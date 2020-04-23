@@ -18,14 +18,17 @@ class FusionServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerProviders();
-        $this->registerRoutes();
-        $this->registerBonsai();
         $this->registerMigrations();
-        $this->registerTheme();
         $this->registerPublishing();
         $this->registerViews();
 
-        Passport::routes();
+        if (app_installed()) {
+            $this->registerRoutes();
+            $this->registerBonsai();
+            $this->registerTheme();
+
+            Passport::routes();
+        }
     }
 
     /**
@@ -46,6 +49,7 @@ class FusionServiceProvider extends ServiceProvider
             \Fusion\Console\UninstallCommand::class,
             \Fusion\Console\InstallCommand::class,
             \Fusion\Console\PublishCommand::class,
+            \Fusion\Console\RefreshCommand::class,
             \Fusion\Console\FlushCommand::class,
             \Fusion\Console\SyncCommand::class,
         ]);
@@ -64,6 +68,10 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(FieldtypeServiceProvider::class);
 
         $this->app->register(\Caffeinated\Shinobi\ShinobiServiceProvider::class);
+
+        if (app_installed()) {
+            $this->app->register(\Caffeinated\Themes\ThemesServiceProvider::class);
+        }
     }
 
     /**
@@ -104,6 +112,10 @@ class FusionServiceProvider extends ServiceProvider
             $this->publishes([
                 fusion_path('/config/fusion.php') => config_path('fusion.php'),
             ], 'fusion-config');
+
+            $this->publishes([
+                fusion_path('/themes') => base_path('themes'),
+            ], 'fusion-themes');
         }
     }
 
@@ -114,7 +126,9 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerTheme()
     {
-        Theme::set(setting('system.theme'));
+        if (app_installed()) {
+            Theme::set(setting('system.theme'));
+        }
     }
 
     /**

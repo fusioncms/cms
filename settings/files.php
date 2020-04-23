@@ -1,6 +1,5 @@
 <?php
 
-
 return [
     'name'        => 'Files',
     'group'       => 'General',

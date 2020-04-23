@@ -18,7 +18,7 @@ class FlushCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Flush the various FusionCMS cache';
+    protected $description = 'Flush the various FusionCMS caches';
 
     /**
      * Execute the console command.

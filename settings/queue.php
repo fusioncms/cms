@@ -1,6 +1,5 @@
 <?php
 
-
 return [
 	'name'        => 'Queue',
     'group'       => 'Services',

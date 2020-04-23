@@ -14,7 +14,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'fusion:install {--homestead} {--valet} {--force} {--url=http://localhost} {--host=localhost} {--database=} {--username=} {--password=} {--charset=utf8} {--collation=utf8_unicode_ci}';
+    protected $signature = 'fusion:install {--homestead} {--valet} {--force} {--refresh} {--url=http://localhost} {--host=localhost} {--database=} {--username=} {--password=} {--charset=utf8} {--collation=utf8_unicode_ci}';
 
     /**
      * The console command description.
@@ -39,38 +39,58 @@ class InstallCommand extends Command
     {
         $name = $this->generateName();
 
-        if ($this->option('homestead')) {
-            $dev      = true;
-            $database = $this->option('database') ?? 'fusioncms';
-            $username = $this->option('username') ?? 'homestead';
-            $password = $this->option('password') ?? 'secret';
+        if ($this->option('refresh')) {
+            $dev       = true;
+            $url       = env('APP_URL');
+            $host      = env('DB_HOST');
+            $database  = env('DB_DATABASE');
+            $username  = env('DB_USERNAME');
+            $password  = env('DB_PASSWORD');
+            $charset   = env('DB_CHARSET');
+            $collation = env('DB_COLLATION');
+        } elseif ($this->option('homestead')) {
+            $dev       = true;
+            $url       = $this->option('url');
+            $host      = $this->option('host');
+            $database  = $this->option('database') ?? 'fusioncms';
+            $username  = $this->option('username') ?? 'homestead';
+            $password  = $this->option('password') ?? 'secret';
+            $charset   = $this->option('charset');
+            $collation = $this->option('collation');
         } elseif ($this->option('valet')) {
-            $dev      = true;
-            $database = $this->option('database') ?? 'fusioncms';
-            $username = $this->option('username') ?? 'root';
-            $password = $this->option('password') ?? '';
+            $dev       = true;
+            $url       = $this->option('url');
+            $host      = $this->option('host');
+            $database  = $this->option('database') ?? 'fusioncms';
+            $username  = $this->option('username') ?? 'root';
+            $password  = $this->option('password') ?? '';
+            $charset   = $this->option('charset');
+            $collation = $this->option('collation');
         } else {
-            $dev      = false;
-            $database = $this->option('database');
-            $username = $this->option('username');
-            $password = $this->option('password');
+            $dev       = false;
+            $url       = $this->option('url');
+            $database  = $this->option('database');
+            $username  = $this->option('username');
+            $password  = $this->option('password');
+            $charset   = $this->option('charset');
+            $collation = $this->option('collation');
         }
 
         $this->container = [
-            'app_url'         => $this->option('url'),
-            'db_host'         => $this->option('host'),
+            'app_url'         => $url,
+            'db_host'         => $host,
             'db_name'         => $database,
             'db_username'     => $username,
             'db_password'     => $password,
-            'db_charset'      => $this->option('charset'),
-            'db_collation'    => $this->option('collation'),
+            'db_charset'      => $charset,
+            'db_collation'    => $collation,
             'user_email'      => 'admin@example.com',
             'user_password'   => 'secret',
             'user_name'       => $name,
             'dev'             => $dev,
         ];
 
-        if (app_installed() and ! $this->option('force')) {
+        if (app_installed() and ! $this->option('force') and ! $this->option('refresh')) {
             return $this->error('FusionCMS is already installed.');
         }
 
@@ -99,6 +119,7 @@ class InstallCommand extends Command
             'Deleting environment config...'    => new \Fusion\Console\Uninstaller\DeleteEnvironmentConfig,
             'Deleting database...'              => new \Fusion\Console\Uninstaller\DeleteDatabase,
 
+            'Creating directories...'           => new \Fusion\Console\Installer\CreateDirectories,
             'Creating database...'              => new \Fusion\Console\Installer\CreateDatabase($this->container),
             'Creating environment config...'    => new \Fusion\Console\Installer\CreateEnvironmentConfig($this->container),
             'Generating encryption key...'      => new \Fusion\Console\Installer\GenerateEncryptionKey,
@@ -114,6 +135,14 @@ class InstallCommand extends Command
 
             'Exiting maintenance mode...'       => new \Fusion\Console\Actions\ExitMaintenanceMode,
         ];
+
+        if ($this->option('refresh')) {
+            unset(
+                $jobs['Deleting environment config...'],
+                $jobs['Creating environment config...'],
+                $jobs['Generating encryption key...'],
+            );
+        }
 
         $progressBar = new ProgressBar($this->output, count($jobs));
 
