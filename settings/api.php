@@ -1,6 +1,5 @@
 <?php
 
-
 return [
 	'name'        => 'API',
 	'group'       => 'General',

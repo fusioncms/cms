@@ -1,6 +1,5 @@
 <?php
 
-
 return [
 	'name'        => 'Date & Time',
     'group'       => 'General',
