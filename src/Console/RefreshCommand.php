@@ -4,21 +4,21 @@ namespace Fusion\Console;
 
 use Illuminate\Console\Command;
 
-class FlushCommand extends Command
+class RefreshCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'fusion:flush';
+    protected $signature = 'fusion:refresh';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Flush the various FusionCMS caches';
+    protected $description = 'Reset and re-install FusionCMS without removing modules or themes';
 
     /**
      * Execute the console command.
@@ -27,9 +27,8 @@ class FlushCommand extends Command
      */
     public function handle()
     {
-        $this->call('cache:clear');
-        $this->call('view:clear');
-        $this->call('route:clear');
-        $this->call('module:optimize');
+        $this->call('fusion:install', [
+            '--refresh' => true,
+        ]);
     }
 }

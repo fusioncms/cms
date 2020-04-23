@@ -49,6 +49,7 @@ class FusionServiceProvider extends ServiceProvider
             \Fusion\Console\UninstallCommand::class,
             \Fusion\Console\InstallCommand::class,
             \Fusion\Console\PublishCommand::class,
+            \Fusion\Console\RefreshCommand::class,
             \Fusion\Console\FlushCommand::class,
             \Fusion\Console\SyncCommand::class,
         ]);
