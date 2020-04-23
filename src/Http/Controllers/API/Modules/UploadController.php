@@ -13,6 +13,22 @@ use Fusion\Http\Requests\ModuleUploadRequest;
 class UploadController extends Controller
 {
     /**
+     * @var \ZipArchive
+     */
+    protected $zipArchive;
+
+    /**
+     * Constructor.
+     *
+     * @param  \ZipArchive $zipArchive
+     * @return void
+     */
+    public function __construct(ZipArchive $zipArchive)
+    {
+        $this->zipArchive = $zipArchive;
+    }
+
+    /**
      * Request for new module installation.
      *
      * @param  \Fusion\Http\Requests\ModuleUploadRequest $request
@@ -20,24 +36,22 @@ class UploadController extends Controller
      */
     public function store(ModuleUploadRequest $request)
     {
-        $upload     = request()->file('file-upload');
-        $zipArchive = new ZipArchive;
-
         try {
-            if ($zipArchive->open($upload) === true) {
-                $index      = $zipArchive->locateName('module.json', ZipArchive::FL_NODIR);
-                $filename   = $zipArchive->getNameIndex($index);
-                $fileHandle = $zipArchive->getStream($filename);
+            if ($this->zipArchive->open(request()->file('file-upload')) === true) {
+                $index      = $this->zipArchive->locateName('module.json', ZipArchive::FL_NODIR);
+                $filename   = $this->zipArchive->getNameIndex($index);
+                $fileHandle = $this->zipArchive->getStream($filename);
                 
                 $settings   = stream_get_contents($fileHandle);
                 $settings   = json_decode($settings);
 
                 // --
-                $zipArchive->extractTo(base_path('modules'));
-                $zipArchive->close();
+                $this->zipArchive->extractTo(base_path('modules'));
+                $this->zipArchive->close();
 
                 Module::optimize();
                 Module::set($settings->slug . '::enabled', false);
+                Module::set($settings->slug . '::registered', false);
 
                 dispatch(function() use ($settings) {
                     DumpAutoload::dispatchNow();

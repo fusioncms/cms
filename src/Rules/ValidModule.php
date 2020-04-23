@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\Rule;
 class ValidModule implements Rule
 {
     /**
-     * @var ZipArchive
+     * @var \ZipArchive
      */
     protected $zipArchive;
 
@@ -22,9 +22,9 @@ class ValidModule implements Rule
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ZipArchive $zipArchive)
     {
-        $this->zipArchive    = new ZipArchive;
+        $this->zipArchive    = $zipArchive;
         $this->requiredFiles = ['module.json'];
     }
     /**

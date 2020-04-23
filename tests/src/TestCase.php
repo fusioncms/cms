@@ -86,6 +86,9 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'database' => ':memory:',
             'prefix'   => '',
         ]);
+
+        $app['config']->set('modules.locations.app.path', base_path('modules/'));
+        $app['config']->set('modules.locations.app.namespace', "Modules\\");
     }
 
     /**
