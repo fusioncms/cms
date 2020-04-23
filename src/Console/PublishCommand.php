@@ -36,5 +36,10 @@ class PublishCommand extends Command
             '--tag'   => 'fusion-assets',
             '--force' => true,
         ]);
+
+        $this->call('vendor:publish', [
+            '--tag'   => 'fusion-themes',
+            '--force' => true,
+        ]);
     }
 }

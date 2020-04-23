@@ -99,6 +99,7 @@ class InstallCommand extends Command
             'Deleting environment config...'    => new \Fusion\Console\Uninstaller\DeleteEnvironmentConfig,
             'Deleting database...'              => new \Fusion\Console\Uninstaller\DeleteDatabase,
 
+            'Creating directories...'           => new \Fusion\Console\Installer\CreateDirectories,
             'Creating database...'              => new \Fusion\Console\Installer\CreateDatabase($this->container),
             'Creating environment config...'    => new \Fusion\Console\Installer\CreateEnvironmentConfig($this->container),
             'Generating encryption key...'      => new \Fusion\Console\Installer\GenerateEncryptionKey,

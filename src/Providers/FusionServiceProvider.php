@@ -104,6 +104,10 @@ class FusionServiceProvider extends ServiceProvider
             $this->publishes([
                 fusion_path('/config/fusion.php') => config_path('fusion.php'),
             ], 'fusion-config');
+
+            $this->publishes([
+                fusion_path('/themes') => base_path('themes'),
+            ], 'fusion-themes');
         }
     }
 
