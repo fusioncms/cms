@@ -35,7 +35,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Fusion\\Tests\\": "tests/src/"
+            "Fusion\\Tests\\": "tests/src/",
+            "App\\": "tests/stubs/laravel/app/",
+            "Modules\\": "tests/stubs/laravel/modules/",
+            "Themes\\": "tests/stubs/laravel/themes/"
         }
     },
     "minimum-stability": "dev",

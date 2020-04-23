@@ -77,7 +77,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
         $app['config']->set('auth.providers.users.model', \Fusion\Models\User::class);
 
-        $app['config']->set('fusion.authenticate.middleware', \Orchestra\Testbench\Http\Middleware\Authenticate::class);
+        // $app['config']->set('fusion.authenticate.middleware', \Orchestra\Testbench\Http\Middleware\Authenticate::class);
 
         $app['config']->set('database.default', 'sqlite');
 
@@ -86,6 +86,9 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'database' => ':memory:',
             'prefix'   => '',
         ]);
+
+        $app['config']->set('modules.locations.app.path', base_path('modules/'));
+        $app['config']->set('modules.locations.app.namespace', "Modules\\");
     }
 
     /**
