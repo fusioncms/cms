@@ -11,7 +11,7 @@ use Illuminate\Contracts\Validation\Rule;
 class UniqueModuleName implements Rule
 {
     /**
-     * @var ZipArchive
+     * @var \ZipArchive
      */
     protected $zipArchive;
 
@@ -20,9 +20,9 @@ class UniqueModuleName implements Rule
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ZipArchive $zipArchive)
     {
-        $this->zipArchive = new ZipArchive;
+        $this->zipArchive = $zipArchive;
     }
 
     /**
@@ -61,7 +61,7 @@ class UniqueModuleName implements Rule
      */
     public function message()
     {
-        return 'A Module with matching name already exists.';
+        return 'A module with matching name already exists.';
     }
 
     /**
