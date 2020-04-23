@@ -91,6 +91,7 @@
             },
             "dont-discover": [
                 "caffeinated/shinobi",
+                "caffeinated/themes",
                 "laravel/telescope"
             ]
         }
