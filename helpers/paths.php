@@ -9,6 +9,6 @@ if (! function_exists('fusion_path')) {
      */
     function fusion_path($path = '')
     {
-        return realpath(__DIR__.'/../').$path;
+        return realpath(__DIR__ . '/../') . ($path ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : $path);
     }
 }
