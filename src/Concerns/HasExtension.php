@@ -12,6 +12,12 @@ trait HasExtension
     {
         static::saved(function ($model) {
             /**
+             * Pull new instance w/ relations.
+             * 
+             */
+            $model = static::find($model->id);
+
+            /**
              * Persist extending field data..
              *
              * Note:
@@ -28,7 +34,7 @@ trait HasExtension
                         return [];
                     }
 
-                    return [ $field->handle => request()->get($field->handle) ];
+                    return [ $field->handle => request()->input($field->handle) ];
                 })->toArray();
 
                 $model->extension->update($attributes);
@@ -46,7 +52,7 @@ trait HasExtension
     public function getAttribute($key)
     {
         $attribute = parent::getAttribute($key);
-        
+
         if (is_null($attribute) && @$this->extension) {
             $attribute = $this->extension->{$key};
         }
