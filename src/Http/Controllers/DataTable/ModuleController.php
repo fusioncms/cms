@@ -4,8 +4,9 @@ namespace Fusion\Http\Controllers\DataTable;
 
 use Illuminate\Http\Request;
 use Caffeinated\Modules\Facades\Module;
+use Fusion\Http\Controllers\Controller;
 
-class ModuleController
+class ModuleController extends Controller
 {
     public function index(Request $request)
     {

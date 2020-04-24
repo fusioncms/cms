@@ -6,6 +6,7 @@ use Exception;
 use ZipArchive;
 use Fusion\Jobs\DumpAutoload;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 use Caffeinated\Modules\Facades\Module;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\ModuleUploadRequest;
@@ -36,8 +37,11 @@ class UploadController extends Controller
      */
     public function store(ModuleUploadRequest $request)
     {
+        $upload   = $request->file('file-upload');
+        $origName = pathinfo($upload->getClientOriginalName(), PATHINFO_FILENAME);
+
         try {
-            if ($this->zipArchive->open(request()->file('file-upload')) === true) {
+            if ($this->zipArchive->open($upload) === true) {
                 $index      = $this->zipArchive->locateName('module.json', ZipArchive::FL_NODIR);
                 $filename   = $this->zipArchive->getNameIndex($index);
                 $fileHandle = $this->zipArchive->getStream($filename);
@@ -45,8 +49,14 @@ class UploadController extends Controller
                 $settings   = stream_get_contents($fileHandle);
                 $settings   = json_decode($settings);
 
+                $files = [];
+                for ($i = 0; $i < $this->zipArchive->numFiles; ++$i) {
+                    $this->zipArchive->renameIndex($i, str_replace($origName, $settings->name, $this->zipArchive->getNameIndex($i)));
+                    $files[] = $this->zipArchive->getNameIndex($i);
+                }
+
                 // --
-                $this->zipArchive->extractTo(base_path('modules'));
+                $this->zipArchive->extractTo(base_path('modules'), $files);
                 $this->zipArchive->close();
 
                 Module::optimize();
