@@ -37,7 +37,7 @@ class ActionController extends Controller
 
         // --
         // Sync module (e.g. assets, settings, extensions)
-        Artisan::call('fusion:sync --module=' . $module->get('slug'));
+        Artisan::call('fusion:sync');
     }
 
     /**
@@ -58,7 +58,7 @@ class ActionController extends Controller
 
         // --
         // Sync module (e.g. assets, settings, extensions)
-        Artisan::call('fusion:sync --module=' . $module->get('slug'));
+        Artisan::call('fusion:sync');
     }
 
     /**
@@ -87,20 +87,10 @@ class ActionController extends Controller
     {
         Module::disable($module->get('slug'));
         Module::set($module->get('slug') . '::installed', false);
-        
+
         // --
-        // Clean up extension records..
-        $files = File::files(base_path("modules/{$module->get('basename')}/src/Models"));
-
-        foreach ($files as $file) {
-            $name   = basename($file->getBaseName(), '.php');
-            $model  = resolve("Modules\\{$module['basename']}\\Models\\{$name}");
-            $traits = class_uses($model);
-
-            if (in_array(HasExtension::class, $traits)) {
-                Extension::where('handle', $model->getTable())->first()->delete();
-            }
-        }
+        // Remove extensions before rolling back..
+        dispatch(new \Fusion\Console\Actions\SyncExtensions);
 
         // --
         // Rollback migrations..
@@ -111,16 +101,14 @@ class ActionController extends Controller
 
         // --
         // File cleanup..
-        File::delete(public_path("modules/{$module->get('slug')}"));
-        File::delete(fusion_path("settings/modules/{$module->get('slug')}.php"));
         File::deleteDirectory(base_path("modules/{$module->get('basename')}"));
-    
+
         // --
         // Unregister module..
         Module::optimize();
 
         // --
-        // Re-sync settings..
-        dispatch(new \Fusion\Console\Actions\SyncSettings);
+        // Re-sync fusion..
+        Artisan::call('fusion:sync');
     }
 }
