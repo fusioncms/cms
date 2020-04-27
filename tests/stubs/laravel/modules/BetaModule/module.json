@@ -1,0 +1,14 @@
+{
+    "name": "BetaModule",
+    "slug": "beta",
+    "version": "1.0",
+    "description": "This is the description for the Beta module.",
+
+    "redirect": {
+    	"upload": "beta/install"
+    },
+
+    "registered": true,
+    "installed": true,
+    "enabled": true
+}
