@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Caffeinated\Themes\Facades\Theme;
 
 if (! function_exists('blade')) {
     /**
