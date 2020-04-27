@@ -1,0 +1,16 @@
+{
+    "name": "efelle/beta",
+    "require": {
+    	"firebase/php-jwt": "5.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Beta\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Beta\\Tests\\": "tests/"
+        }
+    }
+}
