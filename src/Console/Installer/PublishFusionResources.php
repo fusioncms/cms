@@ -13,6 +13,6 @@ class PublishFusionResources
      */
     public function handle()
     {
-        Artisan::call('fusion:publish');
+        Artisan::call('fusion:link');
     }
 }
