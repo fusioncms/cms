@@ -113,6 +113,12 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
+            // Fusion
+            FusionServiceProvider::class,
+
+            // Laravel
+            UiServiceProvider::class,
+
             // Caffeinated
             FlashServiceProvider::class,
             MenusServiceProvider::class,
@@ -124,11 +130,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             BackupServiceProvider::class,
             ActivitylogServiceProvider::class,
             QueryBuilderServiceProvider::class,
-
-            // Laravel
-            UiServiceProvider::class,
-
-            FusionServiceProvider::class,
         ];
     }
 
