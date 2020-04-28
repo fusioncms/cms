@@ -15,6 +15,6 @@ class DeleteFusionResources
     {
         $path = public_path('vendor/fusion');
 
-        File::deleteDirectory($path);
+        File::delete($path);
     }
 }
