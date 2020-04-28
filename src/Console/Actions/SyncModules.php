@@ -40,11 +40,15 @@ class SyncModules
     /**
      * Empty the specified directory of all files and folders
      *   (but keeping the `.gitignore` file).
-     * 
+     *
      * @return void
      */
     protected function cleanDirectory($directory)
     {
+        if (! File::exists($directory)) {
+            File::makeDirectory($directory);
+        }
+
         $files = Finder::create()->in($directory);
         $paths = [];
 

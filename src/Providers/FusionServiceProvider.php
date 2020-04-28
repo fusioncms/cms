@@ -51,7 +51,6 @@ class FusionServiceProvider extends ServiceProvider
             \Fusion\Console\PublishCommand::class,
             \Fusion\Console\RefreshCommand::class,
             \Fusion\Console\FlushCommand::class,
-            \Fusion\Console\LinkCommand::class,
             \Fusion\Console\SyncCommand::class,
         ]);
     }
