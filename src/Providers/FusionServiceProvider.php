@@ -21,13 +21,13 @@ class FusionServiceProvider extends ServiceProvider
         $this->registerMigrations();
         $this->registerPublishing();
         $this->registerViews();
+        $this->registerRoutes();
+
+        Passport::routes();
 
         if (app_installed()) {
-            $this->registerRoutes();
             $this->registerBonsai();
             $this->registerTheme();
-
-            Passport::routes();
         }
     }
 
@@ -68,10 +68,7 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(FieldtypeServiceProvider::class);
 
         $this->app->register(\Caffeinated\Shinobi\ShinobiServiceProvider::class);
-
-        if (app_installed()) {
-            $this->app->register(\Caffeinated\Themes\ThemesServiceProvider::class);
-        }
+        $this->app->register(\Caffeinated\Themes\ThemesServiceProvider::class);
     }
 
     /**
@@ -126,9 +123,7 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerTheme()
     {
-        if (app_installed()) {
-            Theme::set(setting('system.theme'));
-        }
+        Theme::set(setting('system.theme'));
     }
 
     /**
