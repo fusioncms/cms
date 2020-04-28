@@ -14,6 +14,7 @@ use Caffeinated\Modules\ModulesServiceProvider;
 use Fusion\Tests\Concerns\MakesDatabaseAssertions;
 use Spatie\Activitylog\ActivitylogServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
+use Laravel\Ui\UiServiceProvider;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -112,8 +113,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            FusionServiceProvider::class,
-
             // Caffeinated
             FlashServiceProvider::class,
             MenusServiceProvider::class,
@@ -125,6 +124,11 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             BackupServiceProvider::class,
             ActivitylogServiceProvider::class,
             QueryBuilderServiceProvider::class,
+
+            // Laravel
+            UiServiceProvider::class,
+
+            FusionServiceProvider::class,
         ];
     }
 
