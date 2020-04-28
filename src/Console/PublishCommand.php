@@ -33,11 +33,6 @@ class PublishCommand extends Command
         ]);
 
         $this->call('vendor:publish', [
-            '--tag'   => 'fusion-assets',
-            '--force' => true,
-        ]);
-
-        $this->call('vendor:publish', [
             '--tag'   => 'fusion-themes',
             '--force' => true,
         ]);
