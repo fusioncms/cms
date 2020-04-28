@@ -2,10 +2,10 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Theme;
 use Illuminate\Http\Request;
-use Fusion\Http\Controllers\Controller;
 use Fusion\Services\Logs\Repository;
+use Caffeinated\Themes\Facades\Theme;
+use Fusion\Http\Controllers\Controller;
 
 class LogsController extends Controller
 {

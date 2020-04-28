@@ -3,9 +3,9 @@
 namespace Fusion\Rules;
 
 use Log;
-use Theme;
 use Exception;
 use ZipArchive;
+use Caffeinated\Themes\Facades\Theme;
 use Illuminate\Contracts\Validation\Rule;
 
 class UniqueThemeName implements Rule

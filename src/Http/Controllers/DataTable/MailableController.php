@@ -3,9 +3,9 @@
 namespace Fusion\Http\Controllers\DataTable;
 
 use File;
-use Theme;
 use ReflectionClass;
 use Fusion\Models\Mailable;
+use Caffeinated\Themes\Facades\Theme;
 use Fusion\Http\Controllers\DataTableController;
 
 class MailableController extends DataTableController
