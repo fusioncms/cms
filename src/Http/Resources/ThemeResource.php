@@ -2,7 +2,7 @@
 
 namespace Fusion\Http\Resources;
 
-use Theme;
+use Caffeinated\Themes\Facades\Theme;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ThemeResource extends JsonResource

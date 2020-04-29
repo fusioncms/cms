@@ -2,7 +2,7 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Theme;
+use Caffeinated\Themes\Facades\Theme;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\ThemeResource;
 

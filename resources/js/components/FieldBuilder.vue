@@ -24,21 +24,9 @@
                             </div>
 
                             <p-actions :id="field.handle + '_actions'">
-                                <p-dropdown-link @click.prevent="edit(index)" v-modal:edit-field>Edit</p-dropdown-link>
+                                <p-dropdown-link @click.prevent="edit(index)">Edit</p-dropdown-link>
                                 <p-dropdown-link @click.prevent="remove(index)">Delete</p-dropdown-link>
                             </p-actions>
-
-                            <!-- <div style="min-width: 150px;" class="text-right draggable__actions">
-                                <p-dropdown right>
-                                    <fa-icon icon="bars"></fa-icon>
-
-                                    <template slot="options">
-                                        <p-dropdown-item @click.prevent="edit(index)">Edit</p-dropdown-item>
-                                        <p-dropdown-item @click.prevent="remove(index)">Delete</p-dropdown-item>
-                                    </template>
-                                </p-dropdown>
-                            </div> -->
-
                         </div>
                     </p-sortable-item>
                 </div>
@@ -178,7 +166,7 @@
                         _.findIndex(this.fields, (field) => field.handle == handle)
                     )
                 }
-                
+
                 this.field = {}
             }
         },
