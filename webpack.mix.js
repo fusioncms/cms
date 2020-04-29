@@ -23,4 +23,3 @@ mix.setPublicPath('public')
         ],
     })
     .copy('resources/img', 'public/img')
-    .copy('public', '../public/vendor/fusion')
