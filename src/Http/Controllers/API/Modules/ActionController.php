@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
 use Caffeinated\Modules\Facades\Module;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Resources\ModuleResource;
 
 class ActionController extends Controller
 {
@@ -18,7 +19,7 @@ class ActionController extends Controller
      *
      * @param  \Illuminate\Http\Request        $request
      * @param  \Illuminate\Support\Collection  $module
-     * @return void
+     * @return \Fusion\Http\Resources\ModuleResource
      */
     public function install(Request $request, Collection $module)
     {
@@ -38,6 +39,8 @@ class ActionController extends Controller
         // --
         // Sync module (e.g. assets, settings, extensions)
         Artisan::call('fusion:sync');
+
+        return new ModuleResource($module);
     }
 
     /**
@@ -45,7 +48,7 @@ class ActionController extends Controller
      *
      * @param  \Illuminate\Http\Request        $request
      * @param  \Illuminate\Support\Collection  $module
-     * @return void
+     * @return \Fusion\Http\Resources\ModuleResource
      */
     public function update(Request $request, Collection $module)
     {
@@ -59,6 +62,8 @@ class ActionController extends Controller
         // --
         // Sync module (e.g. assets, settings, extensions)
         Artisan::call('fusion:sync');
+
+        return new ModuleResource($module);
     }
 
     /**
@@ -66,7 +71,7 @@ class ActionController extends Controller
      *
      * @param  \Illuminate\Http\Request        $request
      * @param  \Illuminate\Support\Collection  $module
-     * @return void
+     * @return \Fusion\Http\Resources\ModuleResource
      */
     public function seed(Request $request, Collection $module)
     {
@@ -74,6 +79,8 @@ class ActionController extends Controller
             'slug'    => $module->get('slug'),
             '--force' => true,
         ]);
+
+        return new ModuleResource($module);
     }
 
     /**

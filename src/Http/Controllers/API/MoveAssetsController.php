@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\Api;
+namespace Fusion\Http\Controllers\API;
 
 use Fusion\Models\Asset;
 use Illuminate\Http\Request;
