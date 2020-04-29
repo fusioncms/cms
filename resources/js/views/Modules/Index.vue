@@ -175,7 +175,7 @@
                         this.refresh('Module successfully installed.')
 
                         if (response.data.data.redirect.install) {
-                            this.$router.push(response.data.data.redirect.install)
+                            location.href = `/${config.path}/${response.data.data.redirect.install}`
                         }
                     })
                     .catch((error)   => this.refresh(error.response.data.message, 'danger'))
