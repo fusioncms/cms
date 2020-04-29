@@ -140,7 +140,7 @@ class InstallCommand extends Command
             unset(
                 $jobs['Deleting environment config...'],
                 $jobs['Creating environment config...'],
-                $jobs['Generating encryption key...'],
+                $jobs['Generating encryption key...']
             );
         }
 
