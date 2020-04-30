@@ -54,8 +54,8 @@ class LoadNavigation
                         $menu->add($matrix->name, '#')->data([
                             'icon'  => $matrix->icon ?: 'pencil-alt',
                         ]);
-
-                        $menu->{Str::camel($matrix->name)}->add($matrix->reference_plural, '#')->data([
+                        
+                        $menu->{Str::camel($matrix->name)}->add(($matrix->type == 'page' ? $matrix->reference_singular : $matrix->reference_plural), '#')->data([
                             'to' => $matrix->adminPath
                         ]);
 
