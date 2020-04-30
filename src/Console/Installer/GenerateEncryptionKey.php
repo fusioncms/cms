@@ -13,6 +13,6 @@ class GenerateEncryptionKey
      */
     public function handle()
     {
-        return Artisan::call('key:generate');
+        return Artisan::call('key:generate', ['--force' => true]);
     }
 }

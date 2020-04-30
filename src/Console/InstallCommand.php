@@ -69,6 +69,7 @@ class InstallCommand extends Command
         } else {
             $dev       = false;
             $url       = $this->option('url');
+            $host      = $this->option('host');
             $database  = $this->option('database');
             $username  = $this->option('username');
             $password  = $this->option('password');
@@ -94,11 +95,33 @@ class InstallCommand extends Command
             return $this->error('FusionCMS is already installed.');
         }
 
-        if ($dev) {
-            $this->comment('Relax while FusionCMS proceeds with the installation process.');
+        if (! $dev) {
+            $errors = [];
 
-            return $this->install();
+            if (empty($database)) {
+                $errors[] = 'Please provided a database using the `--database` option.';
+            }
+
+            if (empty($username)) {
+                $errors[] = 'Please provided a username using the `--username` option.';
+            }
+
+            if (empty($password)) {
+                $errors[] = 'Please provided a password using the `--password` option.';
+            }
+
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
+                    $this->error($error);
+                }
+
+                return;
+            }
         }
+
+        $this->comment('Relax while FusionCMS proceeds with the installation process.');
+
+        return $this->install();
     }
 
     /**
