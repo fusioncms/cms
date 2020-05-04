@@ -5,14 +5,14 @@
         </portal>
 
         <portal to="actions">
-            <router-link v-if="taxonomy.slug" :to="{ name: 'terms.create', params: {taxonomy: taxonomy.slug} }" class="button">Create {{ singular }}</router-link>
+            <router-link v-if="taxonomy.id" :to="{ name: 'terms.create', params: {taxonomy: taxonomy.id} }" class="button">Create {{ singular }}</router-link>
         </portal>
 
         <div class="row" v-if="endpoint">
             <div class="content-container">
                 <p-table id="entries" :endpoint="endpoint" sort-by="name" :key="taxonomy.handle + '_table'">
                     <template slot="name" slot-scope="table">
-                        <router-link :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.slug, id: table.record.id} }">{{ table.record.name }}</router-link>
+                        <router-link :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
                     <template slot="slug" slot-scope="table">
                         <code>{{ table.record.slug }}</code>
@@ -25,7 +25,7 @@
 
                     <template slot="actions" slot-scope="table">
                         <p-actions :id="'term_' + table.record.id + '_actions'" :key="'term_' + table.record.id + '_actions'">
-                            <p-dropdown-link @click.prevent :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.slug, id: table.record.id} }">Edit</p-dropdown-link>
+                            <p-dropdown-link @click.prevent :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">Edit</p-dropdown-link>
 
                             <p-dropdown-link
                                 @click.prevent
@@ -74,7 +74,7 @@
         computed: {
             endpoint() {
                 if (this.taxonomy.id) {
-                    return '/datatable/taxonomies/' + this.taxonomy.id
+                    return `/datatable/taxonomies/${this.taxonomy.id}`
                 }
 
                 return null
@@ -91,7 +91,7 @@
 
         methods: {
             destroy(id) {
-                axios.delete('/api/taxonomies/' + this.taxonomy.slug + '/' + id).then((response) => {
+                axios.delete(`/api/taxonomies/${this.taxonomy.id}/terms/${id}`).then((response) => {
                     toast('Entry successfully deleted.', 'success')
 
                     proton().$emit('refresh-datatable-entries')
@@ -100,7 +100,7 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            axios.get('/api/taxonomies/slug/' + to.params.taxonomy).then((response) => {
+            axios.get(`/api/taxonomies/${to.params.taxonomy}`).then((response) => {
                 next(function(vm) {
                     vm.taxonomy = response.data.data
 
@@ -110,7 +110,7 @@
         },
 
         beforeRouteUpdate(to, from, next) {
-            axios.get('/api/taxonomies/slug/' + to.params.taxonomy).then((response) => {
+            axios.get(`/api/taxonomies/${to.params.taxonomy}`).then((response) => {
                 this.taxonomy = response.data.data
 
                 this.$emit('updateHead')

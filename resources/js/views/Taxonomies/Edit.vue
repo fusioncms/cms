@@ -48,7 +48,7 @@
 
         methods: {
             submit() {
-                this.form.patch('/api/taxonomies/' + this.taxonomy.id).then((response) => {
+                this.form.patch(`/api/taxonomies/${this.taxonomy.id}`).then((response) => {
                     store.dispatch('navigation/fetchAdminNavigation')
 
                     toast('Taxonomy successfully updated', 'success')
@@ -62,7 +62,7 @@
 
         beforeRouteEnter(to, from, next) {
             axios.all([
-                axios.get('/api/taxonomies/' + to.params.taxonomy),
+                axios.get(`/api/taxonomies/${to.params.taxonomy}`),
                 axios.get('/api/fieldsets'),
             ]).then(axios.spread(function (taxonomy, fieldsets) {
                 next(function(vm) {

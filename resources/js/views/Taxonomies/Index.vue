@@ -78,7 +78,7 @@
 
         methods: {
             destroy(id) {
-                axios.delete('/api/taxonomies/' + id).then((response) => {
+                axios.delete(`/api/taxonomies/${id}`).then((response) => {
                     store.dispatch('navigation/fetchAdminNavigation')
 
                     toast('Taxonomy successfully deleted.', 'success')
