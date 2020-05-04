@@ -22,9 +22,17 @@
 
         <p v-else class="text-sm leading-none">Add a {{ singular }} below.</p>
 
-        <div class="border-t pt-6">
-            <p-input @keyup.enter.native="submit" :name="term + '_name'" v-model="form.name" :placeholder="'New ' + singular + ' name...'" class="mb-2"></p-input>
-            <p-slug :name="term + '_slug'" v-model="form.slug" :watch="form.name" hidden></p-slug>
+        <div class="border-t pt-6" v-if="form">
+            <p-input
+                class="mb-2"
+                :name="term + '_name'"
+                :placeholder="'New ' + singular + ' name...'"
+                @keyup.enter.native="submit"
+                required
+                :has-error="form.errors.has('name')"
+                :error-message="form.errors.get('name')"
+                v-model="form.name">
+            </p-input>
             <p-button @click.prevent="submit">Add {{ singular }}</p-button>
         </div>
     </div>
@@ -40,7 +48,7 @@
         data() {
             return {
                 taxonomy: {},
-                form: {},
+                form: false,
             }
         },
 
@@ -84,13 +92,13 @@
 
         methods: {
             submit() {
-                this.form.post('/api/taxonomies/' + this.taxonomy.slug).then((response) => {
+                this.form.post(`/api/taxonomies/${this.taxonomy.id}/terms`).then((response) => {
                     toast('Term saved successfully', 'success')
 
                     this.fetchTaxonomy()
                     this.resetForm()
                 }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
+                    toast(response.message, 'failed')
                 })
             },
 
@@ -103,7 +111,7 @@
             },
 
             fetchTaxonomy() {
-                axios.get('/api/taxonomies/' + this.field.settings.taxonomy).then((response) => {
+                axios.get(`/api/taxonomies/${this.field.settings.taxonomy}`).then((response) => {
                     this.taxonomy = response.data.data
                 })
             }

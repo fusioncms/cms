@@ -40,23 +40,6 @@ class TaxonomyController extends Controller
     }
 
     /**
-     * Display the specified resource by slug value.
-     *
-     * @param  string  $taxonomy
-     * @return \Fusion\Http\Resources\TaxonomyResource
-     */
-    public function slug($taxonomy)
-    {
-        $this->authorize('taxonomies.show');
-
-        $taxonomy = str_handle($taxonomy);
-
-        $taxonomy = Taxonomy::where('handle', $taxonomy)->first();
-
-        return new TaxonomyResource($taxonomy);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Fusion\Http\Requests\TaxonomyRequest  $request

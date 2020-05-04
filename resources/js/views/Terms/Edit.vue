@@ -68,10 +68,10 @@
 
         methods: {
             submit() {
-                this.form.patch('/api/taxonomies/' + this.taxonomy.slug + '/' + this.term.id).then((response) => {
+                this.form.patch(`/api/taxonomies/${this.taxonomy.id}/terms/${this.term.id}`).then((response) => {
                     toast('Term saved successfully', 'success')
 
-                    this.$router.push('/taxonomies/' + this.taxonomy.slug)
+                    this.$router.push(`/taxonomies/${this.taxonomy.id}`)
                 }).catch((response) => {
                     toast(response.response.data.message, 'failed')
                 })
@@ -126,7 +126,7 @@
     }
 
     export function getTerm(taxonomy, id, callback) {
-        axios.get('/api/taxonomies/' + taxonomy + '/' + id).then((response) => {
+        axios.get(`/api/taxonomies/${taxonomy}/terms/${id}`).then((response) => {
             let taxonomy = response.data.data.taxonomy
             let term = response.data.data
             let fields = {

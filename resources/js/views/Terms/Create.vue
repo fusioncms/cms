@@ -67,10 +67,10 @@
 
         methods: {
             submit() {
-                this.form.post('/api/taxonomies/' + this.taxonomy.slug).then((response) => {
+                this.form.post(`/api/taxonomies/${this.taxonomy.id}/terms`).then((response) => {
                     toast('Term saved successfully', 'success')
 
-                    this.$router.push('/taxonomies/' + this.taxonomy.slug)
+                    this.$router.push(`/taxonomies/${this.taxonomy.id}`)
                 }).catch((response) => {
                     toast(response.response.data.message, 'failed')
                 })
@@ -101,8 +101,8 @@
         }
     }
 
-    export function getTaxonomy(slug, callback) {
-        axios.get('/api/taxonomies/slug/' + slug).then((response) => {
+    export function getTaxonomy(taxonomy, callback) {
+        axios.get(`/api/taxonomies/${taxonomy}`).then((response) => {
             let taxonomy = response.data.data
 
             let fields = {

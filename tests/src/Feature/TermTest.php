@@ -46,7 +46,7 @@ class TermTest extends TestCase
         ];
 
         $this
-            ->json('POST', '/api/taxonomies/' . $this->taxonomy->slug, $attributes)
+            ->json('POST', '/api/taxonomies/' . $this->taxonomy->id . '/terms', $attributes)
             ->assertStatus(201);
 
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
@@ -62,7 +62,7 @@ class TermTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->json('POST', '/api/taxonomies/' . $this->taxonomy->slug, []);
+        $this->json('POST', '/api/taxonomies/' . $this->taxonomy->id . '/terms', []);
     }
 
     /**
@@ -77,7 +77,7 @@ class TermTest extends TestCase
 
         $this->actingAs($this->user, 'api');
 
-        $this->json('POST', '/api/taxonomies/' . $this->taxonomy->slug, []);
+        $this->json('POST', '/api/taxonomies/' . $this->taxonomy->id . '/terms', []);
     }
 
     /**
@@ -100,7 +100,7 @@ class TermTest extends TestCase
         $attributes['slug'] = 'updated-slug-name';
 
         $this
-            ->json('PATCH', '/api/taxonomies/' . $this->taxonomy->slug . '/' . $term->id, $attributes)
+            ->json('PATCH', '/api/taxonomies/' . $this->taxonomy->id . '/terms/' . $term->id, $attributes)
             ->assertStatus(200);
 
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
@@ -119,7 +119,7 @@ class TermTest extends TestCase
         list($term, $attributes) = $this->newTerm();
 
         // Delete ----
-        $this->json('DELETE', '/api/taxonomies/' . $this->taxonomy->slug . '/' . $term->id);
+        $this->json('DELETE', '/api/taxonomies/' . $this->taxonomy->id . '/terms/' . $term->id);
 
         $this->assertDatabaseMissing($this->model->getTable(), [ 'id' => $term->id ]);
     }
@@ -137,7 +137,7 @@ class TermTest extends TestCase
         list($term, $attributes) = $this->newTerm();
 
         $this
-            ->json('POST', '/api/taxonomies/' . $this->taxonomy->slug, $attributes)
+            ->json('POST', '/api/taxonomies/' . $this->taxonomy->id . '/terms', $attributes)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['slug']);
     }
@@ -164,7 +164,7 @@ class TermTest extends TestCase
         ], $overrides);
 
         $term = $this
-            ->json('POST', '/api/taxonomies/' . $this->taxonomy->slug, $attributes)
+            ->json('POST', '/api/taxonomies/' . $this->taxonomy->id . '/terms', $attributes)
             ->getData()
             ->data;
 

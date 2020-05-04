@@ -3,6 +3,7 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Models\Taxonomy;
+use Illuminate\Support\Str;
 use Illuminate\Foundation\Http\FormRequest;
 use Fusion\Services\Builders\Taxonomy as Builder;
 
@@ -11,7 +12,7 @@ class TermRequest extends FormRequest
 
     public function __construct()
     {
-        $this->taxonomy      = Taxonomy::where('slug', request()->route('slug'))->firstOrFail();
+        $this->taxonomy      = request()->route('taxonomy');
         $this->model         = (new Builder($this->taxonomy->handle))->make();
         $this->fieldset      = $this->taxonomy->fieldset;
         $this->fields        = $this->fieldset ? $this->fieldset->database() : [];
@@ -35,7 +36,8 @@ class TermRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'taxonomy_id' => $this->taxonomy->id
+            'taxonomy_id' => $this->taxonomy->id,
+            'slug'        => $this->slug ?? Str::slug($this->name)
         ]);
     }
 
@@ -59,5 +61,20 @@ class TermRequest extends FormRequest
         }
 
         return $rules;
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($validator->errors()->has('slug')) {
+                $validator->errors()->add('name', 'The slug name has already been taken.');
+            }
+        });
     }
 }

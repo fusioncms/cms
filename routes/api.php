@@ -51,14 +51,6 @@ Route::post('/menus/{menu}/reorder', 'NodeReorderController');
 Route::get('/settings', 'SettingsController@index');
 Route::get('/settings/{section}', 'SettingsController@show');
 Route::patch('/settings/{section}', 'SettingsController@update');
-Route::get('/taxonomies/slug/{slug}', 'TaxonomyController@slug');
-Route::get('/taxonomies/{slug}', 'TermController@index');
-Route::get('/taxonomies/{slug}/{id}', 'TermController@show');
-Route::get('/taxonomies/{slug}/create', 'TermController@create');
-Route::post('/taxonomies/{slug}', 'TermController@store');
-Route::patch('/taxonomies/{slug}/{id}', 'TermController@update');
-Route::get('/taxonomies/{slug}/{id}/edit', 'TermController@edit');
-Route::delete('/taxonomies/{slug}/{id}', 'TermController@destroy');
 Route::post('/themes/verify', 'Themes\VerifyController@index');
 Route::get('/theme', 'Themes\ActiveController@show');
 Route::patch('/theme/{theme}', 'Themes\ActiveController@update');
@@ -76,7 +68,6 @@ Route::group(['prefix' => 'insights'], function () {
 Route::apiResource('roles', 'Users\RoleController');
 Route::apiResource('users', 'Users\UserController');
 Route::apiResource('/themes', 'Themes\BrowseController');
-Route::apiResource('/taxonomies', 'TaxonomyController');
 Route::apiResource('/menus/{menu}/nodes', 'NodeController');
 Route::apiResource('/menus', 'MenuController');
 Route::apiResource('/pages', 'PageController');
@@ -90,6 +81,8 @@ Route::apiResource('directories', 'DirectoryController');
 Route::apiResource('/fieldsets', 'FieldsetController');
 Route::apiResource('/fieldsets/{fieldset}/sections', 'FieldsetSectionController');
 Route::apiResource('/extensions', 'ExtensionController');
+Route::apiResource('taxonomies', 'TaxonomyController');
+Route::apiResource('taxonomies/{taxonomy}/terms', 'TermController');
 
 Route::prefix('modules')->group(function() {
 	Route::post('{module}/install',   'Modules\ActionController@install');
