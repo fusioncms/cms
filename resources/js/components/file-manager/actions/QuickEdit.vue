@@ -66,7 +66,7 @@
 
 					    toast('Name is required for updating.', 'warning')
 					} else {
-						this.form.patch(`/api/directories/${this.file.id}`)
+						this.form.patch(this.endpoint)
 							.then(({ data }) => {
 								this.isEditing = false
 								this.form      = new Form({
