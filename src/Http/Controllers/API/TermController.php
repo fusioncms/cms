@@ -15,30 +15,40 @@ class TermController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  string  $taxonomySlug
-     * @param  integer $id
+     * @param  \Fusion\Models\Taxonomy  $taxonomy
      * @return \Fusion\Http\Resources\TermResource
      */
-    public function show($taxonomySlug, $id)
+    public function index(Taxonomy $taxonomy)
     {
-        $taxonomy = Taxonomy::where('slug', $taxonomySlug)->firstOrFail();
-        $model    = (new Builder($taxonomy->handle))->make();
-        $term     = $model->find($id);
-
-        return new TermResource($term);
+        return TermResource::collection(
+            (new Builder($taxonomy->handle))->get()->paginate(25)
+        );
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \Fusion\Http\Requests\TermRequest $request
-     * @param  string $taxonomySlug
+     * @param  \Fusion\Models\Taxonomy  $taxonomy
+     * @param  integer $id
      * @return \Fusion\Http\Resources\TermResource
      */
-    public function store(TermRequest $request, $taxonomySlug)
+    public function show(Taxonomy $taxonomy, $id)
     {
-        $taxonomy = $request->taxonomy;
-        $term     = $request->model->create($request->validated());
+        return new TermResource(
+            (new Builder($taxonomy->handle))->get()->findOrFail($id)
+        );
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \Fusion\Http\Requests\TermRequest  $request
+     * @param  \Fusion\Models\Taxonomy            $taxonomy
+     * @return \Fusion\Http\Resources\TermResource
+     */
+    public function store(TermRequest $request, Taxonomy $taxonomy)
+    {
+        $term = $request->model->create($request->validated());
 
         // persist relationships..
         foreach ($request->relationships as $relationship) {
@@ -52,14 +62,13 @@ class TermController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Fusion\Http\Requests\TermRequest  $request
-     * @param  string  $taxonomySlug
+     * @param  \Fusion\Models\Taxonomy            $taxonomy
      * @param  integer $id
      * @return \Fusion\Http\Resources\TermResource
      */
-    public function update(TermRequest $request, $taxonomySlug, $id)
+    public function update(TermRequest $request, Taxonomy $taxonomy, $id)
     {
-        $taxonomy = $request->taxonomy;
-        $term     = $request->model->findOrFail($id);
+        $term = $request->model->findOrFail($id);
         $term->update($request->validated());
 
         // persist relationships..
@@ -74,17 +83,16 @@ class TermController extends Controller
      * Destroy resource from storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string   $taxonomySlug
+     * @param  \Fusion\Models\Taxonomy   $taxonomy
      * @param  integer  $id
      * @return void
      */
-    public function destroy(Request $request, $taxonomySlug, $id)
+    public function destroy(Request $request, Taxonomy $taxonomy, $id)
     {
         $this->authorize('term.destroy');
 
-        $taxonomy = Taxonomy::where('slug', $taxonomySlug)->firstOrFail();
-        $model    = (new Builder($taxonomy->handle))->make();
-        $term    = $model->findOrFail($id);
+        $model = (new Builder($taxonomy->handle))->make();
+        $term  = $model->findOrFail($id);
 
         $term->delete();
     }

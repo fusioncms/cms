@@ -50,7 +50,7 @@ class Taxonomy extends Model
 
     public function getAdminPathAttribute()
     {
-        return '/taxonomies/' . $this->slug;
+        return '/taxonomies/' . $this->id;
     }
 
     /**
