@@ -4,7 +4,6 @@ const tailwindcss = require('tailwindcss')
 
 const production = process.env.NODE_ENV === 'production'
 const sourceMap = production ? '' : 'inline-source-map'
-const { execFile } = require('child_process')
 
 mix.setPublicPath('public')
     .js('resources/js/gravity.js', 'public/js')
