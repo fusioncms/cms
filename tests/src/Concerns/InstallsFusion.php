@@ -65,6 +65,8 @@ trait InstallsFusion
         File::deleteDirectory(storage_path('uploads'));
 
         File::delete(storage_path('app/modules.json'));
+
+        dispatch_now(new \Fusion\Console\Uninstaller\DeleteModelFiles);
     }
 
     /**
