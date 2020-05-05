@@ -27,10 +27,16 @@
     export default {
         name: 'new-folder-modal',
 
+        watch: {
+            currentDirectory(value) {
+                this.form.parent_id = this.currentDirectory
+            }
+        },
+
         data() {
             return {
                 form: new Form({
-                    parent_id: this.currentDirectory,
+                    parent_id: 0,
                     name: '',
                 })
             }
@@ -49,7 +55,7 @@
 
             submit() {
                 this.form.post('/api/directories').then((response) => {
-                    this.form.reset()
+                    this.form.name = ""
                     this.fetchFilesAndDirectories()
                     this.$children[0].isActive = false
 
