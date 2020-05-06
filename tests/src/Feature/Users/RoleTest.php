@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\Users;
 
 use Fusion\Models\Role;
 use Fusion\Tests\TestCase;

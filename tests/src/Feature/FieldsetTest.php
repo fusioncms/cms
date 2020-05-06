@@ -21,6 +21,7 @@ class FieldsetTest extends TestCase
      * @test
      * @group fusioncms
      * @group fieldset
+     * @group collection
      */
     public function when_attached_all_fields_should_generate_database_columns()
     {
@@ -37,6 +38,7 @@ class FieldsetTest extends TestCase
      * @test
      * @group fusioncms
      * @group fieldset
+     * @group collection
      */
     public function when_detached_all_fields_should_drop_database_columns()
     {
@@ -51,7 +53,12 @@ class FieldsetTest extends TestCase
         });
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group fusioncms
+     * @group fieldset
+     * @group collection
+     */
     public function when_replaced_database_columns_should_merge_if_compatible()
     {
         $redSection  = SectionFactory::times(1)->withoutFields()->create();
@@ -90,7 +97,12 @@ class FieldsetTest extends TestCase
         ]);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group fusioncms
+     * @group fieldset
+     * @group collection
+     */
     public function when_replaced_database_columns_should_drop_if_irrelevant()
     {
         $redSection  = SectionFactory::times(1)->withoutFields()->create();
@@ -133,7 +145,12 @@ class FieldsetTest extends TestCase
         ]);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group fusioncms
+     * @group fieldset
+     * @group collection
+     */
     public function when_a_field_is_added_a_database_column_should_be_generated_on_all_attached_tables()
     {
         $fieldset    = FieldsetFactory::create();
@@ -151,7 +168,12 @@ class FieldsetTest extends TestCase
         $this->assertDatabaseTableHasColumn($newsTable, $field->handle);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group fusioncms
+     * @group fieldset
+     * @group collection
+     */
     public function when_a_field_is_removed_the_associated_database_column_should_be_removed_from_all_tables()
     {
         $fieldset = FieldsetFactory::create();
@@ -170,7 +192,12 @@ class FieldsetTest extends TestCase
         $this->assertDatabaseTableDoesNotHaveColumn($newsTable, $field->handle);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group fusioncms
+     * @group fieldset
+     * @group collection
+     */
     public function when_a_field_is_renamed_the_associated_database_column_should_also_be_renamed()
     {
         $fieldset    = FieldsetFactory::create();
@@ -197,7 +224,12 @@ class FieldsetTest extends TestCase
         $this->assertDatabaseTableHasColumn($newsTable, $fieldInstance->handle);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group fusioncms
+     * @group fieldset
+     * @group collection
+     */
     public function when_a_fields_fieldtype_is_changed_the_associated_database_columns_type_should_also_change()
     {
         $fieldset = FieldsetFactory::create();
@@ -217,7 +249,12 @@ class FieldsetTest extends TestCase
         $this->assertDatabaseTableColumnHasType($table, $field->handle, 'text');
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group fusioncms
+     * @group fieldset
+     * @group collection
+     */
     public function when_a_field_is_retyped_the_associated_database_column_should_also_be_retyped()
     {
         $section  = SectionFactory::times(1)->withoutFields()->create();
@@ -249,7 +286,12 @@ class FieldsetTest extends TestCase
         );
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group fusioncms
+     * @group fieldset
+     * @group collection
+     */
     public function when_a_field_is_renamed_and_new_field_created_in_its_name_database_should_have_both_columns()
     {
         // Create fieldset..
@@ -293,8 +335,9 @@ class FieldsetTest extends TestCase
 
     /**
      * @test
-     * @group feature
+     * @group fusioncms
      * @group fieldset
+     * @group collection
      */
     public function each_fieldset_must_have_a_unique_handle()
     {
