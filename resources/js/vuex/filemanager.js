@@ -320,23 +320,21 @@ export default {
             if (state.currentDirectory > 0)
                 getDirectory = axios.get(`/api/directories/${state.currentDirectory}`)
 
-            Promise.all([
+            axios.all([
                 axios.get('/api/files', { params: getters.getFileFilters }),
                 axios.get('/api/directories', { params: getters.getDirectoryFilters }),
                 getDirectory
-            ]).then((response) => {
-                const files            = response[0]
-                const directories      = response[1]
-                const currentDirectory = response[2]
+            ]).then(
+                axios.spread((files, directories, currentDirectory) => {
+                    commit('setFiles',       files.data.data)
+                    commit('setTotalPages',  files.data.meta.last_page)
+                    commit('setDirectories', directories.data.data)
+                    commit('setDirectory',   currentDirectory ? currentDirectory.data.data : null)
+                    commit('setLoading',     false)
 
-                commit('setFiles',       files.data.data)
-                commit('setTotalPages',  files.data.meta.last_page)
-                commit('setDirectories', directories.data.data)
-                commit('setDirectory',   currentDirectory ? current.data.data : null)
-                commit('setLoading',     false)
-
-                dispatch('setBreadcrumbs')
-            }).catch(errors => {
+                    dispatch('setBreadcrumbs')
+                })
+            ).catch(errors => {
                 console.error(errors)
             })
         }, 500),
