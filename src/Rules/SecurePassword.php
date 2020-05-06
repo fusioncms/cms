@@ -21,16 +21,6 @@ class SecurePassword implements Rule
     protected $errors;
 
     /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        // ..
-    }
-
-    /**
      * Determine if the validation rule passes.
      *
      * @param  string  $attribute
@@ -39,6 +29,13 @@ class SecurePassword implements Rule
      */
     public function passes($attribute, $value)
     {
+        // We will be relying on the "required" or "sometimes"
+        // validation rules here. So if the length is 0,
+        // continue on as it implies its optional.
+        if (strlen($value) === 0) {
+            return empty($this->error);
+        }
+
         if (strlen($value) < $this->minLength)
             $this->error = "The :attribute field must be at least {$this->minLength} characters long.";
         elseif (! preg_match('/[a-z]{1,}/', $value))
