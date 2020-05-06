@@ -5,13 +5,13 @@ namespace Fusion\Models\Pages;
 use Fusion\Models\Field;
 use Fusion\Models\Matrix;
 use Illuminate\Support\Str;
+use Fusion\Concerns\HasActivity;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class {class} extends Model
 {
-    use LogsActivity;
+    use HasActivity;
 
 	/**
      * The table associated with the model.
