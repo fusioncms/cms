@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\FileManager;
 
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\AuthenticationException;
@@ -89,16 +89,15 @@ class DirectoryTest extends TestCase
      * @group feature
      * @group directory
      */
-    public function activity_will_be_tracked_when_directory_is_deleted()
+    public function activities_will_be_cleaned_up_for_directory_when_it_is_deleted()
     {
         $this
             ->be($this->admin, 'api')
             ->json('DELETE', 'api/directories/' . $this->directoryA->id);
 
-        $this->assertDatabaseHas('activity_log', [
-            'description' => 'Deleted folder (Lorem)',
-            'causer_id'   => $this->admin->id,
-            'subject_id'  => $this->directoryA->id,
+        $this->assertDatabaseMissing('activity_log', [
+            'subject_id'   => $this->directoryA->id,
+            'subject_type' => 'Fusion\Models\Directory',
         ]);
     }
 

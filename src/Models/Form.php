@@ -2,15 +2,15 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasFieldset;
 use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Form extends Model
 {
-    use CachesQueries, HasFieldset, LogsActivity;
+    use CachesQueries, HasFieldset, HasActivity;
 
     protected $with = ['fieldsets'];
 
@@ -118,11 +118,10 @@ class Form extends Model
     {
         $subject    = $activity->subject;
         $action     = ucfirst($eventName);
-        $properties = ['icon' => 'paper-plane'];
-
-        if ($eventName !== 'deleted') {
-            $properties['link'] = "forms/{$subject->id}/edit";
-        }
+        $properties = [
+            'link' => "forms/{$subject->id}/edit",
+            'icon' => 'paper-plane'
+        ];
 
         $activity->description = "{$action} form ({$subject->name})";
         $activity->properties  = $properties;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\Matrix;
 
 use Fusion\Models\Matrix;
 use Facades\MatrixFactory;

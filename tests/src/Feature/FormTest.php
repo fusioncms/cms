@@ -468,18 +468,16 @@ class FormTest extends TestCase
      * @group form
      * @group activity
      */
-    public function a_deleted_form_should_be_logged_as_an_activity()
+    public function activities_will_be_cleaned_up_for_form_when_it_is_deleted()
     {
         $this->actingAs($this->admin, 'api');
         $form = FormFactory::create();
 
         $this->json('DELETE', '/api/forms/' . $form->id);
 
-        $this->assertDatabaseHas('activity_log', [
-            'description' => "Deleted form ({$form->name})",
-            'subject_id'  => $form->id,
-            'causer_type' => 'Fusion\Models\User',
-            'causer_id'   => $this->admin->id,
+        $this->assertDatabaseMissing('activity_log', [
+            'subject_id'   => $form->id,
+            'subject_type' => 'Fusion\Models\Forms',
         ]);
     }
 }
