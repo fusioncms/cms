@@ -122,6 +122,25 @@ export default {
 
         getDropzoneVisible(state) {
             return state.dropzoneVisible && state.dropzoneEnabled
+        },
+
+        getFileFilters(state) {
+            return {
+                'filter[directory_id]': state.currentDirectory,
+                'filter[display]':      (state.display !== 'everything') ? state.display : null,
+                'filter[search]':       (state.search !== '') ? state.search : null,
+                'sort':                 (state.direction === 'asc' ? '' : '-') + state.sort,
+                'page':                 state.currentPage,
+                'perPage':              state.perPage,
+            }
+        },
+
+        getDirectoryFilters(state) {
+            return {
+                'filter[search]':    (state.search !== '') ? state.search : null,
+                'filter[parent_id]': state.currentDirectory,
+                'sort':              (state.sort == 'name' ? (state.direction === 'asc' ? 'name' : '-name') : null)
+            }
         }
     },
 
@@ -293,38 +312,31 @@ export default {
             context.commit('clearDirectorySelection')
         },
 
-        fetchFilesAndDirectories: _.throttle(function({ state, commit, dispatch }) {
+        fetchFilesAndDirectories: _.throttle(({ state, getters, commit, dispatch }) => {
             commit('setLoading', true)
 
-            axios.all([
-                    axios.get('/api/files', {
-                        params: {
-                            'filter[directory_id]': state.currentDirectory,
-                            'filter[display]':      (state.display !== 'everything') ? state.display : null,
-                            'filter[search]':       (state.search !== '') ? state.search : null,
-                            'sort':                 (state.direction === 'asc' ? '' : '-') + state.sort,
-                            'page':                 state.currentPage,
-                            'perPage':              state.perPage,
-                        }
-                    }),
-                    axios.get('/api/directories', {
-                        params: {
-                            'filter[search]':    (state.search !== '') ? state.search : null,
-                            'filter[parent_id]': state.currentDirectory,
-                            'sort':              (state.sort == 'name' ? (state.direction === 'asc' ? 'name' : '-name') : null)
-                        }
-                    }),
-                    axios.get(`/api/directories/${state.currentDirectory}`),
-                ].map(promise => promise.catch(error => ({ error })))
-            ).then(axios.spread(function (files, directories, directory) {
-                commit('setFiles', files.data.data)
-                commit('setTotalPages', files.data.meta.last_page)
-                commit('setDirectories', directories.data.data)
-                commit('setDirectory', _.has(directory, 'error') ? null : directory.data.data)
-                commit('setLoading', false)
+            let getDirectory = null
 
-                dispatch('setBreadcrumbs')
-            }))
+            if (state.currentDirectory > 0)
+                getDirectory = axios.get(`/api/directories/${state.currentDirectory}`)
+
+            axios.all([
+                axios.get('/api/files', { params: getters.getFileFilters }),
+                axios.get('/api/directories', { params: getters.getDirectoryFilters }),
+                getDirectory
+            ]).then(
+                axios.spread((files, directories, currentDirectory) => {
+                    commit('setFiles',       files.data.data)
+                    commit('setTotalPages',  files.data.meta.last_page)
+                    commit('setDirectories', directories.data.data)
+                    commit('setDirectory',   currentDirectory ? currentDirectory.data.data : null)
+                    commit('setLoading',     false)
+
+                    dispatch('setBreadcrumbs')
+                })
+            ).catch(errors => {
+                console.error(errors)
+            })
         }, 500),
 
         moveFileToDirectory({ commit, state, dispatch }, payload) {
