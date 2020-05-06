@@ -2,12 +2,12 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasActivity;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Fusion\Concerns\HasDynamicRelationships;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,7 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail
         HasApiTokens,
         Notifiable,
         HasDynamicRelationships,
-        LogsActivity,
+        HasActivity,
         CausesActivity;
 
     /**
@@ -164,11 +164,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $subject    = $activity->subject;
         $action     = ucfirst($eventName);
-        $properties = ['icon' => 'users'];
-
-        if ($eventName !== 'deleted') {
-            $properties['link'] = "users/{$subject->id}/edit";
-        }
+        $properties = [
+            'link' => "users/{$subject->id}/edit",
+            'icon' => 'users'
+        ];
 
         $activity->description = "{$action} user account ({$subject->name})";
         $activity->properties  = $properties;

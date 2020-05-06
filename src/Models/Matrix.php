@@ -3,15 +3,15 @@
 namespace Fusion\Models;
 
 use Illuminate\Support\Str;
+use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasFieldset;
 use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Matrix extends Model
 {
-    use CachesQueries, HasFieldset, LogsActivity;
+    use CachesQueries, HasFieldset, HasActivity;
 
     protected $with = ['fieldsets'];
 
@@ -106,11 +106,10 @@ class Matrix extends Model
     {
         $matrix     = $activity->subject;
         $action     = Str::ucfirst($eventName);
-        $properties = ['icon' => 'hashtag'];
-
-        if ($eventName !== 'deleted') {
-            $properties['link'] = "matrices/{$matrix->id}/edit";
-        }
+        $properties = [
+            'icon' => 'hashtag',
+            'link' => "matrices/{$matrix->id}/edit"
+        ];
 
         $activity->description = "{$action} matrix ({$matrix->name})";
         $activity->properties  = $properties;

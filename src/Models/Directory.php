@@ -2,13 +2,13 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasActivity;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Directory extends Model
 {
-    use LogsActivity;
+    use HasActivity;
 
     /**
      * Fillable fields for Directory model.

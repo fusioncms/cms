@@ -2,15 +2,15 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasFieldset;
 use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Menu extends Model
 {
-    use CachesQueries, HasFieldset, LogsActivity;
+    use CachesQueries, HasFieldset, HasActivity;
 
     protected $with = ['fieldsets'];
 
@@ -73,11 +73,10 @@ class Menu extends Model
     {
         $subject    = $activity->subject;
         $action     = ucfirst($eventName);
-        $properties = ['icon' => 'anchor'];
-
-        if ($eventName !== 'deleted') {
-            $properties['link'] = "menus/{$subject->id}/edit";
-        }
+        $properties = [
+            'link' => "menus/{$subject->id}/edit",
+            'icon' => 'anchor'
+        ];
 
         $activity->description = "{$action} menu ({$subject->name})";
         $activity->properties  = $properties;

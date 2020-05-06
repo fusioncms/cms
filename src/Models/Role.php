@@ -2,16 +2,16 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasActivity;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Caffeinated\Shinobi\Concerns\HasPermissions;
 use Caffeinated\Shinobi\Contracts\Role as RoleContract;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model implements RoleContract
 {
-    use HasPermissions, LogsActivity;
+    use HasPermissions, HasActivity;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -67,11 +67,10 @@ class Role extends Model implements RoleContract
     {
         $subject    = $activity->subject;
         $action     = ucfirst($eventName);
-        $properties = ['icon' => 'id-badge'];
-
-        if ($eventName !== 'deleted') {
-            $properties['link'] = "roles/{$subject->id}/edit";
-        }
+        $properties = [
+            'link' => "roles/{$subject->id}/edit",
+            'icon' => 'id-badge'
+        ];
 
         $activity->description = "{$action} user role ({$subject->name})";
         $activity->properties  = $properties;

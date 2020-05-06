@@ -3,15 +3,15 @@
 namespace Fusion\Models;
 
 use Illuminate\Support\Str;
+use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasFieldset;
 use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Taxonomy extends Model
 {
-    use CachesQueries, HasFieldset, LogsActivity;
+    use CachesQueries, HasFieldset, HasActivity;
 
     protected $with = ['fieldsets'];
 
@@ -107,11 +107,10 @@ class Taxonomy extends Model
     {
         $subject    = $activity->subject;
         $action     = ucfirst($eventName);
-        $properties = ['icon' => 'sitemap'];
-
-        if ($eventName !== 'deleted') {
-            $properties['link'] = "taxonomies/{$subject->id}/edit";
-        }
+        $properties = [
+            'link' => "taxonomies/{$subject->id}/edit",
+            'icon' => 'sitemap'
+        ];
 
         $activity->description = "{$action} taxonomy ({$subject->name})";
         $activity->properties  = $properties;
