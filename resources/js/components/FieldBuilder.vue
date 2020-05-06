@@ -93,7 +93,6 @@
                 },
 
                 set(value) {
-                    // console.log('fields set:', value)
                     this.$emit('input', value)
                 }
             },
@@ -104,7 +103,6 @@
                 },
 
                 set(value) {
-                    // console.log('field set:', value)
                     this.active = value.handle || false
                 }
             },

@@ -13,10 +13,10 @@ class DeleteModelFiles
      */
     public function handle()
     {
-        File::delete(glob(app_path('Models/Collections') . '/*.php'));
-        File::delete(glob(app_path('Models/Forms') . '/*.php'));
-        File::delete(glob(app_path('Models/Menus') . '/*.php'));
-        File::delete(glob(app_path('Models/Pages') . '/*.php'));
-        File::delete(glob(app_path('Models/Taxonomies') . '/*.php'));
+        File::delete(glob(fusion_path('src/Models/Collections') . '/*.php'));
+        File::delete(glob(fusion_path('src/Models/Forms') . '/*.php'));
+        File::delete(glob(fusion_path('src/Models/Menus') . '/*.php'));
+        File::delete(glob(fusion_path('src/Models/Pages') . '/*.php'));
+        File::delete(glob(fusion_path('src/Models/Taxonomies') . '/*.php'));
     }
 }
