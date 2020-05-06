@@ -45,10 +45,6 @@ class MailableTest extends TestCase
      */
     public function a_request_to_register_mailables_will_update_the_database()
     {
-        $this->assertDatabaseMissing('mailables', [ 'name' => 'Welcome New User' ]);
-
-        Mailable::registerNewMailables();
-
         $this->assertDatabaseHas('mailables', [
             'name'      => 'Welcome New User',
             'handle'    => 'welcome_new_user',
@@ -63,8 +59,6 @@ class MailableTest extends TestCase
      */
     public function a_request_can_be_made_to_resolve_the_mailable_class()
     {
-        Mailable::registerNewMailables();
-
         $model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
 
         $this->assertInstanceOf($model->namespace, $model->mailable);
@@ -77,8 +71,6 @@ class MailableTest extends TestCase
      */
     public function a_request_can_be_made_to_generate_a_set_of_placeholders_for_the_mailable_class()
     {
-        Mailable::registerNewMailables();
-
         $model        = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
         $placeholders = $model->placeholders;
         $attributes = app()->make(\Fusion\Models\User::class)->getFillable();

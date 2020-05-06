@@ -78,4 +78,29 @@ class MailableTest extends TestCase
         	->assertStatus(422)
         	->assertJsonValidationErrors(['name']);
 	}
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group fusioncms
+     * @group mailable
+     * @group activity
+     */
+    public function an_updated_mailable_should_be_logged_as_an_activity()
+    {
+        $model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
+
+        // Update ----
+        $attributes         = $model->toArray();
+        $attributes['name'] = 'New Name';
+
+        $this
+            ->be($this->admin, 'api')
+            ->json('PATCH', '/api/mailables/' . $model->id, $attributes);
+
+        $this->assertDatabaseHas('activity_log', [
+            'description' => "Updated mailable ({$attributes['name']})",
+            'subject_id'  => $model->id,
+        ]);
+    }
 }

@@ -29,12 +29,12 @@ class SyncCommand extends Command
     public function handle()
     {
         try {
-            dispatch(new \Fusion\Console\Actions\SyncResources);
-            dispatch(new \Fusion\Console\Actions\SyncModules);
-            dispatch(new \Fusion\Console\Actions\SyncExtensions);
-            dispatch(new \Fusion\Console\Actions\SyncSettings);
-
             activity()->withoutLogs(function() {
+                dispatch(new \Fusion\Console\Actions\SyncResources);
+                dispatch(new \Fusion\Console\Actions\SyncModules);
+                dispatch(new \Fusion\Console\Actions\SyncExtensions);
+                dispatch(new \Fusion\Console\Actions\SyncSettings);
+
                 \Fusion\Models\Mailable::registerNewMailables();
             });
         } catch (Exception $exception) {
