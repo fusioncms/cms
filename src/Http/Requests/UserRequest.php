@@ -53,7 +53,7 @@ class UserRequest extends FormRequest
         if ($this->method() === 'POST') {
             $rules['password'] = [ 'required', new SecurePassword ];
         } else {
-            $rules['password'] = [ 'sometimes', 'required', new SecurePassword ];
+            $rules['password'] = [ 'sometimes', new SecurePassword ];
         }
 
         return $rules;
