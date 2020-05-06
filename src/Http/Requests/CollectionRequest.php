@@ -14,7 +14,7 @@ class CollectionRequest extends FormRequest
         $this->matrix        = Matrix::where('slug', request()->route('slug'))->firstOrFail();
         $this->model         = (new Collection($this->matrix->handle))->make();
         $this->fieldset      = $this->matrix->fieldset;
-        $this->fields        = $this->fieldset ? $this->fieldset->database() : [];
+        $this->fields        = $this->fieldset->fields ?? [];
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
     }
     /**
@@ -35,7 +35,8 @@ class CollectionRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'matrix_id' => $this->matrix->id
+            'matrix_id' => $this->matrix->id,
+            'status'    => $this->status ?? 1
         ]);
     }
 

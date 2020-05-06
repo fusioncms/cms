@@ -2,13 +2,13 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasActivity;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Import extends Model
 {
-    use LogsActivity;
+    use HasActivity;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -63,11 +63,10 @@ class Import extends Model
     {
         $subject    = $activity->subject;
         $action     = ucfirst($eventName);
-        $properties = ['icon' => 'ship'];
-
-        if ($eventName !== 'deleted') {
-            $properties['link'] = "importer/{$subject->id}/edit";
-        }
+        $properties = [
+            'link' => "importer/{$subject->id}/edit",
+            'icon' => 'ship'
+        ];
 
         $activity->description = "{$action} import ({$subject->name})";
         $activity->properties  = $properties;

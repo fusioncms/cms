@@ -141,7 +141,6 @@ class RelationshipTest extends TestCase
             'pivot_type' => 'Fusion\Models\Pages\Post',
         ]);
 
-
         // Assert inverse relationship has been established
         // Note: uncomment to see model file
         // dd(\File::get(app_path('Models/Taxonomies/Colors.php')));

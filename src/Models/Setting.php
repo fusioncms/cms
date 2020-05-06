@@ -2,14 +2,14 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Setting extends Model
 {
-    use CachesQueries, LogsActivity;
+    use CachesQueries, HasActivity;
 
     /**
      * The attributes that are guarded via mass assignment.
@@ -54,13 +54,6 @@ class Setting extends Model
     }
 
     /**
-     * Just log update event.
-     *
-     * @var array
-     */
-    protected static $recordEvents = ['updated'];
-
-    /**
      * Tap into activity before persisting to database.
      *
      * @param  \Spatie\Activitylog\Models\Activity $activity
@@ -69,14 +62,16 @@ class Setting extends Model
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $setting = $activity->subject;
-        $section = $setting->section;
-        $action  = ucfirst($eventName);
+        if ($eventName == 'updated') {
+            $setting = $activity->subject;
+            $section = $setting->section;
+            $action  = ucfirst($eventName);
 
-        $activity->description = "{$action} {$section->name} settings";
-        $activity->properties  = [
-            'icon' => 'cog',
-            'link' => 'settings'
-        ];
+            $activity->description = "{$action} {$section->name} settings";
+            $activity->properties  = [
+                'icon' => 'cog',
+                'link' => 'settings'
+            ];
+        }
     }
 }

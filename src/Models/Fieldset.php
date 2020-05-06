@@ -2,14 +2,14 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasActivity;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Fusion\Concerns\HasDynamicRelationships;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Fieldset extends Model
 {
-    use HasDynamicRelationships, LogsActivity;
+    use HasDynamicRelationships, HasActivity;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -103,11 +103,10 @@ class Fieldset extends Model
     {
         $subject    = $activity->subject;
         $action     = ucfirst($eventName);
-        $properties = ['icon' => 'list'];
-
-        if ($eventName !== 'deleted') {
-            $properties['link'] = "fieldsets/{$subject->id}/edit";
-        }
+        $properties = [
+            'link' => "fieldsets/{$subject->id}/edit",
+            'icon' => 'list'
+        ];
 
         $activity->description = "{$action} fieldset ({$subject->name})";
         $activity->properties  = $properties;

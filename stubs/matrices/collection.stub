@@ -5,13 +5,13 @@ namespace Fusion\Models\Collections;
 use Fusion\Models\Field;
 use Fusion\Models\Matrix;
 use Illuminate\Support\Str;
+use Fusion\Concerns\HasActivity;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class {class} extends Model
 {
-    use LogsActivity;
+    use HasActivity;
 
 	/**
      * The table associated with the model.
@@ -101,11 +101,10 @@ class {class} extends Model
         $matrix     = $entry->matrix;
         $action     = Str::ucfirst($eventName);
         $modelName  = Str::singular($matrix->name);
-        $properties = ['icon' => $matrix->icon];
-
-        if ($eventName !== 'deleted') {
-            $properties['link'] = "collections/{$matrix->slug}/{$entry->id}/edit";
-        }
+        $properties = [
+            'link' => "collections/{$matrix->slug}/{$entry->id}/edit",
+            'icon' => $matrix->icon
+        ];
 
         $activity->description = "{$action} {$modelName} ({$entry->name})";
         $activity->properties  = $properties;

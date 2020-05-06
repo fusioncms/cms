@@ -5,13 +5,13 @@ namespace Fusion\Models\Taxonomies;
 use Fusion\Models\Field;
 use Fusion\Models\Taxonomy;
 use Illuminate\Support\Str;
+use Fusion\Concerns\HasActivity;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class {class} extends Model
 {
-    use LogsActivity;
+    use HasActivity;
 
 	/**
      * The table associated with the model.
@@ -92,11 +92,10 @@ class {class} extends Model
         $taxonomy   = $term->taxonomy;
         $action     = ucfirst($eventName);
         $modelName  = strtolower(Str::singular($taxonomy->name));
-        $properties = ['icon' => $taxonomy->icon];
-
-        if ($eventName !== 'deleted') {
-            $properties['link'] = "taxonomies/{$taxonomy->slug}/{$term->id}/edit";
-        }
+        $properties = [
+            'link' => "taxonomies/{$taxonomy->slug}/{$term->id}/edit",
+            'icon' => $taxonomy->icon
+        ];
 
         $activity->description = "{$action} {$modelName} term ({$term->name})";
         $activity->properties  = $properties;

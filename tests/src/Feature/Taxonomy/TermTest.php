@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\Taxonomy;
 
 use Fusion\Tests\TestCase;
 use Illuminate\Support\Str;
