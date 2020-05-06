@@ -13,7 +13,6 @@ use Illuminate\Support\Collection;
 use Caffeinated\Themes\Facades\Theme;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Database\Eloquent\Model;
-use Fusion\Models\Mailable as MailableModel;
 
 class Mailable extends Model
 {
@@ -177,15 +176,13 @@ class Mailable extends Model
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        if ($eventName == 'updated') {
-            $subject = $activity->subject;
-            $action  = ucfirst($eventName);
+        $subject = $activity->subject;
+        $action  = ucfirst($eventName);
 
-            $activity->description = "{$action} mailable ({$subject->name})";
-            $activity->properties  = [
-                'icon' => 'mail-bulk',
-                'link' => "mailables/{$subject->id}/edit"
-            ];
-        }
+        $activity->description = "{$action} mailable ({$subject->name})";
+        $activity->properties  = [
+            'icon' => 'mail-bulk',
+            'link' => "mailables/{$subject->id}/edit"
+        ];
     }
 }

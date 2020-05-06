@@ -72,7 +72,7 @@ Route::apiResource('/menus/{menu}/nodes', 'NodeController');
 Route::apiResource('/menus', 'MenuController');
 Route::apiResource('/pages', 'PageController');
 Route::apiResource('/matrices', 'MatrixController');
-Route::apiResource('mailables', 'MailableController')->except(['store', 'destroy']);
+Route::apiResource('mailables', 'MailableController')->except(['index', 'store', 'destroy']);
 Route::apiResource('/imports', 'ImportController');
 Route::apiResource('/forms/{slug}/responses', 'ResponseController');
 Route::apiResource('/forms', 'FormController');

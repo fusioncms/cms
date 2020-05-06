@@ -62,16 +62,14 @@ class Setting extends Model
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        if ($eventName == 'updated') {
-            $setting = $activity->subject;
-            $section = $setting->section;
-            $action  = ucfirst($eventName);
+        $setting = $activity->subject;
+        $section = $setting->section;
+        $action  = ucfirst($eventName);
 
-            $activity->description = "{$action} {$section->name} settings";
-            $activity->properties  = [
-                'icon' => 'cog',
-                'link' => 'settings'
-            ];
-        }
+        $activity->description = "{$action} {$section->name} settings";
+        $activity->properties  = [
+            'icon' => 'cog',
+            'link' => 'settings'
+        ];
     }
 }

@@ -30,16 +30,16 @@ class CreateDefaultUser
      */
     public function handle()
     {
-        activity()->disableLogging();
+        activity()->withoutLogs(function() {
+            $user = User::create([
+                'name'              => $this->container['user_name'],
+                'email'             => $this->container['user_email'],
+                'password'          => Hash::make($this->container['user_password']),
+                'status'            => true,
+                'email_verified_at' => now(),
+            ]);
 
-        $user = User::create([
-            'name'              => $this->container['user_name'],
-            'email'             => $this->container['user_email'],
-            'password'          => Hash::make($this->container['user_password']),
-            'status'            => true,
-            'email_verified_at' => now(),
-        ]);
-
-        Shinobi::assign('admin')->to($user);
+            Shinobi::assign('admin')->to($user);
+        });
     }
 }
