@@ -80,6 +80,7 @@
                         autocomplete="off"
                         required
                         :watch="form.name"
+                        delimiter="_"
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
                         v-model="form.handle">

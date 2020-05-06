@@ -2,31 +2,18 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use File;
-use ReflectionClass;
 use Fusion\Models\Mailable;
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Requests\MailableRequest;
 use Fusion\Http\Resources\MailableResource;
 
 class MailableController extends Controller
 {
-	/**
-     * Display a listing of the resource.
-     *
-     * @param  Request $request
-     * @return Collection
-     */
-    public function index(Request $request)
-    {
-    	$this->authorize('mailable.index');
-    }
-
     /**
      * Display the specified resource.
      *
-     * @param  Mailable  $mailable
-     * @return MailableResource
+     * @param  \Fusion\Models\Mailable  $mailable
+     * @return \Fusion\Http\Resources\MailableResource
      */
     public function show(Mailable $mailable)
     {
@@ -38,22 +25,13 @@ class MailableController extends Controller
     /**
      * Update an existing record in storage.
      *
-     * @param  Request  $request
-     * @param  Mailable $mailable
-     * @return MailableResource
+     * @param  \Fusion\Http\Requests\MailableRequest  $request
+     * @param  \Fusion\Models\Mailable                $mailable
+     * @return \Fusion\Http\Resources\MailableResource
      */
-    public function update(Request $request, Mailable $mailable)
+    public function update(MailableRequest $request, Mailable $mailable)
     {
-    	$this->authorize('mailable.update');
-
-        // Validate..
-        $attributes = $request->validate([
-            'name'     => 'required',
-            'handle'   => 'required|unique:mailables,id,' . $mailable->id,
-            'markdown' => 'required'
-        ]);
-
-        $mailable->update($attributes);
+        $mailable->update($request->validated());
 
     	return new MailableResource($mailable);
     }

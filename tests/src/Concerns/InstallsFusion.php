@@ -50,8 +50,6 @@ trait InstallsFusion
 
         Artisan::call('fusion:sync');
         Artisan::call('fusion:flush');
-
-        activity()->enableLogging();
     }
 
     /**

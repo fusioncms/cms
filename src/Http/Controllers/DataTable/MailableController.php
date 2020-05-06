@@ -12,8 +12,6 @@ class MailableController extends DataTableController
 {
     public function builder()
     {
-        Mailable::registerNewMailables();
-
         return Mailable::active();
     }
 
