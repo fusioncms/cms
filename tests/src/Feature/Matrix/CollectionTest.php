@@ -23,7 +23,7 @@ class CollectionTest extends TestCase
         $this->fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($this->section)->create();
         $this->fieldContent = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($this->section)->create();
         $this->fieldset     = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->matrix       = \Facades\MatrixFactory::withName('Posts')->asCollection()->withFieldset($this->fieldset)->withRoute('posts/{slug}')->withTemplate('index')->create();
+        $this->matrix       = \Facades\MatrixFactory::withName('Collectibles')->asCollection()->withFieldset($this->fieldset)->withRoute('collectibles/{slug}')->withTemplate('index')->create();
         $this->model        = (new \Fusion\Services\Builders\Collection($this->matrix->handle))->make();
     }
 
@@ -46,10 +46,10 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->admin, 'api')
-            ->json('POST', '/api/collections/posts', $attributes)
+            ->json('POST', '/api/collections/collectibles', $attributes)
             ->assertStatus(201);
 
-        $this->assertDatabaseHas('mx_posts', $attributes);
+        $this->assertDatabaseHas('mx_collectibles', $attributes);
     }
 
     /**
@@ -63,7 +63,7 @@ class CollectionTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->json('POST', '/api/collections/posts', []);
+        $this->json('POST', '/api/collections/collectibles', []);
     }
 
     /**
@@ -79,7 +79,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('POST', '/api/collections/posts', []);
+            ->json('POST', '/api/collections/collectibles', []);
     }
 
     /**
@@ -102,10 +102,10 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->admin, 'api')
-            ->json('PATCH', '/api/collections/posts/' . $entry->id, $attributes)
+            ->json('PATCH', '/api/collections/collectibles/' . $entry->id, $attributes)
             ->assertStatus(200);
 
-        $this->assertDatabaseHas('mx_posts', $attributes);
+        $this->assertDatabaseHas('mx_collectibles', $attributes);
     }
 
     /**
@@ -121,9 +121,9 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->admin, 'api')
-            ->json('DELETE', '/api/collections/posts/' . $entry->id);
+            ->json('DELETE', '/api/collections/collectibles/' . $entry->id);
 
-        $this->assertDatabaseMissing('mx_posts', [ 'id' => $entry->id ]);
+        $this->assertDatabaseMissing('mx_collectibles', [ 'id' => $entry->id ]);
     }
 
     /**
@@ -139,7 +139,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->admin, 'api')
-            ->json('POST', '/api/collections/posts', $attributes)
+            ->json('POST', '/api/collections/collectibles', $attributes)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['slug']);
     }
@@ -157,7 +157,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->user)
-            ->get('/posts/' . $entry->slug)
+            ->get('/collectibles/' . $entry->slug)
             ->assertStatus(200);
     }
 
@@ -176,7 +176,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->user)
-            ->get('/posts/' . $entry->slug);
+            ->get('/collectibles/' . $entry->slug);
     }
 
     /**
@@ -194,7 +194,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->admin)
-            ->get('/posts/' . $entry->slug);
+            ->get('/collectibles/' . $entry->slug);
     }
 
     /**
@@ -210,7 +210,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->admin)
-            ->get('/posts/' . $entry->slug . '?preview=true')
+            ->get('/collectibles/' . $entry->slug . '?preview=true')
             ->assertStatus(200);
     }
 
@@ -229,7 +229,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->user)
-            ->get('/posts/' . $entry->slug . '?preview=true');
+            ->get('/collectibles/' . $entry->slug . '?preview=true');
     }
 
     //
@@ -255,7 +255,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->admin, 'api')
-            ->json('POST', '/api/collections/posts', $attributes);
+            ->json('POST', '/api/collections/collectibles', $attributes);
 
         $entry = \DB::table($this->model->getTable())->first();
 

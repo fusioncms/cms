@@ -167,14 +167,7 @@ class Mailable extends Model
             }
         }
     }
-
-    /**
-     * Just log update event.
-     *
-     * @var array
-     */
-    protected static $recordEvents = ['updated'];
-
+    
     /**
      * Tap into activity before persisting to database.
      *
