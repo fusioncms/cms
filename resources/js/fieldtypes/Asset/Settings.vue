@@ -62,14 +62,26 @@
 	        }
         },
 
-        created() {
-        	axios.get('/api/directories').then(response => {
-				this.directories = _.map(response.data.data, (directory) => {
-					return { 'label': directory.name, 'value': directory.id }
-				})
+        methods: {
+        	recursiveMap(items, n) {
+                _.forEach(items, (item) => {
+                	this.directories.push({ 'label': _.repeat('- ', n) + item.name, 'value': item.id })
 
-				this.directories.unshift({ 'label': 'None', 'value': null })
-        	})
+                    this.recursiveMap(item.children, n + 1)
+                })
+            },
+
+        	fetchDirectoryHierarchy() {
+                axios.get('/api/directories?recursive=true').then(({ data }) => {
+                	this.directories.push({ 'label': 'Root', 'value': '0' })
+
+                	this.recursiveMap(data.data, 1)
+                })
+            }
+        },
+
+        created() {
+        	this.fetchDirectoryHierarchy()
         }
     }
 </script>

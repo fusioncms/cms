@@ -252,6 +252,10 @@
 				this.selected = this.selection
 				this.close()
 			}
+		},
+
+		beforeDestroy() {
+			this.reset()
 		}
 	}
 </script>
