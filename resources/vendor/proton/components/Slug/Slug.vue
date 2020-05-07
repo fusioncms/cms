@@ -21,7 +21,7 @@
                 :autofocus="autofocus"
                 v-model.lazy="model"
                 ref="input"
-                @blur="onBlur"
+                
             >
         </div>
 
@@ -36,7 +36,7 @@
 
         data() {
             return {
-                shouldSlugify: false,
+                inSync: true
             }
         },
 
@@ -109,64 +109,40 @@
             },
             watch: {
                 required: false,
-                type: String,
-                default: '',
-            },
+                type: [String,Boolean],
+                default: false,
+            }
         },
 
         watch: {
             watch(value) {
-                if (this.shouldSlugify) {
-                    this.model = this.slugify(value)
+                if (this.inSync) {
+                    this.model = value
                 }
-
-                this.updateState()
             },
 
-            value(value) {
-                this.model = value
-
-                this.updateState()
-            },
-        },
-
-        methods: {
-            updateState() {
-                let modelIsNull = this.model === null
-                let modelEqualsWatch = this.model === this.slugify(this.watch)
-
-                this.shouldSlugify = modelIsNull || modelEqualsWatch
-            },
-
-            slugify(text) {
-                if (text) {
-                    const a = 'àáäâèéëêìíïîòóöôùúüûñçßÿỳýœæŕśńṕẃǵǹḿǘẍźḧ'
-                    const b = 'aaaaeeeeiiiioooouuuuncsyyyoarsnpwgnmuxzh'
-                    const p = new RegExp(a.split('').join('|'), 'g')
-
-                    return text.toString().toLowerCase().trim()
-                    .replace(p, c =>                                                    // Replace special characters
-                        b.charAt(a.indexOf(c)))
-                    .replace(/&+/gi, 'and')                                              // Replace 1 or more & characters with the word 'and'
-                    .replace(/\s+/g, this.delimiter)                                     // Convert spaces with delimiter
-                    .replace(/[^\w\-]+/g, '')                                            // Remove all non-word chars
-                    .replace(new RegExp(this.delimiter + '{2,}', 'g'), this.delimiter);  // Replace multiple delimiters with a single one
-                }
-
-                return null
-            },
-
-            onBlur() {
-                if (this.model == null) {
-                    this.model = this.slugify(this.watch)
-                }
+            model(value) {
+                this.inSync = value === '' || value === this.slugify(this.watch)
             }
         },
 
-        mounted() {
-            this.model = this.value
+        methods: {
+            slugify(value) {
+                const a = 'àáäâèéëêìíïîòóöôùúüûñçßÿỳýœæŕśńṕẃǵǹḿǘẍźḧ'
+                const b = 'aaaaeeeeiiiioooouuuuncsyyyoarsnpwgnmuxzh'
+                const p = new RegExp(a.split('').join('|'), 'g')
+                const d = new RegExp(this.delimiter + '{2,}', 'g')
 
-            this.updateState()
+                return value
+                    .toString()
+                    .toLowerCase()
+                    .trim()
+                    .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+                    .replace(/&+/gi, 'and')                  // Replace 1 or more & characters with the word 'and'
+                    .replace(/\s+/g, this.delimiter)         // Convert spaces with delimiter
+                    .replace(/[^\w\-]+/g, '')                // Remove all non-word chars
+                    .replace(d, this.delimiter)              // Replace multiple delimiters with a single one
+            }
         }
     }
 </script>
