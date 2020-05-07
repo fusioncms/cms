@@ -19,6 +19,7 @@ class CreateFilesTable extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('uuid')->unique();
+            $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->string('location');
             $table->string('original');

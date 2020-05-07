@@ -17,6 +17,7 @@ class File extends Model
         'name',
         'slug',
         'uuid',
+        'title',
         'description',
         'location',
         'original',
@@ -68,6 +69,7 @@ class File extends Model
     {
         return $query
             ->where('name', 'like', "%{$value}%")
+            ->orWhere('title', 'like', "%{$value}%")
             ->orWhere('description', 'like', "%{$value}%");
     }
 
