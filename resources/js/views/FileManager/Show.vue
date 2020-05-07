@@ -69,19 +69,31 @@
                 <div class="card__body">
                     <p-input
                         name="name"
-                        label="Name"
+                        label="Filename"
                         autocomplete="off"
                         autofocus
-                        placeholder="Name"
+                        placeholder="Filename"
+                        help="The filename targets the SEO friendly URL, as the filename is included in the URL."
                         :has-error="form.errors.has('name')"
                         :error-message="form.errors.get('name')"
                         v-model="form.name">
                     </p-input>
 
+                    <p-input
+                        name="title"
+                        label="Title"
+                        autocomplete="off"
+                        help="The title targets the title html attributes, which is a nice-to-have feature."
+                        placeholder="Title"
+                        :has-error="form.errors.has('title')"
+                        :error-message="form.errors.get('title')"
+                        v-model="form.title">
+                    </p-input>
+
                     <p-textarea
                         name="description"
                         label="Description"
-                        help="Describing your file isn't mandatory but is incredibly useful for accessibility."
+                        help="This description is used for image html alt descriptions, required for accessibility."
                         placeholder="Description"
                         :has-error="form.errors.has('description')"
                         :error-message="form.errors.get('description')"
@@ -197,6 +209,7 @@
                         this.loaded = true
                         this.form   = new Form({
                             name: this.file.name,
+                            title: this.file.title,
                             description: this.file.description
                         })
 

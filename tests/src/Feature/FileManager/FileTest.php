@@ -43,6 +43,7 @@ class FileTest extends TestCase
 
         $this->assertDatabaseHas('files', [
             'name'        => $attr['name'],
+            'title'       => $attr['title'],
             'description' => $attr['description'],
             'original'    => $attr['original'],
         ]);
@@ -270,29 +271,35 @@ class FileTest extends TestCase
      * @group feature
      * @group file
      */
-    public function files_can_be_searched_by_name()
+    public function files_can_be_searched_by_name_title_or_description()
     {
         $this->actingAs($this->admin, 'api');
 
-        factory(File::class)->create(['name' => 'lorem', 'description' => '']);
-        factory(File::class)->create(['name' => 'ipsum', 'description' => '']);
-        factory(File::class)->create(['name' => 'dolor', 'description' => '']);
-        factory(File::class)->create(['name' => 'sit',   'description' => '']);
-        factory(File::class)->create(['name' => 'amet',  'description' => '']);
-        factory(File::class)->create(['name' => 'do',    'description' => '']);
+        factory(File::class)->create(['name' => 'lorem', 'title' => 'sit',   'description' => 'do']);
+        factory(File::class)->create(['name' => 'ipsum', 'title' => 'dolor', 'description' => 'amet']);
+        // factory(File::class)->create(['name' => 'sit',   'title' => , 'description' => 'fooBar']);
+        // factory(File::class)->create(['name' => 'amet',  'title' => , 'description' => 'fooBar']);
+        // factory(File::class)->create(['name' => 'do',    'title' => , 'description' => 'fooBar']);
 
         $response = $this->json('GET', '/api/files?filter[search]=lor');
         $data     = collect($response->getData()->data);
 
         $this->assertCount(2, $data);
         $this->assertCount(1, $data->where('name', 'lorem'));
-        $this->assertCount(1, $data->where('name', 'dolor'));
+        $this->assertCount(1, $data->where('name', 'ipsum'));
 
         $response = $this->json('GET', '/api/files?filter[search]=dolor');
         $data     = collect($response->getData()->data);
 
         $this->assertCount(1, $data);
-        $this->assertCount(1, $data->where('name', 'dolor'));
+        $this->assertCount(1, $data->where('name', 'ipsum'));
+
+        $response = $this->json('GET', '/api/files?filter[search]=do');
+        $data     = collect($response->getData()->data);
+
+        $this->assertCount(2, $data);
+        $this->assertCount(1, $data->where('name', 'lorem'));
+        $this->assertCount(1, $data->where('name', 'ipsum'));
     }
 
     /**

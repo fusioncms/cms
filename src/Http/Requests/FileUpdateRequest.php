@@ -52,6 +52,7 @@ class FileUpdateRequest extends FormRequest
     {
         return [
             'name'         => 'required',
+            'title'        => 'sometimes',
             'description'  => 'sometimes',
             'slug'         => 'sometimes',
             'original'     => 'sometimes',

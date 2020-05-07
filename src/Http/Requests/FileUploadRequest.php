@@ -70,6 +70,7 @@ class FileUploadRequest extends FormRequest
             'uuid'         => 'required',
             'name'         => 'required',
             'slug'         => 'required',
+            'title'        => 'sometimes',
             'description'  => 'sometimes',
             'extension'    => 'required',
             'bytes'        => 'required|integer',
