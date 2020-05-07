@@ -270,6 +270,7 @@ export default {
 
     actions: {
         reset({ commit }) {
+            commit('setRootDirectory', 0)
             commit('setCurrentDirectory', null)
             commit('setParentDirectory', null)
             commit('clearFileSelection')
@@ -368,18 +369,23 @@ export default {
             context.commit('setDirection', direction)
         },
 
-        setBreadcrumbs(context) {
+        setBreadcrumbs({ state, commit }) {
             let breadcrumbs = []
-            let directory   = context.state.directory
+            let directory   = state.directory
+            let root        = state.rootDirectory
 
-            if (directory) {
-                while (directory) {
-                    breadcrumbs.unshift(directory)
-                    directory = directory.parent
-                }
+            while (_.has(directory, 'id') && directory.id != root) {
+                breadcrumbs.unshift(directory)
+                directory = directory.parent
             }
 
-            context.commit('setBreadcrumbs', breadcrumbs)
+            if (root == 0) {
+                breadcrumbs.unshift({ id: null, name: 'Root' })
+            } else {
+                breadcrumbs.unshift(directory)
+            }
+
+            commit('setBreadcrumbs', breadcrumbs)
         },
 
         setDirectories(context, directories) {
