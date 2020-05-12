@@ -4,7 +4,7 @@
 			<p-input
 				ref="edit"
 				autocomplete="off"
-				placeholder="Name"
+				placeholder="Filename"
 				v-model="form.name"
 				class="text-center"
 				:has-error="form.errors.has('name')"

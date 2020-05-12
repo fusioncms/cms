@@ -17,26 +17,6 @@ class FileTest extends TestCase
      * @group unit
      * @group file
      */
-    public function each_file_must_have_a_unique_slug()
-    {
-        $this->expectException(QueryException::class);
-        $this->expectExceptionMessage('UNIQUE constraint failed: files.slug');
-
-        $file = factory(File::class)->create();
-        $file = $file->toArray();
-        $file['id']   = null;
-        $file['uuid'] = 'new-uuid';
-
-        unset($file['url']);
-
-        DB::table('files')->insert($file);
-    }
-
-    /**
-     * @test
-     * @group unit
-     * @group file
-     */
     public function each_file_must_have_a_unique_uuid()
     {
         $this->expectException(QueryException::class);
@@ -44,10 +24,9 @@ class FileTest extends TestCase
 
         $file = factory(File::class)->create();
         $file = $file->toArray();
-        $file['id']   = null;
-        $file['slug'] = 'new-slug';
+        $file['id'] = null;
 
-        unset($file['url']);
+        unset($file['isFile'], $file['type'], $file['url']);
 
         DB::table('files')->insert($file);
     }

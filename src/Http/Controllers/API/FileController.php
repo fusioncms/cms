@@ -66,7 +66,40 @@ class FileController extends Controller
      */
     public function store(FileUploadRequest $request)
     {
-        $file = File::create($request->validated());
+        $upload    = $request->file('file');
+        $directory = $request->input('directory_id', 0);
+        $uuid      = unique_id();
+        $name      = pathinfo($upload->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $upload->extension();
+        $bytes     = $upload->getSize();
+        $mimetype  = $upload->getClientMimeType();
+        $filetype  = strtok($mimetype, '/');
+        $location  = "files/{$uuid}-{$name}.{$extension}";
+
+        Storage::disk('public')->putFileAs('', $upload, $location);
+
+        switch ($filetype) {
+            case 'image':
+                list($width, $height) = getimagesize($upload);
+            break;
+            case 'audio':
+            case 'video':
+                // TODO: capture duration
+            break;
+        }
+
+        $file = File::create([
+            'directory_id' => $directory,
+            'uuid'         => $uuid,
+            'name'         => $name,
+            'extension'    => $extension,
+            'bytes'        => $bytes,
+            'mimetype'     => $mimetype,
+            'location'     => $location,
+            'width'        => $width ?? null,
+            'height'       => $height ?? null,
+
+        ]);
 
         return new FileResource($file);
     }

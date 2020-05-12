@@ -17,11 +17,11 @@ class CreateFilesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('directory_id')->nullable();
             $table->string('name');
-            $table->string('slug')->unique();
             $table->string('uuid')->unique();
-            $table->text('description')->nullable();
+            $table->string('title')->nullable();
+            $table->string('alt')->nullable();
+            $table->text('caption')->nullable();
             $table->string('location');
-            $table->string('original');
             $table->string('extension');
             $table->string('mimetype');
             $table->integer('bytes');
