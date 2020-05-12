@@ -14,7 +14,7 @@
 			</p-input>
 		</span>
 
-		<div v-show="!isEditing" class="truncate" @dblclick="edit">{{ form.filename }}</div>
+		<div v-show="!isEditing" class="truncate" @dblclick="edit">{{ form.name }}</div>
 	</div>
 </template>
 

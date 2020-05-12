@@ -31,7 +31,7 @@ class FileController extends Controller
                 AllowedFilter::scope('search', 'searchQuery'),
                 AllowedFilter::scope('display', 'displayQuery'),
             ])
-            ->allowedSorts([ 'name', 'bytes', 'updated_at' ])
+            ->allowedSorts(['name', 'bytes', 'updated_at'])
             ->defaultSort('name')
             ->paginate(
                 request()->query('perPage', 50),
