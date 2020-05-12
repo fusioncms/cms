@@ -2,12 +2,14 @@
 
 namespace Fusion\Console\Actions;
 
-use Symfony\Component\Finder\Finder;
 use Illuminate\Support\Facades\File;
+use Fusion\Concerns\CleansDirectories;
 use Caffeinated\Modules\Facades\Module;
 
 class SyncModules
 {
+    use CleansDirectories;
+
     /**
      * Execute the command.
      *
@@ -35,28 +37,6 @@ class SyncModules
                 );
             }
         });
-    }
-
-    /**
-     * Empty the specified directory of all files and folders
-     *   (but keeping the `.gitignore` file).
-     *
-     * @return void
-     */
-    protected function cleanDirectory($directory)
-    {
-        if (! File::exists($directory)) {
-            File::makeDirectory($directory);
-        }
-
-        $files = Finder::create()->in($directory);
-        $paths = [];
-
-        foreach ($files as $file) {
-            $paths[] = $file->getPathname();
-        }
-
-        File::delete($paths);
     }
 
     /**
