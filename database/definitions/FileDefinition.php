@@ -13,13 +13,12 @@ $factory->define(Fusion\Models\File::class, function (Faker $faker) {
         'directory_id' => 0,
         'uuid'         => ($uuid = unique_id()),
         'name'         => ($name = $this->faker->word),
-        'slug'         => ($slug = Str::slug("{$uuid}-{$name}")),
-        'title'        => ($title = $this->faker->word),
-        'description'  => $faker->sentence(),
+        'title'        => null,       
+        'alt'          => null,       
+        'caption'      => null,
         'extension'    => ($extn = 'png'),
-        'original'     => Str::slug($name) . ".{$extn}",
         'mimetype'     => 'image/png',
-        'location'     => "files/{$slug}.{$extn}",
+        'location'     => "files/{$uuid}-{$name}.{$extn}",
         'width'        => $faker->randomNumber(2),
         'height'       => $faker->randomNumber(2),
         'bytes'        => $faker->randomNumber(3),
@@ -40,17 +39,13 @@ $factory->state(Fusion\Models\File::class, 'image', function ($faker) {
  */
 $factory->state(Fusion\Models\File::class, 'audio', function ($faker) {
     return [
-        'uuid'         => ($uuid = unique_id()),
-        'name'         => ($name = $this->faker->word),
-        'slug'         => ($slug = Str::slug("{$uuid}-{$name}")),
-        'title'        => ($title = $this->faker->word),
-        'description'  => $faker->sentence(),
-        'extension'    => ($extn = 'ogg'),
-        'original'     => Str::slug($name) . ".{$extn}",
-        'mimetype'     => 'audio/ogg',
-        'location'     => "files/{$slug}.{$extn}",
-        'width'        => null,
-        'height'       => null,
+        'uuid'      => ($uuid = unique_id()),
+        'name'      => ($name = $this->faker->word),
+        'extension' => ($extn = 'ogg'),
+        'mimetype'  => 'audio/ogg',
+        'location'  => "files/{$uuid}-{$name}.{$extn}",
+        'width'     => null,
+        'height'    => null,
     ];
 });
 
@@ -59,17 +54,13 @@ $factory->state(Fusion\Models\File::class, 'audio', function ($faker) {
  */
 $factory->state(Fusion\Models\File::class, 'video', function ($faker) {
     return [
-        'uuid'         => ($uuid = unique_id()),
-        'name'         => ($name = $this->faker->word),
-        'slug'         => ($slug = Str::slug("{$uuid}-{$name}")),
-        'title'        => ($title = $this->faker->word),
-        'description'  => $faker->sentence(),
-        'extension'    => ($extn = 'webm'),
-        'original'     => Str::slug($name) . ".{$extn}",
-        'mimetype'     => 'video/webm',
-        'location'     => "files/{$slug}.{$extn}",
-        'width'        => null,
-        'height'       => null,
+        'uuid'      => ($uuid = unique_id()),
+        'name'      => ($name = $this->faker->word),
+        'extension' => ($extn = 'webm'),
+        'mimetype'  => 'video/webm',
+        'location'  => "files/{$uuid}-{$name}.{$extn}",
+        'width'     => null,
+        'height'    => null,
     ];
 });
 
@@ -78,17 +69,13 @@ $factory->state(Fusion\Models\File::class, 'video', function ($faker) {
  */
 $factory->state(Fusion\Models\File::class, 'document', function ($faker) {
     return [
-        'uuid'         => ($uuid = unique_id()),
-        'name'         => ($name = $this->faker->word),
-        'slug'         => ($slug = Str::slug("{$uuid}-{$name}")),
-        'title'        => ($title = $this->faker->word),
-        'description'  => $faker->sentence(),
-        'extension'    => ($extn = 'txt'),
-        'original'     => Str::slug($name) . ".{$extn}",
-        'mimetype'     => 'text/plain',
-        'location'     => "files/{$slug}.{$extn}",
-        'width'        => null,
-        'height'       => null,
+        'uuid'      => ($uuid = unique_id()),
+        'name'      => ($name = $this->faker->word),
+        'extension' => ($extn = 'txt'),
+        'mimetype'  => 'text/plain',
+        'location'  => "files/{$uuid}-{$name}.{$extn}",
+        'width'     => null,
+        'height'    => null,
     ];
 });
 
@@ -96,10 +83,10 @@ $factory->state(Fusion\Models\File::class, 'document', function ($faker) {
  * Post create image - upload image
  */
 $factory->afterCreatingState(Fusion\Models\File::class, 'image', function ($file, $faker) {
-    $name = "{$file->slug}.{$file->extension}";
-    $file = UploadedFile::fake()->image($name);
+    $location = "{$file->uuid}-{$file->name}.{$file->extension}";
+    $file     = UploadedFile::fake()->image($location);
 
-    Storage::fake('public')->putFileAs('files', $file, $name);
+    Storage::fake('public')->putFileAs('files', $file, $location);
 
 });
 
@@ -107,8 +94,8 @@ $factory->afterCreatingState(Fusion\Models\File::class, 'image', function ($file
  * Post create document - upload file
  */
 $factory->afterCreatingState(Fusion\Models\File::class, 'document', function ($file, $faker) {
-    $name = "{$file->slug}.{$file->extension}";
-    $file = UploadedFile::fake()->createWithContent($name, $faker->paragraphs(3, true));
+    $location = "{$file->uuid}-{$file->name}.{$file->extension}";
+    $file     = UploadedFile::fake()->createWithContent($location, $faker->paragraphs(3, true));
 
-    Storage::fake('public')->putFileAs('files', $file, $name);
+    Storage::fake('public')->putFileAs('files', $file, $location);
 });

@@ -9,12 +9,13 @@ use Fusion\Models\Directory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Auth\Access\AuthorizationException;
 
 class FileTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     public function setUp(): void
     {
@@ -33,19 +34,17 @@ class FileTest extends TestCase
      */
     public function a_user_with_permissions_can_create_files()
     {
-        $attr         = factory(File::class)->make()->toArray();
-        $attr['file'] = UploadedFile::fake()->image($attr['original']);
-
         $this
             ->be($this->admin, 'api')
-            ->json('POST', 'api/files', $attr)
+            ->json('POST', 'api/files', [
+                'file' => UploadedFile::fake()->image('foobar.png')
+            ])
             ->assertStatus(201);
 
         $this->assertDatabaseHas('files', [
-            'name'        => $attr['name'],
-            'title'       => $attr['title'],
-            'description' => $attr['description'],
-            'original'    => $attr['original'],
+            'name'      => 'foobar',
+            'mimetype'  => 'image/png',
+            'extension' => 'png'
         ]);
 
         Storage::disk('public')->assertExists(
@@ -81,6 +80,84 @@ class FileTest extends TestCase
             ->json('POST', '/api/files', []);
     }
 
+        /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group file
+     */
+    public function a_file_is_required_for_uploads()
+    {
+        $this
+            ->be($this->admin, 'api')
+            ->json('POST', '/api/files', [ 'file' => null ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'file' => 'The file field is required.',
+            ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group file
+     */
+    public function a_valid_file_is_required_for_uploads()
+    {
+        $this
+            ->be($this->admin, 'api')
+            ->json('POST', '/api/files', [ 'file' => 'foobar' ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'file' => 'The file must be a file.',
+            ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group file
+     */
+    public function a_valid_file_must_abide_by_acceptable_file_type_settings()
+    {
+        setting(['files.accepted_files' => 'jpg, png, gif']);
+        setting(['files.file_size_upload_limit' => 1]);
+
+        $this
+            ->be($this->admin, 'api')
+            ->json('POST', '/api/files', [
+                'file' => UploadedFile::fake()->createWithContent('foobar.txt', $this->faker->paragraphs(3, true))
+            ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'file'  => 'The file must be a file of type: ' . setting('files.accepted_files'),
+            ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group file
+     */
+    public function a_valid_file_must_abide_by_acceptable_file_size_settings()
+    {
+        setting(['files.accepted_files' => 'pdf']);
+        setting(['files.file_size_upload_limit' => 1]);
+
+        $this
+            ->be($this->admin, 'api')
+            ->json('POST', '/api/files', [
+                'file' => UploadedFile::fake()->create('test.pdf', 2000, 'application/pdf')
+            ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'file'  => 'The file cannot be larger than ' . setting('files.file_size_upload_limit') . 'MB',
+            ]);
+    }
+
     /**
      * @test
      * @group fusioncms
@@ -93,8 +170,10 @@ class FileTest extends TestCase
         $attr = $file->toArray();
 
         // updates ----
-        $attr['name']        = 'Updated Name';
-        $attr['description'] = 'Updated description.';
+        $attr['name']    = 'updated-name';
+        $attr['title']   = 'This is the title field.';
+        $attr['alt']     = 'This is the alt field.';
+        $attr['caption'] = 'This is the caption field.';
 
         $this
             ->be($this->admin, 'api')
@@ -104,15 +183,15 @@ class FileTest extends TestCase
         $this->assertDatabaseHas('files', [
             'name'        => ($name = $attr['name']),
             'uuid'        => ($uuid = $file->uuid),
+            'title'       => $attr['title'],
+            'alt'         => $attr['alt'],
+            'caption'     => $attr['caption'],
             'extension'   => ($extn = $file->extension),
-            'slug'        => ($slug = Str::slug("{$uuid}-{$name}")),
-            'original'    => Str::slug($name) . ".{$extn}",
-            'location'    => "files/{$slug}.{$extn}",
-            'description' => $attr['description'],
+            'location'    => "files/{$uuid}-{$name}.{$extn}",
         ]);
 
         Storage::disk('public')->assertMissing($file->location);
-        Storage::disk('public')->assertExists("files/{$slug}.{$extn}");
+        Storage::disk('public')->assertExists("files/{$uuid}-{$name}.{$extn}");
     }
 
     /**
@@ -205,7 +284,7 @@ class FileTest extends TestCase
             ->assertStatus(200);
 
         $this->assertTrue($response->headers->get('content-type') === $file->mimetype);
-        $this->assertTrue($response->headers->get('content-disposition') === "attachment; filename={$file->original}");
+        $this->assertTrue($response->headers->get('content-disposition') === "attachment; filename={$file->name}.{$file->extension}");
     }
 
     /**
@@ -271,35 +350,37 @@ class FileTest extends TestCase
      * @group feature
      * @group file
      */
-    public function files_can_be_searched_by_name_title_or_description()
+    public function files_can_be_searched_by_keywords()
     {
         $this->actingAs($this->admin, 'api');
 
-        factory(File::class)->create(['name' => 'lorem', 'title' => 'sit',   'description' => 'do']);
-        factory(File::class)->create(['name' => 'ipsum', 'title' => 'dolor', 'description' => 'amet']);
-        // factory(File::class)->create(['name' => 'sit',   'title' => , 'description' => 'fooBar']);
-        // factory(File::class)->create(['name' => 'amet',  'title' => , 'description' => 'fooBar']);
-        // factory(File::class)->create(['name' => 'do',    'title' => , 'description' => 'fooBar']);
+        factory(File::class)->create(['name' => 'lorem', 'title' => 'sit']);
+        factory(File::class)->create(['name' => 'ipsum', 'title' => 'amet']);
+        factory(File::class)->create(['name' => 'sit', 'alt' => 'lorem']);
+        factory(File::class)->create(['name' => 'amet', 'alt' => 'ipsum']);
+        factory(File::class)->create(['name' => 'dolor', 'caption' => 'foo']);
+        factory(File::class)->create(['name' => 'foo', 'caption' => 'bar']);
 
         $response = $this->json('GET', '/api/files?filter[search]=lor');
         $data     = collect($response->getData()->data);
 
-        $this->assertCount(2, $data);
+        $this->assertCount(3, $data);
         $this->assertCount(1, $data->where('name', 'lorem'));
-        $this->assertCount(1, $data->where('name', 'ipsum'));
+        $this->assertCount(1, $data->where('name', 'sit'));
+        $this->assertCount(1, $data->where('name', 'dolor'));
 
         $response = $this->json('GET', '/api/files?filter[search]=dolor');
         $data     = collect($response->getData()->data);
 
         $this->assertCount(1, $data);
-        $this->assertCount(1, $data->where('name', 'ipsum'));
+        $this->assertCount(1, $data->where('name', 'dolor'));
 
-        $response = $this->json('GET', '/api/files?filter[search]=do');
+        $response = $this->json('GET', '/api/files?filter[search]=foo');
         $data     = collect($response->getData()->data);
 
         $this->assertCount(2, $data);
-        $this->assertCount(1, $data->where('name', 'lorem'));
-        $this->assertCount(1, $data->where('name', 'ipsum'));
+        $this->assertCount(1, $data->where('name', 'dolor'));
+        $this->assertCount(1, $data->where('name', 'foo'));
     }
 
     /**

@@ -22,7 +22,7 @@
 			return {
 				options: {
 					name: 'Name',
-					bytes: 'Filesize',
+					bytes: 'Size',
 					updated_at: 'Last Modified'
 				}
 			}

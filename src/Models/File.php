@@ -2,6 +2,7 @@
 
 namespace Fusion\Models;
 
+use File as FileSystem;
 use Storage;
 use Illuminate\Support\Str;
 use Fusion\Concerns\CachesQueries;
@@ -13,14 +14,13 @@ class File extends Model
     use CachesQueries;
 
     protected $fillable = [
+        'uuid',
         'directory_id',
         'name',
-        'slug',
-        'uuid',
         'title',
-        'description',
+        'alt',
+        'caption',
         'location',
-        'original',
         'extension',
         'mimetype',
         'bytes',
@@ -28,12 +28,11 @@ class File extends Model
         'height',
     ];
 
-    protected $appends = ['url'];
-
-    public function getUrlAttribute()
-    {
-        return '/file/'.$this->uuid.'/'.$this->getAttribute('original');
-    }
+    protected $appends = [
+        'isFile',
+        'type',
+        'url'
+    ];
 
     /**
      * The "booting" method of the model.
@@ -47,6 +46,50 @@ class File extends Model
         static::deleting(function ($model) {
             Storage::delete($model->location);
         });
+    }
+
+    /**
+     * Get derived absolute file path.
+     *
+     * @return string
+     */
+    public function getFullPathAttribute()
+    {
+        return Storage::disk('public')->path($this->location);
+    }
+
+    /**
+     * Is file a file (or directory)?
+     *
+     * @return boolean
+     */
+    public function getIsFileAttribute()
+    {
+        return FileSystem::isFile($this->fullPath);
+    }
+
+    /**
+     * Get derived file type (image or ..?).
+     *
+     * @return string
+     */
+    public function getTypeAttribute()
+    {
+        $type  = strtok($this->mimetype, '/');
+        $types = ['image', 'audio', 'video'];
+
+        return in_array($type, $types) ? $type : 'document';
+    }
+
+    /**
+     * Get the user-friendly url.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getUrlAttribute()
+    {
+        return "/file/{$this->uuid}/{$this->name}";
     }
 
     /**
@@ -69,8 +112,9 @@ class File extends Model
     {
         return $query
             ->where('name', 'like', "%{$value}%")
-            ->orWhere('title', 'like', "%{$value}%")
-            ->orWhere('description', 'like', "%{$value}%");
+            ->orwhere('title', 'like', "%{$value}%")
+            ->orWhere('alt', 'like', "%{$value}%")
+            ->orWhere('caption', 'like', "%{$value}%");
     }
 
     /**

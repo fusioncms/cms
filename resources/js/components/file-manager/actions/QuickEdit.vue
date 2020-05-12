@@ -4,7 +4,7 @@
 			<p-input
 				ref="edit"
 				autocomplete="off"
-				placeholder="Name"
+				placeholder="Filename"
 				v-model="form.name"
 				class="text-center"
 				:has-error="form.errors.has('name')"
@@ -14,7 +14,7 @@
 			</p-input>
 		</span>
 
-		<div v-show="!isEditing" class="truncate" @dblclick="edit">{{ form.name }}</div>
+		<div v-show="!isEditing" class="truncate" @dblclick="edit">{{ form.filename }}</div>
 	</div>
 </template>
 
