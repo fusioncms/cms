@@ -23,9 +23,16 @@ class FileReplaceController extends Controller
         $extension = $upload->extension();
         $bytes     = $upload->getSize();
         $mimetype  = $upload->getClientMimeType();
+        $filetype  = strtok($mimetype, '/');
 
-        if (Str::startsWith($mimetype, 'image')) {
-            list($width, $height) = getimagesize($upload);
+        switch ($filetype) {
+            case 'image':
+                list($width, $height) = getimagesize($upload);
+            break;
+            case 'audio':
+            case 'video':
+                // TODO: capture duration
+            break;
         }
 
         if (Storage::disk('public')->putFileAs('', $upload, $file->location)) {
@@ -37,7 +44,6 @@ class FileReplaceController extends Controller
                 'height'    => $height ?? null,
             ]);
 
-            // clear glide cache
             glide()->deleteCache($file->location);
         }
 

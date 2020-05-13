@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('file/{uuid}/{filename}', 'FileController@index');
+Route::get('file/{uuid}/{name}', 'FileController@index');
 Route::get('backups/{backup}', 'BackupController@index');
 Route::get('/themes/{theme}/preview.png', 'Themes\ScreenshotController@show');
 

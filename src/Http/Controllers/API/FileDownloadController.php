@@ -14,6 +14,6 @@ class FileDownloadController extends Controller
         $file = File::where('uuid', $uuid)->firstOrFail();
         $path = Storage::disk('public')->path($file->location);
 
-        return response()->download($path, $file->original);
+        return response()->download($path, "{$file->name}.{$file->extension}");
     }
 }

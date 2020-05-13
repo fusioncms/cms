@@ -2,10 +2,12 @@
 
 namespace Fusion\Console\Uninstaller;
 
-use Illuminate\Support\Facades\File;
+use Fusion\Concerns\CleansDirectories;
 
 class DeleteDirectories
 {
+    use CleansDirectories;
+    
     /**
      * Execute the command.
      *
@@ -25,13 +27,8 @@ class DeleteDirectories
      */
     private function deleteModuleDirectories()
     {
-        if (File::exists(base_path('modules'))) {
-            File::deleteDirectory(base_path('modules'));
-        }
-
-        if (File::exists(public_path('modules'))) {
-            File::deleteDirectory(public_path('modules'));
-        }
+        $this->cleanDirectory(base_path('modules'));
+        $this->cleanDirectory(public_path('modules'));
     }
 
     /**
@@ -42,12 +39,7 @@ class DeleteDirectories
      */
     private function deleteThemeDirectories()
     {
-        if (File::exists(base_path('themes'))) {
-            File::deleteDirectory(base_path('themes'));
-        }
-
-        if (File::exists(public_path('themes'))) {
-            File::deleteDirectory(public_path('themes'));
-        }
+        $this->cleanDirectory(base_path('themes'));
+        $this->cleanDirectory(public_path('themes'));
     }
 }

@@ -2,12 +2,33 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FileUploadRequest extends FormRequest
 {
+    /**
+     * Max file size upload limit.
+     * 
+     * @var int
+     */
+    protected $maxFileSize;
+
+    /**
+     * Accepted file extensions.
+     * 
+     * @var string
+     */
+    protected $acceptedMimes;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->maxFileSize   = setting('files.file_size_upload_limit');
+        $this->acceptedMimes = setting('files.accepted_files');
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -19,65 +40,30 @@ class FileUploadRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        $this->upload = request()->file('file');
-
-        if ($this->upload) {
-            $uuid      = unique_id();
-            $directory = is_numeric($this->directory_id) ? $this->directory_id : 0;
-            $extension = $this->upload->extension();
-            $bytes     = $this->upload->getSize();
-            $mimetype  = $this->upload->getClientMimeType();
-            $name      = pathinfo($this->upload->getClientOriginalName(), PATHINFO_FILENAME);
-            $slug      = Str::slug("{$uuid}-{$name}");
-            $original  = Str::slug($name) . ".{$extension}";
-            $location  = Storage::disk('public')->putFileAs('files', $this->upload, "{$slug}.{$extension}");
-
-            if (Str::startsWith($mimetype, 'image')) {
-                list($width, $height) = getimagesize($this->upload);
-            }
-
-            $this->merge([
-                'directory_id' => $directory,
-                'uuid'         => $uuid,
-                'name'         => $name,
-                'slug'         => $slug,
-                'extension'    => $extension,
-                'bytes'        => $bytes,
-                'original'     => $original,
-                'mimetype'     => $mimetype,
-                'location'     => $location,
-                'width'        => $width ?? null,
-                'height'       => $height ?? null,
-            ]);
-        }
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules()
     {
+        $maxKb = byte_converter($this->maxFileSize, 'MB', 'KB');
+        $mimes = preg_replace('/\\s/', '', $this->acceptedMimes);
+
         return [
-            'directory_id' => 'required|integer',
-            'uuid'         => 'required',
-            'name'         => 'required',
-            'slug'         => 'required',
-            'description'  => 'sometimes',
-            'extension'    => 'required',
-            'bytes'        => 'required|integer',
-            'original'     => 'required',
-            'mimetype'     => 'required',
-            'location'     => 'required',
-            'width'        => 'sometimes',
-            'height'       => 'sometimes',
+            'file'         => "required|file|max:{$maxKb}|mimes:{$mimes}",
+            'directory_id' => 'sometimes',
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+    *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'file.max' => "The file cannot be larger than {$this->maxFileSize}MB",
         ];
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <form-container>
         <portal to="title">
-            <app-title icon="image">{{ loaded ? file.name : '' }}</app-title>
+            <app-title icon="image" v-text="form.name"></app-title>
         </portal>
 
         <portal to="actions">
@@ -26,11 +26,11 @@
         </portal>
 
         <div class="card" v-if="loaded" :key="file.name">
-            <div class="flex items-center justify-center">
+            <div class="card__body flex items-center justify-center">
                 <div v-if="file.type == 'image'">
                     <p-img
                         :src="fileSrc"
-                        :alt="file.description"
+                        :alt="file.alt"
                         background-color="#ffffff"
                         class="rounded">
                     </p-img>
@@ -42,13 +42,19 @@
                     </video>
                 </div>
 
+                <div v-else-if="file.type == 'audio'">
+                    <audio controls>
+                        <source :src="file.url" :type="file.mimetype">
+                    </audio>
+                </div>
+
                 <div v-else>
                     <p-img
                         :src="'/vendor/fusion/img/' + file.type + '-small.svg'"
                         background-color="#ffffff"
                         :width="200"
                         :height="200"
-                        :alt="file.description">
+                        :alt="file.alt">
                     </p-img>
 
                     <div class="text-center px-6 py-3 rounded border border-gray-400 bg-gray-200 text-gray-800">
@@ -67,25 +73,49 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-input
+                    <p-slug
                         name="name"
-                        label="Name"
-                        autocomplete="off"
+                        label="Filename"
                         autofocus
-                        placeholder="Name"
+                        required
+                        autocomplete="off"
+                        help="The filename dictates the Share URL below."
+                        placeholder="Filename"
                         :has-error="form.errors.has('name')"
                         :error-message="form.errors.get('name')"
                         v-model="form.name">
+                    </p-slug>
+
+                    <p-input
+                        name="title"
+                        label="Title"
+                        autocomplete="off"
+                        help="The title targets the title html attributes, which is a nice-to-have feature."
+                        placeholder="Title (optional)"
+                        :has-error="form.errors.has('title')"
+                        :error-message="form.errors.get('title')"
+                        v-model="form.title">
+                    </p-input>
+
+                    <p-input
+                        name="alt"
+                        label="Alt"
+                        autocomplete="off"
+                        placeholder="Alt (optional)"
+                        help="This value targets the alt html attributes, required for accessibility."
+                        :has-error="form.errors.has('alt')"
+                        :error-message="form.errors.get('alt')"
+                        v-model="form.alt">
                     </p-input>
 
                     <p-textarea
-                        name="description"
-                        label="Description"
-                        help="Describing your file isn't mandatory but is incredibly useful for accessibility."
-                        placeholder="Description"
-                        :has-error="form.errors.has('description')"
-                        :error-message="form.errors.get('description')"
-                        v-model="form.description">
+                        name="caption"
+                        label="Caption"
+                        help="This caption is used for image captions to give users more information."
+                        placeholder="Caption (optional)"
+                        :has-error="form.errors.has('caption')"
+                        :error-message="form.errors.get('caption')"
+                        v-model="form.caption">
                     </p-textarea>
                 </div>
             </div>
@@ -111,8 +141,8 @@
                     {{ file.mimetype }}
                 </p-definition>
 
-                <p-definition name="Dimensions" v-if="file.width && file.height">
-                    {{ file.width }} x {{ file.height }}
+                <p-definition name="Dimensions" v-if="file.dimensions">
+                    {{ file.dimensions.width }} x {{ file.dimensions.height }}
                 </p-definition>
 
                 <p-definition name="Last Modified">
@@ -151,7 +181,7 @@
 
         computed: {
             fileSrc(file) {
-                return this.file.url + '?w=1500&h=1500&fit=max&t=' + this.$moment.utc(this.file.updated_at)
+                return `${this.file.url}?w=1500&h=1500&fit=max&t=${this.$moment.utc(this.file.updated_at).format('X')}`
             }
         },
 
@@ -197,35 +227,14 @@
                         this.loaded = true
                         this.form   = new Form({
                             name: this.file.name,
-                            description: this.file.description
+                            title: this.file.title,
+                            alt: this.file.alt,
+                            caption: this.file.caption
                         })
 
                         this.toggleSelection(this.file.id)
 
                         this.$emit('updateHead')
-
-                        this.$nextTick(() => {
-                            this.player = new Plyr(this.$refs.player, {
-                                title: this.file.name,
-                                ratio: '16:9',
-                                controls: [
-                                    'play-large',   // The large play button in the center
-                                    'restart',      // Restart playback
-                                    'play',         // Play/pause playback
-                                    'progress',     // The progress bar and scrubber for playback and buffering
-                                    'current-time', // The current time of playback
-                                    'duration',     // The full duration of the media
-                                    'mute',         // Toggle mute
-                                    'volume',       // Volume control
-                                    'captions',     // Toggle captions
-                                    'settings',     // Settings menu
-                                    'pip',          // Picture-in-picture (currently Safari only)
-                                    'airplay',      // Airplay (currently Safari only)
-                                    'fullscreen',   // Toggle fullscreen
-                                ],
-                                settings: ['quality', 'loop'],
-                            })
-                        })
                     })
             },
 
@@ -246,19 +255,17 @@
 
             download() {
                 axios({
-                    url: '/api/files/' + this.file.uuid + '/download',
+                    url: `/api/files/${this.file.uuid}/download`,
                     method: 'GET',
                     responseType: 'blob',
                 }).then((response) => {
                     const url = window.URL.createObjectURL(new Blob([response.data]));
                     const link = document.createElement('a');
                     link.href = url;
-                    link.setAttribute('download', this.file.original);
+                    link.setAttribute('download', `${this.file.name}.${this.file.extension}`);
                     document.body.appendChild(link);
                     link.click();
                 })
-
-                toast(this.file.original + ' downloaded', 'success')
             },
         },
 

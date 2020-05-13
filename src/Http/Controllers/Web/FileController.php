@@ -12,7 +12,7 @@ use Fusion\Http\Streamers\Video\LaravelStreamer as LaravelVideoStreamer;
 
 class FileController extends Controller
 {
-    public function index($uuid, $filename)
+    public function index($uuid, $name)
     {
         $file = File::where('uuid', $uuid)->firstOrFail();
 
@@ -20,8 +20,8 @@ class FileController extends Controller
         $params      = request()->all();
         $params['t'] = $file->updated_at->format('U');
 
-        if ($filename !== $file->original) {
-            return redirect()->to('/file/' . $uuid . '/' . $file->original . '?' . http_build_query($params));
+        if ($name !== $file->name) {
+            return redirect()->to('/file/' . $uuid . '/' . $file->name . '?' . http_build_query($params));
         }
 
         if (Str::startsWith($file->mimetype, 'image') and $file->mimetype !== 'image/gif') {
@@ -32,7 +32,7 @@ class FileController extends Controller
             return $this->videoResponse($file->location, $file->mimetype);
         }
 
-        return Storage::drive('public')->response($file->location);
+        return Storage::disk('public')->response($file->location);
     }
 
     protected function imageResponse($path, $params)

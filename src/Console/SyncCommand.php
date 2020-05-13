@@ -34,8 +34,6 @@ class SyncCommand extends Command
                 dispatch(new \Fusion\Console\Actions\SyncModules);
                 dispatch(new \Fusion\Console\Actions\SyncExtensions);
                 dispatch(new \Fusion\Console\Actions\SyncSettings);
-
-                \Fusion\Models\Mailable::registerNewMailables();
             });
         } catch (Exception $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);

@@ -2,7 +2,6 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,21 +24,14 @@ class FileUpdateRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        // Handle name change..
-        if ($this->name !== $this->file->name) {
-            $name     = Str::slug($this->name);
-            $slug     = Str::slug("{$this->file->uuid}-{$this->name}");
-            $original = str_replace($this->file->name, $name, $this->file->original);
-            $location = str_replace(Str::slug($this->file->name), $name, $this->file->location);
+        $oldLocation = $this->file->location;
+        $newLocation = "files/{$this->file->uuid}-{$this->name}.{$this->file->extension}";
 
-            // Rename file..
-            Storage::disk('public')->move($this->file->location, $location);
+        // Rename if necessary..
+        if ($oldLocation !== $newLocation) {
+            Storage::disk('public')->move($oldLocation, $newLocation);
 
-            $this->merge([
-                'slug'     => $slug,
-                'original' => $original,
-                'location' => $location,
-            ]);
+            $this->merge([ 'location' => $newLocation ]);
         }
     }
 
@@ -51,11 +43,11 @@ class FileUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'         => 'required',
-            'description'  => 'sometimes',
-            'slug'         => 'sometimes',
-            'original'     => 'sometimes',
-            'location'     => 'sometimes',
+            'name'     => 'required',
+            'title'    => 'sometimes',
+            'alt'      => 'sometimes',
+            'caption'  => 'sometimes',
+            'location' => 'sometimes',
         ];
     }
 }

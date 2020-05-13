@@ -14,7 +14,7 @@
 				:lazySrc="fileSrc"
 				:width="100"
 				:height="100"
-				:alt="file.description"
+				:alt="file.alt"
 				:draggable="false">
 			</p-img>
 		</div>
@@ -83,7 +83,7 @@
 			fileSrc() {
 				switch(this.file.type) {
 					case 'image':
-						return `${this.file.url}?w=100&h=100&fit=crop&t=${this.$moment.utc(this.file.updated_at)}`
+						return `${this.file.url}?w=100&h=100&fit=crop&t=${this.$moment.utc(this.file.updated_at).format('X')}`
 					default:
 						return `/vendor/fusion/img/${this.file.type}-large.svg`
 				}

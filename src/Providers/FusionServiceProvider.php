@@ -2,6 +2,7 @@
 
 namespace Fusion\Providers;
 
+use Fusion\Models\Mailable;
 use Laravel\Passport\Passport;
 use Caffeinated\Themes\Facades\Theme;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,7 @@ class FusionServiceProvider extends ServiceProvider
         if (app_installed()) {
             $this->registerBonsai();
             $this->registerTheme();
+            $this->registerMailables();
         }
     }
 
@@ -131,10 +133,21 @@ class FusionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerMigrations() {
+    private function registerMigrations()
+    {
         if ($this->app->runningInConsole()) {
             $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
         }
+    }
+
+    /**
+     * Register Mailables templates.
+     * 
+     * @return void
+     */
+    private function registerMailables()
+    {
+        Mailable::registerNewMailables();
     }
 
     /**
