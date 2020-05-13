@@ -45,6 +45,7 @@
                         monospaced
                         autocomplete="off"
                         required
+                        delimiter="_"
                         :watch="form.name"
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"

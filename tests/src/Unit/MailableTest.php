@@ -15,6 +15,13 @@ class MailableTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        Mailable::registerNewMailables();
+    }
+
     /**
      * @test
      * @group unit
