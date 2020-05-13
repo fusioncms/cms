@@ -20,9 +20,7 @@
                 :autocomplete="autocomplete"
                 :autofocus="autofocus"
                 v-model.lazy="model"
-                ref="input"
-                
-            >
+                ref="input">
         </div>
 
         <p class="field__help" v-if="help" v-html="help"></p>
@@ -36,7 +34,8 @@
 
         data() {
             return {
-                inSync: true
+                inSync: true,
+                isLocked: _.endsWith(this.$route.name, '.edit')
             }
         },
 
@@ -109,20 +108,20 @@
             },
             watch: {
                 required: false,
-                type: [String,Boolean],
-                default: false,
+                type: String,
+                default: '',
             }
         },
 
         watch: {
             watch(value) {
-                if (this.inSync) {
+                if (this.inSync && ! this.isLocked) {
                     this.model = value
                 }
             },
 
             model(value) {
-                this.inSync = value === '' || value === this.slugify(this.watch)
+                this.inSync = ! this.isLocked && (value === '' || value === this.slugify(this.watch))
             }
         },
 
