@@ -8,7 +8,6 @@ use Fusion\Tests\Concerns\InstallsFusion;
 use Fusion\Providers\FusionServiceProvider;
 use Caffeinated\Flash\FlashServiceProvider;
 use Caffeinated\Menus\MenusServiceProvider;
-use Caffeinated\Bonsai\BonsaiServiceProvider;
 use Caffeinated\Themes\ThemesServiceProvider;
 use Caffeinated\Modules\ModulesServiceProvider;
 use Fusion\Tests\Concerns\MakesDatabaseAssertions;
@@ -122,7 +121,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             // Caffeinated
             FlashServiceProvider::class,
             MenusServiceProvider::class,
-            BonsaiServiceProvider::class,
             ThemesServiceProvider::class,
             ModulesServiceProvider::class,
 

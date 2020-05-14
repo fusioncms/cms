@@ -6,7 +6,6 @@ use Fusion\Models\Mailable;
 use Laravel\Passport\Passport;
 use Caffeinated\Themes\Facades\Theme;
 use Illuminate\Support\Facades\Route;
-use Caffeinated\Bonsai\Facades\Bonsai;
 use Illuminate\Support\ServiceProvider;
 
 class FusionServiceProvider extends ServiceProvider
@@ -27,7 +26,6 @@ class FusionServiceProvider extends ServiceProvider
         Passport::routes();
 
         if (app_installed()) {
-            $this->registerBonsai();
             $this->registerTheme();
             $this->registerMailables();
         }
@@ -44,6 +42,7 @@ class FusionServiceProvider extends ServiceProvider
             define('FUSION_VERSION', '6.0.0-beta.5');
         }
 
+        $this->registerFusion();
         $this->registerConfig();
         $this->registerTelescope();
 
@@ -55,6 +54,19 @@ class FusionServiceProvider extends ServiceProvider
             \Fusion\Console\FlushCommand::class,
             \Fusion\Console\SyncCommand::class,
         ]);
+    }
+
+    /**
+     * Register the primary Fusion class and its
+     * binding within the service container.
+     *
+     * @return void
+     */
+    private function registerFusion()
+    {
+        $this->app->bind('fusion', function() {
+            return new \Fusion\Fusion;
+        });
     }
 
     /**
@@ -142,26 +154,12 @@ class FusionServiceProvider extends ServiceProvider
 
     /**
      * Register Mailables templates.
-     * 
+     *
      * @return void
      */
     private function registerMailables()
     {
         Mailable::registerNewMailables();
-    }
-
-    /**
-     * Register and boot the root bonsai instance.
-     *
-     * @return void
-     */
-    private function registerBonsai()
-    {
-        // Japanese maples
-        // five finger leaves, red or green
-        // delicate beauty
-
-        Bonsai::plant();
     }
 
     /**
@@ -289,5 +287,17 @@ class FusionServiceProvider extends ServiceProvider
         Route::pattern('slug', '[a-z0-9-]+');
         Route::pattern('handle', '[a-z0-9_]+');
         Route::pattern('username', '[a-z0-9_-]{3,16}');
+    }
+
+    /**
+     * Return a list of bound services.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return [
+            'fusion'
+        ];
     }
 }

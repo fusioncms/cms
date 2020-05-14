@@ -26,6 +26,7 @@
         {{-- Scripts --}}
         <script src="{{ mix('js/gravity.js', 'vendor/fusion') }}"></script>
 
-        @bonsai('js')
+        @assets('js')
+
     </body>
 </html>

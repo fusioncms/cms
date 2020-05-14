@@ -33,8 +33,22 @@ class BladeServiceProvider extends ServiceProvider
     protected function registerAppDirectives()
     {
         Blade::directive('route', function ($expression) {
-            return "<?php
- echo route({$expression}); ?>";
+            return "<?php echo route({$expression}); ?>";
+        });
+
+        Blade::directive('assets', function ($type) {
+            switch($assetType) {
+                case "'css'":
+                    return "<?php echo Fusion::css(); ?>";
+                    break;
+
+                case "'js'":
+                return "<?php echo Fusion::js(); ?>";
+                    break;
+
+                default:
+                    throw new Exception('Invalid asset type declared. Must be either "css" or "js".');
+            }
         });
     }
 
