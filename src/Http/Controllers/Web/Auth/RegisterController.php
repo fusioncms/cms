@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Events\Registered;
 use Fusion\Http\Controllers\Controller;
-use Caffeinated\Shinobi\Facades\Shinobi;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -64,9 +63,9 @@ class RegisterController extends Controller
             'name'     => $attributes['name'],
             'email'    => $attributes['email'],
             'password' => Hash::make($attributes['password']),
-        ]);
-
-        Shinobi::assign(setting('user.default_user_role', 'user'))->to($user);
+        ])->assignRole(
+            setting('user.default_user_role', 'User')
+        );
 
         if (setting('users.user_email_verification') === 'disabled') {
         // Automatically verify registration

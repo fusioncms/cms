@@ -35,6 +35,12 @@ class SyncModules
                     fusion_path("settings/modules/{$module['slug']}.php"),
                     base_path("modules/{$module['basename']}/settings.php")
                 );
+
+                // publish permissions..
+                $this->symlink(
+                    fusion_path("permissions/modules/{$module['slug']}.php"),
+                    base_path("modules/{$module['basename']}/permissions.php")
+                );
             }
         });
     }

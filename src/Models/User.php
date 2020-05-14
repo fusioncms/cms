@@ -4,6 +4,7 @@ namespace Fusion\Models;
 
 use Fusion\Concerns\HasActivity;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Fusion\Concerns\HasDynamicRelationships;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,11 +13,10 @@ use Spatie\Activitylog\Traits\CausesActivity;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Fusion\Concerns\MustVerifyEmail as UserMustVerifyEmail;
-use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasRolesAndPermissions,
+    use HasRoles,
         UserMustVerifyEmail,
         HasApiTokens,
         Notifiable,
