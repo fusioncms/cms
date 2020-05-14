@@ -49,7 +49,6 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.2.5",
-        "caffeinated/bonsai": "^5.0",
         "caffeinated/flash": "^4.0",
         "caffeinated/menus": "^4.0",
         "caffeinated/modules": "^6.0",
@@ -91,6 +90,7 @@
                 "Fusion\\Providers\\FusionServiceProvider"
             ],
             "aliases": {
+                "Fusion": "Fusion\\Facades\\Fusion",
                 "Setting": "Fusion\\Facades\\Setting"
             },
             "dont-discover": [

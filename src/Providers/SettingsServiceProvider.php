@@ -40,6 +40,11 @@ class SettingsServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * Return a list of bound services.
+     *
+     * @return array
+     */
     public function provides()
     {
         return [
