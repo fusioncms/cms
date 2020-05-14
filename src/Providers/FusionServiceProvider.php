@@ -4,6 +4,7 @@ namespace Fusion\Providers;
 
 use Fusion\Models\Mailable;
 use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\Gate;
 use Caffeinated\Themes\Facades\Theme;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -22,13 +23,25 @@ class FusionServiceProvider extends ServiceProvider
         $this->registerPublishing();
         $this->registerViews();
         $this->registerRoutes();
+        $this->registerGates();
 
         Passport::routes();
 
         if (app_installed()) {
             $this->registerTheme();
-            $this->registerMailables();
         }
+    }
+
+    /**
+     * Register the permission gates.
+     *
+     * @return void
+     */
+    protected function registerGates()
+    {
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole(['Administrator', 'Developer']) ? true : null;
+        });
     }
 
     /**
@@ -81,7 +94,6 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(SettingsServiceProvider::class);
         $this->app->register(FieldtypeServiceProvider::class);
 
-        $this->app->register(\Caffeinated\Shinobi\ShinobiServiceProvider::class);
         $this->app->register(\Caffeinated\Themes\ThemesServiceProvider::class);
     }
 
@@ -153,16 +165,6 @@ class FusionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register Mailables templates.
-     *
-     * @return void
-     */
-    private function registerMailables()
-    {
-        Mailable::registerNewMailables();
-    }
-
-    /**
      * Register the package's config.
      *
      * @return void
@@ -178,7 +180,7 @@ class FusionServiceProvider extends ServiceProvider
         );
 
         $this->mergeConfigFrom(
-            __DIR__.'/../../config/shinobi.php', 'shinobi'
+            __DIR__.'/../../config/permission.php', 'permission'
         );
     }
 
