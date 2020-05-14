@@ -2,6 +2,8 @@
 
 namespace Fusion\Concerns;
 
+use Illuminate\Support\Collection;
+
 trait RegistersAssets
 {
     /**
@@ -210,7 +212,7 @@ trait RegistersAssets
             }
         }
 
-        $dependencies       = buildDependencies($list);
+        $dependencies       = $this->buildDependencies($list);
         $sortedDependencies = $this->sortDependencies();
 
         return array_filter($sortedDependencies);

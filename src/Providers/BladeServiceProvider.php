@@ -3,6 +3,7 @@
 namespace Fusion\Providers;
 
 use Blade;
+use Fusion;
 use Illuminate\Support\ServiceProvider;
 
 class BladeServiceProvider extends ServiceProvider
@@ -37,7 +38,7 @@ class BladeServiceProvider extends ServiceProvider
         });
 
         Blade::directive('assets', function ($type) {
-            switch($assetType) {
+            switch($type) {
                 case "'css'":
                     return "<?php echo Fusion::css(); ?>";
                     break;

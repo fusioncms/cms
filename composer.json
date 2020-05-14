@@ -49,12 +49,6 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.2.5",
-<<<<<<< HEAD
-        "doctrine/dbal": "^2.9",
-        "illuminate/support": "^7.0",
-=======
-        "caffeinated/bonsai": "^5.0",
->>>>>>> b38bc1d220a9f99947c098b8114aca66eeb36dc9
         "caffeinated/flash": "^4.0",
         "caffeinated/menus": "^4.0",
         "caffeinated/modules": "^6.0",
