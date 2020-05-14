@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 
 class SyncPermissions
 {
@@ -59,6 +60,9 @@ class SyncPermissions
         foreach ($existing as $id) {
             Permission::findOrFail($id)->delete();
         }
+
+        // Clear permission cache..
+        resolve(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 
     /**
