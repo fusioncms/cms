@@ -2,7 +2,7 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Models\Role;
+use Spatie\Permission\Models\Role;
 use Fusion\Http\Controllers\DataTableController;
 
 class RoleController extends DataTableController
@@ -16,7 +16,7 @@ class RoleController extends DataTableController
     {
         return [
             'name',
-            'slug',
+            'guard_name',
             'description',
         ];
     }
@@ -25,7 +25,7 @@ class RoleController extends DataTableController
     {
         return [
             'name'        => 'Name',
-            'slug'        => 'Slug',
+            'guard_name'  => 'Guard',
             'description' => 'Description',
         ];
     }
@@ -34,7 +34,6 @@ class RoleController extends DataTableController
     {
         return [
             'name',
-            'slug',
         ];
     }
 
@@ -42,7 +41,6 @@ class RoleController extends DataTableController
     {
         return [
             'name',
-            'slug',
         ];
     }
 }

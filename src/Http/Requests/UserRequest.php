@@ -43,7 +43,7 @@ class UserRequest extends FormRequest
         $rules = [
             'name'              => 'required',
             'email'             => 'required|email|unique:users,email,' . $id,
-            'role'              => 'sometimes|exists:roles,slug',
+            'role'              => 'sometimes|exists:roles,name',
             'status'            => 'sometimes|boolean',
             'email_verified_at' => 'sometimes|required',
 

@@ -6,11 +6,9 @@ use Fusion\Models\User;
 use Illuminate\Support\Facades\File;
 use Caffeinated\Themes\Facades\Theme;
 use Illuminate\Support\Facades\Artisan;
-use Caffeinated\Shinobi\Facades\Shinobi;
-use Fusion\Console\Installer\CreatePermissions;
+use Fusion\Console\Installer\CreateDefaultRoles;
 use Fusion\Console\Installer\PublishModuleAssets;
 use Fusion\Console\Installer\CreateDatabaseTables;
-use Fusion\Console\Installer\CreateDefaultUserRoles;
 use Fusion\Console\Installer\PublishFusionResources;
 
 trait InstallsFusion
@@ -41,8 +39,7 @@ trait InstallsFusion
 
         dispatch_now(new CreateDatabaseTables);
         dispatch_now(new PublishModuleAssets);
-        dispatch_now(new CreatePermissions);
-        dispatch_now(new CreateDefaultUserRoles([
+        dispatch_now(new CreateDefaultRoles([
             'user_name'     => $this->name,
             'user_email'    => $this->email,
             'user_password' => $this->password,
@@ -73,7 +70,7 @@ trait InstallsFusion
      * @param  String  $name
      * @param  String  $email
      * @param  String  $password
-     * @param  String|Null  $role
+     * @param  String|Array|Null  $role
      * @param  Array  $overrides
      *
      * @return Fusion\Models\User
@@ -89,7 +86,7 @@ trait InstallsFusion
         $user = factory(User::class)->create($attributes);
 
         if (! is_null($role)) {
-            Shinobi::assign($role)->to($user);
+            $user->assignRole($role);
         }
 
         return $user;

@@ -3,8 +3,8 @@
 namespace Fusion\Console\Installer;
 
 use Fusion\Models\User;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
-use Caffeinated\Shinobi\Facades\Shinobi;
 
 class CreateDefaultUser
 {
@@ -31,15 +31,15 @@ class CreateDefaultUser
     public function handle()
     {
         activity()->withoutLogs(function() {
-            $user = User::create([
+            User::create([
                 'name'              => $this->container['user_name'],
                 'email'             => $this->container['user_email'],
                 'password'          => Hash::make($this->container['user_password']),
                 'status'            => true,
                 'email_verified_at' => now(),
-            ]);
-
-            Shinobi::assign('admin')->to($user);
+            ])->assignRole(
+                $this->container['dev'] ? 'Developer' : 'Administrator'
+            );
         });
     }
 }
