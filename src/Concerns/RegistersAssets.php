@@ -138,6 +138,17 @@ trait RegistersAssets
     }
 
     /**
+     * Determines if the passed asset is indeed an asset.
+     *
+     * @param  string  $asset
+     * @return bool
+     */
+    protected function isAsset($asset)
+    {
+        return preg_match($this->assetRegex, $asset);
+    }
+
+    /**
      * Determines if the passed asset is a Javascript file.
      *
      * @param  string  $asset
@@ -175,16 +186,16 @@ trait RegistersAssets
             return $this;
         }
 
-        $type   = ($this->isCss($assets)) ? 'css' : 'js';
-        $assets = $this->assets->get($type);
+        $type       = ($this->isCss($assets)) ? 'css' : 'js';
+        $collection = $this->assets->get($type);
 
-        if (! in_array($assets, $assets)) {
-            $assets[$assets] = array(
+        if (! in_array($assets, $collection)) {
+            $collection[$assets] = array(
                 'namespace'  => $namespace,
                 'dependency' => array()
             );
 
-            $this->assets->put($type, $assets);
+            $this->assets->put($type, $collection);
 
             $this->lastAddedType  = $type;
             $this->lastAddedAsset = $assets;

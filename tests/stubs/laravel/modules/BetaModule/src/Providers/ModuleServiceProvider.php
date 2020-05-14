@@ -3,7 +3,7 @@
 namespace Modules\BetaModule\Providers;
 
 use Menu;
-use Fusion\Fusion;
+use Fusion;
 use Caffeinated\Modules\Support\ServiceProvider;
 
 class ModuleServiceProvider extends ServiceProvider

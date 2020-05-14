@@ -140,6 +140,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     protected function getPackageAliases($app)
     {
         return [
+            'Fusion' => 'Fusion\Facades\Fusion',
             'Theme'  => 'Caffeinated\Themes\Facades\Theme',
             'Module' => 'Caffeinated\Modules\Facades\Module',
         ];
