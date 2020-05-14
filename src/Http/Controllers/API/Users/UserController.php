@@ -53,7 +53,7 @@ class UserController extends Controller
         $user = User::create($attributes);
 
         if (isset($attributes['role'])) {
-            $user->assignRoles($attributes['role']);
+            $user->assignRole($attributes['role']);
         }
 
         return new UserResource($user);

@@ -2,8 +2,8 @@
 
 namespace Fusion\Tests\Feature\Users;
 
-use Fusion\Models\Role;
 use Fusion\Tests\TestCase;
+use Spatie\Permission\Models\Role;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -69,7 +69,7 @@ class RoleTest extends TestCase
 		$this
 			->json('POST', '/api/roles', [])
 			->assertStatus(422)
-			->assertJsonValidationErrors(['name', 'slug']);
+			->assertJsonValidationErrors(['name']);
 	}
 
 	/**
@@ -84,31 +84,10 @@ class RoleTest extends TestCase
 
         $role = factory(Role::class)->create()->toArray();
         $role['id']   = null;
-        $role['slug'] = 'new-slug';
 
         $this
             ->json('POST', '/api/roles', $role)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['name']);
-    }
-
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     */
-    public function each_role_must_have_a_unique_slug()
-    {
-        $this->actingAs($this->admin, 'api');
-
-        $role = factory(Role::class)->create()->toArray();
-        $role['id']   = null;
-        $role['name'] = 'New Name';
-
-        $this
-            ->json('POST', '/api/roles', $role)
-            ->assertStatus(422)
-            ->assertJsonValidationErrors(['slug']);
     }
 }

@@ -17,18 +17,6 @@ class RoleRequest extends FormRequest
     }
 
     /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'special' => $this->special ?? null,
-        ]);
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -39,9 +27,7 @@ class RoleRequest extends FormRequest
 
         return [
             'name'        => 'required|unique:roles,name,' . $id,
-            'slug'        => 'required|unique:roles,slug,' . $id,
             'description' => 'sometimes',
-            'special'     => 'sometimes|nullable',
         ];
     }
 }
