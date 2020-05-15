@@ -2,7 +2,6 @@
 
 namespace Fusion\Http\Resources;
 
-use Illuminate\Support\Str;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RoleResource extends JsonResource
@@ -18,11 +17,10 @@ class RoleResource extends JsonResource
         return [
             'id'          => $this->id,
             'name'        => $this->name,
-            'slug'        => $this->slug,
-            'handle'      => Str::slug($this->slug),
+            'guard_name'  => $this->guard_name,
             'description' => $this->description,
-            'special'     => $this->special,
             'fields'      => $this->fields,
+            'permissions' => $this->permissions()->pluck('name'),
             'created_by'  => $this->created_by,
             'updated_by'  => $this->updated_by,
             'created_at'  => $this->created_at,

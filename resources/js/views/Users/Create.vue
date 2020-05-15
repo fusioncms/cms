@@ -4,7 +4,7 @@
             <app-title icon="user-alt">Create User</app-title>
         </portal>
 
-        <shared-form :form="form" :roleOptions="roleOptions" :submit="submit"></shared-form>
+        <shared-form :form="form" :roles="roles" :submit="submit"></shared-form>
     </div>
 </template>
 
@@ -23,7 +23,7 @@
 
         data() {
             return {
-                roles: null,
+                roles: [],
                 form: new Form({
                     name: '',
                     email: '',
@@ -38,23 +38,6 @@
 
         components: {
             'shared-form': SharedForm
-        },
-
-        computed: {
-            roleOptions() {
-                let roles = _.filter(this.roles, (role) => {
-                    return role.handle !== 'guest'
-                })
-
-                roles = _.map(roles, (role) => {
-                    return {
-                        label: role.name,
-                        value: role.slug,
-                    }
-                })
-
-                return roles
-            }
         },
 
         methods: {
@@ -94,9 +77,7 @@
 
     export function getRoles(callback) {
         axios.get('/api/roles').then((response) => {
-            let roles = response.data.data
-
-            callback(null, roles)
+            callback(null, response.data.data)
         }).catch(function(error) {
             callback(new Error('Roles could not be found'))
         })

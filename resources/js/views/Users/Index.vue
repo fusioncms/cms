@@ -17,7 +17,7 @@
 
                             <span class="list--separator">Roles</span>
 
-                            <router-link v-for="role in filteredRoles" :key="role.id" :to="{ name: 'users.role', params: { role: role.slug } }" class="list--item" exact>
+                            <router-link v-for="role in filteredRoles" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" class="list--item" exact>
                                 {{ role.name }}
                             </router-link>
                         </div>
@@ -95,9 +95,7 @@
             }),
 
             filteredRoles() {
-                return _.filter(this.roles, (role) => {
-                    return role.slug !== 'guest'
-                })
+                return _.filter(this.roles, (role) => role.name !== 'Guest')
             },
 
             endpoint() {
@@ -117,21 +115,13 @@
 
         beforeRouteEnter(to, from, next) {
             axios.get('/api/roles').then((response) => {
-                next(vm => vm.setRoles(response.data.data))
+                next(vm => vm.roles = response.data.data)
             }).catch((err) => {
-                next(vm => vm.setError(err))
+                next(vm => console.log(error))
             })
         },
 
         methods: {
-            setRoles(roles) {
-                this.roles = roles
-            },
-
-            setError(error) {
-                console.log(error)
-            },
-
             destroy(id) {
                 axios.delete('/api/users/' + id).then((response) => {
                     toast('User successfully deleted.', 'success')

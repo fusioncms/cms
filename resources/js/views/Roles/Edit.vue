@@ -4,7 +4,7 @@
             <app-title icon="user-shield">Edit Role</app-title>
         </portal>
 
-        <shared-form :form="form" :role="role" :flags="flags" :submit="submit"></shared-form>
+        <shared-form :form="form" :role="role" :submit="submit"></shared-form>
     </div>
 </template>
 
@@ -24,20 +24,6 @@
         data() {
             return {
                 role: {},
-                flags: [
-                    {
-                        label: 'None',
-                        value: '',
-                    },
-                    {
-                        label: 'All Access',
-                        value: 'all-access',
-                    },
-                    {
-                        label: 'No Access',
-                        value: 'no-access',
-                    },
-                ],
                 form: new Form,
             }
         },
@@ -83,9 +69,8 @@
             let role = response.data.data
             let fields = {
                 name: role.name,
-                slug: role.slug,
                 description: role.description,
-                special: role.special,
+                permissions: role.permissions,
             }
 
             callback(null, role, fields)

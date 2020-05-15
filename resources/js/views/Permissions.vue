@@ -6,9 +6,13 @@
 
         <div class="row">
             <div class="content-container">
-                <p-table name="permissions" :endpoint="endpoint" sort-by="slug" :per-page="10" no-actions key="permissions_table">
-                    <template slot="slug" slot-scope="table">
-                        <code>{{ table.record.slug }}</code>
+                <p-table id="permissions" :endpoint="endpoint" sort-by="name" :per-page="10" no-actions key="permissions_table">
+                    <template slot="name" slot-scope="table">
+                        <code>{{ table.record.name }}</code>
+                    </template>
+
+                    <template slot="guard_name" slot-scope="table">
+                        <span class="badge">{{ table.record.guard_name }}</span>
                     </template>
 
                     <template slot="description" slot-scope="table">

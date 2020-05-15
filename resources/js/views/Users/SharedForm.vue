@@ -117,14 +117,29 @@
                 required: true,
             },
 
+            roles: {
+                type: Array,
+                required: true,
+            },
+
             user: {
                 type: Object,
                 required: false,
-            },
+            }
+        },
 
-            roleOptions: {
-                type: Array,
-                require: true
+        computed: {
+            roleOptions() {
+                let roles = _.map(this.roles, (role) => {
+                    if (role.name !== 'Guest') {
+                        return {
+                            label: role.name,
+                            value: role.name,
+                        }
+                    }
+                })
+
+                return _.filter(roles)
             }
         }
     }

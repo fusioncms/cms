@@ -4,7 +4,7 @@
             <app-title icon="user-shield">Create Role</app-title>
         </portal>
 
-        <shared-form :form="form" :flags="flags" :submit="submit"></shared-form>
+        <shared-form :form="form" :submit="submit"></shared-form>
     </div>
 </template>
 
@@ -23,25 +23,10 @@
 
         data() {
             return {
-                flags: [
-                    {
-                        'label': 'None',
-                        'value': '',
-                    },
-                    {
-                        'label': 'All Access',
-                        'value': 'all-access',
-                    },
-                    {
-                        'label': 'No Access',
-                        'value': 'no-access',
-                    },
-                ],
                 form: new Form({
                     name: '',
-                    slug: '',
                     description: '',
-                    special: '',
+                    permissions: []
                 }, true)
             }
         },
