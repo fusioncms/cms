@@ -3,7 +3,7 @@
 namespace Modules\BetaModule\Providers;
 
 use Menu;
-use Caffeinated\Bonsai\Facades\Bonsai;
+use Fusion;
 use Caffeinated\Modules\Support\ServiceProvider;
 
 class ModuleServiceProvider extends ServiceProvider
@@ -21,8 +21,8 @@ class ModuleServiceProvider extends ServiceProvider
         $this->loadConfigsFrom(module_path('beta', 'config', config('module.default_location')));
         $this->loadFactoriesFrom(module_path('beta', 'database/factories', config('module.default_location')));
 
-        Bonsai::add('/modules/beta/css/beta.css');
-        Bonsai::add('/modules/beta/js/beta.js');
+        Fusion::asset('/modules/beta/css/beta.css');
+        Fusion::asset('/modules/beta/js/beta.js');
     }
 
     /**

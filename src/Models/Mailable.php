@@ -8,16 +8,12 @@ use ReflectionClass;
 use ReflectionProperty;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Fusion\Concerns\HasActivity;
 use Illuminate\Support\Collection;
 use Caffeinated\Themes\Facades\Theme;
-use Spatie\Activitylog\Models\Activity;
 use Illuminate\Database\Eloquent\Model;
 
 class Mailable extends Model
 {
-    use HasActivity;
-
 	/**
      * The attributes that are fillable via mass assignment.
      *
@@ -165,24 +161,5 @@ class Mailable extends Model
                 logger()->error($exception->getMessage());
             }
         }
-    }
-    
-    /**
-     * Tap into activity before persisting to database.
-     *
-     * @param  \Spatie\Activitylog\Models\Activity $activity
-     * @param  string   $eventName
-     * @return void
-     */
-    public function tapActivity(Activity $activity, string $eventName)
-    {
-        $subject = $activity->subject;
-        $action  = ucfirst($eventName);
-
-        $activity->description = "{$action} mailable ({$subject->name})";
-        $activity->properties  = [
-            'icon' => 'mail-bulk',
-            'link' => "mailables/{$subject->id}/edit"
-        ];
     }
 }

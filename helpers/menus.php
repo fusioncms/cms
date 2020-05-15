@@ -17,12 +17,14 @@ if (! function_exists('menu')) {
             $item = $menu->add($node->name, $node->url);
 
             if ($node->new_window) {
-                $item->attribute('target', '_blank');
+                $item->target = '_blank';
+            } else {
+                $item->target = '_self';
             }
 
             if ($fieldset = $node->menu->fieldset) {
                 foreach ($fieldset->fields as $field) {
-                    $item->attribute($field->handle, $node->{$field->handle} ?? false);
+                    $item->{$field->handle} = $node->{$field->handle};
                 }
             }
         };
