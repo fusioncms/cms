@@ -30,19 +30,19 @@ $factory->define(User::class, function (Faker $faker) {
 });
 
 $factory->afterCreatingState(User::class, 'guest', function ($user, $faker) {
-    $role = Role::firstOrCreate(['name' => 'Guest', 'slug' => 'guest', 'special' => 'no-access']);
+    $role = Role::firstOrCreate(['name' => 'Guest']);
 
-    $user->assignRoles([ $role->slug ]);
+    $user->assignRole($role->name);
 });
 
 $factory->afterCreatingState(User::class, 'user', function ($user, $faker) {
-    $role = Role::firstOrCreate(['name' => 'User', 'slug' => 'user', 'special' => null]);
+    $role = Role::firstOrCreate(['name' => 'User']);
 
-    $user->assignRoles([ $role->slug ]);
+    $user->assignRole($role->name);
 });
 
 $factory->afterCreatingState(User::class, 'admin', function ($user, $faker) {
-    $role = Role::firstOrCreate(['name' => 'Admin', 'slug' => 'admin', 'special' => 'all-access']);
+    $role = Role::firstOrCreate(['name' => 'Administrator']);
 
-    $user->assignRoles([ $role->slug ]);
+    $user->assignRole($role->name);
 });

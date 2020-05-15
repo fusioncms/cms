@@ -81,9 +81,9 @@ class UserTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $this->actingAs($this->user, 'api');
-
-        $this->json('POST', '/api/users', []);
+        $this
+        	->be($this->user, 'api')
+        	->json('POST', '/api/users', []);
     }
 
     /**
