@@ -68,7 +68,7 @@
         axios.get('/api/roles/' + id).then((response) => {
             let role = response.data.data
             let fields = {
-                name: role.name,
+                label: role.label,
                 description: role.description,
                 permissions: role.permissions,
             }

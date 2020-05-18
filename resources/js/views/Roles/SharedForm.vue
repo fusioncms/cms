@@ -10,13 +10,13 @@
 		<div class="card">
             <div class="card__body">
                 <p-title
-                    name="name"
+                    name="label"
                     autocomplete="off"
                     autofocus
                     required
-                    :has-error="form.errors.has('name')"
-                    :error-message="form.errors.get('name')"
-                    v-model="form.name">
+                    :has-error="form.errors.has('label')"
+                    :error-message="form.errors.get('label')"
+                    v-model="form.label">
                 </p-title>
 
 				<p-textarea
@@ -101,7 +101,7 @@
             },
 
             hasPermissions() {
-                return ! _.includes(['Administrator', 'Developer', 'Guest'], this.role.name);
+                return ! _.includes(['developer'], this.role.name);
             }
         },
 

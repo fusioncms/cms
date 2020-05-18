@@ -1,7 +1,6 @@
 <?php
 
 use Fusion\Models\User;
-use Fusion\Models\Role;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -27,22 +26,4 @@ $factory->define(User::class, function (Faker $faker) {
         'remember_token'    => Str::random(10),
         'email_verified_at' => now(),
     ];
-});
-
-$factory->afterCreatingState(User::class, 'guest', function ($user, $faker) {
-    $role = Role::firstOrCreate(['name' => 'Guest']);
-
-    $user->assignRole($role->name);
-});
-
-$factory->afterCreatingState(User::class, 'user', function ($user, $faker) {
-    $role = Role::firstOrCreate(['name' => 'User']);
-
-    $user->assignRole($role->name);
-});
-
-$factory->afterCreatingState(User::class, 'admin', function ($user, $faker) {
-    $role = Role::firstOrCreate(['name' => 'Administrator']);
-
-    $user->assignRole($role->name);
 });

@@ -64,7 +64,7 @@ class RegisterController extends Controller
             'email'    => $attributes['email'],
             'password' => Hash::make($attributes['password']),
         ])->assignRole(
-            setting('user.default_user_role', 'User')
+            setting('user.default_user_role', 'user')
         );
 
         if (setting('users.user_email_verification') === 'disabled') {

@@ -10,13 +10,9 @@
 
         <div class="row">
             <div class="content-container">
-                <p-table :endpoint="endpoint" id="roles" sort-by="name" key="roles_table">
-                    <template slot="name" slot-scope="table">
-                        <router-link :to="{ name: 'roles.edit', params: {role: table.record.id} }">{{ table.record.name }}</router-link>
-                    </template>
-
-                    <template slot="guard_name" slot-scope="table">
-                        <span class="badge">{{ table.record.guard_name }}</span>
+                <p-table :endpoint="endpoint" id="roles" sort-by="label" key="roles_table">
+                    <template slot="label" slot-scope="table">
+                        <router-link :to="{ name: 'roles.edit', params: {role: table.record.id} }">{{ table.record.label }}</router-link>
                     </template>
 
                     <template slot="description" slot-scope="table">
@@ -25,12 +21,14 @@
 
                     <template slot="actions" slot-scope="table">
                         <p-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
-                            <p-dropdown-link @click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">Edit</p-dropdown-link>
+                            
+                            <p-dropdown-link@click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">
+                                Edit
+                            </p-dropdown-link>
 
                             <p-dropdown-link
                                 v-if="! isProtected(table.record.name)"
-                                @click.prevent
-                                v-modal:delete-role="table.record"
+                                @click.prevent v-modal:delete-role="table.record"
                                 classes="link--danger"
                             >
                                 Delete
@@ -74,7 +72,7 @@
 
         methods: {
             isProtected(name) {
-                return _.includes(['Administrator', 'Developer', 'User', 'Guest'], name);
+                return _.includes(['admin', 'developer', 'user', 'guest'], name);
             },
 
             destroy(id) {

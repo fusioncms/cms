@@ -32,7 +32,7 @@ class UserTest extends TestCase
 			'email'                 => $this->faker->unique()->safeEmail,
 			'password'              => ($password = '@M-J"ga&t9f9P5'),
 			'password_confirmation' => ($password),
-			'role'                  => $this->faker->randomElement(['User', 'Guest']),
+			'role'                  => $this->faker->randomElement(['user', 'guest']),
 			'status'                => $this->faker->boolean
 		];
 
