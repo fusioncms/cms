@@ -24,7 +24,7 @@ class FileController extends Controller
             return redirect()->to('/file/' . $uuid . '/' . $file->name . '?' . http_build_query($params));
         }
 
-        if (Str::startsWith($file->mimetype, 'image') and $file->mimetype !== 'image/gif') {
+        if (in_array($file->mimetype, ['image/jpeg', 'image/gif', 'image/png'])) {
             return $this->imageResponse($file->location, $params);
         }
 
@@ -32,7 +32,13 @@ class FileController extends Controller
             return $this->videoResponse($file->location, $file->mimetype);
         }
 
-        return Storage::disk('public')->response($file->location);
+        return Storage::disk('public')->response(
+            $file->location,
+            $file->name,
+            [
+                'Content-Type' => $file->mimetype
+            ]
+        );
     }
 
     protected function imageResponse($path, $params)
