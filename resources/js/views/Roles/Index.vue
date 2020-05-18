@@ -72,7 +72,7 @@
 
         methods: {
             isProtected(name) {
-                return _.includes(['owner', 'admin', 'developer', 'user', 'guest'], name);
+                return _.includes(['admin', 'developer', 'user', 'guest'], name);
             },
 
             destroy(id) {

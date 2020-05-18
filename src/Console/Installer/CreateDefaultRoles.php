@@ -29,12 +29,7 @@ class CreateDefaultRoles
             'name'        => 'developer',
             'label'       => 'Developer',
             'description' => 'Developers have full control panel access, plus additional abilities for configuration.',
-        ],
-        'owner' => [
-            'name'        => 'owner',
-            'label'       => 'Owner',
-            'description' => 'Owners have full control panel access. Only one user can be assigned this role at one time.',
-        ],
+        ]
     ];
 
     /**

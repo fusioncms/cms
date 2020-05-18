@@ -101,7 +101,7 @@
             },
 
             hasPermissions() {
-                return ! _.includes(['developer', 'owner'], this.role.name);
+                return ! _.includes(['developer'], this.role.name);
             }
         },
 
