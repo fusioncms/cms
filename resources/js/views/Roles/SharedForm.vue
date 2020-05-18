@@ -32,7 +32,7 @@
 			</div>
 		</div>
 
-        <div class="card" v-if="hasPermissions">
+        <div class="card" v-if="hasPermissions(form.name)">
             <div class="card__body">
                 <p-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions_table">
                     <template slot="name" slot-scope="table">
@@ -73,6 +73,11 @@
 
 <script>
     export default {
+
+        mixins: [
+            require('../../mixins/roles').default
+        ],
+
     	props: {
 			role: {
 				type: Object,
@@ -98,10 +103,6 @@
                 set(value){
                     this.form.permissions = value
                 }
-            },
-
-            hasPermissions() {
-                return ! _.includes(['developer'], this.role.name);
             }
         },
 

@@ -27,7 +27,7 @@
                             </p-dropdown-link>
 
                             <p-dropdown-link
-                                v-if="! isProtected(table.record.name)"
+                                v-if="! isRemovable(table.record.name)"
                                 @click.prevent v-modal:delete-role="table.record"
                                 classes="link--danger"
                             >
@@ -64,6 +64,10 @@
             }
         },
 
+        mixins: [
+            require('../../mixins/roles').default
+        ],
+
         data() {
             return {
                 endpoint: '/datatable/roles',
@@ -71,10 +75,6 @@
         },
 
         methods: {
-            isProtected(name) {
-                return _.includes(['admin', 'developer', 'user', 'guest'], name);
-            },
-
             destroy(id) {
                 axios.delete('/api/roles/' + id).then((response) => {
                     toast('Role successfully deleted.', 'success')

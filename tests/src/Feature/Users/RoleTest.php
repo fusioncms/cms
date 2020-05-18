@@ -2,6 +2,7 @@
 
 namespace Fusion\Tests\Feature\Users;
 
+use Fusion\Models\User;
 use Fusion\Tests\TestCase;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -112,5 +113,33 @@ class RoleTest extends TestCase
 			->json('POST', '/api/roles', [])
 			->assertStatus(422)
 			->assertJsonValidationErrors(['label']);
+	}
+
+	/**
+	 * @test
+	 * @group fusioncms
+	 * @group feature
+	 * @group role
+	 */
+	public function only_one_user_may_be_assigned_owner_at_a_time()
+	{
+		$user = $this->createUser('User A', 'user-a@example.com', 'secret', 'owner');
+	
+		$this
+			->be($this->admin, 'api')
+			->json('POST', '/api/users', [
+				'name'                  => 'User B',
+				'email'                 => 'user-b@example.com',
+				'password'              => ($password = '@M-J"ga&t9f9P5'),
+				'password_confirmation' => ($password),
+				'role'                  => 'owner',
+				'status'                => true
+			]);
+
+		$oldOwner = $user->fresh();
+		$newOwner = User::where('name', 'User B')->first();
+
+		$this->assertFalse($oldOwner->hasRole('owner'));
+		$this->assertTrue($newOwner->hasRole('owner'));
 	}
 }
