@@ -50,7 +50,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         $this->install();
 
         $this->admin          = $this->createUser('Jane Doe', 'admin@example.com', 'secret', 'Administrator');
-        $this->user           = $this->createUser('Ducky Consumer', 'guest@example.com', 'secret');
+        $this->user           = $this->createUser('Ducky Consumer', 'guest@example.com', 'secret', 'User');
         $this->unverifiedUser = $this->createUser('Unverified Consumer', 'unverified@example.com', 'secret', null, ['email_verified_at' => null]);
         $this->guest          = $this->createGuest();
     }

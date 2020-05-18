@@ -179,6 +179,12 @@
                 default: 'id',
             },
 
+            perPage: {
+                required: false,
+                type: Number,
+                default: 10,
+            },
+
             sortIn: {
                 required: false,
                 type: String,

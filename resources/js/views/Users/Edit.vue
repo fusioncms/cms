@@ -4,7 +4,7 @@
             <app-title icon="user-alt">Edit User</app-title>
         </portal>
 
-        <shared-form :form="form" :roleOptions="roleOptions" :user="user" :submit="submit">
+        <shared-form :form="form" :roles="roles" :user="user" :submit="submit">
             <template v-slot:side-container>
                 <p-card class="text-sm" v-if="user">
                     <div class="flex justify-between">
@@ -65,7 +65,7 @@
         head: {
             title() {
                 return {
-                    inner: this.name || 'Loading...'
+                    inner: this.user.name || 'Loading...'
                 }
             }
         },
@@ -87,22 +87,6 @@
 
         components: {
             'shared-form': SharedForm
-        },
-
-        computed: {
-            roleOptions() {
-                let roles = _.filter(this.roles, (role) => {
-                    return role.handle !== 'guest'
-                })
-                roles = _.map(roles, (role) => {
-                    return {
-                        label: role.name,
-                        value: role.slug,
-                    }
-                })
-
-                return roles
-            }
         },
 
         methods: {
@@ -147,19 +131,18 @@
             axios.get('/api/roles'),
             axios.get('/api/users/' + userId),
         ])
-        .then(axios.spread(function (roles, user) {
-            user = user.data.data
+        .then(axios.spread((roles, user) => {
+            user  = user.data.data
             roles = roles.data.data
-            let fields = {
+
+            callback(null, user, roles, {
                 name: user.name,
                 email: user.email,
                 status: user.status,
-                role: user.roles[0].slug,
+                role: user.roles[0].name,
                 password: '',
                 password_confirmation: '',
-            }
-
-            callback(null, user, roles, fields)
+            })
         }))
     }
 </script>

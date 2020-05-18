@@ -27,6 +27,7 @@ class RoleRequest extends FormRequest
 
         return [
             'name'        => 'required|unique:roles,name,' . $id,
+            'guard_name'  => 'sometimes',
             'description' => 'sometimes',
         ];
     }

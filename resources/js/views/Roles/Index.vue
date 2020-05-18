@@ -15,8 +15,8 @@
                         <router-link :to="{ name: 'roles.edit', params: {role: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
 
-                    <template slot="slug" slot-scope="table">
-                        <code>{{ table.record.slug }}</code>
+                    <template slot="guard_name" slot-scope="table">
+                        <span class="badge">{{ table.record.guard_name }}</span>
                     </template>
 
                     <template slot="description" slot-scope="table">
@@ -28,7 +28,7 @@
                             <p-dropdown-link @click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">Edit</p-dropdown-link>
 
                             <p-dropdown-link
-                                v-if="! isProtected(table.record.slug)"
+                                v-if="! isProtected(table.record.name)"
                                 @click.prevent
                                 v-modal:delete-role="table.record"
                                 classes="link--danger"
@@ -73,10 +73,8 @@
         },
 
         methods: {
-            isProtected(slug) {
-                let roles = ['admin', 'user', 'guest']
-
-                return _.includes(roles, slug);
+            isProtected(name) {
+                return _.includes(['Administrator', 'Developer', 'User', 'Guest'], name);
             },
 
             destroy(id) {

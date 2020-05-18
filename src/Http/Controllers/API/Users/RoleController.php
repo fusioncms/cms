@@ -48,6 +48,10 @@ class RoleController extends Controller
     {
         $role = Role::create($request->validated());
 
+        if ($request->has('permissions')) {
+            $role->givePermissionTo($request->input('permissions'));
+        }
+
         return new RoleResource($role);
     }
 
@@ -61,6 +65,10 @@ class RoleController extends Controller
     public function update(RoleRequest $request, Role $role)
     {
         $role->update($request->validated());
+
+        if ($request->has('permissions')) {
+            $role->syncPermissions($request->input('permissions'));
+        }
 
         return new RoleResource($role);
     }

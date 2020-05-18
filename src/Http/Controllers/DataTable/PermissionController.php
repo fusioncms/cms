@@ -2,7 +2,7 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Models\Permission;
+use Spatie\Permission\Models\Permission;
 use Fusion\Http\Controllers\DataTableController;
 
 class PermissionController extends DataTableController
@@ -16,7 +16,7 @@ class PermissionController extends DataTableController
     {
         return [
             'name',
-            'slug',
+            'guard_name',
             'description',
         ];
     }
@@ -25,7 +25,7 @@ class PermissionController extends DataTableController
     {
         return [
             'name'        => 'Name',
-            'slug'        => 'Slug',
+            'guard_name'  => 'Guard',
             'description' => 'Description',
         ];
     }
@@ -34,7 +34,6 @@ class PermissionController extends DataTableController
     {
         return [
             'name',
-            'slug',
         ];
     }
 
@@ -42,7 +41,6 @@ class PermissionController extends DataTableController
     {
         return [
             'name',
-            'slug',
         ];
     }
 }
