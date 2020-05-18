@@ -40,7 +40,7 @@ class FusionServiceProvider extends ServiceProvider
     protected function registerGates()
     {
         Gate::before(function ($user, $ability) {
-            return $user->hasRole(['Administrator', 'Developer']) ? true : null;
+            return $user->hasRole(['owner', 'developer']) ? true : null;
         });
     }
 

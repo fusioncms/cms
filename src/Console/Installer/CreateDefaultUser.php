@@ -38,7 +38,7 @@ class CreateDefaultUser
                 'status'            => true,
                 'email_verified_at' => now(),
             ])->assignRole(
-                $this->container['dev'] ? 'Developer' : 'Administrator'
+                $this->container['dev'] ? 'developer' : 'admin'
             );
         });
     }

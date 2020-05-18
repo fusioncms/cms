@@ -51,7 +51,7 @@ class RoleTest extends TestCase
 
 		// update ----
 		$attributes = [
-			'name'        => $role->name,
+			'label'        => $role->label,
 			'description' => 'New Description',
 		];
 
@@ -111,24 +111,6 @@ class RoleTest extends TestCase
 			->be($this->admin, 'api')
 			->json('POST', '/api/roles', [])
 			->assertStatus(422)
-			->assertJsonValidationErrors(['name']);
+			->assertJsonValidationErrors(['label']);
 	}
-
-	/**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     */
-    public function each_role_must_have_a_unique_name()
-    {
-        $role = factory(Role::class)->create()->toArray();
-        $role['id']   = null;
-
-        $this
-        	->be($this->admin, 'api')
-            ->json('POST', '/api/roles', $role)
-            ->assertStatus(422)
-            ->assertJsonValidationErrors(['name']);
-    }
 }

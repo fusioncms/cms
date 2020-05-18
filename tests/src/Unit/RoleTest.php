@@ -20,7 +20,7 @@ class RoleTest extends TestCase
      */
     public function each_role_can_have_one_or_many_permissions()
     {
-        $role = Role::where('name', 'User')->first();
+        $role = Role::where('name', 'user')->first();
         $role->givePermissionTo(['pages.create', 'pages.update']);
 
         $this->assertInstanceOf(Collection::class, $role->permissions);
@@ -34,7 +34,7 @@ class RoleTest extends TestCase
      */
     public function each_role_can_have_one_or_many_users()
     {
-        $role = Role::where('name', 'User')->first();
+        $role = Role::where('name', 'user')->first();
 
         $this->assertInstanceOf(Collection::class, $role->users);
         $this->assertInstanceOf(User::class, $role->users->first());

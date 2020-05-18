@@ -11,20 +11,29 @@ class CreateDefaultRoles
      */
     protected $roles = [
         'guest' => [
-            'name'        => 'Guest',
+            'name'        => 'guest',
+            'label'       => 'Guest',
             'description' => 'All guests of the website will be assigned this role automatically.',
         ],
         'user' => [
-            'name'        => 'User',
-            'description' => 'Users have limited access to the website. They can not access the admin backend or change any of its settings.',
+            'name'        => 'user',
+            'label'       => 'User',
+            'description' => 'Users have limited access to the website. They do not have control panel access.',
         ],
         'admin' => [
-            'name'        => 'Administrator',
-            'description' => 'Administrators have full control over the website and can change all website settings, users, roles, and their permissions.',
+            'name'        => 'admin',
+            'label'       => 'Administrator',
+            'description' => 'Administrators have control panel access with a base set of assigned permissions.',
         ],
         'developer' => [
-            'name'        => 'Developer',
-            'description' => 'Developers have full admin control, plus additional.',
+            'name'        => 'developer',
+            'label'       => 'Developer',
+            'description' => 'Developers have full control panel access, plus additional abilities for configuration.',
+        ],
+        'owner' => [
+            'name'        => 'owner',
+            'label'       => 'Owner',
+            'description' => 'Owners have full control panel access. Only one user can be assigned this role at one time.',
         ],
     ];
 
@@ -36,10 +45,7 @@ class CreateDefaultRoles
     public function handle()
     {
         foreach ($this->roles as $role) {
-            Role::create([
-                'name'        => $role['name'],
-                'description' => $role['description']
-            ]);
+            Role::create($role);
         }
     }
 }
