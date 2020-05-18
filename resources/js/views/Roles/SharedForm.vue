@@ -41,8 +41,7 @@
                             name="permissions"
                             :id="table.record.name"
                             :value="table.record.name"
-                            v-model="permissions"
-                            @click.meta="toggle(table.record.name, $event)">
+                            v-model="permissions">
 
                         <code>{{ table.record.name }}</code>
                     </template>
@@ -107,19 +106,19 @@
         },
 
         methods: {
-            toggle(name, ev) {
-                const token  = _.head(_.split(name, '.'))
-                const items  = this.$refs.permissions.records
+            // toggle(name, ev) {
+            //     const token  = _.head(_.split(name, '.'))
+            //     const items  = this.$refs.permissions.records
                 
-                if (ev.target.checked) {
-                    let matches = _.filter(items, (item) => _.startsWith(item.name, token))
-                        matches = _.map(matches,  (item) => item.name)
+            //     if (ev.target.checked) {
+            //         let matches = _.filter(items, (item) => _.startsWith(item.name, token))
+            //             matches = _.map(matches,  (item) => item.name)
 
-                    this.permissions = _.union(this.permissions, matches)
-                } else {
-                    this.permissions = _.remove(this.permissions, (item) => ! _.startsWith(item, token))
-                }
-            }
+            //         this.permissions = _.union(this.permissions, matches)
+            //     } else {
+            //         this.permissions = _.remove(this.permissions, (item) => ! _.startsWith(item, token))
+            //     }
+            // }
         }
     }
 </script>
