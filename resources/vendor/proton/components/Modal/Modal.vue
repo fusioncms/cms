@@ -121,7 +121,7 @@
                 default: false,
             },
 
-            noOutsideClose: {
+            outsideClose: {
                 required: false,
                 type: Boolean,
                 default: false,
@@ -196,7 +196,7 @@
             },
 
             clickedOutside() {
-                if (! this.noOutsideClose && this.isLoaded && this.isActiveStack()) {
+                if (this.outsideClose && this.isLoaded && this.isActiveStack()) {
                     this.close()
                 }
             },
