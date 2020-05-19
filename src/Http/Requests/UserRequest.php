@@ -16,7 +16,17 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('users.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        $authorized = $this->user()->can('users.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        
+        /**
+         * Only user with roles: `developer` || `owner`
+         *   may re-assign the owner role.
+         */
+        if ($this->role == 'owner') {
+            $authorized = $this->user()->hasRole(['developer','owner']);
+        }
+
+        return $authorized;
     }
 
     /**

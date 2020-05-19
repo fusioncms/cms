@@ -123,23 +123,43 @@ class RoleTest extends TestCase
 	 */
 	public function only_one_user_may_be_assigned_owner_at_a_time()
 	{
-		$user = $this->createUser('User A', 'user-a@example.com', 'secret', 'owner');
+		$owner = $this->createUser('User A', 'user-a@example.com', 'secret', 'owner');
 	
 		$this
-			->be($this->admin, 'api')
+			->be($owner, 'api')
 			->json('POST', '/api/users', [
 				'name'                  => 'User B',
 				'email'                 => 'user-b@example.com',
 				'password'              => ($password = '@M-J"ga&t9f9P5'),
 				'password_confirmation' => ($password),
 				'role'                  => 'owner',
-				'status'                => true
 			]);
 
-		$oldOwner = $user->fresh();
+		$oldOwner = $owner->fresh();
 		$newOwner = User::where('name', 'User B')->first();
 
 		$this->assertFalse($oldOwner->hasRole('owner'));
 		$this->assertTrue($newOwner->hasRole('owner'));
+	}
+
+	/**
+	 * @test
+	 * @group fusioncms
+	 * @group feature
+	 * @group role
+	 */
+	public function only_the_owner_may_reassign_the_owner_role()
+	{
+		$this->expectException(AuthorizationException::class);
+
+		$admin = $this->createUser('Admin User', 'admin-user@example.com', 'secret', 'admin');
+	
+		$this
+			->be($admin, 'api')
+			->json('PATCH', '/api/users/' . $this->admin->id, [
+				'name'  => $this->admin->name,
+				'email' => $this->admin->email,
+				'role'  => 'owner',
+			]);
 	}
 }
