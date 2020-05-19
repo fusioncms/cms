@@ -17,7 +17,7 @@ class Theme extends Collection
     protected $theme;
 
     /**
-     * Activate the referenced theme.
+     * Activate the specified theme.
      *
      * @param  string  $theme
      * @return void
@@ -25,7 +25,7 @@ class Theme extends Collection
     public function activate($theme)
     {
         $this->setTheme($theme);
-        $this->symlinkPublicDirectory();
+        $this->createSymlink();
         $this->registerViewLocation();
         $this->registerClassLoader();
         $this->registerServiceProviders();
@@ -39,6 +39,7 @@ class Theme extends Collection
     public function deactivate()
     {
         $this->setTheme(null);
+        $this->removeSymlink();
     }
 
     /**
@@ -72,7 +73,12 @@ class Theme extends Collection
         return $this->theme;
     }
 
-    protected function symlinkPublicDirectory()
+    /**
+     * Symlink the active theme's public directory.
+     *
+     * @return void
+     */
+    protected function createSymlink()
     {
         if (! File::exists(public_path('theme'))) {
             $folder = $this->active()->get('namespace');
@@ -85,7 +91,20 @@ class Theme extends Collection
     }
 
     /**
-     * Register the themes view location with Laravel.
+     * Symlink the active theme's public directory.
+     *
+     * @return void
+     */
+    protected function removeSymlink()
+    {
+        if (File::exists(public_path('theme'))) {
+            File::delete(public_path('theme'));
+        }
+    }
+
+    /**
+     * Register the themes view location with Laravel. Theme views
+     * take precedence over the application.
      *
      * @return void
      */
@@ -96,6 +115,12 @@ class Theme extends Collection
         View::getFinder()->prependLocation(theme_path("{$folder}/resources/views"));
     }
 
+    /**
+     * Register a new PSR-4 class loader with composer for
+     * the currently active theme.
+     *
+     * @return void
+     */
     protected function registerClassLoader()
     {
         $namespace = $this->active()->get('namespace');
@@ -105,6 +130,12 @@ class Theme extends Collection
         $loader->register();
     }
 
+    /**
+     * Register any specified service providers with Laravel
+     * a specified by the active theme.
+     *
+     * @return void
+     */
     protected function registerServiceProviders()
     {
         if ($this->active()->has('providers')) {
