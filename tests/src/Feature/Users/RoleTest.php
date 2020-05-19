@@ -32,7 +32,7 @@ class RoleTest extends TestCase
 		$role = factory(Role::class)->make()->toArray();
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('POST', '/api/roles', $role)
 			->assertStatus(201);
 
@@ -57,7 +57,7 @@ class RoleTest extends TestCase
 		];
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/roles/' . $role->id,
 				$attributes + ['permissions' => $permissions->pluck('name')])
 			->assertStatus(200);
@@ -109,7 +109,7 @@ class RoleTest extends TestCase
 	public function a_user_cannot_create_a_role_without_required_fields()
 	{
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('POST', '/api/roles', [])
 			->assertStatus(422)
 			->assertJsonValidationErrors(['label']);
@@ -123,10 +123,8 @@ class RoleTest extends TestCase
 	 */
 	public function only_one_user_may_be_assigned_owner_at_a_time()
 	{
-		$owner = $this->createUser('User A', 'user-a@example.com', 'secret', 'owner');
-	
 		$this
-			->be($owner, 'api')
+			->be($this->owner, 'api')
 			->json('POST', '/api/users', [
 				'name'                  => 'User B',
 				'email'                 => 'user-b@example.com',
@@ -135,7 +133,7 @@ class RoleTest extends TestCase
 				'role'                  => 'owner',
 			]);
 
-		$oldOwner = $owner->fresh();
+		$oldOwner = $this->owner->fresh();
 		$newOwner = User::where('name', 'User B')->first();
 
 		$this->assertFalse($oldOwner->hasRole('owner'));
@@ -156,9 +154,9 @@ class RoleTest extends TestCase
 	
 		$this
 			->be($admin, 'api')
-			->json('PATCH', '/api/users/' . $this->admin->id, [
-				'name'  => $this->admin->name,
-				'email' => $this->admin->email,
+			->json('PATCH', '/api/users/' . $this->owner->id, [
+				'name'  => $this->owner->name,
+				'email' => $this->owner->email,
 				'role'  => 'owner',
 			]);
 	}

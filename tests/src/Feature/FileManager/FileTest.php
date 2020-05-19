@@ -35,7 +35,7 @@ class FileTest extends TestCase
     public function a_user_with_permissions_can_create_files()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', 'api/files', [
                 'file' => UploadedFile::fake()->image('foobar.png')
             ])
@@ -89,7 +89,7 @@ class FileTest extends TestCase
     public function a_file_is_required_for_uploads()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/files', [ 'file' => null ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
@@ -106,7 +106,7 @@ class FileTest extends TestCase
     public function a_valid_file_is_required_for_uploads()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/files', [ 'file' => 'foobar' ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
@@ -126,7 +126,7 @@ class FileTest extends TestCase
         setting(['files.file_size_upload_limit' => 1]);
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/files', [
                 'file' => UploadedFile::fake()->createWithContent('foobar.txt', $this->faker->paragraphs(3, true))
             ])
@@ -148,7 +148,7 @@ class FileTest extends TestCase
         setting(['files.file_size_upload_limit' => 1]);
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/files', [
                 'file' => UploadedFile::fake()->create('test.pdf', 2000, 'application/pdf')
             ])
@@ -176,7 +176,7 @@ class FileTest extends TestCase
         $attr['caption'] = 'This is the caption field.';
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', 'api/files/' . $file->id, $attr)
             ->assertStatus(200);
 
@@ -205,7 +205,7 @@ class FileTest extends TestCase
         $file = factory(File::class)->states('audio')->create();
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('DELETE', 'api/files/' . $file->id)
             ->assertStatus(200);
 
@@ -225,7 +225,7 @@ class FileTest extends TestCase
         $file = factory(File::class)->states('image')->create();
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', 'api/files/' . $file->id, [])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
@@ -243,7 +243,7 @@ class FileTest extends TestCase
     {
         $file    = factory(File::class)->states('image')->create();
         $payload = $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('GET', '/api/files/' . $file->uuid)
             ->assertStatus(200)
             ->getData()->data;
@@ -279,7 +279,7 @@ class FileTest extends TestCase
         $file = factory(File::class)->states('document')->create();
 
         $response = $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('GET', "/api/files/{$file->uuid}/download")
             ->assertStatus(200);
 
@@ -298,7 +298,7 @@ class FileTest extends TestCase
         $file = factory(File::class)->states('image')->create();
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/files/replace/' . $file->id, [
                 'file' => UploadedFile::fake()->image('file.jpeg', 25, 25)
             ])
@@ -329,7 +329,7 @@ class FileTest extends TestCase
         $directory = factory(Directory::class)->create();
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', 'api/files/move', [
                 'directory' => $directory->id,
                 'moving'    => [
@@ -352,7 +352,7 @@ class FileTest extends TestCase
      */
     public function files_can_be_searched_by_keywords()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         factory(File::class)->create(['name' => 'lorem', 'title' => 'sit']);
         factory(File::class)->create(['name' => 'ipsum', 'title' => 'amet']);
@@ -391,7 +391,7 @@ class FileTest extends TestCase
      */
     public function files_can_be_sorted_by_name()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         factory(File::class)->create(['name' => 'lorem']);
         factory(File::class)->create(['name' => 'ipsum']);
@@ -421,7 +421,7 @@ class FileTest extends TestCase
      */
     public function files_can_be_sorted_by_filesize()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         factory(File::class)->create(['name' => 'lorem', 'bytes' => 400]);
         factory(File::class)->create(['name' => 'ipsum', 'bytes' => 100]);
@@ -451,7 +451,7 @@ class FileTest extends TestCase
      */
     public function files_can_be_sorted_by_last_modified_timestamp()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         factory(File::class)->create(['name' => 'lorem', 'updated_at' => now()->addDays(1)]);
         factory(File::class)->create(['name' => 'ipsum', 'updated_at' => now()->addDays(3)]);
@@ -481,7 +481,7 @@ class FileTest extends TestCase
      */
     public function image_files_can_be_filtered()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         factory(File::class)->create(['name' => 'lorem']);
         factory(File::class)->create(['name' => 'ipsum']);

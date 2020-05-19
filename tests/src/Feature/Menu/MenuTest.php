@@ -35,7 +35,7 @@ class MenuTest extends TestCase
         $menu = factory(Menu::class)->make()->toArray();
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/menus', $menu)
             ->assertStatus(201);
 
@@ -53,7 +53,7 @@ class MenuTest extends TestCase
      */
     public function when_a_menu_is_created_an_associated_fieldset_should_also_be_created()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $menu = MenuFactory::withName('Header')->create();
 
@@ -98,7 +98,7 @@ class MenuTest extends TestCase
      */
     public function a_user_with_permissions_can_update_an_existing_menu()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $menu = MenuFactory::create();
 
@@ -123,7 +123,7 @@ class MenuTest extends TestCase
      */
     public function a_user_with_permissions_can_delete_an_existing_menu()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $menu = MenuFactory::create();
 
@@ -144,7 +144,7 @@ class MenuTest extends TestCase
      */
     public function a_user_with_permissions_can_move_a_menu_node_before_another()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $menu = $menu = MenuFactory::withName('Test')->create();
 
@@ -181,7 +181,7 @@ class MenuTest extends TestCase
      */
     public function a_user_with_permissions_can_move_a_menu_node_after_another()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $menu = $menu = MenuFactory::withName('Test')->create();
 
@@ -225,7 +225,7 @@ class MenuTest extends TestCase
      */
     public function menu_nodes_can_be_refreshed()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $menu = $menu = MenuFactory::withName('Test')->create();
 
@@ -270,7 +270,7 @@ class MenuTest extends TestCase
      */
     public function each_menu_must_have_a_unique_handle()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $menu       = factory(Menu::class)->create()->toArray();
         $menu['id'] = null;
@@ -289,7 +289,7 @@ class MenuTest extends TestCase
      */
     public function menu_handle_must_not_be_a_reserved_keyword()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $this
             ->json('POST', '/api/menus', [ 'handle' => 'default' ])

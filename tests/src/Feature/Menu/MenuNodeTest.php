@@ -18,7 +18,7 @@ class MenuNodeTest extends TestCase
         $this->handleValidationExceptions();
 
         // --
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $this->section      = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $this->fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($this->section)->create();
@@ -42,7 +42,7 @@ class MenuNodeTest extends TestCase
         ];
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/menus/' . $this->menu->id . '/nodes', $attributes)
             ->assertStatus(201);
 
@@ -66,7 +66,7 @@ class MenuNodeTest extends TestCase
         ];
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/menus/' . $this->menu->id . '/nodes', $attributes)
             ->assertStatus(201);
 
@@ -110,7 +110,7 @@ class MenuNodeTest extends TestCase
         $attributes['url']  = 'https://updated.com';
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', '/api/menus/' . $this->menu->id . '/nodes/' . $node->id, $attributes)
             ->assertStatus(200);
 
@@ -129,7 +129,7 @@ class MenuNodeTest extends TestCase
 
         // Delete ----
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('DELETE', '/api/menus/' . $this->menu->id . '/nodes/' . $node->id);
 
         $this->assertDatabaseMissing($this->model->getTable(), [ 'id' => $node->id ]);

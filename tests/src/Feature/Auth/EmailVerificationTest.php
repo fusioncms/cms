@@ -112,7 +112,7 @@ class EmailVerificationTest extends TestCase
         // Creating for default user..
         $verifyRoute = URL::signedRoute('verification.verify', ['id' => $this->user->id, 'hash' => sha1($this->user->email)]);
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->owner)
             ->get($verifyRoute)
             ->assertStatus(403);
 

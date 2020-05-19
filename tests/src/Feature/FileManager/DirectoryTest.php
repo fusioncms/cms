@@ -34,7 +34,7 @@ class DirectoryTest extends TestCase
     public function a_user_with_permissions_can_create_directories()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', 'api/directories', [ 'name' => 'Test Folder' ])
             ->assertStatus(201);
 
@@ -53,12 +53,12 @@ class DirectoryTest extends TestCase
     public function activity_will_be_tracked_when_directory_is_created()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', 'api/directories', [ 'name' => 'Test Folder' ]);
 
         $this->assertDatabaseHas('activity_log', [
             'description' => 'Created folder (Test Folder)',
-            'causer_id'   => $this->admin->id,
+            'causer_id'   => $this->owner->id,
         ]);
     }
 
@@ -71,14 +71,14 @@ class DirectoryTest extends TestCase
     public function activity_will_be_tracked_when_directory_is_updated()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', 'api/directories/' . $this->directoryA->id, [
                 'name' => 'Updated Name'
             ]);
 
         $this->assertDatabaseHas('activity_log', [
             'description' => 'Updated folder (Updated Name)',
-            'causer_id'   => $this->admin->id,
+            'causer_id'   => $this->owner->id,
             'subject_id'  => $this->directoryA->id,
         ]);
     }
@@ -92,7 +92,7 @@ class DirectoryTest extends TestCase
     public function activities_will_be_cleaned_up_for_directory_when_it_is_deleted()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('DELETE', 'api/directories/' . $this->directoryA->id);
 
         $this->assertDatabaseMissing('activity_log', [
@@ -138,7 +138,7 @@ class DirectoryTest extends TestCase
     public function a_user_with_permissions_can_rename_directories()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', 'api/directories/' . $this->directoryA->id, [
                 'name' => 'Updated Name'
             ])
@@ -160,7 +160,7 @@ class DirectoryTest extends TestCase
     {
         // delete directory..
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('DELETE', 'api/directories/' . $this->directoryA->id)
             ->assertStatus(200);
 
@@ -180,7 +180,7 @@ class DirectoryTest extends TestCase
      */
     public function directories_can_be_searched_by_name()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $response = $this->json('GET', '/api/directories?filter[search]=lor');
         $data     = collect($response->getData()->data);
@@ -204,7 +204,7 @@ class DirectoryTest extends TestCase
      */
     public function directories_can_be_searched_by_parent()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $response = $this->json('GET', '/api/directories');
         $data     = collect($response->getData()->data);
@@ -233,7 +233,7 @@ class DirectoryTest extends TestCase
         $directory['id'] = null;
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', 'api/directories', $directory)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['slug']);
@@ -252,7 +252,7 @@ class DirectoryTest extends TestCase
         $directory['parent_id'] = 99;
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', 'api/directories', $directory)
             ->assertStatus(201);
     }
@@ -272,7 +272,7 @@ class DirectoryTest extends TestCase
 
         // Attempt to combine directories in same location
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/files/move', [
                 'directory' => $directoryA1->parent_id,
                 'moving'    => [

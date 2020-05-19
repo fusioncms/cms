@@ -70,7 +70,7 @@ class UserSettingsTest extends TestCase
     public function a_verified_user_can_access_account_settings()
     {
         $this
-            ->be($this->admin)
+            ->be($this->owner)
             ->get('/account/settings')
             ->assertStatus(200);
     }
@@ -82,24 +82,24 @@ class UserSettingsTest extends TestCase
      */
     public function a_user_can_update_their_personal_information()
     {
-        $old = $this->admin->toArray();
+        $old = $this->owner->toArray();
         $new = [
             'name'  => $this->faker->name,
             'email' => $this->faker->safeEmail,
         ];
 
         $this
-            ->be($this->admin)
+            ->be($this->owner)
             ->post('/account/settings', $new);
 
         $this->assertDatabaseHas('users', [
-            'id'    => $this->admin->id,
+            'id'    => $this->owner->id,
             'name'  => $new['name'],
             'email' => $new['email']
         ]);
 
         $this->assertDatabaseMissing('users', [
-            'id'    => $this->admin->id,
+            'id'    => $this->owner->id,
             'name'  => $old['name'],
             'email' => $old['email'] ]);
     }
@@ -114,7 +114,7 @@ class UserSettingsTest extends TestCase
         $this->expectException(ValidationException::class);
 
         $this
-            ->be($this->admin)
+            ->be($this->owner)
             ->post('/account/settings', [])
             ->assertStatus(302)
             ->assertJsonValidationErrors([
@@ -134,18 +134,18 @@ class UserSettingsTest extends TestCase
             \Illuminate\Auth\Middleware\RequirePassword::class
         ]);
 
-        $oldPassword = $this->admin->password;
+        $oldPassword = $this->owner->password;
         $newPassword = '@M-J"ga&t9f9P5';
 
         $this
-            ->be($this->admin)
+            ->be($this->owner)
             ->from('account/security')
             ->post('account/security', [
                 'password'              => $newPassword,
                 'password_confirmation' => $newPassword,
             ]);
 
-        $user = $this->admin->fresh();
+        $user = $this->owner->fresh();
 
         $this->assertTrue(Hash::check($newPassword, $user->password));
         $this->assertFalse(Hash::check($oldPassword, $user->password));

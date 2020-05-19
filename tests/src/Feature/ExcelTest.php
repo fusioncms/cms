@@ -48,7 +48,7 @@ class ExcelTest extends TestCase
     	list($import, $filepath, $log) = $this->generateFakeImport();
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->post('/api/imports/queue/' . $import->id)
 			->assertStatus(201);
 
@@ -379,7 +379,7 @@ class ExcelTest extends TestCase
     {
     	Storage::fake('public');
 
-    	$this->actingAs($this->admin, 'api');
+    	$this->actingAs($this->owner, 'api');
 
     	$import   = factory(Import::class)->states('users')->create($overrides);
         $filepath = "imports/{$import->handle}.csv";

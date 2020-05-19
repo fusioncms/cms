@@ -30,7 +30,7 @@ class FormTest extends TestCase
         $attributes = factory(Form::class)->make()->toArray();
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/forms', $attributes)
             ->assertStatus(201);
 
@@ -49,7 +49,7 @@ class FormTest extends TestCase
     public function a_newly_created_form_should_create_associated_tables()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/forms', factory(Form::class)->make()->toArray())
             ->assertStatus(201);
 
@@ -105,7 +105,7 @@ class FormTest extends TestCase
      */
     public function a_user_with_permissions_can_update_an_existing_form()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form = FormFactory::create();
 
         // Update ----
@@ -113,7 +113,7 @@ class FormTest extends TestCase
         $attributes['description'] = 'This is the new form description';
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', '/api/forms/' . $form->id, $attributes)
             ->assertStatus(200);
 
@@ -130,7 +130,7 @@ class FormTest extends TestCase
      */
     public function an_updated_form_request_will_also_update_associated_fieldset_name()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form = FormFactory::create();
 
         $oldName = $form->name;
@@ -140,7 +140,7 @@ class FormTest extends TestCase
         $attributes['name'] = 'New Name';
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', '/api/forms/' . $form->id, $attributes)
             ->assertStatus(200);
 
@@ -162,11 +162,11 @@ class FormTest extends TestCase
      */
     public function a_user_with_permissions_can_delete_an_existing_form()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form = FormFactory::create();
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('DELETE', '/api/forms/' . $form->id)
             ->assertStatus(200);
 
@@ -182,12 +182,12 @@ class FormTest extends TestCase
      */
     public function a_deleted_form_request_will_also_delete_associated_tables()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form     = FormFactory::create();
         $fieldset = $form->fieldset;
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('DELETE', '/api/forms/' . $form->id)
             ->assertStatus(200);
 
@@ -216,7 +216,7 @@ class FormTest extends TestCase
      */
     public function a_form_response_will_be_recorded_in_the_activity_log()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form = FormFactory::withName('Contact Us')->create();
 
         $this
@@ -241,7 +241,7 @@ class FormTest extends TestCase
      */
     public function forms_do_not_collect_ips_on_default()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form = FormFactory::create();
 
         // guest form request
@@ -263,7 +263,7 @@ class FormTest extends TestCase
      */
     public function a_form_can_be_set_to_collect_ips()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form = FormFactory::thatCollectsIPs()->create();
 
         $this
@@ -284,7 +284,7 @@ class FormTest extends TestCase
      */
     public function a_form_can_be_set_to_collect_emails()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form = FormFactory::thatCollectsEmails()->create();
 
         $this
@@ -305,7 +305,7 @@ class FormTest extends TestCase
      */
     public function forms_redirect_to_default_confirmation_page_on_default()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form = FormFactory::create();
 
         $this
@@ -323,7 +323,7 @@ class FormTest extends TestCase
      */
     public function a_form_can_be_set_to_redirect_to_custom_page()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form = FormFactory::withCustomRedirect('thanks')->create();
 
         $this
@@ -354,7 +354,7 @@ class FormTest extends TestCase
      */
     public function each_form_must_have_a_unique_slug()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $form = factory(Form::class)->create()->toArray();
         $form['id']     = null;
@@ -374,7 +374,7 @@ class FormTest extends TestCase
      */
     public function each_form_must_have_a_unique_handle()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $form = factory(Form::class)->create()->toArray();
         $form['id']   = null;
@@ -394,7 +394,7 @@ class FormTest extends TestCase
      */
     public function form_handle_must_not_be_a_reserved_keyword()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $this
             ->json('POST', '/api/forms', [ 'handle' => 'default' ])
@@ -424,7 +424,7 @@ class FormTest extends TestCase
     public function a_newly_created_form_should_be_logged_as_an_activity()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/forms', factory(Form::class)->make()->toArray());
 
         $form = Form::firstOrFail();
@@ -433,7 +433,7 @@ class FormTest extends TestCase
             'description' => "Created form ({$form->name})",
             'subject_id'  => $form->id,
             'causer_type' => 'Fusion\Models\User',
-            'causer_id'   => $this->admin->id,
+            'causer_id'   => $this->owner->id,
         ]);
     }
 
@@ -445,7 +445,7 @@ class FormTest extends TestCase
      */
     public function an_updated_form_should_be_logged_as_an_activity()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form = FormFactory::create();
 
         // Update ----
@@ -458,7 +458,7 @@ class FormTest extends TestCase
             'description' => "Updated form ({$attributes['name']})",
             'subject_id'  => $form->id,
             'causer_type' => 'Fusion\Models\User',
-            'causer_id'   => $this->admin->id,
+            'causer_id'   => $this->owner->id,
         ]);
     }
 
@@ -470,7 +470,7 @@ class FormTest extends TestCase
      */
     public function activities_will_be_cleaned_up_for_form_when_it_is_deleted()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $form = FormFactory::create();
 
         $this->json('DELETE', '/api/forms/' . $form->id);
