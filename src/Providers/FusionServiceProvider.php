@@ -2,10 +2,11 @@
 
 namespace Fusion\Providers;
 
+use Fusion\Facades\Theme;
 use Fusion\Models\Mailable;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
-use Caffeinated\Themes\Facades\Theme;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -93,8 +94,7 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
         $this->app->register(SettingsServiceProvider::class);
         $this->app->register(FieldtypeServiceProvider::class);
-
-        $this->app->register(\Caffeinated\Themes\ThemesServiceProvider::class);
+        $this->app->register(ThemeServiceProvider::class);
     }
 
     /**
@@ -117,7 +117,7 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerViews()
     {
-        $this->app->make('view.finder')->addLocation(__DIR__.'/../../resources/views');
+        View::getFinder()->prependLocation(fusion_path('resources/views'));
     }
 
     /**
@@ -149,7 +149,7 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerTheme()
     {
-        Theme::set(setting('system.theme'));
+        Theme::activate(setting('system.theme'));
     }
 
     /**
