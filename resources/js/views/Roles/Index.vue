@@ -27,7 +27,7 @@
                             </p-dropdown-link>
 
                             <p-dropdown-link
-                                v-if="! isRemovable(table.record.name)"
+                                v-if="isRemovable(table.record.name)"
                                 @click.prevent v-modal:delete-role="table.record"
                                 classes="link--danger"
                             >

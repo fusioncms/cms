@@ -5,11 +5,11 @@ export default {
 		},
 
 		isRemovable(name) {
-            return ! _.includes(['developer', 'owner', 'admin', 'user', 'guest'], name);
-        },
+			return ! _.includes(['developer', 'owner', 'admin', 'user', 'guest'], name);
+		},
 
 		hasPermissions(name) {
 			return ! _.includes(['developer', 'owner'], name);
-        }
+		}
 	}
 }
