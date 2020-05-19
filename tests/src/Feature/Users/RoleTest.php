@@ -123,10 +123,8 @@ class RoleTest extends TestCase
 	 */
 	public function only_one_user_may_be_assigned_owner_at_a_time()
 	{
-		$owner = $this->createUser('User A', 'user-a@example.com', 'secret', 'owner');
-	
 		$this
-			->be($owner, 'api')
+			->be($this->owner, 'api')
 			->json('POST', '/api/users', [
 				'name'                  => 'User B',
 				'email'                 => 'user-b@example.com',
@@ -135,7 +133,7 @@ class RoleTest extends TestCase
 				'role'                  => 'owner',
 			]);
 
-		$oldOwner = $owner->fresh();
+		$oldOwner = $this->owner->fresh();
 		$newOwner = User::where('name', 'User B')->first();
 
 		$this->assertFalse($oldOwner->hasRole('owner'));
