@@ -52,7 +52,16 @@ class UserController extends Controller
 
         $user = User::create($attributes);
 
+        // role assignment..
         if (isset($attributes['role'])) {
+            if ($attributes['role'] === 'owner') {
+                User::role('owner')
+                    ->where('id', '<>', $user->id)
+                    ->each(function($user) {
+                        $user->syncRoles('admin');
+                    });
+            }
+
             $user->assignRole($attributes['role']);
         }
 
@@ -77,8 +86,16 @@ class UserController extends Controller
 
         $user->update($attributes);
 
-        // role (optional)..
+        // role assignment..
         if (isset($attributes['role'])) {
+            if ($attributes['role'] === 'owner') {
+                User::role('owner')
+                    ->where('id', '<>', $user->id)
+                    ->each(function($user) {
+                        $user->syncRoles('admin');
+                    });
+            }
+
             $user->syncRoles($attributes['role']);
         }
 
