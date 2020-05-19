@@ -58,7 +58,7 @@ class BackupTest extends TestCase
 	{
 		Bus::fake();
 
-        $response = $this->actingAs($this->admin, 'api')
+        $response = $this->actingAs($this->owner, 'api')
         	->json('POST', '/api/backups')
         	->assertStatus(200);
 

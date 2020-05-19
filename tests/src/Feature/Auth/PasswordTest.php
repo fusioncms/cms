@@ -41,7 +41,7 @@ class PasswordTest extends TestCase
 		$newPassword = $this->attributes['password'];
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
 			->assertStatus(200);
 
@@ -63,7 +63,7 @@ class PasswordTest extends TestCase
 		unset($this->attributes['password'], $this->attributes['password_confirmation']);
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('POST', '/api/users', $this->attributes)
 			->assertStatus(422)
 			->assertJsonValidationErrors([
@@ -82,7 +82,7 @@ class PasswordTest extends TestCase
 		unset($this->attributes['password_confirmation']);
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('POST', '/api/users', $this->attributes)
 			->assertStatus(422)
 			->assertJsonValidationErrors([
@@ -90,7 +90,7 @@ class PasswordTest extends TestCase
 			]);
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
 			->assertStatus(422)
 			->assertJsonValidationErrors([
@@ -108,7 +108,7 @@ class PasswordTest extends TestCase
 	public function password_fields_are_not_required_with_update()
 	{
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, [
 				'name'  => $this->user->name,
 				'email' => $this->user->email,
@@ -129,7 +129,7 @@ class PasswordTest extends TestCase
 		$this->attributes['password_confirmation'] = $password;
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
 			->assertStatus(422)
 			->assertJsonValidationErrors([
@@ -150,7 +150,7 @@ class PasswordTest extends TestCase
 		$this->attributes['password_confirmation'] = $password;
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
 			->assertStatus(422)
 			->assertJsonValidationErrors([
@@ -171,7 +171,7 @@ class PasswordTest extends TestCase
 		$this->attributes['password_confirmation'] = $password;
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
 			->assertStatus(422)
 			->assertJsonValidationErrors([
@@ -192,7 +192,7 @@ class PasswordTest extends TestCase
 		$this->attributes['password_confirmation'] = $password;
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
 			->assertStatus(422)
 			->assertJsonValidationErrors([
@@ -213,7 +213,7 @@ class PasswordTest extends TestCase
 		$this->attributes['password_confirmation'] = $password;
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
 			->assertStatus(422)
 			->assertJsonValidationErrors([
@@ -233,7 +233,7 @@ class PasswordTest extends TestCase
 		$oldPassword = $this->user->password;
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('POST', "/api/users/{$this->user->id}/password", [
 				'password' => ($password = '@M-J"ga&t9f9P5'),
 				'password_confirmation' => $password,
@@ -258,7 +258,7 @@ class PasswordTest extends TestCase
 		$oldPassword = $this->user->password;
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('POST', "/api/users/{$this->user->id}/password", [
 				'password' => ($password = '@M-J"ga&t9f9P5'),
 				'password_confirmation' => $password,
@@ -298,6 +298,6 @@ class PasswordTest extends TestCase
 
         $this
         	->be($this->user, 'api')
-			->json('POST', "/api/users/{$this->admin->id}/password", []);
+			->json('POST', "/api/users/{$this->owner->id}/password", []);
     }
 }

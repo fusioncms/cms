@@ -46,7 +46,7 @@ class FormFieldtypeTest extends TestCase
         ];
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/collections/foobar', $attributes);
 
         $entry = $this->model->first();
@@ -95,7 +95,7 @@ class FormFieldtypeTest extends TestCase
         ];
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/collections/foobar', $attributes)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['form' => 'The form must contain 2 items.']);
@@ -120,7 +120,7 @@ class FormFieldtypeTest extends TestCase
         ];
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/collections/foobar', $attributes);
         
         \Cache::flush();

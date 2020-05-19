@@ -12,7 +12,7 @@ class DispatcherTest extends TestCase
     /** @test */
     public function as_an_authorized_user_the_dispatcher_should_resolve_requests_appropriately()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $response = fusion()->get('users/1');
 
@@ -40,7 +40,7 @@ class DispatcherTest extends TestCase
     /** @test */
     public function as_an_authorized_user_the_dispatcher_should_allow_for_disabling_throttle_checks()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         // ...dispatcher won't be throttled for 60 attempts...
         for ($i = 0; $i < 60; ++$i) {

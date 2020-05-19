@@ -22,7 +22,7 @@ class ActivityTest extends TestCase
     	$attributes = factory(Matrix::class)->make()->toArray();
 
     	$this
-    		->be($this->admin, 'api')
+    		->be($this->owner, 'api')
     		->json('POST', '/api/matrices', $attributes);
 
     	$matrix = Matrix::latest()->first();
@@ -48,7 +48,7 @@ class ActivityTest extends TestCase
 		$attributes['slug'] = 'new-name';
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/matrices/' . $matrix->id, $attributes);
 
 		$this->assertDatabaseHas('activity_log', [
@@ -65,7 +65,7 @@ class ActivityTest extends TestCase
      */
     public function activity_log_will_store_pertenant_info_for_the_dashboard()
     {
-    	$this->actingAs($this->admin, 'api');
+    	$this->actingAs($this->owner, 'api');
 
     	$matrix   = factory(Matrix::class)->create();
     	$activity = Activity::latest('id')->first();
@@ -76,7 +76,7 @@ class ActivityTest extends TestCase
     		'description'  => "Created matrix ({$matrix->name})",
     		'subject_id'   => $matrix->id,
     		'subject_type' => 'Fusion\Models\Matrix',
-    		'causer_id'    => $this->admin->id,
+    		'causer_id'    => $this->owner->id,
     		'causer_type'  => 'Fusion\Models\User'
     	]);
 

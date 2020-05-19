@@ -41,7 +41,7 @@ class TaxonomyTest extends TestCase
         ];
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/taxonomies', $attributes)
             ->assertStatus(201);
 
@@ -95,7 +95,7 @@ class TaxonomyTest extends TestCase
         unset($attributes['created_at'], $attributes['updated_at']);
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', '/api/taxonomies/' . $taxonomy->id, $attributes)
             ->assertStatus(200);
 
@@ -118,7 +118,7 @@ class TaxonomyTest extends TestCase
         ];
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/taxonomies', $attributes)
             ->assertStatus(422)
             ->assertJsonValidationErrors([
@@ -139,7 +139,7 @@ class TaxonomyTest extends TestCase
         $taxonomy['id'] = null;
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/taxonomies', $taxonomy)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['slug', 'handle']);
@@ -153,7 +153,7 @@ class TaxonomyTest extends TestCase
      */
     public function taxonomy_handle_must_not_be_a_reserved_keyword()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $this
             ->json('POST', '/api/taxonomies', [ 'handle' => 'default' ])

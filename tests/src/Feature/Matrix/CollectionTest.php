@@ -45,7 +45,7 @@ class CollectionTest extends TestCase
         ];
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/collections/collectibles', $attributes)
             ->assertStatus(201);
 
@@ -101,7 +101,7 @@ class CollectionTest extends TestCase
         $attributes['slug'] = 'updated-post-title';
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', '/api/collections/collectibles/' . $entry->id, $attributes)
             ->assertStatus(200);
 
@@ -120,7 +120,7 @@ class CollectionTest extends TestCase
         list($entry, $attributes) = $this->newEntry();
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('DELETE', '/api/collections/collectibles/' . $entry->id);
 
         $this->assertDatabaseMissing('mx_collectibles', [ 'id' => $entry->id ]);
@@ -138,7 +138,7 @@ class CollectionTest extends TestCase
         list($entry, $attributes) = $this->newEntry();
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/collections/collectibles', $attributes)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['slug']);
@@ -193,7 +193,7 @@ class CollectionTest extends TestCase
         list($entry, $attributes) = $this->newEntry(['status' => false]);
 
         $this
-            ->be($this->admin)
+            ->be($this->owner)
             ->get('/collectibles/' . $entry->slug);
     }
 
@@ -209,7 +209,7 @@ class CollectionTest extends TestCase
         list($entry, $attributes) = $this->newEntry(['status' => false]);
 
         $this
-            ->be($this->admin)
+            ->be($this->owner)
             ->get('/collectibles/' . $entry->slug . '?preview=true')
             ->assertStatus(200);
     }
@@ -254,7 +254,7 @@ class CollectionTest extends TestCase
         ], $overrides);
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/collections/collectibles', $attributes);
 
         $entry = \DB::table($this->model->getTable())->first();
