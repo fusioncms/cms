@@ -71,9 +71,11 @@ export default {
             axios
                 .patch(`/api/theme/${themeSlug}`)
                 .then(() => {
-                    this.themes.forEach((theme) => {
+                    _.each(this.themes, (theme) => {
                         theme.active = theme.slug === themeSlug
                     })
+
+                    toast('Active theme has been set', 'success')
                 })
         },
 

@@ -83,10 +83,12 @@ class Theme extends Collection
         if (! File::exists(public_path('theme'))) {
             $folder = $this->active()->get('namespace');
 
-            File::link(
-                theme_path("{$folder}/public"),
-                public_path('theme')
-            );
+            if (File::exists(theme_path("{$folder}/public"))) {
+                File::link(
+                    theme_path("{$folder}/public"),
+                    public_path('theme')
+                );
+            }
         }
     }
 
@@ -97,9 +99,7 @@ class Theme extends Collection
      */
     protected function removeSymlink()
     {
-        if (File::exists(public_path('theme'))) {
-            File::delete(public_path('theme'));
-        }
+        File::delete(public_path('theme'));
     }
 
     /**

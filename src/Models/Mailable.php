@@ -6,10 +6,10 @@ use File;
 use Exception;
 use ReflectionClass;
 use ReflectionProperty;
+use Fusion\Facades\Theme;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
-use Caffeinated\Themes\Facades\Theme;
 use Illuminate\Database\Eloquent\Model;
 
 class Mailable extends Model
@@ -78,7 +78,9 @@ class Mailable extends Model
      */
     public function scopeActive($query)
     {
-        return $query->where('namespace', 'like', 'Themes\\\\'. Theme::getCurrent() . '%')
+        $namespace = Theme::active()->get('namespace');
+
+        return $query->where('namespace', 'like', "Themes\\\\{$namespace}%")
                      ->orWhere('namespace', 'like', "Fusion\\\Mail%");
     }
 
@@ -122,8 +124,10 @@ class Mailable extends Model
      */
     public static function registerNewMailables()
     {
+        $namespace = Theme::active()->get('namespace');
+
         $fusionMailFiles = File::files(__DIR__.'/../Mail');
-        $themeMailFiles  = File::files(Theme::path('src/Mail'));
+        $themeMailFiles  = File::files(theme_path("{$namespace}/src/Mail"));
 
         // Resolve fusion mailables..
         foreach ($fusionMailFiles as $file) {
@@ -132,7 +136,7 @@ class Mailable extends Model
 
         // Resolve theme mailables..
         foreach ($themeMailFiles as $file) {
-            self::resolveNewMailable('Themes\\' . basename(Theme::path()) . '\\Mail\\' . $file->getFilenameWithoutExtension());
+            self::resolveNewMailable("Themes\\{$namespace}\\Mail\\{$file->getFilenameWithoutExtension()}");
         }
     }
 

@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Controllers\API\Themes;
 
+use Fusion\Facades\Theme;
 use Illuminate\Http\Request;
-use Caffeinated\Themes\Facades\Theme;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\ThemeResource;
 
@@ -16,7 +16,7 @@ class ActiveController extends Controller
      */
     public function show()
     {
-        $theme = Theme::where('slug', setting('system.theme'))->first();
+        $theme = Theme::active();
 
         return new ThemeResource($theme);
     }
@@ -30,7 +30,10 @@ class ActiveController extends Controller
      */
     public function update(Request $request, $theme)
     {
-        $theme = Theme::where('slug', $theme)->first();
+        Theme::deactivate();
+        Theme::activate($theme);
+
+        $theme = Theme::active();
 
         setting([
             'system.theme' => $theme->get('slug')

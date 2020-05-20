@@ -5,7 +5,6 @@ namespace Fusion\Http\Controllers\DataTable;
 use File;
 use ReflectionClass;
 use Fusion\Models\Mailable;
-use Caffeinated\Themes\Facades\Theme;
 use Fusion\Http\Controllers\DataTableController;
 
 class MailableController extends DataTableController
@@ -13,7 +12,7 @@ class MailableController extends DataTableController
     public function builder()
     {
         Mailable::registerNewMailables();
-        
+
         return Mailable::active();
     }
 

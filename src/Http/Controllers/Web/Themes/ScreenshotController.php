@@ -2,7 +2,6 @@
 
 namespace Fusion\Http\Controllers\Web\Themes;
 
-use Caffeinated\Themes\Facades\Theme;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\ThemeResource;
 
@@ -10,6 +9,6 @@ class ScreenshotController extends Controller
 {
     public function show($theme)
     {
-        return \Image::make(base_path("themes/$theme/preview.png"))->response();
+        return \Image::make(theme_path("{$theme}/preview.png"))->response();
     }
 }
