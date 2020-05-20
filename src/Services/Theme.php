@@ -25,10 +25,13 @@ class Theme extends Collection
     public function activate($theme)
     {
         $this->setTheme($theme);
-        $this->createSymlink();
-        $this->registerViewLocation();
-        $this->registerClassLoader();
-        $this->registerServiceProviders();
+
+        if ($this->active()) {
+            $this->createSymlink();
+            $this->registerViewLocation();
+            $this->registerClassLoader();
+            $this->registerServiceProviders();
+        }
     }
 
     /**

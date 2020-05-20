@@ -128,7 +128,7 @@
             submit() {
                 this.theme.setting['_method'] = 'PATCH'
 
-                axios.post(`/api/themes/${this.theme.slug}`, this.theme.setting).then(() => {
+                axios.post(`/api/themes/${this.theme.namespace}`, this.theme.setting).then(() => {
                     toast('Theme settings have been updated', 'success')
                 })
             },

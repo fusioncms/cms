@@ -11,7 +11,7 @@ return [
                 'name'        => 'Theme',
                 'handle'      => 'theme',
                 'description' => 'The desired theme for the public frontend.',
-                'default'     => 'hello',
+                'default'     => 'Hello',
                 'gui'         => false,
             ],
             [
