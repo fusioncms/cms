@@ -16,7 +16,7 @@
         head: {
             title() {
                 return {
-                    inner: this.menu.name || 'Loading...'
+                    inner: this.form.name || 'Loading...'
                 }
             }
         },

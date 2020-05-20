@@ -28,7 +28,7 @@ class ImporterTest extends TestCase
      */
 	public function a_user_with_permission_can_create_an_import()
 	{
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $response = $this->json(
             'POST',
@@ -60,7 +60,7 @@ class ImporterTest extends TestCase
      */
     public function an_import_cannot_not_create_with_disable_and_delete_strategies()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $response = $this->json(
             'POST',
@@ -78,7 +78,7 @@ class ImporterTest extends TestCase
      */
     public function a_mapping_preview_will_be_generated_on_import_mapping_page()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $import = factory(Import::class)->states('users')->create([
             'preview'  => [],
@@ -103,7 +103,7 @@ class ImporterTest extends TestCase
      */
 	public function a_user_with_permission_can_update_an_import()
 	{
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $import = factory(Import::class)->create();
 
@@ -133,7 +133,7 @@ class ImporterTest extends TestCase
      */
 	public function a_user_with_permission_can_delete_an_import()
 	{
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $import = factory(Import::class)->create();
 

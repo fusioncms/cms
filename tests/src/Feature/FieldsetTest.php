@@ -309,7 +309,7 @@ class FieldsetTest extends TestCase
         ];
 
         // Save fieldset through API..
-        $this->actingAs($this->admin, 'api')
+        $this->actingAs($this->owner, 'api')
             ->json(
                 'POST',
                 '/api/fieldsets/' . $fieldset->id . '/sections',
@@ -330,7 +330,7 @@ class FieldsetTest extends TestCase
      */
     public function each_fieldset_must_have_a_unique_handle()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $fieldset = FieldsetFactory::withName('Foo')->create();
         $fieldset = $fieldset->toArray();

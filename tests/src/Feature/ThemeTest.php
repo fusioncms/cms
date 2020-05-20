@@ -32,7 +32,7 @@ class ThemeTest extends TestCase
      */
 	public function a_user_with_permission_can_upload_a_theme()
 	{
-		$this->actingAs($this->admin, 'api');
+		$this->actingAs($this->owner, 'api');
 
 		list($themePath, $themeName) = $this->generateTheme();
 
@@ -52,7 +52,7 @@ class ThemeTest extends TestCase
 	 */
 	public function a_user_with_permission_can_set_currently_active_theme()
 	{
-		$this->actingAs($this->admin, 'api');
+		$this->actingAs($this->owner, 'api');
 
 		$this
 			->json('PATCH', '/api/theme/test')
@@ -81,7 +81,7 @@ class ThemeTest extends TestCase
      */
 	public function an_uploaded_theme_must_have_its_required_files()
 	{
-		$this->actingAs($this->admin, 'api');
+		$this->actingAs($this->owner, 'api');
 
 		list($themePath, $themeName) = $this->generateTheme('Hello', false);
 
@@ -103,7 +103,7 @@ class ThemeTest extends TestCase
      */
 	public function an_uploaded_theme_cannot_have_the_same_name_as_an_existing_theme()
 	{
-		$this->actingAs($this->admin, 'api');
+		$this->actingAs($this->owner, 'api');
 
 		list($themePath, $themeName) = $this->generateTheme('Hello');
 

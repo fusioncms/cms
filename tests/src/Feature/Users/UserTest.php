@@ -32,12 +32,12 @@ class UserTest extends TestCase
 			'email'                 => $this->faker->unique()->safeEmail,
 			'password'              => ($password = '@M-J"ga&t9f9P5'),
 			'password_confirmation' => ($password),
-			'role'                  => $this->faker->randomElement(['User', 'Guest']),
+			'role'                  => $this->faker->randomElement(['user', 'guest']),
 			'status'                => $this->faker->boolean
 		];
 
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('POST', '/api/users', $attributes)
 			->assertStatus(201);
 
@@ -53,7 +53,7 @@ class UserTest extends TestCase
 			'subject_type' => User::class,
 			'subject_id'   => $newUser->id,
       		'causer_type'  => User::class,
-			'causer_id'    => $this->admin->id,
+			'causer_id'    => $this->owner->id,
 			'description'  => "Created user account ({$newUser->name})",
 		]);
 	}
@@ -81,9 +81,9 @@ class UserTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $this->actingAs($this->user, 'api');
-
-        $this->json('POST', '/api/users', []);
+        $this
+        	->be($this->user, 'api')
+        	->json('POST', '/api/users', []);
     }
 
     /**
@@ -95,7 +95,7 @@ class UserTest extends TestCase
     public function a_user_with_permissions_can_update_a_user()
     {
     	$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, [
 				'name'     => ($name  = $this->faker->name),
 				'email'    => ($email = $this->faker->unique()->safeEmail),
@@ -113,7 +113,7 @@ class UserTest extends TestCase
 			'subject_type' => User::class,
 			'subject_id'   => $this->user->id,
       		'causer_type'  => User::class,
-			'causer_id'    => $this->admin->id,
+			'causer_id'    => $this->owner->id,
 			'description'  => "Updated user account ({$name})",
 		]);
     }
@@ -127,7 +127,7 @@ class UserTest extends TestCase
 	public function password_fields_can_be_ignored_upon_update()
 	{
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, [
 				'name'  => ($name  = $this->faker->name),
 				'email' => ($email = $this->faker->unique()->safeEmail),
@@ -151,7 +151,7 @@ class UserTest extends TestCase
 	public function a_user_cannot_be_assigned_invalid_role()
 	{
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, [
 				'name'  => $this->user->name,
 				'email' => $this->user->email,
@@ -172,7 +172,7 @@ class UserTest extends TestCase
 	public function name_and_email_fields_are_always_required()
 	{
 		$this
-			->be($this->admin, 'api')
+			->be($this->owner, 'api')
 			->json('PATCH', '/api/users/' . $this->user->id, [])
 			->assertStatus(422)
 			->assertJsonValidationErrors([
@@ -193,7 +193,7 @@ class UserTest extends TestCase
         $user['id'] = null;
 
         $this
-        	->be($this->admin, 'api')
+        	->be($this->owner, 'api')
             ->json('POST', '/api/users', $user)
             ->assertStatus(422)
             ->assertJsonValidationErrors([
@@ -210,10 +210,10 @@ class UserTest extends TestCase
     public function existing_user_cannot_use_an_already_taken_email()
     {
         $this
-        	->be($this->admin, 'api')
+        	->be($this->owner, 'api')
             ->json('PATCH', '/api/users/' . $this->user->id, [
             	'name'  => $this->user->name,
-            	'email' => $this->admin->email,
+            	'email' => $this->owner->email,
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([

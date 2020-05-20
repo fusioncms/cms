@@ -35,7 +35,7 @@ class TermTest extends TestCase
      */
     public function a_user_with_permissions_can_create_a_new_term()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $attributes = [
             'name'    => ($name = $this->faker->word),
@@ -88,7 +88,7 @@ class TermTest extends TestCase
      */
     public function a_user_with_permissions_can_update_an_existing_term()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         list($term, $attributes) = $this->newTerm([
             'name' => 'New Term Name',
@@ -114,7 +114,7 @@ class TermTest extends TestCase
      */
     public function a_user_with_permissions_can_delete_an_existing_term()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         list($term, $attributes) = $this->newTerm();
 
@@ -132,7 +132,7 @@ class TermTest extends TestCase
      */
     public function each_term_must_have_a_unique_slug()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         list($term, $attributes) = $this->newTerm();
 

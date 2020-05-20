@@ -90,7 +90,7 @@ class ExtensionTest extends TestCase
         $attributes['profiles'] = factory('Fusion\Models\User', 2)->create()->toArray();
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->post('/api/beta', $attributes)
             ->assertStatus(201);
 
@@ -137,7 +137,7 @@ class ExtensionTest extends TestCase
         $attributes['profiles'] = factory('Fusion\Models\User', 2)->create()->toArray();
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->patch('/api/beta/' . $this->model->id, $attributes)
             ->assertStatus(200);
 
@@ -182,7 +182,7 @@ class ExtensionTest extends TestCase
         ];
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->patch('/api/beta/' . $this->model->id, $attributes);
 
         $this->assertEquals($this->model->content, $attributes['content']);

@@ -25,8 +25,8 @@ class GrumpyTest extends TestCase
     public function it_asserts_database_has_starter_data()
     {
         $this->assertDatabaseHas('users', [
-            'name'  => $this->admin->name,
-            'email' => $this->admin->email,
+            'name'  => $this->owner->name,
+            'email' => $this->owner->email,
         ]);
 
         $this->assertDatabaseHas('users', [

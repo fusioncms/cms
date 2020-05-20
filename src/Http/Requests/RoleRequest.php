@@ -23,10 +23,10 @@ class RoleRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->role->id ?? null;
-
         return [
-            'name'        => 'required|unique:roles,name,' . $id,
+            'name'        => 'sometimes',
+            'label'       => 'required',
+            'guard_name'  => 'sometimes',
             'description' => 'sometimes',
         ];
     }

@@ -31,7 +31,7 @@ class MailTest extends TestCase
      */
     public function a_user_with_permissions_can_update_mail_settings()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $this->json('PATCH', 'api/settings/mail', [])
             ->assertStatus(200);
@@ -58,7 +58,7 @@ class MailTest extends TestCase
     public function an_update_to_mail_settings_will_reflect_in_the_settings_file()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', 'api/settings/mail', [
                 'mail_smtp_host' => 'smtp.mailtrap.io',
                 'mail_smtp_port' => 2525,
@@ -84,11 +84,11 @@ class MailTest extends TestCase
     {
         Mail::fake();
 
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
         $this->json('GET', 'api/mail/test', []);
 
         Mail::assertSent(\Fusion\Mail\WelcomeNewUser::class, function($mail) {
-            return $mail->user->id === $this->admin->id;
+            return $mail->user->id === $this->owner->id;
         });
     }
 

@@ -50,7 +50,7 @@ class PageTest extends TestCase
         ];
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', '/api/pages/' . $this->matrix->id, $attributes)
             ->assertStatus(201);
 
@@ -97,7 +97,7 @@ class PageTest extends TestCase
     public function a_user_cannot_create_a_page_without_required_fields()
     {
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', '/api/pages/' . $this->matrix->id, [])
             ->assertStatus(422)
             ->assertJsonValidationErrors(['name', 'slug', 'status']);
@@ -168,7 +168,7 @@ class PageTest extends TestCase
         list($entry, $attributes) = $this->newEntry(['status' => false]);
 
         $this
-            ->be($this->admin)
+            ->be($this->owner)
             ->get($entry->slug);
     }
 
@@ -184,7 +184,7 @@ class PageTest extends TestCase
         list($entry, $attributes) = $this->newEntry(['status' => false]);
 
         $this
-            ->be($this->admin)
+            ->be($this->owner)
             ->get($entry->slug . '?preview=true')
             ->assertStatus(200);
     }
@@ -230,7 +230,7 @@ class PageTest extends TestCase
 
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('PATCH', '/api/pages/' . $this->matrix->id, $attributes);
 
         $entry = \DB::table($this->model->getTable())->first();

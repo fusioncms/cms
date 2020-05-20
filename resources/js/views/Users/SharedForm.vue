@@ -107,6 +107,10 @@
 
 <script>
     export default {
+        mixins: [
+            require('../../mixins/roles').default
+        ],
+
         props: {
             form: {
                 type: Object,
@@ -117,14 +121,27 @@
                 required: true,
             },
 
+            roles: {
+                type: Array,
+                required: true,
+            },
+
             user: {
                 type: Object,
                 required: false,
-            },
+            }
+        },
 
-            roleOptions: {
-                type: Array,
-                require: true
+        computed: {
+            roleOptions() {
+                const roles = _.filter(this.roles, (role) => this.isAssignable(role.name))
+
+                return _.map(roles, (role) => {
+                    return {
+                        label: role.label,
+                        value: role.name
+                    }
+                })
             }
         }
     }

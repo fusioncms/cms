@@ -10,13 +10,9 @@
 
         <div class="row">
             <div class="content-container">
-                <p-table :endpoint="endpoint" id="roles" sort-by="name" key="roles_table">
-                    <template slot="name" slot-scope="table">
-                        <router-link :to="{ name: 'roles.edit', params: {role: table.record.id} }">{{ table.record.name }}</router-link>
-                    </template>
-
-                    <template slot="slug" slot-scope="table">
-                        <code>{{ table.record.slug }}</code>
+                <p-table :endpoint="endpoint" id="roles" sort-by="label" key="roles_table">
+                    <template slot="label" slot-scope="table">
+                        <router-link :to="{ name: 'roles.edit', params: {role: table.record.id} }">{{ table.record.label }}</router-link>
                     </template>
 
                     <template slot="description" slot-scope="table">
@@ -25,12 +21,14 @@
 
                     <template slot="actions" slot-scope="table">
                         <p-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
-                            <p-dropdown-link @click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">Edit</p-dropdown-link>
+                            
+                            <p-dropdown-link@click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">
+                                Edit
+                            </p-dropdown-link>
 
                             <p-dropdown-link
-                                v-if="! isProtected(table.record.slug)"
-                                @click.prevent
-                                v-modal:delete-role="table.record"
+                                v-if="isRemovable(table.record.name)"
+                                @click.prevent v-modal:delete-role="table.record"
                                 classes="link--danger"
                             >
                                 Delete
@@ -66,6 +64,10 @@
             }
         },
 
+        mixins: [
+            require('../../mixins/roles').default
+        ],
+
         data() {
             return {
                 endpoint: '/datatable/roles',
@@ -73,12 +75,6 @@
         },
 
         methods: {
-            isProtected(slug) {
-                let roles = ['admin', 'user', 'guest']
-
-                return _.includes(roles, slug);
-            },
-
             destroy(id) {
                 axios.delete('/api/roles/' + id).then((response) => {
                     toast('Role successfully deleted.', 'success')

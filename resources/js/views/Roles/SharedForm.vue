@@ -10,13 +10,13 @@
 		<div class="card">
             <div class="card__body">
                 <p-title
-                    name="name"
+                    name="label"
                     autocomplete="off"
                     autofocus
                     required
-                    :has-error="form.errors.has('name')"
-                    :error-message="form.errors.get('name')"
-                    v-model="form.name">
+                    :has-error="form.errors.has('label')"
+                    :error-message="form.errors.get('label')"
+                    v-model="form.label">
                 </p-title>
 
 				<p-textarea
@@ -32,34 +32,32 @@
 			</div>
 		</div>
 
+        <div class="card" v-if="hasPermissions(form.name)">
+            <div class="card__body">
+                <p-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions_table">
+                    <template slot="name" slot-scope="table">
+                        <input
+                            type="checkbox"
+                            name="permissions"
+                            :id="table.record.name"
+                            :value="table.record.name"
+                            v-model="permissions">
+
+                        <code>{{ table.record.name }}</code>
+                    </template>
+
+                    <template slot="guard_name" slot-scope="table">
+                        <span class="badge">{{ table.record.guard_name }}</span>
+                    </template>
+
+                    <template slot="description" slot-scope="table">
+                        <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
+                    </template>
+                </p-table>
+            </div>
+        </div>
+
 		<template v-slot:sidebar>
-            <div class="card">
-                <div class="card__body">
-                    <p-slug
-                        name="slug"
-                        label="Slug"
-                        monospaced
-                        autocomplete="off"
-                        required
-                        :watch="form.name"
-                        :has-error="form.errors.has('slug')"
-                        :error-message="form.errors.get('slug')"
-                        v-model="form.slug">
-                    </p-slug>
-
-					<p-select
-	                    name="special"
-	                    label="Special Flag"
-	                    :options="flags"
-	                    autocomplete="off"
-	                    :has-error="form.errors.has('special')"
-	                    :error-message="form.errors.get('special')"
-	                    required
-	                    v-model="form.special">
-	                </p-select>
-				</div>
-			</div>
-
 			<p-definition-list v-if="role">
                 <p-definition name="Created At">
                     {{ $moment(role.created_at).format('Y-MM-DD, hh:mm a') }}
@@ -68,10 +66,6 @@
                 <p-definition name="Updated At">
                     {{ $moment(role.updated_at).format('Y-MM-DD, hh:mm a') }}
                 </p-definition>
-
-				<p-definition name="Special Flag">
-                    {{ special }}
-                </p-definition>
             </p-definition-list>
 		</template>
 	</form-container>
@@ -79,6 +73,11 @@
 
 <script>
     export default {
+
+        mixins: [
+            require('../../mixins/roles').default
+        ],
+
     	props: {
 			role: {
 				type: Object,
@@ -90,24 +89,37 @@
     			required: true,
 			},
 
-    		flags: {
-    			type: Array,
-    			required: true
-			},
-
 			submit: {
                 required: true,
             },
 		},
 
-		computed: {
-			special() {
-				if (this.role.special) {
-					return _.startCase(this.role.special)
-				}
+        computed: {
+            permissions: {
+                get() {
+                    return this.form.permissions
+                },
 
-				return 'None';
-			}
-		}
+                set(value){
+                    this.form.permissions = value
+                }
+            }
+        },
+
+        methods: {
+            // toggle(name, ev) {
+            //     const token  = _.head(_.split(name, '.'))
+            //     const items  = this.$refs.permissions.records
+                
+            //     if (ev.target.checked) {
+            //         let matches = _.filter(items, (item) => _.startsWith(item.name, token))
+            //             matches = _.map(matches,  (item) => item.name)
+
+            //         this.permissions = _.union(this.permissions, matches)
+            //     } else {
+            //         this.permissions = _.remove(this.permissions, (item) => ! _.startsWith(item, token))
+            //     }
+            // }
+        }
     }
 </script>

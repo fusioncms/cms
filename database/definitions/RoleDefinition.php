@@ -5,7 +5,8 @@ use Spatie\Permission\Models\Role;
 
 $factory->define(Role::class, function (Faker $faker) {
     return [
-        'name'        => $faker->word,
+        'name'        => ($name = $faker->word),
+        'label'       => ucfirst($name),
         'guard_name'  => config('auth.defaults.guard'),
         'description' => $faker->sentence,
     ];

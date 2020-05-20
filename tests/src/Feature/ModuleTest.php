@@ -44,7 +44,7 @@ class ModuleTest extends TestCase
         // });
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/modules/upload', [
                 'file-upload' => new UploadedFile($modulePath, $moduleName, 'application/zip', null, true)
             ])->assertStatus(200);
@@ -66,13 +66,13 @@ class ModuleTest extends TestCase
         list($modulePath, $moduleName) = $this->generateModule('Omega');
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/modules/upload', [
                 'file-upload' => new UploadedFile($modulePath, $moduleName, 'application/zip', null, true)
             ]);
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/modules/omega/install')
             ->assertStatus(200);
 
@@ -96,17 +96,17 @@ class ModuleTest extends TestCase
         list($modulePath, $moduleName) = $this->generateModule('Omega');
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/modules/upload', [
                 'file-upload' => new UploadedFile($modulePath, $moduleName, 'application/zip', null, true)
             ]);
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/modules/omega/install');
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/modules/omega/uninstall')
             ->assertStatus(200);
 
@@ -150,7 +150,7 @@ class ModuleTest extends TestCase
         list($modulePath, $moduleName) = $this->generateModule('Invalid', false);
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/modules/upload', [
                 'file-upload' => new UploadedFile($modulePath, $moduleName, 'application/zip', null, true)
             ])
@@ -170,7 +170,7 @@ class ModuleTest extends TestCase
         list($modulePath, $moduleName) = $this->generateModule('Beta');
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', '/api/modules/upload', [
                 'file-upload' => new UploadedFile($modulePath, $moduleName, 'application/zip', null, true)
             ])
@@ -194,7 +194,7 @@ class ModuleTest extends TestCase
         Module::enable($slug);
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', "/api/modules/{$slug}/disable")
             ->assertStatus(200);
 
@@ -215,7 +215,7 @@ class ModuleTest extends TestCase
         Module::disable($slug);
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', "/api/modules/{$slug}/enable")
             ->assertStatus(200);
 
@@ -234,7 +234,7 @@ class ModuleTest extends TestCase
         $slug   = $module->get('slug');
 
         $this
-            ->be($this->admin, 'api')
+            ->be($this->owner, 'api')
             ->json('POST', "/api/modules/{$slug}/seed")
             ->assertStatus(200);
 

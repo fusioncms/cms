@@ -32,7 +32,7 @@ class MailableTest extends TestCase
 	public function a_user_with_permission_can_update_a_mailable()
 	{
     	// Storage::fake('temp');
-		$this->actingAs($this->admin, 'api');
+		$this->actingAs($this->owner, 'api');
 
 		$model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
 
@@ -70,7 +70,7 @@ class MailableTest extends TestCase
      */
 	public function a_user_cannot_update_a_mailable_without_required_fields()
 	{
-		$this->actingAs($this->admin, 'api');
+		$this->actingAs($this->owner, 'api');
 
 		$model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
 

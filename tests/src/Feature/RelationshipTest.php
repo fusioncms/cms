@@ -57,7 +57,7 @@ class RelationshipTest extends TestCase
     /** @test */
     public function user_field_will_add_relationships_through_users_pivot_table()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         $section  = SectionFactory::times(1)->withoutFields()->create();
         $field    = FieldFactory::withName('Users')->withType('user')->withSection($section)->create();
@@ -93,7 +93,7 @@ class RelationshipTest extends TestCase
     /** @test */
     public function a_user_can_add_multiple_fields_linked_to_the_same_taxonomy()
     {
-        $this->actingAs($this->admin, 'api');
+        $this->actingAs($this->owner, 'api');
 
         // Taxonomy with Terms..
         $taxonomy = TaxonomyFactory::withName('Colors')->withStates(['terms'])->create();
