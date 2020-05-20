@@ -1,9 +1,14 @@
 {
     "name": "Hello",
     "slug": "hello",
+    "namespace": "Hello",
     "description": "Say hello to your new Content Management System.",
     "author": "efelle creative",
     "version": "1.0.0",
+
+    "providers": [
+        "Themes\\Hello\\ThemeServiceProvider"
+    ],
 
     "settings": {
         "greeting": {
