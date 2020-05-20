@@ -35,7 +35,7 @@ trait InstallsFusion
      */
     protected function install()
     {
-        Theme::activate('hello');
+        Theme::activate('Hello');
 
         dispatch_now(new CreateDatabaseTables);
         dispatch_now(new PublishModuleAssets);

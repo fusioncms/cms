@@ -81,7 +81,7 @@ class SettingTest extends TestCase
     {
         $this->assertDatabaseHas('setting_sections', ['name' => 'System']);
 
-        $this->assertDatabaseHas('settings', ['name' => 'Theme', 'value' => 'hello']);
+        $this->assertDatabaseHas('settings', ['name' => 'Theme', 'value' => 'Hello']);
         $this->assertDatabaseHas('settings', ['name' => 'Website Title', 'value' => 'My FusionCMS Website']);
     }
 }

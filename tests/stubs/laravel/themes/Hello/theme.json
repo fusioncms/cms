@@ -1,6 +1,5 @@
 {
     "name": "Hello",
-    "slug": "hello",
     "namespace": "Hello",
     "description": "Say hello to your new Content Management System.",
     "author": "efelle creative",
