@@ -2,7 +2,7 @@
 
 namespace Fusion\Http\Resources;
 
-use Caffeinated\Themes\Facades\Theme;
+use Fusion\Facades\Theme;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ThemeResource extends JsonResource
@@ -21,7 +21,7 @@ class ThemeResource extends JsonResource
             'description' => $this->get('description'),
             'author'      => $this->get('author'),
             'version'     => $this->get('version'),
-            'active'      => $this->get('slug') === Theme::getCurrent(),
+            'active'      => $this->get('slug') === Theme::getTheme(),
             'preview'     => "/themes/{$this->get('slug')}/preview.png",
             'settings'    => $this->get('settings'),
             'setting'     => $this->getSettingValues($this->get('slug')),

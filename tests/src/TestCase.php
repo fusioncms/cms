@@ -8,7 +8,6 @@ use Fusion\Tests\Concerns\InstallsFusion;
 use Fusion\Providers\FusionServiceProvider;
 use Caffeinated\Flash\FlashServiceProvider;
 use Caffeinated\Menus\MenusServiceProvider;
-use Caffeinated\Themes\ThemesServiceProvider;
 use Caffeinated\Modules\ModulesServiceProvider;
 use Fusion\Tests\Concerns\MakesDatabaseAssertions;
 use Spatie\Activitylog\ActivitylogServiceProvider;
@@ -121,7 +120,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             // Caffeinated
             FlashServiceProvider::class,
             MenusServiceProvider::class,
-            ThemesServiceProvider::class,
             ModulesServiceProvider::class,
 
             // Spatie
@@ -141,7 +139,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         return [
             'Fusion' => 'Fusion\Facades\Fusion',
-            'Theme'  => 'Caffeinated\Themes\Facades\Theme',
+            'Theme'  => 'Fusion\Facades\Theme',
             'Module' => 'Caffeinated\Modules\Facades\Module',
         ];
     }

@@ -3,10 +3,10 @@
 namespace Fusion\Tests\Feature;
 
 use ZipArchive;
+use Fusion\Facades\Theme;
 use Fusion\Tests\TestCase;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
-use Caffeinated\Themes\Facades\Theme;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Auth\AuthenticationException;
@@ -54,20 +54,11 @@ class ThemeTest extends TestCase
 	{
 		$this->actingAs($this->owner, 'api');
 
-		Theme::push(collect([
-			'name'        => 'Test Theme',
-			'slug'        => 'test_theme',
-			'description' => 'A temporary theme for testing purposes.',
-			'author'      => 'efelle creative',
-			'version'     => '1.0.0',
-			'settings'    => [],
-		]));
-
 		$this
-			->json('PATCH', '/api/theme/test_theme')
+			->json('PATCH', '/api/theme/test')
 			->assertStatus(200);
 
-		$this->assertEquals(setting('system.theme'), 'test_theme');
+		$this->assertEquals(setting('system.theme'), 'test');
 	}
 
 	/**
