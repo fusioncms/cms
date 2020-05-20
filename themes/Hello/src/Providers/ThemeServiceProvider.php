@@ -2,14 +2,12 @@
 
 namespace Themes\Hello\Providers;
 
-use Caffeinated\Themes\Support\ServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
 class ThemeServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        parent::boot();
-
         //
     }
 

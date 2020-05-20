@@ -3,7 +3,7 @@
 namespace Themes\Hello\Providers;
 
 use Illuminate\Support\Facades\Route;
-use Caffeinated\Themes\Support\RouteServiceProvider as ServiceProvider;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {

@@ -7,7 +7,7 @@
     "version": "1.0.0",
 
     "providers": [
-        "Themes\\Hello\\ThemeServiceProvider"
+        "Themes\\Hello\\Providers\\ThemeServiceProvider"
     ],
 
     "settings": {
