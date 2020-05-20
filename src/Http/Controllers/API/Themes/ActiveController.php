@@ -36,7 +36,7 @@ class ActiveController extends Controller
         $theme = Theme::active();
 
         setting([
-            'system.theme' => $theme->get('slug')
+            'system.theme' => $theme->get('namespace')
         ]);
 
         activity()

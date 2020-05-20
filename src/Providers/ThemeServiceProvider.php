@@ -33,9 +33,9 @@ class ThemeServiceProvider extends ServiceProvider
                 $themes = $this->app['files']->directories(theme_path());
 
                 foreach ($themes as $theme) {
-                    $manifest         = new Manifest($theme.'/theme.json');
-                    $slug             = $manifest->get('slug');
-                    $manifests[$slug] = collect($manifest->all());
+                    $manifest              = new Manifest($theme.'/theme.json');
+                    $namespace             = $manifest->get('namespace');
+                    $manifests[$namespace] = collect($manifest->all());
                 }
             }
 
