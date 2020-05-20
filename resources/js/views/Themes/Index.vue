@@ -26,7 +26,7 @@
                         <p class="text-gray-800 text-base">{{ theme.description }}</p>
 
                         <div class="w-full border-t-2 border-gray-200 pt-3">
-                            <p-button class="w-full" v-if="! theme.active" @click="setAsActive(theme.slug)">Set as active</p-button>
+                            <p-button class="w-full" v-if="! theme.active" @click="setAsActive(theme.namespace)">Set as active</p-button>
                             <p class="text-center" v-else>Currently Active</p>
                         </div>
                     </div>
@@ -67,13 +67,15 @@ export default {
     },
 
     methods: {
-        setAsActive(themeSlug) {
+        setAsActive(themeNamespace) {
             axios
-                .patch(`/api/theme/${themeSlug}`)
+                .patch(`/api/theme/${themeNamespace}`)
                 .then(() => {
-                    this.themes.forEach((theme) => {
-                        theme.active = theme.slug === themeSlug
+                    _.each(this.themes, (theme) => {
+                        theme.active = theme.namespace === themeNamespace
                     })
+
+                    toast('Active theme has been set', 'success')
                 })
         },
 

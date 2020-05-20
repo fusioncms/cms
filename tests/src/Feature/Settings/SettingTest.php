@@ -79,7 +79,7 @@ class SettingTest extends TestCase
         $this->assertEquals(
             setting('system'),
             [
-                'theme'           => 'hello',
+                'theme'           => 'Hello',
                 'website_title'   => 'My FusionCMS Website',
                 'website_slogan'  => 'Another awesome website powered by FusionCMS!',
                 'site_url'        => 'http://localhost',

@@ -1,5 +1,5 @@
 <template>
-    <p-modal name="edit-field" title="Edit Field" noCloseButton noEscClose noOutsideClose extra-large v-model="modalOpen">
+    <p-modal name="edit-field" title="Edit Field" noCloseButton noEscClose extra-large v-model="modalOpen">
         <div class="row mb-6">
             <div class="col w-1/2">
                 <p-input

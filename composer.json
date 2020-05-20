@@ -52,7 +52,6 @@
         "caffeinated/flash": "^4.0",
         "caffeinated/menus": "^4.0",
         "caffeinated/modules": "^6.0",
-        "caffeinated/themes": "^7.0",
         "composer/semver": "^1.5",
         "doctrine/dbal": "^2.9",
         "illuminate/support": "^7.0",
@@ -91,7 +90,8 @@
             ],
             "aliases": {
                 "Fusion": "Fusion\\Facades\\Fusion",
-                "Setting": "Fusion\\Facades\\Setting"
+                "Setting": "Fusion\\Facades\\Setting",
+                "Theme": "Fusion\\Facades\\Theme"
             },
             "dont-discover": [
                 "caffeinated/shinobi",

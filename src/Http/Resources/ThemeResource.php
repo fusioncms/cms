@@ -2,7 +2,7 @@
 
 namespace Fusion\Http\Resources;
 
-use Caffeinated\Themes\Facades\Theme;
+use Fusion\Facades\Theme;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ThemeResource extends JsonResource
@@ -17,20 +17,20 @@ class ThemeResource extends JsonResource
     {
         return [
             'name'        => $this->get('name'),
-            'slug'        => $this->get('slug'),
+            'namespace'   => $this->get('namespace'),
             'description' => $this->get('description'),
             'author'      => $this->get('author'),
             'version'     => $this->get('version'),
-            'active'      => $this->get('slug') === Theme::getCurrent(),
-            'preview'     => "/themes/{$this->get('slug')}/preview.png",
+            'active'      => $this->get('namespace') === Theme::getTheme(),
+            'preview'     => "/themes/{$this->get('namespace')}/preview.png",
             'settings'    => $this->get('settings'),
-            'setting'     => $this->getSettingValues($this->get('slug')),
+            'value'       => $this->getSettingValues($this->get('namespace')),
         ];
     }
 
     protected function getSettingValues()
     {
-        $settingsFilePath = storage_path('themes/'.$this->get('slug').'.json');
+        $settingsFilePath = storage_path('themes/'.$this->get('namespace').'.json');
 
         $defaults = collect($this->get('settings'))->mapWithKeys(function($setting, $handle) {
             return [$handle => $setting['default'] ?? null];

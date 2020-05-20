@@ -3,8 +3,8 @@
 namespace Fusion\Tests\Concerns;
 
 use Fusion\Models\User;
+use Fusion\Facades\Theme;
 use Illuminate\Support\Facades\File;
-use Caffeinated\Themes\Facades\Theme;
 use Illuminate\Support\Facades\Artisan;
 use Fusion\Console\Installer\CreateDefaultRoles;
 use Fusion\Console\Installer\PublishModuleAssets;
@@ -35,7 +35,7 @@ trait InstallsFusion
      */
     protected function install()
     {
-        Theme::set('hello');
+        Theme::activate('Hello');
 
         dispatch_now(new CreateDatabaseTables);
         dispatch_now(new PublishModuleAssets);

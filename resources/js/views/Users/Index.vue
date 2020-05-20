@@ -18,7 +18,7 @@
                             <span class="list--separator">Roles</span>
 
                             <router-link v-for="role in filteredRoles" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" class="list--item" exact>
-                                {{ role.name }}
+                                {{ role.label }}
                             </router-link>
                         </div>
                     </div>
