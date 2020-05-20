@@ -55,10 +55,10 @@ class ThemeTest extends TestCase
 		$this->actingAs($this->owner, 'api');
 
 		$this
-			->json('PATCH', '/api/theme/test')
+			->json('PATCH', '/api/theme/Test')
 			->assertStatus(200);
 
-		$this->assertEquals(setting('system.theme'), 'test');
+		$this->assertEquals(setting('system.theme'), 'Test');
 	}
 
 	/**
@@ -133,7 +133,7 @@ class ThemeTest extends TestCase
 
 		$settings = [
 			'name'        => $themeName,
-			'slug'        => Str::slug($themeName),
+			'namespace'   => Str::studly($themeName),
 			'description' => $this->faker->text,
 			'author'      => $this->faker->name,
 			'version'     => '1.0.0',
