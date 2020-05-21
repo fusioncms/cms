@@ -19,11 +19,10 @@ class UserRequest extends FormRequest
         $authorized = $this->user()->can('users.' . ($this->method() === 'POST' ? 'create' : 'update'));
         
         /**
-         * Only user with roles: `developer` || `owner`
-         *   may re-assign the owner role.
+         * Only user with role `owner` may re-assign this role.
          */
         if ($this->role == 'owner') {
-            $authorized = $this->user()->hasRole(['developer','owner']);
+            $authorized = $this->user()->hasRole('owner');
         }
 
         return $authorized;

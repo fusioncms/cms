@@ -1,15 +1,15 @@
 export default {
 	methods: {
 		isAssignable(name) {
-			return ! _.includes([], name)
+			return ! _.includes(['guest'], name)
 		},
 
 		isRemovable(name) {
-			return ! _.includes(['developer', 'owner', 'admin', 'user', 'guest'], name);
+			return ! _.includes(['owner', 'admin', 'user', 'guest'], name);
 		},
 
 		hasPermissions(name) {
-			return ! _.includes(['developer', 'owner'], name);
+			return ! _.includes(['owner'], name);
 		}
 	}
 }
