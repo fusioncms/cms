@@ -37,9 +37,7 @@ class CreateDefaultUser
                 'password'          => Hash::make($this->container['user_password']),
                 'status'            => true,
                 'email_verified_at' => now(),
-            ])->assignRole(
-                $this->container['dev'] ? 'developer' : 'owner'
-            );
+            ])->assignRole('owner');
         });
     }
 }

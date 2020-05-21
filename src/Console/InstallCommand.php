@@ -150,6 +150,7 @@ class InstallCommand extends Command
             'Publishing module assets...'       => new \Fusion\Console\Installer\PublishModuleAssets,
             'Publishing Fusion resources...'    => new \Fusion\Console\Installer\PublishFusionResources,
             'Creating storage link...'          => new \Fusion\Console\Installer\CreateStorageLink,
+            'Creating default permissions...'   => new \Fusion\Console\Installer\CreateDefaultPermissions,
             'Creating default roles...'         => new \Fusion\Console\Installer\CreateDefaultRoles,
             'Creating default user account...'  => new \Fusion\Console\Installer\CreateDefaultUser($this->container),
             'Creating OAuth keys...'            => new \Fusion\Console\Installer\CreateOAuthKeys,

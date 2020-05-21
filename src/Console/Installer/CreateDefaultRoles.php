@@ -13,22 +13,20 @@ class CreateDefaultRoles
         'guest' => [
             'name'        => 'guest',
             'label'       => 'Guest',
-            'description' => 'All guests of the website will be assigned this role automatically.',
+            'description' => 'All non-logged, visiting users automatically assume this role.',
         ],
         'user' => [
             'name'        => 'user',
             'label'       => 'User',
-            'description' => 'Users have limited access to the website. They do not have control panel access.',
+            'description' => 'Default role assigned to new users after creating an account.',
         ],
         'admin' => [
             'name'        => 'admin',
             'label'       => 'Administrator',
             'description' => 'Administrators have control panel access with a base set of assigned permissions.',
-        ],
-        'developer' => [
-            'name'        => 'developer',
-            'label'       => 'Developer',
-            'description' => 'Developers have full control panel access, plus additional abilities for configuration.',
+            'permissions' => [
+                'cp.access'
+            ],
         ],
         'owner' => [
             'name'        => 'owner',
@@ -45,7 +43,11 @@ class CreateDefaultRoles
     public function handle()
     {
         foreach ($this->roles as $role) {
-            Role::create($role);
+            Role::create([
+            'name'        => $role['name'],
+            'label'       => $role['label'],
+            'description' => $role['description'],
+            ])->givePermissionTo($role['permissions'] ?? []);
         }
     }
 }
