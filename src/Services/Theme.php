@@ -83,13 +83,13 @@ class Theme extends Collection
      */
     protected function createSymlink()
     {
-        if (! File::exists(public_path('theme'))) {
+        if (! File::exists(public_path('themes'))) {
             $folder = $this->active()->get('namespace');
 
             if (File::exists(theme_path("{$folder}/public"))) {
                 File::link(
                     theme_path("{$folder}/public"),
-                    public_path('theme')
+                    public_path('themes')
                 );
             }
         }

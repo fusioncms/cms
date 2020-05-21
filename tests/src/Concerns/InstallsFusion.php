@@ -10,6 +10,7 @@ use Fusion\Console\Installer\CreateDefaultRoles;
 use Fusion\Console\Installer\PublishModuleAssets;
 use Fusion\Console\Installer\CreateDatabaseTables;
 use Fusion\Console\Installer\PublishFusionResources;
+use Fusion\Console\Installer\CreateDefaultPermissions;
 
 trait InstallsFusion
 {
@@ -39,11 +40,8 @@ trait InstallsFusion
 
         dispatch_now(new CreateDatabaseTables);
         dispatch_now(new PublishModuleAssets);
-        dispatch_now(new CreateDefaultRoles([
-            'user_name'     => $this->name,
-            'user_email'    => $this->email,
-            'user_password' => $this->password,
-        ]));
+        dispatch_now(new CreateDefaultPermissions);
+        dispatch_now(new CreateDefaultRoles);
 
         Artisan::call('fusion:sync');
         Artisan::call('fusion:flush');
