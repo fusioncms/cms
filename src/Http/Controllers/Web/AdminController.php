@@ -11,7 +11,7 @@ class AdminController extends Controller
 	 */
 	public function __construct()
 	{
-		$this->middleware(['role:owner','permission:cp.access']);
+		$this->middleware(['permission:cp.access']);
 	}
 
     /**
