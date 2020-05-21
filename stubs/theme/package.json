@@ -1,0 +1,19 @@
+{
+    "name": "theme",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "NODE_ENV=development webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "watch": "NODE_ENV=development webpack --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "hot": "NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "production": "NODE_ENV=production webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+    },
+    "devDependencies": {
+        "laravel-mix": "^5.0.0",
+        "resolve-url-loader": "^3.1.0",
+        "sass": "^1.26.5",
+        "sass-loader": "^8.0.2",
+        "vue-template-compiler": "^2.6.11",
+        "webpack": "^4.43.0"
+    }
+}
