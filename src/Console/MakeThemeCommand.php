@@ -2,6 +2,7 @@
 
 namespace Fusion\Console;
 
+use Fusion\Facades\Theme;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -33,6 +34,10 @@ class MakeThemeCommand extends Command
         $template  = $this->getTemplate();
         $manifest  = $this->getManifest();
 
+        if (! File::isDirectory($template)) {
+            return $this->error("No template found at '{$template}'");
+        }
+
         if (File::isDirectory(theme_path($namespace))) {
             return $this->error('Theme already exists!');
         }
@@ -59,11 +64,11 @@ class MakeThemeCommand extends Command
     {
         $template = $this->option('template', null);
 
-        // if (is_null($template)) {
+        if (is_null($template)) {
             return fusion_path('stubs/theme');
-        // }
+        }
 
-        // Otherwise, fetch the template theme and return its path
+        return base_path("templates/{$template}");
     }
 
     /**
