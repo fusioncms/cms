@@ -35,7 +35,7 @@ class MakeThemeCommand extends Command
         $manifest  = $this->getManifest();
 
         if (! File::isDirectory($template)) {
-            return $this->error("No template found for '{$template}'");
+            return $this->error("No template found at '{$template}'");
         }
 
         if (File::isDirectory(theme_path($namespace))) {
@@ -68,7 +68,7 @@ class MakeThemeCommand extends Command
             return fusion_path('stubs/theme');
         }
 
-        return theme_path("{$template}/template");
+        return base_path("templates/{$template}");
     }
 
     /**
