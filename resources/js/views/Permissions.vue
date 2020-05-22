@@ -11,10 +11,6 @@
                         <code>{{ table.record.name }}</code>
                     </template>
 
-                    <template slot="guard_name" slot-scope="table">
-                        <span class="badge">{{ table.record.guard_name }}</span>
-                    </template>
-
                     <template slot="description" slot-scope="table">
                         <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
                     </template>

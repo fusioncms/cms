@@ -16,7 +16,6 @@ class PermissionController extends DataTableController
     {
         return [
             'name',
-            'guard_name',
             'description',
         ];
     }
@@ -25,7 +24,6 @@ class PermissionController extends DataTableController
     {
         return [
             'name'        => 'Name',
-            'guard_name'  => 'Guard',
             'description' => 'Description',
         ];
     }
