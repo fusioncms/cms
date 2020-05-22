@@ -2,6 +2,7 @@
 
 namespace Fusion\Http\Requests;
 
+use Illuminate\Support\Str;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RoleRequest extends FormRequest
@@ -17,6 +18,18 @@ class RoleRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'name' => $this->name ?? Str::slug($this->label),
+        ]);
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -24,7 +37,7 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'        => 'sometimes',
+            'name'        => 'required',
             'label'       => 'required',
             'guard_name'  => 'sometimes',
             'description' => 'sometimes',
