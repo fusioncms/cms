@@ -2,10 +2,10 @@
 
 namespace Fusion\Tests\Feature\Users;
 
-use Fusion\Models\User;
 use Fusion\Tests\TestCase;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use Fusion\Models\User;
+use Fusion\Models\Role;
+use Fusion\Models\Permission;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;

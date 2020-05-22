@@ -4,9 +4,9 @@ namespace Fusion\Console\Actions;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Fusion\Models\Permission;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
 
 class SyncPermissions
@@ -48,7 +48,10 @@ class SyncPermissions
                 
                 $permission = Permission::updateOrCreate(
                     [ 'name' => $name ],
-                    [ 'description' => $value ]
+                    [
+                        'guard_name'  => '*',
+                        'description' => $value,
+                    ]
                 );
 
                 // Unset for later cleanup..

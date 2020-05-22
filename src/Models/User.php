@@ -2,9 +2,9 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasRoles;
 use Fusion\Concerns\HasActivity;
 use Laravel\Passport\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Fusion\Concerns\HasDynamicRelationships;
 use Illuminate\Database\Eloquent\Builder;
