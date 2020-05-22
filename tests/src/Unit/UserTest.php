@@ -3,8 +3,8 @@
 namespace Fusion\Tests\Unit;
 
 use Fusion\Tests\TestCase;
+use Fusion\Models\Role;
 use Illuminate\Support\Collection;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;

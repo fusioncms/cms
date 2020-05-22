@@ -2,7 +2,7 @@
 
 namespace Fusion\Console\Installer;
 
-use Spatie\Permission\Models\Role;
+use Fusion\Models\Role;
 
 class CreateDefaultRoles
 {
@@ -45,6 +45,7 @@ class CreateDefaultRoles
         foreach ($this->roles as $role) {
             Role::create([
             'name'        => $role['name'],
+            'guard_name'  => '*',
             'label'       => $role['label'],
             'description' => $role['description'],
             ])->givePermissionTo($role['permissions'] ?? []);

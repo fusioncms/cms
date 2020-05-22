@@ -3,7 +3,7 @@
 namespace Fusion\Http\Controllers\API\Users;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
+use Fusion\Models\Role;
 use Fusion\Http\Requests\RoleRequest;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\RoleResource;

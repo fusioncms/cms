@@ -3,7 +3,7 @@
 namespace Fusion\Console\Installer;
 
 use Fusion\Models\User;
-use Spatie\Permission\Models\Role;
+use Fusion\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
 class CreateDefaultUser
