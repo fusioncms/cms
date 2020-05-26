@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Auth\Access\AuthorizationException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ExtensionTest extends TestCase
@@ -36,6 +36,99 @@ class ExtensionTest extends TestCase
 
         $this->model = factory(Beta::class)->create();
         $this->model = $this->model->fresh();
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group extension
+     * @group auth
+     */
+    public function a_guest_cannot_not_create_an_extension()
+    {
+        $this->expectException(AuthenticationException::class);
+
+        $this->json('POST', '/api/extensions', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group extension
+     * @group permissions
+     */
+    public function only_owner_user_may_view_any_extensions()
+    {
+        $this->expectException(UnauthorizedException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/extensions');
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('GET', '/api/extensions')
+            ->assertOk(200);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group extension
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_an_extension()
+    {
+        $this->expectException(UnauthorizedException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/extensions/' . $this->extension->id);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group extenion
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_update_existing_extenions()
+    {
+        $this->expectException(UnauthorizedException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('PATCH', '/api/extensions/' . $this->extension->id, []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group extension
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_delete_existing_extensions()
+    {
+        $this->expectException(UnauthorizedException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('DELETE', '/api/extensions/' . $this->extension->id);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group extension
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_create_new_extension()
+    {
+        $this->expectException(UnauthorizedException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/extensions', []);
     }
 
     /**

@@ -25,7 +25,7 @@ class TermRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('term.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('terms.' . ($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**

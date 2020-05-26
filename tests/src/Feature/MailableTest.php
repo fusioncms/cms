@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Auth\Access\AuthorizationException;
+
 
 class MailableTest extends TestCase
 {
@@ -31,9 +33,6 @@ class MailableTest extends TestCase
      */
 	public function a_user_with_permission_can_update_a_mailable()
 	{
-    	// Storage::fake('temp');
-		$this->actingAs($this->owner, 'api');
-
 		$model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
 
 		$newData = [
@@ -42,7 +41,9 @@ class MailableTest extends TestCase
         	'markdown' => $this->faker->text
         ];
 
-        $response = $this->json('PATCH', '/api/mailables/' . $model->id, $newData)
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', '/api/mailables/' . $model->id, $newData)
         	->assertStatus(200);
 
         $this->assertDatabaseHas('mailables', $newData);
@@ -51,7 +52,9 @@ class MailableTest extends TestCase
 	/**
      * @test
      * @group fusioncms
-     * @group mailable
+     * @group feature
+     * @group mailabe
+     * @group permissions
      */
 	public function a_guest_cannot_not_update_a_mailable()
 	{
@@ -59,9 +62,44 @@ class MailableTest extends TestCase
 
 		$model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
 
-        $response = $this->json('PATCH', '/api/mailables/' . $model->id, [])
-        	->assertStatus(422);
+        $this->json('PATCH', '/api/mailables/' . $model->id, []);
 	}
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group mailabe
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_a_role()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/mailables/' . $model->id);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group mailabe
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_update_existing_roles()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('PATCH', '/api/mailables/' . $model->id, []);
+    }
 
 	/**
      * @test
@@ -70,11 +108,11 @@ class MailableTest extends TestCase
      */
 	public function a_user_cannot_update_a_mailable_without_required_fields()
 	{
-		$this->actingAs($this->owner, 'api');
-
 		$model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
 
-        $response = $this->json('PATCH', '/api/mailables/' . $model->id, [])
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', '/api/mailables/' . $model->id, [])
         	->assertStatus(422)
         	->assertJsonValidationErrors(['name']);
 	}

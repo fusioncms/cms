@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class BackupTest extends TestCase
 {
@@ -58,7 +59,8 @@ class BackupTest extends TestCase
 	{
 		Bus::fake();
 
-        $response = $this->actingAs($this->owner, 'api')
+        $this
+        	->be($this->owner, 'api')
         	->json('POST', '/api/backups')
         	->assertStatus(200);
 
@@ -76,11 +78,28 @@ class BackupTest extends TestCase
 
 		$this->expectException(AuthenticationException::class);
 
-        $response = $this->json('POST', '/api/backups')
-        	->assertStatus(422);
+        $this->json('POST', '/api/backups', []);
 
         Bus::assertNotDispatched(\Fusion\Jobs\Backups\BackupRun::class);
 	}
+
+	/**
+     * @test
+     * @group fusioncms
+     * @group backups
+     */
+	public function a_user_without_permissions_cannot_create_new_backups()
+	{
+		Bus::fake();
+
+		$this->expectException(UnauthorizedException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/backups', []);
+
+        Bus::assertNotDispatched(\Fusion\Jobs\Backups\BackupRun::class);
+    }
 
 	/**
      * @test

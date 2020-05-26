@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\FileManager;
 
 use Fusion\Models\Directory;
 use Illuminate\Support\Str;
@@ -21,6 +21,8 @@ class DirectoryController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('directories.viewAny');
+
         if ($request->recursive) {
             $directories = Directory::hierarchy()->get();
         } else {
@@ -61,6 +63,8 @@ class DirectoryController extends Controller
      */
     public function show(Directory $directory)
     {
+        $this->authorize('directories.view');
+
         return new DirectoryResource($directory);
     }
 
@@ -86,6 +90,8 @@ class DirectoryController extends Controller
      */
     public function destroy(Directory $directory)
     {
+        $this->authorize('directories.delete');
+
         $directory->delete();
     }
 }

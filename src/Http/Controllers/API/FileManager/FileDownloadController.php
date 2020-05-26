@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\FileManager;
 
 use Fusion\Models\File;
 use Illuminate\Http\Request;

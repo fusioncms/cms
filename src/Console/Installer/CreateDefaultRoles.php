@@ -25,7 +25,7 @@ class CreateDefaultRoles
             'label'       => 'Administrator',
             'description' => 'Administrators have control panel access with a base set of assigned permissions.',
             'permissions' => [
-                'cp.access'
+                'access.admin'
             ],
         ],
         'owner' => [

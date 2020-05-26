@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Fields;
 
 use Fusion\Models\Field;
 use Illuminate\Http\Request;
@@ -19,7 +19,7 @@ class FieldController extends Controller
      */
     public function reorder(Request $request)
     {
-        $this->authorize('fields.update');
+        $this->authorize('fields.reorder');
 
         DB::transaction(function () {
             foreach (request()->get('fields') as $index => $field) {

@@ -19,7 +19,7 @@ class TaxonomyController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('taxonomies.show');
+        $this->authorize('taxonomies.viewAny');
 
         $taxonomies = Taxonomy::orderBy('name')->paginate(25);
 
@@ -34,7 +34,7 @@ class TaxonomyController extends Controller
      */
     public function show(Taxonomy $taxonomy)
     {
-        $this->authorize('taxonomies.show');
+        $this->authorize('taxonomies.view');
 
         return new TaxonomyResource($taxonomy);
     }

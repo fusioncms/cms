@@ -74,10 +74,12 @@ class FormTest extends TestCase
 
     /**
      * @test
+     * @group fusioncms
      * @group feature
      * @group form
+     * @group permissions
      */
-    public function a_user_without_control_panel_access_cannot_create_new_forms()
+    public function a_guest_cannot_create_new_forms()
     {
         $this->expectException(AuthenticationException::class);
 
@@ -86,8 +88,44 @@ class FormTest extends TestCase
 
     /**
      * @test
+     * @group fusioncms
      * @group feature
      * @group form
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_any_forms()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/forms');
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group role
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_a_form()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $form = factory(Form::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/forms/' . $form->id);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group form
+     * @group permissions
      */
     public function a_user_without_permissions_cannot_create_new_forms()
     {
@@ -96,6 +134,42 @@ class FormTest extends TestCase
         $this
             ->be($this->user, 'api')
             ->json('POST', '/api/forms', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group form
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_update_existing_formss()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $form = factory(Form::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('PATCH', '/api/forms/' . $form->id, []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group form
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_delete_existing_forms()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $form = factory(Form::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('DELETE', '/api/roles/' . $form->id);
     }
 
     /**

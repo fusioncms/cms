@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Menus;
 
 use Fusion\Models\Menu;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class MenuController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('menus.show');
+        $this->authorize('menus.viewAny');
 
         $menus = Menu::orderBy('name')->paginate(25);
 
@@ -33,7 +33,7 @@ class MenuController extends Controller
      */
     public function show(Menu $menu)
     {
-        $this->authorize('menus.show');
+        $this->authorize('menus.view');
 
         return new MenuResource($menu);
     }

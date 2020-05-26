@@ -7,11 +7,118 @@ use Facades\MatrixFactory;
 use Fusion\Tests\TestCase;
 use Fusion\Models\Fieldset;
 use Illuminate\Support\Str;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class MatrixTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->handleValidationExceptions();
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group matrix
+     * @group auth
+     */
+    public function a_guest_cannot_not_create_a_matrix()
+    {
+        $this->expectException(AuthenticationException::class);
+
+        $this->json('POST', '/api/matrices', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group matrix
+     * @group permissions
+     */
+    public function only_owner_may_view_any_matrix()
+    {
+        $this->expectException(UnauthorizedException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/matrices');
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('GET', '/api/matrices')
+            ->assertOk(200);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group matrix
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_a_matrix()
+    {
+        $this->expectException(UnauthorizedException::class);
+
+        $matrix = factory(Matrix::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/matrices/' . $matrix->id);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group matrix
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_create_new_matrices()
+    {
+        $this->expectException(UnauthorizedException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/matrices', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group matrix
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_update_existing_matrices()
+    {
+        $this->expectException(UnauthorizedException::class);
+
+        $matrix = factory(Matrix::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('PATCH', '/api/matrices/' . $matrix->id, []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group matrix
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_delete_existing_roles()
+    {
+        $this->expectException(UnauthorizedException::class);
+
+        $matrix = factory(Matrix::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('DELETE', '/api/matrices/' . $matrix->id);
+    }
 
     /**
      * @test
@@ -27,9 +134,9 @@ class MatrixTest extends TestCase
 
         $matrix['fieldset'] = $fieldset->id;
 
-        $response = $this->json('POST', '/api/matrices', $matrix);
-
-        $response->assertStatus(201);
+        $this
+            ->json('POST', '/api/matrices', $matrix)
+            ->assertStatus(201);
     }
 
     /**
@@ -52,21 +159,6 @@ class MatrixTest extends TestCase
         $response = $this->json('PATCH', '/api/matrices/'.$matrix->id, $data);
 
         $response->assertJsonValidationErrors(['parent_id']);
-    }
-
-    /**
-     * @test
-     * @group fusioncms
-     * @group matrix
-     */
-    public function a_user_without_permissions_can_not_create_a_matrix()
-    {
-        $response = $this->json('POST', '/api/matrices', [
-            'name'   => 'Test',
-            'handle' => 'test',
-        ]);
-
-        $response->assertStatus(401);
     }
 
     /**

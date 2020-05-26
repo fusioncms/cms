@@ -19,7 +19,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('users.show');
+        $this->authorize('users.viewAny');
 
         $users = User::paginate(25);
 
@@ -34,7 +34,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $this->authorize('users.show');
+        $this->authorize('users.view');
 
         return new UserResource($user);
     }

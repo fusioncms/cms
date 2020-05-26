@@ -1,6 +1,7 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+
+namespace Fusion\Http\Controllers\API\Menus;
 
 use Fusion\Models\Menu;
 use Illuminate\Support\Str;
@@ -9,7 +10,7 @@ use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\NodeResource;
 use Fusion\Services\Builders\Menu as Builder;
 
-class NodeReorderController extends Controller
+class NodeMoveBeforeController extends Controller
 {
     /**
      * Update the specified resource in storage.
@@ -20,18 +21,18 @@ class NodeReorderController extends Controller
      */
     public function __invoke(Request $request, $menu)
     {
-        $this->authorize('node.update');
+        $this->authorize('nodes.update');
 
-        $menu  = Menu::find($menu)->firstOrFail();
-        $model = (new Builder($menu->handle))->make();
-        $nodes = $request->nodes;
+        $menu   = Menu::find($menu)->firstOrFail();
+        $model  = (new Builder($menu->handle))->make();
 
-        foreach ($nodes as $id => $node) {
-            $record        = $model->find($id);
-            $record->order = $node['order'];
+        $move   = $model->find($request->move);
+        $before = $model->find($request->before);
 
-            $record->save();
-        }
+        $order = $before->orderBefore();
+
+        $move->order = $order;
+        $move->save();
 
         activity()
             ->performedOn($menu)

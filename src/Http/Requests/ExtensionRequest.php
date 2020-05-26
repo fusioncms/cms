@@ -14,7 +14,7 @@ class ExtensionRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('extensions.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->hasRole('owner');
     }
 
     /**

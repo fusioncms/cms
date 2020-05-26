@@ -53,6 +53,7 @@ class TaxonomyTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group taxonomy
+     * @group auth
      */
     public function a_user_without_permissions_can_not_create_a_new_taxonomy()
     {
@@ -66,6 +67,41 @@ class TaxonomyTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group taxonomy
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_any_taxonomies()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/taxonomies');
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group taxonomy
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_a_taxonomy()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $taxonomy = factory(Taxonomy::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/taxonomies/' . $taxonomy->id);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group taxonomy
+     * @group permission
      */
     public function a_user_without_permissions_cannot_create_new_taxonomies()
     {
@@ -74,6 +110,42 @@ class TaxonomyTest extends TestCase
         $this
             ->be($this->user, 'api')
             ->json('POST', '/api/taxonomies', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group taxonomy
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_update_existing_taxonomies()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $taxonomy = factory(Taxonomy::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('PATCH', '/api/taxonomies/' . $taxonomy->id, []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group taxonomy
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_delete_existing_taxonomies()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $taxonomy = factory(Taxonomy::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('DELETE', '/api/taxonomies/' . $taxonomy->id);
     }
 
     /**

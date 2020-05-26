@@ -9,6 +9,7 @@ use Fusion\Services\Imports\PreviewImport;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class ImporterTest extends TestCase
 {
@@ -40,18 +41,37 @@ class ImporterTest extends TestCase
 	/**
      * @test
      * @group fusioncms
+     * @group feature
      * @group imports
+     * @group permissions
      */
 	public function a_guest_cannot_not_create_an_import()
 	{
 		$this->expectException(AuthenticationException::class);
 
-        $response = $this->json(
-            'POST',
-            '/api/imports',
-            factory(Import::class)->make()->toArray()
-        )->assertStatus(422);
+        $this->json('POST', '/api/imports', []);
 	}
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group imports
+     * @group permissions
+     */
+    public function only_owner_may_view_any_import()
+    {
+        $this->expectException(UnauthorizedException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/imports');
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('GET', '/api/imports')
+            ->assertOk(200);
+    }
 
     /**
      * @test

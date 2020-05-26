@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\FileManager;
 
 use Image;
 use Fusion\Models\File;
@@ -23,7 +23,7 @@ class FileController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('files.show');
+        $this->authorize('files.viewAny');
 
         $files = QueryBuilder::for(File::class)
             ->allowedFilters([
@@ -51,7 +51,7 @@ class FileController extends Controller
      */
     public function show(Request $request, $uuid)
     {
-        $this->authorize('files.show');
+        $this->authorize('files.view');
 
         $file = File::where('uuid', $uuid)->firstOrFail();
 
@@ -120,7 +120,7 @@ class FileController extends Controller
 
     public function destroy(Request $request, File $file)
     {
-        $this->authorize('files.destroy');
+        $this->authorize('files.delete');
 
         Storage::delete($file->location);
 

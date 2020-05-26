@@ -18,8 +18,6 @@ class MatrixController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('matrices.show');
-
         $matrices = Matrix::orderBy('name')->paginate(25);
 
         return MatrixResource::collection($matrices);
@@ -33,8 +31,6 @@ class MatrixController extends Controller
      */
     public function show(Matrix $matrix)
     {
-        $this->authorize('matrices.show');
-
         return new MatrixResource($matrix);
     }
 
@@ -46,8 +42,6 @@ class MatrixController extends Controller
      */
     public function slug($matrix)
     {
-        $this->authorize('matrices.show');
-
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
 
         return new MatrixResource($matrix);
@@ -98,8 +92,6 @@ class MatrixController extends Controller
      */
     public function destroy(Matrix $matrix)
     {
-        $this->authorize('matrices.delete');
-
         $matrix->delete();
     }
 }

@@ -20,6 +20,8 @@ class TermController extends Controller
      */
     public function index(Taxonomy $taxonomy)
     {
+        $this->authorize('terms.viewAny');
+
         return TermResource::collection(
             (new Builder($taxonomy->handle))->get()->paginate(25)
         );
@@ -34,6 +36,8 @@ class TermController extends Controller
      */
     public function show(Taxonomy $taxonomy, $id)
     {
+        $this->authorize('terms.view');
+
         return new TermResource(
             (new Builder($taxonomy->handle))->get()->findOrFail($id)
         );
@@ -89,7 +93,7 @@ class TermController extends Controller
      */
     public function destroy(Request $request, Taxonomy $taxonomy, $id)
     {
-        $this->authorize('term.destroy');
+        $this->authorize('terms.delete');
 
         $model = (new Builder($taxonomy->handle))->make();
         $term  = $model->findOrFail($id);

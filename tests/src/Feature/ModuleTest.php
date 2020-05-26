@@ -15,6 +15,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class ModuleTest extends TestCase
 {
@@ -34,14 +35,6 @@ class ModuleTest extends TestCase
     public function a_user_with_permissions_can_upload_a_module()
     {
         list($modulePath, $moduleName) = $this->generateModule('Omega');
-
-        // $this->partialMock(ZipArchive::class, function ($mock) {
-        //     $mock
-        //         ->shouldReceive()
-        //         ->extractTo(base_path('modules'))
-        //         ->once()
-        //         ->andReturn(true);
-        // });
 
         $this
             ->be($this->owner, 'api')
@@ -133,7 +126,7 @@ class ModuleTest extends TestCase
      */
     public function a_user_without_permissions_cannot_upload_a_module()
     {
-        $this->expectException(AuthorizationException::class);
+        $this->expectException(UnauthorizedException::class);
 
         $this
             ->be($this->user, 'api')

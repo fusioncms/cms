@@ -16,6 +16,8 @@ class NavigationController extends Controller
      */
     public function index()
     {
+        $this->authorize('access.admin');
+        
         event(ServingFusion::class);
 
         $roots = Menu::get('admin')->roots();
