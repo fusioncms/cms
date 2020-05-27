@@ -57,8 +57,9 @@ class TermTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group term
+     * @group auth
      */
-    public function a_user_without_control_panel_access_cannot_create_new_terms()
+    public function a_guest_cannot_create_new_terms()
     {
         $this->expectException(AuthenticationException::class);
 
@@ -70,14 +71,85 @@ class TermTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group term
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_any_terms()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/taxonomies/' . $this->taxonomy->id . '/terms');
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group term
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_a_term()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        list($term, $attributes) = $this->newTerm();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/taxonomies/' . $this->taxonomy->id . '/terms/' . $term->id);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group term
+     * @group permissions
      */
     public function a_user_without_permissions_cannot_create_new_terms()
     {
         $this->expectException(AuthorizationException::class);
 
-        $this->actingAs($this->user, 'api');
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/taxonomies/' . $this->taxonomy->id . '/terms', []);
+    }
 
-        $this->json('POST', '/api/taxonomies/' . $this->taxonomy->id . '/terms', []);
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group term
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_update_existing_terms()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        list($term, $attributes) = $this->newTerm();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('PATCH', '/api/taxonomies/' . $this->taxonomy->id . '/terms/' . $term->id, []);
+    }
+    
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group term
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_delete_existing_terms()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        list($term, $attributes) = $this->newTerm();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('DELETE', '/api/taxonomies/' . $this->taxonomy->id . '/terms/' . $term->id);
     }
 
     /**
@@ -88,8 +160,6 @@ class TermTest extends TestCase
      */
     public function a_user_with_permissions_can_update_an_existing_term()
     {
-        $this->actingAs($this->owner, 'api');
-
         list($term, $attributes) = $this->newTerm([
             'name' => 'New Term Name',
             'slug' => 'new-term-name',
@@ -100,6 +170,7 @@ class TermTest extends TestCase
         $attributes['slug'] = 'updated-slug-name';
 
         $this
+            ->be($this->owner, 'api')
             ->json('PATCH', '/api/taxonomies/' . $this->taxonomy->id . '/terms/' . $term->id, $attributes)
             ->assertStatus(200);
 
@@ -114,12 +185,12 @@ class TermTest extends TestCase
      */
     public function a_user_with_permissions_can_delete_an_existing_term()
     {
-        $this->actingAs($this->owner, 'api');
-
         list($term, $attributes) = $this->newTerm();
 
         // Delete ----
-        $this->json('DELETE', '/api/taxonomies/' . $this->taxonomy->id . '/terms/' . $term->id);
+        $this
+            ->be($this->owner, 'api')
+            ->json('DELETE', '/api/taxonomies/' . $this->taxonomy->id . '/terms/' . $term->id);
 
         $this->assertDatabaseMissing($this->model->getTable(), [ 'id' => $term->id ]);
     }
@@ -132,11 +203,10 @@ class TermTest extends TestCase
      */
     public function each_term_must_have_a_unique_slug()
     {
-        $this->actingAs($this->owner, 'api');
-
         list($term, $attributes) = $this->newTerm();
 
         $this
+            ->be($this->owner, 'api')
             ->json('POST', '/api/taxonomies/' . $this->taxonomy->id . '/terms', $attributes)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['slug']);
@@ -164,6 +234,7 @@ class TermTest extends TestCase
         ], $overrides);
 
         $term = $this
+            ->be($this->owner, 'api')
             ->json('POST', '/api/taxonomies/' . $this->taxonomy->id . '/terms', $attributes)
             ->getData()
             ->data;

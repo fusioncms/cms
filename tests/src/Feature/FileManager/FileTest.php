@@ -57,12 +57,47 @@ class FileTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group file
+     * @group permissions
      */
-    public function a_user_without_control_panel_access_cannot_create_new_files()
+    public function a_guest_cannot_create_new_files()
     {
         $this->expectException(AuthenticationException::class);
 
         $this->json('POST', '/api/files', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group file
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_any_files()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/files');
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group file
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_a_file()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $file = factory(File::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/files/' . $file->id);
     }
 
     /**
@@ -78,6 +113,60 @@ class FileTest extends TestCase
         $this
             ->be($this->user, 'api')
             ->json('POST', '/api/files', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group file
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_update_existing_files()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $file = factory(File::class)->states('image')->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('PATCH', '/api/files/' . $file->id, []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group file
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_delete_existing_files()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $file = factory(File::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('DELETE', '/api/files/' . $file->id);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group file
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_download_files()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $file = factory(File::class)->states('image')->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', "/api/files/{$file->uuid}/download");
     }
 
         /**

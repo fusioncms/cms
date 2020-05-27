@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Imports;
 
 use Fusion\Models\Import;
 use Illuminate\Http\Request;
@@ -19,7 +19,7 @@ class ImportController extends Controller
      */
     public function index(Request $request)
     {
-    	$this->authorize('importer.index');
+        $this->authorize('imports.viewAny');
 
     	$imports = Import::orderBy('name')->paginate(25);
 
@@ -34,7 +34,7 @@ class ImportController extends Controller
      */
     public function show(Import $import)
     {
-    	$this->authorize('importer.show');
+        $this->authorize('imports.view');
 
     	return new ImportResource($import);
     }
@@ -47,7 +47,7 @@ class ImportController extends Controller
      */
     public function store(Request $request)
     {
-    	$this->authorize('importer.create');
+        $this->authorize('imports.create');
 
         $attributes = $request->validate([
             'name'     => 'required',
@@ -79,7 +79,7 @@ class ImportController extends Controller
      */
     public function update(Request $request, Import $import)
     {
-    	$this->authorize('importer.update');
+        $this->authorize('imports.update');
 
         // Validate..
     	$attributes = $request->validate([
@@ -110,8 +110,8 @@ class ImportController extends Controller
      */
     public function destroy(Import $import)
     {
-    	$this->authorize('importer.delete');
-
+        $this->authorize('imports.delete');
+        
     	$import->delete();
     }
 }

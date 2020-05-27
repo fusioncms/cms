@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Menus;
 
 use Fusion\Models\Menu;
 use Illuminate\Support\Str;
@@ -29,6 +29,8 @@ class NodeController extends Controller
      */
     public function show($menu, $id)
     {
+        $this->authorize('nodes.view');
+
         $menu  = Menu::find($menu);
         $model = (new Builder($menu->handle))->make();
         $node  = $model->find($id);
@@ -38,7 +40,7 @@ class NodeController extends Controller
 
     public function store(Request $request, $menu)
     {
-        $this->authorize('node.create');
+        $this->authorize('nodes.create');
 
         $menu          = Menu::find($menu);
         $model         = (new Builder($menu->handle))->make();
@@ -83,7 +85,7 @@ class NodeController extends Controller
      */
     public function update(Request $request, $menu, $id)
     {
-        $this->authorize('node.update');
+        $this->authorize('nodes.update');
 
         $menu          = Menu::findOrFail($menu);
         $node          = (new Builder($menu->handle))->make()->findOrFail($id);
@@ -122,7 +124,7 @@ class NodeController extends Controller
 
     public function destroy(Request $request, $menu, $id)
     {
-        $this->authorize('node.destroy');
+        $this->authorize('nodes.delete');
 
         $menu  = Menu::findOrFail($menu);
         $model = (new Builder($menu->handle))->make();

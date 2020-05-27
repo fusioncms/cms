@@ -20,7 +20,7 @@ class PageController extends Controller
      */
     public function show($matrix)
     {
-        $this->authorize('entry.show');
+        $this->authorize('entries.show');
 
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
         $model  = (new Page($matrix->handle))->make();

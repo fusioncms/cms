@@ -26,7 +26,7 @@ class PageRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('entry.update');
+        return $this->user()->can('entries.update');
     }
 
     /**

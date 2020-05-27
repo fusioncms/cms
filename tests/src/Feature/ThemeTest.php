@@ -10,6 +10,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ThemeTest extends TestCase
@@ -64,14 +65,47 @@ class ThemeTest extends TestCase
 	/**
      * @test
      * @group fusioncms
+     * @group feature
      * @group themes
+     * @group auth
      */
 	public function a_guest_cannot_not_upload_a_theme()
 	{
 		$this->expectException(AuthenticationException::class);
 
-        $response = $this->json('POST', '/api/themes')
-        	->assertStatus(422);
+        $this->json('POST', '/api/themes');
+	}
+
+	/**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group themes
+     * @group permission
+     */
+	public function a_user_without_permissions_cannot_not_view_any_themes()
+	{
+		$this->expectException(AuthorizationException::class);
+
+        $this
+        	->be($this->user, 'api')
+        	->json('GET', '/api/themes');
+	}
+
+	/**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group themes
+     * @group permission
+     */
+	public function a_user_without_permissions_cannot_not_upload_a_theme()
+	{
+		$this->expectException(AuthorizationException::class);
+
+        $this
+        	->be($this->user, 'api')
+        	->json('POST', '/api/themes');
 	}
 
 	/**

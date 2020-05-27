@@ -21,7 +21,7 @@ class BrowseController extends Controller
      */
     public function index()
     {
-        $this->authorize('themes.index');
+        $this->authorize('themes.viewAny');
 
         $themes = collect(Theme::all());
 

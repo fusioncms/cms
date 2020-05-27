@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Imports;
 
 use Fusion\Models\ImportLog;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class ImportLogController extends Controller
      */
     public function index(Request $request, ImportLog $importLog)
     {
-        $this->authorize('importlog.show');
+        $this->authorize('imports.viewAny');
 
         return new ImportLogResource($importLog);
     }

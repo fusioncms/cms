@@ -43,7 +43,7 @@ class EntryRouter extends Router
             }
 
             if (!$entry->status) {
-                if (Gate::denies('access.admin') || !request()->has('preview')) {
+                if (Gate::denies('access.controlPanel') || !request()->has('preview')) {
                     continue 1;
                 }
             }

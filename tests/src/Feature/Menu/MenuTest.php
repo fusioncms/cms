@@ -68,11 +68,44 @@ class MenuTest extends TestCase
      * @group feature
      * @group menu
      */
-    public function a_user_without_control_panel_access_cannot_create_a_new_menu()
+    public function a_guest_cannot_create_a_new_menu()
     {
         $this->expectException(AuthenticationException::class);
 
         $this->json('POST', '/api/menus', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group menu
+     */
+    public function a_user_without_permissions_cannot_view_any_menus()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/menus');
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group menu
+     */
+    public function a_user_without_permissions_cannot_view_a_menu()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this->actingAs($this->owner, 'api');
+        $menu = factory(Menu::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/menus/' . $menu->id);
     }
 
     /**
@@ -86,8 +119,44 @@ class MenuTest extends TestCase
         $this->expectException(AuthorizationException::class);
 
         $this
-            ->actingAs($this->user, 'api')
+            ->be($this->user, 'api')
             ->json('POST', '/api/menus', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group role
+     */
+    public function a_user_without_permissions_cannot_update_existing_menus()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this->actingAs($this->owner, 'api');
+        $menu = factory(Menu::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('PATCH', '/api/menus/' . $menu->id, []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group menu
+     */
+    public function a_user_without_permissions_cannot_delete_existing_menus()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this->actingAs($this->owner, 'api');
+        $menu = factory(Menu::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('DELETE', '/api/menus/' . $menu->id);
     }
 
     /**

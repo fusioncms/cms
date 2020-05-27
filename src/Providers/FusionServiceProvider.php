@@ -3,11 +3,14 @@
 namespace Fusion\Providers;
 
 use Fusion\Facades\Theme;
+use Fusion\Models\User;
+use Fusion\Models\Role;
 use Fusion\Models\Mailable;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 
 class FusionServiceProvider extends ServiceProvider
@@ -40,8 +43,26 @@ class FusionServiceProvider extends ServiceProvider
      */
     protected function registerGates()
     {
-        Gate::before(function ($user, $ability) {
-            return $user->hasRole(['owner']) ? true : null;
+        Gate::before(function (?User $user, $ability) {
+            /**
+             * Authenticated users undergo auth check
+             *  based on their assigned Role.
+             * 
+             */
+            if ($user) {
+                return $user->isOwner() or
+                       $user->hasPermissionTo($ability)
+                       ? true : null;
+            }
+
+            /**
+             * Unauthenticated users undergo auth check.
+             *  based on `guest` Role.
+             * 
+             */
+            return Role::whereName('guest')
+                ->firstOrFail()
+                ->hasPermissionTo($ability);
         });
     }
 
@@ -196,6 +217,7 @@ class FusionServiceProvider extends ServiceProvider
 
         $this->registerRouteBindings();
         $this->registerRoutePatterns();
+        $this->registerRouteMiddleware();
 
         $path = dirname(__FILE__).'/../../';
 
@@ -263,7 +285,7 @@ class FusionServiceProvider extends ServiceProvider
         // Note: route binding for backup removal
         // TODO: point to correct disk if it changes from local storage
         Route::bind('backup', function ($filename) {
-            return new Backup(Storage::disk('public'), "backups/{$filename}.zip");
+            return new \Spatie\Backup\BackupDestination\Backup(Storage::disk('public'), "backups/{$filename}.zip");
         });
 
         Route::bind('fieldset', function($id) {
@@ -290,6 +312,18 @@ class FusionServiceProvider extends ServiceProvider
         Route::pattern('slug', '[a-z0-9-]+');
         Route::pattern('handle', '[a-z0-9_]+');
         Route::pattern('username', '[a-z0-9_-]{3,16}');
+    }
+
+    /**
+     * Register the package's route middleware.
+     *
+     * @return void
+     */
+    private function registerRouteMiddleware()
+    {
+        Route::aliasMiddleware('role',               \Spatie\Permission\Middlewares\RoleMiddleware::class);
+        Route::aliasMiddleware('permission',         \Spatie\Permission\Middlewares\PermissionMiddleware::class);
+        Route::aliasMiddleware('role_or_permission', \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class);
     }
 
     /**

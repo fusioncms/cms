@@ -17,6 +17,8 @@ class LogsController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('access.controlPanel');
+        
         $log     = new Repository;
 
         if ($request->input('l')) {

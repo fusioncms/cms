@@ -18,7 +18,7 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('roles.show');
+        $this->authorize('roles.viewAny');
 
         $roles = Role::orderBy('name')->paginate(25);
 
@@ -33,7 +33,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        $this->authorize('roles.show');
+        $this->authorize('roles.view');
 
         return new RoleResource($role);
     }

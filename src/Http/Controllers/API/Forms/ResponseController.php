@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Forms;
 
 use Fusion\Models\Form;
 use Illuminate\Support\Str;
@@ -13,6 +13,8 @@ class ResponseController extends Controller
 {
     public function index($slug)
     {
+        $this->authorize('responses.viewAny');
+
         $responses = Form::where('slug', $slug)
             ->firstOrFail()
             ->responses()
@@ -30,6 +32,8 @@ class ResponseController extends Controller
      */
     public function show($slug, $id)
     {
+        $this->authorize('responses.view');
+
         $form  = Form::where('slug', $slug)->firstOrFail();
         $model = (new Builder($form->handle))->make();
         $response  = $model->find($id);
@@ -39,7 +43,7 @@ class ResponseController extends Controller
 
     public function store(Request $request, $slug)
     {
-        $this->authorize('response.create');
+        $this->authorize('responses.create');
 
         $form          = Form::where('slug', $slug)->firstOrFail();
         $collection    = (new Builder($form->handle))->make();
@@ -80,7 +84,7 @@ class ResponseController extends Controller
      */
     public function update(Request $request, $slug, $id)
     {
-        $this->authorize('response.update');
+        $this->authorize('responses.update');
 
         $form      = Form::where('slug', $slug)->firstOrFail();
         $response          = (new Builder($form->handle))->make()->find($id);
@@ -116,7 +120,7 @@ class ResponseController extends Controller
 
     public function destroy(Request $request, $slug, $id)
     {
-        $this->authorize('response.destroy');
+        $this->authorize('responses.delete');
 
         $form = Form::where('slug', $slug)->firstOrFail();
         $model    = (new Builder($form->handle))->make();

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Menus;
 
 use Fusion\Models\Menu;
 use Illuminate\Support\Str;
@@ -9,7 +9,7 @@ use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\NodeResource;
 use Fusion\Services\Builders\Menu as Builder;
 
-class NodeRefreshController extends Controller
+class NodeReorderController extends Controller
 {
     /**
      * Update the specified resource in storage.
@@ -20,14 +20,18 @@ class NodeRefreshController extends Controller
      */
     public function __invoke(Request $request, $menu)
     {
-        $this->authorize('node.update');
+        $this->authorize('nodes.update');
 
-        $menu = Menu::find($menu)->firstOrFail();
+        $menu  = Menu::find($menu)->firstOrFail();
+        $model = (new Builder($menu->handle))->make();
+        $nodes = $request->nodes;
 
-        $menu->nodes->each(function($node, $index) {
-            $node->order = $index + 1;
-            $node->save();
-        });
+        foreach ($nodes as $id => $node) {
+            $record        = $model->find($id);
+            $record->order = $node['order'];
+
+            $record->save();
+        }
 
         activity()
             ->performedOn($menu)
@@ -35,6 +39,6 @@ class NodeRefreshController extends Controller
                 'icon' => 'anchor',
                 'link' => 'menus/'.$menu->id.'/nodes'
             ])
-            ->log('Refreshed '.strtolower(Str::singular($menu->name)).' menu node ordering');
+            ->log('Updated '.strtolower(Str::singular($menu->name)).' menu node ordering');
     }
 }

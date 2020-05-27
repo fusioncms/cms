@@ -21,6 +21,8 @@ class CollectionController extends Controller
      */
     public function index($matrix)
     {
+        $this->authorize('entries.viewAny');
+
         $matrix  = Matrix::where('slug', $matrix)->firstOrFail();
         $model   = (new Collection($matrix->handle))->make();
         $entries = $model->get()->paginate(25);
@@ -36,6 +38,8 @@ class CollectionController extends Controller
      */
     public function show($matrix, $id)
     {
+        $this->authorize('entries.view');
+
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
         $model  = (new Collection($matrix->handle))->make();
         $entry  = $model->findOrFail($id);
@@ -110,7 +114,7 @@ class CollectionController extends Controller
      */
     public function destroy(Request $request, $matrixSlug, $id)
     {
-        $this->authorize('entry.destroy');
+        $this->authorize('entries.destroy');
 
         $matrix = Matrix::where('slug', $matrixSlug)->firstOrFail();
         $model  = (new Collection($matrix->handle))->make();

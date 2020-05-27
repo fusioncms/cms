@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Forms;
 
 use Fusion\Models\Form;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class FormController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('forms.show');
+        $this->authorize('forms.viewAny');
 
         $forms = Form::orderBy('name')->paginate(25);
 
@@ -33,7 +33,7 @@ class FormController extends Controller
      */
     public function show(Form $form)
     {
-        $this->authorize('forms.show');
+        $this->authorize('forms.view');
 
         return new FormResource($form);
     }

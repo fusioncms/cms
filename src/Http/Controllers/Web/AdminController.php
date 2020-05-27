@@ -6,16 +6,6 @@ use Fusion\Http\Controllers\Controller;
 
 class AdminController extends Controller
 {
-	/**
-	 * Constructor.
-	 */
-	public function __construct()
-	{
-		if (auth()->check()) {
-			$this->middleware(['role:owner','permission:cp.access']);
-		}
-	}
-
     /**
      * Show the admin dashboard.
      *
@@ -23,6 +13,10 @@ class AdminController extends Controller
      */
     public function index()
 	{
+		if (auth()->check()) {
+			$this->authorize('access.controlPanel');
+		}
+
 		return view('admin.index');
     }
 }

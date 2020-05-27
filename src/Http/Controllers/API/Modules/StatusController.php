@@ -19,6 +19,8 @@ class StatusController extends Controller
      */
     public function enable(Request $request, Collection $module)
     {
+        $this->authorize('modules.update');
+
         Module::enable($module->get('slug'));
 
         return new ModuleResource($module);
@@ -33,6 +35,8 @@ class StatusController extends Controller
      */
     public function disable(Request $request, Collection $module)
     {
+        $this->authorize('modules.update');
+        
         Module::disable($module->get('slug'));
 
         return new ModuleResource($module);

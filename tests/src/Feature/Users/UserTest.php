@@ -72,10 +72,45 @@ class UserTest extends TestCase
 	}
 
 	/**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group user
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_any_users()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/users');
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group user
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_a_user()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $user = factory(User::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/users/' . $user->id);
+    }
+
+	/**
 	 * @test
 	 * @group fusioncms
 	 * @group feature
 	 * @group user
+	 * @group permissions
 	 */
     public function a_user_without_permissions_cannot_create_new_users()
     {
@@ -84,6 +119,42 @@ class UserTest extends TestCase
         $this
         	->be($this->user, 'api')
         	->json('POST', '/api/users', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group user
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_update_existing_users()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $user = factory(User::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('PATCH', '/api/users/' . $user->id, []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group user
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_delete_existing_users()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $user = factory(User::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('DELETE', '/api/users/' . $user->id);
     }
 
     /**

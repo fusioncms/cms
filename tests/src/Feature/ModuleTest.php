@@ -35,14 +35,6 @@ class ModuleTest extends TestCase
     {
         list($modulePath, $moduleName) = $this->generateModule('Omega');
 
-        // $this->partialMock(ZipArchive::class, function ($mock) {
-        //     $mock
-        //         ->shouldReceive()
-        //         ->extractTo(base_path('modules'))
-        //         ->once()
-        //         ->andReturn(true);
-        // });
-
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/modules/upload', [
@@ -116,10 +108,12 @@ class ModuleTest extends TestCase
 
     /**
      * @test
+     * @group fusioncms
      * @group feature
      * @group module
+     * @group auth
      */
-    public function a_user_without_control_panel_access_cannot_upload_a_module()
+    public function a_guest_cannot_upload_a_module()
     {
         $this->expectException(AuthenticationException::class);
 
@@ -128,8 +122,10 @@ class ModuleTest extends TestCase
 
     /**
      * @test
+     * @group fusioncms
      * @group feature
      * @group module
+     * @group permissions
      */
     public function a_user_without_permissions_cannot_upload_a_module()
     {
@@ -138,6 +134,102 @@ class ModuleTest extends TestCase
         $this
             ->be($this->user, 'api')
             ->json('POST', '/api/modules/upload', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group module
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_install_a_module()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/modules/beta/install', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group module
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_uninstall_existing_modules()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/modules/beta/uninstall', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group module
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_enable_existing_modules()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/modules/beta/enable', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group module
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_disable_existing_modules()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/modules/beta/disable', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group module
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_seed_existing_modules()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/modules/beta/seed', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group module
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_update_existing_modules()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/modules/beta/update', []);
     }
 
     /**

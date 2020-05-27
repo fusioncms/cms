@@ -18,7 +18,7 @@ class MatrixController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('matrices.show');
+        $this->authorize('matrices.viewAny');
 
         $matrices = Matrix::orderBy('name')->paginate(25);
 
@@ -33,7 +33,7 @@ class MatrixController extends Controller
      */
     public function show(Matrix $matrix)
     {
-        $this->authorize('matrices.show');
+        $this->authorize('matrices.view');
 
         return new MatrixResource($matrix);
     }
@@ -46,7 +46,7 @@ class MatrixController extends Controller
      */
     public function slug($matrix)
     {
-        $this->authorize('matrices.show');
+        $this->authorize('matrices.view');
 
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
 

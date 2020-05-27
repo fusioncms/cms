@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Fields;
 
 use Fusion\Models\Field;
 use Illuminate\Http\Request;
@@ -11,23 +11,6 @@ use Fusion\Http\Resources\FieldResource;
 
 class FieldController extends Controller
 {
-    /**
-     * Reorder fields in storage.
-     *
-     * @param  Request $request
-     * @return void
-     */
-    public function reorder(Request $request)
-    {
-        $this->authorize('fields.update');
-
-        DB::transaction(function () {
-            foreach (request()->get('fields') as $index => $field) {
-                Field::find($field)->update([ 'order' => $index ]);
-            }
-        });
-    }
-
     /**
      * Validate field, but don't persist to storage.
      *

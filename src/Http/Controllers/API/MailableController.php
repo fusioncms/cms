@@ -17,7 +17,7 @@ class MailableController extends Controller
      */
     public function show(Mailable $mailable)
     {
-    	$this->authorize('mailable.show');
+    	$this->authorize('mailables.view');
 
     	return new MailableResource($mailable);
     }
