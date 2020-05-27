@@ -24,19 +24,15 @@ class ActivityTest extends TestCase
      * @test
      * @group fusioncms
      * @group activity
+     * @group permissions
      */
-    public function only_admins_can_view_activities()
+    public function a_user_without_permissions_cannot_view_activities()
     {
         $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->user, 'api')
             ->json('GET', '/api/activity');
-
-        $this
-            ->be($this->owner, 'api')
-            ->json('GET', '/api/activity')
-            ->assertOk();
     }
 
     /**
