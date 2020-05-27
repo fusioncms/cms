@@ -16,7 +16,7 @@ class NavigationController extends Controller
      */
     public function index()
     {
-        $this->authorize('access.admin');
+        $this->authorize('access.controlPanel');
         
         event(ServingFusion::class);
 

@@ -16,7 +16,7 @@ class ActivityController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('access.admin');
+        $this->authorize('access.controlPanel');
         
         $activities = Activity::orderBy('created_at', 'desc')->paginate(10);
 

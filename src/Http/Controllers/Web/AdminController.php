@@ -14,7 +14,7 @@ class AdminController extends Controller
     public function index()
 	{
 		if (auth()->check()) {
-			$this->authorize('access.admin');
+			$this->authorize('access.controlPanel');
 		}
 
 		return view('admin.index');

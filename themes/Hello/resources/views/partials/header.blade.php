@@ -16,7 +16,7 @@
 
                 <ul class="hidden lg:flex flex-row flex-1 items-center justify-end px-4 md:px-0">
                     @auth
-                        @can('access.admin')
+                        @can('access.controlPanel')
                             <li class="ml-6 my-2 md:my-0">
                                 <a href="/admin" class="group block py-1 md:py-4 px-2 align-middle text-gray-500 no-underline border-b-2 border-white hover:border-gray-900">
                                     <span class="pb-1 md:pb-0 text-sm group-hover:text-gray-900">Control Panel</span>
@@ -55,7 +55,7 @@
             <div class="w-full py-4 bg-gray-900 text-gray-100 text-right overflow-y-scroll max-h-screen lg:hidden shadow-lg">
                 <ul class="pb-10 container mx-auto px-6">
                     @auth
-                        @can('access.admin')
+                        @can('access.controlPanel')
                             <li class="py-px"><a href="/admin" class="text-gray-500 hover:text-gray-700">Control Panel</a></li>
                         @endcan
 

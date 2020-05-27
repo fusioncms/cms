@@ -27,5 +27,5 @@ return [
 
 	// special permissions
 	// --
-	'access.admin' => 'Control Panel Access',
+	'access.controlPanel' => 'Control Panel Access',
 ];
