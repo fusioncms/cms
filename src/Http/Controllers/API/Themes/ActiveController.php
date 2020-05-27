@@ -16,6 +16,8 @@ class ActiveController extends Controller
      */
     public function show()
     {
+        $this->authorize('themes.view');
+
         $theme = Theme::active();
 
         return new ThemeResource($theme);
@@ -30,6 +32,8 @@ class ActiveController extends Controller
      */
     public function update(Request $request, $theme)
     {
+        $this->authorize('themes.update');
+
         Theme::deactivate();
         Theme::activate($theme);
 
