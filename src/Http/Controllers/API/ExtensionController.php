@@ -18,6 +18,8 @@ class ExtensionController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('extensions.viewAny');
+
         $extensions = Extension::orderBy('name')->paginate(25);
 
         return ExtensionResource::collection($extensions);
@@ -31,6 +33,8 @@ class ExtensionController extends Controller
      */
     public function show(Extension $extension)
     {
+        $this->authorize('extensions.view');
+
         return new ExtensionResource($extension);
     }
 
@@ -79,6 +83,8 @@ class ExtensionController extends Controller
      */
     public function destroy(Extension $extension)
     {
+        $this->authorize('extensions.delete');
+
         $extension->delete();
     }
 }

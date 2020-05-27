@@ -11,6 +11,8 @@ class FileDownloadController extends Controller
 {
     public function index($uuid)
     {
+    	$this->authorize('files.download');
+
         $file = File::where('uuid', $uuid)->firstOrFail();
         $path = Storage::disk('public')->path($file->location);
 

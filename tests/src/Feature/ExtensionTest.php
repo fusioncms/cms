@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\Exceptions\UnauthorizedException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ExtensionTest extends TestCase
@@ -57,18 +57,13 @@ class ExtensionTest extends TestCase
      * @group extension
      * @group permissions
      */
-    public function only_owner_user_may_view_any_extensions()
+    public function a_user_without_permissions_cannot_view_any_extensions()
     {
-        $this->expectException(UnauthorizedException::class);
+        $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->user, 'api')
             ->json('GET', '/api/extensions');
-
-        $this
-            ->be($this->owner, 'api')
-            ->json('GET', '/api/extensions')
-            ->assertOk(200);
     }
 
     /**
@@ -79,7 +74,7 @@ class ExtensionTest extends TestCase
      */
     public function a_user_without_permissions_cannot_view_an_extension()
     {
-        $this->expectException(UnauthorizedException::class);
+        $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->user, 'api')
@@ -94,7 +89,7 @@ class ExtensionTest extends TestCase
      */
     public function a_user_without_permissions_cannot_update_existing_extenions()
     {
-        $this->expectException(UnauthorizedException::class);
+        $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->user, 'api')
@@ -109,7 +104,7 @@ class ExtensionTest extends TestCase
      */
     public function a_user_without_permissions_cannot_delete_existing_extensions()
     {
-        $this->expectException(UnauthorizedException::class);
+        $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->user, 'api')
@@ -124,7 +119,7 @@ class ExtensionTest extends TestCase
      */
     public function a_user_without_permissions_cannot_create_new_extension()
     {
-        $this->expectException(UnauthorizedException::class);
+        $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->user, 'api')

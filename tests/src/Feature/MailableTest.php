@@ -64,7 +64,7 @@ class MailableTest extends TestCase
 
         $this->json('PATCH', '/api/mailables/' . $model->id, []);
 	}
-
+    
     /**
      * @test
      * @group fusioncms
@@ -72,7 +72,7 @@ class MailableTest extends TestCase
      * @group mailabe
      * @group permissions
      */
-    public function a_user_without_permissions_cannot_view_a_role()
+    public function a_user_without_permissions_cannot_view_a_mailable()
     {
         $this->expectException(AuthorizationException::class);
 
@@ -90,7 +90,7 @@ class MailableTest extends TestCase
      * @group mailabe
      * @group permissions
      */
-    public function a_user_without_permissions_cannot_update_existing_roles()
+    public function a_user_without_permissions_cannot_update_existing_mailables()
     {
         $this->expectException(AuthorizationException::class);
 

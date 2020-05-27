@@ -12,11 +12,6 @@ Route::get('structures',       'StructureController@index');
  */
 Route::middleware(['role:owner'])->group(function() {
 	/**
-	 * API - Extension Routes
-	 */
-	Route::apiResource('extensions',  'ExtensionController');
-
-	/**
 	 * API - Matrix Routes
 	 */
 	Route::get('matrices/slug/{slug}', 'MatrixController@slug');
@@ -67,11 +62,15 @@ Route::prefix('collections')->group(function() {
 });
 
 /**
+ * API - Extension Routes
+ */
+Route::apiResource('extensions',  'ExtensionController');
+
+/**
  * API - Field Routes
  */
 Route::prefix('fields')->group(function() {
 	Route::post('validate', 'Fields\FieldController@valid');
-	Route::patch('reorder', 'Fields\FieldController@reorder');
 });
 
 /**

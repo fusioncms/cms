@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\Form;
 
 use Fusion\Models\Form;
 use Facades\FormFactory;
@@ -169,7 +169,7 @@ class FormTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/roles/' . $form->id);
+            ->json('DELETE', '/api/forms/' . $form->id);
     }
 
     /**

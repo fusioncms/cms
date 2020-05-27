@@ -19,6 +19,8 @@ class FileReplaceController extends Controller
      */
     public function store(Request $request, File $file)
     {
+        $this->authorize('files.update');
+
         $upload    = $request->file('file');
         $extension = $upload->extension();
         $bytes     = $upload->getSize();

@@ -19,6 +19,8 @@ class FileMoveController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('files.update');
+        
         $directory = $request->input('directory');
         $moving    = $request->input('moving');
         $errors    = [];
