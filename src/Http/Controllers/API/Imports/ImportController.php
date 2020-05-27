@@ -19,6 +19,8 @@ class ImportController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('imports.viewAny');
+
     	$imports = Import::orderBy('name')->paginate(25);
 
     	return ImportResource::collection($imports);
@@ -32,6 +34,8 @@ class ImportController extends Controller
      */
     public function show(Import $import)
     {
+        $this->authorize('imports.view');
+
     	return new ImportResource($import);
     }
 
@@ -43,6 +47,8 @@ class ImportController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('imports.create');
+
         $attributes = $request->validate([
             'name'     => 'required',
             'handle'   => 'required|unique:imports,handle',
@@ -73,6 +79,8 @@ class ImportController extends Controller
      */
     public function update(Request $request, Import $import)
     {
+        $this->authorize('imports.update');
+
         // Validate..
     	$attributes = $request->validate([
             'name'     => 'required',
@@ -102,6 +110,8 @@ class ImportController extends Controller
      */
     public function destroy(Import $import)
     {
+        $this->authorize('imports.delete');
+        
     	$import->delete();
     }
 }

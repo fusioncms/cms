@@ -8,8 +8,8 @@ use Fusion\Tests\TestCase;
 use Fusion\Models\Fieldset;
 use Illuminate\Support\Str;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class MatrixTest extends TestCase
 {
@@ -24,6 +24,7 @@ class MatrixTest extends TestCase
     /**
      * @test
      * @group fusioncms
+     * @group feature
      * @group matrix
      * @group auth
      */
@@ -40,18 +41,13 @@ class MatrixTest extends TestCase
      * @group matrix
      * @group permissions
      */
-    public function only_owner_may_view_any_matrix()
+    public function a_user_without_permissions_cannot_view_any_matrix()
     {
-        $this->expectException(UnauthorizedException::class);
+        $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->user, 'api')
             ->json('GET', '/api/matrices');
-
-        $this
-            ->be($this->owner, 'api')
-            ->json('GET', '/api/matrices')
-            ->assertOk(200);
     }
 
     /**
@@ -62,7 +58,7 @@ class MatrixTest extends TestCase
      */
     public function a_user_without_permissions_cannot_view_a_matrix()
     {
-        $this->expectException(UnauthorizedException::class);
+        $this->expectException(AuthorizationException::class);
 
         $matrix = factory(Matrix::class)->create();
 
@@ -79,7 +75,7 @@ class MatrixTest extends TestCase
      */
     public function a_user_without_permissions_cannot_create_new_matrices()
     {
-        $this->expectException(UnauthorizedException::class);
+        $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->user, 'api')
@@ -94,7 +90,7 @@ class MatrixTest extends TestCase
      */
     public function a_user_without_permissions_cannot_update_existing_matrices()
     {
-        $this->expectException(UnauthorizedException::class);
+        $this->expectException(AuthorizationException::class);
 
         $matrix = factory(Matrix::class)->create();
 
@@ -111,7 +107,7 @@ class MatrixTest extends TestCase
      */
     public function a_user_without_permissions_cannot_delete_existing_roles()
     {
-        $this->expectException(UnauthorizedException::class);
+        $this->expectException(AuthorizationException::class);
 
         $matrix = factory(Matrix::class)->create();
 

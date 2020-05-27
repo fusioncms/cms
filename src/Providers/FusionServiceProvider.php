@@ -10,6 +10,7 @@ use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 
 class FusionServiceProvider extends ServiceProvider
@@ -284,7 +285,7 @@ class FusionServiceProvider extends ServiceProvider
         // Note: route binding for backup removal
         // TODO: point to correct disk if it changes from local storage
         Route::bind('backup', function ($filename) {
-            return new Backup(Storage::disk('public'), "backups/{$filename}.zip");
+            return new \Spatie\Backup\BackupDestination\Backup(Storage::disk('public'), "backups/{$filename}.zip");
         });
 
         Route::bind('fieldset', function($id) {

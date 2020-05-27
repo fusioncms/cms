@@ -1,23 +1,20 @@
 <?php
 
 return [
-	// owner only 
-	// --
-	// 'backups'  => [ 'viewAny', 'create', 'delete', 'restore', 'upload' ],
-	// 'matrices' => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
-	// 'imports'  => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
-	// 'modules'  => [ 'viewAny', 'create', 'update', 'install', 'uninstall', 'seed', 'disable', 'enable' ],
-
 	// core permissions
 	// --
+	'backups'     => [ 'viewAny', 'create', 'delete', 'restore' ],
 	'directories' => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'entries'     => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'extensions'  => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'files'       => [ 'viewAny', 'view', 'create', 'update', 'delete', 'download' ],
 	'fieldset'    => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'forms'       => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
+	'imports'     => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'mailables'   => [ 'view', 'update' ],
+	'matrices'    => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'menus'       => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
+	'modules'     => [ 'viewAny', 'create', 'update', 'delete' ],
 	'nodes'       => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'pages'       => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'responses'   => [ 'viewAny', 'view', 'create', 'update', 'delete' ],

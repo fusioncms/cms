@@ -7,46 +7,14 @@ Route::get('logs',             'LogsController@index');
 Route::get('mail/test',        'MailController@index');
 Route::get('structures',       'StructureController@index');
 
+
 /**
- * Role:Owner Routes
+ * API - Backup Routes
  */
-Route::middleware(['role:owner'])->group(function() {
-	/**
-	 * API - Matrix Routes
-	 */
-	Route::get('matrices/slug/{slug}', 'MatrixController@slug');
-	Route::apiResource('matrices',    'MatrixController');
+Route::post('backups/upload',           'Backups\BackupUploadController@index');
+Route::post('backups/restore/{backup}', 'Backups\BackupRestoreController@index');
+Route::apiResource('backups',           'Backups\BackupController')->except(['show', 'update']);
 
-	/**
-	 * API - Module Routes
-	 */
-	Route::prefix('modules')->group(function() {
-		Route::post('{module}/install',   'Modules\ActionController@install');
-		Route::post('{module}/update',    'Modules\ActionController@update');
-		Route::post('{module}/seed',      'Modules\ActionController@seed');
-		Route::post('{module}/uninstall', 'Modules\ActionController@uninstall');
-		Route::post('upload',             'Modules\UploadController@store');
-		Route::post('{module}/enable',    'Modules\StatusController@enable');
-		Route::post('{module}/disable',   'Modules\StatusController@disable');
-	});
-
-	/**
-	 * API - Import Routes
-	 */
-	Route::get('imports/mapping/{import}',   'Imports\ImportMappingController@show');
-	Route::patch('imports/mapping/{import}', 'Imports\ImportMappingController@update');
-	Route::post('imports/queue/{import}',    'Imports\ImportQueueController@store');
-	Route::get('imports/queue',              'Imports\ImportQueueController@index');
-	Route::get('imports/logs/{importLog}',   'Imports\ImportLogController@index');
-	Route::apiResource('imports',            'Imports\ImportController');
-
-	/**
-	 * API - Backup Routes
-	 */
-	Route::post('backups/upload',           'Backups\BackupUploadController@index');
-	Route::post('backups/restore/{backup}', 'Backups\BackupRestoreController@index');
-	Route::apiResource('backups',           'Backups\BackupController')->except(['show', 'update']);
-});
 
 /**
  * API - Collection Routes
@@ -61,10 +29,12 @@ Route::prefix('collections')->group(function() {
 	Route::delete('{slug}/{id}',   'CollectionController@destroy');
 });
 
+
 /**
  * API - Extension Routes
  */
 Route::apiResource('extensions',  'ExtensionController');
+
 
 /**
  * API - Field Routes
@@ -72,6 +42,7 @@ Route::apiResource('extensions',  'ExtensionController');
 Route::prefix('fields')->group(function() {
 	Route::post('validate', 'Fields\FieldController@valid');
 });
+
 
 /**
  * API - Fieldtype Routes
@@ -81,11 +52,13 @@ Route::prefix('fieldtypes')->group(function() {
 	Route::get('',       'Fields\FieldtypeController@index');
 });
 
+
 /**
  * API - Fieldset Routes
  */
 Route::apiResource('fieldsets/{fieldset}/sections', 'Fields\FieldsetSectionController');
 Route::apiResource('fieldsets', 'Fields\FieldsetController');
+
 
 /**
  * API - FileManager Routes
@@ -96,11 +69,24 @@ Route::post('files/move',           'FileManager\FileMoveController@store');
 Route::post('files/replace/{file}', 'FileManager\FileReplaceController@store');
 Route::apiResource('files',         'FileManager\FileController');
 
+
 /**
  * API - Form Routes
  */
 Route::apiResource('forms/{slug}/responses', 'Forms\ResponseController');
 Route::apiResource('forms',                  'Forms\FormController');
+
+
+/**
+ * API - Import Routes
+ */
+Route::get('imports/mapping/{import}',   'Imports\ImportMappingController@show');
+Route::patch('imports/mapping/{import}', 'Imports\ImportMappingController@update');
+Route::post('imports/queue/{import}',    'Imports\ImportQueueController@store');
+Route::get('imports/queue',              'Imports\ImportQueueController@index');
+Route::get('imports/logs/{importLog}',   'Imports\ImportLogController@index');
+Route::apiResource('imports',            'Imports\ImportController');
+
 
 /**
  * API - Insight Routes
@@ -119,6 +105,14 @@ Route::prefix('insights')->group(function () {
  */
 Route::apiResource('mailables', 'MailableController')->except(['index', 'store', 'destroy']);
 
+
+/**
+ * API - Matrix Routes
+ */
+Route::get('matrices/slug/{slug}', 'MatrixController@slug');
+Route::apiResource('matrices',    'MatrixController');
+
+
 /**
  * API - Menu Routes
  */
@@ -129,6 +123,21 @@ Route::post('menus/{menu}/reorder',            'Menus\NodeReorderController');
 Route::apiResource('menus/{menu}/nodes',       'Menus\NodeController');
 Route::apiResource('menus',                    'Menus\MenuController');
 
+
+/**
+ * API - Module Routes
+ */
+Route::prefix('modules')->group(function() {
+	Route::post('{module}/install',   'Modules\ActionController@install');
+	Route::post('{module}/update',    'Modules\ActionController@update');
+	Route::post('{module}/seed',      'Modules\ActionController@seed');
+	Route::post('{module}/uninstall', 'Modules\ActionController@uninstall');
+	Route::post('upload',             'Modules\UploadController@store');
+	Route::post('{module}/enable',    'Modules\StatusController@enable');
+	Route::post('{module}/disable',   'Modules\StatusController@disable');
+});
+
+
 /**
  * API - Page Routes
  */
@@ -137,11 +146,13 @@ Route::prefix('pages')->group(function() {
 	Route::patch('{page}', 'PageController@update');
 });
 
+
 /**
  * API - Taxonomy Routes
  */
 Route::apiResource('taxonomies/{taxonomy}/terms', 'TermController');
 Route::apiResource('taxonomies',                  'TaxonomyController');
+
 
 /**
  * API - Theme Routes
@@ -151,6 +162,7 @@ Route::apiResource('themes',  'Themes\BrowseController');
 Route::get('theme',           'Themes\ActiveController@show');
 Route::patch('theme/{theme}', 'Themes\ActiveController@update');
 
+
 /**
  * API - Settings Routes
  */
@@ -159,6 +171,7 @@ Route::prefix('settings')->group(function() {
 	Route::get('{section}',   'SettingsController@show');
 	Route::patch('{section}', 'SettingsController@update');
 });
+
 
 /**
  * API - User Routes

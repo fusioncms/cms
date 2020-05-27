@@ -19,6 +19,8 @@ class ImportMappingController extends Controller
      */
     public function show(Import $import)
     {
+        $this->authorize('imports.view');
+
         $this->generateMappingPreview($import);
 
     	return new ImportResource($import);
@@ -33,6 +35,8 @@ class ImportMappingController extends Controller
      */
     public function update(Request $request, Import $import)
     {
+        $this->authorize('imports.update');
+
     	$attributes = $request->validate([
             'mappings' => 'required|array',
         ]);

@@ -19,6 +19,8 @@ class BackupController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('backups.viewAny');
+
         return new BackupResource([]);
     }
 
@@ -30,6 +32,8 @@ class BackupController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('backups.create');
+
         BackupRun::dispatch();
     }
 
@@ -41,6 +45,8 @@ class BackupController extends Controller
      */
     public function destroy(Backup $backup)
     {
+        $this->authorize('backups.delete');
+
         $backup->delete();
     }
 }

@@ -18,6 +18,8 @@ class BackupUploadController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('backups.create');
+
         // Validation parameters..
         $acceptedMimes = ['zip'];
 

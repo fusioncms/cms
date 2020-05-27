@@ -20,6 +20,8 @@ class ImportQueueController extends Controller
      */
     public function store(Request $request, Import $import)
     {
+        $this->authorize('imports.create');
+        
         BeforeImport::dispatch($import)->onQueue('imports');
 
         return response()->json('Successfully queued!', 201);

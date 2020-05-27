@@ -18,6 +18,8 @@ class ImportLogController extends Controller
      */
     public function index(Request $request, ImportLog $importLog)
     {
+        $this->authorize('imports.viewAny');
+
         return new ImportLogResource($importLog);
     }
 }

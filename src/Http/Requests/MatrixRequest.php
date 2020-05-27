@@ -15,9 +15,9 @@ class MatrixRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->hasRole('owner');
+        return $this->user()->can('matrices.' . ($this->method() === 'POST' ? 'create' : 'update'));
     }
-
+    
     /**
      * Prepare the data for validation.
      *
