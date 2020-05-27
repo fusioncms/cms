@@ -46,6 +46,16 @@ class LoadNavigation
                 'to'    => '/insight',
             ]);
 
+            $menu->add('Menus')->data([
+                'to'   => '/menus',
+                'icon' => 'anchor',
+            ]);
+
+            $menu->add('Customize')->data([
+                'to'   => '/customize',
+                'icon' => 'paint-roller',
+            ]);
+
             if ($matrices->count()) {
                 $menu->add('Content')->divide();
 
@@ -54,7 +64,7 @@ class LoadNavigation
                         $menu->add($matrix->name, '#')->data([
                             'icon'  => $matrix->icon ?: 'pencil-alt',
                         ]);
-                        
+
                         $menu->{Str::camel($matrix->name)}->add(($matrix->type == 'page' ? $matrix->reference_singular : $matrix->reference_plural), '#')->data([
                             'to' => $matrix->adminPath
                         ]);
@@ -87,113 +97,84 @@ class LoadNavigation
 
             $menu->add('System')->divide();
 
-            $menu->add('Appearance', '#')->data([
-                'icon'  => 'fill-drip',
-            ]);
+            // $menu->add('Configure', '#')->data([
+            //     'icon'  => 'sliders-h',
+            // ]);
 
-            $menu->appearance->add('Menus')->data([
-                'to'   => '/menus',
-                'icon' => 'anchor',
-            ]);
+            // $menu->configure->add('Fieldsets')->data([
+            //     'to'   => '/fieldsets',
+            //     'icon' => 'list',
+            // ]);
 
-            $menu->appearance->add('Theme')->data([
-                'to'   => '/themes/settings',
-                'icon' => 'paint-roller',
-            ]);
+            // $menu->configure->add('Forms')->data([
+            //     'to' => '/forms',
+            //     'icon' => 'paper-plane',
+            // ]);
 
-            $menu->add('Configure', '#')->data([
-                'icon'  => 'sliders-h',
-            ]);
+            // $menu->configure->add('Mailables')->data([
+            //     'to'   => '/mailables',
+            //     'icon' => 'mail-bulk',
+            // ]);
 
-            $menu->configure->add('Fieldsets')->data([
-                'to'   => '/fieldsets',
-                'icon' => 'list',
-            ]);
+            // $menu->configure->add('Matrix')->data([
+            //     'to'   => '/matrices',
+            //     'icon' => 'hashtag',
+            // ]);
 
-            $menu->configure->add('Forms')->data([
-                'to' => '/forms',
-                'icon' => 'paper-plane',
-            ]);
+            // $menu->configure->add('Extensions')->data([
+            //     'to'   => '/extensions',
+            //     'icon' => 'seedling',
+            // ]);
 
-            $menu->configure->add('Mailables')->data([
-                'to'   => '/mailables',
-                'icon' => 'mail-bulk',
-            ]);
-
-            $menu->configure->add('Matrix')->data([
-                'to'   => '/matrices',
-                'icon' => 'hashtag',
-            ]);
-
-            $menu->configure->add('Extensions')->data([
-                'to'   => '/extensions',
-                'icon' => 'seedling',
-            ]);
-
-            $menu->configure->add('Taxonomy')->data([
-                'to'   => '/taxonomies',
-                'icon' => 'sitemap',
-            ]);
+            // $menu->configure->add('Taxonomy')->data([
+            //     'to'   => '/taxonomies',
+            //     'icon' => 'sitemap',
+            // ]);
 
             $menu->add('Settings')->data([
                 'to'   => '/settings',
                 'icon' => 'cog',
             ]);
 
-            $menu->add('Tools', '#')->data([
-                'icon'  => 'tools',
-            ]);
+            // $menu->add('Tools', '#')->data([
+            //     'icon'  => 'tools',
+            // ]);
 
-            $menu->tools->add('Backups')->data([
-                'to'   => '/backups',
-                'icon' => 'save',
-            ]);
+            // $menu->tools->add('Backups')->data([
+            //     'to'   => '/backups',
+            //     'icon' => 'save',
+            // ]);
 
             // $menu->tools->add('Import')->data([
             //     'to'   => '/importer',
             //     'icon' => 'ship',
             // ]);
 
-            $menu->tools->add('Logs')->data([
-                'to'   => '/logs',
-                'icon' => 'bug'
-            ]);
+            // $menu->tools->add('Logs')->data([
+            //     'to'   => '/logs',
+            //     'icon' => 'bug'
+            // ]);
 
-            if (app()->isLocal()) {
-                $menu->tools->add('Telescope')->data([
-                    'to' => '/telescope',
-                    'target' => '_blank',
-                    'icon' => 'satellite'
-                ]);
-            }
+            // $menu->add('Modules', '#')->data([
+            //     'to'   => '/modules',
+            //     'icon'  => 'project-diagram',
+            // ]);
 
-            $menu->add('Modules', '#')->data([
-                'to'   => '/modules',
-                'icon'  => 'project-diagram',
-            ]);
+            // $menu->add('Users', '#')->data([
+            //     'icon'  => 'users',
+            // ]);
 
-            $menu->add('Users', '#')->data([
-                'icon'  => 'users',
-            ]);
+            // $menu->users->add('Users')->data([
+            //     'to' => '/users',
+            // ]);
 
-            $menu->users->add('Users')->data([
-                'to' => '/users',
-            ]);
+            // $menu->users->add('Roles')->data([
+            //     'to' => '/roles',
+            // ]);
 
-            $menu->users->add('Roles')->data([
-                'to' => '/roles',
-            ]);
-
-            $menu->users->add('Permissions')->data([
-                'to' => '/permissions',
-            ]);
-
-            if (app()->isLocal()) {
-                $menu->add('Styleguide')->data([
-                    'to'   => '/styleguide',
-                    'icon' => 'swatchbook',
-                ]);
-            }
+            // $menu->users->add('Permissions')->data([
+            //     'to' => '/permissions',
+            // ]);
         });
     }
 }

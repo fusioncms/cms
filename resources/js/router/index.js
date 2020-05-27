@@ -382,12 +382,12 @@ const router = new Router({
             }
         },
         {
-            path: '/themes/settings',
-            component: () => import('../views/Themes/Settings'),
-            name: 'themes.settings',
+            path: '/customize',
+            component: () => import('../views/Customize'),
+            name: 'customize',
             meta: {
                 requiresAuth: true,
-                layout: 'admin',
+                layout: 'blank',
             }
         },
         {

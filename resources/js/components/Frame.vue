@@ -60,6 +60,7 @@
         methods: {
             load() {
                 this.element = document.createElement('iframe')
+                this.element.setAttribute('id', 'iframe')
                 this.element.setAttribute('crossorigin', 'anonymous')
                 this.element.setAttribute('target', '_parent')
                 this.element.setAttribute('style', 'visibility: hidden; position: absolute; top: -99999px;')

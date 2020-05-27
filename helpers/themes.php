@@ -31,9 +31,9 @@ if (! function_exists('theme')) {
         $theme = Theme::active();
 
         if (request()->has('preview')) {
-            $theme->put('setting', json_decode(request()->get('preview'), true));
+            $theme->put('value', json_decode(request()->get('preview'), true));
         } else {
-            $settingsFilePath = storage_path('themes/'.$theme->get('slug').'.json');
+            $settingsFilePath = storage_path('themes/'.$theme->get('namespace').'.json');
 
             if (! File::exists($settingsFilePath)) {
                 $defaults = collect($theme->get('settings'))->mapWithKeys(function($setting, $handle) {
