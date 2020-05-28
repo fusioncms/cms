@@ -373,9 +373,9 @@ const router = new Router({
             }
         },
         {
-            path: '/themes',
-            component: () => import('../views/Themes/Index'),
-            name: 'themes.index',
+            path: '/theme',
+            component: () => import('../views/Theme'),
+            name: 'theme',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',

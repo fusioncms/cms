@@ -91,6 +91,11 @@ class LoadNavigation
                 'icon'  => 'sliders-h',
             ]);
 
+            $menu->configure->add('Extensions')->data([
+                'to'   => '/extensions',
+                'icon' => 'seedling',
+            ]);
+
             $menu->configure->add('Fieldsets')->data([
                 'to'   => '/fieldsets',
                 'icon' => 'list',
@@ -116,14 +121,14 @@ class LoadNavigation
                 'icon' => 'anchor',
             ]);
 
-            $menu->configure->add('Extensions')->data([
-                'to'   => '/extensions',
-                'icon' => 'seedling',
-            ]);
-
             $menu->configure->add('Taxonomy')->data([
                 'to'   => '/taxonomies',
                 'icon' => 'sitemap',
+            ]);
+
+            $menu->configure->add('Theme')->data([
+                'to'   => '/theme',
+                'icon' => 'palette',
             ]);
 
             $menu->add('Tools', '#')->data([
