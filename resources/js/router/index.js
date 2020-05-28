@@ -15,7 +15,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
-                permission: 'access.admin'
+                permission: 'access.controlPanel'
             }
         },
 

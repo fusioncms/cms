@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Imports;
 
 use Fusion\Models\Import;
 use Illuminate\Support\Str;
@@ -20,8 +20,8 @@ class ImportQueueController extends Controller
      */
     public function store(Request $request, Import $import)
     {
-    	$this->authorize('importer.queue.store');
-
+        $this->authorize('imports.create');
+        
         BeforeImport::dispatch($import)->onQueue('imports');
 
         return response()->json('Successfully queued!', 201);

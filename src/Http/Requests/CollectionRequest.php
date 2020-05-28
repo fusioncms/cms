@@ -24,7 +24,7 @@ class CollectionRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('entry.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('entries.' . ($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**

@@ -19,6 +19,8 @@ class BackupRestoreController extends Controller
      */
     public function index(Backup $backup, Request $request)
     {
+        $this->authorize('backups.restore');
+
         if ($request->input('saveBackup')) {
             BackupRun::dispatch();
         }

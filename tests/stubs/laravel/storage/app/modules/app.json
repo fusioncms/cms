@@ -9,9 +9,9 @@
             "upload": "beta\/install"
         },
         "registered": true,
-        "installed": true,
         "id": 2408645731,
         "order": 9001,
+        "installed": true,
         "enabled": true
     }
 }

@@ -77,6 +77,7 @@ class RoleTest extends TestCase
 	 * @group fusioncms
 	 * @group feature
 	 * @group role
+	 * @group auth
 	 */
 	public function a_guest_cannot_not_create_a_role()
 	{
@@ -89,7 +90,42 @@ class RoleTest extends TestCase
      * @test
      * @group fusioncms
      * @group feature
-     * @group taxonomy
+     * @group role
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_any_roles()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/roles');
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group role
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_a_role()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $role = factory(Role::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/roles/' . $role->id);
+    }
+
+	/**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group role
+     * @group permissions
      */
     public function a_user_without_permissions_cannot_create_new_roles()
     {
@@ -98,6 +134,42 @@ class RoleTest extends TestCase
         $this
             ->be($this->user, 'api')
             ->json('POST', '/api/roles', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group role
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_update_existing_roles()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $role = factory(Role::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('PATCH', '/api/roles/' . $role->id, []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group role
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_delete_existing_roles()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $role = factory(Role::class)->create();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('DELETE', '/api/roles/' . $role->id);
     }
 
 	/**

@@ -7,10 +7,33 @@ use Fusion\Tests\TestCase;
 use Illuminate\Support\Collection;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class ActivityTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->handleValidationExceptions();
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group activity
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_activities()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/activity');
+    }
 
     /**
      * @test

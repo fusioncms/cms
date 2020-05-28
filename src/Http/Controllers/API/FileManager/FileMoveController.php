@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\FileManager;
 
 use Fusion\Models\File;
 use Fusion\Models\Directory;
@@ -19,6 +19,8 @@ class FileMoveController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('files.update');
+        
         $directory = $request->input('directory');
         $moving    = $request->input('moving');
         $errors    = [];

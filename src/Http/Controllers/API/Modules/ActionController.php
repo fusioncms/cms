@@ -23,6 +23,8 @@ class ActionController extends Controller
      */
     public function install(Request $request, Collection $module)
     {
+        $this->authorize('modules.create');
+
         // --
         // Register module..
         Module::enable($module->get('slug'));
@@ -52,6 +54,8 @@ class ActionController extends Controller
      */
     public function update(Request $request, Collection $module)
     {
+        $this->authorize('modules.update');
+
         // --
         // Run migrations..
         Artisan::call('module:migrate', [
@@ -75,6 +79,8 @@ class ActionController extends Controller
      */
     public function seed(Request $request, Collection $module)
     {
+        $this->authorize('modules.update');
+
         Artisan::call('module:seed', [
             'slug'    => $module->get('slug'),
             '--force' => true,
@@ -92,6 +98,8 @@ class ActionController extends Controller
      */
     public function uninstall(Request $request, Collection $module)
     {
+        $this->authorize('modules.delete');
+
         Module::disable($module->get('slug'));
         Module::set($module->get('slug') . '::installed', false);
 

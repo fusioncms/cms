@@ -17,7 +17,7 @@ class MatrixRequest extends FormRequest
     {
         return $this->user()->can('matrices.' . ($this->method() === 'POST' ? 'create' : 'update'));
     }
-
+    
     /**
      * Prepare the data for validation.
      *

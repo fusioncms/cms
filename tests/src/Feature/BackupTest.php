@@ -3,6 +3,7 @@
 namespace Fusion\Tests\Feature;
 
 use File;
+use Closure;
 use ZipArchive;
 use Fusion\Tests\TestCase;
 use Illuminate\Support\Str;
@@ -11,6 +12,9 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\AuthenticationException;
+use Spatie\Backup\Events\BackupWasSuccessful;
+use Spatie\Backup\Events\CleanupWasSuccessful;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BackupTest extends TestCase
@@ -20,7 +24,9 @@ class BackupTest extends TestCase
 	public function setUp(): void
     {
 		parent::setUp();
+        $this->handleValidationExceptions();
 
+        // --
         Storage::fake('public');
         Storage::fake('temp');
 
@@ -45,8 +51,6 @@ class BackupTest extends TestCase
 		// Add multiple files..
 		Storage::disk('public')->put('files/testing-file1.txt', 'dummy content');
 		Storage::disk('public')->put('files/testing-file2.txt', 'dummy content');
-
-        $this->handleValidationExceptions();
     }
 
     /**
@@ -58,7 +62,8 @@ class BackupTest extends TestCase
 	{
 		Bus::fake();
 
-        $response = $this->actingAs($this->owner, 'api')
+        $this
+        	->be($this->owner, 'api')
         	->json('POST', '/api/backups')
         	->assertStatus(200);
 
@@ -68,7 +73,9 @@ class BackupTest extends TestCase
 	/**
      * @test
      * @group fusioncms
+     * @group feature
      * @group backups
+     * @group auth
      */
 	public function a_guest_cannot_not_create_a_backup()
 	{
@@ -76,154 +83,216 @@ class BackupTest extends TestCase
 
 		$this->expectException(AuthenticationException::class);
 
-        $response = $this->json('POST', '/api/backups')
-        	->assertStatus(422);
+        $this->json('POST', '/api/backups', []);
 
         Bus::assertNotDispatched(\Fusion\Jobs\Backups\BackupRun::class);
 	}
 
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_any_backups()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/backups');
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_upload_new_backups()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/backups/upload', []);
+    }
+
 	/**
      * @test
      * @group fusioncms
+     * @group feature
+     * @group backups
+     * @group permissions
+     */
+	public function a_user_without_permissions_cannot_create_new_backups()
+	{
+		$this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/backups', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_delete_existing_backups()
+    {
+        $this->newBackup(function($ev, $backup) {
+            $this->expectException(AuthorizationException::class);
+
+            $this
+                ->be($this->user, 'api')
+                ->json('DELETE', '/api/backups/' . basename($backup->path(), '.zip'));
+        });
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_restore_from_existing_backups()
+    {
+        $this->newBackup(function($ev, $backup) {
+            $this->expectException(AuthorizationException::class);
+
+            $this
+                ->be($this->user, 'api')
+                ->json('POST', '/api/backups/restore/' . basename($backup->path(), '.zip'));
+        });
+    }
+
+	/**
+     * @test
+     * @group fusioncms
+     * @group feature
      * @group backups
      */
 	public function a_request_to_backup_will_first_clean_then_create_a_backup()
 	{
-		Event::fake();
+        $this->newBackup(function($ev, $backup) {
+            Event::assertDispatched(CleanupWasSuccessful::class);
 
-		// Create new backup..
-		(new \Fusion\Jobs\Backups\BackupRun)->handle();
-
-		// ...assert cleanup was successful.
-		Event::assertDispatched(\Spatie\Backup\Events\CleanupWasSuccessful::class);
-
-		// ...assert backup was successful.
-		Event::assertDispatched(\Spatie\Backup\Events\BackupWasSuccessful::class, function($ev) use (&$backup) {
-			return Storage::disk('public')->assertExists($ev->backupDestination->newestBackup()->path());
-		});
+            return Storage::disk('public')->assertExists($backup->path());
+        });
 	}
 
 	/**
      * @test
      * @group fusioncms
+     * @group feature
      * @group backups
      */
 	public function a_request_to_backup_will_save_env_variables_with_the_backup_zip()
 	{
-		Event::fake();
+        $this->newBackup(function($ev, $backup) {
+            $backupPath = Storage::disk('public')->path($backup->path());
+            $zipArchive = new ZipArchive;
 
-		// Create new backup..
-		(new \Fusion\Jobs\Backups\BackupRun)->handle();
 
-		// ...assert backup was successful.
-		Event::assertDispatched(\Spatie\Backup\Events\BackupWasSuccessful::class, function($ev) {
-			$backupPath = Storage::disk('public')->path($ev->backupDestination->newestBackup()->path());
-			$zipArchive = new ZipArchive;
+            // Verify env variables were backed-up correctly..
+            if ($zipArchive->open($backupPath) === true) {
+                $envFile   = Storage::disk('temp')->path('env.json');
+                $envPath   = ltrim($envFile, '/');
+                $contents  = $zipArchive->getFromName($envPath);
+                $variables = json_decode($contents, true);
 
-			// Verify env variables were backed-up correctly..
-			if ($zipArchive->open($backupPath) === true) {
-				$contents  = $zipArchive->getFromName(ltrim(Storage::disk('temp')->path('env.json'), '/'));
-				$variables = json_decode($contents, true);
+                foreach(config('backup.backup.source.env') as $key) {
+                    if ($variables[$key] != env($key)) {
+                        return false;
+                    }
+                }
+            }
 
-				foreach(config('backup.backup.source.env') as $key) {
-					if ($variables[$key] != env($key)) {
-						return false;
-					}
-				}
-			}
-
-			return true;
-		});
-
+            return true;
+        });
 	}
 
 	/**
      * @test
      * @group fusioncms
+     * @group feature
      * @group backups
      */
 	public function a_request_to_restore_from_backup_will_restore_files()
 	{
-		Event::fake();
+        $this->newBackup(function($ev, $backup) {
 
-		// Create new backup..
-		(new \Fusion\Jobs\Backups\BackupRun)->handle();
+            // Alter storage setup..
+            Storage::disk('public')->append('files/testing-file1.txt', 'more content');
+            Storage::disk('public')->delete('files/testing-file2.txt');
 
-		// Alter one of the test files..
-		// Delete another test file..
-		Storage::disk('public')->append('files/testing-file1.txt', 'more content');
-		Storage::disk('public')->delete('files/testing-file2.txt');
+            // Restore from backup..
+            (new \Fusion\Jobs\Backups\RestoreFromBackup($backup))->handle();
 
-		// ...assert backup was successful.
-		Event::assertDispatched(\Spatie\Backup\Events\BackupWasSuccessful::class, function($ev) {
-			$backup = $ev->backupDestination->newestBackup();
+            // Assert events were dispatched..
+            Event::assertDispatched(\Fusion\Events\Backups\RestoreManifestWasCreated::class);
+            Event::assertDispatched(\Fusion\Events\Backups\BackupExtractionSuccessful::class);
+            Event::assertDispatched(\Fusion\Events\Backups\FileRestoreSuccessful::class, function($ev) {
+                foreach ($ev->filesToCopy as $file) {
+                    if (Storage::disk('public')->exists('files/' . basename($file['target']))) {
+                        $this->assertEquals(
+                            Storage::disk('public')->get('files/' . basename($file['target'])),
+                            'dummy content'
+                        );
+                    }
 
-			// Restore backup..
-			(new \Fusion\Jobs\Backups\RestoreFromBackup($backup))->handle();
+                }
 
-			// Assert events were dispatched..
-			Event::assertDispatched(\Fusion\Events\Backups\RestoreManifestWasCreated::class);
-			Event::assertDispatched(\Fusion\Events\Backups\BackupExtractionSuccessful::class);
-			Event::assertDispatched(\Fusion\Events\Backups\FileRestoreSuccessful::class, function($ev) {
-				foreach ($ev->filesToCopy as $file) {
-					if (Storage::disk('public')->exists('files/' . basename($file['target']))) {
-						$this->assertEquals(
-							Storage::disk('public')->get('files/' . basename($file['target'])),
-							'dummy content'
-						);
-					}
+                return true;
+            });
 
-				}
-
-				return true;
-			});
-
-			return true;
-		});
+            return true;
+        });
 	}
 
 	/**
      * @test
      * @group fusioncms
+     * @group feature
      * @group backups
      */
-	public function a_request_to_restore_from_backup_will_restore_env_variables()
-	{
-		Event::fake();
+    public function a_request_to_restore_from_backup_will_restore_env_variables()
+    {
+        $this->newBackup(function($ev, $backup) {
 
-		// Create new backup..
-		(new \Fusion\Jobs\Backups\BackupRun)->handle();
+            // Alter .env.testing file and save..
+            $envContents = File::get(app()->environmentFilePath());
 
-		// Make edit to the .env.testing file..
-		// So we can restore the variables upon restoration..
-		$envContents = File::get(app()->environmentFilePath());
+            foreach(config('backup.backup.source.env') as $key) {
+                $envContents = preg_replace("/^({$key})=([^\r\n]*)$/m", "$1=" . Str::random(), $envContents);
+            }
 
-		foreach(config('backup.backup.source.env') as $key) {
-			$envContents = preg_replace("/^({$key})=([^\r\n]*)$/m", "$1=" . Str::random(), $envContents);
-		}
+            File::put(app()->environmentFilePath(), $envContents);
+            // --
 
-		File::put(app()->environmentFilePath(), $envContents);
+            // ----
+            // Restore backup..
+            (new \Fusion\Jobs\Backups\RestoreFromBackup($backup))->handle();
 
-		// ...assert backup was successful.
-		Event::assertDispatched(\Spatie\Backup\Events\BackupWasSuccessful::class, function($ev) {
-			$backup = $ev->backupDestination->newestBackup();
+            $envUpdated = File::get(app()->environmentFilePath());
+            $matches     = [];
 
-			// Restore backup..
-			(new \Fusion\Jobs\Backups\RestoreFromBackup($backup))->handle();
+            foreach(config('backup.backup.source.env') as $key) {
+                preg_match("/^({$key})=([^\r\n]*)$/m", $envUpdated, $matches);
 
-			$envContents = File::get(app()->environmentFilePath());
-			$matches     = [];
+                if (!isset($matches[2]) or ($matches[2] != env($key))) {
+                    return false;
+                }
+            }
 
-			foreach(config('backup.backup.source.env') as $key) {
-				preg_match("/^({$key})=([^\r\n]*)$/m", $envContents, $matches);
-
-				if (!isset($matches[2]) or ($matches[2] != env($key))) {
-					return false;
-				}
-			}
-
-			return true;
-		});
+            return true;
+        });
 	}
 
 	//TODO: unable to dump sql database for testing
@@ -249,4 +318,26 @@ class BackupTest extends TestCase
 
 		// $this->assertDatabaseHas('users', ['email' => 'guest@example.com']);
 	}
+
+    //
+    // ------------------------------------------------
+    //
+
+    /**
+     * Returns new term w/ attributes
+     * [Helper]
+     *
+     * @param  array  $overrides
+     * @return array
+     */
+    private function newBackup(Closure $closure)
+    {
+        Event::fake();
+        
+        (new \Fusion\Jobs\Backups\BackupRun)->handle();
+
+        Event::assertDispatched(BackupWasSuccessful::class, function($ev) use ($closure) {
+            return $closure($ev, $ev->backupDestination->newestBackup());
+        });
+    }
 }

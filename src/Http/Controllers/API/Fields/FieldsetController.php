@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Fields;
 
 use Fusion\Models\Fieldset;
 use Illuminate\Http\Request;

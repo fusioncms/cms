@@ -15,4 +15,24 @@ trait HasRoles
     {
         return $this->guard_name;
     }
+
+    /**
+     * Return first role.
+     * 
+     * @return \Fusion\Models\Role|null
+     */
+    public function getRoleAttribute()
+    {
+        return $this->roles->first();
+    }
+
+    /**
+     * Owner role check.
+     * 
+     * @return boolean
+     */
+    public function isOwner()
+    {
+        return $this->hasRole('owner');
+    }
 }

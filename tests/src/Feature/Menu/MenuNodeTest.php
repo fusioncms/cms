@@ -97,6 +97,85 @@ class MenuNodeTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group menu
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_view_a_menu_node()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        list($node, $attributes) = $this->newMenuNode([
+            'name' => 'Example',
+            'url'  => 'https://example.com',
+        ]);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/menus/' . $this->menu->id . '/nodes/' . $node->id);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group menu
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_create_new_menu_nodes()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/menus', []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group menu
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_update_existing_menu_nodes()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        list($node, $attributes) = $this->newMenuNode([
+            'name' => 'Example',
+            'url'  => 'https://example.com',
+        ]);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('PATCH', '/api/menus/' . $this->menu->id . '/nodes/' . $node->id, []);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group menu
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_delete_existing_menu_nodes()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        list($node, $attributes) = $this->newMenuNode([
+            'name' => 'Example',
+            'url'  => 'https://example.com',
+        ]);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('DELETE', '/api/menus/' . $this->menu->id . '/nodes/' . $node->id);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group menu
      */
     public function a_user_with_permissions_can_update_an_existing_menu_nodes()
     {

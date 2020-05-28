@@ -13,7 +13,7 @@ class MailableRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('mailable.update');
+        return $this->user()->can('mailables.update');
     }
 
     /**

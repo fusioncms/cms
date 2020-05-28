@@ -37,6 +37,8 @@ class UploadController extends Controller
      */
     public function store(ModuleUploadRequest $request)
     {
+        $this->authorize('modules.create');
+
         $upload   = $request->file('file-upload');
         $origName = pathinfo($upload->getClientOriginalName(), PATHINFO_FILENAME);
 

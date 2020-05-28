@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Fields;
 
 use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;

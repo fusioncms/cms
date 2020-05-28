@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API;
+namespace Fusion\Http\Controllers\API\Imports;
 
 use Fusion\Models\Import;
 use Illuminate\Http\Request;
@@ -19,7 +19,7 @@ class ImportMappingController extends Controller
      */
     public function show(Import $import)
     {
-    	$this->authorize('importer.mapping.show');
+        $this->authorize('imports.view');
 
         $this->generateMappingPreview($import);
 
@@ -35,7 +35,7 @@ class ImportMappingController extends Controller
      */
     public function update(Request $request, Import $import)
     {
-    	$this->authorize('importer.mapping.update');
+        $this->authorize('imports.update');
 
     	$attributes = $request->validate([
             'mappings' => 'required|array',
