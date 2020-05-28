@@ -14,19 +14,47 @@
                 </div>
 
                 <div class="controls__content">
-                    <component
-                        v-for="(setting, handle) in theme.settings"
-                        v-model="theme.value[handle]"
-                        :key="handle"
-                        :is="setting.fieldtype + '-fieldtype'"
-                        :field="{
-                            name: setting.name,
-                            handle: handle,
-                            help: setting.help,
-                            settings: {},
-                        }"
-                        class="mb-8"
-                    ></component>
+                    <p-accordion :multiple="true">
+                        <p-accordion-item v-for="(section, handle) in theme.settings" :key="section.handle" :title="section.name">
+                            <div class="p-3">
+                                <p class="text-sm" v-if="section.description">{{ section.description }}</p>
+
+                                <component
+                                    v-for="(field, fieldHandle) in section.fields"
+                                    v-model="theme.value[handle][fieldHandle]"
+                                    :key="fieldHandle"
+                                    :is="field.fieldtype + '-fieldtype'"
+                                    :field="{
+                                        name: field.name,
+                                        handle: handle,
+                                        help: field.help,
+                                        settings: {},
+                                    }"
+                                    class="mb-8"
+                                ></component>
+                            </div>
+                        </p-accordion-item>
+                    </p-accordion>
+
+                    <!-- <div v-for="(section, handle) in theme.settings" :key="section.handle + '-custom'">
+                        <button v-collapse="section.handle" class="simple-button rounded p-2 mb-3 text-left w-full text-gray-100 bg-gray-900 leading-none text-lg font-bold">{{ section.name }}</button>
+
+                        <p-collapse :name="section.handle">
+                            <component
+                                v-for="(field, fieldHandle) in section.fields"
+                                v-model="theme.value[handle][fieldHandle]"
+                                :key="fieldHandle + '-custom'"
+                                :is="field.fieldtype + '-fieldtype'"
+                                :field="{
+                                    name: field.name,
+                                    handle: handle,
+                                    help: field.help,
+                                    settings: {},
+                                }"
+                                class="mb-8"
+                            ></component>
+                        </p-collapse>
+                    </div> -->
                 </div>
 
                 <div class="controls__footer">
@@ -50,12 +78,14 @@
         </div>
 
         <div class="preview__window">
-            <div class="window" :class="'window--' + window">
+
+            <div v-if="preview" class="window" :class="'window--' + window"> -->
                 <p-frame
-                    v-if="preview"
                     :src="preview"
                 ></p-frame>
             </div>
+
+            <div v-else class="bg-white py-1 px-3 rounded-lg bg-gray-800 text-white uppercase font-bold text-sm tracking-wide">Loading...</div>
         </div>
     </div>
 </template>
