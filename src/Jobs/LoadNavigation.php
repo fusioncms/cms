@@ -38,24 +38,6 @@ class LoadNavigation
                 'icon' => 'inbox',
             ]);
 
-            $menu->add('SEO', '#')->data([
-                'icon'  => 'chart-bar',
-            ]);
-
-            $menu->seo->add('Insight')->data([
-                'to'    => '/insight',
-            ]);
-
-            $menu->add('Menus')->data([
-                'to'   => '/menus',
-                'icon' => 'anchor',
-            ]);
-
-            $menu->add('Customize')->data([
-                'to'   => '/customize',
-                'icon' => 'paint-roller',
-            ]);
-
             if ($matrices->count()) {
                 $menu->add('Content')->divide();
 
@@ -97,84 +79,102 @@ class LoadNavigation
 
             $menu->add('System')->divide();
 
-            // $menu->add('Configure', '#')->data([
-            //     'icon'  => 'sliders-h',
-            // ]);
+            $menu->add('SEO', '#')->data([
+                'icon'  => 'chart-bar',
+            ]);
 
-            // $menu->configure->add('Fieldsets')->data([
-            //     'to'   => '/fieldsets',
-            //     'icon' => 'list',
-            // ]);
+            $menu->seo->add('Insight')->data([
+                'to'    => '/insight',
+            ]);
 
-            // $menu->configure->add('Forms')->data([
-            //     'to' => '/forms',
-            //     'icon' => 'paper-plane',
-            // ]);
+            $menu->add('Configure', '#')->data([
+                'icon'  => 'sliders-h',
+            ]);
 
-            // $menu->configure->add('Mailables')->data([
-            //     'to'   => '/mailables',
-            //     'icon' => 'mail-bulk',
-            // ]);
+            $menu->configure->add('Fieldsets')->data([
+                'to'   => '/fieldsets',
+                'icon' => 'list',
+            ]);
 
-            // $menu->configure->add('Matrix')->data([
-            //     'to'   => '/matrices',
-            //     'icon' => 'hashtag',
-            // ]);
+            $menu->configure->add('Forms')->data([
+                'to' => '/forms',
+                'icon' => 'paper-plane',
+            ]);
 
-            // $menu->configure->add('Extensions')->data([
-            //     'to'   => '/extensions',
-            //     'icon' => 'seedling',
-            // ]);
+            $menu->configure->add('Mailables')->data([
+                'to'   => '/mailables',
+                'icon' => 'mail-bulk',
+            ]);
 
-            // $menu->configure->add('Taxonomy')->data([
-            //     'to'   => '/taxonomies',
-            //     'icon' => 'sitemap',
-            // ]);
+            $menu->configure->add('Matrix')->data([
+                'to'   => '/matrices',
+                'icon' => 'hashtag',
+            ]);
+
+            $menu->configure->add('Menus')->data([
+                'to'   => '/menus',
+                'icon' => 'anchor',
+            ]);
+
+            $menu->configure->add('Extensions')->data([
+                'to'   => '/extensions',
+                'icon' => 'seedling',
+            ]);
+
+            $menu->configure->add('Taxonomy')->data([
+                'to'   => '/taxonomies',
+                'icon' => 'sitemap',
+            ]);
+
+            $menu->add('Tools', '#')->data([
+                'icon'  => 'tools',
+            ]);
+
+            $menu->tools->add('Backups')->data([
+                'to'   => '/backups',
+                'icon' => 'save',
+            ]);
+
+            $menu->tools->add('Import')->data([
+                'to'   => '/importer',
+                'icon' => 'ship',
+            ]);
+
+            $menu->tools->add('Logs')->data([
+                'to'   => '/logs',
+                'icon' => 'bug'
+            ]);
+
+            $menu->add('Users', '#')->data([
+                'icon'  => 'users',
+            ]);
+
+            $menu->users->add('Users')->data([
+                'to' => '/users',
+            ]);
+
+            $menu->users->add('Roles')->data([
+                'to' => '/roles',
+            ]);
+
+            $menu->users->add('Permissions')->data([
+                'to' => '/permissions',
+            ]);
+
+            $menu->add('Customize')->data([
+                'to'   => '/customize',
+                'icon' => 'paint-roller',
+            ]);
+
+            $menu->add('Modules', '#')->data([
+                'to'   => '/modules',
+                'icon'  => 'box-open',
+            ]);
 
             $menu->add('Settings')->data([
                 'to'   => '/settings',
                 'icon' => 'cog',
             ]);
-
-            // $menu->add('Tools', '#')->data([
-            //     'icon'  => 'tools',
-            // ]);
-
-            // $menu->tools->add('Backups')->data([
-            //     'to'   => '/backups',
-            //     'icon' => 'save',
-            // ]);
-
-            // $menu->tools->add('Import')->data([
-            //     'to'   => '/importer',
-            //     'icon' => 'ship',
-            // ]);
-
-            // $menu->tools->add('Logs')->data([
-            //     'to'   => '/logs',
-            //     'icon' => 'bug'
-            // ]);
-
-            // $menu->add('Modules', '#')->data([
-            //     'to'   => '/modules',
-            //     'icon'  => 'project-diagram',
-            // ]);
-
-            // $menu->add('Users', '#')->data([
-            //     'icon'  => 'users',
-            // ]);
-
-            // $menu->users->add('Users')->data([
-            //     'to' => '/users',
-            // ]);
-
-            // $menu->users->add('Roles')->data([
-            //     'to' => '/roles',
-            // ]);
-
-            // $menu->users->add('Permissions')->data([
-            //     'to' => '/permissions',
-            // ]);
         });
     }
 }
