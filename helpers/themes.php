@@ -31,13 +31,17 @@ if (! function_exists('theme')) {
         $theme = Theme::active();
 
         if (request()->has('preview')) {
-            $theme->put('setting', json_decode(request()->get('preview'), true));
+            $theme->put('value', json_decode(request()->get('preview'), true));
         } else {
-            $settingsFilePath = storage_path('themes/'.$theme->get('slug').'.json');
+            $settingsFilePath = storage_path('themes/'.$theme->get('namespace').'.json');
 
             if (! File::exists($settingsFilePath)) {
-                $defaults = collect($theme->get('settings'))->mapWithKeys(function($setting, $handle) {
-                    return [$handle => $setting['default'] ?? null];
+                $defaults = collect($theme->get('settings'))->mapWithKeys(function($section, $handle) {
+                    $settings = collect($section['fields'])->mapWithKeys(function($setting, $field) {
+                        return [$field => $setting['default'] ?? null];
+                    });
+
+                    return [$handle => $settings];
                 });
 
                 File::put($settingsFilePath, json_encode($defaults, JSON_PRETTY_PRINT));

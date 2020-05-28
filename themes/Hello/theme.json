@@ -10,19 +10,47 @@
     ],
 
     "settings": {
-        "greeting": {
-            "name": "Greeting",
-            "fieldtype": "input",
-            "default": "Welcome to FusionCMS",
-            "help": "Say hello to your visitors.",
-            "required": false
+        "homepage": {
+            "name": "Homepage",
+            "description": "Customization options for the homepage.",
+            "fields": {
+                "greeting": {
+                    "name": "Greeting",
+                    "fieldtype": "input",
+                    "default": "Welcome to FusionCMS",
+                    "help": "Say hello to your visitors.",
+                    "required": false
+                },
+                "message": {
+                    "name": "Message",
+                    "fieldtype": "input",
+                    "default": "We think you'll enjoy your time here ✌️",
+                    "required": false
+                }
+            }
         },
-
-        "message": {
-            "name": "Message",
-            "fieldtype": "input",
-            "default": "We think you'll enjoy your time here ✌️",
-            "required": false
+        "colors": {
+            "name": "Colors",
+            "description": "Customize the look and feel of the branding colors.",
+            "fields": {
+                "primary": {
+                    "name": "Primary",
+                    "fieldtype": "color-picker",
+                    "default": "#000000",
+                    "required": true
+                }
+            }
+        },
+        "additional": {
+            "name": "Additional CSS",
+            "description": "Add your own CSS code here to customize the appearance and layout of your site.",
+            "fields": {
+                "css": {
+                    "fieldtype": "code",
+                    "default": "",
+                    "required": false
+                }
+            }
         }
     }
 }

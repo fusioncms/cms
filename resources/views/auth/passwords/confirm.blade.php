@@ -10,8 +10,10 @@
             </div>
 
             <div class="card-body">
-                {{ __('Please confirm your password before continuing.') }}
-                {{ __('We won\'t ask for your password again for a few hours.') }}
+                <div class="mb-6">
+                    {{ __('Please confirm your password before continuing.') }}
+                    {{ __('We won\'t ask for your password again for a few hours.') }}
+                </div>
 
                 <div class="mb-6">
                     <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="password">

@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="fill-drip">Themes</app-title>
+            <app-title icon="palette">Theme</app-title>
         </portal>
 
         <div class="row">
@@ -53,7 +53,7 @@ export default {
     head: {
         title() {
             return {
-                inner: 'Themes'
+                inner: 'Theme'
             }
         }
     },

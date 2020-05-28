@@ -1,3 +1,16 @@
+.simple-button {
+    @apply
+        appearance-none
+    ;
+
+    &:focus {
+        @apply
+            outline-none
+            shadow-focus
+        ;
+    }
+}
+
 .button {
     @apply
         appearance-none

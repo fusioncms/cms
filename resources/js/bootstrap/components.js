@@ -4,6 +4,7 @@ import Vue from 'vue';
 Vue.component('admin-layout', require('../layouts/Admin').default)
 Vue.component('error-layout', require('../layouts/Error').default)
 Vue.component('default-layout', require('../layouts/Default').default)
+Vue.component('blank-layout', require('../layouts/Blank').default)
 
 // App
 Vue.component('app', require('../components/App').default)

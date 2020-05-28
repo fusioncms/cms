@@ -373,21 +373,21 @@ const router = new Router({
             }
         },
         {
-            path: '/themes',
-            component: () => import('../views/Themes/Index'),
-            name: 'themes.index',
+            path: '/theme',
+            component: () => import('../views/Theme'),
+            name: 'theme',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
             }
         },
         {
-            path: '/themes/settings',
-            component: () => import('../views/Themes/Settings'),
-            name: 'themes.settings',
+            path: '/customize',
+            component: () => import('../views/Customize'),
+            name: 'customize',
             meta: {
                 requiresAuth: true,
-                layout: 'admin',
+                layout: 'blank',
             }
         },
         {

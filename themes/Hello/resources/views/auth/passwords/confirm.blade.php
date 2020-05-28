@@ -7,9 +7,9 @@
 
             <h2 class="m-0 mb-10 text-center text-4xl font-bold tracking-wider leading-tight">{{ __('Confirm Password') }}</h2>
 
-            <div class="text-center text-sm">
-            {{ __('Please confirm your password before continuing.') }}
-            {{ __('We won\'t ask for your password again for a few hours.') }}
+            <div class="text-center text-sm mb-6">
+				{{ __('Please confirm your password before continuing.') }}
+				{{ __('We won\'t ask for your password again for a few hours.') }}
         	</div>
 
 			<div class="mb-6">

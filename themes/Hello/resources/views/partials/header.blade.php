@@ -1,13 +1,13 @@
 <nav id="header" class="bg-white fixed w-full z-10 top-0">
     <div class="w-full">
-        <div class="w-full container mx-auto mb-px flex flex-wrap items-center">
-            <div class="w-1/2 px-6 flex items-center">
+        <div class="w-full container mx-auto mb-px flex flex-wrap items-center justify-between">
+            <div class="px-6 flex items-center">
                 <div class="group">
-                    <a class="font-bold text-xl mr-20 text-gray-500 group-hover:text-black tracking-wider" href="/">{{ setting('system.website_title') }}</a>
+                    <a class="font-bold md:text-xl text-gray-500 group-hover:text-black tracking-wider" href="/">{{ setting('system.website_title') }}</a>
                 </div>
             </div>
 
-            <div class="w-1/2 pr-0">
+            <div class="pr-0">
                 <div class="w-full flex flex-row items-center justify-end px-6">
                     <a href="#" @click.prevent v-collapse:mobile-menu class="lg:hidden block py-4 align-middle text-gray-500 no-underline hover:text-gray-900 border-b-2 border-white hover:border-gray-900">
                         <i class="fas fa-bars text-lg"></i>

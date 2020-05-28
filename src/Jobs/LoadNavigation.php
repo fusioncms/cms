@@ -38,14 +38,6 @@ class LoadNavigation
                 'icon' => 'inbox',
             ]);
 
-            $menu->add('SEO', '#')->data([
-                'icon'  => 'chart-bar',
-            ]);
-
-            $menu->seo->add('Insight')->data([
-                'to'    => '/insight',
-            ]);
-
             if ($matrices->count()) {
                 $menu->add('Content')->divide();
 
@@ -54,7 +46,7 @@ class LoadNavigation
                         $menu->add($matrix->name, '#')->data([
                             'icon'  => $matrix->icon ?: 'pencil-alt',
                         ]);
-                        
+
                         $menu->{Str::camel($matrix->name)}->add(($matrix->type == 'page' ? $matrix->reference_singular : $matrix->reference_plural), '#')->data([
                             'to' => $matrix->adminPath
                         ]);
@@ -87,22 +79,21 @@ class LoadNavigation
 
             $menu->add('System')->divide();
 
-            $menu->add('Appearance', '#')->data([
-                'icon'  => 'fill-drip',
+            $menu->add('SEO', '#')->data([
+                'icon'  => 'chart-bar',
             ]);
 
-            $menu->appearance->add('Menus')->data([
-                'to'   => '/menus',
-                'icon' => 'anchor',
-            ]);
-
-            $menu->appearance->add('Theme')->data([
-                'to'   => '/themes/settings',
-                'icon' => 'paint-roller',
+            $menu->seo->add('Insight')->data([
+                'to'    => '/insight',
             ]);
 
             $menu->add('Configure', '#')->data([
                 'icon'  => 'sliders-h',
+            ]);
+
+            $menu->configure->add('Extensions')->data([
+                'to'   => '/extensions',
+                'icon' => 'seedling',
             ]);
 
             $menu->configure->add('Fieldsets')->data([
@@ -125,9 +116,9 @@ class LoadNavigation
                 'icon' => 'hashtag',
             ]);
 
-            $menu->configure->add('Extensions')->data([
-                'to'   => '/extensions',
-                'icon' => 'seedling',
+            $menu->configure->add('Menus')->data([
+                'to'   => '/menus',
+                'icon' => 'anchor',
             ]);
 
             $menu->configure->add('Taxonomy')->data([
@@ -135,9 +126,9 @@ class LoadNavigation
                 'icon' => 'sitemap',
             ]);
 
-            $menu->add('Settings')->data([
-                'to'   => '/settings',
-                'icon' => 'cog',
+            $menu->configure->add('Theme')->data([
+                'to'   => '/theme',
+                'icon' => 'palette',
             ]);
 
             $menu->add('Tools', '#')->data([
@@ -149,27 +140,14 @@ class LoadNavigation
                 'icon' => 'save',
             ]);
 
-            // $menu->tools->add('Import')->data([
-            //     'to'   => '/importer',
-            //     'icon' => 'ship',
-            // ]);
+            $menu->tools->add('Import')->data([
+                'to'   => '/importer',
+                'icon' => 'ship',
+            ]);
 
             $menu->tools->add('Logs')->data([
                 'to'   => '/logs',
                 'icon' => 'bug'
-            ]);
-
-            if (app()->isLocal()) {
-                $menu->tools->add('Telescope')->data([
-                    'to' => '/telescope',
-                    'target' => '_blank',
-                    'icon' => 'satellite'
-                ]);
-            }
-
-            $menu->add('Modules', '#')->data([
-                'to'   => '/modules',
-                'icon'  => 'project-diagram',
             ]);
 
             $menu->add('Users', '#')->data([
@@ -188,12 +166,20 @@ class LoadNavigation
                 'to' => '/permissions',
             ]);
 
-            if (app()->isLocal()) {
-                $menu->add('Styleguide')->data([
-                    'to'   => '/styleguide',
-                    'icon' => 'swatchbook',
-                ]);
-            }
+            $menu->add('Customize')->data([
+                'to'   => '/customize',
+                'icon' => 'paint-roller',
+            ]);
+
+            $menu->add('Modules', '#')->data([
+                'to'   => '/modules',
+                'icon'  => 'box-open',
+            ]);
+
+            $menu->add('Settings')->data([
+                'to'   => '/settings',
+                'icon' => 'cog',
+            ]);
         });
     }
 }
