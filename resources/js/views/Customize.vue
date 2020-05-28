@@ -1,7 +1,7 @@
 <template>
     <div class="preview">
-        <div class="preview__controls" :class="{'w-0': !showControls}">
-            <button @click="toggleControls" class="simple-button show-button p-3" :class="{'hidden': showControls, 'inline-block': !showControls}"><fa-icon :icon="['fas', 'caret-square-right']" class="fa-fw"></fa-icon> Show Controls</button>
+        <div class="preview__controls" :aria-hidden="!showControls" :class="{'w-0 border-0': !showControls}">
+            <button @click="toggleControls" ref="show-controls" class="simple-button show-controls-button" :class="{'hidden': showControls, 'inline-block': !showControls}"><fa-icon :icon="['fas', 'caret-square-right']" class="fa-fw"></fa-icon> Show Controls</button>
             <div class="controls" :class="{'hidden': !showControls}">
                 <div class="controls__header">
                     <router-link exact :to="{ name: 'dashboard' }" class="flex items-center px-3 py-2 border-r border-gray-300 leading-none">
@@ -35,30 +35,10 @@
                             </div>
                         </p-accordion-item>
                     </p-accordion>
-
-                    <!-- <div v-for="(section, handle) in theme.settings" :key="section.handle + '-custom'">
-                        <button v-collapse="section.handle" class="simple-button rounded p-2 mb-3 text-left w-full text-gray-100 bg-gray-900 leading-none text-lg font-bold">{{ section.name }}</button>
-
-                        <p-collapse :name="section.handle">
-                            <component
-                                v-for="(field, fieldHandle) in section.fields"
-                                v-model="theme.value[handle][fieldHandle]"
-                                :key="fieldHandle + '-custom'"
-                                :is="field.fieldtype + '-fieldtype'"
-                                :field="{
-                                    name: field.name,
-                                    handle: handle,
-                                    help: field.help,
-                                    settings: {},
-                                }"
-                                class="mb-8"
-                            ></component>
-                        </p-collapse>
-                    </div> -->
                 </div>
 
                 <div class="controls__footer">
-                    <button @click="toggleControls" class="simple-button p-3"><fa-icon :icon="['fas', 'caret-square-left']" class="fa-fw"></fa-icon> Hide Controls</button>
+                    <button @click="toggleControls" ref="hide-controls" class="simple-button hide-controls-button"><fa-icon :icon="['fas', 'caret-square-left']" class="fa-fw"></fa-icon> Hide Controls</button>
 
                     <div class="flex border-l border-gray-300">
                         <button @click="setWindow('desktop')" class="simple-button relative inline-flex items-center px-3 py-2 border-b-4 border-gray-300 hover:border-gray-500" :class="{'hover:border-primary-500 border-primary-500': isDesktop}">
@@ -95,7 +75,7 @@
         head: {
             title() {
                 return {
-                    inner: 'Theme Settings'
+                    inner: 'Customize'
                 }
             }
         },
@@ -180,6 +160,14 @@
 
             toggleControls() {
                 this.showControls = !this.showControls
+
+                this.$nextTick(function() {
+                    if (this.showControls) {
+                        this.$refs['hide-controls'].focus()
+                    } else {
+                        this.$refs['show-controls'].focus()
+                    }
+                })
             }
         },
 

@@ -32,7 +32,7 @@
     }
 
     &__footer {
-        @apply flex items-stretch justify-between mt-auto border-t border-gray-300;
+        @apply flex items-stretch justify-between mt-auto border-t border-gray-300 h-14;
     }
 
     &__content {
@@ -72,12 +72,22 @@
         ;
     }
 }
-
-.show-button {
+.hide-controls-button {
     @apply
+        px-3
+    ;
+}
+
+.show-controls-button {
+    @apply
+        h-14
         fixed
         bottom-0
         left-0
+        px-3
+        bg-white
+        border
+        border-gray-300
     ;
 
     z-index: 999;
