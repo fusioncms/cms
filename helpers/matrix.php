@@ -8,11 +8,18 @@
  */
 function matrix_page($matrix)
 {
-    return new \Fusion\Services\Builders\Page($matrix);
+    try {
+        return new \Fusion\Services\Builders\Page($matrix);
+    } catch (\Exception $e) {
+        return null;
+    }
 }
-
 
 function matrix_entries($matrix)
 {
-    return (new \Fusion\Services\Builders\Collection($matrix))->make();
+    try {
+        return (new \Fusion\Services\Builders\Collection($matrix))->make();
+    } catch (\Exception $e) {
+        return null;
+    }
 }
