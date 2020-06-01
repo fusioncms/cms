@@ -1,48 +1,48 @@
 <template>
-    <div class="form__group">
-        <label
-            class="form__label"
-            :for="name"
-            v-if="label"
-            v-html="label">
-        </label>
+	<div class="form__group">
+		<label v-if="label" :for="name" class="form__label" v-html="label"></label>
 
-        <input type="hidden" :value="value" :name="name">
-
-        <div class="form__select" :class="{'form__select--open': isOpen, 'form__select--dark': dark}" v-click-outside="close">
+        <div class="form__select" :class="{ 'form__select--open': isOpen }" v-click-outside="close">
             <button
-                @click="toggle"
                 type="button"
-                class="form__select-button"
-                :class="{'form__error': hasError}"
-                :disabled="disabled"
                 ref="button"
-                @keydown.esc="close"
-                @keydown.down.prevent="highlightNext"
-                @keydown.up.prevent="highlightPrevious"
-                @keydown.enter.prevent="selectHighlighted"
-            >
-                <span v-if="selected" v-html="selected.label || selected"></span>
+                class="form__select-button"
+                :disabled="disabled"
+                @click="toggle">
+
+                <div v-if="selectedOptions.length > 0">
+                    <div v-if="multiple" v-for="(option, index) in selectedOptions" :key="index" class="badge">
+                        {{ option.label || option }}
+                        <button @click.stop="removeSelection(index)" class="w-6 h-6 inline-block align-middle text-gray-500 hover:text-gray-600 focus:outline-none">
+                            <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg>
+                        </button>
+                    </div>
+
+                    <span v-else v-html="selectedOptions[0].label || selectedOptions[0]"></span>
+                </div>
+
                 <span v-else class="form__select-placeholder" v-html="placeholder"></span>
-                <!-- <span class="form__select-placeholder" v-html="placeholder + ' :: ' + (selected.label || selected)"></span> -->
 
                 <div class="form__select-arrow">
                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                 </div>
             </button>
 
-            <div v-show="isOpen" class="form__select-dropdown" ref="dropdown">
+            <div
+                v-show="isOpen"
+                class="form__select-dropdown"
+                ref="dropdown"
+                @keydown.down="highlightNext"
+                @keydown.up="highlightPrevious"
+                @keydown.enter.prevent="selectHighlighted"
+                @keydown.esc="close">
                 <input
+                    v-if="filterable"
                     type="search"
+                    ref="search"
                     class="form__select-search"
                     v-model="search"
-                    ref="search"
-                    @keydown.esc="close"
-                    @keydown.down="highlightNext"
-                    @keydown.up="highlightPrevious"
-                    @keydown.enter.prevent="selectHighlighted"
-                    v-if="filterable"
-                >
+                    placeholder="Search for option..."/>
 
                 <div class="form__select-controls" v-if="showControls">
                     <span>Press enter to select</span>
@@ -50,22 +50,38 @@
                     <span>esc to dismiss</span>
                 </div>
 
-                <ul class="form__select-options" v-show="filteredOptions.length > 0" ref="options">
-                    <li class="form__select-option"
-                        :class="{'form__select-option--selected': isSelected(option), 'form__select-option--highlighted': isHighlighted(index)}"
-                        v-for="(option, index) in filteredOptions"
-                        :key="index"
-                        @click="select(option)"
-                    >{{ option.label || option }}</li>
-                </ul>
+                <div v-if="filteredOptions.length > 0">
+                    <p-checkbox-group ref="options" v-if="multiple" class="form__select-options">
+                        <p-checkbox
+                            v-for="(option, index) in filteredOptions"
+                            :id="index"
+                            :key="index"
+                            :native-value="option.value"
+                            :class="{ 'form__select-option--highlighted': isHighlighted(index) }"
+                            name="selection"
+                            v-model="selection">
+                            {{ option.label }}
+                        </p-checkbox>
+                    </p-checkbox-group>
 
-                <div
-                    v-show="filteredOptions.length === 0"
-                    class="form__select-search-empty"
-                >
+                    <ul ref="options" v-else v-show="filteredOptions.length > 0" class="form__select-options">
+                        <li v-for="(option, index) in filteredOptions"
+                            :key="index"
+                            class="form__select-option"
+                            :class="{
+                                'form__select-option--selected': inSelection(option),
+                                'form__select-option--highlighted': isHighlighted(index)
+                            }"
+                            @click="addSelection(option)">
+                            {{ option.label }}
+                        </li>
+                    </ul>
+                </div>
+
+                <div v-else class="form__select-search-empty">
                     No results found for "{{ search }}"
                 </div>
-            </div>
+			</div>
         </div>
 
         <div class="form__control--meta" v-if="help || errorMessage">
@@ -74,7 +90,7 @@
                 <span v-if="errorMessage" class="form__error--message" v-html="errorMessage"></span>
             </div>
         </div>
-    </div>
+	</div>
 </template>
 
 <script>
@@ -88,12 +104,12 @@
                 isOpen: false,
                 search: '',
                 highlighted: 0,
-                model: this.value,
+                selection: []
             }
         },
 
         props: {
-            name: {
+        	name: {
                 required: true,
                 type: String,
             },
@@ -117,11 +133,6 @@
                 required: false,
                 type: String,
                 default: 'Please select an option...',
-            },
-
-            required: {
-                type: Boolean,
-                default: false,
             },
 
             disabled: {
@@ -149,11 +160,6 @@
                 },
             },
 
-            filterFunction: {
-                required: false,
-                default: null
-            },
-
             filterable: {
                 required: false,
                 type: Boolean,
@@ -170,67 +176,69 @@
                 required: false,
                 type: Boolean,
                 default: false,
+            },
+
+            multiple: {
+                required: false,
+                type: Boolean,
+                default: false
             }
         },
 
         computed: {
-            selected: {
-                get: function () {
-                    if (this.model === null) {
-                        return this.model
+            availOptions() {
+                return _.map(this.options, (option) => {
+                    let label = _.has(option, 'label') ? option['label'] : option
+                    let value = _.has(option, 'value') ? option['value'] : option
+
+                    // Note:
+                    //  All option values are saved as strings
+                    //  therefore we will immediately convert
+                    //  all numbers to strings.
+                    if (_.isNumber(value)) {
+                        value = _.toString(value)
                     }
 
-                    if (typeof _.head(this.options) === 'object') {
-                        let index = _.findIndex(this.options, (option) => {
-                            if (typeof this.model === 'object') {
-                                return option.value === this.model.value
-                            }
-
-                            return option.value === this.model
-                        })
-
-                        if (index === -1) {
-                            return null
-                        }
-
-                        return this.options[index]
-                    }
-
-                    return this.model
-                },
-                
-                set: function(selected) {
-                    this.model = selected
-                }
+                    return { label, value }
+                })
             },
 
             filteredOptions() {
-                if (this.filterFunction == null) {
-                    return this.options.filter((option) => {
-                        let value = option.value || option
-                        let label = option.label || option
+                return this.availOptions.filter((option) => {
+                    const label = _.has(option, 'label') ? option['label'] : option
+                    
+                    return label.toLowerCase().startsWith(this.search.toLowerCase())
+                })
+            },
 
-                        return label.toLowerCase().startsWith(this.search.toLowerCase())
-                    })
+            selectedOptions() {
+                return this.availOptions.filter((option) => {
+                    return this.inSelection(option)
+                })
+            },
+
+            highlight() {
+                if (this.multiple) {
+                    return this.$refs.options.$children[this.highlighted].$el
+                } else {
+                    return this.$refs.options.children[this.highlighted]
                 }
-
-                return this.filterFunction(this.search, this.options)
             }
         },
 
         watch: {
-            search() {
-                this.resetHighlighted()
+            selection(value) {
+                this.$emit('input', _.isArray(value) ? _.join(value, ',') : value)
             },
 
-            value(value) {
-                if (value !== null) {
-                    this.select(value)
+            search(value) {
+                if (value == '') {
+                    this.resetHighlighted()
                 }
-            },
+            }
         },
 
-        methods: {
+		methods: {
             toggle() {
                 this.isOpen ? this.close() : this.open()
             },
@@ -251,7 +259,7 @@
                 if (this.isOpen) {
                     this.resetSearch()
                     this.resetHighlighted()
-                    
+
                     this.isOpen = false
                     this.$refs.button.focus()
                 }                
@@ -267,48 +275,51 @@
                 }
             },
 
+            addSelection(option) {
+                if (this.multiple) {
+                    this.selection.push(option.value)
+                } else {
+                    this.selection = [ option.value ]
+                    this.close()
+                }
+            },
+
+            removeSelection(index) {
+                this.selection.splice(index, 1)
+            },
+
+            toggleSelection(option) {
+                if (this.inSelection(option)) {
+                    this.removeSelection(_.indexOf(this.selection, option))
+                } else {
+                    this.addSelection(option)
+                }
+            },
+
+            inSelection(option) {
+                return _.includes(this.selection, option.value)
+            },
+
             resetSearch() {
                 this.search = ''
-            },
-
-            select(option) {
-                let value = null
-
-                if (typeof option === 'object') {
-                    value = option['value']
-                } else {
-                    value = option
-                }
-
-                this.$emit('input', value)
-                this.$emit('change', value)
-                this.selected = option
-                this.close()
-            },
-
-            selectHighlighted() {
-                this.select(this.filteredOptions[this.highlighted])
-            },
-
-            isSelected(option) {
-                if (option.value && (this.selected !== null)) {
-                    return ((option.value === this.selected.value) || (option.value === this.selected))
-                }
-
-                return (option === this.selected)
             },
 
             isHighlighted(index) {
                 return (index === this.highlighted)
             },
 
-            resetHighlighted() {
-                this.highlighted = 0
+            selectHighlighted() {
+                let option = this.filteredOptions[this.highlighted]
+                let value  = option.value || option
 
-                this.scrollToHighlighted()
+                this.toggleSelection(value)
             },
 
-            highlight(index) {
+            resetHighlighted() {
+                this.highlighted = 0
+            },
+
+            setHighlight(index) {
                 this.highlighted = index
 
                 if (this.highlighted > (this.filteredOptions.length - 1)) {
@@ -319,22 +330,28 @@
                     this.highlighted = this.filteredOptions.length - 1
                 }
 
-                this.scrollToHighlighted()
+                this.highlight.scrollIntoViewIfNeeded()
             },
 
             highlightNext() {
-                this.highlight(this.highlighted + 1)
+                this.setHighlight(this.highlighted + 1)
+
+                this.highlight.scrollIntoViewIfNeeded()
             },
 
             highlightPrevious() {
-                this.highlight(this.highlighted - 1)
-            },
+                this.setHighlight(this.highlighted - 1)
 
-            scrollToHighlighted() {
-                this.$refs.options.children[this.highlighted].scrollIntoView({
-                    block: 'nearest'
-                })
-            },
+                this.highlight.scrollIntoViewIfNeeded()
+            }
+        },
+
+        mounted() {
+            if (_.isString(this.value)) {
+                this.selection = this.value.split(',')
+            } else if (_.isNumber(this.value)) {
+                this.selection = [ _.toString(this.value) ]
+            }
         },
 
         beforeDestroy() {

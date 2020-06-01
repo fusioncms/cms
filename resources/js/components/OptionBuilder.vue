@@ -90,6 +90,22 @@
             value(value) {
                 this.options = value
             },
+
+            'editing.value'(value) {
+                if (value) {
+                    // Note:
+                    //  commas are reserved for multi-field values
+                    this.editing.value = value.replace(/,/, '')
+                }
+            },
+
+            'option.value'(value) {
+                if (value) {
+                    // Note:
+                    //  commas are reserved for multi-field values
+                    this.option.value = value.replace(/,/, '')
+                }
+            }
         },
 
         methods: {

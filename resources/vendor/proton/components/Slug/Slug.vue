@@ -138,8 +138,8 @@
                     .trim()
                     .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
                     .replace(/&+/gi, 'and')                  // Replace 1 or more & characters with the word 'and'
+                    .replace(/([^\w\s]|_)+/g, ' ')           // Remove all non-word chars
                     .replace(/\s+/g, this.delimiter)         // Convert spaces with delimiter
-                    .replace(/[^\w\-]+/g, '')                // Remove all non-word chars
                     .replace(d, this.delimiter)              // Replace multiple delimiters with a single one
             }
         }
