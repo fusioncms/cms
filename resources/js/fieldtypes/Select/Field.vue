@@ -7,6 +7,9 @@
             :value="value"
             @input="$emit('input', $event)"
             :options="options"
+            :multiple="multiple"
+            :showControls="showControls"
+            :filterable="filterable"
         ></p-select>
     </div>
 </template>
@@ -30,6 +33,18 @@
         computed: {
             options() {
                 return this.field.settings.options
+            },
+
+            filterable() {
+                return this.field.settings.filterable == '1' ? true : false
+            },
+
+            multiple() {
+                return this.field.settings.multiple == '1' ? true : false
+            },
+
+            showControls() {
+                return this.field.settings.showControls == '1' ? true : false
             },
         },
 
