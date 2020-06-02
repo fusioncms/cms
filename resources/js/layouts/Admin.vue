@@ -58,8 +58,10 @@
             </div>
 
             <!-- Local Environment Warning -->
-            <div class="w-full bg-warning-100 flex flex-col items-center justify-between text-gray-900 shadow border-l text-center" v-if="environment == 'local'">
-                <span class="text-sm font-bold py-2 px-6">Your website is currently in the local development environment.</span>
+            <div class="w-full bg-warning-100 flex flex-col items-center justify-between text-gray-900 shadow border-l text-center" v-if="environment == 'local'" style="height: 40px;">
+                <div class="flex-1 px-6">
+                    <span class="text-sm font-bold leading-none">Local Development Environment</span>
+                </div>
 
                 <div class="w-full" style="height: 4px; background: repeating-linear-gradient(-45deg, #F2D024, #F2D024 12px, #22292F 10px, #22292F 23px);"></div>
             </div>

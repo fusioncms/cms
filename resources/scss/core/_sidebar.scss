@@ -115,11 +115,7 @@
         ;
 
         &:hover {
-            @apply
-                cursor-pointer
-                text-gray-100
-                bg-gray-900
-            ;
+            @apply cursor-pointer bg-gray-900 text-gray-100;
         }
     }
 
@@ -159,12 +155,16 @@
         > li {
             a {
                 padding-left: 50px;
+
+                @apply text-gray-500;
+
+                &:hover {
+                    @apply text-gray-100;
+                }
             }
 
             .sidebar__menu-text {
-                @apply
-                    text-xs
-                ;
+                @apply text-xs;
             }
         }
     }
