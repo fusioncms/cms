@@ -28,8 +28,11 @@
             </div>
 
             <span class="sidebar__menu-toggle" v-if="hasChildren">
-                <fa-icon v-if="! showChildren" :icon="['fas', 'plus']" class="fa-inverse! fa-fw"></fa-icon>
-                <fa-icon v-else :icon="['fas', 'minus']" class="fa-inverse! fa-fw"></fa-icon>
+
+                <plus-icon v-if="! showChildren" size="1.2x"></plus-icon>
+                <minus-icon v-else size="1.2x"></minus-icon>
+                <!-- <fa-icon v-if="! showChildren" :icon="['fas', 'plus']" class="fa-inverse! fa-fw"></fa-icon> -->
+                <!-- <fa-icon v-else :icon="['fas', 'minus']" class="fa-inverse! fa-fw"></fa-icon> -->
             </span>
         </a>
 
@@ -42,8 +45,8 @@
                     @click.native="mobileToggle()"
                 >
                     <div class="flex items-center">
-                        <fa-icon :icon="['fas', 'chevron-right']" class="fa-xs mr-2 text-gray-600" style="font-size: .5rem;"></fa-icon>
-                        <span class="sidebar__menu-text">{{ child.title }}</span>
+                        <!-- <fa-icon :icon="['fas', 'chevron-right']" class="fa-xs mr-2 text-gray-600" style="font-size: .5rem;"></fa-icon> -->
+                        <span class="sidebar__menu-text text-gray-600">{{ child.title }}</span>
                     </div>
                 </router-link>
             </li>
@@ -54,9 +57,15 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import { PlusIcon, MinusIcon } from 'vue-feather-icons'
 
     export default {
         name: 'sidebar-item',
+
+        components: {
+            'plus-icon': PlusIcon,
+            'minus-icon': MinusIcon,
+        },
 
         props: {
             icon: {

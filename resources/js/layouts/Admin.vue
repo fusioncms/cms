@@ -6,9 +6,9 @@
 
         <div
             class="flex flex-col flex-1"
-            :class="{'md:pl-250px': isSidebarOpen, 'pl-0': !isSidebarOpen}"
+            :class="{'md:pl-225px': isSidebarOpen, 'pl-0': !isSidebarOpen}"
             style="margin-top: 55px; transition: all 0.3s ease;"
-            :style="{'left: 0;': isSidebarOpen, 'left: -250px;': !isSidebarOpen}"
+            :style="{'left: 0;': isSidebarOpen, 'left: -225px;': !isSidebarOpen}"
         >
             <!-- Header -->
             <div

@@ -14,9 +14,9 @@ const cursors = {
 
 const screens = {
     sm: '640px',
-    md: '1018px', // 768 + 250
-    lg: '1274px', // 1024 + 250
-    xl: '1530px', // 1280 + 250
+    md: '993px', // 768 + 225
+    lg: '1249px', // 1024 + 225
+    xl: '1505px', // 1280 + 225
 }
 
 const spacing = {
@@ -89,12 +89,13 @@ const spacing = {
     '75px': '75px',
     '90px': '90px',
     '100px': '100px',
+    '225px': '225px',
     '250px': '250px',
     '300px': '300px',
     '400px': '400px',
     '500px': '500px',
 
-    'full-sidebar-open': 'calc(100% - 250px)',
+    'full-sidebar-open': 'calc(100% - 225px)',
     'full-sidebar-collapsed': 'calc(100%)',
 }
 
