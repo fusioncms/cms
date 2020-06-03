@@ -130,7 +130,7 @@
 
         computed: {
             ...mapGetters({
-                user: 'user/getUser',
+                user: 'auth/getUser',
                 navigation: 'navigation/getNavigation',
                 version: 'fusion/getVersion',
             }),

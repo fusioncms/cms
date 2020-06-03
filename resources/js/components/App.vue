@@ -32,14 +32,13 @@
         },
 
         created() {
-            this.$store.commit('user/setUser', this.user)
+            this.$store.commit('auth/setUser', this.user)
             this.$store.commit('fusion/setVersion', this.version)
 
-            this.$store.dispatch('auth/authorize', {
+            this.$store.dispatch('auth/authenticate', {
                 guestNext: { name: 'login', query: { redirect: location.pathname } },
                 adminNext: { name: 'dashboard' }
             })
         }
-
     }
 </script>

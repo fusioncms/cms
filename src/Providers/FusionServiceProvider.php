@@ -81,6 +81,9 @@ class FusionServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerTelescope();
 
+        $kernel = $this->app->make(\Illuminate\Contracts\Http\Kernel::class);
+        $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
+
         $this->commands([
             \Fusion\Console\UninstallCommand::class,
             \Fusion\Console\InstallCommand::class,
@@ -193,17 +196,35 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerConfig()
     {
-        $this->mergeConfigFrom(
+        $this->mergeConfigFile(
             __DIR__.'/../../config/analytics.php', 'analytics'
         );
 
-        $this->mergeConfigFrom(
+        $this->mergeConfigFile(
             __DIR__.'/../../config/fusion.php', 'fusion'
         );
 
-        $this->mergeConfigFrom(
+        $this->mergeConfigFile(
             __DIR__.'/../../config/permission.php', 'permission'
         );
+
+        $this->mergeConfigFile(
+            __DIR__.'/../../config/sanctum.php', 'sanctum'
+        );
+    }
+
+    /**
+     * Merge in `fusioncms` config values.
+     * 
+     * @param  string $key
+     * @param  string $path
+     * @return void
+     */
+    private function mergeConfigFile($path, $key)
+    {
+        $this->app['config']->set($key, array_merge(
+            $this->app['config']->get($key, []), require $path
+        ));
     }
 
     /**
@@ -255,7 +276,7 @@ class FusionServiceProvider extends ServiceProvider
     private function routeAPIConfiguration()
     {
         return [
-            'middleware' => ['api', 'auth:api'],
+            'middleware' => ['api', 'auth:sanctum'],
             'namespace'  => 'Fusion\Http\Controllers\API',
             'prefix'     => 'api',
         ];
