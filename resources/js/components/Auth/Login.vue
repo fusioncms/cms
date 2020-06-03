@@ -65,8 +65,6 @@
             submit() {
                 this.form.post('/login')
                     .then(response => {
-                        this.$store.commit('user/setUser', response.data)
-
                         if (!!this.$route.query.redirect)
                             location.href = this.$route.query.redirect
                         else
