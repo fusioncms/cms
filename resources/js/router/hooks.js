@@ -24,7 +24,7 @@ export const before = (to, from, next) => {
 }
 
 export const resolve = (to, from, next) => {
-    if (store.state.auth.isAuthorized) {
+    if (store.state.auth.isAuthenticated) {
         store.dispatch('navigation/fetchAdminNavigation')
         store.dispatch('settings/fetchSettings')
     }
