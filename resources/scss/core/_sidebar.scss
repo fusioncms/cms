@@ -22,8 +22,8 @@
             h-full
         ;
 
-        left: -250px;
-        width: 250px !important;
+        left: -225px;
+        width: 225px !important;
     }
 
     &--opened {
@@ -109,17 +109,13 @@
             font-semibold
             text-gray-700
             no-underline
-            text-sm
+            text-xs
             flex-1
             flex
         ;
 
         &:hover {
-            @apply
-                cursor-pointer
-                text-gray-100
-                bg-gray-900
-            ;
+            @apply cursor-pointer bg-gray-900 text-gray-100;
         }
     }
 
@@ -131,7 +127,7 @@
             py-3
         ;
 
-        width: 75px;
+        width: 50px;
     }
 
     &__menu-text {
@@ -140,7 +136,7 @@
             items-center
             leading-none
             font-serif
-            text-sm
+            text-xs
             flex
             py-3
         ;
@@ -158,13 +154,17 @@
     &__menu-link-children {
         > li {
             a {
-                padding-left: 75px;
+                padding-left: 50px;
+
+                @apply text-gray-500;
+
+                &:hover {
+                    @apply text-gray-100;
+                }
             }
 
             .sidebar__menu-text {
-                @apply
-                    text-xs
-                ;
+                @apply text-xs;
             }
         }
     }

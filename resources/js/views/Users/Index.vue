@@ -91,7 +91,7 @@
 
         computed: {
             ...mapGetters({
-                user: 'user/getUser',
+                user: 'auth/getUser',
             }),
 
             filteredRoles() {

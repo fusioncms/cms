@@ -171,7 +171,7 @@ class LoginTest extends TestCase
     public function a_logged_in_user_can_logout()
     {
         $this
-            ->actingAs($this->user)
+            ->be($this->user, 'web')
             ->post('/logout')
             ->assertRedirect('/');
 

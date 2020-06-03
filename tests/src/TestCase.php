@@ -13,6 +13,9 @@ use Fusion\Tests\Concerns\MakesDatabaseAssertions;
 use Spatie\Activitylog\ActivitylogServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
 use Laravel\Ui\UiServiceProvider;
+use Laravel\Sanctum\Sanctum;
+use Laravel\Sanctum\SanctumServiceProvider;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -52,6 +55,32 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         $this->user           = $this->createUser('Ducky Consumer', 'guest@example.com', 'secret', 'user');
         $this->unverifiedUser = $this->createUser('Unverified Consumer', 'unverified@example.com', 'secret', null, ['email_verified_at' => null]);
         $this->guest          = $this->createGuest();
+    }
+
+    /**
+     * Set the currently logged in user for the application.
+     * [override]
+     * 
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user 
+     * @param string|null  $driver
+     * @return $this
+     */
+    public function actingAs(Authenticatable $user, $driver = null)
+    {
+        return $this->be($user, $driver);
+    }
+
+    /**
+     * Decorator for Sanctum::actingAs()
+     *
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user 
+     * @param string|null  $driver
+     * @param array        $abilities
+     * @return $this
+     */
+    public function be(Authenticatable $user, $driver = null)
+    {
+        return parent::be(Sanctum::actingAs($user), $driver);
     }
 
     /**
@@ -116,6 +145,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
             // Laravel
             UiServiceProvider::class,
+            SanctumServiceProvider::class,
 
             // Caffeinated
             FlashServiceProvider::class,

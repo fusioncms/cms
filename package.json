@@ -64,6 +64,7 @@
         "plyr": "~3.5.10",
         "popper.js": "^1.16.1",
         "vue-apexcharts": "^1.5.2",
+        "vue-feather-icons": "^5.0.0",
         "vue-head": "^2.1.2",
         "vue-moment": "^4.0.0",
         "vue-mq": "^1.0.1",
