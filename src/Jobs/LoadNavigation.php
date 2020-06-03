@@ -113,7 +113,7 @@ class LoadNavigation
 
             $menu->configure->add('Matrix')->data([
                 'to'   => '/matrices',
-                'icon' => 'hashtag',
+                'icon' => 'layer-group',
             ]);
 
             $menu->configure->add('Menus')->data([
