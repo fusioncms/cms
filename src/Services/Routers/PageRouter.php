@@ -11,9 +11,9 @@ class PageRouter extends Router
 {
     public function handle(Request $request)
     {
-        $matrices = Matrix::where('type', 'page')->get();
+        $pages = Matrix::where('type', 'page')->get();
 
-        foreach ($matrices as $matrix) {
+        foreach ($pages as $matrix) {
             $found = $this->matchRoute($matrix->route, $request);
 
             if ($found === false or empty($matrix->template)) {
