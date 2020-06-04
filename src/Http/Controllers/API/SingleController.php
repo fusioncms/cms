@@ -4,13 +4,13 @@ namespace Fusion\Http\Controllers\API;
 
 use Fusion\Models\Matrix;
 use Illuminate\Support\Str;
-use Fusion\Services\Builders\Page;
-use Fusion\Http\Requests\PageRequest;
-use Fusion\Http\Resources\PageResource;
+use Fusion\Services\Builders\Single;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Requests\SingleRequest;
+use Fusion\Http\Resources\SingleResource;
 use Fusion\Http\Resources\MatrixResource;
 
-class PageController extends Controller
+class SingleController extends Controller
 {
     /**
      * Display the specified resource.
@@ -23,10 +23,10 @@ class PageController extends Controller
         $this->authorize('entries.show');
 
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
-        $model  = (new Page($matrix->handle))->make();
+        $single = (new Single($matrix->handle))->make();
 
         try {
-            return new PageResource($model->firstOrFail());
+            return new SingleResource($single->firstOrFail());
         } catch (\Exception $exception) {
             return new MatrixResource($matrix);
         }
@@ -35,22 +35,22 @@ class PageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Fusion\Http\Requests\PageRequest $request
+     * @param  \Fusion\Http\Requests\SingleRequest $request
      * @param  integer $id
-     * @return \Fusion\Http\Resources\PageResource
+     * @return \Fusion\Http\Resources\SingleResource
      */
-    public function update(PageRequest $request, $id)
+    public function update(SingleRequest $request, $id)
     {
         $matrix     = $request->matrix;
         $attributes = $request->validated();
 
-        $entry = $request->model->updateOrCreate(['matrix_id' => $id], $attributes);
+        $single = $request->model->updateOrCreate(['matrix_id' => $id], $attributes);
 
         // persist relationships..
         foreach ($request->relationships as $relationship) {
-            $relationship->type()->persistRelationship($entry, $relationship);
+            $relationship->type()->persistRelationship($single, $relationship);
         }
 
-        return new PageResource($entry);
+        return new SingleResource($single);
     }
 }

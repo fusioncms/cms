@@ -38,14 +38,14 @@ class SyncPermissions
             foreach(Arr::dot($values) as $name => $value) {
 
                 // Allow for condensed version w/ autogen description.
-                // i.e. 'pages' => [ 'show', 'create', ... ]
+                // i.e. 'single' => [ 'show', 'create', ... ]
                 $matches = [];
-                
+
                 if (preg_match('/([a-z]+)\.(\d+)/i', $name, $matches)) {
                     $name  = str_replace($matches[2], $value, $name);
                     $value = ucfirst($value) . ' a ' . Str::of($matches[1])->singular()->ucfirst();
                 }
-                
+
                 $permission = Permission::updateOrCreate(
                     [ 'name' => $name ],
                     [

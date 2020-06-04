@@ -4,23 +4,23 @@ namespace Fusion\Services\Routers;
 
 use Fusion\Models\Matrix;
 use Illuminate\Http\Request;
-use Fusion\Services\Builders\Page;
+use Fusion\Services\Builders\Single;
 use Illuminate\Support\Facades\Gate;
 
-class PageRouter extends Router
+class SingleRouter extends Router
 {
     public function handle(Request $request)
     {
-        $pages = Matrix::where('type', 'page')->get();
+        $singles = Matrix::where('type', 'single')->get();
 
-        foreach ($pages as $matrix) {
+        foreach ($singles as $matrix) {
             $found = $this->matchRoute($matrix->route, $request);
 
             if ($found === false or empty($matrix->template)) {
                 continue 1;
             }
 
-            $model = (new Page($matrix->handle))->make();
+            $model = (new Single($matrix->handle))->make();
             $page  = $model->firstOrFail();
 
             if (!$page->status) {

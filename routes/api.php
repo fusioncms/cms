@@ -139,11 +139,11 @@ Route::prefix('modules')->group(function() {
 
 
 /**
- * API - Page Routes
+ * API - Single Routes
  */
-Route::prefix('pages')->group(function() {
-	Route::get('{slug}',   'PageController@show');
-	Route::patch('{page}', 'PageController@update');
+Route::prefix('singles')->group(function() {
+	Route::get('{slug}',   'SingleController@show');
+	Route::patch('{single}', 'SingleController@update');
 });
 
 

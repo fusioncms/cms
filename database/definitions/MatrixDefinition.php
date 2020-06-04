@@ -22,7 +22,7 @@ $factory->define(Fusion\Models\Matrix::class, function (Faker $faker) {
         'handle'           => Str::slug($name, '_'),
         'slug'             => Str::slug($name, '-'),
         'description'      => $faker->sentence,
-        'type'             => $faker->randomElement(['page', 'collection']),
+        'type'             => $faker->randomElement(['single', 'collection']),
         'sidebar'          => $faker->boolean(50),
         'quicklink'        => $faker->boolean(50),
         'icon'             => $faker->randomElement(['pencil-alt', 'plane', 'book', 'brain']),

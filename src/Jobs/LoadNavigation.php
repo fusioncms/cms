@@ -47,12 +47,12 @@ class LoadNavigation
                             'icon'  => $matrix->icon ?: 'pencil-alt',
                         ]);
 
-                        $menu->{Str::camel($matrix->name)}->add(($matrix->type == 'page' ? $matrix->reference_singular : $matrix->reference_plural), '#')->data([
+                        $menu->{Str::camel($matrix->name)}->add(($matrix->type == 'single' ? $matrix->reference_singular : $matrix->reference_plural), '#')->data([
                             'to' => $matrix->adminPath
                         ]);
 
                         foreach ($matrix->children as $child) {
-                            $menu->{Str::camel($matrix->name)}->add(($child->type == 'page' ? $child->reference_singular : $child->reference_plural))->data([
+                            $menu->{Str::camel($matrix->name)}->add(($child->type == 'single' ? $child->reference_singular : $child->reference_plural))->data([
                                 'to' => $child->adminPath
                             ]);
                         }

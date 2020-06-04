@@ -6,7 +6,7 @@
 
         <portal to="subtitle">{{ matrix.description }}</portal>
 
-        <shared-form :form="form" :submit="submit" :page="page" :matrix="matrix"></shared-form>
+        <shared-form :form="form" :submit="submit" :single="single" :matrix="matrix"></shared-form>
     </div>
 </template>
 
@@ -27,7 +27,7 @@
         data() {
             return {
                 matrix: {},
-                page: {},
+                single: {},
                 form: new Form({}),
             }
         },
@@ -60,8 +60,8 @@
 
         methods: {
             submit() {
-                this.form.patch('/api/pages/' + this.matrix.id).then((response) => {
-                    toast('Page saved successfully', 'success')
+                this.form.patch('/api/singles/' + this.matrix.id).then((response) => {
+                    toast('Single saved successfully', 'success')
                 }).catch((response) => {
                     toast(response.message, 'failed')
                 })
@@ -69,11 +69,11 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            getPage(to.params.page, (error, page, matrix, fields) => {
+            getSingle(to.params.single, (error, single, matrix, fields) => {
                 next((vm) => {
                     vm.matrix = matrix
-                    vm.page = page
-                    vm.form = new Form(fields, true)
+                    vm.single = single
+                    vm.form   = new Form(fields, true)
 
                     vm.$emit('updateHead')
 
@@ -85,10 +85,10 @@
         },
 
         beforeRouteUpdate(to,from,next) {
-            getPage(to.params.page, (error, page, matrix, fields) => {
+            getSingle(to.params.single, (error, single, matrix, fields) => {
                 this.matrix = matrix
-                this.page = page
-                this.form = new Form(fields, true)
+                this.single = single
+                this.form   = new Form(fields, true)
 
                 this.$emit('updateHead')
 
@@ -101,17 +101,17 @@
         }
     }
 
-    export function getPage(slug, callback) {
-        axios.get('/api/pages/' + slug).then((response) => {
-            let page = {}
+    export function getSingle(slug, callback) {
+        axios.get('/api/singles/' + slug).then((response) => {
+            let single = {}
             let matrix = {}
 
-            if (_.has(response, 'data.data.page')) {
+            if (_.has(response, 'data.data.single')) {
                 matrix = response.data.data.matrix
-                page   = response.data.data.page
+                single   = response.data.data.single
             } else {
                 matrix = response.data.data
-                page   = {
+                single   = {
                     name: matrix.name,
                     slug: matrix.slug,
                     status: 1
@@ -119,20 +119,20 @@
             }
 
             let fields = {
-                name: page.name,
-                slug: page.slug,
-                status: page.status,
+                name: single.name,
+                slug: single.slug,
+                status: single.status,
             }
 
             if (matrix.fieldset) {
                 _.forEach(matrix.fieldset.sections, function(section) {
                     _.forEach(section.fields, function(field) {
-                        fields[field.handle] = page[field.handle]
+                        fields[field.handle] = single[field.handle]
                     })
                 })
             }
 
-            callback(null, page, matrix, fields)
+            callback(null, single, matrix, fields)
         })
     }
 </script>

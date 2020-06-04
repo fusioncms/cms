@@ -16,7 +16,7 @@ return [
 	'menus'       => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'modules'     => [ 'viewAny', 'create', 'update', 'delete' ],
 	'nodes'       => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
-	'pages'       => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
+	'singles'     => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'responses'   => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'roles'       => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'settings'    => [ 'viewAny', 'view', 'update' ],

@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Fusion\Contracts\Builder as BuilderContract;
 
-class Page extends Builder implements BuilderContract
+class Single extends Builder implements BuilderContract
 {
     /**
      * @var string
@@ -22,7 +22,7 @@ class Page extends Builder implements BuilderContract
     protected $model;
 
     /**
-     * Create a new Page instance.
+     * Create a new Single instance.
      *
      * @param  string  $matrix
      */
@@ -62,8 +62,8 @@ class Page extends Builder implements BuilderContract
             }
         }
 
-        $path = fusion_path('/src/Models/Pages/'.$className.'.php');
-                $stub = File::get(fusion_path('/stubs/matrices/page.stub'));
+        $path = fusion_path('/src/Models/Singles/'.$className.'.php');
+                $stub = File::get(fusion_path('/stubs/matrices/single.stub'));
 
         $contents = strtr($stub, [
             '{class}'         => $className,
@@ -81,6 +81,6 @@ class Page extends Builder implements BuilderContract
 
         File::put($path, $contents);
 
-        return app()->make('Fusion\Models\Pages\\' . $className);
+        return app()->make('Fusion\Models\Singles\\' . $className);
     }
 }

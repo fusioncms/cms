@@ -25,7 +25,7 @@ class MatrixFactory implements Factory
     /**
      * @var boolean
      */
-    protected $asPage = false;
+    protected $asSingle = false;
 
     /**
      * @var boolean
@@ -64,8 +64,8 @@ class MatrixFactory implements Factory
             $overrides['type'] = 'collection';
         }
 
-        if ($this->asPage) {
-            $overrides['type'] = 'page';
+        if ($this->asSingle) {
+            $overrides['type'] = 'single';
         }
 
         if (! $this->fieldset) {
@@ -105,13 +105,13 @@ class MatrixFactory implements Factory
     }
 
     /**
-     * Create a matrix as a page.
+     * Create a matrix as a single.
      *
      * @return \MatrixFactory
      */
-    public function asPage()
+    public function asSingle()
     {
-        $this->asPage = true;
+        $this->asSingle = true;
 
         return $this;
     }

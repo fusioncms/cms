@@ -102,7 +102,7 @@ class {class} extends Model
         $action     = Str::ucfirst($eventName);
         $modelName  = Str::singular($matrix->name);
         $properties = [
-            'link' => "collections/{$matrix->slug}/{$entry->id}/edit",
+            'link' => "collection/{$matrix->slug}/{$entry->id}/edit",
             'icon' => $matrix->icon
         ];
 

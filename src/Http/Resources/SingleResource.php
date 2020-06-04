@@ -4,7 +4,7 @@ namespace Fusion\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PageResource extends JsonResource
+class SingleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,7 @@ class PageResource extends JsonResource
     {
         $resource = [
             'matrix' => new MatrixResource($this->matrix),
-            'page'   => [
+            'single'   => [
                 'name'   => $this->name ?? $this->matrix->name,
                 'slug'   => $this->slug ?? $this->matrix->slug,
                 'status' => $this->status,
@@ -25,7 +25,7 @@ class PageResource extends JsonResource
 
         if ($this->fields) {
             foreach ($this->fields as $field) {
-                $resource['page'][$field->handle] = $field->type()->getResource($this->resource, $field);
+                $resource['single'][$field->handle] = $field->type()->getResource($this->resource, $field);
             }
         }
 

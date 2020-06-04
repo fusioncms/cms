@@ -39,7 +39,7 @@
                 this.form.post('/api/collections/' + this.collection.slug).then((response) => {
                     toast('Entry saved successfully', 'success')
 
-                    this.$router.push('/collections/' + this.collection.slug)
+                    this.$router.push('/collection/' + this.collection.slug)
                 }).catch((response) => {
                     toast(response.message, 'failed')
                 })
@@ -50,7 +50,7 @@
             getCollection(to.params.collection, (error, collection, fields) => {
                 if (error) {
                     next((vm) => {
-                        vm.$router.push('/collections/' + vm.$router.currentRoute.params.collection)
+                        vm.$router.push('/collection/' + vm.$router.currentRoute.params.collection)
 
                         toast(error.toString(), 'danger')
                     })
@@ -69,7 +69,7 @@
         beforeRouteUpdate(to, from, next) {
             getCollection(to.params.collection, (error, matrix, fields) => {
                 if (error) {
-                    this.$router.push('/collections/' + this.$router.currentRoute.params.collection)
+                    this.$router.push('/collection/' + this.$router.currentRoute.params.collection)
 
                     toast(error.toString(), 'danger')
                 } else {

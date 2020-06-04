@@ -21,7 +21,7 @@ class RoleTest extends TestCase
     public function each_role_can_have_one_or_many_permissions()
     {
         $role = Role::where('name', 'user')->first();
-        $role->givePermissionTo(['pages.create', 'pages.update']);
+        $role->givePermissionTo(['singles.create', 'singles.update']);
 
         $this->assertInstanceOf(Collection::class, $role->permissions);
         $this->assertInstanceOf(Permission::class, $role->permissions->first());
