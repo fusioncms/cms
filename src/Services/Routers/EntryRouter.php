@@ -17,8 +17,8 @@ class EntryRouter extends Router
             ->where('template', '<>', '')
             ->get();
 
-        foreach ($collections as $collection) {
-            $found = $this->matchRoute($collection->route, $request);
+        foreach ($collections as $matrix) {
+            $found = $this->matchRoute($matrix->route, $request);
 
             if ($found === false) {
                 continue 1;
@@ -27,7 +27,7 @@ class EntryRouter extends Router
             // Eager load our relatable fields
             $relationships = [];
 
-            foreach ($collection->fieldset->fields as $field) {
+            foreach ($matrix->fieldset->fields as $field) {
                 $fieldtype = fieldtypes()->get($field->type);
 
                 if ($fieldtype->hasRelationship()) {
@@ -35,25 +35,25 @@ class EntryRouter extends Router
                 }
             }
 
-            $model  = (new Collection($collection->handle))->make();
-            $entry  = $model->with($relationships)->where('slug', $found->parameter('slug'))->first();
+            $model = (new Collection($matrix->handle))->make();
+            $page  = $model->with($relationships)->where('slug', $found->parameter('slug'))->first();
 
-            if (is_null($entry)) {
+            if (is_null($page)) {
                 continue 1;
             }
 
-            if (!$entry->status) {
+            if (!$page->status) {
                 if (Gate::denies('access.controlPanel') || !request()->has('preview')) {
                     continue 1;
                 }
             }
 
-            $data = $this->bindRouteData($collection->route, $request, [
-                'collection' => $collection,
-                'entry'      => $entry,
+            $data = $this->bindRouteData($matrix->route, $request, [
+                'matrix' => $matrix,
+                'page'   => $page,
             ]);
 
-            return view($collection->template, $data);
+            return view($matrix->template, $data);
         }
     }
 }
