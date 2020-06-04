@@ -4,7 +4,7 @@
 			<app-title icon="anchor">Edit Menu</app-title>
 		</portal>
 
-        <shared-form :form="form" :submit="submit" :id="id" :fieldset="fieldset" @sectionBuilderInput="sectionChange()"></shared-form>
+        <shared-form v-if="form" :form="form"></shared-form>
     </div>
 </template>
 
@@ -16,7 +16,7 @@
         head: {
             title() {
                 return {
-                    inner: this.form.name || 'Loading...'
+                    inner: _.has(this.form, 'name') ? this.form.name : 'Loading...'
                 }
             }
         },
@@ -24,14 +24,8 @@
         data() {
             return {
                 id: null,
-                fieldset: null,
-                form: new Form({
-                    name: '',
-                    handle: '',
-                    description: '',
-
-                    fieldset: {},
-                }, true)
+                sections: [],
+                form: null
             }
         },
 
@@ -39,49 +33,70 @@
             'shared-form': SharedForm
         },
 
-        methods: {
-            submit() {
-                let fieldsetForm = {}
-                fieldsetForm.sections = this.form.fieldset.sections
-
-                axios.post(`/api/fieldsets/${this.form.fieldset.id}/sections`, fieldsetForm).then((response) => {
-                    this.form.patch('/api/menus/' + this.id).then((response) => {
-                        toast('Menu successfully saved', 'success')
-
-                        this.$router.push('/menus')
-                    }).catch((response) => {
-                        toast(response.message, 'failed')
-                    })
-                })
-            },
-
-            sectionChange() {
-                if (!this.form.hasChanges) {
-                    this.form.onFirstChange()
+        watch: {
+            sections: {
+                deep: true,
+                handler(value) {
+                    if (! this.hasChanges) {
+                        this.form.onFirstChange()
+                    }
                 }
             }
         },
 
-        beforeRouteEnter(to, from, next) {
-            axios.all([
-                axios.get('/api/menus/' + to.params.menu),
-            ]).then(axios.spread(function (menu) {
-                next(function(vm) {
-                    vm.id = menu.data.data.id
+        methods: {
+            submit() {
+                this.form.patch(`/api/menus/${this.id}`)
+                    .then(() => {
+                        axios.post(`/api/fieldsets/${this.form.fieldset.id}/sections`, { sections: this.sections })
+                            .then(() => {
+                                toast('Menu successfully saved', 'success')
 
-                    vm.form.name = menu.data.data.name
-                    vm.form.handle = menu.data.data.handle
-                    vm.form.description = menu.data.data.description
-
-                    vm.form.fieldset = menu.data.data.fieldset
-
-                    vm.$emit('updateHead')
-
-                    vm.$nextTick(function(){
-                        vm.form.resetChangeListener()
+                                this.$router.push('/menus')
+                            }).catch((response) => {
+                                toast(response.message, 'failed')
+                            })
+                    }).catch((response) => {
+                        toast(response.message, 'failed')
                     })
-                })
-            }))
+            }
         },
+
+        beforeRouteEnter(to, from, next) {
+            getMenu(to.params.menu, (error, menu) => {
+                if (error) {
+                    next((vm) => {
+                        vm.$router.push('/menus')
+
+                        toast(error.toString(), 'danger')
+                    })
+                } else {
+                    next((vm) => {
+                        vm.id       = menu.id
+                        vm.sections = menu.fieldset.sections
+
+                        vm.form = new Form({
+                            name:        menu.name,
+                            handle:      menu.handle,
+                            description: menu.description,
+                            fieldset:    menu.fieldset
+                        }, true)
+
+                        vm.$nextTick(() => {
+                            vm.$emit('updateHead')
+                            vm.form.resetChangeListener()
+                        })
+                    })
+                }
+            })
+        },
+    }
+
+    export function getMenu(menu, callback) {
+        axios.get(`/api/menus/${menu}`).then((response) => {
+            callback(null, response.data.data)
+        }).catch((error) => {
+            callback(new Error('The requested menu could not be found'))
+        })
     }
 </script>

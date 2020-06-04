@@ -3,7 +3,7 @@
         <portal to="actions">
             <div class="buttons">
                 <router-link :to="{ name: 'menus' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
             </div>
         </portal>
 
@@ -34,7 +34,7 @@
                     </p-tab>
 
                     <p-tab name="Fields">
-                        <section-builder v-model="form.fieldset.sections" @input="$emit('sectionBuilderInput')"></section-builder>
+                        <section-builder v-model="$parent.sections"></section-builder>
                     </p-tab>
                 </p-tabs>
             </div>
@@ -64,20 +64,16 @@
 <script>
     export default {
         props: {
-            id: {
-                type: Number,
+            resource: {
+                type: Object,
                 required: false,
-                default: 0
+                default: () => {}
             },
 
             form: {
                 type: Object,
                 required: true,
-            },
-
-            submit: {
-                required: true,
-            },
+            }
         },
     }
 </script>
