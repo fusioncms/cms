@@ -9,7 +9,7 @@
         "Themes\\Hello\\Providers\\ThemeServiceProvider"
     ],
 
-    "settings": {
+    "options": {
         "homepage": {
             "name": "Homepage",
             "description": "Customization options for the homepage.",
