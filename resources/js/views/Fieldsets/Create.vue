@@ -35,32 +35,37 @@
             'shared-form': SharedForm
         },
 
-        methods: {
-            submit() {
-                this.form.post('/api/fieldsets').then((response) => {
-                    let formData = {}
-                    let fieldsetResponse = response
-                    formData.sections = this.sections
-
-                    axios.post(`/api/fieldsets/${response.data.id}/sections`, formData).then((response) => {
-                        toast('Fieldset successfully created', 'success')
-
-                        this.$router.push('/fieldsets')
-                    })
-                }).catch((response) => {
-                    toast(response.message, 'failed')
-                })
-            },
-
-            sectionsChanged(value) {
-                if(! this.form.hasChanges) {
-                    this.form.onFirstChange()
+        watch: {
+            sections: {
+                deep: true,
+                handler(value) {
+                    if (! this.hasChanges) {
+                        this.form.onFirstChange()
+                    }
                 }
             }
         },
 
+        methods: {
+            submit() {
+                this.form.post('/api/fieldsets')
+                    .then((response) => {
+                        axios.post(`/api/fieldsets/${response.data.id}/sections`, { sections: this.sections })
+                            .then(() => {
+                                toast('Fieldset successfully created', 'success')
+
+                                this.$router.push('/fieldsets')
+                            }).catch((response) => {
+                                toast(response.message, 'failed')
+                            })
+                    }).catch((response) => {
+                        toast(response.message, 'failed')
+                    })
+            },
+        },
+
         mounted() {
-            this.$nextTick(function(){
+            this.$nextTick(() => {
                 this.form.resetChangeListener()
             })
         }

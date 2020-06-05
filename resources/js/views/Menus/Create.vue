@@ -4,7 +4,7 @@
 			<app-title icon="anchor">Create Menu</app-title>
 		</portal>
 
-        <shared-form :form="form" :submit="submit" @sectionBuilderInput="sectionChange()"></shared-form>
+        <shared-form :form="form"></shared-form>
     </div>
 </template>
 
@@ -23,11 +23,11 @@
 
         data() {
             return {
+                sections: [],
                 form: new Form({
                     name: '',
                     handle: '',
                     description: '',
-
                     fieldset: {},
                 }, true)
             }
@@ -37,33 +37,37 @@
             'shared-form': SharedForm
         },
 
-        methods: {
-            submit() {
-                this.form.post('/api/menus').then((response) => {
-                    let fieldsetForm = {}
-                    fieldsetForm.sections = this.form.fieldset.sections
-
-                    axios.post(`/api/fieldsets/${response.data.fieldset.id}/sections`, fieldsetForm).then((response) => {
-                        toast('Menu successfully saved', 'success')
-                    }).catch((response) => {
-                        toast(response.message, 'failed')
-                    })
-
-                    this.$router.push('/menus')
-                }).catch((response) => {
-                    toast(response.message, 'failed')
-                })
-            },
-
-            sectionChange() {
-                if (!this.form.hasChanges) {
-                    this.form.onFirstChange()
+        watch: {
+            sections: {
+                deep: true,
+                handler(value) {
+                    if (! this.hasChanges) {
+                        this.form.onFirstChange()
+                    }
                 }
             }
         },
 
+        methods: {
+            submit() {
+                this.form.post('/api/menus')
+                    .then((response) => {
+                        axios.post(`/api/fieldsets/${response.data.fieldset.id}/sections`, { sections: this.sections })
+                            .then((response) => {
+                                toast('Menu successfully saved', 'success')
+                                
+                                this.$router.push('/menus')
+                            }).catch((response) => {
+                                toast(response.message, 'failed')
+                            })
+                    }).catch((response) => {
+                        toast(response.message, 'failed')
+                    })
+            }
+        },
+
         mounted() {
-            this.$nextTick(function(){
+            this.$nextTick(() => {
                 this.form.resetChangeListener()
             })
         }

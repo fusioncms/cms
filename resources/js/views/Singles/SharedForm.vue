@@ -3,7 +3,7 @@
         <portal to="actions">
             <div class="buttons">
                 <router-link :to="{ name: 'dashboard' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
             </div>
         </portal>
 
@@ -35,7 +35,6 @@
 
                 <div v-else class="text-center">
                     <p>Things are looking a little empty here!</p>
-                    <router-link class="button" :to="'/matrices/' + matrix.id + '/edit'">Configure your page</router-link>
                 </div>
             </div>
         </div>
@@ -82,17 +81,17 @@
                 </div>
             </div>
 
-            <p-definition-list v-if="page">
+            <p-definition-list v-if="single">
                 <p-definition name="Status">
-                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': page.status, 'text-danger-500': ! page.status}"></fa-icon> {{ page.status ? 'Enabled' : 'Disabled' }}
+                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': single.status, 'text-danger-500': ! single.status}"></fa-icon> {{ single.status ? 'Enabled' : 'Disabled' }}
                 </p-definition>
 
                 <p-definition name="Created At">
-                    {{ $moment(page.created_at).format('Y-MM-DD, hh:mm a') }}
+                    {{ $moment(single.created_at).format('Y-MM-DD, hh:mm a') }}
                 </p-definition>
 
                 <p-definition name="Updated At">
-                    {{ $moment(page.updated_at).format('Y-MM-DD, hh:mm a') }}
+                    {{ $moment(single.updated_at).format('Y-MM-DD, hh:mm a') }}
                 </p-definition>
             </p-definition-list>
         </template>
@@ -102,7 +101,7 @@
 <script>
     export default {
         props: {
-            page: {
+            single: {
                 required: true
             },
 
@@ -113,11 +112,7 @@
             form: {
                 type: Object,
                 required: true,
-            },
-
-            submit: {
-                required: true,
-            },
+            }
         },
 
         computed: {

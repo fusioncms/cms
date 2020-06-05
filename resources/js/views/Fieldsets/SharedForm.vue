@@ -19,7 +19,7 @@
                     v-model="form.name">
                 </p-title>
 
-				<section-builder class="mt-6" v-model="sections" @input="$parent.sectionsChanged"></section-builder>
+				<section-builder class="mt-6" v-model="$parent.sections"></section-builder>
 			</div>
 		</div>
 
@@ -55,27 +55,17 @@
 
 <script>
     export default {
-    	props: {
-			resource: {
-				required: false,
-			},
+        props: {
+            resource: {
+                type: Object,
+                required: false,
+                default: () => {}
+            },
 
-    		form: {
-    			type: Object,
-    			required: true,
-    		}
-    	},
-
-    	computed: {
-    		sections: {
-    			get: function() {
-    				return this.$parent.sections
-				},
-
-    			set: function(section) {
-    				this.$parent.sections = section
-    			}
-    		}
-    	}
+            form: {
+                type: Object,
+                required: true,
+            }
+        }
     }
 </script>

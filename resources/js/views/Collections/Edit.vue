@@ -6,7 +6,12 @@
 
         <portal to="subtitle">{{ collection.description }}</portal>
 
-        <shared-form :form="form" :submit="submit" :entry="entry" :collection="collection"></shared-form>
+        <shared-form
+            v-if="form"
+            :form="form"
+            :entry="entry"
+            :collection="collection">
+        </shared-form>
     </div>
 </template>
 
@@ -18,7 +23,7 @@
         head: {
             title() {
                 return {
-                    inner: this.entry.name || 'Loading...'
+                    inner: _.has(this.form, 'name') ? this.form.name : 'Loading...'
                 }
             }
         },
@@ -27,7 +32,7 @@
             return {
                 collection: {},
                 entry: {},
-                form: new Form({}),
+                form: null,
             }
         },
 
@@ -40,7 +45,7 @@
                 this.form.patch('/api/collections/' + this.collection.slug + '/' + this.entry.id).then((response) => {
                     toast('Entry saved successfully', 'success')
 
-                    this.$router.push('/collections/' + this.collection.slug)
+                    this.$router.push('/collection/' + this.collection.slug)
                 }).catch((response) => {
                     toast(response.response.data.message, 'failed')
                 })
@@ -51,7 +56,7 @@
             getEntry(to.params.collection, to.params.id, (error, entry, matrix, fields) => {
                 if (error) {
                     next((vm) => {
-                        vm.$router.push('/collections/' + vm.$router.currentRoute.params.collection)
+                        vm.$router.push('/collection/' + vm.$router.currentRoute.params.collection)
 
                         toast(error.toString(), 'danger')
                     })
@@ -71,7 +76,7 @@
         beforeRouteUpdate(to, from, next) {
             getEntry(to.params.collection, to.params.id, (error, entry, matrix, fields) => {
                 if (error) {
-                    this.$router.push('/collections/' + this.$router.currentRoute.params.collection)
+                    this.$router.push('/collection/' + this.$router.currentRoute.params.collection)
 
                     toast(error.toString(), 'danger')
                 } else {

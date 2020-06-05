@@ -22,11 +22,11 @@ class CollectionResource extends JsonResource
 
         if ($fields) {
             foreach ($fields as $field) {
-                $resource['page'][$field->handle] = $this->resource['page']->{$field->handle};
+                $resource['collection'][$field->handle] = $this->resource['collection']->{$field->handle};
             }
         }
 
-        $resource['page']['status'] = $this->resource['page']['status'];
+        $resource['collection']['status'] = $this->resource['collection']['status'];
 
         return $resource;
     }

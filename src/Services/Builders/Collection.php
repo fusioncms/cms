@@ -22,7 +22,7 @@ class Collection extends Builder implements BuilderContract
     protected $model;
 
     /**
-     * Create a new Page instance.
+     * Create a new Collection instance.
      *
      * @param  string  $matrix
      */

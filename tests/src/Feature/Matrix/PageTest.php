@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class PageTest extends TestCase
+class SingleTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
@@ -28,8 +28,8 @@ class PageTest extends TestCase
         $this->fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($this->section)->create();
         $this->fieldContent = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($this->section)->create();
         $this->fieldset     = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->matrix       = \Facades\MatrixFactory::withName('Page')->asPage()->withFieldset($this->fieldset)->withRoute('{slug}')->withTemplate('index')->create();
-        $this->model        = (new \Fusion\Services\Builders\Page($this->matrix->handle))->make();
+        $this->matrix       = \Facades\MatrixFactory::withName('Single')->asSingle()->withFieldset($this->fieldset)->withRoute('{slug}')->withTemplate('index')->create();
+        $this->model        = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
     }
 
     /**
@@ -37,13 +37,13 @@ class PageTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group matrix
-     * @group page
+     * @group single
      */
-    public function a_user_with_permissions_can_update_a_page()
+    public function a_user_with_permissions_can_update_a_single()
     {
         $attributes = [
-            'name'    => 'Example Page',
-            'slug'    => 'example-page',
+            'name'    => 'Example Single',
+            'slug'    => 'example-single',
             'excerpt' => $this->faker->sentence(),
             'content' => $this->faker->paragraph(),
             'status'  => true
@@ -51,10 +51,10 @@ class PageTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/pages/' . $this->matrix->id, $attributes)
+            ->json('PATCH', '/api/singles/' . $this->matrix->id, $attributes)
             ->assertStatus(201);
 
-        $this->assertDatabaseHas('mx_page', $attributes);
+        $this->assertDatabaseHas('mx_single', $attributes);
     }
 
     /**
@@ -62,13 +62,13 @@ class PageTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group matrix
-     * @group page
+     * @group single
      */
-    public function a_user_without_control_panel_access_cannot_update_a_page()
+    public function a_user_without_control_panel_access_cannot_update_a_single()
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->json('PATCH', '/api/pages/' . $this->matrix->id, []);
+        $this->json('PATCH', '/api/singles/' . $this->matrix->id, []);
     }
 
     /**
@@ -76,15 +76,15 @@ class PageTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group matrix
-     * @group page
+     * @group single
      */
-    public function a_user_without_permissions_cannot_update_a_page()
+    public function a_user_without_permissions_cannot_update_a_single()
     {
         $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/pages/' . $this->matrix->id, []);
+            ->json('PATCH', '/api/singles/' . $this->matrix->id, []);
     }
 
     /**
@@ -92,13 +92,13 @@ class PageTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group matrix
-     * @group page
+     * @group single
      */
-    public function a_user_cannot_create_a_page_without_required_fields()
+    public function a_user_cannot_create_a_single_without_required_fields()
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/pages/' . $this->matrix->id, [])
+            ->json('PATCH', '/api/singles/' . $this->matrix->id, [])
             ->assertStatus(422)
             ->assertJsonValidationErrors(['name', 'slug', 'status']);
     }
@@ -108,14 +108,14 @@ class PageTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group matrix
-     * @group page
+     * @group single
      */
-    public function a_guest_can_visit_newly_created_page()
+    public function a_guest_can_visit_a_newly_created_single()
     {
-        list($entry, $attributes) = $this->newEntry();
+        list($single, $attributes) = $this->newSingle();
 
         $this
-            ->get($entry->slug)
+            ->get($single->slug)
             ->assertStatus(200);
     }
 
@@ -124,15 +124,15 @@ class PageTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group matrix
-     * @group page
+     * @group single
      */
-    public function a_user_without_admin_settings_can_view_an_enabled_page()
+    public function a_user_without_admin_settings_can_view_an_enabled_single()
     {
-        list($entry, $attributes) = $this->newEntry();
+        list($single, $attributes) = $this->newSingle();
 
         $this
             ->be($this->user)
-            ->get($entry->slug)
+            ->get($single->slug)
             ->assertStatus(200);
     }
 
@@ -141,17 +141,17 @@ class PageTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group matrix
-     * @group page
+     * @group single
      */
-    public function a_user_without_admin_settings_cannot_view_a_disabled_entry()
+    public function a_user_without_admin_settings_cannot_view_a_disabled_single()
     {
         $this->expectException(NotFoundHttpException::class);
 
-        list($entry, $attributes) = $this->newEntry(['status' => false]);
+        list($single, $attributes) = $this->newSingle(['status' => false]);
 
         $this
             ->be($this->user)
-            ->get($entry->slug);
+            ->get($single->slug);
     }
 
     /**
@@ -159,17 +159,17 @@ class PageTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group matrix
-     * @group page
+     * @group single
      */
-    public function a_user_with_admin_settings_cannot_view_a_disabled_entry()
+    public function a_user_with_admin_settings_cannot_view_a_disabled_single()
     {
         $this->expectException(NotFoundHttpException::class);
 
-        list($entry, $attributes) = $this->newEntry(['status' => false]);
+        list($single, $attributes) = $this->newSingle(['status' => false]);
 
         $this
             ->be($this->owner)
-            ->get($entry->slug);
+            ->get($single->slug);
     }
 
     /**
@@ -177,15 +177,15 @@ class PageTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group matrix
-     * @group page
+     * @group single
      */
-    public function a_user_with_admin_settings_can_preview_a_disabled_entry()
+    public function a_user_with_admin_settings_can_preview_a_disabled_single()
     {
-        list($entry, $attributes) = $this->newEntry(['status' => false]);
+        list($single, $attributes) = $this->newSingle(['status' => false]);
 
         $this
             ->be($this->owner)
-            ->get($entry->slug . '?preview=true')
+            ->get($single->slug . '?preview=true')
             ->assertStatus(200);
     }
 
@@ -194,17 +194,17 @@ class PageTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group matrix
-     * @group page
+     * @group single
      */
-    public function a_user_without_admin_settings_cannot_preview_a_disabled_entry()
+    public function a_user_without_admin_settings_cannot_preview_a_disabled_single()
     {
         $this->expectException(NotFoundHttpException::class);
 
-        list($entry, $attributes) = $this->newEntry(['status' => false]);
+        list($single, $attributes) = $this->newSingle(['status' => false]);
 
         $this
             ->be($this->user)
-            ->get($entry->slug . '?preview=true');
+            ->get($single->slug . '?preview=true');
     }
 
     //
@@ -218,11 +218,11 @@ class PageTest extends TestCase
      * @param  array  $overrides
      * @return array
      */
-    protected function newEntry($overrides = []): array
+    protected function newSingle($overrides = []): array
     {
         $attributes = array_merge([
-            'name'    => 'Example Page',
-            'slug'    => 'example-page',
+            'name'    => 'Example Single',
+            'slug'    => 'example-single',
             'excerpt' => $this->faker->sentence(),
             'content' => $this->faker->paragraph(),
             'status'  => true
@@ -231,10 +231,10 @@ class PageTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/pages/' . $this->matrix->id, $attributes);
+            ->json('PATCH', '/api/singles/' . $this->matrix->id, $attributes);
 
-        $entry = \DB::table($this->model->getTable())->first();
+        $single = \DB::table($this->model->getTable())->first();
 
-        return [$entry, $attributes];
+        return [$single, $attributes];
     }
 }

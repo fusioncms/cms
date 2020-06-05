@@ -6,7 +6,11 @@
 
         <portal to="subtitle">{{ collection.description }}</portal>
 
-        <shared-form :form="form" :submit="submit" :collection="collection"></shared-form>
+        <shared-form
+            v-if="form"
+            :form="form"
+            :collection="collection">
+        </shared-form>
     </div>
 </template>
 
@@ -26,7 +30,7 @@
         data() {
             return {
                 collection: {},
-                form: new Form({})
+                form: null
             }
         },
 
@@ -39,7 +43,7 @@
                 this.form.post('/api/collections/' + this.collection.slug).then((response) => {
                     toast('Entry saved successfully', 'success')
 
-                    this.$router.push('/collections/' + this.collection.slug)
+                    this.$router.push('/collection/' + this.collection.slug)
                 }).catch((response) => {
                     toast(response.message, 'failed')
                 })
@@ -50,7 +54,7 @@
             getCollection(to.params.collection, (error, collection, fields) => {
                 if (error) {
                     next((vm) => {
-                        vm.$router.push('/collections/' + vm.$router.currentRoute.params.collection)
+                        vm.$router.push('/collection/' + vm.$router.currentRoute.params.collection)
 
                         toast(error.toString(), 'danger')
                     })
@@ -69,7 +73,7 @@
         beforeRouteUpdate(to, from, next) {
             getCollection(to.params.collection, (error, matrix, fields) => {
                 if (error) {
-                    this.$router.push('/collections/' + this.$router.currentRoute.params.collection)
+                    this.$router.push('/collection/' + this.$router.currentRoute.params.collection)
 
                     toast(error.toString(), 'danger')
                 } else {
@@ -88,7 +92,6 @@
     export function getCollection(slug, callback) {
         axios.get('/api/matrices/slug/' + slug).then((response) => {
             let collection = response.data.data
-
             let fields = {
                 name: '',
                 slug: '',

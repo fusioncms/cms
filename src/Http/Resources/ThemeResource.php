@@ -3,6 +3,7 @@
 namespace Fusion\Http\Resources;
 
 use Fusion\Facades\Theme;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ThemeResource extends JsonResource
@@ -23,23 +24,23 @@ class ThemeResource extends JsonResource
             'version'     => $this->get('version'),
             'active'      => $this->get('namespace') === Theme::getTheme(),
             'preview'     => "/themes/{$this->get('namespace')}/preview.png",
-            'settings'    => $this->get('settings'),
-            'value'       => $this->getSettingValues($this->get('namespace')),
+            'options'     => $this->get('options'),
+            'option'      => $this->getOptionValues($this->get('namespace')),
         ];
     }
 
-    protected function getSettingValues()
+    protected function getOptionValues()
     {
-        $settingsFilePath = storage_path('themes/'.$this->get('namespace').'.json');
+        $optionsFilepath = storage_path('themes/'.$this->get('namespace').'.json');
 
-        $defaults = collect($this->get('settings'))->mapWithKeys(function($setting, $handle) {
-            return [$handle => $setting['default'] ?? null];
+        $defaults = collect($this->get('options'))->mapWithKeys(function($option, $handle) {
+            return [$handle => $option['default'] ?? null];
         });
 
-        if (! \File::exists($settingsFilePath)) {
+        if (! File::exists($optionsFilepath)) {
             return $defaults;
         }
 
-        return json_decode(\File::get($settingsFilePath), true);
+        return json_decode(File::get($optionsFilepath), true);
     }
 }

@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <router-link v-if="collection.slug" :to="{ name: 'entries.create', params: {collection: collection.slug} }" class="button">Create {{ collection.reference_singular }}</router-link>
+            <router-link v-if="collection.slug" :to="{ name: 'collection.create', params: {collection: collection.slug} }" class="button">Create {{ collection.reference_singular }}</router-link>
         </portal>
 
         <div class="row" v-if="endpoint">
@@ -14,7 +14,7 @@
                     <template slot="name" slot-scope="table">
                         <p-status :value="table.record.status" class="mr-2"></p-status>
 
-                        <router-link :to="{ name: 'entries.edit', params: {collection: collection.slug, id: table.record.id} }">{{ table.record.name }}</router-link>
+                        <router-link :to="{ name: 'collection.edit', params: {collection: collection.slug, id: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
 
                     <template slot="slug" slot-scope="table">
@@ -23,7 +23,7 @@
 
                     <template slot="actions" slot-scope="table">
                         <p-actions :id="'entry_' + table.record.id + '_actions'" :key="'entry_' + table.record.id + '_actions'">
-                            <p-dropdown-link :to="{ name: 'entries.edit', params: {collection: collection.slug, id: table.record.id} }">Edit</p-dropdown-link>
+                            <p-dropdown-link :to="{ name: 'collection.edit', params: {collection: collection.slug, id: table.record.id} }">Edit</p-dropdown-link>
 
                             <p-dropdown-link
                                 @click.prevent

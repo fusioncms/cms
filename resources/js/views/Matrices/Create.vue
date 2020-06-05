@@ -4,7 +4,12 @@
             <app-title icon="layer-group">Create Matrix</app-title>
         </portal>
 
-        <shared-form :form="form" :submit="submit" :fieldsets="fieldsets" :matrices="matrices"></shared-form>
+        <shared-form
+            :form="form"
+            :submit="submit"
+            :fieldsets="fieldsets"
+            :matrices="matrices">
+        </shared-form>
     </div>
 </template>
 
@@ -91,70 +96,12 @@
             axios.all([
                 axios.get('/api/fieldsets'),
                 axios.get('/api/matrices'),
-            ]).then(axios.spread(function (fieldsets, matrices) {
-                next(function(vm) {
-                    vm.fieldsets = _.map(fieldsets.data.data, function(fieldset) {
-                        return {
-                            'label': fieldset.name,
-                            'value': fieldset.id
-                        }
-                    })
-
-                    vm.fieldsets.unshift({
-                        'label': 'None',
-                        'value': null
-                    })
-
-                    vm.matrices = _.map(matrices.data.data, function(matrix) {
-                        return {
-                            'label': matrix.name,
-                            'value': matrix.id
-                        }
-                    })
-
-                    vm.matrices.unshift({
-                        'label': 'None',
-                        'value': 0
-                    })
-
-                    vm.$nextTick(() => {
-                        vm.form.resetChangeListener()
-                    })
+            ]).then(axios.spread((fieldsets, matrices) => {
+                next((vm) => {
+                    vm.fieldsets = fieldsets.data.data
+                    vm.matrices  = matrices.data.data
                 })
             }))
         }
-    }
-
-    export function getMatricesAndFieldsets(callback) {
-        axios.all([
-            axios.get('/api/fieldsets'),
-            axios.get('/api/matrices'),
-        ]).then(axios.spread((fieldsets, matrices) => {
-            fieldsets = _.map(fieldsets.data.data, function(fieldset) {
-                return {
-                    'label': fieldset.name,
-                    'value': fieldset.id
-                }
-            })
-
-            fieldsets.unshift({
-                'label': 'None',
-                'value': null
-            })
-
-            matrices = _.map(matrices.data.data, function(matrix) {
-                return {
-                    'label': matrix.name,
-                    'value': matrix.id
-                }
-            })
-
-            matrices.unshift({
-                'label': 'None',
-                'value': 0
-            })
-
-            callback(null, matrices, fieldsets)
-        }))
     }
 </script>

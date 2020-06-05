@@ -9,7 +9,7 @@ use Facades\SectionFactory;
 use Facades\FieldsetFactory;
 use Facades\TaxonomyFactory;
 use Illuminate\Support\Str;
-use Fusion\Services\Builders\Page;
+use Fusion\Services\Builders\Single;
 use Fusion\Services\Builders\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -63,18 +63,18 @@ class RelationshipTest extends TestCase
         $field    = FieldFactory::withName('Users')->withType('user')->withSection($section)->create();
         $fieldset = FieldsetFactory::withSections(collect([$section]))->create();
 
-        // Create page
-        $matrix = MatrixFactory::asPage()->withFieldset($fieldset)->create();
-        $model  = (new Page($matrix->handle))->make();
+        // Create single
+        $matrix = MatrixFactory::asSingle()->withFieldset($fieldset)->create();
+        $model  = (new Single($matrix->handle))->make();
 
         // Update with users
         $users = factory(\Fusion\Models\User::class, 3)->create();
 
         $this
-            ->json('PATCH', '/api/pages/' . $matrix->id, [
+            ->json('PATCH', '/api/singles/' . $matrix->id, [
                 'matrix_id' => $matrix->id,
-                'name'      => 'matrix-page',
-                'slug'      => 'matrix-page',
+                'name'      => 'matrix-single',
+                'slug'      => 'matrix-single',
                 'status'    => true,
                 'users'     => $users,
             ])->assertStatus(201);
@@ -83,7 +83,7 @@ class RelationshipTest extends TestCase
             $this->assertDatabaseHas('users_pivot', [
                 'user_id'    => $user->id,
                 'field_id'   => $field->id,
-                'pivot_type' => 'Fusion\Models\Pages\\' . Str::studly($matrix->handle),
+                'pivot_type' => 'Fusion\Models\Singles\\' . Str::studly($matrix->handle),
                 'pivot_id'   => $matrix->id,
                 'order'      => $key + 1,
             ]);
@@ -104,24 +104,24 @@ class RelationshipTest extends TestCase
         $field2   = FieldFactory::withName('Secondary')->withType('taxonomy')->withSection($section)->withSettings(['taxonomy' => $taxonomy->id])->create();
         $fieldset = FieldsetFactory::withSections(collect([$section]))->create();
 
-        // Create page
-        $matrix = MatrixFactory::withName('Post')->asPage()->withFieldset($fieldset)->create();
+        // Create single
+        $matrix = MatrixFactory::withName('Post')->asSingle()->withFieldset($fieldset)->create();
 
         $this
-            ->json('PATCH', '/api/pages/' . $matrix->id, [
+            ->json('PATCH', '/api/singles/' . $matrix->id, [
                 'matrix_id' => $matrix->id,
-                'name'      => 'matrix-page',
-                'slug'      => 'matrix-page',
+                'name'      => 'matrix-single',
+                'slug'      => 'matrix-single',
                 'status'    => true,
                 'primary'   => collect($taxonomy->terms)->pluck('id')->shuffle()->take(3)->toArray(),
                 'secondary' => collect($taxonomy->terms)->pluck('id')->shuffle()->take(3)->toArray(),
             ])->assertStatus(201);
 
         // Fetch records
-        $model   = (new Page($matrix->handle))->make();
-        $page    = $model->first();
-        $primary = $page->primary->first();
-        $secondary = $page->secondary->first();
+        $model   = (new Single($matrix->handle))->make();
+        $single  = $model->first();
+        $primary = $single->primary->first();
+        $secondary = $single->secondary->first();
 
         // Primary color relationship established
         $this->assertInstanceOf('Fusion\Models\Taxonomies\Colors', $primary);
@@ -129,7 +129,7 @@ class RelationshipTest extends TestCase
             'colors_id'  => $primary->id,
             'field_id'   => $field1->id,
             'pivot_id'   => $matrix->id,
-            'pivot_type' => 'Fusion\Models\Pages\Post',
+            'pivot_type' => 'Fusion\Models\Singles\Post',
         ]);
 
         // Secondary color relationship established
@@ -138,7 +138,7 @@ class RelationshipTest extends TestCase
             'colors_id'  => $secondary->id,
             'field_id'   => $field2->id,
             'pivot_id'   => $matrix->id,
-            'pivot_type' => 'Fusion\Models\Pages\Post',
+            'pivot_type' => 'Fusion\Models\Singles\Post',
         ]);
 
         // Assert inverse relationship has been established
@@ -146,9 +146,9 @@ class RelationshipTest extends TestCase
         // dd(\File::get(app_path('Models/Taxonomies/Colors.php')));
 
         // TODO: figure out why this assertion fails
-        // $this->assertInstanceOf('Fusion\Models\Pages\Post', $primary->post->first());
+        // $this->assertInstanceOf('Fusion\Models\Singles\Post', $primary->post->first());
         // Temp solution
-        $this->assertInstanceOf('Fusion\Models\Pages\Post',
-            $primary->morphedByMany('Fusion\Models\Pages\Post', 'pivot', 'taxonomy_colors_pivot')->first());
+        $this->assertInstanceOf('Fusion\Models\Singles\Post',
+            $primary->morphedByMany('Fusion\Models\Singles\Post', 'pivot', 'taxonomy_colors_pivot')->first());
     }
 }
