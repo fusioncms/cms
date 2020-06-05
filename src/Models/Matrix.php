@@ -68,10 +68,10 @@ class Matrix extends Model
 
     public function getAdminPathAttribute()
     {
-        if ($this->type === 'page') {
-            return '/pages/' . $this->slug;
+        if ($this->type === 'single') {
+            return '/single/' . $this->slug;
         } else {
-            return '/collections/' . $this->slug;
+            return '/collection/' . $this->slug;
         }
     }
 

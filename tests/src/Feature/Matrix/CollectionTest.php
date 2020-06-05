@@ -34,7 +34,7 @@ class CollectionTest extends TestCase
      * @group matrix
      * @group collection
      */
-    public function a_user_with_permissions_can_create_a_new_entry()
+    public function a_user_with_permissions_can_create_a_new_collection_entry()
     {
         $attributes = [
             'name'    => 'Example Page',
@@ -59,7 +59,7 @@ class CollectionTest extends TestCase
      * @group matrix
      * @group collection
      */
-    public function a_user_without_control_panel_access_cannot_create_new_entries()
+    public function a_user_without_control_panel_access_cannot_create_new_collection_entries()
     {
         $this->expectException(AuthenticationException::class);
 
@@ -73,7 +73,7 @@ class CollectionTest extends TestCase
      * @group matrix
      * @group collection
      */
-    public function a_user_without_permissions_cannot_create_new_entries()
+    public function a_user_without_permissions_cannot_create_new_collection_entries()
     {
         $this->expectException(AuthorizationException::class);
 
@@ -89,7 +89,7 @@ class CollectionTest extends TestCase
      * @group matrix
      * @group collection
      */
-    public function a_user_with_permissions_can_update_an_existing_entry()
+    public function a_user_with_permissions_can_update_an_existing_collection_entry()
     {
         list($entry, $attributes) = $this->newEntry([
             'name' => 'New Post Title',
@@ -115,7 +115,7 @@ class CollectionTest extends TestCase
      * @group matrix
      * @group collection
      */
-    public function a_user_with_permissions_can_delete_an_existing_entry()
+    public function a_user_with_permissions_can_delete_an_existing_collection_entry()
     {
         list($entry, $attributes) = $this->newEntry();
 
@@ -151,7 +151,7 @@ class CollectionTest extends TestCase
      * @group matrix
      * @group collection
      */
-    public function a_user_without_admin_settings_can_view_an_enabled_entry()
+    public function a_user_without_admin_settings_can_view_an_enabled_collection_entry()
     {
         list($entry, $attributes) = $this->newEntry();
 
@@ -168,7 +168,7 @@ class CollectionTest extends TestCase
      * @group matrix
      * @group collection
      */
-    public function a_user_without_admin_settings_cannot_view_a_disabled_entry()
+    public function a_user_without_admin_settings_cannot_view_a_disabled_collection_entry()
     {
         $this->expectException(NotFoundHttpException::class);
 
@@ -186,7 +186,7 @@ class CollectionTest extends TestCase
      * @group matrix
      * @group collection
      */
-    public function a_user_with_admin_settings_cannot_view_a_disabled_entry()
+    public function a_user_with_admin_settings_cannot_view_a_disabled_collection_entry()
     {
         $this->expectException(NotFoundHttpException::class);
 
@@ -204,7 +204,7 @@ class CollectionTest extends TestCase
      * @group matrix
      * @group collection
      */
-    public function a_user_with_admin_settings_can_preview_a_disabled_entry()
+    public function a_user_with_admin_settings_can_preview_a_disabled_collection_entry()
     {
         list($entry, $attributes) = $this->newEntry(['status' => false]);
 
@@ -221,7 +221,7 @@ class CollectionTest extends TestCase
      * @group matrix
      * @group collection
      */
-    public function a_user_without_admin_settings_cannot_preview_a_disabled_entry()
+    public function a_user_without_admin_settings_cannot_preview_a_disabled_collection_entry()
     {
         $this->expectException(NotFoundHttpException::class);
 

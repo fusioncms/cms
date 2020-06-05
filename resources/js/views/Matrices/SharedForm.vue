@@ -42,8 +42,8 @@
                                     'value': 'collection',
                                 },
                                 {
-                                    'label': 'Page',
-                                    'value': 'page',
+                                    'label': 'Single',
+                                    'value': 'single',
                                 },
                             ]"
                             :has-error="form.errors.has('type')"
@@ -300,7 +300,7 @@
 
         watch: {
             '$parent.form.type'(value) {
-                if (value == 'page') {
+                if (value == 'single') {
                     this.$parent.form.show_name_field = true
                 }
             }
