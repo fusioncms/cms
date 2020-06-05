@@ -4,7 +4,15 @@
             <app-title icon="layer-group">Edit Matrix</app-title>
         </portal>
 
-        <shared-form :id="id" :form="form" :matrix="matrix" :submit="submit" :fieldsets="fieldsets" :matrices="matrices"></shared-form>
+        <shared-form
+            v-if="form"
+            :id="id"
+            :form="form"
+            :matrix="matrix"
+            :submit="submit"
+            :fieldsets="fieldsets"
+            :matrices="matrices">
+        </shared-form>
     </div>
 </template>
 
@@ -18,7 +26,7 @@
         head: {
             title() {
                 return {
-                    inner: this.form.name || 'Loading...'
+                    inner: _.has(this.form, 'name') ? this.form.name : 'Loading...'
                 }
             }
         },
@@ -26,41 +34,10 @@
         data() {
             return {
                 id: null,
-                parent_id: '',
                 fieldsets: [],
                 matrices: [],
                 matrix: {},
-                form: new Form({
-                    parent_id: 0,
-                    name: '',
-                    handle: '',
-                    description: '',
-                    type: 'collection',
-                    fieldset: null,
-
-                    reference_singular: '',
-                    reference_plural: '',
-
-                    sidebar: '1',
-                    quicklink: '1',
-                    icon: '',
-
-                    show_name_field: true,
-                    name_label: '',
-                    name_format: '',
-
-                    route: '',
-                    template: '',
-
-                    categorizable: '1',
-                    creditable: '1',
-                    publishable: '1',
-                    revision_control: '1',
-
-                    seoable: '1',
-
-                    status: '1',
-                }, true)
+                form: null
             }
         },
 
@@ -78,7 +55,7 @@
                     this.form.reference_plural = pluralize(this.form.name)
                 }
 
-                this.form.patch('/api/matrices/' + this.id).then((response) => {
+                this.form.patch(`/api/matrices/${this.id}`).then((response) => {
                     store.dispatch('navigation/fetchAdminNavigation')
 
                     toast('Matrix successfully updated', 'success')
@@ -91,85 +68,64 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            axios.all([
-                axios.get('/api/matrices/' + to.params.matrix),
-                axios.get('/api/fieldsets'),
-                axios.get('/api/matrices')
-            ]).then(axios.spread(function (matrix, fieldsets, matrices) {
-                next(function(vm) {
-                    vm.matrix = matrix.data.data
-                    vm.fieldsets = _.map(fieldsets.data.data, function(fieldset) {
-                        return {
-                            'label': fieldset.name,
-                            'value': fieldset.id
-                        }
+            getModels(to.params.matrix, (error, matrix, fieldsets, matrices) => {
+                if (error) {
+                    next((vm) => {
+                        toast(error.toString(), 'danger')
+
+                        vm.$router.push('/matrices')
                     })
+                } else {
+                    next((vm) => {
+                        vm.id        = matrix.data.data.id
+                        vm.matrix    = matrix.data.data
+                        vm.fieldsets = fieldsets.data.data
+                        vm.matrices  = matrices.data.data
+                        
+                        vm.form = new Form({
+                            parent_id:          vm.matrix.parent_id,
+                            name:               vm.matrix.name,
+                            handle:             vm.matrix.handle,
+                            description:        vm.matrix.description,
+                            type:               vm.matrix.type,
+                            fieldset:           vm.matrix.fieldset && vm.matrix.fieldset.id ? vm.matrix.fieldset.id : null,
+                            reference_singular: vm.matrix.reference_singular,
+                            reference_plural:   vm.matrix.reference_plural,
+                            sidebar:            vm.matrix.sidebar ? '1' : '0',
+                            quicklink:          vm.matrix.quicklink ? '1' : '0',
+                            icon:               vm.matrix.icon,
+                            show_name_field:    vm.matrix.show_name_field,
+                            name_label:         vm.matrix.name_label,
+                            name_format:        vm.matrix.name_format,
+                            route:              vm.matrix.route,
+                            template:           vm.matrix.template,
+                            revision_control:   vm.matrix.revision_control ? '1' : '0',
+                            categorizable:      vm.matrix.categorizable ? '1' : '0',
+                            creditable:         vm.matrix.creditable ? '1' : '0',
+                            publishable:        vm.matrix.publishable ? '1' : '0',
+                            seoable:            vm.matrix.seoable ? '1' : '0',
+                            status:             vm.matrix.status ? '1' : '0'
+                        }, true)
 
-                    vm.fieldsets.unshift({
-                        'label': 'None',
-                        'value': null
+                        vm.$nextTick(() => {
+                            vm.$emit('updateHead')
+                            vm.form.resetChangeListener()
+                        })
                     })
-
-                    vm.matrices = _.map(matrices.data.data, function(parent) {
-                        return {
-                            'label': parent.name,
-                            'value': parent.id
-                        }
-                    })
-
-                    vm.matrices.unshift({
-                        'label': 'None',
-                        'value': 0
-                    })
-
-                    // Remove the current matrix - we don't want to assign the parent
-                    // to itself. That would create an infinite loop.
-                    _.remove(vm.matrices, function(parent) {
-                        return parent.label == matrix.data.data.name
-                    })
-
-                    vm.id = matrix.data.data.id
-
-                    vm.form.parent_id = matrix.data.data.parent_id
-                    vm.form.name = matrix.data.data.name
-                    vm.form.handle = matrix.data.data.handle
-                    vm.form.description = matrix.data.data.description
-                    vm.form.type = matrix.data.data.type
-                    vm.form.fieldset = matrix.data.data.fieldset && matrix.data.data.fieldset.id ? matrix.data.data.fieldset.id : null
-
-                    vm.form.reference_singular = matrix.data.data.reference_singular
-                    vm.form.reference_plural = matrix.data.data.reference_plural
-
-                    vm.form.sidebar = matrix.data.data.sidebar ? '1' : '0'
-                    vm.form.quicklink = matrix.data.data.quicklink ? '1' : '0'
-                    vm.form.icon = matrix.data.data.icon
-
-                    vm.form.show_name_field = matrix.data.data.show_name_field
-                    vm.form.name_label = matrix.data.data.name_label
-                    vm.form.name_format = matrix.data.data.name_format
-
-                    vm.form.route = matrix.data.data.route
-                    vm.form.template = matrix.data.data.template
-
-                    vm.form.revision_control = matrix.data.data.revision_control ? '1' : '0'
-                    vm.form.categorizable = matrix.data.data.categorizable ? '1' : '0'
-                    vm.form.creditable = matrix.data.data.creditable ? '1' : '0'
-                    vm.form.publishable = matrix.data.data.publishable ? '1' : '0'
-
-                    vm.form.seoable = matrix.data.data.seoable ? '1' : '0'
-
-                    vm.form.status = matrix.data.data.status ? '1' : '0'
-
-                    vm.$emit('updateHead')
-
-                    vm.$nextTick(() => {
-                        vm.form.resetChangeListener()
-                    })
-                })
-            })).catch(function(error) {
-                next('/matrices')
-                toast('The requested matrix could not be found', 'warning')
+                }
             })
         }
+    }
+
+    export function getModels(maxtrix, callback) {
+        axios.all([
+            axios.get(`/api/matrices/${maxtrix}`),
+            axios.get('/api/fieldsets'),
+            axios.get('/api/matrices')
+        ]).then(axios.spread((matrix, fieldsets, matrices) => {
+            callback(null, matrix, fieldsets, matrices)
+        })).catch((error) => {
+            callback(new Error('The requested maxtrix could not be found'))
+        })
     }
 </script>

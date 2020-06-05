@@ -4,7 +4,11 @@
 			<app-title icon="paper-plane">Edit Form</app-title>
 		</portal>
 
-        <shared-form :form="form" :resource="resource" :submit="submit" :fieldset="fieldset" @sectionBuilderInput="sectionChange()"></shared-form>
+        <shared-form
+            v-if="form"
+            :form="form"
+            :resource="resource">
+        </shared-form>
     </div>
 </template>
 
@@ -16,7 +20,7 @@
         head: {
             title() {
                 return {
-                    inner: this.form.name || 'Loading...'
+                    inner: _.has(this.form, 'name') ? this.form.name : 'Loading...'
                 }
             }
         },
@@ -24,34 +28,9 @@
         data() {
             return {
                 id: null,
-                fieldset: null,
                 resource: null,
-                form: new Form({
-                    name: '',
-                    handle: '',
-                    description: '',
-
-                    fieldset: {},
-
-                    collect_email_addresses: 0,
-                    collect_ip_addresses: 0,
-                    response_receipt: 0,
-
-                    message: '',
-                    redirect_on_submission: 0,
-                    redirect_url: '',
-
-                    enable_recaptcha: 0,
-                    enable_honeypot: 0,
-
-                    send_to: '',
-                    reply_to: '',
-
-                    form_template: '',
-                    thankyou_template: '',
-
-                    status: 1,
-                }, true)
+                sections: [],
+                form: null
             }
         },
 
@@ -59,26 +38,28 @@
             'shared-form': SharedForm
         },
 
+        watch: {
+            sections: {
+                deep: true,
+                handler(value) {
+                    if (! this.hasChanges) {
+                        this.form.onFirstChange()
+                    }
+                }
+            }
+        },
+
         methods: {
             submit() {
-                let fieldsetForm = {}
-                fieldsetForm.sections = this.form.fieldset.sections
-
-                axios.post(`/api/fieldsets/${this.resource.fieldset.id}/sections`, fieldsetForm).then((response) => {
-                    this.form.patch('/api/forms/' + this.resource.id).then((response) => {
-                        toast('Form successfully saved', 'success')
-
-                        this.$router.push('/forms')
+                this.form.patch(`/api/forms/${this.id}`)
+                    .then(() => {
+                        axios.post(`/api/fieldsets/${this.resource.fieldset.id}/sections`, { sections: this.sections })
+                            .then(() => {
+                                toast('Form successfully saved', 'success')
+                            })
                     }).catch((response) => {
-                        toast(response.message, 'failed')
+                        toast(response.response.data.message, 'failed')
                     })
-                })
-            },
-
-            sectionChange() {
-                if (!this.form.hasChanges) {
-                    this.form.onFirstChange()
-                }
             }
         },
 
@@ -92,43 +73,38 @@
                     })
                 } else {
                     next((vm) => {
+                        vm.id       = form.id
                         vm.resource = form
+                        vm.sections = form.fieldset.sections
+
                         vm.form = new Form({
-                            name: form.name,
-                            handle: form.handle,
-                            description: form.description,
-
-                            fieldset: form.fieldset,
-
+                            name:                    form.name,
+                            handle:                  form.handle,
+                            description:             form.description,
+                            fieldset:                form.fieldset,
                             collect_email_addresses: form.collect_email_addresses,
-                            collect_ip_addresses: form.collect_ip_addresses,
-                            response_receipt: form.response_receipt,
-
-                            message: form.message,
-                            redirect_on_submission: form.redirect_on_submission,
-                            redirect_url: form.redirect_url,
-
-                            enable_recaptcha: form.enable_recaptcha,
-                            enable_honeypot: form.enable_honeypot,
-
-                            send_to: form.send_to,
-                            reply_to: form.reply_to,
-
-                            form_template: form.form_template,
-                            thankyou_template: form.thankyou_template,
-
-                            status: form.status,
+                            collect_ip_addresses:    form.collect_ip_addresses,
+                            response_receipt:        form.response_receipt,
+                            message:                 form.message,
+                            redirect_on_submission:  form.redirect_on_submission,
+                            redirect_url:            form.redirect_url,
+                            enable_recaptcha:        form.enable_recaptcha,
+                            enable_honeypot:         form.enable_honeypot,
+                            send_to:                 form.send_to,
+                            reply_to:                form.reply_to,
+                            form_template:           form.form_template,
+                            thankyou_template:       form.thankyou_template,
+                            status:                  form.status,
                         }, true)
 
-                        vm.$emit('updateHead')
-
                         vm.$nextTick(() => {
+                            vm.$emit('updateHead')
                             vm.form.resetChangeListener()
                         })
                     })
                 }
             })
-        },
+        }
     }
 
     export function getForm(form, callback) {
