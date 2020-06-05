@@ -15,13 +15,13 @@
 
                 <div class="controls__content">
                     <p-accordion :multiple="true">
-                        <p-accordion-item v-for="(section, handle) in theme.settings" :key="section.handle" :title="section.name">
+                        <p-accordion-item v-for="(section, handle) in theme.options" :key="section.handle" :title="section.name">
                             <div class="p-3">
                                 <p class="text-sm" v-if="section.description">{{ section.description }}</p>
 
                                 <component
                                     v-for="(field, fieldHandle) in section.fields"
-                                    v-model="theme.value[handle][fieldHandle]"
+                                    v-model="theme.option[handle][fieldHandle]"
                                     :key="fieldHandle"
                                     :is="field.fieldtype + '-fieldtype'"
                                     :field="{
@@ -93,7 +93,7 @@
 
         computed: {
             hash() {
-                return this.encode(JSON.stringify(this.theme.value))
+                return this.encode(JSON.stringify(this.theme.option))
             },
 
             previewUrl() {
@@ -118,8 +118,8 @@
         },
 
         watch: {
-            'theme.value': {
-                handler: _.debounce(function(value) {
+            'theme.option': {
+                handler: _.debounce(function() {
                     this.hasChanges = true;
                     this.reload()
                 }, 500),
@@ -128,7 +128,7 @@
             },
 
             'url': {
-                handler: _.debounce(function(value) {
+                handler: _.debounce(function() {
                     this.reload()
                 }, 500)
             },
@@ -136,10 +136,10 @@
 
         methods: {
             submit() {
-                this.theme.value['_method'] = 'PATCH'
+                this.theme.option['_method'] = 'PATCH'
 
-                axios.post(`/api/themes/${this.theme.namespace}`, this.theme.value).then(() => {
-                    toast('Theme settings have been updated', 'success')
+                axios.post(`/api/themes/${this.theme.namespace}`, this.theme.option).then(() => {
+                    toast('Theme options have been updated', 'success')
                 })
                 .catch((error) => {
                     toast(error.response.data.message, 'failed')

@@ -52,15 +52,15 @@ class BrowseController extends Controller
             $filename   = $zipArchive->getNameIndex($index);
             $fileHandle = $zipArchive->getStream($filename);
 
-            $themeSettings = stream_get_contents($fileHandle);
-            $themeSettings = collect(json_decode($themeSettings));
+            $manifest = stream_get_contents($fileHandle);
+            $manifest = collect(json_decode($manifest));
 
-            $origName  = basename($request->file('file-upload')->getClientOriginalName(), '.zip');
-            $themeName = $themeSettings->get('name');
+            $originalName  = basename($request->file('file-upload')->getClientOriginalName(), '.zip');
+            $themeName = $manifest->get('name');
 
             $files = [];
             for ($i = 0; $i < $zipArchive->numFiles; ++$i) {
-                $zipArchive->renameIndex($i, str_replace($origName, $themeName, $zipArchive->getNameIndex($i)));
+                $zipArchive->renameIndex($i, str_replace($originalName, $themeName, $zipArchive->getNameIndex($i)));
                 $files[] = $zipArchive->getNameIndex($i);
             }
 
@@ -74,7 +74,7 @@ class BrowseController extends Controller
     }
 
     /**
-     * Update the specified themes settings.
+     * Update the specified themes options.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  String  $theme
@@ -83,17 +83,15 @@ class BrowseController extends Controller
     {
         $this->authorize('themes.update');
 
-        $settingsFilePath = storage_path("/themes/{$theme}.json");
+        $optionsPath = storage_path("/themes/{$theme}.json");
 
-        File::put($settingsFilePath, json_encode($request->except('_method'), JSON_PRETTY_PRINT));
+        File::put($optionsPath, json_encode($request->except('_method'), JSON_PRETTY_PRINT));
 
         activity()
             ->withProperties([
                 'icon' => 'swatchbook',
                 'link' => 'theme',
             ])
-            ->log('Updated theme settings');
-
-        // return response(['data' => $settings[$section]]);
+            ->log('Updated theme options');
     }
 }

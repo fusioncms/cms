@@ -30,26 +30,6 @@ if (! function_exists('theme')) {
     {
         $theme = Theme::active();
 
-        if (request()->has('preview')) {
-            $theme->put('value', json_decode(request()->get('preview'), true));
-        } else {
-            $settingsFilePath = storage_path('themes/'.$theme->get('namespace').'.json');
-
-            if (! File::exists($settingsFilePath)) {
-                $defaults = collect($theme->get('settings'))->mapWithKeys(function($section, $handle) {
-                    $settings = collect($section['fields'])->mapWithKeys(function($setting, $field) {
-                        return [$field => $setting['default'] ?? null];
-                    });
-
-                    return [$handle => $settings];
-                });
-
-                File::put($settingsFilePath, json_encode($defaults, JSON_PRETTY_PRINT));
-            }
-
-            $theme->put('value', json_decode(File::get($settingsFilePath), true));
-        }
-
         $dotNotation = $theme->mapWithKeys(function($value, $handle) {
             return Arr::dot([$handle => $value]);
         });
@@ -57,6 +37,51 @@ if (! function_exists('theme')) {
         $theme = $theme->merge($dotNotation);
 
         return $theme->get($key, $default);
+    }
+}
+
+if (! function_exists('theme_option')) {
+    /**
+     * Fetches the theme's option value.
+     *
+     * @param  string  $key
+     * @param  mixed  $default
+     * @return mixed
+     */
+    function theme_option($key, $default = '')
+    {
+        $theme  = Theme::active();
+        $values = collect();
+
+        if (request()->has('preview')) {
+            $preview = collect(json_decode(request()->get('preview'), true));
+            $values  = $values->merge($preview);
+        } else {
+            $optionsFilePath = storage_path('themes/'.$theme->get('namespace').'.json');
+
+            if (! File::exists($optionsFilePath)) {
+                $defaults = collect($theme->get('options'))->mapWithKeys(function($section, $handle) {
+                    $options = collect($section['fields'])->mapWithKeys(function($option, $field) {
+                        return [$field => $option['default'] ?? null];
+                    });
+
+                    return [$handle => $options];
+                });
+
+                File::put($optionsFilePath, json_encode($defaults, JSON_PRETTY_PRINT));
+            }
+
+            $options = collect(json_decode(File::get($optionsFilePath), true));
+            $values  = $values->merge($options);
+        }
+
+        $dotNotation = $values->mapWithKeys(function($value, $handle) {
+            return Arr::dot([$handle => $value]);
+        });
+
+        $values = $values->merge($dotNotation);
+
+        return $values->get($key, $default);
     }
 }
 
