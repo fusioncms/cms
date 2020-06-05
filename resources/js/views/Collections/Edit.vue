@@ -6,7 +6,12 @@
 
         <portal to="subtitle">{{ collection.description }}</portal>
 
-        <shared-form :form="form" :submit="submit" :entry="entry" :collection="collection"></shared-form>
+        <shared-form
+            v-if="form"
+            :form="form"
+            :entry="entry"
+            :collection="collection">
+        </shared-form>
     </div>
 </template>
 
@@ -18,7 +23,7 @@
         head: {
             title() {
                 return {
-                    inner: this.entry.name || 'Loading...'
+                    inner: _.has(this.form, 'name') ? this.form.name : 'Loading...'
                 }
             }
         },
@@ -27,7 +32,7 @@
             return {
                 collection: {},
                 entry: {},
-                form: new Form({}),
+                form: null,
             }
         },
 
