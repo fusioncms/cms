@@ -55,6 +55,7 @@ class CreateEnvironmentConfig
         $contents = $this->findAndReplace($env, [
             '##APP_KEY##'      => Str::random(32),
             '##APP_URL##'      => $this->container['app_url'],
+            '##APP_DOMAIN##'   => parse_url($this->container['app_url'], PHP_URL_HOST),
             '##DB_DRIVER##'    => 'mysql',
             '##DB_HOST##'      => $this->container['db_host'],
             '##DB_NAME##'      => $this->container['db_name'],
