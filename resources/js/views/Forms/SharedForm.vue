@@ -3,7 +3,7 @@
         <portal to="actions">
             <div class="buttons">
                 <router-link :to="{ name: 'forms' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
             </div>
         </portal>
 
@@ -137,7 +137,7 @@
                     </p-tab>
 
                     <p-tab key="fields" name="Fields">
-                        <section-builder v-model="form.fieldset.sections" @input="$emit('sectionBuilderInput')"></section-builder>
+                        <section-builder v-model="$parent.sections"></section-builder>
                     </p-tab>
                 </p-tabs>
             </div>
@@ -196,23 +196,15 @@
         },
 
         props: {
-            id: {
-                type: Number,
-                required: false,
-                default: 0
-            },
-
             form: {
                 required: true,
             },
 
             resource: {
+                type: Object,
                 required: false,
-            },
-
-            submit: {
-                required: true,
-            },
+                default: () => {}
+            }
         },
 
         watch: {
@@ -253,10 +245,10 @@
         created() {
             axios.all([
                 axios.get('/api/fieldtypes/input'),
-            ]).then(axios.spread(function (fieldtype) {
+            ]).then(axios.spread((fieldtype) => {
                 this.fieldtype = fieldtype.data
                 this.ready = true
-            }.bind(this)))
+            }))
         }
     }
 </script>

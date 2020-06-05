@@ -4,7 +4,11 @@
             <app-title icon="list">Edit Fieldset</app-title>
         </portal>
 
-        <shared-form :form="form" :resource="resource"></shared-form>
+        <shared-form
+            v-if="form"
+            :form="form"
+            :resource="resource">
+        </shared-form>
     </div>
 </template>
 
@@ -16,7 +20,7 @@
         head: {
             title() {
                 return {
-                    inner: this.form.name || 'Loading...'
+                    inner: _.has(this.form, 'name') ? this.form.name : 'Loading...'
                 }
             }
         },
@@ -26,12 +30,7 @@
                 id: null,
                 resource: null,
                 sections: [],
-                originalSections: [],
-                loaded: false,
-                form: new Form({
-                    name: '',
-                    handle: '',
-                }, true)
+                form: null
             }
         },
 
@@ -39,28 +38,32 @@
             'shared-form': SharedForm
         },
 
-        methods: {
-            submit() {
-                this.form.patch('/api/fieldsets/' + this.resource.id).then((response) => {
-                    let formData = {}
-                    formData.sections = this.sections
-
-                    axios.post(`/api/fieldsets/${this.resource.id}/sections`, formData).then((response) => {
-                        toast('Fieldset successfully updated', 'success')
-
-                        this.$router.push('/fieldsets')
-                    })
-                }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
-                })
-            },
-
-            sectionsChanged(value) {
-                if(this.loaded && !this.form.hasChanges) {
-                    if (!_.isEqual(this.originalSections, value)) {
+        watch: {
+            sections: {
+                deep: true,
+                handler(value) {
+                    if (! this.hasChanges) {
                         this.form.onFirstChange()
                     }
                 }
+            }
+        },
+
+        methods: {
+            submit() {
+                this.form.patch(`/api/fieldsets/${this.resource.id}`)
+                    .then(() => {
+                        axios.post(`/api/fieldsets/${this.resource.id}/sections`, { sections: this.sections })
+                            .then(() => {
+                                toast('Fieldset successfully updated', 'success')
+
+                                this.$router.push('/fieldsets')
+                            }).catch((response) => {
+                                toast(response.message, 'failed')
+                            })
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
             }
         },
 
@@ -76,16 +79,15 @@
                     next((vm) => {
                         vm.resource = fieldset
                         vm.sections = fieldset.sections
-                        vm.originalSections = _.cloneDeep(vm.sections)
                         vm.form = new Form({
                             name: fieldset.name,
                             handle: fieldset.handle,
                         }, true)
 
-                        vm.loaded = true
-
-                        vm.$emit('updateHead')
-                        vm.form.resetChangeListener()
+                        vm.$nextTick(() => {
+                            vm.$emit('updateHead')
+                            vm.form.resetChangeListener()
+                        })
                     })
                 }
             })

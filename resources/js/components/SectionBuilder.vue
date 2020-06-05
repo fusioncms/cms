@@ -56,7 +56,12 @@
 
             <div class="row">
                 <div class="col mt-6 w-full">
-                    <field-builder v-model="section.fields" @input="reorder(section.fields)" :id="section.handle"></field-builder>
+                    <field-builder
+                        v-if="section.fields"
+                        v-model="section.fields"
+                        @input="reorder(section.fields)"
+                        :id="section.handle">
+                    </field-builder>
                 </div>
             </div>
         </div>
@@ -68,16 +73,7 @@
         data() {
             return {
                 active: 0,
-                total: 0,
-                sections: [],
-                default: {
-                    name: 'General',
-                    handle: 'general',
-                    description: '',
-                    placement: 'body',
-                    order: 0,
-                    fields: [],
-                }
+                sections: []
             }
         },
 
@@ -91,30 +87,23 @@
         watch: {
             sections: {
                 deep: true,
-                handler(value){
-                    if (this.total === 0) {
-                        this.total = value.length
-                    }
+                handler(value) {
                     this.$emit('input', value)
                 }
-            },
+            }
+        },
 
-            value(value) {
-                if (! value.length) {
-                    this.sections.push(this.default)
-                } else {
-                    this.sections = value
-                }
-            },
+        computed: {
+            total() {
+                return this.sections.length || 0
+            }
         },
 
         methods: {
             add() {
-                this.total++
-
                 this.sections.push({
-                    name: 'Section ' + this.total,
-                    handle: 'section-' + this.total,
+                    name: `Section ${this.total}`,
+                    handle: `section-${this.total}`,
                     description: '',
                     placement: 'body',
                     order: this.total,
@@ -147,23 +136,26 @@
             },
 
             fieldCount(count) {
-                if (count > 1 || count == 0) {
-                    return count + ' fields'
-                }
-
-                return '1 field'
+                return `${count >= 0 ? count : 1} field`
             },
 
             reorder(fields) {
-                _.each(fields, function (field, order) {
-                    field.order = order
-                })
+                _.each(fields, (field, order) => field.order = order)
             }
         },
 
         mounted() {
-            if (! this.sections.length) {
-                this.sections.push(this.default)
+            if (this.value.length > 0) {
+                this.sections = this.value
+            } else {
+                this.sections = [{
+                    name: 'General',
+                    handle: 'general',
+                    description: '',
+                    placement: 'body',
+                    order: 0,
+                    fields: [],
+                }]
             }
         }
     }

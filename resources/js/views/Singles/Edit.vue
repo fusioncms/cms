@@ -6,7 +6,12 @@
 
         <portal to="subtitle">{{ matrix.description }}</portal>
 
-        <shared-form :form="form" :submit="submit" :single="single" :matrix="matrix"></shared-form>
+        <shared-form
+            v-if="form"
+            :form="form"
+            :single="single"
+            :matrix="matrix">
+        </shared-form>
     </div>
 </template>
 
@@ -19,7 +24,7 @@
         head: {
             title() {
                 return {
-                    inner: this.matrix.name || 'Loading...'
+                    inner: _.has(this.form, 'name') ? this.form.name : 'Loading...'
                 }
             }
         },
@@ -28,7 +33,7 @@
             return {
                 matrix: {},
                 single: {},
-                form: new Form({}),
+                form: null,
             }
         },
 

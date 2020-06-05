@@ -55,7 +55,7 @@
                             name="fieldset"
                             label="Fieldset"
                             help="What fieldset would you like to attach?"
-                            :options="fieldsets"
+                            :options="fieldsetOptions"
                             :has-error="form.errors.has('fieldset')"
                             :error-message="form.errors.get('fieldset')"
                             v-model="form.fieldset">
@@ -153,7 +153,7 @@
                         name="parent_id"
                         label="Parent Matrix"
                         help="Should this matrix belong to another?"
-                        :options="matrices"
+                        :options="parentOptions"
                         :has-error="form.errors.has('parent_id')"
                         :error-message="form.errors.get('parent_id')"
                         v-model="form.parent_id">
@@ -268,6 +268,34 @@
             pluralReference() {
                 return pluralize(this.form.name)
             },
+
+            fieldsetOptions() {
+                let options = _.map(this.fieldsets, (item) => {
+                    return {
+                        'label': item.name,
+                        'value': item.id
+                    }
+                })
+
+                options.unshift({ 'label': 'None', 'value': null })
+
+                return options
+            },
+
+            parentOptions() {
+                let options = _.map(this.matrices, (item) => {
+                    return {
+                        'label': item.name,
+                        'value': item.id
+                    }
+                })
+
+                options = _.remove(options, (item) => this.id == item.id)
+                
+                options.unshift({ 'label': 'None', 'value': null })
+
+                return options
+            }
         },
 
         watch: {

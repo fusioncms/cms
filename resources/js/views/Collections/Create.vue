@@ -6,7 +6,11 @@
 
         <portal to="subtitle">{{ collection.description }}</portal>
 
-        <shared-form :form="form" :submit="submit" :collection="collection"></shared-form>
+        <shared-form
+            v-if="form"
+            :form="form"
+            :collection="collection">
+        </shared-form>
     </div>
 </template>
 
@@ -26,7 +30,7 @@
         data() {
             return {
                 collection: {},
-                form: new Form({})
+                form: null
             }
         },
 
@@ -88,7 +92,6 @@
     export function getCollection(slug, callback) {
         axios.get('/api/matrices/slug/' + slug).then((response) => {
             let collection = response.data.data
-
             let fields = {
                 name: '',
                 slug: '',
