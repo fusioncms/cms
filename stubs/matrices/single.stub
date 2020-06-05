@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Models\Pages;
+namespace Fusion\Models\Singles;
 
 use Fusion\Models\Field;
 use Fusion\Models\Matrix;
@@ -104,7 +104,7 @@ class {class} extends Model
         $activity->description = "Updated {$modelName}";
         $activity->properties  = [
             'icon'  => $matrix->icon,
-            'link' => "pages/{$matrix->slug}"
+            'link' => "single/{$matrix->slug}"
         ];
     }
 }

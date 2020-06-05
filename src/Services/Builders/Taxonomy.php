@@ -27,7 +27,7 @@ class Taxonomy extends Builder implements BuilderContract
     protected $model;
 
     /**
-     * Create a new Page instance.
+     * Create a new Taxonomy instance.
      *
      * @param  string  $taxonomy
      */

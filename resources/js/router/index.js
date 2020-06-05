@@ -184,36 +184,36 @@ const router = new Router({
             }
         },
         {
-            path: '/pages/:page',
-            component: () => import('../views/Pages/Edit'),
-            name: 'pages.edit',
+            path: '/single/:single',
+            component: () => import('../views/Singles/Edit'),
+            name: 'single.edit',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
             },
         },
         {
-            path: '/collections/:collection',
+            path: '/collection/:collection',
             component: () => import('../views/Collections/Index'),
-            name: 'entries.index',
+            name: 'collection.index',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
             },
         },
         {
-            path: '/collections/:collection/create',
+            path: '/collection/:collection/create',
             component: () => import('../views/Collections/Create'),
-            name: 'entries.create',
+            name: 'collection.create',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
             },
         },
         {
-            path: '/collections/:collection/:id/edit',
+            path: '/collection/:collection/:id/edit',
             component: () => import('../views/Collections/Edit'),
-            name: 'entries.edit',
+            name: 'collection.edit',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',

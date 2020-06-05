@@ -5,16 +5,16 @@ namespace Fusion\Http\Requests;
 use Fusion\Models\Matrix;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Fusion\Services\Builders\Page;
+use Fusion\Services\Builders\Single;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PageRequest extends FormRequest
+class SingleRequest extends FormRequest
 {
 
     public function __construct()
     {
-        $this->matrix        = Matrix::findOrFail(request()->route('page'));
-        $this->model         = (new Page($this->matrix->handle))->make();
+        $this->matrix        = Matrix::findOrFail(request()->route('single'));
+        $this->model         = (new Single($this->matrix->handle))->make();
         $this->fieldset      = $this->matrix->fieldset;
         $this->fields        = $this->fieldset ? $this->fieldset->database() : [];
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];

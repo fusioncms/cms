@@ -75,15 +75,15 @@ class MatrixObserver
 
         }
 
-        // Create the ID column if converting from a page to a collection type
-        if ($old->type === 'page' and $matrix->type === 'collection') {
+        // Create the ID column if converting from a single to a collection type
+        if ($old->type === 'single' and $matrix->type === 'collection') {
             $this->migration->schema->table($matrix->table, function (Blueprint $table) {
                 $table->bigIncrements('id')->first();
             });
         }
 
-        // Drop the ID column if converting from a collection to a page type
-        if ($old->type === 'collection' and $matrix->type === 'page') {
+        // Drop the ID column if converting from a collection to a single type
+        if ($old->type === 'collection' and $matrix->type === 'single') {
             $this->migration->schema->table($matrix->table, function (Blueprint $table) {
                 $table->dropColumn('id');
             });

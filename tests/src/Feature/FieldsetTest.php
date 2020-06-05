@@ -10,7 +10,7 @@ use Fusion\Models\Fieldset;
 use Illuminate\Support\Str;
 use Facades\FieldsetFactory;
 use Facades\TaxonomyFactory;
-use Fusion\Services\Builders\Page;
+use Fusion\Services\Builders\Single;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FieldsetTest extends TestCase
@@ -63,18 +63,18 @@ class FieldsetTest extends TestCase
         $redFieldTwo = FieldFactory::withName('Ipsum')->withSection($redSection)->create();
         $redFieldset = FieldsetFactory::withSections(collect([$redSection]))->create();
 
-        $matrix = MatrixFactory::asPage()->withFieldset($redFieldset)->create();
-        $model  = (new Page($matrix->handle))->make();
-        $page   = $model->create([
+        $matrix = MatrixFactory::asSingle()->withFieldset($redFieldset)->create();
+        $model  = (new Single($matrix->handle))->make();
+        $single   = $model->create([
             'matrix_id' => $matrix->id,
-            'name'      => 'Renamed-page',
-            'slug'      => 'renamed-page',
+            'name'      => 'Renamed-single',
+            'slug'      => 'renamed-single',
             'status'    => true,
             'lorem'     => 'test',
             'ipsum'     => 'test',
         ]);
 
-        $this->assertDatabaseHas($page->getTable(), [
+        $this->assertDatabaseHas($single->getTable(), [
             'lorem' => 'test',
             'ipsum' => 'test',
         ]);
@@ -87,7 +87,7 @@ class FieldsetTest extends TestCase
 
         $matrix->attachFieldset($blueFieldset);
 
-        $this->assertDatabaseHas($page->getTable(), [
+        $this->assertDatabaseHas($single->getTable(), [
             'lorem' => 'test',
             'ipsum' => 'test',
             'dolor' => null,
@@ -106,18 +106,18 @@ class FieldsetTest extends TestCase
         $redFieldTwo = FieldFactory::withName('Ipsum')->withSection($redSection)->create();
         $redFieldset = FieldsetFactory::withSections(collect([$redSection]))->create();
 
-        $matrix = MatrixFactory::asPage()->withFieldset($redFieldset)->create();
-        $model  = (new Page($matrix->handle))->make();
-        $page   = $model->create([
+        $matrix = MatrixFactory::asSingle()->withFieldset($redFieldset)->create();
+        $model  = (new Single($matrix->handle))->make();
+        $single = $model->create([
             'matrix_id' => $matrix->id,
-            'name'      => 'Renamed-page',
-            'slug'      => 'renamed-page',
+            'name'      => 'Renamed-single',
+            'slug'      => 'renamed-single',
             'status'    => true,
             'lorem'     => 'test',
             'ipsum'     => 'test',
         ]);
 
-        $this->assertDatabaseHas($page->getTable(), [
+        $this->assertDatabaseHas($single->getTable(), [
             'lorem' => 'test',
             'ipsum' => 'test',
         ]);
@@ -130,11 +130,11 @@ class FieldsetTest extends TestCase
 
         $matrix->attachFieldset($blueFieldset);
 
-        $this->assertDatabaseTableDoesNotHaveColumn($page->getTable(), 'ipsum');
-        $this->assertDatabaseTableHasColumn($page->getTable(), 'dolor');
-        $this->assertDatabaseTableHasColumn($page->getTable(), 'sit');
+        $this->assertDatabaseTableDoesNotHaveColumn($single->getTable(), 'ipsum');
+        $this->assertDatabaseTableHasColumn($single->getTable(), 'dolor');
+        $this->assertDatabaseTableHasColumn($single->getTable(), 'sit');
 
-        $this->assertDatabaseHas($page->getTable(), [
+        $this->assertDatabaseHas($single->getTable(), [
             'lorem' => 'test',
             'dolor' => null,
             'sit'   => null,
@@ -252,7 +252,7 @@ class FieldsetTest extends TestCase
         $fieldOne = FieldFactory::withName('Foo')->withSection($section)->create();
         $fieldset = FieldsetFactory::withSections(collect([$section]))->create();
 
-        $matrix = MatrixFactory::asPage()->withFieldset($fieldset)->create();
+        $matrix = MatrixFactory::asSingle()->withFieldset($fieldset)->create();
         $table  = $matrix->getBuilder()->getTable();
 
         // Assert column & type are correct..
@@ -290,7 +290,7 @@ class FieldsetTest extends TestCase
         $fieldset = FieldsetFactory::withSections([$section])->create();
 
         // Assign to matrix..
-        $matrix   = MatrixFactory::asPage()->withFieldset($fieldset)->create();
+        $matrix   = MatrixFactory::asSingle()->withFieldset($fieldset)->create();
         $table    = $matrix->getBuilder()->getTable();
 
         // origial field - updated
