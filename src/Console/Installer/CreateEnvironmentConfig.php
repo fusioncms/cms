@@ -46,26 +46,26 @@ class CreateEnvironmentConfig
      */
     protected function createConfigFile()
     {
-        if ($this->container['dev']) {
-            $env = 'env.dev.stub';
-        } else {
-            $env = 'env.stub';
-        }
+        File::put(base_path('.env'),
+            $this->findAndReplace('console/env.stub', [
+                // application
+                '##APP_NAME##'   => $this->container['app_name'],
+                '##APP_ENV##'    => $this->container['app_env'],
+                '##APP_DEBUG##'  => $this->container['app_debug'],
+                '##APP_KEY##'    => Str::random(32),
+                '##APP_URL##'    => $this->container['app_url'],
+                '##APP_DOMAIN##' => parse_url($this->container['app_url'], PHP_URL_HOST),
 
-        $contents = $this->findAndReplace($env, [
-            '##APP_KEY##'      => Str::random(32),
-            '##APP_URL##'      => $this->container['app_url'],
-            '##APP_DOMAIN##'   => parse_url($this->container['app_url'], PHP_URL_HOST),
-            '##DB_DRIVER##'    => 'mysql',
-            '##DB_HOST##'      => $this->container['db_host'],
-            '##DB_NAME##'      => $this->container['db_name'],
-            '##DB_USERNAME##'  => $this->container['db_username'],
-            '##DB_PASSWORD##'  => $this->container['db_password'],
-            '##DB_CHARSET##'   => $this->container['db_charset'],
-            '##DB_COLLATION##' => $this->container['db_collation'],
-        ]);
-
-        File::put(base_path('.env'), $contents);
+                // database
+                '##DB_DRIVER##'    => $this->container['db_driver'],
+                '##DB_HOST##'      => $this->container['db_host'],
+                '##DB_NAME##'      => $this->container['db_name'],
+                '##DB_USERNAME##'  => $this->container['db_user'],
+                '##DB_PASSWORD##'  => $this->container['db_pass'],
+                '##DB_CHARSET##'   => $this->container['db_charset'],
+                '##DB_COLLATION##' => $this->container['db_collation'],
+            ])
+        );
     }
 
     /**
