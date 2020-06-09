@@ -2,10 +2,12 @@
 
 namespace Fusion\Console;
 
-use Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Fusion\Console\Actions\CheckServerRequirements;
 
 class InstallCommand extends Command
 {
@@ -14,7 +16,12 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'fusion:install {--homestead} {--valet} {--force} {--refresh} {--url=http://localhost} {--host=localhost} {--database=} {--username=} {--password=} {--charset=utf8} {--collation=utf8_unicode_ci}';
+    protected $signature = 'fusion:install' .
+                           ' {--homestead}' .  // use default homestead configurations; skips wizard
+                           ' {--valet}'     .  // use default valet configurations; skips wizard
+                           ' {--refresh}'   .  // refresh database/settings, while leaving user in tact
+                           ' {--debug=}'       // sets environmental debug setting (default = false)
+                           ;
 
     /**
      * The console command description.
@@ -37,91 +44,141 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        $name = $this->generateName();
-
-        if ($this->option('refresh')) {
-            $dev       = true;
-            $url       = env('APP_URL');
-            $host      = env('DB_HOST');
-            $database  = env('DB_DATABASE');
-            $username  = env('DB_USERNAME');
-            $password  = env('DB_PASSWORD');
-            $charset   = env('DB_CHARSET');
-            $collation = env('DB_COLLATION');
-        } elseif ($this->option('homestead')) {
-            $dev       = true;
-            $url       = $this->option('url');
-            $host      = $this->option('host');
-            $database  = $this->option('database') ?? 'fusioncms';
-            $username  = $this->option('username') ?? 'homestead';
-            $password  = $this->option('password') ?? 'secret';
-            $charset   = $this->option('charset');
-            $collation = $this->option('collation');
-        } elseif ($this->option('valet')) {
-            $dev       = true;
-            $url       = $this->option('url');
-            $host      = $this->option('host');
-            $database  = $this->option('database') ?? 'fusioncms';
-            $username  = $this->option('username') ?? 'root';
-            $password  = $this->option('password') ?? '';
-            $charset   = $this->option('charset');
-            $collation = $this->option('collation');
-        } else {
-            $dev       = false;
-            $url       = $this->option('url');
-            $host      = $this->option('host');
-            $database  = $this->option('database');
-            $username  = $this->option('username');
-            $password  = $this->option('password');
-            $charset   = $this->option('charset');
-            $collation = $this->option('collation');
+        if (app_installed() and ! $this->option('refresh')) {
+            $this->error('FusionCMS is already installed.');
+            $this->comment('Did you mean?');
+            $this->line('fusion:uninstall - Uninstall FusionCMS.');
+            $this->line('fusion:refresh   - Refresh installation; resets database and default settings.');
+            return;
         }
 
+        if (! app_installed() and $this->option('refresh')) {
+            $this->error('FusionCMS first needs to be installed.');
+            $this->comment('Did you mean?');
+            $this->line('fusion:install - Install FusionCMS.');
+            return;
+        }
+
+        // is a dev?
+        //
+        $dev = ($this->option('homestead') or $this->option('valet'));
+
+        // installation configurations
+        //
         $this->container = [
-            'app_url'         => $url,
-            'db_host'         => $host,
-            'db_name'         => $database,
-            'db_username'     => $username,
-            'db_password'     => $password,
-            'db_charset'      => $charset,
-            'db_collation'    => $collation,
-            'user_email'      => 'admin@example.com',
-            'user_password'   => 'secret',
-            'user_name'       => $name,
-            'dev'             => $dev,
+            // application
+            'app_name'      => env('APP_NAME',     'FusionCMS'),
+            'app_env'       => env('APP_ENV',      'local'),
+            'app_debug'     => env('APP_DEBUG',    $this->option('debug') ?? $dev),
+            'app_url'       => env('APP_URL',      'http://localhost'),
+            
+            // database
+            'db_driver'     => env('DB_DRIVER',    'mysql'),
+            'db_host'       => env('DB_HOST',      'localhost'),
+            'db_name'       => env('DB_DATABASE',  'fusioncms'),
+            'db_user'       => env('DB_USERNAME',  'root'),
+            'db_pass'       => env('DB_PASSWORD',  'secret'),
+            'db_charset'    => env('DB_CHARSET',   'utf8'),
+            'db_collation'  => env('DB_COLLATION', 'utf8_unicode_ci'),
+            
+            // default user
+            'user_email'    => 'admin@example.com',
+            'user_password' => 'secret',
+            'user_name'     => $this->generateName(),
         ];
 
-        if (app_installed() and ! $this->option('force') and ! $this->option('refresh')) {
-            return $this->error('FusionCMS is already installed.');
+        // --homestead flag overrides
+        // 
+        if ($this->option('homestead')) {
+            $this->container['db_user'] = env('DB_USERNAME', 'homestead');
+            $this->container['db_pass'] = env('DB_PASSWORD', 'secret');
         }
 
-        if (! $dev) {
-            $errors = [];
-
-            if (empty($database)) {
-                $errors[] = 'Please provided a database using the `--database` option.';
-            }
-
-            if (empty($username)) {
-                $errors[] = 'Please provided a username using the `--username` option.';
-            }
-
-            if (empty($password)) {
-                $errors[] = 'Please provided a password using the `--password` option.';
-            }
-
-            if (count($errors) > 0) {
-                foreach ($errors as $error) {
-                    $this->error($error);
-                }
-
-                return;
-            }
+        // --valet flag overrides
+        // 
+        if ($this->option('valet')) {
+            $this->container['db_user'] = env('DB_USERNAME', 'root');
+            $this->container['db_pass'] = env('DB_PASSWORD', '');
         }
 
-        $this->comment('Relax while FusionCMS proceeds with the installation process.');
+        if ($dev or $this->option('refresh')) {
+            $this->confirmation(true);
+        } else {
+            $this->line('<fg=white;options=bold>' . File::get(fusion_path('/stubs/console/wizard.stub')) . '</>');
 
-        return $this->install();
+            $this->line("\n<fg=black;bg=white>--- Verifying server for requirements...</>");
+            $this->verifyServerRequirements();
+
+            $this->line("\n<fg=black;bg=white>--- Now for some questions to get you started...</>");
+            $this->wizard();
+        }
+    }
+
+    /**
+     * Installation wizard.
+     *
+     * @return void
+     */
+    private function wizard()
+    {
+        // application
+        $this->container['app_name']  = $this->ask('Please enter your application name:', $this->container['app_name']);
+        $this->container['app_url']   = $this->ask('Please enter your website url:',      $this->container['app_url']);
+
+        // database
+        $this->container['db_host']      = $this->ask('Please enter the database host:',      $this->container['db_host']);
+        $this->container['db_name']      = $this->ask('Please enter the database name:',      $this->container['db_name']);
+        $this->container['db_user']      = $this->ask('Please enter the database username:',  $this->container['db_user']);
+        $this->container['db_pass']      = $this->ask('Please enter the database password:',  $this->container['db_pass']);
+        $this->container['db_charset']   = $this->ask('Please enter the database charset:',   $this->container['db_charset']);
+        $this->container['db_collation'] = $this->ask('Please enter the database collation:', $this->container['db_collation']);
+        
+        // default user
+        $this->container['user_name']     = $this->ask('Please enter a default user name:',     $this->container['user_name']);
+        $this->container['user_email']    = $this->ask('Please enter a default user email:',    $this->container['user_email']);
+        $this->container['user_password'] = $this->ask('Please enter a default user password:', $this->container['user_password']);
+
+        $this->confirmation();
+    }
+
+    /**
+     * Installation confirmation
+     * 
+     * @return void
+     */
+    private function confirmation($confirmed = false)
+    {
+        if (! $confirmed) {
+            $this->line("\n<fg=black;bg=white>--- You have entered the following...</>");
+
+            // application
+            $this->comment('Application name:      ' . $this->container['app_name']);
+            $this->comment('Application URL:       ' . $this->container['app_url']);
+
+            // database
+            $this->comment('Database host:         ' . $this->container['db_host']);
+            $this->comment('Database name:         ' . $this->container['db_name']);
+            $this->comment('Database username:     ' . $this->container['db_user']);
+            $this->comment('Database password:     ' . $this->container['db_pass']);
+            $this->comment('Database charset:      ' . $this->container['db_charset']);
+            $this->comment('Database collation:    ' . $this->container['db_collation']);
+            
+            // default user
+            $this->comment('Default user name:     ' . $this->container['user_name']);
+            $this->comment('Default user email:    ' . $this->container['user_email']);
+            $this->comment('Default user password: ' . $this->container['user_password']);
+            
+            // make confirmation..
+            if ($this->confirm('Do you wish to proceed in installing FusionCMS?')) {
+                $this->confirmation(true);
+            } else {
+                $this->wizard();
+            }
+        } else {
+            $this->line("\n<fg=black;bg=white>--- Relax while FusionCMS proceeds with the installation process...</>");
+            
+            $this->install();
+        }
     }
 
     /**
@@ -168,7 +225,6 @@ class InstallCommand extends Command
         }
 
         $progressBar = new ProgressBar($this->output, count($jobs));
-
         $progressBar->setFormat("\n%status:-45s%\n%current%/%max% [%bar%] %percent:3s%%\n🏁  %estimated:-20s%  %memory:20s%\n\n");
 
         event('fusioncms.installing');
@@ -206,7 +262,7 @@ class InstallCommand extends Command
         $progressBar->setMessage('Complete', 'status');
         $progressBar->finish();
 
-        return $this->info("\nInstallation complete.");
+        return $this->line("\n<fg=black;bg=green>--- Installation complete.</>");
     }
 
     /**
@@ -236,5 +292,16 @@ class InstallCommand extends Command
         ];
 
         return $people[array_rand($people)];
+    }
+
+    private function verifyServerRequirements()
+    {
+        $this->table(['Requirement', 'Version', 'Pass'], CheckServerRequirements::requirements());
+        $this->table(['Folder', 'Actual', 'Required', 'Pass'],   CheckServerRequirements::permissions());
+
+        if (! CheckServerRequirements::verify()) {
+            $this->error('Your server does not meet the FusionCMS requirements.');
+            die();
+        }
     }
 }
