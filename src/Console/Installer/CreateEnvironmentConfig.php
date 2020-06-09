@@ -51,7 +51,7 @@ class CreateEnvironmentConfig
                 // application
                 '##APP_NAME##'   => $this->container['app_name'],
                 '##APP_ENV##'    => $this->container['app_env'],
-                '##APP_DEBUG##'  => $this->container['app_debug'],
+                '##APP_DEBUG##'  => boolval($this->container['app_debug']),
                 '##APP_KEY##'    => Str::random(32),
                 '##APP_URL##'    => $this->container['app_url'],
                 '##APP_DOMAIN##' => parse_url($this->container['app_url'], PHP_URL_HOST),

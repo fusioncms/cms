@@ -45,7 +45,18 @@ class InstallCommand extends Command
     public function handle()
     {
         if (app_installed() and ! $this->option('refresh')) {
-            return $this->error('FusionCMS is already installed.');
+            $this->error('FusionCMS is already installed.');
+            $this->comment('Did you mean?');
+            $this->line('fusion:uninstall - Uninstall FusionCMS.');
+            $this->line('fusion:refresh   - Refresh installation; resets database and default settings.');
+            return;
+        }
+
+        if (! app_installed() and $this->option('refresh')) {
+            $this->error('FusionCMS first needs to be installed.');
+            $this->comment('Did you mean?');
+            $this->line('fusion:install - Install FusionCMS.');
+            return;
         }
 
         // is a dev?
@@ -58,7 +69,7 @@ class InstallCommand extends Command
             // application
             'app_name'      => env('APP_NAME',     'FusionCMS'),
             'app_env'       => env('APP_ENV',      'local'),
-            'app_debug'     => env('APP_DEBUG',    (bool) $this->option('debug') ?? $dev),
+            'app_debug'     => env('APP_DEBUG',    $this->option('debug') ?? $dev),
             'app_url'       => env('APP_URL',      'http://localhost'),
             
             // database
@@ -93,10 +104,12 @@ class InstallCommand extends Command
         if ($dev or $this->option('refresh')) {
             $this->confirmation(true);
         } else {
-            $this->info(File::get(fusion_path('/stubs/console/wizard.stub')));
+            $this->line('<fg=white;options=bold>' . File::get(fusion_path('/stubs/console/wizard.stub')) . '</>');
 
+            $this->line("\n<fg=black;bg=white>--- Verifying server for requirements...</>");
             $this->verifyServerRequirements();
 
+            $this->line("\n<fg=black;bg=white>--- Now for some questions to get you started...</>");
             $this->wizard();
         }
     }
@@ -136,7 +149,7 @@ class InstallCommand extends Command
     private function confirmation($confirmed = false)
     {
         if (! $confirmed) {
-            $this->info(File::get(fusion_path('/stubs/console/wizard.stub')));
+            $this->line("\n<fg=black;bg=white>--- You have entered the following...</>");
 
             // application
             $this->comment('Application name:      ' . $this->container['app_name']);
@@ -162,7 +175,7 @@ class InstallCommand extends Command
                 $this->wizard();
             }
         } else {
-            $this->line(File::get(fusion_path('/stubs/console/install.stub')));
+            $this->line("\n<fg=black;bg=white>--- Relax while FusionCMS proceeds with the installation process...</>");
             
             $this->install();
         }
@@ -249,7 +262,7 @@ class InstallCommand extends Command
         $progressBar->setMessage('Complete', 'status');
         $progressBar->finish();
 
-        return $this->info("\nInstallation complete.");
+        return $this->line("\n<fg=black;bg=green>--- Installation complete.</>");
     }
 
     /**
