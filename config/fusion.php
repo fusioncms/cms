@@ -66,6 +66,7 @@ return [
         \Fusion\Fieldtypes\SelectFieldtype::class,
         \Fusion\Fieldtypes\TaxonomyFieldtype::class,
         \Fusion\Fieldtypes\TextareaFieldtype::class,
+        \Fusion\Fieldtypes\TinyMceFieldtype::class,
         \Fusion\Fieldtypes\ToggleFieldtype::class,
         \Fusion\Fieldtypes\USStateFieldtype::class,
         \Fusion\Fieldtypes\UserFieldtype::class,

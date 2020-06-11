@@ -68,3 +68,6 @@ Vue.component('us-state-fieldtype-settings', () => import('../fieldtypes/USState
 
 Vue.component('user-fieldtype', () => import('../fieldtypes/User/Field'))
 Vue.component('user-fieldtype-settings', () => import('../fieldtypes/User/Settings'))
+
+Vue.component('tinymce-fieldtype', () => import('../fieldtypes/TinyMce/Field'))
+Vue.component('tinymce-fieldtype-settings', () => import('../fieldtypes/TinyMce/Settings'))
