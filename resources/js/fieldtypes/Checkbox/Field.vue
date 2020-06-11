@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p-checkbox-group 
+        <p-checkbox-group
             :label="field.name"
             :help="field.help"
             :inline="field.settings.display == 'row'">
@@ -23,6 +23,7 @@
 
 <script>
     import fieldtype from '../../mixins/fieldtype'
+
     export default {
         name: 'checkbox-fieldtype',
 
@@ -57,4 +58,3 @@
         }
     }
 </script>
-

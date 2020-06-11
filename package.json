@@ -63,6 +63,7 @@
         "pluralize": "^8.0.0",
         "plyr": "~3.5.10",
         "popper.js": "^1.16.1",
+        "uniqid": "^5.2.0",
         "vue-apexcharts": "^1.5.2",
         "vue-feather-icons": "^5.0.0",
         "vue-head": "^2.1.2",
