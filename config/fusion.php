@@ -58,6 +58,7 @@ return [
         \Fusion\Fieldtypes\InformationFieldtype::class,
         \Fusion\Fieldtypes\InputFieldtype::class,
         \Fusion\Fieldtypes\LinkFieldtype::class,
+        \Fusion\Fieldtypes\ListFieldtype::class,
         \Fusion\Fieldtypes\MarkdownFieldtype::class,
         \Fusion\Fieldtypes\NumberFieldtype::class,
         \Fusion\Fieldtypes\RadioFieldtype::class,
