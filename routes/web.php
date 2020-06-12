@@ -11,6 +11,13 @@
 |
 */
 
+Route::prefix('installer')->group(function() {
+    Route::get('confirm', 'Installer\InstallController@index');
+    Route::post('confirm', 'Installer\InstallController@store');
+    Route::get('{step?}', 'Installer\StepController@index');
+    Route::post('{step?}', 'Installer\StepController@store');
+});
+
 Route::get('file/{uuid}/{name}', 'FileController@index');
 Route::get('backups/{backup}', 'BackupController@index');
 Route::get('/themes/{theme}/preview.png', 'Themes\ScreenshotController@show');

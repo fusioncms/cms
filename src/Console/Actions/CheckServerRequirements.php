@@ -5,32 +5,6 @@ namespace Fusion\Console\Actions;
 class CheckServerRequirements
 {
     /**
-     * System requirements.
-     * 
-     * @var array
-     */
-    private static $requirements = [
-        'php' => '7.2.5',
-        'extensions' => [
-            'bcmath',
-            'ctype',
-            'fileinfo',
-            'json',
-            'mbstring',
-            'openssl',
-            'pdo',
-            'tokenizer',
-            'xml'
-        ]
-    ];
-
-    private static $permissions = [
-        'storage/framework/' => '775',
-        'storage/logs/'      => '775',
-        'bootstrap/cache/'   => '775',
-    ];
-
-    /**
      * Verify requirements.
      *
      * @return void
@@ -69,7 +43,7 @@ class CheckServerRequirements
      */
     private static function getPHPVersion()
     {
-        return [[ 'PHP', phpversion(), self::verifyPHPVersion() ? '<fg=green>√</>' : '<fg=red>x</>' ]];
+        return [[ 'PHP', phpversion(), self::verifyPHPVersion() ? '√' : 'x' ]];
     }
 
     /**
@@ -79,8 +53,8 @@ class CheckServerRequirements
      */
     private static function getExtensions()
     {
-        return collect(self::$requirements['extensions'])->map(function($extension) {
-            return [ $extension, phpversion($extension), extension_loaded($extension) ? '<fg=green>√</>' : '<fg=red>x</>' ];
+        return collect(config('installer.requirements.extensions'))->map(function($extension) {
+            return [ $extension, phpversion($extension), extension_loaded($extension) ? '√' : 'x' ];
         })->toArray();
     }
 
@@ -91,14 +65,14 @@ class CheckServerRequirements
      */
     private static function getFolderPermissions()
     {
-        return collect(self::$permissions)->map(function($perm, $folder) {
-            $actual = substr(sprintf('%o', fileperms($folder)), -3);
+        return collect(config('installer.permissions'))->map(function($perm, $folder) {
+            $actual = substr(sprintf('%o', fileperms(base_path($folder))), -3);
             
             return [
                 $folder,
                 $actual,
                 $perm,
-                ($actual == $perm) ? '<fg=green>√</>' : '<fg=red>x</>'
+                ($actual == $perm) ? '√' : 'x'
             ];
         })->toArray();
     }
@@ -108,9 +82,9 @@ class CheckServerRequirements
      *
      * @return bool
      */
-    private static function verifyPHPVersion()
+    public static function verifyPHPVersion()
     {
-       return version_compare(phpversion(), self::$requirements['php'], '>=');
+       return version_compare(phpversion(), config('installer.requirements.php'), '>=');
        
     }
 
@@ -119,9 +93,9 @@ class CheckServerRequirements
      *
      * @return bool
      */
-    private static function verifyExtensions()
+    public static function verifyExtensions()
     {
-        return collect(self::$requirements['extensions'])->every(function($extension) {
+        return collect(config('installer.requirements.extensions'))->every(function($extension) {
             return extension_loaded($extension);
         });
     }
@@ -131,10 +105,10 @@ class CheckServerRequirements
      *
      * @return bool
      */
-    private static function verifyFolderPermissions()
+    public static function verifyFolderPermissions()
     {
-       return collect(self::$permissions)->every(function($perm, $folder) {
-            return substr(sprintf('%o', fileperms($folder)), -3) == $perm;
+       return collect(config('installer.permissions'))->every(function($perm, $folder) {
+            return substr(sprintf('%o', fileperms(base_path($folder))), -3) == $perm;
         });
     }
 }

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 class FusionServiceProvider extends ServiceProvider
@@ -28,12 +29,42 @@ class FusionServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->registerRoutes();
         $this->registerGates();
+        $this->registerCustomRules();
 
         Passport::routes();
 
         if (app_installed()) {
             $this->registerTheme();
         }
+    }
+
+    /**
+     * Register the provided services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        if (! defined('FUSION_VERSION')) {
+            define('FUSION_VERSION', '6.0.0-beta.5');
+        }
+
+        $this->registerFusion();
+        $this->registerConfig();
+        $this->registerTelescope();
+
+        $kernel = $this->app->make(\Illuminate\Contracts\Http\Kernel::class);
+        $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
+
+        $this->commands([
+            \Fusion\Console\UninstallCommand::class,
+            \Fusion\Console\InstallCommand::class,
+            \Fusion\Console\MakeThemeCommand::class,
+            \Fusion\Console\PublishCommand::class,
+            \Fusion\Console\RefreshCommand::class,
+            \Fusion\Console\FlushCommand::class,
+            \Fusion\Console\SyncCommand::class,
+        ]);
     }
 
     /**
@@ -67,32 +98,15 @@ class FusionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the provided services.
+     * Register custom rule extensions.
      *
      * @return void
      */
-    public function register()
+    protected function registerCustomRules()
     {
-        if (! defined('FUSION_VERSION')) {
-            define('FUSION_VERSION', '6.0.0-beta.5');
-        }
-
-        $this->registerFusion();
-        $this->registerConfig();
-        $this->registerTelescope();
-
-        $kernel = $this->app->make(\Illuminate\Contracts\Http\Kernel::class);
-        $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
-
-        $this->commands([
-            \Fusion\Console\UninstallCommand::class,
-            \Fusion\Console\InstallCommand::class,
-            \Fusion\Console\MakeThemeCommand::class,
-            \Fusion\Console\PublishCommand::class,
-            \Fusion\Console\RefreshCommand::class,
-            \Fusion\Console\FlushCommand::class,
-            \Fusion\Console\SyncCommand::class,
-        ]);
+        Validator::extend('securepassword', 'Fusion\Rules\SecurePassword@passes');
+        Validator::extend('serverrequirements', 'Fusion\Rules\ServerRequirements@passes');
+        Validator::extend('permissionrequirements', 'Fusion\Rules\PermissionRequirements@passes');
     }
 
     /**
@@ -152,19 +166,17 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerPublishing()
     {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                fusion_path('/public') => public_path('vendor/fusion'),
-            ], 'fusion-assets');
+        $this->publishes([
+            fusion_path('/public') => public_path('vendor/fusion'),
+        ], 'fusion-assets');
 
-            $this->publishes([
-                fusion_path('/config/fusion.php') => config_path('fusion.php'),
-            ], 'fusion-config');
+        $this->publishes([
+            fusion_path('/config/fusion.php') => config_path('fusion.php'),
+        ], 'fusion-config');
 
-            $this->publishes([
-                fusion_path('/themes') => base_path('themes'),
-            ], 'fusion-themes');
-        }
+        $this->publishes([
+            fusion_path('/themes') => base_path('themes'),
+        ], 'fusion-themes');
     }
 
     /**
@@ -184,9 +196,7 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerMigrations()
     {
-        if ($this->app->runningInConsole()) {
-            $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
-        }
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
     }
 
     /**
@@ -202,6 +212,10 @@ class FusionServiceProvider extends ServiceProvider
 
         $this->mergeConfigFile(
             __DIR__.'/../../config/fusion.php', 'fusion'
+        );
+
+        $this->mergeConfigFile(
+            __DIR__.'/../../config/installer.php', 'installer'
         );
 
         $this->mergeConfigFile(
