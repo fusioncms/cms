@@ -36,6 +36,9 @@ Vue.component('input-fieldtype-settings', () => import('../fieldtypes/Input/Sett
 Vue.component('link-fieldtype', () => import('../fieldtypes/Link/Field'))
 Vue.component('link-fieldtype-settings', () => import('../fieldtypes/Link/Settings'))
 
+Vue.component('list-fieldtype', () => import('../fieldtypes/List/Field'))
+Vue.component('list-fieldtype-settings', () => import('../fieldtypes/List/Settings'))
+
 Vue.component('markdown-fieldtype', () => import('../fieldtypes/Markdown/Field'))
 Vue.component('markdown-fieldtype-settings', () => import('../fieldtypes/Markdown/Settings'))
 

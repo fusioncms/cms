@@ -55,7 +55,9 @@ class SettingsController extends Controller
 
                     $setting->update([ 'value' => $path ]);
                 } else {
-                    $setting->update([ 'value' => $request->get($setting->handle) ]);
+                    $value = $request->get($setting->handle);
+
+                    $setting->update([ 'value' => $value ]);
                 }
             }
         });
