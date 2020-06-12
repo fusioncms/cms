@@ -47,7 +47,7 @@ class FusionServiceProvider extends ServiceProvider
             /**
              * Authenticated users undergo auth check
              *  based on their assigned Role.
-             * 
+             *
              */
             if ($user) {
                 return $user->isOwner() or
@@ -58,7 +58,7 @@ class FusionServiceProvider extends ServiceProvider
             /**
              * Unauthenticated users undergo auth check.
              *  based on `guest` Role.
-             * 
+             *
              */
             return Role::whereName('guest')
                 ->firstOrFail()
@@ -79,7 +79,6 @@ class FusionServiceProvider extends ServiceProvider
 
         $this->registerFusion();
         $this->registerConfig();
-        $this->registerTelescope();
 
         $kernel = $this->app->make(\Illuminate\Contracts\Http\Kernel::class);
         $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
@@ -120,19 +119,6 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(SettingsServiceProvider::class);
         $this->app->register(FieldtypeServiceProvider::class);
         $this->app->register(ThemeServiceProvider::class);
-    }
-
-    /**
-     * Register Laravel Telescope when in the local environment.
-     *
-     * @return void
-     */
-    private function registerTelescope()
-    {
-        if ($this->app->isLocal()) {
-            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
-            $this->app->register(TelescopeServiceProvider::class);
-        }
     }
 
     /**
@@ -215,7 +201,7 @@ class FusionServiceProvider extends ServiceProvider
 
     /**
      * Merge in `fusioncms` config values.
-     * 
+     *
      * @param  string $key
      * @param  string $path
      * @return void

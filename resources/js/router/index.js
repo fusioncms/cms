@@ -417,11 +417,6 @@ const router = new Router({
                 layout: 'admin'
             }
         },
-        {
-            path: '/telescope',
-            name: 'telescope',
-            beforeEnter() { location.href = '/telescope/exceptions' },
-        },
 
         {
             path: '/importer',
