@@ -24,7 +24,7 @@ export default {
     },
 
     mounted() {
-        this.$bus.$on('openSelectDirectoryModal', (callback) => {
+        bus().$on('openSelectDirectoryModal', (callback) => {
             this.open = true
             this.callback = callback
 

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import Form from '../../../forms/Form'
+    import Form from '../../../services/Form'
     import { mapActions, mapGetters } from 'vuex'
 
     export default {

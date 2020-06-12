@@ -19,7 +19,7 @@
 </template>
 
 <script>
-	import Form from '../../../forms/Form'
+	import Form from '../../../services/Form'
 
 	export default {
 		data() {
@@ -83,7 +83,7 @@
 									toast(error.message, 'danger')
 								}
 							})
-					}    
+					}
 				}
 			}
 		}

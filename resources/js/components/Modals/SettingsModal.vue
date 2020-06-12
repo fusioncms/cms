@@ -17,7 +17,7 @@
 </template>
 
 <script>
-	import SettingsForm from '../../views/Settings/SharedForm.vue'
+	import SettingsForm from '../../pages/Settings/SharedForm.vue'
 
 	export default {
 		name: 'settings-modal',

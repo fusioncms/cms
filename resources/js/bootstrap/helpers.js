@@ -1,12 +1,11 @@
-import store from '../vuex'
 import _ from 'lodash'
 
-window.proton = function() {
-    return Vue.prototype.$proton
+window.bus = function() {
+    return Vue.prototype.$bus
 }
 
 window.toast = function (message, level) {
-    proton().$emit('toast', {
+    bus().$emit('toast', {
         message,
         level
     })

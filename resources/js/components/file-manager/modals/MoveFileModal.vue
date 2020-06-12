@@ -51,7 +51,7 @@
                 clearFileSelection:      'filemanager/clearFileSelection',
             }),
 
-            submit() {  
+            submit() {
                 if (this.directory) {
                     if (this.directory.id == this.currentDirectory) {
                         toast('Cannot move files to same location.', 'warning')
@@ -104,10 +104,10 @@
         },
 
         created() {
-            this.$proton.$on('modal-opened', (name) => {
+            bus().$on('modal-opened', (name) => {
                 if (name == 'move-file') { this.isOpen = true }
             })
-            this.$proton.$on('modal-closed', (name) => {
+            bus().$on('modal-closed', (name) => {
                 if (name == 'move-file') { this.isOpen = false }
             })
         }

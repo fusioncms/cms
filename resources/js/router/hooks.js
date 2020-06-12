@@ -1,4 +1,4 @@
-import store from '../vuex'
+import store from '../store'
 import Cookies   from 'js-cookie'
 import NProgress from 'nprogress'
 
@@ -28,7 +28,7 @@ export const resolve = (to, from, next) => {
         store.dispatch('navigation/fetchAdminNavigation')
         store.dispatch('settings/fetchSettings')
     }
-    
+
     next()
 }
 

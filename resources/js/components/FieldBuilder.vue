@@ -178,7 +178,7 @@
         },
 
         created() {
-            this.$bus.$on('add-field-' + this.id, (adding) => {
+            bus().$on('add-field-' + this.id, (adding) => {
                 let index = _.findIndex(this.fields, (field) => field.handle == adding.handle)
 
                 if (index == -1) {
@@ -186,7 +186,7 @@
                 }
             })
 
-            this.$bus.$on('remove-field-' + this.id, (handle) => {
+            bus().$on('remove-field-' + this.id, (handle) => {
                 let index = _.findIndex(this.fields, (field) => field.handle == handle)
 
                 if (index > -1) {

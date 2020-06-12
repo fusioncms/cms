@@ -10,7 +10,7 @@ const router = new Router({
     routes: [
         {
             path: '/',
-            component: () => import('../views/Dashboard'),
+            component: () => import('../pages/Dashboard'),
             name: 'dashboard',
             meta: {
                 requiresAuth: true,
@@ -21,7 +21,7 @@ const router = new Router({
 
         {
             path: '/login',
-            component: () => import('../views/Auth/Login'),
+            component: () => import('../pages/Auth/Login'),
             name: 'login',
             meta: {
                 requiresAuth: false,
@@ -31,7 +31,7 @@ const router = new Router({
 
         {
             path: '/insight',
-            component: () => import('../views/SEO/Insight'),
+            component: () => import('../pages/SEO/Insight'),
             name: 'insight',
             meta: {
                 requiresAuth: true,
@@ -41,7 +41,7 @@ const router = new Router({
 
         {
             path: '/fieldsets',
-            component: () => import('../views/Fieldsets/Index'),
+            component: () => import('../pages/Fieldsets/Index'),
             name: 'fieldsets',
             meta: {
                 requiresAuth: true,
@@ -50,7 +50,7 @@ const router = new Router({
         },
         {
             path: '/fieldsets/create',
-            component: () => import('../views/Fieldsets/Create'),
+            component: () => import('../pages/Fieldsets/Create'),
             name: 'fieldsets.create',
             meta: {
                 requiresAuth: true,
@@ -59,7 +59,7 @@ const router = new Router({
         },
         {
             path: '/fieldsets/:fieldset/edit',
-            component: () => import('../views/Fieldsets/Edit'),
+            component: () => import('../pages/Fieldsets/Edit'),
             name: 'fieldsets.edit',
             meta: {
                 requiresAuth: true,
@@ -68,7 +68,7 @@ const router = new Router({
         },
         {
             path: '/taxonomies',
-            component: () => import('../views/Taxonomies/Index'),
+            component: () => import('../pages/Taxonomies/Index'),
             name: 'taxonomies',
             meta: {
                 requiresAuth: true,
@@ -77,7 +77,7 @@ const router = new Router({
         },
         {
             path: '/taxonomies/create',
-            component: () => import('../views/Taxonomies/Create'),
+            component: () => import('../pages/Taxonomies/Create'),
             name: 'taxonomies.create',
             meta: {
                 requiresAuth: true,
@@ -86,7 +86,7 @@ const router = new Router({
         },
         {
             path: '/taxonomies/:taxonomy/edit',
-            component: () => import('../views/Taxonomies/Edit'),
+            component: () => import('../pages/Taxonomies/Edit'),
             name: 'taxonomies.edit',
             meta: {
                 requiresAuth: true,
@@ -95,7 +95,7 @@ const router = new Router({
         },
         {
             path: '/menus',
-            component: () => import('../views/Menus/Index'),
+            component: () => import('../pages/Menus/Index'),
             name: 'menus',
             meta: {
                 requiresAuth: true,
@@ -104,7 +104,7 @@ const router = new Router({
         },
         {
             path: '/menus/create',
-            component: () => import('../views/Menus/Create'),
+            component: () => import('../pages/Menus/Create'),
             name: 'menus.create',
             meta: {
                 requiresAuth: true,
@@ -113,7 +113,7 @@ const router = new Router({
         },
         {
             path: '/menus/:menu/edit',
-            component: () => import('../views/Menus/Edit'),
+            component: () => import('../pages/Menus/Edit'),
             name: 'menus.edit',
             meta: {
                 requiresAuth: true,
@@ -122,7 +122,7 @@ const router = new Router({
         },
         {
             path: '/menus/:menu/nodes',
-            component: () => import('../views/Nodes/Index'),
+            component: () => import('../pages/Nodes/Index'),
             name: 'menu.nodes',
             meta: {
                 requiresAuth: true,
@@ -131,7 +131,7 @@ const router = new Router({
         },
         {
             path: '/menus/:menu/nodes/:node/edit',
-            component: () => import('../views/Nodes/Edit'),
+            component: () => import('../pages/Nodes/Edit'),
             name: 'menu.nodes.edit',
             meta: {
                 requiresAuth: true,
@@ -140,7 +140,7 @@ const router = new Router({
         },
         {
             path: '/matrices',
-            component: () => import('../views/Matrices/Index'),
+            component: () => import('../pages/Matrices/Index'),
             name: 'matrices',
             meta: {
                 requiresAuth: true,
@@ -149,7 +149,7 @@ const router = new Router({
         },
         {
             path: '/matrices/create',
-            component: () => import('../views/Matrices/Create'),
+            component: () => import('../pages/Matrices/Create'),
             name: 'matrices.create',
             meta: {
                 requiresAuth: true,
@@ -158,7 +158,7 @@ const router = new Router({
         },
         {
             path: '/matrices/:matrix/edit',
-            component: () => import('../views/Matrices/Edit'),
+            component: () => import('../pages/Matrices/Edit'),
             name: 'matrices.edit',
             meta: {
                 requiresAuth: true,
@@ -167,7 +167,7 @@ const router = new Router({
         },
         {
             path: '/extensions',
-            component: () => import('../views/Extensions/Index'),
+            component: () => import('../pages/Extensions/Index'),
             name: 'extensions',
             meta: {
                 requiresAuth: true,
@@ -176,7 +176,7 @@ const router = new Router({
         },
         {
             path: '/extensions/:extension/edit',
-            component: () => import('../views/Extensions/Edit'),
+            component: () => import('../pages/Extensions/Edit'),
             name: 'extensions.edit',
             meta: {
                 requiresAuth: true,
@@ -185,7 +185,7 @@ const router = new Router({
         },
         {
             path: '/single/:single',
-            component: () => import('../views/Singles/Edit'),
+            component: () => import('../pages/Singles/Edit'),
             name: 'single.edit',
             meta: {
                 requiresAuth: true,
@@ -194,7 +194,7 @@ const router = new Router({
         },
         {
             path: '/collection/:collection',
-            component: () => import('../views/Collections/Index'),
+            component: () => import('../pages/Collections/Index'),
             name: 'collection.index',
             meta: {
                 requiresAuth: true,
@@ -203,7 +203,7 @@ const router = new Router({
         },
         {
             path: '/collection/:collection/create',
-            component: () => import('../views/Collections/Create'),
+            component: () => import('../pages/Collections/Create'),
             name: 'collection.create',
             meta: {
                 requiresAuth: true,
@@ -212,7 +212,7 @@ const router = new Router({
         },
         {
             path: '/collection/:collection/:id/edit',
-            component: () => import('../views/Collections/Edit'),
+            component: () => import('../pages/Collections/Edit'),
             name: 'collection.edit',
             meta: {
                 requiresAuth: true,
@@ -221,7 +221,7 @@ const router = new Router({
         },
         {
             path: '/taxonomies/:taxonomy',
-            component: () => import('../views/Terms/Index'),
+            component: () => import('../pages/Terms/Index'),
             name: 'terms.index',
             meta: {
                 requiresAuth: true,
@@ -230,7 +230,7 @@ const router = new Router({
         },
         {
             path: '/taxonomies/:taxonomy/create',
-            component: () => import('../views/Terms/Create'),
+            component: () => import('../pages/Terms/Create'),
             name: 'terms.create',
             meta: {
                 requiresAuth: true,
@@ -239,7 +239,7 @@ const router = new Router({
         },
         {
             path: '/taxonomies/:taxonomy/:id/edit',
-            component: () => import('../views/Terms/Edit'),
+            component: () => import('../pages/Terms/Edit'),
             name: 'terms.edit',
             meta: {
                 requiresAuth: true,
@@ -248,7 +248,7 @@ const router = new Router({
         },
         {
             path: '/forms',
-            component: () => import('../views/Forms/Index'),
+            component: () => import('../pages/Forms/Index'),
             name: 'forms',
             meta: {
                 requiresAuth: true,
@@ -257,7 +257,7 @@ const router = new Router({
         },
         {
             path: '/forms/create',
-            component: () => import('../views/Forms/Create'),
+            component: () => import('../pages/Forms/Create'),
             name: 'forms.create',
             meta: {
                 requiresAuth: true,
@@ -266,7 +266,7 @@ const router = new Router({
         },
         {
             path: '/forms/:form/edit',
-            component: () => import('../views/Forms/Edit'),
+            component: () => import('../pages/Forms/Edit'),
             name: 'forms.edit',
             meta: {
                 requiresAuth: true,
@@ -275,7 +275,7 @@ const router = new Router({
         },
         {
             path: '/inbox',
-            component: () => import('../views/Inbox/Index'),
+            component: () => import('../pages/Inbox/Index'),
             name: 'inbox',
             meta: {
                 requiresAuth: true,
@@ -284,7 +284,7 @@ const router = new Router({
         },
         {
             path: '/users',
-            component: () => import('../views/Users/Index'),
+            component: () => import('../pages/Users/Index'),
             name: 'users',
             meta: {
                 requiresAuth: true,
@@ -293,7 +293,7 @@ const router = new Router({
         },
         {
             path: '/users/create',
-            component: () => import('../views/Users/Create'),
+            component: () => import('../pages/Users/Create'),
             name: 'users.create',
             meta: {
                 requiresAuth: true,
@@ -302,7 +302,7 @@ const router = new Router({
         },
         {
             path: '/users/:user/edit',
-            component: () => import('../views/Users/Edit'),
+            component: () => import('../pages/Users/Edit'),
             name: 'users.edit',
             meta: {
                 requiresAuth: true,
@@ -311,7 +311,7 @@ const router = new Router({
         },
         {
             path: '/users/:role',
-            component: () => import('../views/Users/Index'),
+            component: () => import('../pages/Users/Index'),
             name: 'users.role',
             meta: {
                 requiresAuth: true,
@@ -320,7 +320,7 @@ const router = new Router({
         },
         {
             path: '/roles',
-            component: () => import('../views/Roles/Index'),
+            component: () => import('../pages/Roles/Index'),
             name: 'roles',
             meta: {
                 requiresAuth: true,
@@ -329,7 +329,7 @@ const router = new Router({
         },
         {
             path: '/roles/create',
-            component: () => import('../views/Roles/Create'),
+            component: () => import('../pages/Roles/Create'),
             name: 'roles.create',
             meta: {
                 requiresAuth: true,
@@ -338,7 +338,7 @@ const router = new Router({
         },
         {
             path: '/roles/:role/edit',
-            component: () => import('../views/Roles/Edit'),
+            component: () => import('../pages/Roles/Edit'),
             name: 'roles.edit',
             meta: {
                 requiresAuth: true,
@@ -347,7 +347,7 @@ const router = new Router({
         },
         {
             path: '/permissions',
-            component: () => import('../views/Permissions'),
+            component: () => import('../pages/Permissions'),
             name: 'permissions',
             meta: {
                 requiresAuth: true,
@@ -356,7 +356,7 @@ const router = new Router({
         },
         {
             path: '/settings',
-            component: () => import('../views/Settings/Index'),
+            component: () => import('../pages/Settings/Index'),
             name: 'settings',
             meta: {
                 requiresAuth: true,
@@ -365,7 +365,7 @@ const router = new Router({
         },
         {
             path: '/settings/:section',
-            component: () => import('../views/Settings/Edit'),
+            component: () => import('../pages/Settings/Edit'),
             name: 'setting.section',
             meta: {
                 requiresAuth: true,
@@ -374,7 +374,7 @@ const router = new Router({
         },
         {
             path: '/theme',
-            component: () => import('../views/Theme'),
+            component: () => import('../pages/Theme'),
             name: 'theme',
             meta: {
                 requiresAuth: true,
@@ -383,7 +383,7 @@ const router = new Router({
         },
         {
             path: '/customize',
-            component: () => import('../views/Customize'),
+            component: () => import('../pages/Customize'),
             name: 'customize',
             meta: {
                 requiresAuth: true,
@@ -392,7 +392,7 @@ const router = new Router({
         },
         {
             path: '/files',
-            component: () => import('../views/FileManager/Index'),
+            component: () => import('../pages/FileManager/Index'),
             name: 'file-manager.index',
             meta: {
                 requiresAuth: true,
@@ -401,7 +401,7 @@ const router = new Router({
         },
         {
             path: '/files/:uuid',
-            component: () => import('../views/FileManager/Show'),
+            component: () => import('../pages/FileManager/Show'),
             name: 'file-manager.show',
             meta: {
                 requiresAuth: true,
@@ -410,7 +410,7 @@ const router = new Router({
         },
         {
             path: '/logs',
-            component: () => import('../views/Logs/Index'),
+            component: () => import('../pages/Logs/Index'),
             name: 'logs.index',
             meta: {
                 requiresAuth: true,
@@ -420,7 +420,7 @@ const router = new Router({
 
         {
             path: '/importer',
-            component: () => import('../views/Importer/Index'),
+            component: () => import('../pages/Importer/Index'),
             name: 'importer',
             meta: {
                 requiresAuth: true,
@@ -430,7 +430,7 @@ const router = new Router({
 
         {
             path: '/importer/create',
-            component: () => import('../views/Importer/Create'),
+            component: () => import('../pages/Importer/Create'),
             name: 'importer.create',
             meta: {
                 requiresAuth: true,
@@ -440,7 +440,7 @@ const router = new Router({
 
         {
             path: '/importer/:importer/edit',
-            component: () => import('../views/Importer/Edit'),
+            component: () => import('../pages/Importer/Edit'),
             name: 'importer.edit',
             meta: {
                 requiresAuth: true,
@@ -450,7 +450,7 @@ const router = new Router({
 
         {
             path: '/importer/:importer/view',
-            component: () => import('../views/Importer/View'),
+            component: () => import('../pages/Importer/View'),
             name: 'importer.view',
             meta: {
                 requiresAuth: true,
@@ -460,7 +460,7 @@ const router = new Router({
 
         {
             path: '/importer/:importer/mapping',
-            component: () => import('../views/Importer/Mapping'),
+            component: () => import('../pages/Importer/Mapping'),
             name: 'importer.mapping',
             meta: {
                 requiresAuth: true,
@@ -470,7 +470,7 @@ const router = new Router({
 
         {
             path: '/backups',
-            component: () => import('../views/Backups/Index'),
+            component: () => import('../pages/Backups/Index'),
             name: 'backups',
             meta: {
                 requiresAuth: true,
@@ -480,7 +480,7 @@ const router = new Router({
 
         {
             path: '/mailables',
-            component: () => import('../views/Mailables/Index'),
+            component: () => import('../pages/Mailables/Index'),
             name: 'mailables',
             meta: {
                 requiresAuth: true,
@@ -490,7 +490,7 @@ const router = new Router({
 
         {
             path: '/mailables/:mailable/edit',
-            component: () => import('../views/Mailables/Edit'),
+            component: () => import('../pages/Mailables/Edit'),
             name: 'mailables.edit',
             meta: {
                 requiresAuth: true,
@@ -500,7 +500,7 @@ const router = new Router({
 
         {
             path: '/modules',
-            component: () => import('../views/Modules/Index'),
+            component: () => import('../pages/Modules/Index'),
             name: 'modules',
             meta: {
                 requiresAuth: true,
@@ -510,7 +510,7 @@ const router = new Router({
 
         {
             path: '/styleguide',
-            component: () => import('../views/Styleguide/Index'),
+            component: () => import('../pages/Styleguide/Index'),
             name: 'styleguide',
             meta: {
                 requiresAuth: true,
@@ -520,7 +520,7 @@ const router = new Router({
 
         {
             path: '/styleguide/tables',
-            component: () => import('../views/Styleguide/Tables'),
+            component: () => import('../pages/Styleguide/Tables'),
             name: 'styleguide.tables',
             meta: {
                 requiresAuth: true,
@@ -530,7 +530,7 @@ const router = new Router({
 
         {
             path: '*',
-            component: () => import('../views/404'),
+            component: () => import('../pages/404'),
             name: '404',
             meta: {
                 layout: 'error'

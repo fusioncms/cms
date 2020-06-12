@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import Form from '../../forms/Form'
+import Form from '../../services/Form'
 
 export default {
     data() {
@@ -34,7 +34,7 @@ export default {
     },
 
     mounted() {
-        this.$bus.$on('openEditDirectoryModal', ({directory, onChange}) => {
+        bus().$on('openEditDirectoryModal', ({directory, onChange}) => {
             this.open = true
             this.directory = directory
             this.onChange = onChange

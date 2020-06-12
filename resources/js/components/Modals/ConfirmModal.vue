@@ -9,13 +9,13 @@
 </template>
 
 <script>
-    import store from '../../vuex'
+    import store from '../../store'
     export default {
         name: 'confirm-modal',
         computed: {
             modalVisible: {
                 get() {
-                    return store.state.form.confirmModalVisible 
+                    return store.state.form.confirmModalVisible
                 },
                 set(value) {
                     store.commit('form/setConfirmModalVisible', value)
