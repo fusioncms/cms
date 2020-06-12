@@ -92,11 +92,7 @@
                 "Fusion": "Fusion\\Facades\\Fusion",
                 "Setting": "Fusion\\Facades\\Setting",
                 "Theme": "Fusion\\Facades\\Theme"
-            },
-            "dont-discover": [
-                "caffeinated/shinobi",
-                "caffeinated/themes"
-            ]
+            }
         }
     }
 }
