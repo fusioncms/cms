@@ -24,8 +24,8 @@
 <script>
 	import { mapActions } from 'vuex'
 
-	import Directory from './browse/Directory.vue'
-	import File      from './browse/File.vue'
+	import Directory from './Browse/Directory.vue'
+	import File      from './Browse/File.vue'
 
 	export default {
 		name: 'file-manager-browser',

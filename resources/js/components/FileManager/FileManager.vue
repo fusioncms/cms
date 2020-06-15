@@ -58,12 +58,12 @@
     import FilePaginator from './FilePaginator.vue'
     import FileUploader  from './FileUploader.vue'
 
-    import BreadcrumbAction from './actions/Breadcrumb.vue'
-    import ControlAction    from './actions/Control.vue'
-    import DisplayAction    from './actions/Display.vue'
-    import SearchAction     from './actions/Search.vue'
-    import SortAction       from './actions/Sort.vue'
-    import ViewAction       from './actions/View.vue'
+    import BreadcrumbAction from './Actions/Breadcrumb.vue'
+    import ControlAction    from './Actions/Control.vue'
+    import DisplayAction    from './Actions/Display.vue'
+    import SearchAction     from './Actions/Search.vue'
+    import SortAction       from './Actions/Sort.vue'
+    import ViewAction       from './Actions/View.vue'
 
     export default {
         name: 'file-manager',

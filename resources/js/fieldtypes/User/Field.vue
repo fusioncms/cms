@@ -38,7 +38,7 @@
 										<fa-icon class="icon" icon="arrow-alt-circle-left"></fa-icon>
 									</button>
                     			</div>
-		                        
+
 		                        <div class="toolbar__group toolbar__group--grow">
 		                            <search-action></search-action>
 		                        </div>
@@ -71,13 +71,13 @@
 <script>
 	import { mapGetters, mapActions } from 'vuex'
 
-	import UserCard      from '../../components/user-manager/browse/User.vue'
-	import UserSelection from '../../components/user-manager/Selection.vue'
+	import UserCard      from '../../components/UserManager/Browse/User.vue'
+	import UserSelection from '../../components/UserManager/Selection.vue'
 
-	import RoleAction    from '../../components/user-manager/actions/Role.vue'
-	import SearchAction  from '../../components/user-manager/actions/Search.vue'
-	import SortAction    from '../../components/user-manager/actions/Sort.vue'
-	import ViewAction    from '../../components/user-manager/actions/View.vue'
+	import RoleAction    from '../../components/UserManager/Actions/Role.vue'
+	import SearchAction  from '../../components/UserManager/Actions/Search.vue'
+	import SortAction    from '../../components/UserManager/Actions/Sort.vue'
+	import ViewAction    from '../../components/UserManager/Actions/View.vue'
 
 	export default {
 		name: 'user-fieldtype',

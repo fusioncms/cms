@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import stackable from '../../../mixins/stackable'
+    import stackable from '../../mixins/stackable'
 
     export default {
         name: 'p-modal',

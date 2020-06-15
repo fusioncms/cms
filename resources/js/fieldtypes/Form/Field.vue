@@ -63,9 +63,9 @@
 
 <script>
 	import { mapActions, mapGetters } from 'vuex'
-	import FormCard      from '../../components/form-manager/browse/Form.vue'
-	import FormSelection from '../../components/form-manager/Selection.vue'
-	import SearchAction  from '../../components/form-manager/actions/Search.vue'
+	import FormCard      from '../../components/FormManager/Browse/Form.vue'
+	import FormSelection from '../../components/FormManager/Selection.vue'
+	import SearchAction  from '../../components/FormManager/Actions/Search.vue'
 
 	export default {
 		name: 'form-fieldtype',
