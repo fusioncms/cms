@@ -11,6 +11,16 @@
 |
 */
 
+Route::prefix('install')->group(function() {
+    Route::get('confirm', 'Installer\InstallController@index');
+    Route::post('confirm', 'Installer\InstallController@store')
+        ->withoutMiddleware([App\Http\Middleware\VerifyCsrfToken::class]);
+        
+    Route::get('{step?}', 'Installer\StepController@index');
+    Route::post('{step?}', 'Installer\StepController@store')
+        ->withoutMiddleware([App\Http\Middleware\VerifyCsrfToken::class]);
+});
+
 Route::get('file/{uuid}/{name}', 'FileController@index');
 Route::get('backups/{backup}', 'BackupController@index');
 Route::get('/themes/{theme}/preview.png', 'Themes\ScreenshotController@show');

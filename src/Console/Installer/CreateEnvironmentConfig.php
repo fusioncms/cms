@@ -21,7 +21,22 @@ class CreateEnvironmentConfig
      */
     public function __construct(array $container)
     {
-        $this->container = $container;
+        $this->container = [
+            'APP_NAME'   => $container['app_name'],
+            'APP_ENV'    => $container['app_env'],
+            'APP_DEBUG'  => $container['app_debug'] ? 'true' : 'false',
+            'APP_KEY'    => $container['app_key'] ?? $this->generateRandomKey(),
+            'APP_URL'    => $container['app_url'],
+            
+            'DB_HOST'     => $container['db_host'],
+            'DB_DATABASE' => $container['db_name'],
+            'DB_USERNAME' => $container['db_user'],
+            'DB_PASSWORD' => $container['db_pass'],
+
+            // for sanctum
+            'SESSION_DOMAIN' => '.'.parse_url($container['app_url'], PHP_URL_HOST),
+            'SANCTUM_STATEFUL_DOMAINS' => parse_url($container['app_url'], PHP_URL_HOST),
+        ];
     }
 
     /**
@@ -35,7 +50,6 @@ class CreateEnvironmentConfig
             $this->createConfigFile();
         }
 
-        Artisan::call('cache:clear');
         Artisan::call('config:cache');
     }
 
@@ -46,37 +60,50 @@ class CreateEnvironmentConfig
      */
     protected function createConfigFile()
     {
-        File::put(base_path('.env'),
-            $this->findAndReplace('console/env.stub', [
-                // application
-                '##APP_NAME##'   => $this->container['app_name'],
-                '##APP_ENV##'    => $this->container['app_env'],
-                '##APP_DEBUG##'  => $this->container['app_debug'] ? 'true' : 'false',
-                '##APP_KEY##'    => Str::random(32),
-                '##APP_URL##'    => $this->container['app_url'],
-                '##APP_DOMAIN##' => parse_url($this->container['app_url'], PHP_URL_HOST),
+        $env = $this->getEnv();
 
-                // database
-                '##DB_DRIVER##'    => $this->container['db_driver'],
-                '##DB_HOST##'      => $this->container['db_host'],
-                '##DB_NAME##'      => $this->container['db_name'],
-                '##DB_USERNAME##'  => $this->container['db_user'],
-                '##DB_PASSWORD##'  => $this->container['db_pass'],
-                '##DB_CHARSET##'   => $this->container['db_charset'],
-                '##DB_COLLATION##' => $this->container['db_collation'],
-            ])
-        );
+        foreach ($this->container as $key => $value) {
+            $pattern = "/^{$key}\=.*/m";
+            $setting = "{$key}={$value}";
+            $matches = [];
+
+            if (preg_match($pattern, $env, $matches)) {
+                $env = preg_replace($pattern, $setting, $env);
+            } else {
+                $env .= "\n{$setting}";
+            }
+        }
+
+        file_put_contents(app()->environmentFilePath(), $env);
     }
 
     /**
-     * Find and replace placeholders in file.
+     * Generate a random key for the application.
      *
-     * @param  string  $file
-     * @param  array   $data
-     * @return mixed
+     * @return string
      */
-    protected function findAndReplace($file, $data)
+    private function generateRandomKey()
     {
-        return strtr(File::get(fusion_path('/stubs/' . $file)), $data);
+        Artisan::call('key:generate', ['--show' => true]);
+
+        $output = Artisan::output();
+        $output = trim(preg_replace('/\s+/', ' ', $output));
+
+        return $output;
+    }
+
+    /**
+     * Returns contents of `.env` file.
+     * Will create an `.env` file, if one doesn't exist.
+     * 
+     * @return string
+     */
+    private function getEnv()
+    {
+        if (! file_exists(app()->environmentFilePath())) {
+            copy(base_path('.env.example'), app()->environmentFilePath());
+        }
+
+        return file_get_contents(app()->environmentFilePath());
     }
 }
