@@ -67,19 +67,17 @@ class InstallCommand extends Command
         //
         $this->container = [
             // application
-            'app_name'      => env('APP_NAME',     'FusionCMS'),
-            'app_env'       => env('APP_ENV',      'local'),
-            'app_debug'     => env('APP_DEBUG',    $this->option('debug') ?? $dev),
-            'app_url'       => env('APP_URL',      'http://localhost'),
+            'app_name'  => env('APP_NAME',     'FusionCMS'),
+            'app_env'   => env('APP_ENV',      'local'),
+            'app_debug' => env('APP_DEBUG',    $this->option('debug') ?? $dev),
+            'app_url'   => env('APP_URL',      'http://localhost'),
             
             // database
-            'db_driver'     => env('DB_DRIVER',    'mysql'),
-            'db_host'       => env('DB_HOST',      'localhost'),
-            'db_name'       => env('DB_DATABASE',  'fusioncms'),
-            'db_user'       => env('DB_USERNAME',  'root'),
-            'db_pass'       => env('DB_PASSWORD',  'secret'),
-            'db_charset'    => env('DB_CHARSET',   'utf8'),
-            'db_collation'  => env('DB_COLLATION', 'utf8_unicode_ci'),
+            'db_driver' => env('DB_DRIVER',    'mysql'),
+            'db_host'   => env('DB_HOST',      'localhost'),
+            'db_name'   => env('DB_DATABASE',  'fusioncms'),
+            'db_user'   => env('DB_USERNAME',  'root'),
+            'db_pass'   => env('DB_PASSWORD',  'secret'),
             
             // default user
             'user_email'    => 'admin@example.com',
@@ -130,8 +128,6 @@ class InstallCommand extends Command
         $this->container['db_name']      = $this->ask('Please enter the database name:',      $this->container['db_name']);
         $this->container['db_user']      = $this->ask('Please enter the database username:',  $this->container['db_user']);
         $this->container['db_pass']      = $this->ask('Please enter the database password:',  $this->container['db_pass']);
-        $this->container['db_charset']   = $this->ask('Please enter the database charset:',   $this->container['db_charset']);
-        $this->container['db_collation'] = $this->ask('Please enter the database collation:', $this->container['db_collation']);
         
         // default user
         $this->container['user_name']     = $this->ask('Please enter a default user name:',     $this->container['user_name']);
@@ -160,8 +156,6 @@ class InstallCommand extends Command
             $this->comment('Database name:         ' . $this->container['db_name']);
             $this->comment('Database username:     ' . $this->container['db_user']);
             $this->comment('Database password:     ' . $this->container['db_pass']);
-            $this->comment('Database charset:      ' . $this->container['db_charset']);
-            $this->comment('Database collation:    ' . $this->container['db_collation']);
             
             // default user
             $this->comment('Default user name:     ' . $this->container['user_name']);
@@ -202,7 +196,6 @@ class InstallCommand extends Command
             'Creating directories...'           => new \Fusion\Console\Installer\CreateDirectories,
             'Creating database...'              => new \Fusion\Console\Installer\CreateDatabase($this->container),
             'Creating environment config...'    => new \Fusion\Console\Installer\CreateEnvironmentConfig($this->container),
-            'Generating encryption key...'      => new \Fusion\Console\Installer\GenerateEncryptionKey,
             'Creating database tables...'       => new \Fusion\Console\Installer\CreateDatabaseTables,
             'Publishing module assets...'       => new \Fusion\Console\Installer\PublishModuleAssets,
             'Publishing Fusion resources...'    => new \Fusion\Console\Installer\PublishFusionResources,
