@@ -4,8 +4,6 @@
 
 @section('content')
 	<form method="POST">
-		@csrf
-
 		<x-installer.input
 			name="db_driver"
 			label="Driver"
@@ -47,7 +45,7 @@
 		<x-installer.input
 			name="db_collation"
 			label="Collation"
-			value="{{ $data['db_charset'] ?? 'utf8_unicode_ci' }}"
+			value="{{ $data['db_collation'] ?? 'utf8_unicode_ci' }}"
 		/>
 
 		<div class="mt-10 flex justify-between">

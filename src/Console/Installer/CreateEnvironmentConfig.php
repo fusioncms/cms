@@ -25,7 +25,7 @@ class CreateEnvironmentConfig
             'APP_NAME'   => $container['app_name'],
             'APP_ENV'    => $container['app_env'],
             'APP_DEBUG'  => $container['app_debug'] ? 'true' : 'false',
-            'APP_KEY'    => $this->generateRandomKey(),
+            'APP_KEY'    => $container['app_key'] ?? $this->generateRandomKey(),
             'APP_URL'    => $container['app_url'],
             
             'DB_HOST'     => $container['db_host'],
@@ -33,12 +33,8 @@ class CreateEnvironmentConfig
             'DB_USERNAME' => $container['db_user'],
             'DB_PASSWORD' => $container['db_pass'],
 
-            'CACHE_ENABLED' => 'true',
-            'CACHE_DRIVER'  => 'memcached',
-
-            'SESSION_DRIVER' => 'cookie',
+            // for sanctum
             'SESSION_DOMAIN' => '.'.parse_url($container['app_url'], PHP_URL_HOST),
-
             'SANCTUM_STATEFUL_DOMAINS' => parse_url($container['app_url'], PHP_URL_HOST),
         ];
     }
@@ -54,8 +50,7 @@ class CreateEnvironmentConfig
             $this->createConfigFile();
         }
 
-        Artisan::call('cache:clear');
-        Artisan::call('config:clear');
+        Artisan::call('config:cache');
     }
 
     /**
@@ -91,7 +86,10 @@ class CreateEnvironmentConfig
     {
         Artisan::call('key:generate', ['--show' => true]);
 
-        return Artisan::output();
+        $output = Artisan::output();
+        $output = trim(preg_replace('/\s+/', ' ', $output));
+
+        return $output;
     }
 
     /**

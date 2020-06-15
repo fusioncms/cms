@@ -4,8 +4,6 @@
 
 @section('content')
 	<form method="POST">
-		@csrf
-
 		<x-installer.input
 			type="hidden"
 			name="app_key"
@@ -34,7 +32,6 @@
 			name="app_url"
 			label="URL"
 			value="{{ $data['app_url'] ?? url('/') }}"
-			readonly
 		/>
 
 		<div class="mt-10 flex justify-between">

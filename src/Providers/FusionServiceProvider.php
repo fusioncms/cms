@@ -51,7 +51,6 @@ class FusionServiceProvider extends ServiceProvider
 
         $this->registerFusion();
         $this->registerConfig();
-        $this->registerTelescope();
 
         $kernel = $this->app->make(\Illuminate\Contracts\Http\Kernel::class);
         $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
@@ -193,6 +192,10 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerConfig()
     {
+        $this->mergeConfigFile(
+            __DIR__.'/../../config/session.php', 'session'
+        );
+
         $this->mergeConfigFile(
             __DIR__.'/../../config/analytics.php', 'analytics'
         );

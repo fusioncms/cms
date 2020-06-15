@@ -13,13 +13,14 @@ class StepController extends Controller
      *
      * Pre-installation instructions:
      * ----
-     * 1) Copy `.env.example` to a new `.env` file.
-     * 2) Run `php artisan key:generate`
-     * 3) Serve up FusionCMS and visit: /installer
+     * - Copy `.env.example` to a new `.env` file.
+     * - Add  'installer/*' to `VerifyCsrfToken` middleware.
+     * - Run `php artisan key:generate`
+     * - Serve up FusionCMS and visit: /installer
      */
     public function __construct()
     {
-        abort_if(app_installed(), '404');
+        //
     }
 
     /**
@@ -30,6 +31,8 @@ class StepController extends Controller
      */
     public function index(Request $request, $step = 'index')
     {
+        abort_if(app_installed(), '404');
+
         return view("installer.{$step}", $this->getStepData($step));
     }
 

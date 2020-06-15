@@ -15,8 +15,6 @@ class DeleteDatabase
      */
     public function handle()
     {
-        Artisan::call('config:clear');
-
         try {
             $pdo = new PDO('mysql:host=' . config('database.connections.mysql.host'), config('database.connections.mysql.username'), config('database.connections.mysql.password'));
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

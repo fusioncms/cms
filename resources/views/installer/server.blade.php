@@ -46,7 +46,6 @@
 		</div>
 	</div>
 	<form method="POST">
-		@csrf
 		<input type="hidden" name="server" value="true"/>
 
 		<div class="mt-10 flex justify-between">

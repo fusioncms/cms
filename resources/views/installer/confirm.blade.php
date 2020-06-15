@@ -1,3 +1,4 @@
+
 @extends('layouts.installer')
 
 @section('subtitle', 'Confirm your settings')
@@ -7,44 +8,99 @@
 		<div class="text-red-500">{{ $message }}</div>
 	@enderror
 
-	<div class="flex flex-col">
-		<div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-			<div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-				
-				@foreach($data as $datum)
-					<table class="mb-5 min-w-full">
-						<thead>
-							<tr>
-								<th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-									Field
-								</th>
-								<th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-									Value
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach($datum as $field => $value)
-								<tr class="bg-white">
-									<td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-										{{ $field }}
-									</td>
-									<td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-										{{ $value }}
-									</td>
-								</tr>
-							@endforeach
-						</tbody>
-					</table>
-				@endforeach
+	<div>
+		<x-installer.input
+			name="app_name"
+			label="Name"
+			value="{{ $data['app']['app_name'] }}"
+			readonly
+		/>
 
-			</div>
-		</div>
+		<x-installer.input
+			name="app_url"
+			label="URL"
+			value="{{ $data['app']['app_url'] }}"
+			readonly
+		/>
+	</div>
+
+	<div class="py-2">
+		<x-installer.input
+			name="user_email"
+			label="E-mail"
+			value="{{ $data['user']['user_email'] }}"
+			readonly
+		/>
+
+		<x-installer.input
+			name="user_name"
+			label="Username"
+			value="{{ $data['user']['user_name'] }}" 
+			readonly
+		/>
+
+		<x-installer.input
+			name="user_password"
+			label="Password"
+			type="password"
+			value="{{ $data['user']['user_password'] }}"
+			readonly
+		/>
+	</div>
+
+	<div class="py-2">
+		<x-installer.input
+			name="db_driver"
+			label="Driver"
+			value="mysql"
+			readonly
+		/>
+
+		<x-installer.input
+			name="db_host"
+			label="Hostname"
+			value="{{ $data['database']['db_host'] }}"
+			readonly
+		/>
+
+		<x-installer.input
+			name="db_name"
+			label="Database Name"
+			value="{{ $data['database']['db_name'] }}"
+			readonly
+		/>
+
+		<x-installer.input
+			name="db_user"
+			label="Username"
+			value="{{ $data['database']['db_user'] }}"
+			readonly
+		/>
+
+		<x-installer.input
+			name="db_pass"
+			type="password"
+			label="Password"
+			value="{{ $data['database']['db_pass'] }}"
+			readonly
+		/>
+
+		<x-installer.input
+			name="db_charset"
+			label="Character Set"
+			value="{{ $data['database']['db_charset'] }}"
+			readonly
+		/>
+
+		<x-installer.input
+			name="db_collation"
+			label="Collation"
+			value="{{ $data['database']['db_collation'] }}"
+			readonly
+		/>
 	</div>
 
 	<form method="POST">
-		@csrf
-
 		<div class="mt-5 flex justify-between">
 			<x-installer.button class="w-1/3" label="Start Over" href="/installer"/>
 			<x-installer.button class="w-1/3" label="Install!" type="submit"/>

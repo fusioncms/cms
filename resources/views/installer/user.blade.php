@@ -4,8 +4,6 @@
 
 @section('content')
 	<form method="POST">
-		@csrf
-
 		<x-installer.input
 			name="user_email"
 			label="E-mail"
