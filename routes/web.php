@@ -13,9 +13,12 @@
 
 Route::prefix('installer')->group(function() {
     Route::get('confirm', 'Installer\InstallController@index');
-    Route::post('confirm', 'Installer\InstallController@store');
+    Route::post('confirm', 'Installer\InstallController@store')
+        ->withoutMiddleware([App\Http\Middleware\VerifyCsrfToken::class]);
+        
     Route::get('{step?}', 'Installer\StepController@index');
-    Route::post('{step?}', 'Installer\StepController@store');
+    Route::post('{step?}', 'Installer\StepController@store')
+        ->withoutMiddleware([App\Http\Middleware\VerifyCsrfToken::class]);
 });
 
 Route::get('file/{uuid}/{name}', 'FileController@index');
