@@ -11,7 +11,7 @@
 |
 */
 
-Route::prefix('installer')->group(function() {
+Route::prefix('install')->group(function() {
     Route::get('confirm', 'Installer\InstallController@index');
     Route::post('confirm', 'Installer\InstallController@store')
         ->withoutMiddleware([App\Http\Middleware\VerifyCsrfToken::class]);
