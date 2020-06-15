@@ -102,7 +102,7 @@
 
 	<form method="POST">
 		<div class="mt-5 flex justify-between">
-			<x-installer.button class="w-1/3" label="Start Over" href="/installer"/>
+			<x-installer.button class="w-1/3" label="Start Over" href="/install"/>
 			<x-installer.button class="w-1/3" label="Install!" type="submit"/>
 		</div>
 	</form>

@@ -9,21 +9,6 @@ use Illuminate\Support\Facades\Validator;
 class StepController extends Controller
 {
     /**
-     * Installation Wizard.
-     *
-     * Pre-installation instructions:
-     * ----
-     * - Copy `.env.example` to a new `.env` file.
-     * - Add  'installer/*' to `VerifyCsrfToken` middleware.
-     * - Run `php artisan key:generate`
-     * - Serve up FusionCMS and visit: /installer
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Installation step.
      *
      * @param  string $step
@@ -178,7 +163,7 @@ class StepController extends Controller
         $index  = $this->getStepIndex($step);
 
         if (array_key_exists($index - 1, $keys)) {
-            return '/installer/' . $keys[$index - 1];
+            return '/install/' . $keys[$index - 1];
         }
 
         return null;
@@ -196,7 +181,7 @@ class StepController extends Controller
         $index  = $this->getStepIndex($step);
 
         if (array_key_exists($index + 1, $keys)) {
-            return '/installer/' . $keys[$index + 1];
+            return '/install/' . $keys[$index + 1];
         }
 
         return null;
