@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import Form from '../forms/Form'
+    import Form from '../services/Form'
 
     export default {
         name: 'field-editor',
@@ -79,7 +79,7 @@
                 this.form = new Form(_.cloneDeep(value))
             }
         },
-        
+
         methods: {
             submit() {
                 this.form.post('/api/fields/validate')

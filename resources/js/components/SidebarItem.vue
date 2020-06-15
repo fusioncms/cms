@@ -124,7 +124,7 @@
             },
 
             listenForSidebarEvent() {
-                Fusion.bus.$on('toggle-sidebar', () => {
+                bus().$on('toggle-sidebar', () => {
                     this.toggle()
                 })
             }
