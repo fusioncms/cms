@@ -78,12 +78,10 @@
                 accessToken: null,
                 revokeToken: null,
                 
-                tokens: [],  // existing tokens for current user
-                scopes: [],  // all available scopes
+                tokens: [],
 
                 form: new Form({
-                    name: '',
-                    scopes: []
+                    name: ''
                 })
             }
         },
@@ -114,23 +112,19 @@
             refreshTokens() {
                 this.loading = true
 
-                axios.all([
-                    axios.get('/oauth/personal-access-tokens'),
-                    axios.get('/oauth/scopes')
-                ]).then(axios.spread(function (tokens, scopes) {
-                    if (tokens) this.tokens = tokens.data
-                    if (scopes) this.scopes = scopes.data
-
-                    this.loading = false
-                    this.loadingMessage = ''
-                }.bind(this)))
+                axios.get('/api/tokens')
+                    .then((response) => {
+                        this.tokens  = response.data.data
+                        this.loading = false
+                    })
+                    .catch(() => {})
             },
 
             submit() {
-                this.form.post('/oauth/personal-access-tokens')
-                    .then(response => {
-                        this.tokens.push(response.token)
-                        this.accessToken = response.accessToken
+                this.form.post('/api/tokens')
+                    .then((response) => {
+                        this.tokens.push(response.data.accessToken)
+                        this.accessToken = response.data.plainTextToken
                         this.form.reset()
                     })
                     .catch(() => {})
@@ -141,8 +135,8 @@
             },
 
             revoke(token) {
-                axios.delete('/oauth/personal-access-tokens/' + token.id)
-                    .then(response => {
+                axios.delete(`/api/tokens/${token.id}`)
+                    .then(() => {
                         this.setLoadingMessage('Deleting token...')
                         this.refreshTokens()
                     })
