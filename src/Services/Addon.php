@@ -18,7 +18,9 @@ class Addon extends Collection
      */
     public function register()
     {
-        $this->each(function($addon) {
+        $this->filter(function($addon) {
+            return $addon['enabled'] == true;
+        })->each(function($addon) {
             $this->createSymlink($addon);
             $this->registerViewLocation($addon);
             $this->registerClassLoader($addon);
@@ -34,7 +36,7 @@ class Addon extends Collection
      */
     protected function createSymlink($addon)
     {
-        $folder     = $addon->get('namespace');
+        $folder     = $addon['namespace'];
         $publicPath = public_path("addons/{$folder}");
         $addonPath  = addon_path("{$folder}/public");
 
@@ -59,7 +61,7 @@ class Addon extends Collection
      */
     protected function registerViewLocation($addon)
     {
-        $folder = $addon->get('namespace');
+        $folder = $addon['namespace'];
 
         View::getFinder()->addLocation(addon_path("{$folder}/resources/views"));
     }
@@ -73,7 +75,7 @@ class Addon extends Collection
      */
     protected function registerClassLoader($addon)
     {
-        $namespace = $addon->get('namespace');
+        $namespace = $addon['namespace'];
         $loader    = new ClassLoader();
 
         $loader->addPsr4("Addons\\{$namespace}\\", addon_path("{$namespace}/src"));
@@ -88,7 +90,7 @@ class Addon extends Collection
      */
     protected function registerServiceProvider($addon)
     {
-        $provider = "Addons\\{$addon->get('namespace')}\\Providers\\AddonServiceProvider";
+        $provider = "Addons\\{$addon['namespace']}\\Providers\\AddonServiceProvider";
 
         if (class_exists($provider)) {
             App::register($provider);

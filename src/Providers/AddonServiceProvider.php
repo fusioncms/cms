@@ -26,20 +26,13 @@ class AddonServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('addon', function($app) {
-            $addons    = [];
-            $manifests = [];
+            $addons = [];
 
-            if (file_exists(addon_path()) and is_dir(addon_path())) {
-                $addons = $this->app['files']->directories(addon_path());
-
-                foreach ($addons as $addon) {
-                    $manifest              = new Manifest($addon.'/addon.json');
-                    $namespace             = $manifest->get('namespace');
-                    $manifests[$namespace] = collect($manifest->all());
-                }
+            if (file_exists(storage_path('app/addons.json'))) {
+                $addons = (new Manifest(storage_path('app/addons.json')));
             }
 
-            return new Addon($manifests);
+            return new Addon($addons);
         });
     }
 }
