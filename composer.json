@@ -55,7 +55,6 @@
         "composer/semver": "^1.5",
         "doctrine/dbal": "^2.9",
         "illuminate/support": "^7.0",
-        "laravel/passport": "^8.4",
         "laravel/sanctum": "^2.3",
         "laravel/scout": "^8.0",
         "laravel/ui": "^2.0",
