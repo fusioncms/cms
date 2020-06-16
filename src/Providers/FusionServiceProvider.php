@@ -59,6 +59,7 @@ class FusionServiceProvider extends ServiceProvider
 
         $this->commands([
             \Fusion\Console\AddonsDiscoverCommand::class,
+            \Fusion\Console\MakeAddonCommand::class,
             \Fusion\Console\MakeThemeCommand::class,
             \Fusion\Console\UninstallCommand::class,
             \Fusion\Console\InstallCommand::class,
