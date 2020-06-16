@@ -58,9 +58,10 @@ class FusionServiceProvider extends ServiceProvider
         $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
 
         $this->commands([
+            \Fusion\Console\AddonsDiscoverCommand::class,
+            \Fusion\Console\MakeThemeCommand::class,
             \Fusion\Console\UninstallCommand::class,
             \Fusion\Console\InstallCommand::class,
-            \Fusion\Console\MakeThemeCommand::class,
             \Fusion\Console\PublishCommand::class,
             \Fusion\Console\RefreshCommand::class,
             \Fusion\Console\FlushCommand::class,

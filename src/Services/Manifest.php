@@ -2,7 +2,6 @@
 
 namespace Fusion\Services;
 
-use Exception;
 use Illuminate\Support\Collection;
 
 class Manifest extends Collection
@@ -15,7 +14,7 @@ class Manifest extends Collection
     /**
      * @var string
      */
-    protected $content;
+    protected $content = "";
 
     /**
      * Create a new Manifest.
@@ -24,10 +23,6 @@ class Manifest extends Collection
      */
     public function __construct($path = null)
     {
-        if (is_null($path)) {
-            throw Exception('Please specify a path to your manifest file.');
-        }
-
         $this->setPath($path);
         $this->load();
 
