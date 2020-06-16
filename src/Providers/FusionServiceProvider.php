@@ -2,17 +2,18 @@
 
 namespace Fusion\Providers;
 
-use Fusion\Facades\Theme;
 use Fusion\Models\User;
 use Fusion\Models\Role;
+use Fusion\Facades\Addon;
+use Fusion\Facades\Theme;
 use Fusion\Models\Mailable;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class FusionServiceProvider extends ServiceProvider
 {
@@ -34,6 +35,7 @@ class FusionServiceProvider extends ServiceProvider
         Passport::routes();
 
         if (app_installed()) {
+            $this->registerAddons();
             $this->registerTheme();
         }
     }
@@ -128,6 +130,7 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerProviders()
     {
+        $this->app->register(AddonServiceProvider::class);
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
         $this->app->register(SettingsServiceProvider::class);
@@ -163,6 +166,16 @@ class FusionServiceProvider extends ServiceProvider
         $this->publishes([
             fusion_path('/themes') => base_path('themes'),
         ], 'fusion-themes');
+    }
+
+    /**
+     * Register the available addons.
+     *
+     * @return void
+     */
+    private function registerAddons()
+    {
+        Addon::register();
     }
 
     /**

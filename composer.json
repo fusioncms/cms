@@ -89,9 +89,10 @@
                 "Fusion\\Providers\\FusionServiceProvider"
             ],
             "aliases": {
+                "Addon": "Fusion\\Facades\\Addon",
+                "Theme": "Fusion\\Facades\\Theme",
                 "Fusion": "Fusion\\Facades\\Fusion",
-                "Setting": "Fusion\\Facades\\Setting",
-                "Theme": "Fusion\\Facades\\Theme"
+                "Setting": "Fusion\\Facades\\Setting"
             }
         }
     }
