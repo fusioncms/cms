@@ -32,10 +32,6 @@ class CreateEnvironmentConfig
             'DB_DATABASE' => $container['db_name'],
             'DB_USERNAME' => $container['db_user'],
             'DB_PASSWORD' => $container['db_pass'],
-
-            // for sanctum
-            'SESSION_DOMAIN' => '.'.parse_url($container['app_url'], PHP_URL_HOST),
-            'SANCTUM_STATEFUL_DOMAINS' => parse_url($container['app_url'], PHP_URL_HOST),
         ];
     }
 
