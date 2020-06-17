@@ -4,7 +4,7 @@ namespace Fusion\Models;
 
 use Fusion\Concerns\HasRoles;
 use Fusion\Concerns\HasActivity;
-use Laravel\Passport\HasApiTokens;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Fusion\Concerns\HasDynamicRelationships;
 use Illuminate\Database\Eloquent\Builder;

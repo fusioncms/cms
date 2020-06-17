@@ -203,8 +203,6 @@ class InstallCommand extends Command
             'Creating default permissions...'   => new \Fusion\Console\Installer\CreateDefaultPermissions,
             'Creating default roles...'         => new \Fusion\Console\Installer\CreateDefaultRoles,
             'Creating default user account...'  => new \Fusion\Console\Installer\CreateDefaultUser($this->container),
-            'Creating OAuth keys...'            => new \Fusion\Console\Installer\CreateOAuthKeys,
-            'Creating Passport clients...'      => new \Fusion\Console\Installer\CreatePassportClients,
 
             'Exiting maintenance mode...'       => new \Fusion\Console\Actions\ExitMaintenanceMode,
         ];

@@ -6,7 +6,6 @@ use Fusion\Facades\Theme;
 use Fusion\Models\User;
 use Fusion\Models\Role;
 use Fusion\Models\Mailable;
-use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
@@ -30,8 +29,6 @@ class FusionServiceProvider extends ServiceProvider
         $this->registerRoutes();
         $this->registerGates();
         $this->registerCustomRules();
-
-        Passport::routes();
 
         if (app_installed()) {
             $this->registerTheme();
