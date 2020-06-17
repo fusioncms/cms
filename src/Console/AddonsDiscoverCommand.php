@@ -37,11 +37,8 @@ class AddonsDiscoverCommand extends Command
         $addons->map(function($addon) use($cache) {
             $cached = $cache->get($addon['namespace']);
 
-            if ($cached = $cache->get($addon['namespace'])) {
-                $addon['enabled'] = $cached['enabled'];
-            } else {
-                $addon['enabled'] = false;
-            }
+            $addon['enabled']   = $cached['enabled'] ?? false;
+            $addon['installed'] = $cached['installed'] ?? false;
 
             return $addon;
         });
