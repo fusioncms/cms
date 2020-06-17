@@ -11,7 +11,7 @@ return [
     |   https://laravel.com/docs/master/installation#server-requirements
     |
     */
-   
+
 	'requirements' => [
 		'php' => '7.2.5',
         'extensions' => [
@@ -36,11 +36,11 @@ return [
     |   https://laravel.com/docs/master/installation#configuration
     |
     */
-   
+
    'permissions' => [
-   		'storage/framework/' => '775',
-        'storage/logs/'      => '775',
-        'bootstrap/cache/'   => '775',
+   		'storage/framework/' => '755',
+        'storage/logs/'      => '755',
+        'bootstrap/cache/'   => '755',
    ],
 
    /*
@@ -50,9 +50,9 @@ return [
     |
     |
     */
-   
+
 	'wizard' => [
-		
+
 		/**
 		 * Form data will be saved into cache using:
 		 * `key`     - cache identifier

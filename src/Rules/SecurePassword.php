@@ -11,7 +11,7 @@ class SecurePassword implements Rule
      *
      * @var integer
      */
-    protected $minLength = 8;
+    protected $minLength = 6;
 
     /**
      * Last validation error.
@@ -38,14 +38,14 @@ class SecurePassword implements Rule
 
         if (strlen($value) < $this->minLength)
             $this->error = "The :attribute field must be at least {$this->minLength} characters long.";
-        elseif (! preg_match('/[a-z]{1,}/', $value))
-            $this->error = "The :attribute field must have at least 1 lowercase letter.";
-        elseif (! preg_match('/[A-Z]{1,}/', $value))
-            $this->error = "The :attribute field must have at least 1 uppercase letter.";
-        elseif (! preg_match('/[0-9]{1,}/', $value))
-            $this->error = "The :attribute field must have at least 1 digit.";
-        elseif (! preg_match('/[@$!%*#?&]{1,}/', $value))
-            $this->error = "The :attribute field must have at least 1 symbol.";
+        // elseif (! preg_match('/[a-z]{1,}/', $value))
+        //     $this->error = "The :attribute field must have at least 1 lowercase letter.";
+        // elseif (! preg_match('/[A-Z]{1,}/', $value))
+        //     $this->error = "The :attribute field must have at least 1 uppercase letter.";
+        // elseif (! preg_match('/[0-9]{1,}/', $value))
+        //     $this->error = "The :attribute field must have at least 1 digit.";
+        // elseif (! preg_match('/[@$!%*#?&]{1,}/', $value))
+        //     $this->error = "The :attribute field must have at least 1 symbol.";
 
         return empty($this->error);
     }
