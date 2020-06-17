@@ -4,7 +4,6 @@ namespace Fusion\Http\Requests;
 
 use ZipArchive;
 use Fusion\Rules\ValidModule;
-use Fusion\Rules\UniqueModuleName;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ModuleUploadRequest extends FormRequest
@@ -51,7 +50,6 @@ class ModuleUploadRequest extends FormRequest
                 'file',
                 'mimes:' . implode(',', $this->acceptedMimes),
                 new ValidModule($this->zipArchive),
-                new UniqueModuleName($this->zipArchive),
             ]
         ];
     }

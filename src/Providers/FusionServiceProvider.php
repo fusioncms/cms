@@ -332,12 +332,12 @@ class FusionServiceProvider extends ServiceProvider
             return \Fusion\Models\Fieldset::findOrFail($id);
         });
 
-        Route::bind('module', function($slug) {
-            if (! \Caffeinated\Modules\Facades\Module::exists($slug)) {
-                throw new \Caffeinated\Modules\Exceptions\ModuleNotFoundException($slug);
+        Route::bind('addon', function($namespace) {
+            if (! Addon::exists($namespace)) {
+                abort(404);
             }
 
-            return \Caffeinated\Modules\Facades\Module::where('slug', $slug);
+            return Addon::get($namespace);
         });
     }
 

@@ -157,7 +157,13 @@ abstract class DataTableController extends Controller
      */
     protected function getDatabaseColumnNames()
     {
-        return Schema::getColumnListing($this->builder->getModel()->getTable());
+        $columns = Schema::getColumnListing($this->builder->getModel()->getTable());
+
+        if (empty($columns)) {
+            $columns = ['*'];
+        }
+
+        return $columns;
     }
 
     /**
@@ -170,7 +176,7 @@ abstract class DataTableController extends Controller
     {
         try {
             /**
-             * Using Spatie's `laravel-query-builder` package.
+             * Using Swpatie's `laravel-query-builder` package.
              * https://docs.spatie.be/laravel-query-builder/v2/introduction/
              */
             return QueryBuilder::for($this->builder)

@@ -2,8 +2,8 @@
 
 namespace Fusion\Listeners;
 
+use Fusion\Facades\Addon;
 use Fusion\Jobs\LoadNavigation;
-use Caffeinated\Modules\Facades\Module;
 
 class FusionServed
 {
@@ -17,9 +17,9 @@ class FusionServed
     {
     	LoadNavigation::dispatchNow();
 
-        Module::enabled()->each(function ($module) {
-            if (class_exists("Modules\\{$module['basename']}\\Jobs\\LoadNavigation")) {
-                resolve("Modules\\{$module['basename']}\\Jobs\\LoadNavigation")::dispatchNow();
+        Addon::enabled()->each(function ($addon) {
+            if (class_exists("Addons\\{$addon['namespace']}\\Jobs\\LoadNavigation")) {
+                resolve("Addons\\{$addon['namespace']}\\Jobs\\LoadNavigation")::dispatchNow();
             }
         });
     }

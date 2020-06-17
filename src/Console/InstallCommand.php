@@ -71,14 +71,14 @@ class InstallCommand extends Command
             'app_env'   => env('APP_ENV',      'local'),
             'app_debug' => env('APP_DEBUG',    $this->option('debug') ?? $dev),
             'app_url'   => env('APP_URL',      'http://localhost'),
-            
+
             // database
             'db_driver' => env('DB_DRIVER',    'mysql'),
             'db_host'   => env('DB_HOST',      'localhost'),
             'db_name'   => env('DB_DATABASE',  'fusioncms'),
             'db_user'   => env('DB_USERNAME',  'root'),
             'db_pass'   => env('DB_PASSWORD',  'secret'),
-            
+
             // default user
             'user_email'    => 'admin@example.com',
             'user_password' => 'secret',
@@ -86,14 +86,14 @@ class InstallCommand extends Command
         ];
 
         // --homestead flag overrides
-        // 
+        //
         if ($this->option('homestead')) {
             $this->container['db_user'] = env('DB_USERNAME', 'homestead');
             $this->container['db_pass'] = env('DB_PASSWORD', 'secret');
         }
 
         // --valet flag overrides
-        // 
+        //
         if ($this->option('valet')) {
             $this->container['db_user'] = env('DB_USERNAME', 'root');
             $this->container['db_pass'] = env('DB_PASSWORD', '');
@@ -128,7 +128,7 @@ class InstallCommand extends Command
         $this->container['db_name']      = $this->ask('Please enter the database name:',      $this->container['db_name']);
         $this->container['db_user']      = $this->ask('Please enter the database username:',  $this->container['db_user']);
         $this->container['db_pass']      = $this->ask('Please enter the database password:',  $this->container['db_pass']);
-        
+
         // default user
         $this->container['user_name']     = $this->ask('Please enter a default user name:',     $this->container['user_name']);
         $this->container['user_email']    = $this->ask('Please enter a default user email:',    $this->container['user_email']);
@@ -139,7 +139,7 @@ class InstallCommand extends Command
 
     /**
      * Installation confirmation
-     * 
+     *
      * @return void
      */
     private function confirmation($confirmed = false)
@@ -156,12 +156,12 @@ class InstallCommand extends Command
             $this->comment('Database name:         ' . $this->container['db_name']);
             $this->comment('Database username:     ' . $this->container['db_user']);
             $this->comment('Database password:     ' . $this->container['db_pass']);
-            
+
             // default user
             $this->comment('Default user name:     ' . $this->container['user_name']);
             $this->comment('Default user email:    ' . $this->container['user_email']);
             $this->comment('Default user password: ' . $this->container['user_password']);
-            
+
             // make confirmation..
             if ($this->confirm('Do you wish to proceed in installing FusionCMS?')) {
                 $this->confirmation(true);
@@ -170,7 +170,7 @@ class InstallCommand extends Command
             }
         } else {
             $this->line("\n<fg=black;bg=white>--- Relax while FusionCMS proceeds with the installation process...</>");
-            
+
             $this->install();
         }
     }
@@ -197,7 +197,6 @@ class InstallCommand extends Command
             'Creating database...'              => new \Fusion\Console\Installer\CreateDatabase($this->container),
             'Creating environment config...'    => new \Fusion\Console\Installer\CreateEnvironmentConfig($this->container),
             'Creating database tables...'       => new \Fusion\Console\Installer\CreateDatabaseTables,
-            'Publishing module assets...'       => new \Fusion\Console\Installer\PublishModuleAssets,
             'Publishing Fusion resources...'    => new \Fusion\Console\Installer\PublishFusionResources,
             'Creating storage link...'          => new \Fusion\Console\Installer\CreateStorageLink,
             'Creating default permissions...'   => new \Fusion\Console\Installer\CreateDefaultPermissions,

@@ -18,13 +18,37 @@ class Addon extends Collection
      */
     public function register()
     {
-        $this->filter(function($addon) {
-            return $addon['enabled'] == true;
-        })->each(function($addon) {
+        $this->enabled()->each(function($addon) {
             $this->createSymlink($addon);
             $this->registerViewLocation($addon);
             $this->registerClassLoader($addon);
             $this->registerServiceProvider($addon);
+        });
+    }
+
+    /**
+     * Return a filtered collection of addons that
+     * are enabled.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function enabled()
+    {
+        return $this->filter(function($addon) {
+            return $addon['enabled'] == true;
+        });
+    }
+
+    /**
+     * Return a filtered collection of addons that
+     * are disabled.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function disabled()
+    {
+        return $this->filter(function($addon) {
+            return $addon['enabled'] == false;
         });
     }
 
