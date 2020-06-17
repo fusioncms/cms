@@ -83,7 +83,7 @@ return [
 					'user_email'    => 'required|email',
 					'user_name'     => 'required',
 					'user_password' => 'required|securepassword',
-					'user_confirm'  => 'required_with:password|same:user_password'
+					'user_confirm'  => 'required_with:user_password|same:user_password'
 				],
 			],
 			'app' => [
