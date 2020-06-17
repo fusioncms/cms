@@ -1,21 +1,21 @@
 <?php
 
-namespace Fusion\Http\Controllers\API\Modules;
+namespace Fusion\Http\Controllers\API\Addons;
 
+use Fusion\Facades\Addon;
 use Fusion\Models\Extension;
 use Illuminate\Http\Request;
 use Fusion\Concerns\HasExtension;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
-use Caffeinated\Modules\Facades\Module;
 use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\ModuleResource;
+use Fusion\Http\Resources\AddonResource;
 
 class ActionController extends Controller
 {
     /**
-     * Request for new module installation.
+     * Request for new addon installation.
      *
      * @param  \Illuminate\Http\Request        $request
      * @param  \Illuminate\Support\Collection  $module
@@ -23,7 +23,7 @@ class ActionController extends Controller
      */
     public function install(Request $request, Collection $module)
     {
-        $this->authorize('modules.create');
+        $this->authorize('addons.create');
 
         // --
         // Register module..
@@ -91,7 +91,7 @@ class ActionController extends Controller
 
     /**
      * Uninstall process.
-     * 
+     *
      * @param  \Illuminate\Http\Request        $request
      * @param  \Illuminate\Support\Collection  $module
      * @return void
