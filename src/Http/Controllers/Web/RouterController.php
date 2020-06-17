@@ -18,6 +18,10 @@ class RouterController extends Controller
      */
     public function handle(Request $request)
     {
+        if (! app_installed()) {
+            return redirect('/install');
+        }
+
         $routers = [
             HomepageRouter::class,
             EntryRouter::class,
