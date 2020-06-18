@@ -28,7 +28,7 @@
                                         name: field.name,
                                         handle: handle,
                                         help: field.help,
-                                        settings: {},
+                                        settings: field.settings || {},
                                     }"
                                     class="mb-8"
                                 ></component>
