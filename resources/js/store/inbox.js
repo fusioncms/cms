@@ -90,14 +90,17 @@ export default {
         },
 
         fetchResponses(context) {
-            context.dispatch('isLoading')
+            if (context.state.form.slug) {
+                context.dispatch('isLoading')
 
-            return axios.get('/api/forms/' + context.state.form.slug + '/responses?page=' + context.state.page).then((response) => {
-                context.commit('setResponses', response.data.data)
-                context.commit('setTotalPages', response.data.meta.last_page)
+                return axios.get('/api/forms/' + context.state.form.slug + '/responses?page=' + context.state.page)
+                    .then((response) => {
+                        context.commit('setResponses', response.data.data)
+                        context.commit('setTotalPages', response.data.meta.last_page)
 
-                context.dispatch('doneLoading')
-            })
+                        context.dispatch('doneLoading')
+                    })
+            }
         },
 
         selectForm(context, form) {
