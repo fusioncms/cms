@@ -47,7 +47,7 @@ trait HasLocalEloquentData
         return static::$sushiConnection;
     }
 
-    public static function bootSushi()
+    public static function bootHasLocalEloquentData()
     {
         $instance = (new static);
 
