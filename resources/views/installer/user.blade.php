@@ -12,22 +12,22 @@
 
 		<x-installer.input
 			name="user_name"
-			label="Username"
-			value="{{ $data['user_name'] ?? 'Fusion User' }}" 
+			label="Name"
+			value="{{ $data['user_name'] ?? '' }}"
 		/>
 
 		<x-installer.input
 			name="user_password"
 			label="Password"
 			type="password"
-			value="{{ $data['user_password'] ?? 'asDF12#$' }}"
+			value="{{ $data['user_password'] ?? '' }}"
 		/>
 
 		<x-installer.input
 			name="user_confirm"
 			label="Confirm"
 			type="password"
-			value="{{ $data['user_password'] ?? 'asDF12#$' }}"
+			value="{{ $data['user_password'] ?? '' }}"
 		/>
 
 		<div class="mt-10 flex justify-between">

@@ -17,10 +17,17 @@ class InstallCommand extends Command
      * @var string
      */
     protected $signature = 'fusion:install' .
-                           ' {--homestead}' .  // use default homestead configurations; skips wizard
-                           ' {--valet}'     .  // use default valet configurations; skips wizard
-                           ' {--refresh}'   .  // refresh database/settings, while leaving user in tact
-                           ' {--debug=}'       // sets environmental debug setting (default = false)
+                           ' {--H|homestead                : Quick install; uses default homestead configurations. }' .
+                           ' {--A|valet                    : Quick install; uses default valet configurations. }' .
+                           ' {--R|refresh                  : Same as running uninstall/install but wont\'t refresh .env file. }' .
+                           ' {--D|debug                    : Enables error logging; for development purposes. }' .
+                           ' {--url=http://localhost       : Sets .env variable APP_URL }' .
+                           ' {--host=localhost             : Sets .env variable DB_HOST }' .
+                           ' {--database=fusioncms         : Sets .env variable DB_DATABASE }' .
+                           ' {--username=root              : Sets .env variable DB_USERNAME }' .
+                           ' {--password=secret            : Sets .env variable DB_PASSWORD }' .
+                           ' {--charset=utf8               : Sets .env variable DB_CHARSET }' .
+                           ' {--collation=utf8_general_ci  : Sets .env variable DB_COLLATION }'
                            ;
 
     /**
@@ -70,14 +77,16 @@ class InstallCommand extends Command
             'app_name'  => env('APP_NAME',     'FusionCMS'),
             'app_env'   => env('APP_ENV',      'local'),
             'app_debug' => env('APP_DEBUG',    $this->option('debug') ?? $dev),
-            'app_url'   => env('APP_URL',      'http://localhost'),
+            'app_url'   => env('APP_URL',      $this->option('url')),
 
             // database
-            'db_driver' => env('DB_DRIVER',    'mysql'),
-            'db_host'   => env('DB_HOST',      'localhost'),
-            'db_name'   => env('DB_DATABASE',  'fusioncms'),
-            'db_user'   => env('DB_USERNAME',  'root'),
-            'db_pass'   => env('DB_PASSWORD',  'secret'),
+            'db_driver'    => env('DB_DRIVER',    'mysql'),
+            'db_host'      => env('DB_HOST',      $this->option('host')),
+            'db_name'      => env('DB_DATABASE',  $this->option('database')),
+            'db_user'      => env('DB_USERNAME',  $this->option('username')),
+            'db_pass'      => env('DB_PASSWORD',  $this->option('password')),
+            'db_charset'   => env('DB_CHARSET',   $this->option('charset')),
+            'db_collation' => env('DB_COLLATION', $this->option('collation')),
 
             // default user
             'user_email'    => 'admin@example.com',
@@ -128,6 +137,8 @@ class InstallCommand extends Command
         $this->container['db_name']      = $this->ask('Please enter the database name:',      $this->container['db_name']);
         $this->container['db_user']      = $this->ask('Please enter the database username:',  $this->container['db_user']);
         $this->container['db_pass']      = $this->ask('Please enter the database password:',  $this->container['db_pass']);
+        $this->container['db_charset']   = $this->ask('Please enter the database charset:',   $this->container['db_charset']);
+        $this->container['db_collation'] = $this->ask('Please enter the database collation:', $this->container['db_collation']);
 
         // default user
         $this->container['user_name']     = $this->ask('Please enter a default user name:',     $this->container['user_name']);
@@ -156,6 +167,8 @@ class InstallCommand extends Command
             $this->comment('Database name:         ' . $this->container['db_name']);
             $this->comment('Database username:     ' . $this->container['db_user']);
             $this->comment('Database password:     ' . $this->container['db_pass']);
+            $this->comment('Database charset:      ' . $this->container['db_charset']);
+            $this->comment('Database collation:    ' . $this->container['db_collation']);
 
             // default user
             $this->comment('Default user name:     ' . $this->container['user_name']);

@@ -28,10 +28,12 @@ class CreateEnvironmentConfig
             'APP_KEY'    => $container['app_key'] ?? $this->generateRandomKey(),
             'APP_URL'    => $container['app_url'],
             
-            'DB_HOST'     => $container['db_host'],
-            'DB_DATABASE' => $container['db_name'],
-            'DB_USERNAME' => $container['db_user'],
-            'DB_PASSWORD' => $container['db_pass'],
+            'DB_HOST'      => $container['db_host'],
+            'DB_DATABASE'  => $container['db_name'],
+            'DB_USERNAME'  => $container['db_user'],
+            'DB_PASSWORD'  => $container['db_pass'],
+            'DB_CHARSET'   => $container['db_charset'],
+            'DB_COLLATION' => $container['db_collation'],
         ];
     }
 
