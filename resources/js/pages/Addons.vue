@@ -14,7 +14,13 @@
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">
                             <p-status
+                                v-if="table.record.installed"
                                 :value="table.record.enabled"
+                                class="mr-2">
+                            </p-status>
+
+                            <p-status
+                                v-else
                                 class="mr-2">
                             </p-status>
 
@@ -31,67 +37,60 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <!-- <p-actions v-if="table.record.registered" :id="'module_' + table.record.id + '_actions'" :key="'module_' + table.record.id + '_actions'">
-                            <template v-if="table.record.installed">
-                                <p-dropdown-link v-if="table.record.enabled" @click="disable(table.record.slug)">Disable</p-dropdown-link>
-                                <p-dropdown-link v-else @click="enable(table.record.slug)">Enable</p-dropdown-link>
+                        <p-actions v-show="table.record.installed" :id="'addon_' + table.record.slug + '_actions_installed'" :key="'addon_' + table.record.slug + '_actions_installed'">
+                            <p-dropdown-link v-if="table.record.enabled" @click="disable(table.record.slug)">Disable</p-dropdown-link>
+                            <p-dropdown-link v-else @click="enable(table.record.slug)">Enable</p-dropdown-link>
 
-                                <p-dropdown-link v-if="table.record.enabled" :to="{ name: 'setting.section', params: { section: table.record.slug } }">Settings</p-dropdown-link>
+                            <p-dropdown-link v-if="table.record.enabled" :to="{ name: 'setting.section', params: { section: table.record.slug } }">Settings</p-dropdown-link>
 
-                                <p-dropdown-link v-if="table.record.enabled" @click="seed(table.record.slug)">Seed</p-dropdown-link>
+                            <!-- <p-dropdown-link v-if="table.record.enabled" @click.prevent v-modal:update-addon="table.record">
+                                Update
+                            </p-dropdown-link> -->
 
-                                <p-dropdown-link v-if="table.record.enabled" @click.prevent v-modal:update-module="table.record">
-                                    Update
-                                </p-dropdown-link>
+                            <p-dropdown-link @click.prevent v-modal:uninstall-addon="table.record.slug" classes="link--danger">
+                                Uninstall
+                            </p-dropdown-link>
+                        </p-actions>
 
-                                <p-dropdown-link @click.prevent v-modal:uninstall-module="table.record" classes="link--danger">
-                                    Uninstall
-                                </p-dropdown-link>
-                            </template>
-
-                            <template v-else>
-                                <p-dropdown-link @click.prevent v-modal:install-module="table.record" classes="link--success">
-                                    Install
-                                </p-dropdown-link>
-                                <p-dropdown-link @click.prevent v-modal:uninstall-module="table.record" classes="link--danger">
-                                    Remove
-                                </p-dropdown-link>
-                            </template>
-                        </p-actions> -->
+                        <p-actions v-show="!table.record.installed" :id="'addon_' + table.record.slug + '_actions_uninstalled'" :key="'addon_' + table.record.slug + '_actions_uninstalled'">
+                            <p-dropdown-link v-modal:install-addon="table.record.slug">
+                                Install
+                            </p-dropdown-link>
+                        </p-actions>
                     </template>
                 </p-table>
             </div>
         </div>
 
         <portal to="modals">
-            <!-- <p-modal name="uninstall-module" title="Uninstall Module" key="uninstall_module">
-                <p>All assets and data will be removed.</p>
-                <p>Are you sure you want to uninstall this module?</p>
+            <p-modal name="uninstall-addon" title="Uninstall Addon" key="uninstall_addon">
+                <p>Existing data related to this addon will be removed.</p>
+                <p>Are you sure you want to uninstall this addon?</p>
 
-                <template slot="footer" slot-scope="module">
-                    <p-button v-modal:uninstall-module @click="uninstall(module.data.slug)" theme="danger" class="ml-3">Uninstall</p-button>
-                    <p-button v-modal:uninstall-module>Cancel</p-button>
+                <template slot="footer" slot-scope="addon">
+                    <p-button v-modal:uninstall-addon @click="uninstall(addon.data)" theme="danger" class="ml-3">Uninstall</p-button>
+                    <p-button v-modal:uninstall-addon>Cancel</p-button>
                 </template>
             </p-modal>
 
-            <p-modal name="install-module" title="Install Module" key="install_module">
-                <p>Are you sure you want to install this module?</p>
+            <p-modal name="install-addon" title="Install Addon" key="install_addon">
+                <p>Are you sure you want to install this addon?</p>
 
-                <template slot="footer" slot-scope="module">
-                    <p-button v-modal:install-module @click="install(module.data.slug)" theme="success" class="ml-3">Install</p-button>
-                    <p-button v-modal:install-module>Cancel</p-button>
+                <template slot="footer" slot-scope="addon">
+                    <p-button v-modal:install-addon @click="install(addon.data)" theme="success" class="ml-3">Install</p-button>
+                    <p-button v-modal:install-addon>Cancel</p-button>
                 </template>
             </p-modal>
 
-            <p-modal name="update-module" title="Update Module" key="update_module">
+            <p-modal name="update-addon" title="Update Module" key="update_addon">
                 <p>This will migrate any new migrations and run db:seed.</p>
                 <p>Are you sure you want to proceed?</p>
 
-                <template slot="footer" slot-scope="module">
-                    <p-button v-modal:update-module @click="update(module.data.slug)" theme="warning" class="ml-3">Update</p-button>
-                    <p-button v-modal:update-module>Cancel</p-button>
+                <template slot="footer" slot-scope="addon">
+                    <p-button v-modal:update-addon @click="update(addon.data)" theme="warning" class="ml-3">Update</p-button>
+                    <p-button v-modal:update-addon>Cancel</p-button>
                 </template>
-            </p-modal> -->
+            </p-modal>
 
             <p-modal name="upload-addon" title="Upload Addon" key="upload_addon">
                 <p-upload
@@ -142,60 +141,60 @@
                     .catch((error) => this.refresh(error.response.data.message, 'danger'))
             },
 
-            // enable(slug) {
-            //     axios.post(`/api/modules/${slug}/enable`)
-            //         .then((response) => {
-            //             this.refresh('Module successfully enabled.')
+            enable(slug) {
+                axios.post(`/api/addons/${slug}/enable`)
+                    .then((response) => {
+                        this.refresh('Addon successfully enabled.')
 
-            //             if (response.data.data.redirect.enable) {
-            //                 this.$router.push(response.data.data.redirect.enable)
-            //             }
-            //         })
-            //         .catch((error) => this.refresh(error.response.data.message, 'danger'))
-            // },
+                        if (response.data.data.redirect && response.data.data.redirect.enable) {
+                            this.$router.push(response.data.data.redirect.enable)
+                        }
+                    })
+                    .catch((error) => this.refresh(error.response.data.message, 'danger'))
+            },
 
-            // disable(slug) {
-            //     axios.post(`/api/modules/${slug}/disable`)
-            //         .then((response) => this.refresh('Module successfully disabled.'))
-            //         .catch((error)   => this.refresh(error.response.data.message, 'danger'))
-            // },
+            disable(slug) {
+                axios.post(`/api/addons/${slug}/disable`)
+                    .then((response) => this.refresh('Addon successfully disabled.'))
+                    .catch((error)   => this.refresh(error.response.data.message, 'danger'))
+            },
 
-            // install (slug) {
-            //     axios.post(`/api/modules/${slug}/install`)
-            //         .then((response) => {
-            //             this.refresh('Module successfully installed.')
+            install (slug) {
+                axios.post(`/api/addons/${slug}/install`)
+                    .then((response) => {
+                        this.refresh('Addon successfully installed.')
 
-            //             if (response.data.data.redirect.install) {
-            //                 location.href = `/${config.path}/${response.data.data.redirect.install}`
-            //             }
-            //         })
-            //         .catch((error)   => this.refresh(error.response.data.message, 'danger'))
-            // },
+                        if (response.data.data.redirect.install) {
+                            location.href = `/${config.path}/${response.data.data.redirect.install}`
+                        }
+                    })
+                    .catch((error) => this.refresh(error.response.data.message, 'danger'))
+            },
 
-            // uninstall(slug) {
-            //     axios.post(`/api/modules/${slug}/uninstall`)
-            //         .then((response) => this.refresh('Module successfully removed.'))
-            //         .catch((error)   => this.refresh(error.response.data.message, 'danger'))
-            // },
+            uninstall(slug) {
+                axios.post(`/api/addons/${slug}/uninstall`)
+                    .then((response) => this.refresh('Addon successfully uninstalled.'))
+                    .catch((error)   => this.refresh(error.response.data.message, 'danger'))
+            },
 
             // update(slug) {
-            //     axios.patch(`/api/modules/${slug}/update`)
+            //     axios.patch(`/api/addons/${slug}/update`)
             //         .then((response) => this.refresh('Module successfully updated.'))
             //         .catch((error)   => this.refresh(error.response.data.message, 'danger'))
             // },
 
             // seed(slug) {
-            //     axios.patch(`/api/modules/${slug}/seed`)
+            //     axios.patch(`/api/addons/${slug}/seed`)
             //         .then((response) => this.refresh('Module successfully seeded.'))
             //         .catch((error)   => this.refresh(error.response.data.message, 'danger'))
             // },
 
-            // refresh(msg = null, status = 'success') {
-            //     if (msg) toast(msg, status)
+            refresh(msg = null, status = 'success') {
+                if (msg) toast(msg, status)
 
-            //     this.$store.dispatch('navigation/fetchAdminNavigation')
-            //     bus().$emit('refresh-datatable-modules')
-            // }
+                this.$store.dispatch('navigation/fetchAdminNavigation')
+                bus().$emit('refresh-datatable-addons')
+            }
         }
     }
 </script>

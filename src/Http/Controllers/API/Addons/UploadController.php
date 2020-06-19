@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API\Modules;
+namespace Fusion\Http\Controllers\API\Addons;
 
 use Exception;
 use ZipArchive;
@@ -47,7 +47,7 @@ class UploadController extends Controller
                 $index      = $this->zipArchive->locateName('module.json', ZipArchive::FL_NODIR);
                 $filename   = $this->zipArchive->getNameIndex($index);
                 $fileHandle = $this->zipArchive->getStream($filename);
-                
+
                 $settings   = stream_get_contents($fileHandle);
                 $settings   = json_decode($settings);
 

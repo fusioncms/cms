@@ -15,34 +15,19 @@ use Fusion\Http\Resources\AddonResource;
 class ActionController extends Controller
 {
     /**
-     * Request for new addon installation.
+     * Install addon.
      *
      * @param  \Illuminate\Http\Request        $request
-     * @param  \Illuminate\Support\Collection  $module
+     * @param  \Illuminate\Support\Collection  $addon
      * @return \Fusion\Http\Resources\ModuleResource
      */
-    public function install(Request $request, Collection $module)
+    public function install(Request $request, $addon)
     {
         $this->authorize('addons.create');
 
-        // --
-        // Register module..
-        Module::enable($module->get('slug'));
-        Module::set($module->get('slug') . '::installed', true);
-        Module::optimize();
+        $addon = Addon::install($addon->namespace);
 
-        // --
-        // Run migrations..
-        Artisan::call('module:migrate', [
-            'slug'    => $module->get('slug'),
-            '--force' => true,
-        ]);
-
-        // --
-        // Sync module (e.g. assets, settings, extensions)
-        Artisan::call('fusion:sync');
-
-        return new ModuleResource($module);
+        return new AddonResource($addon);
     }
 
     /**
@@ -96,34 +81,12 @@ class ActionController extends Controller
      * @param  \Illuminate\Support\Collection  $module
      * @return void
      */
-    public function uninstall(Request $request, Collection $module)
+    public function uninstall(Request $request, $addon)
     {
-        $this->authorize('modules.delete');
+        $this->authorize('addons.delete');
 
-        Module::disable($module->get('slug'));
-        Module::set($module->get('slug') . '::installed', false);
+        $addon = Addon::uninstall($addon->namespace);
 
-        // --
-        // Remove extensions before rolling back..
-        dispatch(new \Fusion\Console\Actions\SyncExtensions);
-
-        // --
-        // Rollback migrations..
-        Artisan::call('module:migrate:rollback', [
-            'slug'    => $module->get('slug'),
-            '--force' => true,
-        ]);
-
-        // --
-        // File cleanup..
-        File::deleteDirectory(base_path("modules/{$module->get('basename')}"));
-
-        // --
-        // Unregister module..
-        Module::optimize();
-
-        // --
-        // Re-sync fusion..
-        Artisan::call('fusion:sync');
+        return new AddonResource($addon);
     }
 }

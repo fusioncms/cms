@@ -3,11 +3,13 @@
 namespace Fusion\Services;
 
 use Illuminate\Support\Str;
+use Fusion\Services\Manifest;
 use Composer\Autoload\ClassLoader;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Artisan;
 
 class Addon extends Collection
 {
@@ -24,6 +26,70 @@ class Addon extends Collection
             $this->registerClassLoader($addon);
             $this->registerServiceProvider($addon);
         });
+    }
+
+    public function install($namespace)
+    {
+        $this->enable($namespace);
+        $this->setProperty($namespace, 'installed', true);
+
+        // Artisan::call('addon:migrate', [
+        //     'namespace' => $addon->get('slug'),
+        //     '--force'   => true,
+        // ]);
+
+                // Artisan::call('addon:migrate:rollback', [
+        //     'slug'    => $module->get('slug'),
+        //     '--force' => true,
+        // ]);
+
+        Artisan::call('fusion:sync');
+
+        return $this->get($namespace);
+    }
+
+        public function uninstall($namespace)
+    {
+        $this->disable($namespace);
+        $this->setProperty($namespace, 'installed', false);
+
+        // Remove extensions before rolling back..
+        dispatch(new \Fusion\Console\Actions\SyncExtensions);
+
+        // Artisan::call('addon:migrate:rollback', [
+        //     'namespace' => $namespace,
+        //     '--force' => true,
+        // ]);
+
+        Artisan::call('fusion:sync');
+
+        return $this->get($namespace);
+    }
+
+    /**
+     * Enable the specified addon.
+     *
+     * @param  string  $namespace
+     * @return void
+     */
+    public function enable($namespace)
+    {
+        $this->setProperty($namespace, 'enabled', true);
+
+        return $this->get($namespace);
+    }
+
+    /**
+     * Disable the specified addon.
+     *
+     * @param  string  $addon
+     * @return void
+     */
+    public function disable($namespace)
+    {
+        $this->setProperty($namespace, 'enabled', false);
+
+        return $this->get($namespace);
     }
 
     /**
@@ -119,5 +185,52 @@ class Addon extends Collection
         if (class_exists($provider)) {
             App::register($provider);
         }
+    }
+
+    protected function setProperty($namespace, $key, $value)
+    {
+        $addon       = $this->get($namespace);
+        $addon[$key] = $value;
+
+        $this->put($namespace, $addon);
+
+        File::put(storage_path('app/addons.json'), $this->toJson(JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Get the addon cache manifest.
+     *
+     * @return \Fusion\Services\Manifest
+     */
+    public function getCache()
+    {
+        if (file_exists(storage_path('app/addons.json'))) {
+            return new Manifest(storage_path('app/addons.json'));
+        }
+
+        return new Manifest();
+    }
+
+    /**
+     * Get the available addons and their manifests.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getAddons()
+    {
+        $addons = collect();
+
+        if (file_exists(addon_path()) and is_dir(addon_path())) {
+            $directories = File::directories(addon_path());
+
+            foreach ($directories as $directory) {
+                $addon     = new Manifest($directory.'/addon.json');
+                $namespace = $addon->get('namespace');
+
+                $addons->put($namespace, collect($addon->all()));
+            }
+        }
+
+        return $addons;
     }
 }

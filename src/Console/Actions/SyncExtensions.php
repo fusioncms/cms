@@ -6,6 +6,7 @@ use Fusion\Facades\Addon;
 use Illuminate\Support\Str;
 use Fusion\Models\Extension;
 use Fusion\Concerns\HasExtension;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,7 +35,9 @@ class SyncExtensions
      */
     public function handle()
     {
-        Addon::enabled()->each(function($addon) {
+        Addon::enabled()->filter(function($addon) {
+            return File::exists(addon_path("{$addon['namespace']}/src/Models"));
+        })->each(function($addon) {
             $files = Finder::create()
                 ->files()
                 ->in(addon_path("{$addon['namespace']}/src/Models"))
@@ -42,10 +45,14 @@ class SyncExtensions
 
             foreach ($files as $file) {
                 $name  = Str::studly($file->getFilenameWithoutExtension());
-                $model = resolve("Addons\\{$addon['namespace']}\\Models\\{$name}");
+                $class = "Addons\\{$addon['namespace']}\\Models\\{$name}";
 
-                if (in_array(HasExtension::class, class_uses($model))) {
-                    $this->syncExtension($model);
+                if (class_exists($class)) {
+                    $model = resolve($class);
+
+                    if (in_array(HasExtension::class, class_uses($model))) {
+                        $this->syncExtension($model);
+                    }
                 }
             }
         });

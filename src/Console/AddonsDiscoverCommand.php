@@ -2,7 +2,8 @@
 
 namespace Fusion\Console;
 
-use Fusion\Services\Addon;
+use Fusion\Facades\Addon;
+use Illuminate\Support\Str;
 use Fusion\Services\Manifest;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -30,13 +31,15 @@ class AddonsDiscoverCommand extends Command
      */
     public function handle()
     {
-        $cache  = $this->getCache();
-        $addons = $this->getAddons();
+        $cache  = Addon::getCache();
+        $addons = Addon::getAddons();
 
         // 1. Extract existing "enabled" values for each addon
         $addons->map(function($addon) use($cache) {
             $cached = $cache->get($addon['namespace']);
 
+            $addon['slug']      = Str::slug($addon['name'], '-');
+            $addon['handle']    = Str::slug($addon['name'], '_');
             $addon['enabled']   = $cached['enabled'] ?? false;
             $addon['installed'] = $cached['installed'] ?? false;
 
@@ -48,42 +51,5 @@ class AddonsDiscoverCommand extends Command
 
         $term = ($addons->count() == 1) ? 'addon' : 'addons';
         $this->info("Discovered {$addons->count()} {$term}!");
-    }
-
-    /**
-     * Get the addon cache manifest.
-     *
-     * @return \Fusion\Services\Manifest
-     */
-    protected function getCache()
-    {
-        if (file_exists(storage_path('app/addons.json'))) {
-            return new Manifest(storage_path('app/addons.json'));
-        }
-
-        return new Manifest();
-    }
-
-    /**
-     * Get the available addons and their manifests.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    protected function getAddons()
-    {
-        $addons = collect();
-
-        if (file_exists(addon_path()) and is_dir(addon_path())) {
-            $directories = File::directories(addon_path());
-
-            foreach ($directories as $directory) {
-                $addon     = new Manifest($directory.'/addon.json');
-                $namespace = $addon->get('namespace');
-
-                $addons->put($namespace, collect($addon->all()));
-            }
-        }
-
-        return $addons;
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Fusion\Http\Controllers\API\Modules;
+namespace Fusion\Http\Controllers\API\Addons;
 
+use Fusion\Facades\Addon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Caffeinated\Modules\Facades\Module;
 use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\ModuleResource;
+use Fusion\Http\Resources\AddonResource;
 
 class StatusController extends Controller
 {
@@ -14,31 +14,31 @@ class StatusController extends Controller
      * Enable module.
      *
      * @param  \Illuminate\Http\Request        $request
-     * @param  \Illuminate\Support\Collection  $module
+     * @param  \Illuminate\Support\Collection  $addon
      * @return Redirect|void
      */
-    public function enable(Request $request, Collection $module)
+    public function enable(Request $request, $addon)
     {
-        $this->authorize('modules.update');
+        $this->authorize('addons.update');
 
-        Module::enable($module->get('slug'));
+        $addon = Addon::enable($addon->namespace);
 
-        return new ModuleResource($module);
+        return new AddonResource($addon);
     }
 
     /**
      * Disable module.
      *
      * @param  \Illuminate\Http\Request        $request
-     * @param  \Illuminate\Support\Collection  $module
+     * @param  \Illuminate\Support\Collection  $addon
      * @return void
      */
-    public function disable(Request $request, Collection $module)
+    public function disable(Request $request, $addon)
     {
-        $this->authorize('modules.update');
-        
-        Module::disable($module->get('slug'));
+        $this->authorize('addons.update');
 
-        return new ModuleResource($module);
+        $addon = Addon::disable($addon->namespace);
+
+        return new AddonResource($addon);
     }
 }

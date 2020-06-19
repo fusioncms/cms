@@ -10,6 +10,16 @@ class Addon extends Model
 {
     use HasLocalEloquentData;
 
+    protected $schema = [
+        'enabled'   => 'boolean',
+        'installed' => 'boolean',
+    ];
+
+    protected $casts = [
+        'enabled' => 'boolean',
+        'installed' => 'boolean',
+    ];
+
     public function getRows()
     {
         return AddonFacade::values()->toArray();

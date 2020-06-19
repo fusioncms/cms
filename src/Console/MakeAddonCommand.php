@@ -63,11 +63,8 @@ class MakeAddonCommand extends Command
      */
     protected function getManifest()
     {
-        $name = Str::snake($this->argument('namespace'));
-        $name = Str::title($name);
-
         return [
-            'name'        => $name,
+            'name'        => $this->generateName($this->argument('namespace')),
             'namespace'   => $this->argument('namespace'),
             'description' => 'This is a fresh start. Now go and build something amazing.',
             'author'      => 'Unknown',
@@ -100,5 +97,13 @@ class MakeAddonCommand extends Command
         ];
 
         return str_replace($find, $replace, $content);
+    }
+
+    protected function generateName($name)
+    {
+        $name = preg_replace('/(?<!\ )[A-Z]/', ' $0', $name);
+        $name = trim($name);
+
+        return $name;
     }
 }

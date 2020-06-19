@@ -329,12 +329,8 @@ class FusionServiceProvider extends ServiceProvider
             return \Fusion\Models\Fieldset::findOrFail($id);
         });
 
-        Route::bind('addon', function($namespace) {
-            if (! Addon::exists($namespace)) {
-                abort(404);
-            }
-
-            return Addon::get($namespace);
+        Route::bind('addon', function($slug) {
+            return \Fusion\Models\Addon::where('slug', $slug)->firstOrFail();
         });
     }
 

@@ -4,7 +4,7 @@ namespace Fusion\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ModuleResource extends JsonResource
+class AddonResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
