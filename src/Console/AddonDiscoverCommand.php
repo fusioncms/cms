@@ -8,14 +8,14 @@ use Fusion\Services\Manifest;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
-class AddonsDiscoverCommand extends Command
+class AddonDiscoverCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'addons:discover';
+    protected $signature = 'addon:discover';
 
     /**
      * The console command description.
