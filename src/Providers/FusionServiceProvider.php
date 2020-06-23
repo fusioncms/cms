@@ -30,9 +30,9 @@ class FusionServiceProvider extends ServiceProvider
         $this->registerGates();
         $this->registerCustomRules();
 
-        if (app_installed()) {
-            $this->registerTheme();
-        }
+        // if (app_installed()) {
+        //     $this->registerTheme();
+        // }
     }
 
     /**

@@ -2,10 +2,10 @@
 
 namespace Fusion\Providers;
 
-use Fusion\Models\Fieldset;
-use Fusion\Facades\Setting;
-use Fusion\Models\SettingSection;
+use Fusion\Models\Settings\Field;
+use Fusion\Models\Settings\Section;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class SettingsServiceProvider extends ServiceProvider
@@ -17,9 +17,15 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (app_installed()) {
-            Setting::registerOverrides();
-        }
+        // if (app_installed()) {
+        //     Field::where('override', '<>', '')->each(function ($setting) {
+        //         $envKey = strtoupper(str_replace('.', '_', $setting->override));
+
+        //         if (Config::has($setting->override) && ! empty($setting->value)) {
+        //             Config::set($setting->override, env($envKey, $setting->value));
+        //         }
+        //     });
+        // }
     }
 
     /**
@@ -31,24 +37,12 @@ class SettingsServiceProvider extends ServiceProvider
     {
         // Explicit model binding..
         Route::bind('section', function($handle) {
-            return SettingSection::where('handle', $handle)->first() ?? abort(404);
+            return Section::where('handle', $handle)->first() ?? abort(404);
         });
 
         // Settings facade..
         $this->app->bind('setting', function() {
-            return new \Fusion\Services\Settings;
+            return new \Fusion\Services\Setting;
         });
-    }
-
-    /**
-     * Return a list of bound services.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [
-            'setting'
-        ];
     }
 }

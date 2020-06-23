@@ -2,8 +2,12 @@
 
 namespace Fusion\Console\Actions;
 
-use Fusion\Models\Setting;
-use Fusion\Models\SettingSection;
+use Fusion\Facades\Setting;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+
+use Fusion\Models\Settings\Field;
+use Fusion\Models\Settings\Section;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
@@ -31,6 +35,31 @@ class SyncSettings
      */
     public function handle()
     {
+        $settings = Setting::settings()
+            ->mapWithKeys(function($setting) {
+                $handle = str_replace('.', '-', $setting['handle']);
+                $value  = $setting['value'] ?: $setting['default'];
+
+                if ($setting['type'] == 'component') {
+                    $dataType = 'string';
+                    $value    = 'component';
+                } else {
+                    $fieldtype = fieldtypes()->get($setting['type']);
+                    $dataType  = $fieldtype->getColumn('type');
+                }
+
+                if (! Schema::hasColumn('settings', $handle)) {
+                    Schema::table('settings', function(Blueprint $table) use ($dataType, $handle) {
+                        $table->{$dataType}($handle)->nullable();
+                    });
+                }
+
+                return [ $handle => $value ];
+            });
+dd($settings);
+        \DB::table('settings')->update($settings);
+
+/*
         // Record existing settings..
         $this->sections = SettingSection::all()->pluck('id', 'id');
         $this->settings = Setting::all()->pluck('id', 'id');
@@ -47,7 +76,7 @@ class SyncSettings
 
         // Clean up removed settings..
         foreach ($this->settings as $id) {
-            Setting::findOrFail($id)->delete();
+            SettingField::findOrFail($id)->delete();
         }
 
         // Cache settings forever..
@@ -60,6 +89,7 @@ class SyncSettings
                 return [ $key => $value ];
             });
         });
+*/
     }
 
     /**

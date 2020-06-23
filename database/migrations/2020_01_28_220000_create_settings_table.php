@@ -13,29 +13,39 @@ class CreateSettingsTable extends Migration
      */
     public function up()
     {
+        // Schema::create('setting_sections', function (Blueprint $table) {
+        //     $table->bigIncrements('id');
+        //     $table->string('name');
+        //     $table->string('handle')->unique();
+        //     $table->string('group');
+        //     $table->string('description');
+        //     $table->string('icon');
+        //     $table->timestamps();
+        // });
+
         Schema::create('settings', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('section_id');
-            $table->string('name');
-            $table->string('handle');
-            $table->string('group');
-            $table->string('override');
-            $table->string('component');
-            $table->string('description');
-            $table->string('type');
-            $table->text('options')->nullable();
-            $table->text('default')->nullable();
-            $table->text('value')->nullable();
-            $table->boolean('required');
-            $table->boolean('gui');
-            $table->unsignedInteger('order');
+            // $table->bigIncrements('id');
+        //     $table->unsignedBigInteger('section_id');
+        //     $table->string('name');
+        //     $table->string('handle');
+        //     $table->string('group');
+        //     $table->string('override');
+        //     $table->string('component');
+        //     $table->string('description');
+        //     $table->string('type');
+        //     $table->text('options')->nullable();
+        //     $table->text('default')->nullable();
+        //     $table->text('value')->nullable();
+        //     $table->boolean('required');
+        //     $table->boolean('gui');
+        //     $table->unsignedInteger('order');
             $table->timestamps();
 
-            $table->foreign('section_id')
-                ->references('id')->on('setting_sections')
-                ->onDelete('cascade');
+        //     $table->foreign('section_id')
+        //         ->references('id')->on('setting_sections')
+        //         ->onDelete('cascade');
 
-            $table->unique(['section_id', 'handle']);
+        //     $table->unique(['section_id', 'handle']);
         });
     }
 
@@ -47,5 +57,6 @@ class CreateSettingsTable extends Migration
     public function down()
     {
         Schema::drop('settings');
+        Schema::drop('setting_sections');
     }
 }
