@@ -29,8 +29,7 @@ class AddonListCommand extends Command
     public function handle()
     {
         $headers = ['Name', 'Version', 'Description', 'Status'];
-
-        $addons = Addon::map(function($addon) {
+        $addons  = Addon::map(function($addon) {
             return [
                 'name' => $addon['name'],
                 'version' => $addon['version'],
