@@ -55,8 +55,10 @@ class FusionServiceProvider extends ServiceProvider
         $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
 
         $this->commands([
+            \Fusion\Console\AddonMigrateRollbackCommand::class,
             \Fusion\Console\AddonDiscoverCommand::class,
             \Fusion\Console\AddonDisableCommand::class,
+            \Fusion\Console\AddonMigrateCommand::class,
             \Fusion\Console\AddonEnableCommand::class,
             \Fusion\Console\AddonListCommand::class,
             \Fusion\Console\MakeAddonCommand::class,
@@ -138,6 +140,12 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(SettingsServiceProvider::class);
         $this->app->register(FieldtypeServiceProvider::class);
         $this->app->register(ThemeServiceProvider::class);
+
+        // Not sure why Laravel doesn't register this against
+        // the class name as well ¯\_(ツ)_/¯
+        $this->app->singleton(\Illuminate\Database\Migrations\Migrator::class, function ($app) {
+            return $app['migrator'];
+        });
     }
 
     /**
