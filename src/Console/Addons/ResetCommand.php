@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Console;
+namespace Fusion\Console\Addons;
 
 use Fusion\Facades\Addon;
 use Illuminate\Console\Command;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Database\Migrations\Migrator;
 
-class AddonMigrateResetCommand extends Command
+class ResetCommand extends Command
 {
     use ConfirmableTrait;
 
@@ -17,7 +17,7 @@ class AddonMigrateResetCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'addon:migrate:reset {namespace?}';
+    protected $signature = 'addon:reset {namespace?}';
 
     /**
      * The console command description.

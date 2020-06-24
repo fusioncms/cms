@@ -1,12 +1,12 @@
 <?php
 
-namespace Fusion\Console;
+namespace Fusion\Console\Addons;
 
 use Fusion\Facades\Addon;
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
 
-class AddonMigrateCommand extends Command
+class MigrateCommand extends Command
 {
     use ConfirmableTrait;
 

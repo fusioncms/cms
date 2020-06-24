@@ -1,11 +1,11 @@
 <?php
 
-namespace Fusion\Console;
+namespace Fusion\Console\Addons;
 
 use Fusion\Facades\Addon;
 use Illuminate\Console\Command;
 
-class AddonListCommand extends Command
+class ListCommand extends Command
 {
     /**
      * The name and signature of the console command.

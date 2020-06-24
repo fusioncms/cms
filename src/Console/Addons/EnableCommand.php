@@ -1,25 +1,25 @@
 <?php
 
-namespace Fusion\Console;
+namespace Fusion\Console\Addons;
 
 use Fusion\Facades\Addon;
 use Illuminate\Console\Command;
 
-class AddonDisableCommand extends Command
+class EnableCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'addon:disable {namespace}';
+    protected $signature = 'addon:enable {namespace}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Disable the specified addon';
+    protected $description = 'Enable the specified addon';
 
     /**
      * Execute the console command.
@@ -35,8 +35,8 @@ class AddonDisableCommand extends Command
             return;
         }
 
-        Addon::disable($addon['namespace']);
+        Addon::enable($addon['namespace']);
 
-        $this->info('Addon successfully disabled!');
+        $this->info('Addon successfully enabled!');
     }
 }

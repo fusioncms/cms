@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Console;
+namespace Fusion\Console\Addons;
 
 use Fusion\Facades\Addon;
 use Illuminate\Support\Str;
@@ -8,7 +8,7 @@ use Fusion\Services\Manifest;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
-class AddonDiscoverCommand extends Command
+class DiscoverCommand extends Command
 {
     /**
      * The name and signature of the console command.
