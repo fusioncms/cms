@@ -4,9 +4,12 @@ namespace Fusion\Console\Addons;
 
 use Fusion\Facades\Addon;
 use Illuminate\Console\Command;
+use Illuminate\Console\ConfirmableTrait;
 
 class EnableCommand extends Command
 {
+    use ConfirmableTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -28,6 +31,10 @@ class EnableCommand extends Command
      */
     public function handle()
     {
+        if (! $this->confirmToProceed()) {
+            return 1;
+        }
+
         $addon = Addon::where('namespace', $this->argument('namespace'))->first();
 
         if (! $addon) {

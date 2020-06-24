@@ -59,6 +59,7 @@ class FusionServiceProvider extends ServiceProvider
             \Fusion\Console\Addons\DiscoverCommand::class,
             \Fusion\Console\Addons\DisableCommand::class,
             \Fusion\Console\Addons\MigrateCommand::class,
+            \Fusion\Console\Addons\RefreshCommand::class,
             \Fusion\Console\Addons\EnableCommand::class,
             \Fusion\Console\Addons\ResetCommand::class,
             \Fusion\Console\Addons\ListCommand::class,
