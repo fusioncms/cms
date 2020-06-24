@@ -41,12 +41,6 @@
                             <p-dropdown-link v-if="table.record.enabled" @click="disable(table.record.slug)">Disable</p-dropdown-link>
                             <p-dropdown-link v-else @click="enable(table.record.slug)">Enable</p-dropdown-link>
 
-                            <p-dropdown-link v-if="table.record.enabled" :to="{ name: 'setting.section', params: { section: table.record.slug } }">Settings</p-dropdown-link>
-
-                            <!-- <p-dropdown-link v-if="table.record.enabled" @click.prevent v-modal:update-addon="table.record">
-                                Update
-                            </p-dropdown-link> -->
-
                             <p-dropdown-link @click.prevent v-modal:uninstall-addon="table.record.slug" classes="link--danger">
                                 Uninstall
                             </p-dropdown-link>
@@ -176,18 +170,6 @@
                     .then((response) => this.refresh('Addon successfully uninstalled.'))
                     .catch((error)   => this.refresh(error.response.data.message, 'danger'))
             },
-
-            // update(slug) {
-            //     axios.patch(`/api/addons/${slug}/update`)
-            //         .then((response) => this.refresh('Module successfully updated.'))
-            //         .catch((error)   => this.refresh(error.response.data.message, 'danger'))
-            // },
-
-            // seed(slug) {
-            //     axios.patch(`/api/addons/${slug}/seed`)
-            //         .then((response) => this.refresh('Module successfully seeded.'))
-            //         .catch((error)   => this.refresh(error.response.data.message, 'danger'))
-            // },
 
             refresh(msg = null, status = 'success') {
                 if (msg) toast(msg, status)

@@ -53,7 +53,7 @@ class MakeAddonCommand extends Command
             File::put($filePath, $content);
         }
 
-        $this->callSilent('addons:discover');
+        $this->callSilent('addon:discover');
 
         $this->info("Addon created successfully.");
     }

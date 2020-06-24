@@ -3,10 +3,9 @@
 namespace Fusion\Http\Requests;
 
 use ZipArchive;
-use Fusion\Rules\ValidModule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ModuleUploadRequest extends FormRequest
+class AddonUploadRequest extends FormRequest
 {
     /**
      * @var \ZipArchive
@@ -16,15 +15,16 @@ class ModuleUploadRequest extends FormRequest
     /**
      * @var array
      */
-    protected $acceptedMimes;
+    protected $acceptedMimes = ['zip'];
 
     /**
+     * Create a new AddonUploadRequest instance.
      *
+     * @param  \ZipArchive  $zipArchive
      */
     public function __construct(ZipArchive $zipArchive)
     {
-        $this->zipArchive    = $zipArchive;
-        $this->acceptedMimes = ['zip'];
+        $this->zipArchive = $zipArchive;
     }
 
     /**
@@ -34,7 +34,7 @@ class ModuleUploadRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('modules.create');
+        return $this->user()->can('addons.create');
     }
 
     /**
@@ -49,7 +49,6 @@ class ModuleUploadRequest extends FormRequest
                 'required',
                 'file',
                 'mimes:' . implode(',', $this->acceptedMimes),
-                new ValidModule($this->zipArchive),
             ]
         ];
     }

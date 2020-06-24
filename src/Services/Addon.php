@@ -33,15 +33,9 @@ class Addon extends Collection
         $this->enable($namespace);
         $this->setProperty($namespace, 'installed', true);
 
-        // Artisan::call('addon:migrate', [
-        //     'namespace' => $addon->get('slug'),
-        //     '--force'   => true,
-        // ]);
-
-                // Artisan::call('addon:migrate:rollback', [
-        //     'slug'    => $module->get('slug'),
-        //     '--force' => true,
-        // ]);
+        Artisan::call('addon:migrate', [
+            'namespace' => $namespace,
+        ]);
 
         Artisan::call('fusion:sync');
 
@@ -56,10 +50,9 @@ class Addon extends Collection
         // Remove extensions before rolling back..
         dispatch(new \Fusion\Console\Actions\SyncExtensions);
 
-        // Artisan::call('addon:migrate:rollback', [
-        //     'namespace' => $namespace,
-        //     '--force' => true,
-        // ]);
+        Artisan::call('addon:rollback', [
+            'namespace' => $namespace,
+        ]);
 
         Artisan::call('fusion:sync');
 

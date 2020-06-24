@@ -13,6 +13,6 @@ class SyncAddons
      */
     public function handle()
     {
-        Artisan::call('addons:discover');
+        Artisan::call('addon:discover');
     }
 }
