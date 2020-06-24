@@ -17,14 +17,14 @@ class RollbackCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'addon:rollback {namespace?}';
+    protected $signature = 'addon:rollback {namespace}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Rollback the last database migration for either all or specified addon';
+    protected $description = 'Rollback the last database migration for the specified addon';
 
     /**
      * The migrator instance.
@@ -64,22 +64,14 @@ class RollbackCommand extends Command
             return;
         }
 
-        $paths = [];
+        $path = addon_path("{$addon['namespace']}/database/migrations");
 
-        if ($addon) {
-            $paths[] = addon_path("{$addon['namespace']}/database/migrations");
-        } else {
-            Addon::enabled()->each(function($addon) use (&$paths) {
-                $paths[] = addon_path("{$addon['namespace']}/database/migrations");
-            });
-        }
-
-        $this->rollback($paths);
+        $this->rollback($path);
     }
 
-    protected function rollback($paths)
+    protected function rollback($path)
     {
-        $migrations = $this->migrator->rollback($paths);
+        $migrations = $this->migrator->rollback($path);
 
         if (count($migrations) === 0) {
             $this->info("Nothing to rollback.");
