@@ -22,7 +22,7 @@ class AddonMigrateCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Run migrations for either all or specified addon';
+    protected $description = 'Run the database migrations for either all or specified addon';
 
     /**
      * @var Migrator

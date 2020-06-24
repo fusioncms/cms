@@ -56,6 +56,7 @@ class FusionServiceProvider extends ServiceProvider
 
         $this->commands([
             \Fusion\Console\AddonMigrateRollbackCommand::class,
+            \Fusion\Console\AddonMigrateResetCommand::class,
             \Fusion\Console\AddonDiscoverCommand::class,
             \Fusion\Console\AddonDisableCommand::class,
             \Fusion\Console\AddonMigrateCommand::class,

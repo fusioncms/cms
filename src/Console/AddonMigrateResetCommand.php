@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Database\Migrations\Migrator;
 
-class AddonMigrateRollbackCommand extends Command
+class AddonMigrateResetCommand extends Command
 {
     use ConfirmableTrait;
 
@@ -17,14 +17,14 @@ class AddonMigrateRollbackCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'addon:migrate:rollback {namespace?}';
+    protected $signature = 'addon:migrate:reset {namespace?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Rollback the last database migration for either all or specified addon';
+    protected $description = 'Rollback all database migrations for either all or specified addon';
 
     /**
      * The migrator instance.
@@ -74,12 +74,12 @@ class AddonMigrateRollbackCommand extends Command
             });
         }
 
-        $this->rollback($paths);
+        $this->reset($paths);
     }
 
-    protected function rollback($paths)
+    protected function reset($paths)
     {
-        $migrations = $this->migrator->rollback($paths);
+        $migrations = $this->migrator->reset($paths);
 
         if (count($migrations) === 0) {
             $this->info("Nothing to rollback.");
