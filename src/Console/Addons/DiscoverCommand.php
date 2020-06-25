@@ -5,6 +5,7 @@ namespace Fusion\Console\Addons;
 use Fusion\Facades\Addon;
 use Illuminate\Support\Str;
 use Fusion\Services\Manifest;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
@@ -31,25 +32,13 @@ class DiscoverCommand extends Command
      */
     public function handle()
     {
-        $cache  = Addon::getCache();
-        $addons = Addon::getAddons();
+        dump('addon:discover');
 
-        // 1. Extract existing "enabled" values for each addon
-        $addons->map(function($addon) use($cache) {
-            $cached = $cache->get($addon['namespace']);
+        Addon::discover();
 
-            $addon['slug']      = Str::slug($addon['name'], '-');
-            $addon['handle']    = Str::slug($addon['name'], '_');
-            $addon['enabled']   = $cached['enabled'] ?? false;
-            $addon['installed'] = $cached['installed'] ?? false;
+        $count = Addon::count();
+        $term  = ($count == 1) ? 'addon' : 'addons';
 
-            return $addon;
-        });
-
-        // 2. Create new cache manifest and store values
-        File::put(storage_path('app/addons.json'), $addons->toJson(JSON_PRETTY_PRINT));
-
-        $term = ($addons->count() == 1) ? 'addon' : 'addons';
-        $this->info("Discovered {$addons->count()} {$term}!");
+        $this->info("Discovered {$count} {$term}!");
     }
 }

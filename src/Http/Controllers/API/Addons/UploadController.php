@@ -60,7 +60,8 @@ class UploadController extends Controller
                 $this->zipArchive->extractTo(addon_path(), $files);
                 $this->zipArchive->close();
 
-                Artisan::call('addon:discover');
+                // Artisan::call('addon:discover');
+                Addon::discover();
             } else {
                 throw new Exception('Unable to locate an addon manifest file.');
             }

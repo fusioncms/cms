@@ -123,9 +123,9 @@ class PasswordTest extends TestCase
 	 * @group auth
 	 * @group password
 	 */
-	public function new_passwords_must_be_at_least_8_characters_long()
+	public function new_passwords_must_be_at_least_6_characters_long()
 	{
-		$this->attributes['password'] = ($password = 'short');
+		$this->attributes['password'] = ($password = 'abc');
 		$this->attributes['password_confirmation'] = $password;
 
 		$this
@@ -133,91 +133,7 @@ class PasswordTest extends TestCase
 			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
 			->assertStatus(422)
 			->assertJsonValidationErrors([
-				'password' => 'The password field must be at least 8 characters long.'
-			]);
-	}
-
-	/**
-	 * @test
-	 * @group fusioncms
-	 * @group feature
-	 * @group auth
-	 * @group password
-	 */
-	public function password_must_contain_at_least_one_lowercase_letter()
-	{
-		$this->attributes['password'] = ($password = 'ABC123@$#');
-		$this->attributes['password_confirmation'] = $password;
-
-		$this
-			->be($this->owner, 'api')
-			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
-			->assertStatus(422)
-			->assertJsonValidationErrors([
-				'password' => 'The password field must have at least 1 lowercase letter.'
-			]);
-	}
-
-	/**
-	 * @test
-	 * @group fusioncms
-	 * @group feature
-	 * @group auth
-	 * @group password
-	 */
-	public function password_must_contain_at_least_one_uppercase_letter()
-	{
-		$this->attributes['password'] = ($password = 'abc123@$#');
-		$this->attributes['password_confirmation'] = $password;
-
-		$this
-			->be($this->owner, 'api')
-			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
-			->assertStatus(422)
-			->assertJsonValidationErrors([
-				'password' => 'The password field must have at least 1 uppercase letter.'
-			]);
-	}
-
-	/**
-	 * @test
-	 * @group fusioncms
-	 * @group feature
-	 * @group auth
-	 * @group password
-	 */
-	public function password_must_contain_at_least_one_digit()
-	{
-		$this->attributes['password'] = ($password = 'ABCabc@$#');
-		$this->attributes['password_confirmation'] = $password;
-
-		$this
-			->be($this->owner, 'api')
-			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
-			->assertStatus(422)
-			->assertJsonValidationErrors([
-				'password' => 'The password field must have at least 1 digit.'
-			]);
-	}
-
-	/**
-	 * @test
-	 * @group fusioncms
-	 * @group feature
-	 * @group auth
-	 * @group password
-	 */
-	public function password_must_contain_at_least_one_symbol()
-	{
-		$this->attributes['password'] = ($password = 'ABCabc123');
-		$this->attributes['password_confirmation'] = $password;
-
-		$this
-			->be($this->owner, 'api')
-			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
-			->assertStatus(422)
-			->assertJsonValidationErrors([
-				'password' => 'The password field must have at least 1 symbol.'
+				'password' => 'The password field must be at least 6 characters long.'
 			]);
 	}
 

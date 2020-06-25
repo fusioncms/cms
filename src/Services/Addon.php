@@ -10,9 +10,31 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 class Addon extends Collection
 {
+
+    public function discover()
+    {
+        $addons = $this->getAddons();
+
+        // 1. Extract existing "enabled" values for each addon
+        $addons->map(function($addon) {
+            $cached = $this->get($addon['namespace']);
+
+            $addon['slug']      = Str::slug($addon['name'], '-');
+            $addon['handle']    = Str::slug($addon['name'], '_');
+            $addon['enabled']   = $cached['enabled'] ?? ($addon['enabled'] ?? false);
+            $addon['installed'] = $cached['installed'] ?? ($addon['installed'] ?? false);
+
+            return $addon;
+        });
+
+        // 2. Create new cache manifest and store values
+        File::put(storage_path('app/addons.json'), $addons->toJson(JSON_PRETTY_PRINT));
+    }
+
     /**
      * Register the available addons.
      *

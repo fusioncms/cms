@@ -14,7 +14,7 @@ return [
 	'mailables'   => [ 'view', 'update' ],
 	'matrices'    => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'menus'       => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
-	'modules'     => [ 'viewAny', 'create', 'update', 'delete' ],
+	'addons'      => [ 'viewAny', 'create', 'update', 'delete' ],
 	'nodes'       => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'singles'     => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
 	'responses'   => [ 'viewAny', 'view', 'create', 'update', 'delete' ],
