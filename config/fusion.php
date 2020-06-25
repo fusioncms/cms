@@ -54,6 +54,7 @@ return [
         \Fusion\Fieldtypes\CountryFieldtype::class,
         \Fusion\Fieldtypes\DateTimeFieldtype::class,
         \Fusion\Fieldtypes\DividerFieldtype::class,
+        \Fusion\Fieldtypes\FileFieldtype::class,
         \Fusion\Fieldtypes\FormFieldtype::class,
         \Fusion\Fieldtypes\InformationFieldtype::class,
         \Fusion\Fieldtypes\InputFieldtype::class,

@@ -51,6 +51,6 @@ class SingleController extends Controller
             $relationship->type()->persistRelationship($single, $relationship);
         }
 
-        return new SingleResource($single);
+        return new SingleResource($single->fresh());
     }
 }

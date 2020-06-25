@@ -67,6 +67,8 @@
             submit() {
                 this.form.patch('/api/singles/' + this.matrix.id).then((response) => {
                     toast('Single saved successfully', 'success')
+
+                    this.$router.go()
                 }).catch((response) => {
                     toast(response.message, 'failed')
                 })
@@ -113,10 +115,10 @@
 
             if (_.has(response, 'data.data.single')) {
                 matrix = response.data.data.matrix
-                single   = response.data.data.single
+                single = response.data.data.single
             } else {
                 matrix = response.data.data
-                single   = {
+                single = {
                     name: matrix.name,
                     slug: matrix.slug,
                     status: 1

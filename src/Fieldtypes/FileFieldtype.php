@@ -2,6 +2,14 @@
 
 namespace Fusion\Fieldtypes;
 
+use Fusion\Models\File as FileModel;
+use Fusion\Models\Field;
+use Fusion\Models\Directory;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Fusion\Http\Resources\FileResource;
+
 class FileFieldtype extends Fieldtype
 {
     /**
@@ -17,17 +25,109 @@ class FileFieldtype extends Fieldtype
     /**
      * @var string
      */
-    public $description = 'FIELDTYPE IN DEVELOPMENT';
+    public $description = 'A single file-upload field.';
 
     /**
      * @var string
      */
-    public $cast = 'string';
+    public $relationship = 'morphToMany';
 
     /**
-     * @var array
+     * @var string
      */
-    public $column = [
-        'type' => 'string',
-    ];
+    public $namespace = 'Fusion\Models\File';
+
+    /**
+     * Generate relationship methods for associated Model.
+     *
+     * @param  Fusion\Models\Field $field
+     * @return string
+     */
+    public function generateRelationship($field)
+    {
+        $stub = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
+
+        return strtr($stub, [
+            '{handle}'            => $field->handle,
+            '{studly_handle}'     => Str::studly($field->handle),
+            '{related_pivot_key}' => 'file_id',
+            '{related_namespace}' => $this->namespace,
+            '{related_table}'     => 'files_pivot',
+            '{where_clause}'      => "->where('field_id', {$field->id})",
+            '{order_clause}'      => "->orderBy('order')",
+        ]);
+    }
+
+    /**
+     * Update relationship data in storage.
+     *
+     * @param  Illuminate\Eloquent\Model  $model
+     * @param  Fusion\Models\Field           $field
+     * @return void
+     */
+    public function persistRelationship($model, Field $field)
+    {
+        $directory = Directory::firstOrCreate([
+            'name' => $field->settings['directory'] ?? 'uploads'
+        ]);
+        
+        $oldValues = $model->{$field->handle}->pluck('id');
+        $newValues = collect(request()->input($field->handle))
+            ->mapWithKeys(function($file, $key) use ($field, $directory) {
+                if (is_string($file)) {
+                    // file properties..
+                    $filePath  = $file;
+                    $fullPath  = Storage::disk('public')->path($filePath);
+                    $fullName  = File::name($fullPath);
+                    $extension = File::extension($fullPath);
+                    $bytes     = File::size($fullPath);
+                    $mimetype  = File::mimeType($fullPath);
+                    $filetype  = strtok($mimetype, '/');
+                    $location  = str_replace('tmp/', 'files/', $filePath);
+
+                    list($uuid, $name) = explode('-', $fullName);
+
+                    if ($filetype == 'image') {
+                        list($width, $height) = getimagesize($fullPath);
+                    }
+
+                    // save to filemanager..
+                    $file = FileModel::create([
+                        'directory_id' => $directory->id,
+                        'uuid'         => $uuid,
+                        'name'         => $name,
+                        'extension'    => $extension,
+                        'bytes'        => $bytes,
+                        'mimetype'     => $mimetype,
+                        'location'     => $location,
+                        'width'        => $width ?? null,
+                        'height'       => $height ?? null,
+                    ]);
+
+                    // move tmp file to permanant location..
+                    Storage::disk('public')->move($filePath, $location);
+                }
+
+                return [
+                    $file['id'] => [
+                        'field_id' => $field->id,
+                        'order'    => $key + 1
+                    ]];
+            });
+
+        $model->{$field->handle}()->detach($oldValues);
+        $model->{$field->handle}()->attach($newValues);
+    }
+
+    /**
+     * Returns resource object of field.
+     *
+     * @param  Illuminate\Eloquent\Model  $model
+     * @param  Fusion\Models\Field           $field
+     * @return FileResource
+     */
+    public function getResource($model, Field $field)
+    {
+        return FileResource::collection($this->getValue($model, $field));
+    }
 }

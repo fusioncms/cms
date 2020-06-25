@@ -50,8 +50,7 @@ class FileUploadRequest extends FormRequest
         $mimes = preg_replace('/\\s/', '', $this->acceptedMimes);
 
         return [
-            'file'         => "required|file|max:{$maxKb}|mimes:{$mimes}",
-            'directory_id' => 'sometimes',
+            'file.*' => "required|file|max:1{$maxKb}|mimes:{$mimes}",
         ];
     }
 
@@ -63,7 +62,8 @@ class FileUploadRequest extends FormRequest
     public function messages()
     {
         return [
-            'file.max' => "The file cannot be larger than {$this->maxFileSize}MB",
+            'file.*.max'   => "Each file cannot be larger than {$this->maxFileSize}MB",
+            'file.*.mimes' => "Each file must be a file of type: {$this->acceptedMimes}",
         ];
     }
 }

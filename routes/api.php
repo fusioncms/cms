@@ -40,6 +40,7 @@ Route::apiResource('extensions',  'ExtensionController');
  * API - Field Routes
  */
 Route::prefix('fields')->group(function() {
+	Route::post('file', 'Fields\FieldController@file');
 	Route::post('validate', 'Fields\FieldController@valid');
 });
 

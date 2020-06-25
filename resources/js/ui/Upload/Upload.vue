@@ -31,21 +31,30 @@
                 <strong>Drag files here</strong> or click to select
             </label>
         </div>
-        
-        <table v-if="files.length" class="upload__files">
-            <tbody>
-                <tr v-for="(file, index) in files" :key="file.name" class="upload__file">
-                    <td class="upload__file--name">{{ file.name }}</td>
-                    <td class="upload__file--size">{{ filesize(file.size) }}</td>
-                    <td class="upload__file--actions"><p-button @click.prevent="remove(index)">Remove</p-button></td>
-                </tr>
-            </tbody>
-        </table>
 
-        <div class="form__control--meta" v-if="help || errorMessage || error">
+        <div v-if="files.length" class="bg-white shadow overflow-hidden sm:rounded-md">
+            <ul>
+                <li v-for="(file, index) in files" :key="`file.${index}`">
+                    <div class="p-2 sm:px-4">
+                        <div class="flex items-start">
+                            <div class="upload__file--name flex-1 text-sm" v-text="file.name" />
+
+                            <div class="upload__file--size text-sm">
+                                {{ file.bytes || file.size | bytes }}
+                            </div>
+                            
+                            <div class="upload__file--actions pl-4">
+                                <p-button class="button--danger button--small" @click.prevent="remove(index)">Remove</p-button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="form__control--meta" v-if="help || error">
             <div class="form__help">
                 <span v-if="help" v-html="help"></span>
-                <span v-if="errorMessage" class="form__error--message" v-html="errorMessage"></span>
                 <span v-if="error" class="form__error--message" v-html="error"></span>
             </div>
         </div>
@@ -56,9 +65,13 @@
     export default {
         name: 'p-upload',
 
+        mixins: [
+            require ('../../mixins/filehelper').default
+        ],
+
         data() {
             return {
-                files: [],
+                files: this.value,
                 isDraggedOver: false,
                 error: '',
             }
@@ -70,13 +83,25 @@
             label: String,
             help: String,
             multiple: Boolean,
-            accept: String,
             required: Boolean,
-            errorMessage: {
+            value: {
+                type: Array,
                 required: false,
-                type: String,
-                default: '',
+                default: () => []
             },
+            errors: {
+                type: Object,
+                required: false,
+                default: () => {}
+            }
+        },
+
+        watch: {
+            errors(value) {
+                _.each(value, (errors, index) => {
+                    this.error = errors.join("\n")
+                })
+            }
         },
 
         methods: {
@@ -94,98 +119,35 @@
                 this.onFileChange(event)
             },
 
-            resetError() {
-                this.error = ''
-            },
-
-            setError(message) {
-                this.error = message
-            },
-
             onFileChange(event) {
-                this.resetError()
+                this.error = ''
 
                 let files = Array.from(event.target.files || event.dataTransfer.files)
 
-                files = _.filter(files, function(file) {
-                    return this.checkAcceptance(file)
-                }.bind(this))
+                files = _.filter(files, (file) => {
+                    let isValid = this.validExtension(file)
 
-                if (! this.multiple && files.length > 1) {
+                    if (! isValid) {
+                        this.error += `Each file must be a file of type: ${this.accept}\n`
+                    }
+
+                    return isValid
+                })
+
+                if (! this.multiple && files.length > 0) {
                     files.length = 1
                 }
 
-                this.files = files
+                this.files.unshift(...files)
 
-                this.emitInput()
+                this.$emit('input', this.files)
             },
 
             remove(index) {
                 this.files.splice(index, 1)
 
-                this.emitInput()
-            },
-
-            emitInput() {
-                if (this.multiple) {
-                    this.$emit('input', this.files)
-                } else {
-                    this.$emit('input', this.files[0])
-                }
-            },
-
-            filesize(bytes) {
-                let thresh = 1000
-
-                if (Math.abs(bytes) < thresh) {
-                    return bytes + ' B'
-                }
-
-                let units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-                let index = -1
-
-                do {
-                    bytes /= thresh
-                    ++index
-                } while (Math.abs(bytes) >= thresh && index < units.length - 1)
-
-                return bytes.toFixed(1) + ' ' + units[index]
-            },
-
-            checkAcceptance(file) {
-                if (! this.accept) return true
-
-                const types = this.accept.split(',')
-                if (types.length === 0) return true
-                
-                let isValid = false
-                
-                for (let i = 0; i < types.length && ! isValid; i++) {
-                    const type = types[i].trim()
-
-                    if (type) {
-                        if (type.substring(0, 1) === '.') {
-                            const extIndex = file.name.lastIndexOf('.')
-                            const extension = extIndex >= 0
-                                ? file.name.substring(extIndex) : ''
-                            
-                            if (extension.toLowerCase() === type.toLowerCase()) {
-                                isValid = true
-                            }
-                        } else {
-                            if (file.type.match(type)) {
-                                isValid = true
-                            }
-                        }
-                    }
-                }
-
-                if (! isValid) {
-                    this.setError('Only files of type <b>' + types.join(', ') + '</b> are accepted.')
-                }
-
-                return isValid
+                this.$emit('input', this.files)
             }
-        },
+        }
     }
 </script>

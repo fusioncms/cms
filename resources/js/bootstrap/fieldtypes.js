@@ -18,6 +18,10 @@ Vue.component('color-picker-fieldtype-settings', () => import('../fieldtypes/Col
 Vue.component('country-fieldtype', () => import('../fieldtypes/Country/Field'))
 Vue.component('country-fieldtype-settings', () => import('../fieldtypes/Country/Settings'))
 
+Vue.component('file-fieldtype', () => import('../fieldtypes/File/Field'))
+Vue.component('file-fieldtype-settings', () => import('../fieldtypes/File/Settings'))
+
+
 Vue.component('form-fieldtype', () => import('../fieldtypes/Form/Field'))
 Vue.component('form-fieldtype-settings', () => import('../fieldtypes/Form/Settings'))
 
