@@ -1,7 +1,6 @@
 <template>
     <div class="field">
     	<p-upload
-            ref="upload"
             name="file"
             :label="field.name"
             :help="field.help"
@@ -20,7 +19,7 @@
 
 		data() {
 			return {
-                model: this.value,
+                model: [...this.value],
 				errors: []
 			}
 		},
@@ -45,18 +44,14 @@
 
             limit() {
                 return _.defaultTo(this.field.settings.limit, false)
-            },
-
-            count() {
-                return this.model.length
             }
         },
 
         methods: {
             upload(files) {
-                let uploadForm = new FormData()
-                let fileCount  = 0
-                let values     = []
+                let fileCount = 0
+                let values    = []
+                let uploadForm
 
                 // reset..
                 this.errors = []
@@ -67,6 +62,8 @@
                     this.errors.push(`File limit of ${this.limit} has been reached.`)
                 }
 
+                // prepare uploads
+                uploadForm = new FormData()
                 uploadForm.append('_method', 'POST')
 
                 _.each(files, (file) => {

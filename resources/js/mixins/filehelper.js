@@ -45,6 +45,10 @@ export default {
     },
 
 	methods: {
+		filesize(value) {
+			return filesize(value)
+		},
+
 		validExtension(file) {
 			if (_.isEmpty(this.accept)) {
 				return true;

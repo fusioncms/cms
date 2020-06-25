@@ -32,7 +32,7 @@
             </label>
         </div>
 
-        <div v-if="files.length" class="bg-white shadow overflow-hidden sm:rounded-md">
+        <div v-if="files.length && display" class="bg-white shadow overflow-hidden sm:rounded-md">
             <ul>
                 <li v-for="(file, index) in files" :key="`file.${index}`">
                     <div class="p-2 sm:px-4">
@@ -71,7 +71,7 @@
 
         data() {
             return {
-                files: this.value,
+                files: _.isArray(this.value) ? this.value : [this.value],
                 isDraggedOver: false,
                 error: '',
             }
@@ -82,10 +82,18 @@
             placeholder: String,
             label: String,
             help: String,
-            multiple: Boolean,
             required: Boolean,
+            display: {
+                type: Boolean,
+                required: false,
+                default: true
+            },
+            multiple: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
             value: {
-                type: Array,
                 required: false,
                 default: () => []
             },
@@ -97,13 +105,20 @@
         },
 
         watch: {
+            files: {
+                handler(value) {
+                    this.$emit('input', value)
+                },
+                deep: true
+            },
+
             errors(value) {
                 let errors = []
 
                 _.each(value, (error) => {
                     errors = errors.concat(_.isArray(error) ? error : [error])
                 })
-                
+
                 this.error = _.uniq(errors).join("\n")
             }
         },
@@ -143,14 +158,10 @@
                 }
 
                 this.files.unshift(...files)
-
-                this.$emit('input', this.files)
             },
 
             remove(index) {
                 this.files.splice(index, 1)
-
-                this.$emit('input', this.files)
             }
         }
     }

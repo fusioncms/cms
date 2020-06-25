@@ -27,8 +27,10 @@
 					:name="setting.handle"
 					:label="setting.name"
 					:help="setting.description"
-					v-model="setting.value"
 					accept="json"
+                    :display="false"
+					v-model="setting.value"
+                    @input="(ev) => setting.value = ev.shift()"
 				></p-upload>
 
 				<component
@@ -63,7 +65,7 @@
 			},
 
 			groups: function() {
-				let settings = _.filter(this.settings, (setting) => { return Boolean(setting.gui) })
+				let settings = _.filter(this.settings, (setting) => Boolean(setting.gui))
 
 				return _.groupBy(settings, 'group')
 			},
@@ -90,24 +92,23 @@
 	        },
 
 			submit() {
-				const formData = new FormData()
-
+				let formData = new FormData()
 				formData.append('_method', 'PATCH')
 
-				_.forEach(this.settings, function(setting) {
-					formData.append(setting.handle, setting.value)
-				})
+				_.forEach(this.settings, (setting) =>
+					formData.append(setting.handle, setting.value))
 
-				axios.post(`/api/settings/${this.section}`, formData).then((response) => {
-					this.setSection({
-						handle: this.section,
-						section: response.data.data
-					})
+				axios.post(`/api/settings/${this.section}`, formData)
+                    .then((response) => {
+                        this.setSection({
+                            handle: this.section,
+                            section: response.data.data
+                        })
 
-					toast('Settings have been updated.', 'success')
-				}).catch(error => {
-					toast(error.message, 'failed')
-                })
+                        toast('Settings have been updated.', 'success')
+                    }).catch(error => {
+                        toast(error.message, 'failed')
+                    })
             },
 		}
 	}

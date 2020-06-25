@@ -1,16 +1,16 @@
 <template>
-    <p-modal name="replace-file" title="Replace current file with another">
+    <p-modal
+        name="replace-file"
+        title="Replace current file with another"
+        no-footer
+        v-model="open"
+    >
         <p-upload
-            ref="upload"
             name="file"
+            help="Select a file to replace current file."
             :multiple="false"
-            @input="uploadFile"
+            @input="upload"
         ></p-upload>
-
-        <template v-slot:footer>
-            <p-button v-modal:replace-file>Close</p-button>
-            <p-button theme="primary" @click="submit" v-modal:replace-file class="mr-1">Replace</p-button>
-        </template>
     </p-modal>
 </template>
 
@@ -20,35 +20,30 @@
 
         data() {
             return {
-                uploadForm: null
+                open: false
             }
         },
 
         props: {
             file: {
-                required: true,
-            },
+                type: Object,
+                required: true
+            }
         },
 
         methods: {
-            uploadFile(files) {
-                this.uploadForm = new FormData()
-                this.uploadForm.append('_method', 'POST')
-                this.uploadForm.append('file', files)
-            },
+            upload(files) {
+                let form = new FormData()
+                form.append('_method', 'POST')
+                form.append('file', files.shift())
 
-            submit() {
-                if (this.uploadForm) {
-                    axios.post(`/api/files/replace/${this.file.id}`, this.uploadForm).then((response) => {
-                        this.uploadForm = null
-                        this.$refs.upload.remove()
+                axios.post(`/api/files/replace/${this.file.id}`, form)
+                    .then((response) => {
                         this.$emit('replaced', response.data.data)
+                        this.open = false
 
                         toast('File has been replaced successfully!', 'success')
                     })
-                } else {
-                    toast('No replacement specified.', 'failed')
-                }
             }
         }
     }
