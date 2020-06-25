@@ -31,7 +31,7 @@
 	import fieldtype from '../../mixins/fieldtype'
 
     export default {
-        name: 'form-fieldtype-settings',
+        name: 'file-fieldtype-settings',
         mixins: [fieldtype],
     }
 </script>

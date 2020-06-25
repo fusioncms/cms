@@ -50,7 +50,7 @@ class FileUploadRequest extends FormRequest
         $mimes = preg_replace('/\\s/', '', $this->acceptedMimes);
 
         return [
-            'file.*' => "required|file|max:1{$maxKb}|mimes:xml",
+            'file.*' => "required|file|max:1{$maxKb}|mimes:{$mimes}",
         ];
     }
 

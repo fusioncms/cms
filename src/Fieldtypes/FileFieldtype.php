@@ -38,6 +38,14 @@ class FileFieldtype extends Fieldtype
     public $namespace = 'Fusion\Models\File';
 
     /**
+     * @var array
+     */
+    public $settings = [
+        'limit'     => null,
+        'directory' => null,
+    ];
+
+    /**
      * Generate relationship methods for associated Model.
      *
      * @param  Fusion\Models\Field $field
@@ -68,7 +76,8 @@ class FileFieldtype extends Fieldtype
     public function persistRelationship($model, Field $field)
     {
         $directory = Directory::firstOrCreate([
-            'name' => $field->settings['directory'] ?? 'uploads'
+            'name' => ($name = $field->settings['directory'] ?? 'uploads'),
+            'slug' => Str::slug($name),
         ]);
         
         $oldValues = $model->{$field->handle}->pluck('id');
