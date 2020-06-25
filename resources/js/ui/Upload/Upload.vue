@@ -90,17 +90,21 @@
                 default: () => []
             },
             errors: {
-                type: Object,
+                type: Array,
                 required: false,
-                default: () => {}
+                default: () => []
             }
         },
 
         watch: {
             errors(value) {
-                _.each(value, (errors, index) => {
-                    this.error = errors.join("\n")
+                let errors = []
+
+                _.each(value, (error) => {
+                    errors = errors.concat(_.isArray(error) ? error : [error])
                 })
+                
+                this.error = _.uniq(errors).join("\n")
             }
         },
 

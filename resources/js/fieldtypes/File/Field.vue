@@ -5,7 +5,7 @@
             name="file"
             :label="field.name"
             :help="field.help"
-            :placeholder="field.settings.placeholder"
+            :placeholder="placeholder"
             :multiple="true"
             :errors="errors"
             v-model="model"
@@ -21,7 +21,7 @@
 		data() {
 			return {
                 model: this.value,
-				errors: {}
+				errors: []
 			}
 		},
 
@@ -38,12 +38,34 @@
             }
         },
 
+        computed: {
+            placeholder() {
+                return _.defaultTo(this.field.settings.placeholder, '')
+            },
+
+            limit() {
+                return _.defaultTo(this.field.settings.limit, false)
+            },
+
+            count() {
+                return this.model.length
+            }
+        },
+
         methods: {
             upload(files) {
                 let uploadForm = new FormData()
                 let fileCount  = 0
                 let values     = []
-                this.errors    = {}
+
+                // reset..
+                this.errors = []
+
+                // limit..
+                if (this.limit && files.length > this.limit) {
+                    files = _.drop(files, files.length - this.limit)
+                    this.errors.push(`File limit of ${this.limit} has been reached.`)
+                }
 
                 uploadForm.append('_method', 'POST')
 
@@ -60,9 +82,8 @@
                     axios.post('/api/fields/file', uploadForm)
                     	.then((response) => values.unshift(...response.data.files))
                     	.catch((error) => {
-                            this.errors = error.response.data.errors
-
-                            _.each(this.errors, (value, key) => {
+                            _.each(error.response.data.errors, (value, key) => {
+                                this.errors.push(value)
                                 this.model.splice(key, 1)
                             })
                         })
