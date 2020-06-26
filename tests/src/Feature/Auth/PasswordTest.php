@@ -123,7 +123,7 @@ class PasswordTest extends TestCase
 	 * @group auth
 	 * @group password
 	 */
-	public function new_passwords_must_be_at_least_8_characters_long()
+	public function new_passwords_must_be_at_least_6_characters_long()
 	{
 		$this->attributes['password'] = ($password = 'short');
 		$this->attributes['password_confirmation'] = $password;
@@ -133,12 +133,12 @@ class PasswordTest extends TestCase
 			->json('PATCH', '/api/users/' . $this->user->id, $this->attributes)
 			->assertStatus(422)
 			->assertJsonValidationErrors([
-				'password' => 'The password field must be at least 8 characters long.'
+				'password' => 'The password field must be at least 6 characters long.'
 			]);
 	}
 
 	/**
-	 * @test
+	 * 
 	 * @group fusioncms
 	 * @group feature
 	 * @group auth
@@ -159,7 +159,7 @@ class PasswordTest extends TestCase
 	}
 
 	/**
-	 * @test
+	 * 
 	 * @group fusioncms
 	 * @group feature
 	 * @group auth
@@ -180,7 +180,7 @@ class PasswordTest extends TestCase
 	}
 
 	/**
-	 * @test
+	 * 
 	 * @group fusioncms
 	 * @group feature
 	 * @group auth
@@ -201,7 +201,7 @@ class PasswordTest extends TestCase
 	}
 
 	/**
-	 * @test
+	 * 
 	 * @group fusioncms
 	 * @group feature
 	 * @group auth
