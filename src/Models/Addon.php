@@ -16,7 +16,7 @@ class Addon extends Model
     ];
 
     protected $casts = [
-        'enabled' => 'boolean',
+        'enabled'   => 'boolean',
         'installed' => 'boolean',
     ];
 

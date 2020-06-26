@@ -343,7 +343,7 @@ class FusionServiceProvider extends ServiceProvider
         });
 
         Route::bind('addon', function($slug) {
-            return \Fusion\Models\Addon::where('slug', $slug)->firstOrFail();
+            return \Fusion\Facades\Addon::where('slug', $slug)->first();
         });
     }
 

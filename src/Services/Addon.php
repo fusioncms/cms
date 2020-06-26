@@ -20,7 +20,7 @@ class Addon extends Collection
         $addons = $this->getAddons();
 
         // 1. Extract existing "enabled" values for each addon
-        $addons->map(function($addon) {
+        $addons->transform(function($addon) {
             $cached = $this->get($addon['namespace']);
 
             $addon['slug']      = Str::slug($addon['name'], '-');
@@ -31,7 +31,10 @@ class Addon extends Collection
             return $addon;
         });
 
-        // 2. Create new cache manifest and store values
+        // 2. Update the current cache instance
+        $this->items = $addons->toArray();
+
+        // 3. Create new cache manifest and store values
         File::put(storage_path('app/addons.json'), $addons->toJson(JSON_PRETTY_PRINT));
     }
 
@@ -131,6 +134,28 @@ class Addon extends Collection
         return $this->filter(function($addon) {
             return $addon['enabled'] == false;
         });
+    }
+
+    public function isEnabled($namespace)
+    {
+        $addon = $this->get($namespace);
+
+        if ($addon['enabled'] === true) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isNotEnabled($namespace)
+    {
+        $addon = $this->get($namespace);
+
+        if ($addon['enabled'] === false) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

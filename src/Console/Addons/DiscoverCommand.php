@@ -32,8 +32,6 @@ class DiscoverCommand extends Command
      */
     public function handle()
     {
-        dump('addon:discover');
-
         Addon::discover();
 
         $count = Addon::count();

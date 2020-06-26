@@ -36,18 +36,18 @@ trait InstallsFusion
      */
     protected function install()
     {
-        Addon::register();
-
         dispatch_now(new CreateDatabaseTables);
         dispatch_now(new CreateDefaultPermissions);
         dispatch_now(new CreateDefaultRoles);
 
-        // Artisan::call('fusion:flush');
-
         Theme::activate('Hello');
-        // Artisan::call('addon:discover');
+        Addon::discover();
+        Addon::register();
 
-        // Artisan::call('fusion:sync');
+        Addon::install('Foobar');
+
+        Artisan::call('fusion:flush');
+        Artisan::call('fusion:sync');
     }
 
     /**

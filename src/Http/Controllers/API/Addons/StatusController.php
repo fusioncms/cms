@@ -21,7 +21,7 @@ class StatusController extends Controller
     {
         $this->authorize('addons.update');
 
-        $addon = Addon::enable($addon->namespace);
+        $addon = Addon::enable($addon['namespace']);
 
         return new AddonResource($addon);
     }
@@ -37,7 +37,7 @@ class StatusController extends Controller
     {
         $this->authorize('addons.update');
 
-        $addon = Addon::disable($addon->namespace);
+        $addon = Addon::disable($addon['namespace']);
 
         return new AddonResource($addon);
     }

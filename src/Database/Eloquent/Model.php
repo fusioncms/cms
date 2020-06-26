@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class Model extends EloquentModel
 {
-    use HasDynamicRelationships;
+    // use HasDynamicRelationships;
 
     /**
      * @var Model

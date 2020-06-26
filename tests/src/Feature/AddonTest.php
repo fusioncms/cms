@@ -26,8 +26,18 @@ class AddonTest extends TestCase
         parent::setUp();
 
         $this->handleValidationExceptions();
+    }
 
-        // Artisan::call('addon:discover');
+    /**
+     * @test
+     * @group feature
+     * @group addon
+     */
+    public function addons_are_registered_with_fusion()
+    {
+        $addons = Addon::all();
+
+        $this->assertCount(1, $addons);
     }
 
     /**
@@ -51,74 +61,70 @@ class AddonTest extends TestCase
 
         // Clean up..
         File::deleteDirectory(addon_path('Omega'));
-        Addon::discover();
     }
 
-    // /**
-    //  * @test
-    //  * @group feature
-    //  * @group module
-    //  */
-    // public function an_uploaded_addon_can_be_installed()
-    // {
-    //     list($addonPath, $addonName) = $this->generateAddon('Omega');
+    /**
+     * @test
+     * @group feature
+     * @group module
+     */
+    public function an_uploaded_addon_can_be_installed()
+    {
+        list($addonPath, $addonName) = $this->generateAddon('Omega');
 
-    //     // $this
-    //     //     ->be($this->owner, 'api')
-    //     //     ->json('POST', '/api/addons/upload', [
-    //     //         'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true)
-    //     //     ])->assertStatus(200);
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/addons/upload', [
+                'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true)
+            ])->assertStatus(200);
 
-    //     dd(Addon::all(), File::get(storage_path('app/addons.json')), Addon::register(), Addon::all());
+        $addon = Addon::where('namespace', 'Omega')->first();
 
-    //     $addon = Addon::where('namespace', 'Omega')->first();
+        $this->assertFalse($addon['enabled']);
+        $this->assertFalse($addon['installed']);
 
-    //     $this->assertFalse($addon['enabled']);
-    //     $this->assertFalse($addon['installed']);
+        $addon = Addon::install('Omega');
 
-    //     // $this
-    //     //     ->be($this->owner, 'api')
-    //     //     ->json('POST', '/api/addons/Omega/install')->assertStatus(200);
-    //     Addon::install('Omega');
+        $this->assertTrue($addon['enabled']);
+        $this->assertTrue($addon['installed']);
 
-    //     $this->assertTrue($addon['enabled']);
-    //     $this->assertTrue($addon['installed']);
+        // Clean up..
+        File::deleteDirectory(addon_path('Omega'));
+    }
 
-    //     // Clean up..
-    //     File::deleteDirectory(addon_path('Omega'));
-    //     File::delete()
-    //     Addon::discover();
-    // }
+    /**
+     * @test
+     * @group feature
+     * @group addon
+     */
+    public function an_installed_addon_can_be_uninstalled()
+    {
+        Bus::fake();
 
-    // /**
-    //  * @test
-    //  * @group feature
-    //  * @group module
-    //  */
-    // public function an_installed_module_can_be_uninstalled()
-    // {
-    //     Bus::fake();
+        list($addonPath, $addonName) = $this->generateAddon('Omega');
 
-    //     list($modulePath, $moduleName) = $this->generateModule('Omega');
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/addons/upload', [
+                'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true)
+            ]);
 
-    //     $this
-    //         ->be($this->owner, 'api')
-    //         ->json('POST', '/api/modules/upload', [
-    //             'file-upload' => new UploadedFile($modulePath, $moduleName, 'application/zip', null, true)
-    //         ]);
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/addons/omega/install');
 
-    //     $this
-    //         ->be($this->owner, 'api')
-    //         ->json('POST', '/api/modules/omega/install');
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/addons/omega/uninstall')
+            ->assertStatus(200);
 
-    //     $this
-    //         ->be($this->owner, 'api')
-    //         ->json('POST', '/api/modules/omega/uninstall')
-    //         ->assertStatus(200);
+        $addon = Addon::get('Omega');
 
-    //     $this->assertFalse(File::exists(base_path('modules/Omega')));
-    //     $this->assertFalse(Module::exists('omega'));
-    // }
+        $this->assertFalse($addon['installed']);
+
+        // Clean up..
+        File::deleteDirectory(addon_path('Omega'));
+    }
 
     /**
      * @test
@@ -150,139 +156,123 @@ class AddonTest extends TestCase
             ->json('POST', '/api/addons/upload', []);
     }
 
-    // /**
-    //  * @test
-    //  * @group fusioncms
-    //  * @group feature
-    //  * @group module
-    //  * @group permissions
-    //  */
-    // public function a_user_without_permissions_cannot_install_a_module()
-    // {
-    //     $this->expectException(AuthorizationException::class);
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group addon
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_install_an_addon()
+    {
+        $this->expectException(AuthorizationException::class);
 
-    //     $this
-    //         ->be($this->user, 'api')
-    //         ->json('POST', '/api/addons/Foobar/install', []);
-    // }
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/addons/foobar/install', []);
+    }
 
-    // /**
-    //  * @test
-    //  * @group fusioncms
-    //  * @group feature
-    //  * @group module
-    //  * @group permissions
-    //  */
-    // public function a_user_without_permissions_cannot_uninstall_existing_modules()
-    // {
-    //     $this->expectException(AuthorizationException::class);
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group addon
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_uninstall_existing_addons()
+    {
+        $this->expectException(AuthorizationException::class);
 
-    //     $this
-    //         ->be($this->user, 'api')
-    //         ->json('POST', '/api/modules/beta/uninstall', []);
-    // }
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/addons/foobar/uninstall', []);
+    }
 
-    // /**
-    //  * @test
-    //  * @group fusioncms
-    //  * @group feature
-    //  * @group addon
-    //  * @group permissions
-    //  */
-    // public function a_user_without_permissions_cannot_enable_existing_addons()
-    // {
-    //     $this->expectException(AuthorizationException::class);
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group addon
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_enable_existing_addons()
+    {
+        $this->expectException(AuthorizationException::class);
 
-    //     $this
-    //         ->be($this->user, 'api')
-    //         ->json('POST', '/api/addons/Foobar/enable', []);
-    // }
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/addons/foobar/enable', []);
+    }
 
-    // /**
-    //  * @test
-    //  * @group fusioncms
-    //  * @group feature
-    //  * @group addon
-    //  * @group permissions
-    //  */
-    // public function a_user_without_permissions_cannot_disable_existing_addons()
-    // {
-    //     $this->expectException(AuthorizationException::class);
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group addon
+     * @group permissions
+     */
+    public function a_user_without_permissions_cannot_disable_existing_addons()
+    {
+        $this->expectException(AuthorizationException::class);
 
-    //     $this
-    //         ->be($this->user, 'api')
-    //         ->json('POST', '/api/addons/Foobar/disable', []);
-    // }
+        $this
+            ->be($this->user, 'api')
+            ->json('POST', '/api/addons/foobar/disable', []);
+    }
 
-    // /**
-    //  * @test
-    //  * @group fusioncms
-    //  * @group feature
-    //  * @group addon
-    //  * @group permissions
-    //  */
-    // public function a_user_without_permissions_cannot_seed_existing_addons()
-    // {
-    //     $this->expectException(AuthorizationException::class);
+    /**
+     * @test
+     * @group feature
+     * @group addon
+     */
+    public function a_newly_uploaded_addon_has_file_requirements()
+    {
+        list($addonPath, $addonName) = $this->generateAddon('Invalid', false);
 
-    //     $this
-    //         ->be($this->user, 'api')
-    //         ->json('POST', '/api/addons/Foobar/seed', []);
-    // }
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/addons/upload', [
+                'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true)
+            ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'file-upload' => 'An addon requires the following files: addon.json.'
+            ]);
+    }
 
-    // /**
-    //  * @test
-    //  * @group feature
-    //  * @group addon
-    //  */
-    // public function a_newly_uploaded_addon_has_file_requirements()
-    // {
-    //     list($addonPath, $addonName) = $this->generateAddon('Invalid', false);
+    /**
+     * @test
+     * @group feature
+     * @group addon
+     */
+    public function an_enabled_addon_can_be_disabled()
+    {
+        Addon::enable('Foobar');
 
-    //     $this
-    //         ->be($this->owner, 'api')
-    //         ->json('POST', '/api/addons/upload', [
-    //             'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true)
-    //         ])
-    //         ->assertStatus(422)
-    //         ->assertJsonValidationErrors([
-    //             'file-upload' => 'An addon requires the following files: addon.json.'
-    //         ]);
-    // }
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/addons/foobar/disable")
+            ->assertStatus(200);
 
-    // /**
-    //  * @test
-    //  * @group feature
-    //  * @group addon
-    //  */
-    // public function an_enabled_addon_can_be_disabled()
-    // {
-    //     Addon::enable('Foobar');
+        $this->assertTrue(Addon::isNotEnabled('Foobar'));
+    }
 
-    //     $this
-    //         ->be($this->owner, 'api')
-    //         ->json('POST', "/api/addons/Foobar/disable")
-    //         ->assertStatus(200);
+    /**
+     * @test
+     * @group feature
+     * @group addon
+     */
+    public function a_disabled_addon_can_be_enabled()
+    {
+        Addon::disable('Foobar');
 
-    //     $this->assertTrue(Addon::isNotEnabled('Foobar'));
-    // }
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/addons/foobar/enable")
+            ->assertStatus(200);
 
-    // /**
-    //  * @test
-    //  * @group feature
-    //  * @group addon
-    //  */
-    // public function a_disabled_addon_can_be_enabled()
-    // {
-    //     Addon::disable('Foobar');
-
-    //     $this
-    //         ->be($this->owner, 'api')
-    //         ->json('POST', "/api/addons/Foobar/enable")
-    //         ->assertStatus(200);
-
-    //     $this->assertTrue(Addon::isEnabled('Foobar'));
-    // }
+        $this->assertTrue(Addon::isEnabled('Foobar'));
+    }
 
     /**
      * Generate fake addon zip for testing.
@@ -292,7 +282,7 @@ class AddonTest extends TestCase
      */
     private function generateAddon($addonNamespace = null, $includesRequirements = true)
     {
-        // Storage::fake();
+        Storage::fake();
 
         $zipArchive     = new ZipArchive;
         $addonNamespace = $addonNamespace ?? $this->faker->word;

@@ -9,16 +9,6 @@ use Illuminate\Support\ServiceProvider;
 class AddonServiceProvider extends ServiceProvider
 {
     /**
-     * Boot the provided services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
-
-    /**
      * Register the provided services.
      *
      * @return void

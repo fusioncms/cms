@@ -19,59 +19,15 @@ class ActionController extends Controller
      *
      * @param  \Illuminate\Http\Request        $request
      * @param  \Illuminate\Support\Collection  $addon
-     * @return \Fusion\Http\Resources\ModuleResource
+     * @return \Fusion\Http\Resources\AddonResource
      */
     public function install(Request $request, $addon)
     {
         $this->authorize('addons.create');
 
-        $addon = Addon::install($addon->namespace);
+        $addon = Addon::install($addon['namespace']);
 
         return new AddonResource($addon);
-    }
-
-    /**
-     * Update module installation.
-     *
-     * @param  \Illuminate\Http\Request        $request
-     * @param  \Illuminate\Support\Collection  $module
-     * @return \Fusion\Http\Resources\ModuleResource
-     */
-    public function update(Request $request, Collection $module)
-    {
-        $this->authorize('modules.update');
-
-        // --
-        // Run migrations..
-        Artisan::call('module:migrate', [
-            'slug'    => $module->get('slug'),
-            '--force' => true,
-        ]);
-
-        // --
-        // Sync module (e.g. assets, settings, extensions)
-        Artisan::call('fusion:sync');
-
-        return new ModuleResource($module);
-    }
-
-    /**
-     * Seed module installation.
-     *
-     * @param  \Illuminate\Http\Request        $request
-     * @param  \Illuminate\Support\Collection  $module
-     * @return \Fusion\Http\Resources\ModuleResource
-     */
-    public function seed(Request $request, Collection $module)
-    {
-        $this->authorize('modules.update');
-
-        Artisan::call('module:seed', [
-            'slug'    => $module->get('slug'),
-            '--force' => true,
-        ]);
-
-        return new ModuleResource($module);
     }
 
     /**
@@ -85,7 +41,7 @@ class ActionController extends Controller
     {
         $this->authorize('addons.delete');
 
-        $addon = Addon::uninstall($addon->namespace);
+        $addon = Addon::uninstall($addon['namespace']);
 
         return new AddonResource($addon);
     }
