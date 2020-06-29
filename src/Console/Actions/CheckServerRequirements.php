@@ -72,7 +72,7 @@ class CheckServerRequirements
                 $folder,
                 $actual,
                 $perm,
-                ($actual == $perm) ? '√' : 'x'
+                ($actual >= $perm) ? '√' : 'x'
             ];
         })->toArray();
     }
@@ -108,7 +108,7 @@ class CheckServerRequirements
     public static function verifyFolderPermissions()
     {
        return collect(config('installer.permissions'))->every(function($perm, $folder) {
-            return substr(sprintf('%o', fileperms(base_path($folder))), -3) == $perm;
+            return substr(sprintf('%o', fileperms(base_path($folder))), -3) >= $perm;
         });
     }
 }
