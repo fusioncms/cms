@@ -30,7 +30,7 @@ class UploadController extends Controller
     }
 
     /**
-     * Request for new module installation.
+     * Request for new addon installation.
      *
      * @param  \Fusion\Http\Requests\AddonUploadRequest $request
      * @return void
