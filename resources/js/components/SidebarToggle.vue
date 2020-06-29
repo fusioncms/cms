@@ -10,7 +10,7 @@
 
         methods: {
             onClick() {
-                Fusion.bus.$emit('toggle-sidebar')
+                bus().$emit('toggle-sidebar')
             }
         }
     }

@@ -22,5 +22,10 @@ class CreateDirectories
             File::makeDirectory(base_path('themes'));
             File::put(base_path('themes/.gitignore'), "*\n!.gitignore");
         }
+
+        if (! File::exists(storage_path('app/themes'))) {
+            File::makeDirectory(storage_path('app/themes'));
+            File::put(storage_path('app/themes/.gitignore'), "*\n!.gitignore");
+        }
     }
 }
