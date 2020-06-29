@@ -4,9 +4,7 @@ function app_installed()
 {
     try {
         return (DB::table('settings')->count() > 0);
-    } catch (Exception $exception) {
-        return false;
-    }
+    } catch (Exception $exception) { }
 
     return false;
 }
