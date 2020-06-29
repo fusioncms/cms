@@ -35,14 +35,12 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/stubs/laravel/modules",
+            "tests/stubs/laravel/addons",
             "tests/stubs/laravel/themes"
         ],
         "psr-4": {
             "Fusion\\Tests\\": "tests/src/",
-            "App\\": "tests/stubs/laravel/app/",
-            "Modules\\": "tests/stubs/laravel/modules/",
-            "Themes\\": "tests/stubs/laravel/themes/"
+            "App\\": "tests/stubs/laravel/app/"
         }
     },
     "minimum-stability": "dev",

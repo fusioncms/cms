@@ -258,7 +258,7 @@ class InstallCommand extends Command
 
         Artisan::call('fusion:sync');
         Artisan::call('config:clear');
-        Artisan::call('module:optimize');
+        Artisan::call('addon:discover');
 
         event('fusioncms.installed');
 

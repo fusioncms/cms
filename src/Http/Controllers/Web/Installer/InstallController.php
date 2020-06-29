@@ -27,7 +27,7 @@ class InstallController extends Controller
 
     /**
      * Install FusionCMS.
-     * 
+     *
      * @param  Request $request
      * @return Redirect
      */
@@ -68,21 +68,21 @@ class InstallController extends Controller
                 dispatch_now($instance);
             } catch (Exception $exception) {
                 Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
-            
+
                 return back();
             }
         }
 
         Artisan::call('fusion:sync');
         Artisan::call('config:clear');
-        Artisan::call('module:optimize');
+        Artisan::call('addon:discover');
 
         return redirect('/admin');
     }
 
     /**
      * Returns formatted data.
-     * 
+     *
      * @return array
      */
     private function getData()
@@ -95,7 +95,7 @@ class InstallController extends Controller
 
     /**
      * Returns formatted rules.
-     * 
+     *
      * @return array
      */
     private function getRules()
@@ -111,7 +111,7 @@ class InstallController extends Controller
 
     /**
      * Returns formatted messages.
-     * 
+     *
      * @return array
      */
     private function getMessages()
