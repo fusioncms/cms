@@ -12,13 +12,16 @@ class ResponseController extends Controller
      * Show the home index screen.
      *
      * @param \Fusion\Http\Requests\ResponseRequest  $request
-     * @param  string  $form
      * @return Theme
      */
-    public function store(ResponseRequest $request, $form)
+    public function store(ResponseRequest $request)
     {
         $form     = $request->form->fresh();
         $response = $form->responses()->create($request->validated());
+
+        foreach ($request->relationships as $relationship) {
+            $relationship->type()->persistRelationship($response, $relationship);
+        }
 
         activity()
             ->performedOn($response)

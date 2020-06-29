@@ -1,6 +1,6 @@
 <h1>{{ $form->name }}</h1>
 
-<form method="POST" role="form" class="mt-10" action="{{ $form->path() }}">
+<form method="POST" role="form" class="mt-10" action="{{ $form->path() }}" enctype="multipart/form-data">
     @csrf
 
     @if ($form->enable_honeypot)
