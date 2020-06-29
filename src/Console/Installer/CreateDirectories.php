@@ -13,9 +13,9 @@ class CreateDirectories
      */
     public function handle()
     {
-        if (! File::exists(base_path('modules'))) {
-            File::makeDirectory(base_path('modules'));
-            File::put(base_path('modules/.gitignore'), "*\n!.gitignore");
+        if (! File::exists(base_path('addons'))) {
+            File::makeDirectory(base_path('addons'));
+            File::put(base_path('addons/.gitignore'), "*\n!.gitignore");
         }
 
         if (! File::exists(base_path('themes'))) {

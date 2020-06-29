@@ -6,8 +6,8 @@ use Fusion\Tests\TestCase;
 use Illuminate\Support\Str;
 use Fusion\Models\Fieldset;
 use Fusion\Models\Extension;
+use Addons\Foobar\Models\Foobar;
 use Illuminate\Support\Collection;
-use Modules\BetaModule\Models\Beta;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Auth\AuthenticationException;
@@ -30,11 +30,11 @@ class ExtensionTest extends TestCase
         $fieldOne = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($section)->create();
         $fieldTwo = \Facades\FieldFactory::withName('Profiles')->withType('user')->withSection($section)->create();
         $fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$section]))->create();
-        
-        $this->extension = Extension::where('handle', 'betas')->first();
+
+        $this->extension = Extension::where('handle', 'foobars')->first();
         $this->extension->attachFieldset($fieldset);
 
-        $this->model = factory(Beta::class)->create();
+        $this->model = factory(Foobar::class)->create();
         $this->model = $this->model->fresh();
     }
 
@@ -133,10 +133,10 @@ class ExtensionTest extends TestCase
      */
     public function model_with_has_extension_trait_will_be_linked_to_extensions_table()
     {
-        $this->assertDatabaseHasTable('ext_betas');
+        $this->assertDatabaseHasTable('ext_foobars');
         $this->assertDatabaseHas('extensions', [
-            'name'   => 'Betas',
-            'handle' => 'betas'
+            'name'   => 'Foobars',
+            'handle' => 'foobars'
         ]);
     }
 
@@ -171,7 +171,7 @@ class ExtensionTest extends TestCase
      */
     public function creating_extended_model_will_also_update_extending_fields()
     {
-        $attributes = factory(Beta::class)->make()->toArray();
+        $attributes = factory(Foobar::class)->make()->toArray();
 
         // extending fields..
         $attributes['content']  = $this->faker->sentence;
@@ -179,29 +179,29 @@ class ExtensionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->post('/api/beta', $attributes)
+            ->post('/api/foobar', $attributes)
             ->assertStatus(201);
 
-        $model = Beta::where('handle', $attributes['handle'])->first();
+        $model = Foobar::where('handle', $attributes['handle'])->first();
 
-        $this->assertDataBaseHas('betas', [
+        $this->assertDataBaseHas('foobars', [
             'name'        => $attributes['name'],
             'handle'      => $attributes['handle'],
             'description' => $attributes['description'],
         ]);
 
-        $this->assertDatabaseHas('ext_betas', [
+        $this->assertDatabaseHas('ext_foobars', [
             'content' => $attributes['content']
         ]);
 
         $this->assertDatabaseHas('users_pivot', [
-            'pivot_type' => 'Fusion\Models\Extensions\Betas',
+            'pivot_type' => 'Fusion\Models\Extensions\Foobars',
             'pivot_id'   => $model->id,
             'user_id'    => $attributes['profiles'][0]['id']
         ]);
 
         $this->assertDatabaseHas('users_pivot', [
-            'pivot_type' => 'Fusion\Models\Extensions\Betas',
+            'pivot_type' => 'Fusion\Models\Extensions\Foobars',
             'pivot_id'   => $model->id,
             'user_id'    => $attributes['profiles'][1]['id']
         ]);
@@ -226,27 +226,27 @@ class ExtensionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->patch('/api/beta/' . $this->model->id, $attributes)
+            ->patch('/api/foobar/' . $this->model->id, $attributes)
             ->assertStatus(200);
 
-        $this->assertDataBaseHas('betas', [
+        $this->assertDataBaseHas('foobars', [
             'name'        => $attributes['name'],
             'handle'      => $attributes['handle'],
             'description' => $attributes['description'],
         ]);
 
-        $this->assertDatabaseHas('ext_betas', [
+        $this->assertDatabaseHas('ext_foobars', [
             'content' => $attributes['content']
         ]);
 
         $this->assertDatabaseHas('users_pivot', [
-            'pivot_type' => 'Fusion\Models\Extensions\Betas',
+            'pivot_type' => 'Fusion\Models\Extensions\Foobars',
             'pivot_id'   => $this->model->id,
             'user_id'    => $attributes['profiles'][0]['id']
         ]);
 
         $this->assertDatabaseHas('users_pivot', [
-            'pivot_type' => 'Fusion\Models\Extensions\Betas',
+            'pivot_type' => 'Fusion\Models\Extensions\Foobars',
             'pivot_id'   => $this->model->id,
             'user_id'    => $attributes['profiles'][1]['id']
         ]);
@@ -271,7 +271,7 @@ class ExtensionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->patch('/api/beta/' . $this->model->id, $attributes);
+            ->patch('/api/foobar/' . $this->model->id, $attributes);
 
         $this->assertEquals($this->model->content, $attributes['content']);
         $this->assertEquals($this->model->profiles->pluck('id'), collect($attributes['profiles'])->pluck('id'));

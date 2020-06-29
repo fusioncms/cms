@@ -4,10 +4,10 @@ namespace Fusion\Tests\Concerns;
 
 use Fusion\Models\User;
 use Fusion\Facades\Theme;
+use Fusion\Facades\Addon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
 use Fusion\Console\Installer\CreateDefaultRoles;
-use Fusion\Console\Installer\PublishModuleAssets;
 use Fusion\Console\Installer\CreateDatabaseTables;
 use Fusion\Console\Installer\PublishFusionResources;
 use Fusion\Console\Installer\CreateDefaultPermissions;
@@ -36,15 +36,18 @@ trait InstallsFusion
      */
     protected function install()
     {
-        Theme::activate('Hello');
-
         dispatch_now(new CreateDatabaseTables);
-        dispatch_now(new PublishModuleAssets);
         dispatch_now(new CreateDefaultPermissions);
         dispatch_now(new CreateDefaultRoles);
 
-        Artisan::call('fusion:sync');
+        Theme::activate('Hello');
+        Addon::discover();
+        Addon::register();
+
+        Addon::install('Foobar');
+
         Artisan::call('fusion:flush');
+        Artisan::call('fusion:sync');
     }
 
     /**
@@ -57,7 +60,7 @@ trait InstallsFusion
         File::deleteDirectory(storage_path('backups'));
         File::deleteDirectory(storage_path('uploads'));
 
-        File::delete(storage_path('app/modules.json'));
+        File::delete(storage_path('app/addons.json'));
 
         dispatch_now(new \Fusion\Console\Uninstaller\DeleteModelFiles);
     }

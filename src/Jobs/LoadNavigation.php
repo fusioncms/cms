@@ -171,8 +171,8 @@ class LoadNavigation
                 'icon' => 'paint-roller',
             ]);
 
-            $menu->add('Modules', '#')->data([
-                'to'   => '/modules',
+            $menu->add('Addons', '#')->data([
+                'to'   => '/addons',
                 'icon'  => 'box-open',
             ]);
 
