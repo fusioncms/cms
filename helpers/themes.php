@@ -18,14 +18,14 @@ if (! function_exists('javascript')) {
     }
 }
 
-if (! function_exists('customizing_theme')) {
+if (! function_exists('theme_preview')) {
     /**
      * Determines if the current request has the theme customizer
      * header present or not.
      *
      * @return bool
      */
-    function customizing_theme()
+    function theme_preview()
     {
         return request()->headers->has('x-fusioncms-customize');
     }
@@ -66,7 +66,7 @@ if (! function_exists('theme_option')) {
         $theme  = Theme::active();
         $values = collect();
 
-        if (customizing_theme()) {
+        if (theme_preview()) {
             $values = collect(request()->attributes->get('customize'));
         } else {
             $optionsFilePath = storage_path('app/themes/'.$theme->get('namespace').'.json');
