@@ -53,9 +53,8 @@ if (! function_exists('theme_option')) {
         $theme  = Theme::active();
         $values = collect();
 
-        if (request()->has('preview')) {
-            $preview = collect(json_decode(request()->get('preview'), true));
-            $values  = $values->merge($preview);
+        if (request()->headers->has('x-fusioncms-customize')) {
+            $values = collect(request()->attributes->get('customize'));
         } else {
             $optionsFilePath = storage_path('app/themes/'.$theme->get('namespace').'.json');
 
