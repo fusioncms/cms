@@ -23,14 +23,6 @@ class ResponseController extends Controller
             $relationship->type()->persistRelationship($response, $relationship);
         }
 
-        activity()
-            ->performedOn($response)
-            ->withProperties([
-                'icon' => 'paper-plane',
-                'link' => 'test',
-            ])
-            ->log('Submitted response to ' . $form->name . ' (' . $response->identifiable_email_address . ')');
-
         if (! $form->redirect_on_submission) {
             $redirect = $form->thankyouPath();
         } else {

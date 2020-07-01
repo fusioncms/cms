@@ -1,10 +1,11 @@
 <template>
     <div>
-        <p-toggle :name="field.handle"
+        <p-toggle
+            :name="field.handle"
             :label="field.name"
             :help="field.help"
-            :checked="!! checked"
-            @input="$emit('input', $event)"
+            :value="checked"
+            @input="$emit('input', Boolean($event))"
         ></p-toggle>
     </div>
 </template>
@@ -20,7 +21,9 @@
             },
 
             value: {
-                required: false
+                type: Boolean,
+                required: false,
+                default: false
             },
         },
 

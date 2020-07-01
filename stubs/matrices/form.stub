@@ -97,14 +97,12 @@ class {class} extends Model
     {
         $response   = $activity->subject;
         $form       = $response->form;
-        $action     = ucfirst($eventName);
-        $modelName  = strtolower(Str::singular($form->name));
         $properties = [
-            'link' => "forms/{$form->slug}/responses/{$response->id}/edit",
-            'icon' => $form->icon
+            'link' => 'inbox',
+            'icon' => 'paper-plane'
         ];
 
-        $activity->description = "{$action} {$modelName} form response ({$response->name})";
+        $activity->description = "Submitted response to {$form->name} ({$response->identifiable_email_address})";
         $activity->properties  = $properties;
     }
 }

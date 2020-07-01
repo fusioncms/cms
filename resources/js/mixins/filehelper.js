@@ -17,11 +17,9 @@ let filesize = function(value) {
 }
 
 export default {
-	props: {
-		accept: {
-			type: String,
-			required: false,
-			default: ''
+	data() {
+		return {
+			validExtensions: (this.accept || '')
 		}
 	},
 
@@ -33,7 +31,7 @@ export default {
 
     computed: {
         acceptRegex() {
-            let regex = this.accept
+            let regex = this.validExtensions
 				.split(',')
 				.filter((item) => !_.isEmpty(item))
 				.map((item) => `\\.${item.trim('.')}`)
@@ -49,7 +47,7 @@ export default {
 		},
 
 		validExtension(file) {
-			if (_.isEmpty(this.accept)) {
+			if (_.isEmpty(this.validExtensions)) {
 				return true;
 			}
 
