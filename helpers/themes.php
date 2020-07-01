@@ -18,6 +18,19 @@ if (! function_exists('javascript')) {
     }
 }
 
+if (! function_exists('customizing_theme')) {
+    /**
+     * Determines if the current request has the theme customizer
+     * header present or not.
+     *
+     * @return bool
+     */
+    function customizing_theme()
+    {
+        return request()->headers->has('x-fusioncms-customize');
+    }
+}
+
 if (! function_exists('theme')) {
     /**
      * Fetches the theme property from the manifest file.
@@ -53,7 +66,7 @@ if (! function_exists('theme_option')) {
         $theme  = Theme::active();
         $values = collect();
 
-        if (request()->headers->has('x-fusioncms-customize')) {
+        if (customizing_theme()) {
             $values = collect(request()->attributes->get('customize'));
         } else {
             $optionsFilePath = storage_path('app/themes/'.$theme->get('namespace').'.json');

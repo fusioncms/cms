@@ -15,17 +15,12 @@ class CustomizeController extends Controller
 
         array_pop($segments);
 
-        $rootRoute   = '/'.implode('/', $segments);
-        $rootRequest = Request::createFromBase(SymfonyRequest::create($rootRoute));
+        $route   = '/'.implode('/', $segments);
+        $secondaryRequest = SymfonyRequest::create($route);
 
-        $rootRequest->headers->set('X-FusionCMS-Customize', true);
-        $rootRequest->attributes->set('customize', $request->all());
+        $secondaryRequest->headers->set('X-FusionCMS-Customize', true);
+        $secondaryRequest->attributes->set('customize', $request->all());
 
-        app()->instance('request', $rootRequest);
-        Facade::clearResolvedInstance('request');
-
-        return app()->handle($rootRequest);
-
-        // return $rootResponse;
+        return app()->handle($secondaryRequest);
     }
 }
