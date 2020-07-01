@@ -67,13 +67,36 @@ export default class Form {
         return data
     }
 
+    formdata(additional = {}) {
+        let data = new FormData()
+        let json = {}
+
+        // add form data..
+        for (let key in this.originalData)
+            if (this[key] instanceof FileList)
+                _.each(this[key], (val) => data.append(`${key}[]`, val))
+            else if (this[key] instanceof File)
+                data.append(key, val)
+            else
+                json[key] = this[key]
+
+        // non-file data will be decoded on back-end..
+        if (! _.isEmpty(json))
+            data.append('_json', JSON.stringify(json))
+
+        // add additional data..
+        _.each(additional, (v, k) => data.append(k, v))
+
+        return data
+    }
+
     /**
     * Submit a POST request.
     *
     * @param {string} url
     */
     post(url) {
-        return this.submit('post', url)
+        return this.submit('post', url, this.formdata())
     }
 
     /**
@@ -82,7 +105,7 @@ export default class Form {
      * @param {string} url
      */
     patch(url) {
-        return this.submit('patch', url)
+        return this.submit('post', url, this.formdata({'_method': 'PATCH'}))
     }
 
     /**
@@ -91,7 +114,7 @@ export default class Form {
      * @param {string} url
      */
     put(url) {
-        return this.submit('put', url)
+        return this.submit('post', url, this.formdata({'_method': 'PUT'}))
     }
 
     /**
@@ -100,7 +123,7 @@ export default class Form {
      * @param {string} url
      */
     delete(url) {
-        return this.submit('delete', url)
+        return this.submit('post', url, this.formdata({'_method': 'DELETE'}))
     }
 
     /**
@@ -109,9 +132,9 @@ export default class Form {
      * @param {string} requestType
      * @param {string} url
      */
-    submit(requestType, url) {
+    submit(requestType, url, data) {
         return new Promise((resolve, reject) => {
-            axios[requestType](url, this.data())
+            axios[requestType](url, data)
                 .then(response => {
                     this.onSuccess(response.data)
                     store.commit('form/setPreventNavigation', false)
