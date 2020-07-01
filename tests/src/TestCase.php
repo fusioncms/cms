@@ -2,20 +2,19 @@
 
 namespace Fusion\Tests;
 
+use Laravel\Sanctum\Sanctum;
+use Laravel\Ui\UiServiceProvider;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Backup\BackupServiceProvider;
 use Fusion\Tests\Concerns\InstallsFusion;
 use Fusion\Providers\FusionServiceProvider;
 use Caffeinated\Flash\FlashServiceProvider;
 use Caffeinated\Menus\MenusServiceProvider;
-use Caffeinated\Modules\ModulesServiceProvider;
+use Laravel\Sanctum\SanctumServiceProvider;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Fusion\Tests\Concerns\MakesDatabaseAssertions;
 use Spatie\Activitylog\ActivitylogServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
-use Laravel\Ui\UiServiceProvider;
-use Laravel\Sanctum\Sanctum;
-use Laravel\Sanctum\SanctumServiceProvider;
-use Illuminate\Contracts\Auth\Authenticatable;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -60,8 +59,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Set the currently logged in user for the application.
      * [override]
-     * 
-     * @param \Illuminate\Contracts\Auth\Authenticatable $user 
+     *
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
      * @param string|null  $driver
      * @return $this
      */
@@ -73,7 +72,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Decorator for Sanctum::actingAs()
      *
-     * @param \Illuminate\Contracts\Auth\Authenticatable $user 
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
      * @param string|null  $driver
      * @param array        $abilities
      * @return $this
@@ -114,9 +113,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'database' => ':memory:',
             'prefix'   => '',
         ]);
-
-        $app['config']->set('modules.locations.app.path', base_path('modules/'));
-        $app['config']->set('modules.locations.app.namespace', "Modules\\");
     }
 
     /**
@@ -150,7 +146,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             // Caffeinated
             FlashServiceProvider::class,
             MenusServiceProvider::class,
-            ModulesServiceProvider::class,
 
             // Spatie
             BackupServiceProvider::class,
@@ -170,7 +165,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         return [
             'Fusion' => 'Fusion\Facades\Fusion',
             'Theme'  => 'Fusion\Facades\Theme',
-            'Module' => 'Caffeinated\Modules\Facades\Module',
+            'Addon'  => 'Fusion\Facades\Addon',
         ];
     }
 }

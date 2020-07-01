@@ -83,7 +83,7 @@ class BrowseController extends Controller
     {
         $this->authorize('themes.update');
 
-        $optionsPath = storage_path("/themes/{$theme}.json");
+        $optionsPath = storage_path("app/themes/{$theme}.json");
 
         File::put($optionsPath, json_encode($request->except('_method'), JSON_PRETTY_PRINT));
 

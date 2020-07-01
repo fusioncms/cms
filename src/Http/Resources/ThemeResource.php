@@ -31,7 +31,7 @@ class ThemeResource extends JsonResource
 
     protected function getOptionValues()
     {
-        $optionsFilepath = storage_path('themes/'.$this->get('namespace').'.json');
+        $optionsFilepath = storage_path('app/themes/'.$this->get('namespace').'.json');
 
         $defaults = collect($this->get('options'))->mapWithKeys(function($option, $handle) {
             return [$handle => $option['default'] ?? null];

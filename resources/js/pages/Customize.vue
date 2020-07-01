@@ -59,7 +59,7 @@
 
         <div class="preview__window">
 
-            <div v-if="preview" class="window" :class="'window--' + window"> -->
+            <div v-if="preview" class="window" :class="'window--' + window">
                 <p-frame
                     :src="preview"
                 ></p-frame>

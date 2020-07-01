@@ -125,16 +125,14 @@ Route::apiResource('menus',                    'Menus\MenuController');
 
 
 /**
- * API - Module Routes
+ * API - Addon Routes
  */
-Route::prefix('modules')->group(function() {
-	Route::post('{module}/install',   'Modules\ActionController@install');
-	Route::post('{module}/update',    'Modules\ActionController@update');
-	Route::post('{module}/seed',      'Modules\ActionController@seed');
-	Route::post('{module}/uninstall', 'Modules\ActionController@uninstall');
-	Route::post('upload',             'Modules\UploadController@store');
-	Route::post('{module}/enable',    'Modules\StatusController@enable');
-	Route::post('{module}/disable',   'Modules\StatusController@disable');
+Route::prefix('addons')->group(function() {
+	Route::post('upload',            'Addons\UploadController@store');
+	Route::post('{addon}/install',   'Addons\ActionController@install');
+	Route::post('{addon}/uninstall', 'Addons\ActionController@uninstall');
+	Route::post('{addon}/enable',    'Addons\StatusController@enable');
+	Route::post('{addon}/disable',   'Addons\StatusController@disable');
 });
 
 

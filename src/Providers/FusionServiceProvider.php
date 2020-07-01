@@ -2,16 +2,17 @@
 
 namespace Fusion\Providers;
 
-use Fusion\Facades\Theme;
 use Fusion\Models\User;
 use Fusion\Models\Role;
+use Fusion\Facades\Addon;
+use Fusion\Facades\Theme;
 use Fusion\Models\Mailable;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class FusionServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,7 @@ class FusionServiceProvider extends ServiceProvider
         $this->registerCustomRules();
 
         if (app_installed()) {
+            $this->registerAddons();
             $this->registerTheme();
         }
     }
@@ -54,9 +56,18 @@ class FusionServiceProvider extends ServiceProvider
         $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
 
         $this->commands([
+            \Fusion\Console\Addons\RollbackCommand::class,
+            \Fusion\Console\Addons\DiscoverCommand::class,
+            \Fusion\Console\Addons\DisableCommand::class,
+            \Fusion\Console\Addons\MigrateCommand::class,
+            \Fusion\Console\Addons\RefreshCommand::class,
+            \Fusion\Console\Addons\EnableCommand::class,
+            \Fusion\Console\Addons\ResetCommand::class,
+            \Fusion\Console\Addons\ListCommand::class,
+            \Fusion\Console\MakeAddonCommand::class,
+            \Fusion\Console\MakeThemeCommand::class,
             \Fusion\Console\UninstallCommand::class,
             \Fusion\Console\InstallCommand::class,
-            \Fusion\Console\MakeThemeCommand::class,
             \Fusion\Console\PublishCommand::class,
             \Fusion\Console\RefreshCommand::class,
             \Fusion\Console\FlushCommand::class,
@@ -126,11 +137,18 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerProviders()
     {
+        $this->app->register(AddonServiceProvider::class);
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
         $this->app->register(SettingsServiceProvider::class);
         $this->app->register(FieldtypeServiceProvider::class);
         $this->app->register(ThemeServiceProvider::class);
+
+        // Not sure why Laravel doesn't register this against
+        // the class name as well ¯\_(ツ)_/¯
+        $this->app->singleton(\Illuminate\Database\Migrations\Migrator::class, function ($app) {
+            return $app['migrator'];
+        });
     }
 
     /**
@@ -161,6 +179,16 @@ class FusionServiceProvider extends ServiceProvider
         $this->publishes([
             fusion_path('/themes') => base_path('themes'),
         ], 'fusion-themes');
+    }
+
+    /**
+     * Register the available addons.
+     *
+     * @return void
+     */
+    private function registerAddons()
+    {
+        Addon::register();
     }
 
     /**
@@ -315,12 +343,8 @@ class FusionServiceProvider extends ServiceProvider
             return \Fusion\Models\Fieldset::findOrFail($id);
         });
 
-        Route::bind('module', function($slug) {
-            if (! \Caffeinated\Modules\Facades\Module::exists($slug)) {
-                throw new \Caffeinated\Modules\Exceptions\ModuleNotFoundException($slug);
-            }
-
-            return \Caffeinated\Modules\Facades\Module::where('slug', $slug);
+        Route::bind('addon', function($slug) {
+            return \Fusion\Facades\Addon::where('slug', $slug)->first();
         });
     }
 

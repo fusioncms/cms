@@ -57,7 +57,7 @@ if (! function_exists('theme_option')) {
             $preview = collect(json_decode(request()->get('preview'), true));
             $values  = $values->merge($preview);
         } else {
-            $optionsFilePath = storage_path('themes/'.$theme->get('namespace').'.json');
+            $optionsFilePath = storage_path('app/themes/'.$theme->get('namespace').'.json');
 
             if (! File::exists($optionsFilePath)) {
                 $defaults = collect($theme->get('options'))->mapWithKeys(function($section, $handle) {

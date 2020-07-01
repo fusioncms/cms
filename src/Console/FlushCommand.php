@@ -30,6 +30,6 @@ class FlushCommand extends Command
         $this->call('cache:clear');
         $this->call('view:clear');
         $this->call('route:clear');
-        $this->call('module:optimize');
+        $this->call('addon:discover');
     }
 }

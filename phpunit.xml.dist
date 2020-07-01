@@ -26,6 +26,11 @@
     </filter>
 
     <php>
-        <env name="APP_KEY" value="base64:UCfgTCY1PYHCii+kT6F6V088hZCxNnSIa7uGJmS6zHs="/>
+        <server name="APP_ENV" value="testing"/>
+        <server name="APP_KEY" value="base64:UCfgTCY1PYHCii+kT6F6V088hZCxNnSIa7uGJmS6zHs="/>
+        <server name="CACHE_DRIVER" value="array"/>
+        <server name="BCRYPT_ROUNDS" value="4"/>
+        <server name="QUEUE_CONNECTION" value="sync"/>
+        <server name="SESSION_DRIVER" value="array"/>
     </php>
 </phpunit>

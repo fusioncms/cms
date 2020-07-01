@@ -499,9 +499,9 @@ const router = new Router({
         },
 
         {
-            path: '/modules',
-            component: () => import('../pages/Modules/Index'),
-            name: 'modules',
+            path: '/addons',
+            component: () => import('../pages/Addons'),
+            name: 'addons',
             meta: {
                 requiresAuth: true,
                 layout: 'admin'
