@@ -36,7 +36,7 @@
             <tbody>
                 <tr v-for="(file, index) in files" :key="file.name" class="upload__file">
                     <td class="upload__file--name">{{ file.name }}</td>
-                    <td class="upload__file--size">{{ filesize(file.size) }}</td>
+                    <td class="upload__file--size">{{ file.size | bytes }}</td>
                     <td class="upload__file--actions"><p-button @click.prevent="remove(index)">Remove</p-button></td>
                 </tr>
             </tbody>
@@ -55,6 +55,10 @@
 <script>
     export default {
         name: 'p-upload',
+        
+        mixins: [
+            require ('../../mixins/filehelper').default
+        ],
 
         data() {
             return {
@@ -107,9 +111,7 @@
 
                 let files = Array.from(event.target.files || event.dataTransfer.files)
 
-                files = _.filter(files, function(file) {
-                    return this.checkAcceptance(file)
-                }.bind(this))
+                files = _.filter(files, (file) => this.validExtension(file))
 
                 if (! this.multiple && files.length > 1) {
                     files.length = 1
@@ -132,60 +134,7 @@
                 } else {
                     this.$emit('input', this.files[0])
                 }
-            },
-
-            filesize(bytes) {
-                let thresh = 1000
-
-                if (Math.abs(bytes) < thresh) {
-                    return bytes + ' B'
-                }
-
-                let units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-                let index = -1
-
-                do {
-                    bytes /= thresh
-                    ++index
-                } while (Math.abs(bytes) >= thresh && index < units.length - 1)
-
-                return bytes.toFixed(1) + ' ' + units[index]
-            },
-
-            checkAcceptance(file) {
-                if (! this.accept) return true
-
-                const types = this.accept.split(',')
-                if (types.length === 0) return true
-                
-                let isValid = false
-                
-                for (let i = 0; i < types.length && ! isValid; i++) {
-                    const type = types[i].trim()
-
-                    if (type) {
-                        if (type.substring(0, 1) === '.') {
-                            const extIndex = file.name.lastIndexOf('.')
-                            const extension = extIndex >= 0
-                                ? file.name.substring(extIndex) : ''
-                            
-                            if (extension.toLowerCase() === type.toLowerCase()) {
-                                isValid = true
-                            }
-                        } else {
-                            if (file.type.match(type)) {
-                                isValid = true
-                            }
-                        }
-                    }
-                }
-
-                if (! isValid) {
-                    this.setError('Only files of type <b>' + types.join(', ') + '</b> are accepted.')
-                }
-
-                return isValid
             }
-        },
+        }
     }
 </script>

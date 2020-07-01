@@ -1,0 +1,5 @@
+# This directory is used by the addon system to create symlinks
+# to your installed addons. There is nothing to manage here 🖖
+
+*
+!.gitignore

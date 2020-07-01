@@ -2,25 +2,26 @@
 
 namespace Fusion\Console\Actions;
 
+use Fusion\Facades\Addon;
 use Illuminate\Support\Str;
 use Fusion\Models\Extension;
 use Fusion\Concerns\HasExtension;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\Finder;
-use Caffeinated\Modules\Facades\Module;
 use Illuminate\Database\Eloquent\Model;
 
 class SyncExtensions
 {
     /**
      * Existing extension records.
-     * 
+     *
      * @var array
      */
     public $extensions = [];
 
     /**
      * Constructor.
-     * 
+     *
      */
     public function __construct()
     {
@@ -34,16 +35,20 @@ class SyncExtensions
      */
     public function handle()
     {
-        Module::all()->each(function($module) {
-            if ($module['registered'] && $module['installed']) {
-                $files = Finder::create()
-                    ->files()
-                    ->in(base_path("modules/{$module['basename']}/src/Models"))
-                    ->name('*.php');
+        Addon::enabled()->filter(function($addon) {
+            return File::exists(addon_path("{$addon['namespace']}/src/Models"));
+        })->each(function($addon) {
+            $files = Finder::create()
+                ->files()
+                ->in(addon_path("{$addon['namespace']}/src/Models"))
+                ->name('*.php');
 
-                foreach ($files as $file) {
-                    $name  = Str::studly($file->getFilenameWithoutExtension());
-                    $model = resolve("Modules\\{$module['basename']}\\Models\\{$name}");
+            foreach ($files as $file) {
+                $name  = Str::studly($file->getFilenameWithoutExtension());
+                $class = "Addons\\{$addon['namespace']}\\Models\\{$name}";
+
+                if (class_exists($class)) {
+                    $model = resolve($class);
 
                     if (in_array(HasExtension::class, class_uses($model))) {
                         $this->syncExtension($model);
@@ -78,7 +83,7 @@ class SyncExtensions
 
     /**
      * Clean up existing, unused extension records.
-     * 
+     *
      * @return void
      */
     protected function cleanUp()

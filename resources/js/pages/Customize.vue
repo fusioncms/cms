@@ -28,7 +28,7 @@
                                         name: field.name,
                                         handle: handle,
                                         help: field.help,
-                                        settings: {},
+                                        settings: field.settings || {},
                                     }"
                                     class="mb-8"
                                 ></component>
@@ -58,19 +58,19 @@
         </div>
 
         <div class="preview__window">
-
-            <div v-if="preview" class="window" :class="'window--' + window"> -->
-                <p-frame
-                    :src="preview"
-                ></p-frame>
+            <div class="window" :class="'window--' + window">
+                <iframe ref="iframe" frameborder="0"></iframe>
             </div>
-
-            <div v-else class="bg-white py-1 px-3 rounded-lg bg-gray-800 text-white uppercase font-bold text-sm tracking-wide">Loading...</div>
         </div>
     </div>
 </template>
 
 <script>
+    import _ from 'lodash'
+
+    var cancel
+    var CancelToken = axios.CancelToken
+
     export default {
         head: {
             title() {
@@ -83,8 +83,6 @@
         data() {
             return {
                 theme: {},
-                preview: '',
-                url: '',
                 hasChanges: false,
                 window: 'desktop',
                 showControls: true,
@@ -92,18 +90,6 @@
         },
 
         computed: {
-            hash() {
-                return this.encode(JSON.stringify(this.theme.option))
-            },
-
-            previewUrl() {
-                return this.baseUrl + this.url + '?preview=' + this.hash
-            },
-
-            baseUrl() {
-                return '/'
-            },
-
             isDesktop() {
                 return this.window == 'desktop'
             },
@@ -119,22 +105,44 @@
 
         watch: {
             'theme.option': {
-                handler: _.debounce(function() {
+                handler: function() {
                     this.hasChanges = true;
-                    this.reload()
-                }, 500),
+                    this.update()
+                },
 
                 deep: true
-            },
-
-            'url': {
-                handler: _.debounce(function() {
-                    this.reload()
-                }, 500)
             },
         },
 
         methods: {
+            update: _.debounce(function() {
+                if (cancel != undefined) {
+                    cancel();
+                }
+
+                axios({
+                    method: 'post',
+                    url: '/customize',
+                    data: this.theme.option,
+                    cancelToken: new CancelToken(function executer(c) {
+                        cancel = c
+                    })
+                }).then(response => {
+                    this.updateIframe(response.data)
+                }).catch(err => {
+                    if (axios.isCancel(err)) return;
+                    throw err
+                })
+            }, 150),
+
+            updateIframe(contents) {
+                const iframe  = this.$refs.iframe
+
+                iframe.contentWindow.document.open()
+                iframe.contentWindow.document.write(contents)
+                iframe.contentWindow.document.close()
+            },
+
             submit() {
                 this.theme.option['_method'] = 'PATCH'
 
@@ -144,14 +152,6 @@
                 .catch((error) => {
                     toast(error.response.data.message, 'failed')
                 })
-            },
-
-            encode(string) {
-                return encodeURIComponent(string).replace(/[!'()*]/g, escape);
-            },
-
-            reload() {
-                this.preview = this.previewUrl
             },
 
             setWindow(device) {

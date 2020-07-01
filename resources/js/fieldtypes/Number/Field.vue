@@ -6,7 +6,7 @@
             :help="field.help"
             :placeholder="field.settings.placeholder"
             :value="value"
-            @input="$emit('input', $event)"
+            @input="$emit('input', Number($event))"
             :steps="field.settings.steps"
             :decimals="field.settings.decimals"
             :min="Number(field.settings.min)"

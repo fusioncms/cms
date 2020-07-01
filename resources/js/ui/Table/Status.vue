@@ -1,7 +1,7 @@
 <template>
-    <span :class="{
-        'text-success-500': value,
-        'text-danger-500': ! value
+    <span class="text-gray-500" :class="{
+        'text-success-500': value === true,
+        'text-danger-500': value === false
     }">
         <fa-icon icon="circle" class="icon fa-xs"></fa-icon>
     </span>
@@ -13,7 +13,7 @@
 
         props: {
             value: {
-                required: true,
+                required: false,
             }
         }
     }

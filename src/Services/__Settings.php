@@ -3,10 +3,10 @@
 namespace Fusion\Services;
 
 use Exception;
-use InvalidArgumentException;
 use Fusion\Models\Setting;
-use Fusion\Models\SettingSection;
 use Illuminate\Support\Arr;
+use InvalidArgumentException;
+use Fusion\Models\SettingSection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
@@ -20,15 +20,13 @@ class Settings
      */
 	public function all()
 	{
-		return Cache::rememberForever('settings', function () {
-			return SettingSection::all()->mapWithKeys(function($section) {
-				$settings = $section->settings->mapWithKeys(function ($setting) {
-					return [ $setting->handle => $setting->value ?? $setting->default ];
-				});
+		return SettingSection::all()->mapWithKeys(function($section) {
+			$settings = $section->settings->mapWithKeys(function ($setting) {
+				return [ $setting->handle => $setting->value ?? $setting->default ];
+			});
 
-				return [ $section->handle => $settings ];
-			})->toArray();
-		});
+			return [ $section->handle => $settings ];
+		})->toArray();
 	}
 
 	/**
@@ -55,7 +53,7 @@ class Settings
 			return static::all();
 		} elseif (is_array($key)) {
             return static::getMany($key);
-        }
+		}
 
 		return Arr::get($this->all(), $key, $default);
 	}

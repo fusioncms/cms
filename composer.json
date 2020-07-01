@@ -35,14 +35,12 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/stubs/laravel/modules",
+            "tests/stubs/laravel/addons",
             "tests/stubs/laravel/themes"
         ],
         "psr-4": {
             "Fusion\\Tests\\": "tests/src/",
-            "App\\": "tests/stubs/laravel/app/",
-            "Modules\\": "tests/stubs/laravel/modules/",
-            "Themes\\": "tests/stubs/laravel/themes/"
+            "App\\": "tests/stubs/laravel/app/"
         }
     },
     "minimum-stability": "dev",
@@ -51,7 +49,6 @@
         "php": "^7.2.5",
         "caffeinated/flash": "^4.0",
         "caffeinated/menus": "^4.0",
-        "caffeinated/modules": "^6.0",
         "composer/semver": "^1.5",
         "doctrine/dbal": "^2.9",
         "illuminate/support": "^7.0",
@@ -88,9 +85,10 @@
                 "Fusion\\Providers\\FusionServiceProvider"
             ],
             "aliases": {
+                "Addon": "Fusion\\Facades\\Addon",
+                "Theme": "Fusion\\Facades\\Theme",
                 "Fusion": "Fusion\\Facades\\Fusion",
-                "Setting": "Fusion\\Facades\\Setting",
-                "Theme": "Fusion\\Facades\\Theme"
+                "Setting": "Fusion\\Facades\\Setting"
             }
         }
     }

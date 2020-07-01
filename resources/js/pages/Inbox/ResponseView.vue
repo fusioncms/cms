@@ -51,7 +51,28 @@
                 <div class="form__group" v-for="field in fields" :key="field.handle">
                     <label :for="field.handle" class="form__label">{{ field.name }}</label>
                     <div :id="field.handle">
-                        <p>{{ response[field.handle] }}</p>
+                        
+                        <div v-if="field.type.id == 'file'" class="bg-white shadow rounded-md mt-2">
+                            <ul>
+                                <li v-for="(file, index) in response[field.handle]" :key="`file.${index}`">
+                                    <div class="p-2 sm:px-4">
+                                        <div class="flex items-center justify-between">
+                                            <router-link :to="'/files/' + file.uuid">
+                                                <img v-if="file.type == 'image'" class="upload__file--preview max-w-12" :src="file.url" :alt="file.name"/>
+                                                <img v-else class="upload__file--preview max-w-12" :src="`/vendor/fusion/img/${file.type}-large.svg`" :alt="file.name"/>
+                                            </router-link>
+
+                                            <div class="upload__file--name" v-text="file.name" />
+
+                                            <div class="upload__file--size" v-text="filesize(file.bytes)" />
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <p v-else>{{ response[field.handle] }}</p>
+
                     </div>
                 </div>
             </div>
@@ -68,6 +89,10 @@
 
     export default {
         name: 'response-view',
+
+        mixins: [
+            require('../../mixins/filehelper').default
+        ],
 
         computed: {
             ...mapGetters({
