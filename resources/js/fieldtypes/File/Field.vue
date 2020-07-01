@@ -67,7 +67,7 @@
 
 		data() {
 			return {
-				files: [...this.value]
+				files: []
 			}
 		},
 
@@ -106,6 +106,11 @@
 				else
         			this.$emit('input', fileList)
         	}
+        },
+
+        mounted() {
+        	if (_.isArray(this.value))
+        		this.files = [...this.value]
         }
 	}
 </script>
