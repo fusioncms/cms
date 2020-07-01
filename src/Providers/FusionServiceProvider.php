@@ -52,6 +52,7 @@ class FusionServiceProvider extends ServiceProvider
         $this->registerConfig();
 
         $kernel = $this->app->make(\Illuminate\Contracts\Http\Kernel::class);
+        $kernel->pushMiddleware(\Fusion\Http\Middleware\DecodeFormData::class);
         $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
 
         $this->commands([

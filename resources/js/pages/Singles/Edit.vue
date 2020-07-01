@@ -65,11 +65,15 @@
 
         methods: {
             submit() {
-                this.form.patch('/api/singles/' + this.matrix.id).then((response) => {
-                    toast('Single saved successfully', 'success')
-                }).catch((response) => {
-                    toast(response.message, 'failed')
-                })
+                this.form.patch('/api/singles/' + this.matrix.id)
+                    .then((response) => {
+                        toast('Single saved successfully', 'success')
+
+                        this.$router.go()
+                    })
+                    .catch((response) => {
+                        toast(response.message, 'failed')
+                    })
             },
         },
 
