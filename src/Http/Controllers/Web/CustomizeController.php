@@ -4,9 +4,7 @@ namespace Fusion\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\Facades\Session;
 use Fusion\Http\Controllers\Controller;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class CustomizeController extends Controller
 {
