@@ -50,10 +50,7 @@ class FusionServiceProvider extends ServiceProvider
 
         $this->registerFusion();
         $this->registerConfig();
-
-        $kernel = $this->app->make(\Illuminate\Contracts\Http\Kernel::class);
-        $kernel->pushMiddleware(\Fusion\Http\Middleware\DecodeFormData::class);
-        $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
+        $this->registerMiddleware();
 
         $this->commands([
             \Fusion\Console\Addons\RollbackCommand::class,
@@ -73,6 +70,20 @@ class FusionServiceProvider extends ServiceProvider
             \Fusion\Console\FlushCommand::class,
             \Fusion\Console\SyncCommand::class,
         ]);
+    }
+
+    /**
+     * Register middleware.
+     *
+     * @return void
+     */
+    protected function registerMiddleware()
+    {
+        $kernel = $this->app->make(\Illuminate\Contracts\Http\Kernel::class);
+
+        $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
+
+        $kernel->pushMiddleware(\Fusion\Http\Middleware\DecodeFormData::class);
     }
 
     /**
