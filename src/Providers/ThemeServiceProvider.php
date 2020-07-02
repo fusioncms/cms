@@ -4,6 +4,7 @@ namespace Fusion\Providers;
 
 use Fusion\Services\Theme;
 use Fusion\Services\Manifest;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
 class ThemeServiceProvider extends ServiceProvider
@@ -35,6 +36,9 @@ class ThemeServiceProvider extends ServiceProvider
                 foreach ($themes as $theme) {
                     $manifest              = new Manifest($theme.'/theme.json');
                     $namespace             = $manifest->get('namespace');
+
+                    $this->generateOptions($manifest);
+
                     $manifests[$namespace] = collect($manifest->all());
                 }
             }
@@ -51,5 +55,43 @@ class ThemeServiceProvider extends ServiceProvider
     public function provides()
     {
         return ['theme'];
+    }
+
+    protected function generateOptions($manifest)
+    {
+        $optionsPath = storage_path('app/themes/'.$manifest->get('namespace').'.json');
+
+        if (! File::exists($optionsPath)) {
+            $defaults = $this->getDefaultOptions($manifest);
+
+            File::put($optionsPath, json_encode($defaults, JSON_PRETTY_PRINT));
+        }
+
+        $optionsModified  = File::lastModified($optionsPath);
+        $manifestModified = File::lastModified($manifest->getPath());
+
+        if ($manifestModified > $optionsModified) {
+            $defaults = $this->getDefaultOptions($manifest);
+            $options  = collect(json_decode(File::get($optionsPath), true));
+
+            $merged = $defaults->map(function($items, $section) use ($options) {
+                return $items->merge($options->get($section));
+            });
+
+            File::put($optionsPath, json_encode($merged, JSON_PRETTY_PRINT));
+        }
+
+        // dd('done', $manifest->getPath(), $manifestModified, $optionsModified, $manifestModified > $optionsModified);
+    }
+
+    protected function getDefaultOptions($manifest)
+    {
+        return collect($manifest->get('options'))->mapWithKeys(function($section, $handle) {
+            $options = collect($section['fields'])->mapWithKeys(function($option, $field) {
+                return [$field => $option['default'] ?? null];
+            });
+
+            return [$handle => $options];
+        });
     }
 }
