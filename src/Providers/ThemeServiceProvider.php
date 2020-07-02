@@ -57,6 +57,12 @@ class ThemeServiceProvider extends ServiceProvider
         return ['theme'];
     }
 
+    /**
+     * Generate the themes options file.
+     *
+     * @param  \Fusion\Services\Manifest  $manifest
+     * @return void
+     */
     protected function generateOptions($manifest)
     {
         $optionsPath = storage_path('app/themes/'.$manifest->get('namespace').'.json');
