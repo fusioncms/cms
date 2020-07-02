@@ -80,10 +80,14 @@ class ThemeServiceProvider extends ServiceProvider
 
             File::put($optionsPath, json_encode($merged, JSON_PRETTY_PRINT));
         }
-
-        // dd('done', $manifest->getPath(), $manifestModified, $optionsModified, $manifestModified > $optionsModified);
     }
 
+    /**
+     * Get the default option values from the manifest file.
+     *
+     * @param  \Fusion\Services\Manifest  $manifest
+     * @return \Illuminate\Support\Collection
+     */
     protected function getDefaultOptions($manifest)
     {
         return collect($manifest->get('options'))->mapWithKeys(function($section, $handle) {
