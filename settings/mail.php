@@ -30,13 +30,13 @@ return [
                 'default'     => 'Wendell',
                 'override'    => 'mail.from.name',
             ],
-            [
-                'name'        => 'Send Test Email',
-                'handle'      => 'mail_test',
-                'description' => 'Send a test email using the currently configured mail settings.',
-                'type'        => 'partial',
-                'options'     => ['view' => 'mail::partials.settings.test_email'],
-            ],
+            // [
+            //     'name'        => 'Send Test Email',
+            //     'handle'      => 'mail_test',
+            //     'description' => 'Send a test email using the currently configured mail settings.',
+            //     'fieldtype'   => 'partial',
+            //     'options'     => ['view' => 'mail::partials.settings.test_email'],
+            // ],
         ],
         'SMTP' => [
             [
@@ -114,10 +114,10 @@ return [
         ],
         'Test' => [
             [
-                'type'      => 'component',
                 'name'      => 'Mail Test',
                 'handle'    => 'mail_test_component',
-                'component' => 'settings-mail-test',
+                'default'   => 'settings-mail-test',
+                'component' => true,
                 'required'  => false,
             ],
         ],

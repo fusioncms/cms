@@ -2,32 +2,17 @@
 
 namespace Fusion\Console\Actions;
 
-use Fusion\Facades\Setting;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-
-use Fusion\Models\Settings\Field;
-use Fusion\Models\Settings\Section;
+use Fusion\Models\Field;
+use Fusion\Models\Fieldset;
+use Fusion\Models\Setting as SettingGroup;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 
 class SyncSettings
 {
-    /**
-     * Store existing section ids
-     *
-     * @var [type]
-     */
-    protected $sections;
-
-    /**
-     * Store existing setting ids
-     *
-     * @var [type]
-     */
-    protected $settings;
-
     /**
      * Execute the command.
      *
@@ -35,157 +20,125 @@ class SyncSettings
      */
     public function handle()
     {
-        $settings = Setting::settings()
-            ->mapWithKeys(function($setting) {
-                $handle = str_replace('.', '-', $setting['handle']);
-                $value  = $setting['value'] ?: $setting['default'];
-
-                if ($setting['type'] == 'component') {
-                    $dataType = 'string';
-                    $value    = 'component';
-                } else {
-                    $fieldtype = fieldtypes()->get($setting['type']);
-                    $dataType  = $fieldtype->getColumn('type');
-                }
-
-                if (! Schema::hasColumn('settings', $handle)) {
-                    Schema::table('settings', function(Blueprint $table) use ($dataType, $handle) {
-                        $table->{$dataType}($handle)->nullable();
-                    });
-                }
-
-                return [ $handle => $value ];
-            });
-dd($settings);
-        \DB::table('settings')->update($settings);
-
-/*
-        // Record existing settings..
-        $this->sections = SettingSection::all()->pluck('id', 'id');
-        $this->settings = Setting::all()->pluck('id', 'id');
-
-        // Sync with existing settings..
-        foreach ($this->fetchAllSettings() as $handle => $values) {
-            $this->syncSettingSection($handle, $values);
-        }
-
-        // Clean up removed sections..
-        foreach ($this->sections as $id) {
-            SettingSection::findOrFail($id)->delete();
-        }
-
-        // Clean up removed settings..
-        foreach ($this->settings as $id) {
-            SettingField::findOrFail($id)->delete();
-        }
-
-        // Cache settings forever..
-        Cache::forget('settings');
-        Cache::rememberForever('settings', function () {
-            return Setting::get()->mapWithKeys(function ($item) {
-                $key   = $item->section->handle . '.' . $item->handle;
-                $value = ! empty($item->value) ? $item->value :  $item->default;
-
-                return [ $key => $value ];
-            });
+        // $this->syncSettingGroups();
+        // $this->syncSettingFields();
+        SettingGroup::all()->each(function($group) {
+            $group->fieldset->fields
+                ->reject(function($field) {
+                    return is_null(fieldtypes()->get($field->type)->column);
+                })
+                ->each(function($field) use ($setting, $tableName) {
+                    
+                });
         });
-*/
+
+
+        // $model     = (new \Fusion\Services\Builders\Setting)->make();
+        // $tableName = $model->getTable();
+        // $setting   = $model->firstOrCreate(['id' => 1]);
+        
+        // $setting->fields
+        //     ->reject(function($field) {
+        //         return is_null(fieldtypes()->get($field->type)->column);
+        //     })
+        //     ->each(function($field) use ($setting, $tableName) {
+        //         if (! Schema::hasColumn($tableName, $field->handle)) {
+        //             Schema::table($tableName, function(Blueprint $table) use ($field) {
+        //                 $dataType = fieldtypes()->get($field->type)->getColumn('type');
+
+        //                 $table->{$dataType}($field->handle)->nullable();
+        //             });
+
+        //             // Set initial value..
+        //             $setting->{$field->handle} = $field->settings['default'] ?? null; 
+        //         }
+        //     });
+
+        // $setting->save();
     }
 
     /**
-     *
-     * @param  string $handle
-     * @param  array  $attributes
+     * Sync Setting Groups.
+     * 
      * @return void
      */
-    protected function syncSettingSection($handle, $attributes)
+    private function syncSettingGroups()
     {
-        $section = SettingSection::updateOrCreate([ 'handle' => $handle ], $attributes);
+        // Pull existing elements..
+        $existing = SettingGroup::all()->pluck('id', 'id');
 
-        unset($this->sections[$section->id]);
+        // Add/update existing elements..
+        \Fusion\Services\Setting::groups()
+            ->each(function($group) use ($existing) {
 
-        if (isset($attributes['settings'])) {
-            foreach ($attributes['settings'] as $group => $settings) {
-                $order = 0;
+                // create update group..
+                $group = SettingGroup::updateOrCreate([
+                    'handle' => $group['handle'],
+                ],[
+                    'name'        => $group['name'],
+                    'group'       => $group['group'] ?? 'General',
+                    'icon'        => $group['icon'],
+                    'description' => $group['description'],
+                ]);
 
-                foreach ($settings as $setting) {
-                    $this->syncSetting(array_merge($setting, [
-                        'section_id' => $section->id,
-                        'group'      => $group,
-                        'order'      => ++$order
-                    ]));
-                }
-            }
-        }
+                // create/update fieldset..
+                $fieldset = Fieldset::updateOrCreate([
+                    'handle' => $group['handle'],
+                ],[
+                    'name'   => $group['name'],
+                    'hidden' => true
+                ]);
+
+                // assign fieldset
+                $group->fieldsets()->sync($fieldset->id);
+
+                $existing->forget($group->id);
+            });
+
+        // Clean up removed elements..
+        $existing->each(function($id) {
+            //TODO: unassign fieldset?
+            
+            SettingGroup::findOrFail($id)->delete();
+        });
     }
 
-    /**
-     *
-     * @param  array $setting
-     * @return void
-     */
-    protected function syncSetting($setting)
+    private function syncSettingFields()
     {
-        $setting = Setting::updateOrCreate(
-            [
-                'section_id' => $setting['section_id'],
-                'handle'     => $setting['handle'],
-            ],
-            [
-                'section_id'  => $setting['section_id'],
-                'name'        => $setting['name'],
-                'handle'      => $setting['handle'],
-                'group'       => $setting['group'],
-                'description' => $setting['description']      ?? '',
-                'override'    => $setting['override']         ?? '',
-                'component'   => $setting['component']        ?? '',
-                'type'        => $setting['type']             ?? 'text',
-                'options'     => $setting['options']          ?? null,
-                'default'     => $setting['default']          ?? '',
-                'value'       => $setting['value'] ?? $setting['default'] ?? '',
-                'required'    => (bool) ($setting['required'] ?? true),
-                'gui'         => (bool) ($setting['gui']      ?? true),
-                'order'       => (int)  ($setting['order']    ?? 0),
-            ]);
+        SettingGroup::all()->each(function($setting) {
+            $order = 0;
 
-        unset($this->settings[$setting->id]);
-    }
+            \Fusion\Services\Setting::fields($setting->handle)
+                ->each(function($settings, $section) use ($setting, &$order) {
+                    $section = $setting->fieldset->sections()
+                        ->updateOrCreate([
+                            'handle' => str_handle($section)
+                        ],  [
+                            'name'        => $section,
+                            'description' => "Settings for {$setting->name} > {$section}",
+                            'order'       => ++$order
+                        ]);
 
-    /**
-     * Fetch all FusionCMS System Settings
-     *   grouped by it's section.
-     *
-     * @return array
-     */
-    protected function fetchAllSettings()
-    {
-        foreach ($this->fetchAllSettingsFiles() as $section => $filepath) {
-            $settings[$section] = require $filepath;
-        }
-
-        return $settings;
-    }
-
-    /**
-     * Fetch all FusionCMS System Setting files.
-     *
-     * @return array
-     */
-    protected function fetchAllSettingsFiles()
-    {
-        $settingPath = fusion_path('/settings');
-        $allFiles    = Finder::create()->files()->name('*.php')->in($settingPath);
-        $files       = [];
-
-        foreach ($allFiles as $file) {
-            $filepath = $file->getRealPath();
-            $section  = basename($filepath, '.php');
-
-            $files[$section] = $filepath;
-        }
-
-        ksort($files, SORT_NATURAL);
-
-        return $files;
+                    $fieldOrder = 0;
+                    collect($settings)
+                        ->each(function($field) use ($section, &$fieldOrder) {
+                            $section->fields()->updateOrCreate([
+                                'handle' => $field['handle'],
+                            ],[
+                                'name'       => $field['name'],
+                                'type'       => $field['type'] ?? 'input',
+                                'help'       => $field['description'] ?? '',
+                                'order'      => ++$fieldOrder,
+                                'validation' => isset($field['required']) ? 'required' : '',
+                                'settings'   => [
+                                    'default'   => $field['default']           ?? '',
+                                    'options'   => collect($field['options']   ?? []),
+                                    'gui'       => (bool) ($field['gui']       ?? true),
+                                    'component' => (bool) ($field['component'] ?? false),
+                                ],
+                            ]);
+                        });
+                });
+        });
     }
 }

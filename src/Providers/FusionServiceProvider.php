@@ -23,7 +23,6 @@ class FusionServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerProviders();
         $this->registerMigrations();
         $this->registerPublishing();
         $this->registerViews();
@@ -48,6 +47,7 @@ class FusionServiceProvider extends ServiceProvider
             define('FUSION_VERSION', '6.0.0-beta.5');
         }
 
+        $this->registerProviders();
         $this->registerFusion();
         $this->registerConfig();
 

@@ -16,7 +16,20 @@ class Fieldset extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'handle'];
+    protected $fillable = [
+        'name',
+        'handle',
+        'hidden'
+    ];
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'hidden' => 'boolean'
+    ];
 
     /**
      * A fieldset is polymorphic.

@@ -2,6 +2,7 @@
 
 namespace Fusion\Services;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Fusion\Models\Settings\Field;
 use Fusion\Models\Settings\Section;
@@ -12,36 +13,77 @@ use Illuminate\Support\Facades\Config;
 class Setting
 {
 	/**
-	 * Get settings reference.
+	 * @var array
+	 */
+	protected $items;
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param array $items
+	 */
+	public function __construct(array $items = [])
+	{
+		$this->items = $items;
+	}
+
+	/**
+	 * Get settings repository.
 	 * 
 	 * @return Collection
 	 */
 	public function all()
 	{
-		return Field::all()->mapWithKeys(function($setting) {
-			return [ $setting->handle => $setting->value ];
-		});
+		return $this->items;
 	}
 
 	/**
-	 * Get FusionCMS setting value(s).
-	 *
-	 * @param  string     $key
-	 * @param  mixed|null $default
-	 * @return mixed
-	 */
+     * Determine if the given setting value exists.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function has($key)
+    {
+        return Arr::has($this->all(), $key);
+    }
+
+	/**
+     * Get the specified setting value.
+     *
+     * @param  array|string  $key
+     * @param  mixed  $default
+     * @return mixed
+     */
 	public function get($key, $default = null)
-	{
-		$filtered = $this->all()->filter(function($value, $name) use ($key) {
-			return Str::startsWith($name, $key ?? '');
-		});
+    {
+        if (is_array($key)) {
+            return $this->getMany($key);
+        }
 
-		if ($filtered->count() == 1) {
-			return $filtered->first() ?? $default;
-		}
+        return Arr::get($this->all(), $key, $default);
+    }
 
-		return $filtered;
-	}
+    /**
+     * Get many setting values.
+     *
+     * @param  array  $keys
+     * @return array
+     */
+    public function getMany($keys)
+    {
+        $config = [];
+
+        foreach ($keys as $key => $default) {
+            if (is_numeric($key)) {
+                [$key, $default] = [$default, null];
+            }
+
+            $config[$key] = Arr::get($this->all(), $key, $default);
+        }
+
+        return $config;
+    }
 
 	/**
 	 * Set a given FusionCMS setting value.
@@ -53,108 +95,59 @@ class Setting
 	public function set($key, $value = null)
 	{
 		$keys = is_array($key) ? $key : [$key => $value];
-	
-		foreach ($keys as $handle => $value) {
-			$setting = Field::where('handle', $handle)->first();
-			$setting->value = $value;
+dd($keys);
+		foreach ($keys as $key => $value) {
+
 		}
-
-//         if (! Schema::hasColumn('setting', $handle)) {
-//             $fieldtype = fieldtypes()->get($this->type);
-//             $dataType  = $fieldtype->getColumn('type');
-// dd($fieldtype, $dataType);
-//             Schema::table($this->table, function(Blueprint $table) use ($columnName) {
-//                 call_user_func_array([$table, $dataType], $columnName)->nullable();
-//             });
-//         }
-
-		// 	try {
-		// 		$setting = Setting::whereHas('section', function($query) use ($section) {
-		// 			$query->where('handle', $section);
-		// 		})
-		// 		->where('handle', $handle)
-		// 		->firstOrFail()
-		// 		->update(['value' => $value]);
-		// 	} catch (Exception $exception) {
-		// 		throw new Exception($exception->getMessage());
-		// 	}
-		// }
-
-		// // rewrite any updated overrides..
-		// $this->registerOverrides();
-
-		// // bust cache..
-		// Cache::forget('settings');
 	}
 
 	/**
-	 * Cached array of setting sections.
+	 * Convienence method to pull Setting Groups.
 	 * 
-	 * @return array
+	 * @return Collection
 	 */
-	public function sections()
+	public static function groups()
 	{
-		return Cache::rememberForever('setting_sections', function() {
-			return $this->raw()->map(function($section, $handle) {
+		return self::raw()
+			->map(function($group, $handle) {
 				return [
-					'name'        => $section['name'],
+					'name'        => $group['name'],
 					'handle'      => $handle,
-					'group'       => $section['group'],
-					'description' => $section['description'],
-					'icon'        => $section['icon'],
+					'group'       => $group['group'] ?? 'General',
+					'icon'        => $group['icon'],
+					'description' => $group['description'],
 				];
 			});
-		});
 	}
 
 	/**
-	 * Cached array of settings
-	 * 
+	 * Convienence method to pull Group Settings.
+	 *
 	 * @return Collection
 	 */
-	public function settings()
+	public static function fields($group = null)
 	{
-		return Cache::rememberForever('settings', function() {
-			$output   = collect([]);
-			$sections = $this->raw()->all();
+		$raw = self::raw();
 
-			foreach ($sections as $handle => $section) {
-				foreach ($section['settings'] as $group => $settings) {
-					$order = 0;
+		if (isset($group) && $raw->has($group)) {
+			return collect($raw->get($group)['settings']);
+		}
 
-					foreach ($settings as $setting) {
-						$output->push([
-							'section_id'  => $handle,
-							'name'        => $setting['name'],
-							'handle'      => "{$handle}.{$setting['handle']}",
-							'description' => $setting['description'] ?? '',
-							'override'    => $setting['override']    ?? '',
-							'component'   => $setting['component']   ?? '',
-							'type'        => $setting['type']        ?? 'input',
-							'options'     => collect($setting['options'] ?? []),
-							'default'     => $setting['default']     ?? '',
-							'value'       => $setting['value'] ?? $setting['default'] ?? '',
-							'required'    => (bool) ($setting['required'] ?? true),
-							'gui'         => (bool) ($setting['gui']      ?? true),
-							'order'       => (int)  ($setting['order']    ??  ++$order),
-						]);
-					}
-				}
-			}
-
-			return $output;
+		return $raw->map(function($group, $handle) {
+			return $group['settings'];
 		});
 	}
 
 	/**
+	 * Pull all settings from filesystem.
 	 * 
 	 * @return Collection
 	 */
-	private function raw()
+	private static function raw()
 	{
 		$path  = fusion_path('settings');
         $files = Finder::create()->files()->name('*.php')->in($path);
-        
+
         return collect($files)->mapWithKeys(function($file) {
         	$path = $file->getRealPath();
             $name = basename($path, '.php');
