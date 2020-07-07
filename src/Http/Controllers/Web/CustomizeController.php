@@ -12,7 +12,7 @@ class CustomizeController extends Controller
     {
         $segments = $request->segments();
         array_pop($segments);
-        $route = '/'.implode('/', $segments);
+        $url = '/'.implode('/', $segments);
 
         $previous = (object) parse_url(session()->get('_previous.url'));
 
@@ -21,14 +21,34 @@ class CustomizeController extends Controller
             (optional($previous)->path != $request->path()) and
             (optional($previous)->path)
         ) {
-            $route = $previous->path;
+            $url = $previous->path;
         }
 
-        $secondaryRequest = Request::create($route);
+        $subRequest = $this->createNewRequest($request, $url);
 
-        $secondaryRequest->headers->set('X-FusionCMS-Customize', true);
-        $secondaryRequest->attributes->set('customize', $request->all());
+        $subRequest->session()->flash('customizing', true);
 
-        return app()->handle($secondaryRequest);
+        $subRequest->attributes->set('customize', $request->all());
+
+        $subRequest->flash();
+
+        return app()->handle($subRequest);
+    }
+
+    /**
+     * Create a new request object.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $url
+     * @return \Illuminate\Http\Request
+     */
+    protected function createNewRequest(Request $from, $url)
+    {
+        $request = Request::createFrom($from);
+
+        $request->server->set('REQUEST_METHOD', 'GET');
+        $request->server->set('REQUEST_URI', $url);
+
+        return $request;
     }
 }
