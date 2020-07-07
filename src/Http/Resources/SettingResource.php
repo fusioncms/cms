@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Fusion\Http\Resources\Settings;
+namespace Fusion\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 

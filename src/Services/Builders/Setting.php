@@ -70,8 +70,8 @@ class Setting extends Builder implements BuilderContract
         $contents = strtr($stub, [
             '{class}'         => $className,
             '{handle}'        => $this->setting->handle,
-            '{fillable}'      => "['" . implode("',\n\t\t'", $fillable) . "']",
-            '{casts}'         => "['" . implode("',\n\t\t'", $casts) . "']",
+            '{fillable}'      => '[\'' . implode('\', \'', $fillable) . '\']',
+            '{casts}'         => '[\'' . implode('\', \'', $casts) . '\']',
             '{dates}'         => '[\'' . implode('\', \'', $this->getDates()) . '\']',
             '{relationships}' => $this->generateRelationships(),
         ]);

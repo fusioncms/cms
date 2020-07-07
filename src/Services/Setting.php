@@ -4,11 +4,8 @@ namespace Fusion\Services;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Fusion\Models\Settings\Field;
-use Fusion\Models\Settings\Section;
 use Symfony\Component\Finder\Finder;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
+use Fusion\Models\Setting as SettingGroup;
 
 class Setting
 {
@@ -95,10 +92,18 @@ class Setting
 	public function set($key, $value = null)
 	{
 		$keys = is_array($key) ? $key : [$key => $value];
-dd($keys);
-		foreach ($keys as $key => $value) {
 
+		foreach ($keys as $key => $value) {
+			list($handle, $column) = explode('.', $key);
+
+			SettingGroup::where('handle', $handle)
+				->firstOrFail()
+				->getBuilder()
+				->firstOrFail()
+				->update([ $column => $value ]);
 		}
+
+		cache()->forget('settings');
 	}
 
 	/**

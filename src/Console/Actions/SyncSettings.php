@@ -5,11 +5,7 @@ namespace Fusion\Console\Actions;
 use Fusion\Models\Field;
 use Fusion\Models\Fieldset;
 use Fusion\Models\Setting as SettingGroup;
-use Symfony\Component\Finder\Finder;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Fusion\Services\Setting as SettingService;
 
 class SyncSettings
 {
@@ -20,41 +16,28 @@ class SyncSettings
      */
     public function handle()
     {
-        // $this->syncSettingGroups();
-        // $this->syncSettingFields();
+        // Create setting tables..
+        $this->syncSettingGroups();
+        $this->syncSettingFields();
+
+        // Set initial values..
         SettingGroup::all()->each(function($group) {
-            $group->fieldset->fields
-                ->reject(function($field) {
+            $group->getBuilder()->firstOr(function() use ($group) {
+                $setting = $group->getBuilder()->create(['id' => 1]);
+                $fields  = $group->fieldset->fields;
+
+                $fields->reject(function($field) {
                     return is_null(fieldtypes()->get($field->type)->column);
                 })
-                ->each(function($field) use ($setting, $tableName) {
-                    
+                ->each(function($field) use ($setting) {
+                    $setting->{$field->handle} = $field->settings['default'] ?? null;
                 });
+
+                $setting->save();
+            });
         });
 
-
-        // $model     = (new \Fusion\Services\Builders\Setting)->make();
-        // $tableName = $model->getTable();
-        // $setting   = $model->firstOrCreate(['id' => 1]);
-        
-        // $setting->fields
-        //     ->reject(function($field) {
-        //         return is_null(fieldtypes()->get($field->type)->column);
-        //     })
-        //     ->each(function($field) use ($setting, $tableName) {
-        //         if (! Schema::hasColumn($tableName, $field->handle)) {
-        //             Schema::table($tableName, function(Blueprint $table) use ($field) {
-        //                 $dataType = fieldtypes()->get($field->type)->getColumn('type');
-
-        //                 $table->{$dataType}($field->handle)->nullable();
-        //             });
-
-        //             // Set initial value..
-        //             $setting->{$field->handle} = $field->settings['default'] ?? null; 
-        //         }
-        //     });
-
-        // $setting->save();
+        cache()->forget('settings');
     }
 
     /**
@@ -68,7 +51,7 @@ class SyncSettings
         $existing = SettingGroup::all()->pluck('id', 'id');
 
         // Add/update existing elements..
-        \Fusion\Services\Setting::groups()
+        SettingService::groups()
             ->each(function($group) use ($existing) {
 
                 // create update group..
@@ -97,8 +80,6 @@ class SyncSettings
 
         // Clean up removed elements..
         $existing->each(function($id) {
-            //TODO: unassign fieldset?
-            
             SettingGroup::findOrFail($id)->delete();
         });
     }
@@ -108,7 +89,7 @@ class SyncSettings
         SettingGroup::all()->each(function($setting) {
             $order = 0;
 
-            \Fusion\Services\Setting::fields($setting->handle)
+            SettingService::fields($setting->handle)
                 ->each(function($settings, $section) use ($setting, &$order) {
                     $section = $setting->fieldset->sections()
                         ->updateOrCreate([
@@ -132,6 +113,7 @@ class SyncSettings
                                 'validation' => isset($field['required']) ? 'required' : '',
                                 'settings'   => [
                                     'default'   => $field['default']           ?? '',
+                                    'override'  => $field['override']          ?? false,
                                     'options'   => collect($field['options']   ?? []),
                                     'gui'       => (bool) ($field['gui']       ?? true),
                                     'component' => (bool) ($field['component'] ?? false),

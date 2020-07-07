@@ -2,13 +2,11 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Fusion\Models\SettingSection;
+use Fusion\Models\Setting;
 use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
-use Fusion\Http\Resources\Settings\SettingResource;
-use Fusion\Http\Resources\Settings\SettingSectionResource;
+use Fusion\Http\Resources\SettingResource;
 
 class SettingsController extends Controller
 {
@@ -16,35 +14,33 @@ class SettingsController extends Controller
      * Request collection from storage.
      *
      * @param  Request $request
-     * @return JsonResource
+     * @return SettingResource
      */
     public function index(Request $request)
     {
-        $sections = SettingSection::all();
-
-        return SettingSectionResource::collection($sections);
+        return SettingResource::collection(Setting::all());
     }
 
      /**
       * Request specific resource from storage.
       *
-      * @param  Request        $request
-      * @param  SettingSection $section
-      * @return JsonResponse
+      * @param  Request  $request
+      * @param  Setting  $setting
+      * @return SettingResource
       */
-    public function show(Request $request, SettingSection $section)
+    public function show(Request $request, Setting $setting)
     {
-        return new SettingSectionResource($section);
+        return new SettingResource($setting);
     }
 
     /**
      * Update settings.
      *
-     * @param  Request        $request
-     * @param  SettingSection $section
+     * @param  Request  $request
+     * @param  Setting  $setting
      * @return JsonResponse
      */
-    public function update(Request $request, SettingSection $section)
+    public function update(Request $request, Setting $setting)
     {
         $section->settings->each(function($setting) use ($request) {
             if ($request->has($setting->handle)) {

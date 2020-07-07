@@ -35,25 +35,5 @@ class {class} extends Model
      */
     protected $dates = {dates};
 
-    /**
-     * Get the Setting Group relationship.
-     *
-     * @return mixed
-     */
-    public function group()
-    {
-        return $this->belongsTo(Setting::class);
-    }
-
-    /**
-     * Get all of the fields for the menu.
-     *
-     * @return mixed
-     */
-    public function getFieldsAttribute()
-    {
-        return $this->group->fieldset->fields;
-    }
-
     {relationships}
 }
