@@ -165,9 +165,9 @@ Route::patch('theme/{theme}', 'Themes\ActiveController@update');
  * API - Settings Routes
  */
 Route::prefix('settings')->group(function() {
-	Route::get('',          'SettingsController@index');
-	Route::get('{group}',   'SettingsController@show');
-	Route::patch('{group}', 'SettingsController@update');
+	Route::get('',          'SettingController@index');
+	Route::get('{group}',   'SettingController@show');
+	Route::patch('{group}', 'SettingController@update');
 });
 
 

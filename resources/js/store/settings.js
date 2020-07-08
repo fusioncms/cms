@@ -2,21 +2,21 @@ export default {
     namespaced: true,
 
     state: {
-        sections: {},
+        groups: {},
         settings: {},
     },
 
     getters: {
-        getSection: (state) => (key) => {
-            return state.sections[key]
+        getGroup: (state) => (key) => {
+            return state.groups[key]
         },
 
-        getSections: (state) => {
-            return state.sections
+        getGroups: (state) => {
+            return state.groups
         },
 
-        getSectionGroups: (state) => {
-            return _.groupBy(state.sections, 'group')
+        getGroupSections: (state) => {
+            return _.groupBy(state.groups, 'group')
         },
         
         getSetting: (state) => (key) => {
@@ -29,47 +29,25 @@ export default {
     },
 
     mutations: {
-        setSection (state, { handle, section }) {
-            state.sections[handle] = section
-
-            // update section's setitngs
-            _.each(section.items, (item) => {
-                state.settings[handle + '.' + item.handle] = item.value
-            })
-        },
-
-        setSections (state, payload) {
-            state.sections = _.keyBy(payload, 'handle')
+        setGroups (state, payload) {
+            state.groups = _.keyBy(payload, 'handle')
         },
 
         setSettings (state, payload) {
-            let items = _.map(payload, (section) => {
-                return _.map(section.items, (item) => {
-                    return {
-                        handle: section.handle + '.' + item.handle,
-                        value:  item.value || item.default
-                    }
-                })
-            })
+            let items    = _.map(payload, 'settings')
+            let settings = {}
 
-            // convert to object
-            items = _.flatten(items)
-            items = _.keyBy(items, 'handle')
-            items = _.mapValues(items, 'value')
+            _.forEach(items, (item) => _.merge(settings, item))
 
-            state.settings = items
+            state.settings = settings
         },
     },
 
     actions: {
-        setSection(context, payload) {
-            context.commit('setSection', payload)
-        },
-
         fetchSettings (context) {
             axios.get('/api/settings')
                 .then(response => {
-                    context.commit('setSections', response.data.data)
+                    context.commit('setGroups', response.data.data)
                     context.commit('setSettings', response.data.data)
                 })
                 .catch(error => {

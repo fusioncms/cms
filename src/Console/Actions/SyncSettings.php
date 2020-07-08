@@ -114,7 +114,7 @@ class SyncSettings
                                 'settings'   => [
                                     'default'   => $field['default']           ?? '',
                                     'override'  => $field['override']          ?? false,
-                                    'options'   => collect($field['options']   ?? []),
+                                    'options'   => $this->formatSettingOptions($field['options'] ?? []),
                                     'gui'       => (bool) ($field['gui']       ?? true),
                                     'component' => (bool) ($field['component'] ?? false),
                                 ],
@@ -122,5 +122,23 @@ class SyncSettings
                         });
                 });
         });
+    }
+
+    /**
+     * Properly format setting options
+     * [helper]
+     * 
+     * @param  array  $options
+     * @return array
+     */
+    private function formatSettingOptions($options = [])
+    {
+        return collect($options)->map(function($label, $value) {
+            return [
+                'checked' => false,
+                'label'   => $label,
+                'value'   => $value
+            ];
+        })->values()->all();
     }
 }

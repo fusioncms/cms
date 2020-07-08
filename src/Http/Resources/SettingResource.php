@@ -22,6 +22,7 @@ class SettingResource extends JsonResource
             'group'       => $this->group,
             'icon'        => $this->icon,
             'description' => $this->description,
+            'fieldset'    => new FieldsetResource($this->fieldset),
         ];
         
         if ($this->fieldset) {

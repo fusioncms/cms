@@ -106,6 +106,17 @@ class Fieldset extends Model
     }
 
     /**
+     * Scope a query to only include visible records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('hidden', false);
+    }
+
+    /**
      * Tap into activity before persisting to database.
      *
      * @param  \Spatie\Activitylog\Models\Activity $activity

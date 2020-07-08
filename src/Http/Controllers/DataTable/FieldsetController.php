@@ -9,7 +9,7 @@ class FieldsetController extends DataTableController
 {
     public function builder()
     {
-        return Fieldset::query();
+        return Fieldset::active();
     }
 
     public function getDisplayableColumns()
@@ -39,8 +39,8 @@ class FieldsetController extends DataTableController
     public function getCustomColumnNames()
     {
         return [
-            'name'        => 'Name',
-            'handle'      => 'Handle',
+            'name'   => 'Name',
+            'handle' => 'Handle',
         ];
     }
 }
