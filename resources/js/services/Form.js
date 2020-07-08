@@ -173,10 +173,8 @@ export default class Form {
      * Handle the first input event. Prevents navigating
      * away from the form if the preventNavigation
      * setting has been enabled.
-     *
-     * @param {object} data
      */
-    onFirstChange(data) {
+    onFirstChange() {
         this.hasChanges = true
         if (this.preventNavigation) {
             store.commit('form/setPreventNavigation', true)
@@ -186,10 +184,8 @@ export default class Form {
      /**
      * Helper method to reset the form to appear as if
      * it had no changes.
-     *
-     * @param {object} data
      */
-    resetChangeListener(data) {
+    resetChangeListener() {
         this.hasChanges = false
         if (this.preventNavigation) {
             store.commit('form/setPreventNavigation', false)

@@ -21,7 +21,7 @@
 
                                 <component
                                     v-for="(field, fieldHandle) in section.fields"
-                                    v-model="theme.option[handle][fieldHandle]"
+                                    v-model="form[handle][fieldHandle]"
                                     :key="fieldHandle"
                                     :is="field.fieldtype + '-fieldtype'"
                                     :field="{
@@ -62,10 +62,13 @@
                 <iframe ref="iframe" @load="onLoadIframe"></iframe>
             </div>
         </div>
+
+        <confirm-modal></confirm-modal>
     </div>
 </template>
 
 <script>
+    import Form from '../services/Form'
     import _ from 'lodash'
 
     var cancel
@@ -83,8 +86,8 @@
         data() {
             return {
                 theme: {},
+                form: null,
                 url: '/customize',
-                hasChanges: false,
                 window: 'desktop',
                 showControls: true,
             }
@@ -107,7 +110,7 @@
         watch: {
             'theme.option': {
                 handler: function() {
-                    this.hasChanges = true;
+                    this.form.onFirstChange()
                     this.update()
                 },
 
@@ -155,12 +158,9 @@
             },
 
             submit() {
-                this.theme.option['_method'] = 'PATCH'
-
-                axios.post(`/api/themes/${this.theme.namespace}`, this.theme.option).then(() => {
+                this.form.patch('/api/themes/' + this.theme.namespace).then((response) => {
                     toast('Theme options have been updated', 'success')
-                })
-                .catch((error) => {
+                }).catch((error) => {
                     toast(error.response.data.message, 'failed')
                 })
             },
@@ -187,7 +187,12 @@
                 axios.get('/api/theme'),
             ]).then(axios.spread(function (theme) {
                 next(function(vm) {
+                    let options = theme.data.data.option
+
+                    _.unset(options, '_json')
+
                     vm.theme = theme.data.data
+                    vm.form = new Form(options, true)
                 })
             }))
         },
