@@ -15,6 +15,21 @@ class SettingResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $resource = [
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'handle'      => $this->handle,
+            'group'       => $this->group,
+            'icon'        => $this->icon,
+            'description' => $this->description,
+        ];
+        
+        if ($this->fieldset) {
+            foreach ($this->fieldset->fields as $field) {
+                $resource['settings'][$field->handle] = setting("{$this->handle}.{$field->handle}");
+            }
+        }
+
+        return $resource;
     }
 }

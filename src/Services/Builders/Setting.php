@@ -44,7 +44,7 @@ class Setting extends Builder implements BuilderContract
     public function make()
     {
         $className = Str::studly($this->setting->handle);
-        $fillable  = [];
+        $fillable  = [ 'setting_id' ];
         $casts     = [];
         $fields    = $this->setting->fieldset->fields;
 

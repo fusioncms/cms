@@ -34,6 +34,7 @@ class SettingObserver
     {
         $this->migration->schema->create($setting->table, function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('setting_id')->index();
             $table->timestamps();
         });
     }

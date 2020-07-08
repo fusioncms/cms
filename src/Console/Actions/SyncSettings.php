@@ -23,7 +23,7 @@ class SyncSettings
         // Set initial values..
         SettingGroup::all()->each(function($group) {
             $group->getBuilder()->firstOr(function() use ($group) {
-                $setting = $group->getBuilder()->create(['id' => 1]);
+                $setting = $group->getBuilder()->firstOrCreate([ 'id' => 1, 'setting_id' => $group->id ]);
                 $fields  = $group->fieldset->fields;
 
                 $fields->reject(function($field) {

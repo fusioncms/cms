@@ -42,7 +42,7 @@ class Setting
      */
     public function has($key)
     {
-        return Arr::has($this->all(), $key);
+        return Arr::has($this->items, $key);
     }
 
 	/**
@@ -58,7 +58,7 @@ class Setting
             return $this->getMany($key);
         }
 
-        return Arr::get($this->all(), $key, $default);
+        return Arr::get($this->items, $key, $default);
     }
 
     /**
@@ -76,7 +76,7 @@ class Setting
                 [$key, $default] = [$default, null];
             }
 
-            $config[$key] = Arr::get($this->all(), $key, $default);
+            $config[$key] = Arr::get($this->items, $key, $default);
         }
 
         return $config;

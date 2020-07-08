@@ -42,6 +42,7 @@ class SettingsController extends Controller
      */
     public function update(Request $request, Setting $setting)
     {
+dd($request->all());
         $section->settings->each(function($setting) use ($request) {
             if ($request->has($setting->handle)) {
                 if ($request->hasFile($setting->handle)) {

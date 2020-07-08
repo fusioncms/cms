@@ -12,8 +12,6 @@ class Setting extends Model
 {
     use CachesQueries, HasFieldset;
 
-    protected $with = ['fieldsets'];
-
     /**
      * The attributes that are fillable via mass assignment.
      *
@@ -46,5 +44,18 @@ class Setting extends Model
     public function getTableAttribute()
     {
         return "{$this->table}_{$this->handle}";
+    }
+
+    /**
+     * Group have many settings.
+     *
+     * @return HasManyRelationship
+     */
+    public function settings()
+    {
+        $model = $this->getBuilder();
+        $class = new \ReflectionClass($model);
+
+        return $this->hasOne('\\'.$class->getName());
     }
 }
