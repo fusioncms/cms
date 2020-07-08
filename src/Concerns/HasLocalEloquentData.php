@@ -106,6 +106,8 @@ trait HasLocalEloquentData
     public function migrate()
     {
         $rows = $this->getRows();
+        
+        if (empty($rows)) return false;
 
         $firstRow = $rows[0];
         $tableName = $this->getTable();
