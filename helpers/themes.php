@@ -27,7 +27,7 @@ if (! function_exists('theme_preview')) {
      */
     function theme_preview()
     {
-        return request()->headers->has('x-fusioncms-customize');
+        return request()->session()->has('customizing');
     }
 }
 

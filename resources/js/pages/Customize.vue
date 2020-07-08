@@ -59,7 +59,7 @@
 
         <div class="preview__window">
             <div class="window" :class="'window--' + window">
-                <iframe ref="iframe" frameborder="0"></iframe>
+                <iframe ref="iframe" @load="onLoadIframe"></iframe>
             </div>
         </div>
     </div>
@@ -83,6 +83,7 @@
         data() {
             return {
                 theme: {},
+                url: '/customize',
                 hasChanges: false,
                 window: 'desktop',
                 showControls: true,
@@ -122,7 +123,7 @@
 
                 axios({
                     method: 'post',
-                    url: '/customize',
+                    url: this.url,
                     data: this.theme.option,
                     cancelToken: new CancelToken(function executer(c) {
                         cancel = c
@@ -141,6 +142,16 @@
                 iframe.contentWindow.document.open()
                 iframe.contentWindow.document.write(contents)
                 iframe.contentWindow.document.close()
+            },
+
+            onLoadIframe(event) {
+                const iframe = this.$refs.iframe
+                const url = iframe.contentWindow.location.toString()
+
+                if (url != 'about:blank' && !_.endsWith(url, '/customize')) {
+                    this.url = url + '/customize'
+                    this.update()
+                }
             },
 
             submit() {
