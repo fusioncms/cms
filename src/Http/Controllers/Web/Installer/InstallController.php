@@ -46,8 +46,8 @@ class InstallController extends Controller
         $jobs = [
             'Deleting asset files...'           => new \Fusion\Console\Uninstaller\DeleteUserFiles,
             'Deleting model files...'           => new \Fusion\Console\Uninstaller\DeleteModelFiles,
-            'Deleting module assets...'         => new \Fusion\Console\Uninstaller\DeleteModuleAssets,
-            'Deleting module cache...'          => new \Fusion\Console\Uninstaller\DeleteModuleCache,
+            'Deleting addon assets...'          => new \Fusion\Console\Uninstaller\DeleteAddonAssets,
+            'Deleting addon cache...'           => new \Fusion\Console\Uninstaller\DeleteAddonCache,
             'Deleting log files...'             => new \Fusion\Console\Uninstaller\DeleteLogFiles,
             'Deleting database...'              => new \Fusion\Console\Uninstaller\DeleteDatabase,
 
@@ -55,7 +55,6 @@ class InstallController extends Controller
             'Creating database...'              => new \Fusion\Console\Installer\CreateDatabase($data),
             'Creating environment config...'    => new \Fusion\Console\Installer\CreateEnvironmentConfig($data),
             'Creating database tables...'       => new \Fusion\Console\Installer\CreateDatabaseTables,
-            'Publishing module assets...'       => new \Fusion\Console\Installer\PublishModuleAssets,
             'Publishing Fusion resources...'    => new \Fusion\Console\Installer\PublishFusionResources,
             'Creating storage link...'          => new \Fusion\Console\Installer\CreateStorageLink,
             'Creating default permissions...'   => new \Fusion\Console\Installer\CreateDefaultPermissions,

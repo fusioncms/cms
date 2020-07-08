@@ -21,7 +21,7 @@
 
                                 <component
                                     v-for="(field, fieldHandle) in section.fields"
-                                    v-model="theme.option[handle][fieldHandle]"
+                                    v-model="form[handle][fieldHandle]"
                                     :key="fieldHandle"
                                     :is="field.fieldtype + '-fieldtype'"
                                     :field="{
@@ -59,13 +59,16 @@
 
         <div class="preview__window">
             <div class="window" :class="'window--' + window">
-                <iframe ref="iframe" frameborder="0"></iframe>
+                <iframe ref="iframe" @load="onLoadIframe"></iframe>
             </div>
         </div>
+
+        <confirm-modal></confirm-modal>
     </div>
 </template>
 
 <script>
+    import Form from '../services/Form'
     import _ from 'lodash'
 
     var cancel
@@ -83,7 +86,8 @@
         data() {
             return {
                 theme: {},
-                hasChanges: false,
+                form: null,
+                url: '/customize',
                 window: 'desktop',
                 showControls: true,
             }
@@ -106,7 +110,7 @@
         watch: {
             'theme.option': {
                 handler: function() {
-                    this.hasChanges = true;
+                    this.form.onFirstChange()
                     this.update()
                 },
 
@@ -122,7 +126,7 @@
 
                 axios({
                     method: 'post',
-                    url: '/customize',
+                    url: this.url,
                     data: this.theme.option,
                     cancelToken: new CancelToken(function executer(c) {
                         cancel = c
@@ -143,13 +147,20 @@
                 iframe.contentWindow.document.close()
             },
 
-            submit() {
-                this.theme.option['_method'] = 'PATCH'
+            onLoadIframe(event) {
+                const iframe = this.$refs.iframe
+                const url = iframe.contentWindow.location.toString()
 
-                axios.post(`/api/themes/${this.theme.namespace}`, this.theme.option).then(() => {
+                if (url != 'about:blank' && !_.endsWith(url, '/customize')) {
+                    this.url = url + '/customize'
+                    this.update()
+                }
+            },
+
+            submit() {
+                this.form.patch('/api/themes/' + this.theme.namespace).then((response) => {
                     toast('Theme options have been updated', 'success')
-                })
-                .catch((error) => {
+                }).catch((error) => {
                     toast(error.response.data.message, 'failed')
                 })
             },
@@ -176,7 +187,12 @@
                 axios.get('/api/theme'),
             ]).then(axios.spread(function (theme) {
                 next(function(vm) {
+                    let options = theme.data.data.option
+
+                    _.unset(options, '_json')
+
                     vm.theme = theme.data.data
+                    vm.form = new Form(options, true)
                 })
             }))
         },

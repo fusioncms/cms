@@ -27,7 +27,7 @@ if (! function_exists('theme_preview')) {
      */
     function theme_preview()
     {
-        return request()->headers->has('x-fusioncms-customize');
+        return request()->session()->has('customizing');
     }
 }
 
@@ -70,18 +70,6 @@ if (! function_exists('theme_option')) {
             $values = collect(request()->attributes->get('customize'));
         } else {
             $optionsFilePath = storage_path('app/themes/'.$theme->get('namespace').'.json');
-
-            if (! File::exists($optionsFilePath)) {
-                $defaults = collect($theme->get('options'))->mapWithKeys(function($section, $handle) {
-                    $options = collect($section['fields'])->mapWithKeys(function($option, $field) {
-                        return [$field => $option['default'] ?? null];
-                    });
-
-                    return [$handle => $options];
-                });
-
-                File::put($optionsFilePath, json_encode($defaults, JSON_PRETTY_PRINT));
-            }
 
             $options = collect(json_decode(File::get($optionsFilePath), true));
             $values  = $values->merge($options);

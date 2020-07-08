@@ -68,7 +68,7 @@ Route::group(['prefix' => config('fusion.path')], function () {
 
 Route::group(['middleware' => ['can:themes.update']], function() {
     Route::post('/customize', 'CustomizeController@show');
-    Route::post('/{any?}/customize', 'CustomizeController@show')->where('any', '.*');
+    Route::post('{any?}/customize', 'CustomizeController@show')->where('any', '.*');
 });
 
 Route::post('form/{form}', 'ResponseController@store');

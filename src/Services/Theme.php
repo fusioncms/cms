@@ -87,6 +87,10 @@ class Theme extends Collection
             $folder = $this->active()->get('namespace');
 
             if (File::exists(theme_path("{$folder}/public"))) {
+                // Delete existing symlink if present
+                File::delete(public_path('theme'));
+
+                // Create new theme symlink
                 File::link(
                     theme_path("{$folder}/public"),
                     public_path('theme')

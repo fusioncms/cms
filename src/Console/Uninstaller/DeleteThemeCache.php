@@ -4,7 +4,7 @@ namespace Fusion\Console\Uninstaller;
 
 use File;
 
-class DeleteModuleAssets
+class DeleteThemeCache
 {
     /**
      * Execute the command.
@@ -13,8 +13,6 @@ class DeleteModuleAssets
      */
     public function handle()
     {
-        $path = public_path('assets/modules');
-
-        File::deleteDirectory($path);
+        File::deleteDirectory(storage_path('app/themes'));
     }
 }
