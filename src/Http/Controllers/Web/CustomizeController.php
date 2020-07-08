@@ -17,7 +17,8 @@ class CustomizeController extends Controller
         $previous = (object) parse_url(session()->get('_previous.url'));
 
         if (
-            (optional($previous)->path != '/admin/customize') and
+            (optional($previous)->path != '/'.config('fusion.path')) and
+            (optional($previous)->path != '/'.config('fusion.path').'/customize') and
             (optional($previous)->path != $request->path()) and
             (optional($previous)->path)
         ) {

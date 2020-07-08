@@ -100,6 +100,7 @@ const spacing = {
 }
 
 module.exports = {
+    purge: false,
     theme: {
         cursors: cursors,
 
