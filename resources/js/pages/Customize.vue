@@ -57,7 +57,18 @@
             </div>
         </div>
 
-        <div class="preview__window">
+        <div class="preview__window flex-col">
+            <div class="w-full px-2 bg-white border-b border-gray-300 flex items-center py-1">
+                <button class="mr-1 w-8 h-8 focus:outline-none hover:bg-gray-200 rounded-full" @click.prevent="navigateBack"><fa-icon :icon="['fas', 'arrow-left']" class="fa-fw text-gray-700"></fa-icon></button>
+                <button class="mr-1 w-8 h-8 focus:outline-none hover:bg-gray-200 rounded-full" @click.prevent="navigateForward"><fa-icon :icon="['fas', 'arrow-right']" class="fa-fw text-gray-700"></fa-icon></button>
+                <button class="mr-1 w-8 h-8 focus:outline-none hover:bg-gray-200 rounded-full" @click.prevent="navigateRefresh"><fa-icon :icon="['fas', 'redo']" class="fa-fw text-gray-700"></fa-icon></button>
+                <button class="mr-1 w-8 h-8 focus:outline-none hover:bg-gray-200 rounded-full" @click.prevent="navigateHome"><fa-icon :icon="['fas', 'home']" class="fa-fw text-gray-700"></fa-icon></button>
+
+                <div class="px-6 py-2 bg-gray-200 rounded-full text-gray-700 flex flex-1 mr-2 items-center leading-none">
+                    <span>{{ prettyURL }}</span>
+                </div>
+            </div>
+
             <div class="window" :class="'window--' + window">
                 <iframe ref="iframe" @load="onLoadIframe"></iframe>
             </div>
@@ -88,6 +99,8 @@
                 theme: {},
                 form: null,
                 url: '/customize',
+                history: [],
+                current: 0,
                 window: 'desktop',
                 showControls: true,
             }
@@ -105,6 +118,11 @@
             isMobile() {
                 return this.window == 'mobile'
             },
+
+            prettyURL() {
+                let url = this.url.replace(/([^:]\/)\/+/g, "$1")
+                return this.parseURL(url)
+            },
         },
 
         watch: {
@@ -119,6 +137,41 @@
         },
 
         methods: {
+            navigateBack() {
+                if (this.history.length > 0) {
+                    let current = this.current - 1
+                    let url = this.history[(this.history.length - 1) + current]
+
+                    if (url) {
+                        this.current = current
+                        this.url = url
+                        this.update()
+                    }
+                }
+            },
+
+            navigateForward() {
+                if (this.current !== 0) {
+                    let current = this.current + 1
+                    let url = this.history[(this.history.length - 1) + current]
+
+                    if (url) {
+                        this.current = current
+                        this.url = url
+                        this.update()
+                    }
+                }
+            },
+
+            navigateRefresh() {
+                this.update()
+            },
+
+            navigateHome() {
+                this.url = '/customize'
+                this.update()
+            },
+
             update: _.debounce(function() {
                 if (cancel != undefined) {
                     cancel();
@@ -151,10 +204,36 @@
                 const iframe = this.$refs.iframe
                 const url = iframe.contentWindow.location.toString()
 
-                if (url != 'about:blank' && !_.endsWith(url, '/customize')) {
+                if (url == 'about:blank') {
+                    this.url = '/customize'
+
+                    if (this.history[this.history.length - 1] != this.url) {
+                        this.history.push(this.url)
+                        this.current = 0
+                    }
+
+                    this.update()
+                } else if (!_.endsWith(url, '/customize')) {
                     this.url = url + '/customize'
+
+                    if (this.history[this.history.length - 1] != this.url) {
+                        this.history.push(this.url)
+                        this.current = 0
+                    }
+
                     this.update()
                 }
+
+                if (this.history[this.history.length + this.current] == this.url) {
+                    this.current = this.current + 1
+                }
+            },
+
+            parseURL(url) {
+                let parser = document.createElement('a')
+                parser.href = url
+
+                return parser
             },
 
             submit() {
