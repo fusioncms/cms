@@ -19,7 +19,7 @@
 
 			<div class="form__control--meta" v-if="field.help">
 	            <div class="form__help">
-	                <span v-html="field.help"></span>
+	                <span class="field__help" v-html="field.help"></span>
 	            </div>
 	        </div>
 
@@ -28,7 +28,9 @@
 	                <li v-for="(file, index) in files" :key="`file.${index}`">
 	                    <div class="p-2 sm:px-4">
 	                        <div class="flex items-center justify-between">
-	                        	<img class="upload__file--preview max-w-12" :src="file.url" :alt="file.name"/>
+
+	                        	<img v-if="file.type == 'image'" class="upload__file--preview max-w-12" :src="file.url" :alt="file.name"/>
+	                        	<img v-else class="upload__file--preview max-w-12" :src="`/vendor/fusion/img/${file.type}-large.svg`" :alt="file.name"/>
 
 	                            <div class="upload__file--name" v-text="file.name" />
 

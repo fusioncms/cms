@@ -110,7 +110,7 @@ class SyncSettings
                                 'type'       => $field['type'] ?? 'input',
                                 'help'       => $field['description'] ?? '',
                                 'order'      => ++$fieldOrder,
-                                'validation' => isset($field['required']) ? 'required' : '',
+                                'validation' => ($field['required'] ?? true) ? 'required' : '',
                                 'settings'   => [
                                     'default'   => $field['default']           ?? '',
                                     'override'  => $field['override']          ?? false,

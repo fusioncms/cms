@@ -62,20 +62,6 @@
                 getSetting: 'settings/getSetting'
             }),
 
-            maxFilesize() {
-                return _.toNumber(this.getSetting('files.file_size_upload_limit'))
-            },
-
-            acceptedFiles() {
-                let extensions = this.getSetting('files.accepted_files')
-
-                extensions = _.split(extensions, ',')
-                extensions = _.map(extensions, (i) => '.' + _.trim(i, ' .'))
-                extensions = _.join(extensions, ',')
-
-                return extensions
-            },
-
             csrf() {
                 let token = document.head.querySelector('meta[name="csrf-token"]')
                 if (token) {
@@ -105,10 +91,6 @@
                 
                 let acceptedTypes = this.getSetting('files.accepted_files')
                 let maxSize       = this.getSetting('files.file_size_upload_limit')
-
-                // convert to array
-                acceptedTypes = _.split(acceptedTypes, ',')
-                acceptedTypes = _.map(acceptedTypes, (item) => _.trim(item, ' .'))
 
                 // convert to bytes
                 maxSize = _.toNumber(maxSize) * Math.pow(1024, 2)

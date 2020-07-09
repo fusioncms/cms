@@ -11,7 +11,8 @@ return [
                 'name'        => 'Accepted File Types',
                 'handle'      => 'accepted_files',
                 'description' => 'List of accepted file types. Separate values by a comma.',
-                'default'     => 'jpg, jpeg, png, gif',
+                'type'        => 'list',
+                'default'     => ['jpg', 'jpeg', 'png', 'gif'],
             ],
             [
                 'name'        => 'Max Filesize Upload Limit',
