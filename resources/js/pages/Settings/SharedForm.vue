@@ -12,7 +12,14 @@
 				<p-tabs>
 					<p-tab v-for="(section, i1) in group.fieldset.sections" :key="i1" :name="section.name" :active="i1 === 0">
 						<div v-for="(field, i2) in section.fields" :key="i2">
+			                <component
+								v-if="field.settings.component"
+								:is="field.settings.default"
+								:settings="group.settings">
+							</component>
+
 							<component
+								v-else
 			                    :is="field.type.id + '-fieldtype'"
 			                    :field="field"
 			                    v-model="form[field.handle]">

@@ -130,7 +130,7 @@ class Setting
              * Load settings from database
              */
             return cache()->rememberForever('settings', function () {
-                return self::all()->flatMap(function($group) {
+                return SettingGroup::all()->flatMap(function($group) {
                     $setting = $group->getBuilder()->first();
 
                     return $group->fieldset->fields
