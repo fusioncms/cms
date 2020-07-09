@@ -35,5 +35,15 @@ class {class} extends Model
      */
     protected $dates = {dates};
 
+    /**
+     * Get the Setting Group relationship.
+     *
+     * @return mixed
+     */
+    public function group()
+    {
+        return $this->belongsTo(Setting::class, 'setting_id');
+    }
+
     {relationships}
 }

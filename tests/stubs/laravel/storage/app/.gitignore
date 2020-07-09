@@ -1,2 +1,3 @@
-laravel-backup/
-addons.json
+*
+!public/
+!.gitignore

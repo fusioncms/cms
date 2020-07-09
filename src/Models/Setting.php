@@ -58,48 +58,4 @@ class Setting extends Model
 
         return $this->hasOne('\\'.$class->getName());
     }
-
-    /**
-     * Load system settings.
-     * 
-     * @return array
-     */
-    public static function loadSettings()
-    {
-        if (settings_available()) {
-            /**
-             * Load settings from database
-             */
-            return cache()->rememberForever('settings', function () {
-                return self::all()->flatMap(function($group) {
-                    $setting = $group->getBuilder()->first();
-
-                    return $group->fieldset->fields
-                        ->mapWithKeys(function($field) use ($group, $setting) {
-                            return [ "{$group->handle}.{$field->handle}"
-                                => $setting->{$field->handle} ?? null ];
-                        });
-                });
-            })->all();
-        } else {
-            /**
-             * Load settings from flat files
-             */
-            $files   = glob(fusion_path('settings') . '/*.php');
-            $results = [];
-
-            foreach ($files as $file) {
-                $group    = basename($file, '.php');
-                $contents = require $file;
-
-                foreach ($contents['settings'] as $settings) {
-                    foreach ($settings as $setting) {
-                        $results["{$group}.{$setting['handle']}"] = $setting['value'] ?? $setting['default'] ?? '';
-                    }
-                }
-            }
-            
-            return $results;
-        }
-    }
 }

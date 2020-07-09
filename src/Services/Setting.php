@@ -94,16 +94,72 @@ class Setting
 		$keys = is_array($key) ? $key : [$key => $value];
 
 		foreach ($keys as $key => $value) {
-			list($handle, $column) = explode('.', $key);
+			if ($this->has($key)) {
+				list($handle, $column) = explode('.', $key);
 
-			SettingGroup::where('handle', $handle)
-				->firstOrFail()
-				->getBuilder()
-				->firstOrFail()
-				->update([ $column => $value ]);
+				$group = SettingGroup::where('handle', $handle)->firstOrFail();
+				
+				// persist setting..
+				$setting = $group->getBuilder()->firstOrFail();
+				$setting->update([ $column => $value ]);
+
+				// update local setting..
+				$this->items[$key] = $value;
+
+				// override config (if necessary)..
+				$group->fieldset->fields->each(function($field) use ($group, $key) {
+					if ($key == "{$group->handle}.{$field->handle}") {
+						if ($field->settings['override'] !== false) {
+							config([ $field->settings['override'] => setting($key)]);
+						}
+					}
+				});
+			}
 		}
+	}
 
-		cache()->forget('settings');
+	/**
+     * Load system settings.
+     * 
+     * @return array
+     */
+	public static function loadSettings()
+	{
+		if (settings_available()) {
+            /**
+             * Load settings from database
+             */
+            return cache()->rememberForever('settings', function () {
+                return self::all()->flatMap(function($group) {
+                    $setting = $group->getBuilder()->first();
+
+                    return $group->fieldset->fields
+                        ->mapWithKeys(function($field) use ($group, $setting) {
+                            return [ "{$group->handle}.{$field->handle}"
+                                => $setting->{$field->handle} ?? null ];
+                        });
+                });
+            })->all();
+        } else {
+            /**
+             * Load settings from flat files
+             */
+            $files   = glob(fusion_path('settings') . '/*.php');
+            $results = [];
+
+            foreach ($files as $file) {
+                $group    = basename($file, '.php');
+                $contents = require $file;
+
+                foreach ($contents['settings'] as $settings) {
+                    foreach ($settings as $setting) {
+                        $results["{$group}.{$setting['handle']}"] = $setting['value'] ?? $setting['default'] ?? '';
+                    }
+                }
+            }
+            
+            return $results;
+        }
 	}
 
 	/**

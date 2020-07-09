@@ -38,7 +38,7 @@ class SettingServiceProvider extends ServiceProvider
         // load system settings
         $this->app->singleton('setting', function() {
             return new SettingService(
-                SettingGroup::loadSettings()
+                SettingService::loadSettings()
             );
         });
     }
