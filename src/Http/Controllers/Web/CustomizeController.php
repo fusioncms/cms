@@ -11,27 +11,14 @@ class CustomizeController extends Controller
     public function show(Request $request)
     {
         $segments = $request->segments();
+
         array_pop($segments);
-        $url = '/'.implode('/', $segments);
 
-        $previous = (object) parse_url(session()->get('_previous.url'));
-
-        if (
-            (optional($previous)->path != '/'.config('fusion.path')) and
-            (optional($previous)->path != '/'.config('fusion.path').'/customize') and
-            (optional($previous)->path != $request->path()) and
-            (optional($previous)->path)
-        ) {
-            $url = $previous->path;
-        }
-
+        $url        = '/'.implode('/', $segments);
         $subRequest = $this->createNewRequest($request, $url);
 
         $subRequest->session()->flash('customizing', true);
-
         $subRequest->attributes->set('customize', $request->all());
-
-        $subRequest->flash();
 
         return app()->handle($subRequest);
     }
