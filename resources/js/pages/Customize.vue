@@ -201,8 +201,6 @@
             },
 
             onLoadIframe(event) {
-                console.log('onLoadIframe')
-
                 const iframe = this.$refs.iframe
                 const url = iframe.contentWindow.location.toString()
 
@@ -229,8 +227,6 @@
                 if (this.history[this.history.length + this.current] == this.url) {
                     this.current = this.current + 1
                 }
-
-                console.log(this.history)
             },
 
             parseURL(url) {
