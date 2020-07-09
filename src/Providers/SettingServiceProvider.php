@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
-class SettingsServiceProvider extends ServiceProvider
+class SettingServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap services.
@@ -18,7 +18,9 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->configOverrides();
+        if (settings_available()) {
+            $this->configOverrides();
+        }
     }
 
     /**
@@ -35,24 +37,14 @@ class SettingsServiceProvider extends ServiceProvider
 
         // load system settings
         $this->app->singleton('setting', function() {
-            $items = cache()->rememberForever('settings', function () {
-                return SettingGroup::all()->flatMap(function($group) {
-                    $setting = $group->getBuilder()->first();
-
-                    return $group->fieldset->fields
-                        ->mapWithKeys(function($field) use ($group, $setting) {
-                            return [ "{$group->handle}.{$field->handle}"
-                                => $setting->{$field->handle} ?? null ];
-                        });
-                });
-            });
-
-            return new SettingService($items->all());
+            return new SettingService(
+                SettingGroup::loadSettings()
+            );
         });
     }
 
     /**
-     * Override configurations from config('setting').
+     * Override config values from settings.
      * 
      * @return void
      */
