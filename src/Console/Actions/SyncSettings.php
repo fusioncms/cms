@@ -40,7 +40,6 @@ class SyncSettings
          *  Fusion\Services\Settings::loadSettings()
          */
         SettingService::loadSettings(true);
-        // cache()->forget('settings');
     }
 
     /**

@@ -37,8 +37,6 @@
                 this.form.patch(`/api/settings/${this.group.handle}`)
                     .then((response) => {
                         toast('Settings saved successfully', 'success')
-
-                        this.$router.go()
                     }).catch((response) => {
                         toast(response.response.data.message, 'failed')
                     })

@@ -51,6 +51,5 @@ class SettingController extends Controller
         }
 
         \Setting::loadSettings(true);
-        // cache()->forget('settings');
     }
 }

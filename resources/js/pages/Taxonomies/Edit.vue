@@ -4,7 +4,12 @@
             <app-title icon="sitemap">Edit Taxonomy</app-title>
         </portal>
 
-        <shared-form :form="form" :fieldsets="fieldsets" :taxonomy="taxonomy" :submit="submit"></shared-form>
+        <shared-form
+            v-if="form"
+            :form="form"
+            :taxonomy="taxonomy"
+            :submit="submit">
+        </shared-form>
     </div>
 </template>
 
@@ -17,7 +22,7 @@
         head: {
             title() {
                 return {
-                    inner: this.form.name || 'Loading...'
+                    inner: _.has(this.form, 'name') ? this.form.name : 'Loading...'
                 }
             }
         },
@@ -25,20 +30,7 @@
         data() {
             return {
                 taxonomy: {},
-                fieldsets: [],
-                creatingFieldset: false,
-                form: new Form({
-                    name: '',
-                    handle: '',
-                    description: '',
-                    fieldset: null,
-
-                    sidebar: '1',
-                    icon: '',
-
-                    route: '',
-                    template: '',
-                }, true)
+                form: null
             }
         },
 
@@ -63,20 +55,8 @@
         beforeRouteEnter(to, from, next) {
             axios.all([
                 axios.get(`/api/taxonomies/${to.params.taxonomy}`),
-                axios.get('/api/fieldsets'),
-            ]).then(axios.spread(function (taxonomy, fieldsets) {
+            ]).then(axios.spread(function (taxonomy) {
                 next(function(vm) {
-                    vm.fieldsets = _.map(fieldsets.data.data, function(fieldset) {
-                        return {
-                            'label': fieldset.name,
-                            'value': fieldset.id
-                        }
-                    })
-                    vm.fieldsets.unshift({
-                        'label': 'None',
-                        'value': null
-                    })
-
                     vm.taxonomy = taxonomy.data.data
 
                     vm.form.name = taxonomy.data.data.name

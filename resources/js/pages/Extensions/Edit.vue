@@ -1,6 +1,5 @@
 <template>
-    <form-container>
-
+    <form-container v-if="form">
         <portal to="title">
             <app-title icon="seedling">Edit Extension</app-title>
         </portal>
@@ -16,15 +15,11 @@
             <div class="card__body">
                 <p-title name="name" readonly v-model="form.name"></p-title>
 
-                <p-select
-                    name="fieldset"
-                    label="Fieldset"
-                    help="What fieldset would you like to attach?"
-                    :options="fieldsets"
+                <p-fieldset
                     :has-error="form.errors.has('fieldset')"
                     :error-message="form.errors.get('fieldset')"
                     v-model="form.fieldset">
-                </p-select>
+                </p-fieldset>
             </div>
         </div>
 
@@ -45,7 +40,6 @@
                 </p-definition>
             </p-definition-list>
         </template>
-
     </form-container>
 </template>
 
@@ -63,49 +57,32 @@
 
         data() {
             return {
-                id: null,
                 extension: {},
-                fieldsets: [],
-                form: new Form({
-                    name: '',
-                    handle: '',
-                    fieldset: null,
-                    status: '1',
-                }, true)
+                form: null
             }
         },
 
         methods: {
             submit() {
-                this.form.patch(`/api/extensions/${this.extension.id}`).then((response) => {
-                    toast('Extension successfully updated', 'success')
-                }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
-                })
+                this.form.patch(`/api/extensions/${this.extension.id}`)
+                    .then((response) => {
+                        toast('Extension successfully updated', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
             },
         },
 
         beforeRouteEnter(to, from, next) {
             axios.all([
                 axios.get(`/api/extensions/${to.params.extension}`),
-                axios.get('/api/fieldsets'),
-            ]).then(axios.spread((extension, fieldsets) => {
+            ]).then(axios.spread((extension) => {
                 next((vm) => {
                     vm.extension     = extension.data.data
-                    vm.form.name     = extension.data.data.name
-                    vm.form.handle   = extension.data.data.handle
-                    vm.form.fieldset = extension.data.data.fieldset && extension.data.data.fieldset.id ? extension.data.data.fieldset.id : null
-                    vm.fieldsets     = _.map(fieldsets.data.data, function(fieldset) {
-                        return {
-                            'label': fieldset.name,
-                            'value': fieldset.id
-                        }
-                    })
-
-                    vm.fieldsets.unshift({
-                        'label': 'None',
-                        'value': null
-
+                    vm.form = new Form({
+                        name:     vm.extension.name,
+                        handle:   vm.extension.handle,
+                        fieldset: vm.extension.fieldset && vm.extension.fieldset.id ? vm.extension.fieldset.id : null
                     })
 
                     vm.$emit('updateHead')

@@ -10,7 +10,6 @@
             :form="form"
             :matrix="matrix"
             :submit="submit"
-            :fieldsets="fieldsets"
             :matrices="matrices">
         </shared-form>
     </div>
@@ -34,7 +33,6 @@
         data() {
             return {
                 id: null,
-                fieldsets: [],
                 matrices: [],
                 matrix: {},
                 form: null
@@ -68,7 +66,7 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            getModels(to.params.matrix, (error, matrix, fieldsets, matrices) => {
+            getModels(to.params.matrix, (error, matrix, matrices) => {
                 if (error) {
                     next((vm) => {
                         toast(error.toString(), 'danger')
@@ -79,7 +77,6 @@
                     next((vm) => {
                         vm.id        = matrix.data.data.id
                         vm.matrix    = matrix.data.data
-                        vm.fieldsets = fieldsets.data.data
                         vm.matrices  = matrices.data.data
 
                         vm.form = new Form({
@@ -120,10 +117,9 @@
     export function getModels(maxtrix, callback) {
         axios.all([
             axios.get(`/api/matrices/${maxtrix}`),
-            axios.get('/api/fieldsets'),
             axios.get('/api/matrices')
-        ]).then(axios.spread((matrix, fieldsets, matrices) => {
-            callback(null, matrix, fieldsets, matrices)
+        ]).then(axios.spread((matrix, matrices) => {
+            callback(null, matrix, matrices)
         })).catch((error) => {
             callback(new Error('The requested maxtrix could not be found'))
         })

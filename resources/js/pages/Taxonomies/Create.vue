@@ -4,7 +4,7 @@
             <app-title icon="sitemap">Create Taxonomy</app-title>
         </portal>
 
-        <shared-form :form="form" :fieldsets="fieldsets" :submit="submit"></shared-form>
+        <shared-form :form="form" :submit="submit"></shared-form>
     </div>
 </template>
 
@@ -25,7 +25,6 @@
         data() {
             return {
                 fieldsets: [],
-                creatingFieldset: false,
                 form: new Form({
                     name: '',
                     handle: '',
@@ -59,32 +58,6 @@
                     toast(response.message, 'failed')
                 })
             },
-        },
-
-        beforeRouteEnter(to, from, next) {
-            axios.all([
-                axios.get('/api/fieldsets'),
-            ]).then(axios.spread(function (fieldsets) {
-                next(function(vm) {
-                    vm.fieldsets = _.map(fieldsets.data.data, function(fieldset) {
-                        return {
-                            'label': fieldset.name,
-                            'value': fieldset.id
-                        }
-                    })
-
-                    vm.fieldsets.unshift({
-                        'label': 'None',
-                        'value': null
-                    })
-
-                    vm.$emit('updateHead')
-
-                    vm.$nextTick(() => {
-                        vm.form.resetChangeListener()
-                    })
-                })
-            }))
         }
     }
 </script>
