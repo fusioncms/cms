@@ -17,28 +17,30 @@ class SyncSettings
      */
     public function handle()
     {
-        // Create setting tables..
+        /**
+         * The following method calls will persist settings
+         *  to the database.
+         *  
+         * Any changes you make to the setting files will
+         *  reflect in the database with subsequent calls
+         *  to this action.
+         *
+         * Groups    - Main `settings` table (1x per setting file).
+         *             `setting_{filename}` table will be created per file.
+         * Fieldsets - Each Group has a corresponding `fieldsets` record.
+         * Sections  - Each Fieldset can have one or more `sections` records.
+         * Fields    - Each Section can have one or more `fields` records.
+         *
+         */
         $this->syncSettingGroups();
         $this->syncSettingSections();
 
-        // Set initial values..
-        SettingGroup::all()->each(function($group) {
-            $group->getBuilder()->firstOr(function() use ($group) {
-                $setting = $group->getBuilder()->firstOrCreate([ 'id' => 1, 'setting_id' => $group->id ]);
-                $fields  = $group->fieldset->fields;
-
-                $fields->reject(function($field) {
-                    return is_null(fieldtypes()->get($field->type)->column);
-                })
-                ->each(function($field) use ($setting) {
-                    $setting->{$field->handle} = $field->settings['default'] ?? null;
-                });
-
-                $setting->save();
-            });
-        });
-
-        cache()->forget('settings');
+        /**
+         * Clears cache set in:
+         *  Fusion\Services\Settings::loadSettings()
+         */
+        SettingService::loadSettings(true);
+        // cache()->forget('settings');
     }
 
     /**
@@ -55,7 +57,7 @@ class SyncSettings
         SettingService::groups()
             ->each(function($group) use ($existing) {
 
-                // create update group..
+                // create/update group..
                 $group = SettingGroup::updateOrCreate([
                     'handle' => $group['handle'],
                 ],[
@@ -129,7 +131,7 @@ class SyncSettings
      */
     private function syncSettingFields(Section $section, $settings)
     {
-        $existing = $section->fields;
+        $existing = $section->fields->pluck('id', 'id');
         $order    = 0;
 
         collect($settings)
@@ -161,7 +163,7 @@ class SyncSettings
     }
 
     /**
-     * Properly format setting options
+     * Properly format setting field options.
      * [helper]
      * 
      * @param  array  $options

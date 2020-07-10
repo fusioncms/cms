@@ -123,20 +123,22 @@ class Setting
      * 
      * @return array
      */
-	public static function loadSettings()
+	public static function loadSettings($refresh = false)
 	{
 		if (settings_available()) {
+			if ($refresh) cache()->forget('settings');
+			
             /**
              * Load settings from database
              */
             return cache()->rememberForever('settings', function () {
                 return SettingGroup::all()->flatMap(function($group) {
-                    $setting = $group->getBuilder()->first();
+                    $setting = $group->getBuilder()->firstOrCreate([ 'id' => 1, 'setting_id' => $group->id ]);
                     $fields  = $group->fieldset->fields ?? collect();
 
                     return $fields->mapWithKeys(function($field) use ($group, $setting) {
-                        return [ "{$group->handle}.{$field->handle}"
-                            => $setting->{$field->handle} ?? null ];
+                        return [ "{$group->handle}.{$field->handle}" =>
+                            $setting->{$field->handle} ?? $field->settings['default'] ?? null ];
                     });
                 });
             })->all();

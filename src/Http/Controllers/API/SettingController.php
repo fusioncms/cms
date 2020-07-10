@@ -50,6 +50,7 @@ class SettingController extends Controller
             $relationship->type()->persistRelationship($setting->settings, $relationship);
         }
 
-        cache()->forget('settings');
+        \Setting::loadSettings(true);
+        // cache()->forget('settings');
     }
 }
