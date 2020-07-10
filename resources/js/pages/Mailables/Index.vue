@@ -35,7 +35,7 @@
 		</div>
 
 		<portal to="modals">
-            <settings-modal section="mail"></settings-modal>
+            <settings-modal handle="mail"></settings-modal>
 		</portal>
 	</div>
 </template>

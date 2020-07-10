@@ -4,6 +4,13 @@
             <app-title icon="cog">{{ group.name }} Settings</app-title>
         </portal>
 
+        <portal to="actions">
+            <div class="buttons" v-if="form">
+                <router-link :to="{ name: 'settings' }" class="button">Go Back</router-link>
+                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+            </div>
+        </portal>
+
         <shared-form v-if="form" :form="form" :group="group"></shared-form>
     </div>
 </template>
