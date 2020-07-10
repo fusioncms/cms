@@ -73,9 +73,9 @@ class SyncSettings
 
                 // create/update fieldset..
                 $fieldset = Fieldset::updateOrCreate([
-                    'handle' => $group['handle'],
+                    'handle' => 'setting_' . $group['handle'],
                 ],[
-                    'name'   => $group['name'],
+                    'name'   => 'Setting: ' . $group['name'],
                     'hidden' => true
                 ]);
 
@@ -151,11 +151,11 @@ class SyncSettings
                     'order'      => ++$order,
                     'validation' => ($item['required'] ?? true) ? 'required' : '',
                     'settings'   => [
-                        'default'   => $item['default']           ?? '',
-                        'override'  => $item['override']          ?? false,
+                        'default'   => $item['default'] ?? '',
+                        'override'  => $item['override'] ?? false,
                         'options'   => $this->formatSettingOptions($item['options'] ?? []),
-                        'gui'       => (bool) ($item['gui']       ?? true),
-                        'component' => (bool) ($item['component'] ?? false),
+                        'gui'       => (bool) ($item['gui'] ?? true),
+                        'component' => $item['component'] ?? false,
                     ],
                 ]);
 

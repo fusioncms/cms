@@ -7,7 +7,7 @@
 						<div v-for="(field, i2) in gui(section.fields)" :key="i2" class="pb-5">
 			                <component
 								v-if="field.settings.component"
-								:is="field.settings.default"
+								:is="field.settings.component"
 								:settings="group.settings">
 							</component>
 

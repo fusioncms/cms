@@ -103,7 +103,7 @@ class Setting
 				$setting = $group->getBuilder()->firstOrFail();
 				$setting->update([ $column => $value ]);
 
-				// update local setting..
+				// update runtime setting..
 				$this->items[$key] = $value;
 
 				// override config (if necessary)..

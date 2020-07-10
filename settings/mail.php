@@ -109,8 +109,7 @@ return [
             [
                 'name'      => 'Mail Test',
                 'handle'    => 'mail_test_component',
-                'default'   => 'settings-mail-test',
-                'component' => true,
+                'component' => 'settings-mail-test',
                 'required'  => false,
             ],
         ],
