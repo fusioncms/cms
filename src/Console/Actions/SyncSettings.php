@@ -33,7 +33,10 @@ class SyncSettings
          *
          */
         $this->syncSettingGroups();
-        $this->syncSettingSections();
+
+        SettingGroup::all()->each(function($group) {
+            $this->syncSettingSection($group);
+        });
 
         /**
          * Clears cache set in:
@@ -47,13 +50,15 @@ class SyncSettings
      * 
      * @return void
      */
-    private function syncSettingGroups()
+    public function syncSettingGroups($groups = null)
     {
+        $groups = $groups ?? SettingService::groups();
+
         // Pull existing elements..
         $existing = SettingGroup::all()->pluck('id', 'id');
 
         // Add/update existing elements..
-        SettingService::groups()
+        collect($groups)
             ->each(function($group) use ($existing) {
 
                 // create/update group..
@@ -62,8 +67,8 @@ class SyncSettings
                 ],[
                     'name'        => $group['name'],
                     'group'       => $group['group'] ?? 'General',
-                    'icon'        => $group['icon'],
-                    'description' => $group['description'],
+                    'icon'        => $group['icon'] ?? 'cog',
+                    'description' => $group['description'] ?? '',
                 ]);
 
                 // create/update fieldset..
@@ -74,9 +79,10 @@ class SyncSettings
                     'hidden' => true
                 ]);
 
-                // assign fieldset
+                // assign fieldset..
                 $group->fieldsets()->sync($fieldset->id);
 
+                // mark for non-removal..
                 $existing->forget($group->id);
             });
 
@@ -87,68 +93,69 @@ class SyncSettings
     }
 
     /**
-     * Sync Fieldset Sections.
+     * Sync Fieldset Section for SettingGroup.
      * 
+     * @param  SettingGroup $group
      * @return void
      */
-    private function syncSettingSections()
+    public function syncSettingSection(SettingGroup $group, $fields = null)
     {
-        SettingGroup::all()->each(function($setting) {
-            $existing = $setting->fieldset->sections->pluck('id', 'id');
-            $order    = 0;
+        $fields   = $fields ?? SettingService::fields($group->handle);
+        $existing = $group->fieldset->sections->pluck('id', 'id');
+        $order    = 0;
 
-            SettingService::fields($setting->handle)
-                ->each(function($settings, $section) use ($setting, $existing, &$order) {
-                    $section = $setting->fieldset->sections()
-                        ->updateOrCreate([
-                            'handle' => str_handle($section)
-                        ],  [
-                            'name'        => $section,
-                            'description' => "Settings for {$setting->name} > {$section}",
-                            'order'       => ++$order
-                        ]);
+        collect($fields)
+            ->each(function($fields, $name) use ($group, $existing, &$order) {
+                $section = $group->fieldset->sections()
+                    ->updateOrCreate([
+                        'handle' => str_handle($name)
+                    ],  [
+                        'name'        => $name,
+                        'description' => "Settings for {$group->name} > {$name}",
+                        'order'       => ++$order
+                    ]);
 
-                    $existing->forget($section->id);
+                // mark for non-removal..
+                $existing->forget($section->id);
 
-                    // Now sync field settings...
-                    $this->syncSettingFields($section, $settings);
-                });
-
-            // Clean up removed elements..
-            $existing->each(function($id) {
-                Section::findOrFail($id)->delete();
+                // Now sync field settings...
+                $this->syncSettingFields($section, $fields);
             });
+
+        // Clean up removed elements..
+        $existing->each(function($id) {
+            Section::findOrFail($id)->delete();
         });
     }
 
     /**
-     * Sync Setting Fields.
+     * Sync Setting Fields for Section.
      * 
      * @param  Section  $section
-     * @param  array    $settings
+     * @param  array    $fields
      * @return void
      */
-    private function syncSettingFields(Section $section, $settings)
+    public function syncSettingFields(Section $section, $fields = [])
     {
         $existing = $section->fields->pluck('id', 'id');
         $order    = 0;
 
-        collect($settings)
-            ->each(function($setting) use ($section, $existing, &$order) {
+        collect($fields)
+            ->each(function($item) use ($section, $existing, &$order) {
                 $field = $section->fields()->updateOrCreate([
-                    'handle' => $setting['handle'],
+                    'handle' => $item['handle'],
                 ],[
-                    'name'       => $setting['name'],
-                    'type'       => $setting['type'] ?? 'input',
-                    'help'       => $setting['description'] ?? '',
+                    'name'       => $item['name'],
+                    'type'       => $item['type'] ?? 'input',
+                    'help'       => $item['description'] ?? '',
                     'order'      => ++$order,
-                    'validation' => ($setting['required'] ?? true) ? 'required' : '',
+                    'validation' => ($item['required'] ?? true) ? 'required' : '',
                     'settings'   => [
-                        'default'   => $setting['default']           ?? '',
-                        'override'  => $setting['override']          ?? false,
-                        'options'   => $this->formatSettingOptions($setting['options'] ?? []),
-                        'gui'       => (bool) ($setting['gui']       ?? true),
-                        'component' => (bool) ($setting['component'] ?? false),
+                        'default'   => $item['default']           ?? '',
+                        'override'  => $item['override']          ?? false,
+                        'options'   => $this->formatSettingOptions($item['options'] ?? []),
+                        'gui'       => (bool) ($item['gui']       ?? true),
+                        'component' => (bool) ($item['component'] ?? false),
                     ],
                 ]);
 

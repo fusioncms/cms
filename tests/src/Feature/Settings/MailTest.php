@@ -31,10 +31,11 @@ class MailTest extends TestCase
      */
     public function a_user_with_permissions_can_update_mail_settings()
     {
-        $this->actingAs($this->owner, 'api');
-
-        $this->json('PATCH', 'api/settings/mail', [])
-            ->assertStatus(200);
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', 'api/settings/api', [
+                'personal_access_tokens' => 'enabled'
+            ])->assertStatus(200);
     }
 
     /**
@@ -46,8 +47,23 @@ class MailTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->json('PATCH', 'api/settings/mail', [])
+        $this
+            ->json('PATCH', 'api/settings/mail', [])
             ->assertStatus(422);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group settings
+     */
+    public function most_settings_are_required_to_have_a_value()
+    {
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', 'api/settings/api', [])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['personal_access_tokens']);
     }
 
     /**
@@ -59,19 +75,12 @@ class MailTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', 'api/settings/mail', [
-                'mail_smtp_host' => 'smtp.mailtrap.io',
-                'mail_smtp_port' => 2525,
+            ->json('PATCH', 'api/settings/api', [
+                'personal_access_tokens' => 'enabled'
             ])->assertStatus(200);
 
-        $this->assertDatabaseHas('settings', [
-            'handle' => 'mail_smtp_host',
-            'value'  => 'smtp.mailtrap.io',
-        ]);
-
-        $this->assertDatabaseHas('settings', [
-            'handle' => 'mail_smtp_port',
-            'value'  => '2525',
+        $this->assertDatabaseHas('settings_api', [
+            'personal_access_tokens' => 'enabled',
         ]);
     }
 
