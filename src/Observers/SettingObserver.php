@@ -67,7 +67,14 @@ class SettingObserver
      */
     public function deleting(Setting $setting)
     {
+        $fieldsets = $setting->fieldsets;
+
         $setting->detachFieldset();
+
+        // Manually remove fieldsets..
+        $fieldsets->each(function($fieldset) {
+            $fieldset->delete();
+        });
     }
 
     /**

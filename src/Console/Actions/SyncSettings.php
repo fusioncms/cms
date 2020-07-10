@@ -3,6 +3,7 @@
 namespace Fusion\Console\Actions;
 
 use Fusion\Models\Field;
+use Fusion\Models\Section;
 use Fusion\Models\Fieldset;
 use Fusion\Models\Setting as SettingGroup;
 use Fusion\Services\Setting as SettingService;
@@ -18,7 +19,7 @@ class SyncSettings
     {
         // Create setting tables..
         $this->syncSettingGroups();
-        $this->syncSettingFields();
+        $this->syncSettingSections();
 
         // Set initial values..
         SettingGroup::all()->each(function($group) {
@@ -84,13 +85,19 @@ class SyncSettings
         });
     }
 
-    private function syncSettingFields()
+    /**
+     * Sync Fieldset Sections.
+     * 
+     * @return void
+     */
+    private function syncSettingSections()
     {
         SettingGroup::all()->each(function($setting) {
-            $order = 0;
+            $existing = $setting->fieldset->sections->pluck('id', 'id');
+            $order    = 0;
 
             SettingService::fields($setting->handle)
-                ->each(function($settings, $section) use ($setting, &$order) {
+                ->each(function($settings, $section) use ($setting, $existing, &$order) {
                     $section = $setting->fieldset->sections()
                         ->updateOrCreate([
                             'handle' => str_handle($section)
@@ -100,27 +107,56 @@ class SyncSettings
                             'order'       => ++$order
                         ]);
 
-                    $fieldOrder = 0;
-                    collect($settings)
-                        ->each(function($field) use ($section, &$fieldOrder) {
-                            $section->fields()->updateOrCreate([
-                                'handle' => $field['handle'],
-                            ],[
-                                'name'       => $field['name'],
-                                'type'       => $field['type'] ?? 'input',
-                                'help'       => $field['description'] ?? '',
-                                'order'      => ++$fieldOrder,
-                                'validation' => ($field['required'] ?? true) ? 'required' : '',
-                                'settings'   => [
-                                    'default'   => $field['default']           ?? '',
-                                    'override'  => $field['override']          ?? false,
-                                    'options'   => $this->formatSettingOptions($field['options'] ?? []),
-                                    'gui'       => (bool) ($field['gui']       ?? true),
-                                    'component' => (bool) ($field['component'] ?? false),
-                                ],
-                            ]);
-                        });
+                    $existing->forget($section->id);
+
+                    // Now sync field settings...
+                    $this->syncSettingFields($section, $settings);
                 });
+
+            // Clean up removed elements..
+            $existing->each(function($id) {
+                Section::findOrFail($id)->delete();
+            });
+        });
+    }
+
+    /**
+     * Sync Setting Fields.
+     * 
+     * @param  Section  $section
+     * @param  array    $settings
+     * @return void
+     */
+    private function syncSettingFields(Section $section, $settings)
+    {
+        $existing = $section->fields;
+        $order    = 0;
+
+        collect($settings)
+            ->each(function($setting) use ($section, $existing, &$order) {
+                $field = $section->fields()->updateOrCreate([
+                    'handle' => $setting['handle'],
+                ],[
+                    'name'       => $setting['name'],
+                    'type'       => $setting['type'] ?? 'input',
+                    'help'       => $setting['description'] ?? '',
+                    'order'      => ++$order,
+                    'validation' => ($setting['required'] ?? true) ? 'required' : '',
+                    'settings'   => [
+                        'default'   => $setting['default']           ?? '',
+                        'override'  => $setting['override']          ?? false,
+                        'options'   => $this->formatSettingOptions($setting['options'] ?? []),
+                        'gui'       => (bool) ($setting['gui']       ?? true),
+                        'component' => (bool) ($setting['component'] ?? false),
+                    ],
+                ]);
+
+                $existing->forget($field->id);
+            });
+
+        // Clean up removed elements..
+        $existing->each(function($id) {
+            Field::findOrFail($id)->delete();
         });
     }
 

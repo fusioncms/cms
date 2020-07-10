@@ -46,7 +46,7 @@ class Setting extends Builder implements BuilderContract
         $className = Str::studly($this->setting->handle);
         $fillable  = [ 'setting_id' ];
         $casts     = [];
-        $fields    = $this->setting->fieldset->fields;
+        $fields    = $this->setting->fieldset->fields ?? collect();
 
         $fields = $fields->reject(function ($field) {
             $fieldtype = fieldtypes()->get($field->type);

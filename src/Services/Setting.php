@@ -132,12 +132,12 @@ class Setting
             return cache()->rememberForever('settings', function () {
                 return SettingGroup::all()->flatMap(function($group) {
                     $setting = $group->getBuilder()->first();
+                    $fields  = $group->fieldset->fields ?? collect();
 
-                    return $group->fieldset->fields
-                        ->mapWithKeys(function($field) use ($group, $setting) {
-                            return [ "{$group->handle}.{$field->handle}"
-                                => $setting->{$field->handle} ?? null ];
-                        });
+                    return $fields->mapWithKeys(function($field) use ($group, $setting) {
+                        return [ "{$group->handle}.{$field->handle}"
+                            => $setting->{$field->handle} ?? null ];
+                    });
                 });
             })->all();
         } else {

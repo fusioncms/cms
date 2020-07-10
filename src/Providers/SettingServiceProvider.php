@@ -51,14 +51,16 @@ class SettingServiceProvider extends ServiceProvider
     private function configOverrides()
     {
         SettingGroup::all()->each(function($group) {
-            $group->fieldset->fields->each(function($field) use ($group) {
-                if ($field->settings['override'] !== false) {
-                    config([
-                        $field->settings['override'] =>
-                        setting("{$group->handle}.{$field->handle}")
-                    ]);
-                }
-            });
+            if ($group->fieldset) {
+                $group->fieldset->fields->each(function($field) use ($group) {
+                    if ($field->settings['override'] !== false) {
+                        config([
+                            $field->settings['override'] =>
+                            setting("{$group->handle}.{$field->handle}")
+                        ]);
+                    }
+                });
+            }
         });
     }
 }
