@@ -10,7 +10,7 @@ return [
             [
                 'name'        => 'Paths',
                 'handle'      => 'cors_paths',
-                'description' => ' You can enable CORS for 1 or multiple paths.',
+                'description' => 'You can enable CORS for 1 or multiple paths.',
                 'type'        => 'list',
                 'default'     => [ 'api/*' ],
                 'override'    => 'cors.paths',
