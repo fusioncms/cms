@@ -53,32 +53,45 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            axios.all([
-                axios.get(`/api/taxonomies/${to.params.taxonomy}`),
-            ]).then(axios.spread(function (taxonomy) {
-                next(function(vm) {
-                    vm.taxonomy = taxonomy.data.data
+            getTaxonomies(to.params.taxonomy, (error, taxonomy) => {
+                if (error) {
+                    next((vm) => {
+                        toast(error.toString(), 'danger')
 
-                    vm.form.name = taxonomy.data.data.name
-                    vm.form.handle = taxonomy.data.data.handle
-                    vm.form.description = taxonomy.data.data.description
-                    vm.form.fieldset = taxonomy.data.data.fieldset && taxonomy.data.data.fieldset.id ? taxonomy.data.data.fieldset.id : null
-
-                    vm.form.sidebar = taxonomy.data.data.sidebar ? '1' : '0'
-                    vm.form.icon = taxonomy.data.data.icon
-
-                    vm.form.route = taxonomy.data.data.route
-                    vm.form.template = taxonomy.data.data.template
-
-                    vm.$emit('updateHead')
-                    vm.$nextTick(() => {
-                        vm.form.resetChangeListener()
+                        vm.$router.push('/taxonomies')
                     })
-                })
-            })).catch(function(error) {
-                next('/taxonomies')
-                toast('The requested taxonomy could not be found', 'warning')
+                } else {
+                    next((vm) => {
+                        vm.taxonomy = taxonomy.data.data
+
+                        vm.form = new Form({
+                            name:        vm.taxonomy.name,
+                            handle:      vm.taxonomy.handle,
+                            description: vm.taxonomy.description,
+                            fieldset:    vm.taxonomy.fieldset && vm.taxonomy.fieldset.id ? vm.taxonomy.fieldset.id : null,
+                            sidebar:     vm.taxonomy.sidebar ? '1' : '0',
+                            icon:        vm.taxonomy.icon,
+                            route:       vm.taxonomy.route,
+                            template:    vm.taxonomy.template
+                        }, true)
+
+                        vm.$nextTick(() => {
+                            vm.$emit('updateHead')
+                            vm.form.resetChangeListener()
+                        })
+                    })
+                }
             })
         }
+    }
+
+    export function getTaxonomies(taxonomy, callback) {
+        axios.all([
+            axios.get(`/api/taxonomies/${taxonomy}`),
+        ]).then(axios.spread((taxonomy) => {
+            callback(null, taxonomy)
+        })).catch((error) => {
+            callback(new Error('The requested taxonomy could not be found'))
+        })
     }
 </script>
