@@ -5,6 +5,7 @@ namespace Fusion\Providers;
 use Fusion\Models\Setting as SettingGroup;
 use Fusion\Services\Setting as SettingService;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
@@ -54,10 +55,14 @@ class SettingServiceProvider extends ServiceProvider
             if ($group->fieldset) {
                 $group->fieldset->fields->each(function($field) use ($group) {
                     if ($field->settings['override'] !== false) {
-                        config([
-                            $field->settings['override'] =>
-                            setting("{$group->handle}.{$field->handle}")
-                        ]);
+                        $key   = $field->settings['override'];
+                        $value = setting("{$group->handle}.{$field->handle}");
+
+                        if (is_a($value, Collection::class)) {
+                            $value = $value->all();
+                        }
+
+                        config([ $key => $value ]);
                     }
                 });
             }
