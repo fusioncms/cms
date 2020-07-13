@@ -18,6 +18,7 @@ class FieldsetResource extends JsonResource
             'id'       => $this->id,
             'name'     => $this->name,
             'handle'   => $this->handle,
+            'hidden'   => $this->hidden,
             'sections' => SectionResource::collection($this->sections),
         ];
 
