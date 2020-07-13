@@ -7,7 +7,6 @@
         <shared-form
             :form="form"
             :submit="submit"
-            :fieldsets="fieldsets"
             :matrices="matrices">
         </shared-form>
     </div>
@@ -30,7 +29,6 @@
 
         data() {
             return {
-                fieldsets: [],
                 matrices: [],
                 form: new Form({
                     name: '',
@@ -94,11 +92,9 @@
 
         beforeRouteEnter(to, from, next) {
             axios.all([
-                axios.get('/api/fieldsets'),
                 axios.get('/api/matrices'),
-            ]).then(axios.spread((fieldsets, matrices) => {
+            ]).then(axios.spread((matrices) => {
                 next((vm) => {
-                    vm.fieldsets = fieldsets.data.data
                     vm.matrices  = matrices.data.data
                 })
             }))

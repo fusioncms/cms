@@ -5,7 +5,7 @@ namespace Fusion\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Fusion\Services\Setting
+ * @see \Fusion\Services\Settings
  */
 class Setting extends Facade
 {

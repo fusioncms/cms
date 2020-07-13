@@ -2,74 +2,60 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\HasActivity;
+use Fusion\Concerns\HasFieldset;
 use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
-use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
 class Setting extends Model
 {
-    use CachesQueries, HasActivity;
+    use CachesQueries, HasFieldset;
 
     /**
-     * The attributes that are guarded via mass assignment.
+     * The attributes that are fillable via mass assignment.
      *
      * @var array
      */
     protected $fillable = [
-        'section_id',
         'name',
         'handle',
-        'group',
-        'override',
-        'component',
         'description',
-        'type',
-        'options',
-        'default',
-        'value',
-        'required',
-        'gui',
-        'order'
+        'group',
+        'icon',
+        'status',
     ];
 
     /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
+     * @return \Fusion\Database\Eloquent\Model
      */
-    protected $casts = [
-        'required' => 'boolean',
-        'gui'      => 'boolean',
-        'options'  => 'collection',
-    ];
+    public function getBuilder()
+    {
+        $builder = new \Fusion\Services\Builders\Setting($this->handle);
 
-    /**
-     * SettingSection Relationship.
-     *
-     * @return Builder|SettingSection
-     */
-    public function section() {
-        return $this->belongsTo(SettingSection::class);
+        return $builder->make();
     }
 
     /**
-     * Tap into activity before persisting to database.
+     * Get the "table" attribute value.
      *
-     * @param  \Spatie\Activitylog\Models\Activity $activity
-     * @param  string   $eventName
-     * @return void
+     * @return string
      */
-    public function tapActivity(Activity $activity, string $eventName)
+    public function getTableAttribute()
     {
-        $setting = $activity->subject;
-        $section = $setting->section;
-        $action  = ucfirst($eventName);
+        return "{$this->table}_{$this->handle}";
+    }
 
-        $activity->description = "{$action} {$section->name} settings";
-        $activity->properties  = [
-            'icon' => 'cog',
-            'link' => 'settings'
-        ];
+    /**
+     * Group have many settings.
+     *
+     * @return HasManyRelationship
+     */
+    public function settings()
+    {
+        $model = $this->getBuilder();
+        $class = new \ReflectionClass($model);
+
+        return $this->hasOne('\\'.$class->getName());
     }
 }

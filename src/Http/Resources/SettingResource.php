@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Fusion\Http\Resources\Settings;
+namespace Fusion\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SettingSectionResource extends JsonResource
+class SettingResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,14 +15,22 @@ class SettingSectionResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $resource = [
             'id'          => $this->id,
             'name'        => $this->name,
             'handle'      => $this->handle,
             'group'       => $this->group,
             'icon'        => $this->icon,
             'description' => $this->description,
-            'items'       => SettingResource::collection($this->settings),
+            'fieldset'    => new FieldsetResource($this->fieldset),
         ];
+        
+        if ($this->fieldset) {
+            foreach ($this->fieldset->fields as $field) {
+                $resource['settings'][$field->handle] = setting("{$this->handle}.{$field->handle}");
+            }
+        }
+
+        return $resource;
     }
 }

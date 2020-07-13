@@ -2,28 +2,14 @@
 
 namespace Fusion\Console\Actions;
 
-use Fusion\Models\Setting;
-use Fusion\Models\SettingSection;
-use Symfony\Component\Finder\Finder;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Fusion\Models\Field;
+use Fusion\Models\Section;
+use Fusion\Models\Fieldset;
+use Fusion\Models\Setting as SettingGroup;
+use Fusion\Services\Setting as SettingService;
 
 class SyncSettings
 {
-    /**
-     * Store existing section ids
-     *
-     * @var [type]
-     */
-    protected $sections;
-
-    /**
-     * Store existing setting ids
-     *
-     * @var [type]
-     */
-    protected $settings;
-
     /**
      * Execute the command.
      *
@@ -31,131 +17,172 @@ class SyncSettings
      */
     public function handle()
     {
-        // Record existing settings..
-        $this->sections = SettingSection::all()->pluck('id', 'id');
-        $this->settings = Setting::all()->pluck('id', 'id');
+        /**
+         * The following method calls will persist settings
+         *  to the database.
+         *  
+         * Any changes you make to the setting files will
+         *  reflect in the database with subsequent calls
+         *  to this action.
+         *
+         * Groups    - Main `settings` table (1x per setting file).
+         *             `setting_{filename}` table will be created per file.
+         * Fieldsets - Each Group has a corresponding `fieldsets` record.
+         * Sections  - Each Fieldset can have one or more `sections` records.
+         * Fields    - Each Section can have one or more `fields` records.
+         *
+         */
+        $this->syncSettingGroups();
 
-        // Sync with existing settings..
-        foreach ($this->fetchAllSettings() as $handle => $values) {
-            $this->syncSettingSection($handle, $values);
-        }
+        SettingGroup::all()->each(function($group) {
+            $this->syncSettingSection($group);
+        });
 
-        // Clean up removed sections..
-        foreach ($this->sections as $id) {
-            SettingSection::findOrFail($id)->delete();
-        }
+        /**
+         * Clears cache set in:
+         *  Fusion\Services\Settings::loadSettings()
+         */
+        SettingService::loadSettings(true);
+    }
 
-        // Clean up removed settings..
-        foreach ($this->settings as $id) {
-            Setting::findOrFail($id)->delete();
-        }
+    /**
+     * Sync Setting Groups.
+     * 
+     * @return void
+     */
+    public function syncSettingGroups($groups = null)
+    {
+        $groups = $groups ?? SettingService::groups();
 
-        // Cache settings forever..
-        Cache::forget('settings');
-        Cache::rememberForever('settings', function () {
-            return Setting::get()->mapWithKeys(function ($item) {
-                $key   = $item->section->handle . '.' . $item->handle;
-                $value = ! empty($item->value) ? $item->value :  $item->default;
+        // Pull existing elements..
+        $existing = SettingGroup::all()->pluck('id', 'id');
 
-                return [ $key => $value ];
+        // Add/update existing elements..
+        collect($groups)
+            ->each(function($group) use ($existing) {
+
+                // create/update group..
+                $group = SettingGroup::updateOrCreate([
+                    'handle' => $group['handle'],
+                ],[
+                    'name'        => $group['name'],
+                    'group'       => $group['group'] ?? 'General',
+                    'icon'        => $group['icon'] ?? 'cog',
+                    'description' => $group['description'] ?? '',
+                ]);
+
+                // create/update fieldset..
+                $fieldset = Fieldset::updateOrCreate([
+                    'handle' => 'setting_' . $group['handle'],
+                ],[
+                    'name'   => 'Setting: ' . $group['name'],
+                    'hidden' => true
+                ]);
+
+                // assign fieldset..
+                $group->fieldsets()->sync($fieldset->id);
+
+                // mark for non-removal..
+                $existing->forget($group->id);
             });
+
+        // Clean up removed elements..
+        $existing->each(function($id) {
+            SettingGroup::findOrFail($id)->delete();
         });
     }
 
     /**
-     *
-     * @param  string $handle
-     * @param  array  $attributes
+     * Sync Fieldset Section for SettingGroup.
+     * 
+     * @param  SettingGroup $group
      * @return void
      */
-    protected function syncSettingSection($handle, $attributes)
+    public function syncSettingSection(SettingGroup $group, $fields = null)
     {
-        $section = SettingSection::updateOrCreate([ 'handle' => $handle ], $attributes);
+        $fields   = $fields ?? SettingService::fields($group->handle);
+        $existing = $group->fieldset->sections->pluck('id', 'id');
+        $order    = 0;
 
-        unset($this->sections[$section->id]);
+        collect($fields)
+            ->each(function($fields, $name) use ($group, $existing, &$order) {
+                $section = $group->fieldset->sections()
+                    ->updateOrCreate([
+                        'handle' => str_handle($name)
+                    ],  [
+                        'name'        => $name,
+                        'description' => "Settings for {$group->name} > {$name}",
+                        'order'       => ++$order
+                    ]);
 
-        if (isset($attributes['settings'])) {
-            foreach ($attributes['settings'] as $group => $settings) {
-                $order = 0;
+                // mark for non-removal..
+                $existing->forget($section->id);
 
-                foreach ($settings as $setting) {
-                    $this->syncSetting(array_merge($setting, [
-                        'section_id' => $section->id,
-                        'group'      => $group,
-                        'order'      => ++$order
-                    ]));
-                }
-            }
-        }
+                // Now sync field settings...
+                $this->syncSettingFields($section, $fields);
+            });
+
+        // Clean up removed elements..
+        $existing->each(function($id) {
+            Section::findOrFail($id)->delete();
+        });
     }
 
     /**
-     *
-     * @param  array $setting
+     * Sync Setting Fields for Section.
+     * 
+     * @param  Section  $section
+     * @param  array    $fields
      * @return void
      */
-    protected function syncSetting($setting)
+    public function syncSettingFields(Section $section, $fields = [])
     {
-        $setting = Setting::updateOrCreate(
-            [
-                'section_id' => $setting['section_id'],
-                'handle'     => $setting['handle'],
-            ],
-            [
-                'section_id'  => $setting['section_id'],
-                'name'        => $setting['name'],
-                'handle'      => $setting['handle'],
-                'group'       => $setting['group'],
-                'description' => $setting['description']      ?? '',
-                'override'    => $setting['override']         ?? '',
-                'component'   => $setting['component']        ?? '',
-                'type'        => $setting['type']             ?? 'text',
-                'options'     => $setting['options']          ?? null,
-                'default'     => $setting['default']          ?? '',
-                'value'       => $setting['value'] ?? $setting['default'] ?? '',
-                'required'    => (bool) ($setting['required'] ?? true),
-                'gui'         => (bool) ($setting['gui']      ?? true),
-                'order'       => (int)  ($setting['order']    ?? 0),
-            ]);
+        $existing = $section->fields->pluck('id', 'id');
+        $order    = 0;
 
-        unset($this->settings[$setting->id]);
+        collect($fields)
+            ->each(function($item) use ($section, $existing, &$order) {
+                $field = $section->fields()->updateOrCreate([
+                    'handle' => $item['handle'],
+                ],[
+                    'name'       => $item['name'],
+                    'type'       => $item['type'] ?? 'input',
+                    'help'       => $item['description'] ?? '',
+                    'order'      => ++$order,
+                    'validation' => ($item['required'] ?? true) ? 'required' : '',
+                    'settings'   => [
+                        'default'   => $item['default'] ?? '',
+                        'override'  => $item['override'] ?? false,
+                        'options'   => $this->formatSettingOptions($item['options'] ?? []),
+                        'gui'       => (bool) ($item['gui'] ?? true),
+                        'component' => $item['component'] ?? false,
+                    ],
+                ]);
+
+                $existing->forget($field->id);
+            });
+
+        // Clean up removed elements..
+        $existing->each(function($id) {
+            Field::findOrFail($id)->delete();
+        });
     }
 
     /**
-     * Fetch all FusionCMS System Settings
-     *   grouped by it's section.
-     *
+     * Properly format setting field options.
+     * [helper]
+     * 
+     * @param  array  $options
      * @return array
      */
-    protected function fetchAllSettings()
+    private function formatSettingOptions($options = [])
     {
-        foreach ($this->fetchAllSettingsFiles() as $section => $filepath) {
-            $settings[$section] = require $filepath;
-        }
-
-        return $settings;
-    }
-
-    /**
-     * Fetch all FusionCMS System Setting files.
-     *
-     * @return array
-     */
-    protected function fetchAllSettingsFiles()
-    {
-        $settingPath = fusion_path('/settings');
-        $allFiles    = Finder::create()->files()->name('*.php')->in($settingPath);
-        $files       = [];
-
-        foreach ($allFiles as $file) {
-            $filepath = $file->getRealPath();
-            $section  = basename($filepath, '.php');
-
-            $files[$section] = $filepath;
-        }
-
-        ksort($files, SORT_NATURAL);
-
-        return $files;
+        return collect($options)->map(function($label, $value) {
+            return [
+                'checked' => false,
+                'label'   => $label,
+                'value'   => $value
+            ];
+        })->values()->all();
     }
 }

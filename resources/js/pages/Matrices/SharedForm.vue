@@ -51,15 +51,11 @@
                             v-model="form.type">
                         </p-select>
 
-                        <p-select
-                            name="fieldset"
-                            label="Fieldset"
-                            help="What fieldset would you like to attach?"
-                            :options="fieldsetOptions"
+                        <p-fieldset
                             :has-error="form.errors.has('fieldset')"
                             :error-message="form.errors.get('fieldset')"
                             v-model="form.fieldset">
-                        </p-select>
+                        </p-fieldset>
                     </p-tab>
 
                     <p-tab name="Customize">
@@ -251,10 +247,6 @@
                 required: true,
             },
 
-            fieldsets: {
-                required: true,
-            },
-
             matrices: {
                 required: true,
             },
@@ -267,19 +259,6 @@
 
             pluralReference() {
                 return pluralize(this.form.name)
-            },
-
-            fieldsetOptions() {
-                let options = _.map(this.fieldsets, (item) => {
-                    return {
-                        'label': item.name,
-                        'value': item.id
-                    }
-                })
-
-                options.unshift({ 'label': 'None', 'value': null })
-
-                return options
             },
 
             parentOptions() {

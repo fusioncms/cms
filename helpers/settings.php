@@ -1,44 +1,40 @@
 <?php
 
-use Fusion\Facades\Setting;
+if (! function_exists('settings_available')) {
+    /**
+     * Determines if the settings have been loaded into
+     * the database or not.
+     *
+     * @return bool
+     */
+	function settings_available()
+	{
+		try {
+			return (DB::table('settings')->count() > 0);
+		} catch (Exception $exception) { }
 
-/**
- * Get/set FusionCMS system settings.
- *
- * @param mixed $key
- * @param mixed $default
- * @return
- */
-function setting($key = null, $default = null)
-{
-	if (! app_installed()) {
-		if (is_array($key)) {
-			return array_values($key)[0];
-		}
-
-		$settingPath = fusion_path('/settings');
-
-		$files    = glob($settingPath . '/*.php');
-		$settings = [];
-
-		foreach ($files as $file) {
-			$section            = basename($file, '.php');
-			$attributes         = require $file;
-			$settings[$section] = [];
-
-			foreach ($attributes['settings'] as $group => $values) {
-				foreach ($values as $setting) {
-					$settings[$section][$setting['handle']] = $setting['value'] ?? $setting['default'] ?? '';
-				}
-			}
-		}
-
-		return Illuminate\Support\Arr::get($settings, $key, $default);
+		return false;
 	}
+}
 
-	if (is_array($key)) {
-		return Setting::set($key);
-	} else {
-		return Setting::get($key, $default);
+if (! function_exists('setting')) {
+    /**
+     * Get / set the specified setting value.
+     *
+     * If an array is passed as the key, we will assume you want to set an array of values.
+     *
+     * @param  array|string|null  $key
+     * @param  mixed  $default
+     * @return mixed|\Fusion\Services\Setting
+     */
+	function setting($key = null, $default = null)
+	{
+		if (is_null($key)) {
+			return \Setting::all();
+		} elseif (is_array($key)) {
+			return \Setting::set($key);
+		} else {
+			return \Setting::get($key, $default);
+		} 
 	}
 }

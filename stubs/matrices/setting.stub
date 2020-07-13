@@ -1,0 +1,49 @@
+<?php
+
+namespace Fusion\Models\Settings;
+
+use Fusion\Models\Setting;
+use Fusion\Database\Eloquent\Model;
+
+class {class} extends Model
+{
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'settings_{handle}';
+
+	/**
+     * Mass assignment protection.
+     *
+     * @var array
+     */
+    protected $fillable = {fillable};
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = {casts};
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = {dates};
+
+    /**
+     * Get the Setting Group relationship.
+     *
+     * @return mixed
+     */
+    public function group()
+    {
+        return $this->belongsTo(Setting::class, 'setting_id');
+    }
+
+    {relationships}
+}

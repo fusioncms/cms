@@ -23,7 +23,6 @@ class FusionServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerProviders();
         $this->registerMigrations();
         $this->registerPublishing();
         $this->registerViews();
@@ -48,6 +47,7 @@ class FusionServiceProvider extends ServiceProvider
             define('FUSION_VERSION', '6.0.0-beta.5');
         }
 
+        $this->registerProviders();
         $this->registerFusion();
         $this->registerConfig();
         $this->registerMiddleware();
@@ -151,8 +151,8 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(AddonServiceProvider::class);
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
-        $this->app->register(SettingsServiceProvider::class);
         $this->app->register(FieldtypeServiceProvider::class);
+        $this->app->register(SettingServiceProvider::class);
         $this->app->register(ThemeServiceProvider::class);
 
         // Not sure why Laravel doesn't register this against

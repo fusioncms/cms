@@ -364,9 +364,9 @@ const router = new Router({
             }
         },
         {
-            path: '/settings/:section',
+            path: '/settings/:group',
             component: () => import('../pages/Settings/Edit'),
-            name: 'setting.section',
+            name: 'setting.group',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',

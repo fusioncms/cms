@@ -36,14 +36,14 @@ class SettingTest extends TestCase
      * @group fusioncms
      * @group settings
      */
-    public function a_setting_update_will_fail_if_full_setting_path_not_defined()
+    public function a_malformed_setting_will_be_ignored()
     {
-        $this->expectException(InvalidArgumentException::class);
-
         setting(['system'  => [
             'website_title'  => 'My New Website',
             'website_slogan' => 'An awesome website!',
         ]]);
+
+        $this->assertNull(setting('system'));
     }
 
     /**
@@ -51,11 +51,11 @@ class SettingTest extends TestCase
      * @group fusioncms
      * @group settings
      */
-    public function a_setting_update_will_fail_if_setting_cannot_be_found()
+    public function a_non_existent_setting_will_be_ignored()
     {
-        $this->expectException(Exception::class);
-
         setting(['system.foo' => 'bar']);
+
+        $this->assertNull(setting('system.foo'));
     }
 
     /**
@@ -74,37 +74,15 @@ class SettingTest extends TestCase
      * @group fusioncms
      * @group settings
      */
-    public function a_request_for_setting_can_be_loaded_by_section()
-    {
-        $this->assertEquals(
-            setting('system'),
-            [
-                'theme'           => 'Hello',
-                'website_title'   => 'My FusionCMS Website',
-                'website_slogan'  => 'Another awesome website powered by FusionCMS!',
-                'site_url'        => 'http://localhost',
-                'site_visibility' => 'public',
-            ]
-        );
-    }
-
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
     public function a_request_for_settings_without_parameters_will_load_all_settings()
     {
         $settings = setting();
 
-        $this->assertArrayHasKey('api', $settings);
-        $this->assertArrayHasKey('backups', $settings);
-        $this->assertArrayHasKey('cache', $settings);
-        $this->assertArrayHasKey('mail', $settings);
-        $this->assertArrayHasKey('system', $settings);
+        $this->assertArrayHasKey('api.personal_access_tokens', $settings);
+        $this->assertArrayHasKey('backups.scheduled_backups', $settings);
+        $this->assertArrayHasKey('cache.clear_cache_component', $settings);
+        $this->assertArrayHasKey('date_time.date_format', $settings);
     }
-
-    // ---------------
 
     /**
      * @test
@@ -115,37 +93,10 @@ class SettingTest extends TestCase
     {
         $settings = Setting::all();
 
-        $this->assertArrayHasKey('api', $settings);
-        $this->assertArrayHasKey('backups', $settings);
-        $this->assertArrayHasKey('cache', $settings);
-        $this->assertArrayHasKey('mail', $settings);
-        $this->assertArrayHasKey('system', $settings);
-    }
-
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
-    public function settings_facade_can_load_many_settings_via_get_method()
-    {
-        $settings = Setting::get(['api','mail']);
-
-        $this->assertArrayHasKey('api', $settings);
-        $this->assertArrayHasKey('mail', $settings);
-    }
-
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
-    public function settings_facade_can_load_many_settings_via_getMany_method()
-    {
-        $settings = Setting::getMany(['api','mail']);
-
-        $this->assertArrayHasKey('api', $settings);
-        $this->assertArrayHasKey('mail', $settings);
+        $this->assertArrayHasKey('api.personal_access_tokens', $settings);
+        $this->assertArrayHasKey('backups.scheduled_backups', $settings);
+        $this->assertArrayHasKey('cache.clear_cache_component', $settings);
+        $this->assertArrayHasKey('date_time.date_format', $settings);
     }
 
     /**
@@ -175,8 +126,8 @@ class SettingTest extends TestCase
     public function settings_facade_can_handle_requests_for_setting_existence()
     {
         $this->assertTrue(Setting::has('system.website_title'));
-        $this->assertTrue(Setting::has('system'));
-
+        
+        $this->assertFalse(Setting::has('system'));
         $this->assertFalse(Setting::has('system.foo'));
         $this->assertFalse(Setting::has('bar'));
         $this->assertFalse(Setting::has('bar.baz'));

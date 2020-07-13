@@ -16,7 +16,20 @@ class Fieldset extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'handle'];
+    protected $fillable = [
+        'name',
+        'handle',
+        'hidden'
+    ];
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'hidden' => 'boolean'
+    ];
 
     /**
      * A fieldset is polymorphic.
@@ -90,6 +103,17 @@ class Fieldset extends Model
         return $this->fields->reject(function($field) {
             return is_null($field->type()->getRelationship());
         });
+    }
+
+    /**
+     * Scope a query to only include visible records.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('hidden', false);
     }
 
     /**

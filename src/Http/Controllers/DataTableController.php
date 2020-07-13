@@ -32,20 +32,6 @@ abstract class DataTableController extends Controller
     abstract public function builder();
 
     /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $builder = $this->builder();
-
-        if (! $builder instanceof Builder) {
-            throw new Exception('Entity builder not instance of Builder');
-        }
-
-        $this->builder = $builder;
-    }
-
-    /**
      * Return the necessary data points for datatables.
      */
     public function index(Request $request)
@@ -66,7 +52,7 @@ abstract class DataTableController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $this->builder->find($id)->delete();
+        $this->builder()->find($id)->delete();
     }
 
     /**
@@ -78,7 +64,7 @@ abstract class DataTableController extends Controller
     {
         return array_diff(
             $this->getDatabaseColumnNames(),
-            $this->builder->getModel()->getHidden()
+            $this->builder()->getModel()->getHidden()
         );
     }
 
@@ -157,7 +143,7 @@ abstract class DataTableController extends Controller
      */
     protected function getDatabaseColumnNames()
     {
-        $columns = Schema::getColumnListing($this->builder->getModel()->getTable());
+        $columns = Schema::getColumnListing($this->builder()->getModel()->getTable());
 
         if (empty($columns)) {
             $columns = ['*'];
@@ -179,7 +165,7 @@ abstract class DataTableController extends Controller
              * Using Swpatie's `laravel-query-builder` package.
              * https://docs.spatie.be/laravel-query-builder/v2/introduction/
              */
-            return QueryBuilder::for($this->builder)
+            return QueryBuilder::for($this->builder())
 
                 // Allowed selectable fields   (e.g. fields['name']=John)
                 ->allowedFields($this->getDisplayableColumns())

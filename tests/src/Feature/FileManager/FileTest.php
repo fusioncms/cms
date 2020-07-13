@@ -211,7 +211,7 @@ class FileTest extends TestCase
      */
     public function a_valid_file_must_abide_by_acceptable_file_type_settings()
     {
-        setting(['files.accepted_files' => 'jpg, png, gif']);
+        setting(['files.accepted_files' => ['jpg', 'png', 'gif']]);
         setting(['files.file_size_upload_limit' => 1]);
 
         $this
@@ -221,7 +221,7 @@ class FileTest extends TestCase
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'file'  => 'The file must be a file of type: ' . setting('files.accepted_files'),
+                'file'  => 'The file must be a file of type: ' . implode(', ', setting('files.accepted_files')),
             ]);
     }
 
@@ -233,7 +233,7 @@ class FileTest extends TestCase
      */
     public function a_valid_file_must_abide_by_acceptable_file_size_settings()
     {
-        setting(['files.accepted_files' => 'pdf']);
+        setting(['files.accepted_files' => ['pdf']]);
         setting(['files.file_size_upload_limit' => 1]);
 
         $this

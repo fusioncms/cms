@@ -32,15 +32,11 @@
 
                 <p-tabs>
                     <p-tab name="General">
-                        <p-select
-                            name="fieldset"
-                            label="Fieldset"
-                            help="What fieldset would you like to attach?"
-                            :options="fieldsets"
+                        <p-fieldset
                             :has-error="form.errors.has('fieldset')"
                             :error-message="form.errors.get('fieldset')"
                             v-model="form.fieldset">
-                        </p-select>
+                        </p-fieldset>
                     </p-tab>
 
                     <p-tab name="Route">
@@ -141,11 +137,7 @@
 
             submit: {
                 required: true,
-            },
-
-            fieldsets: {
-                required: true,
-            },
+            }
         },
     }
 </script>

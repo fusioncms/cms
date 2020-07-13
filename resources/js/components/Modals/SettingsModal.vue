@@ -3,55 +3,66 @@
 
 		<div class="card">
             <div class="card__body">
-        		<settings-form ref="form" :section="section"></settings-form>
+        		<shared-form v-if="form" :form="form" :group="group"></shared-form>
 			</div>
 		</div>
 
-        <template slot="footer">
+		<template slot="footer">
 			<div class="buttons">
-				<button type="button" class="button" @click.prevent="close">Cancel</button>
-				<button type="submit" class="button button--primary" @click.prevent="$refs.form.submit">Save Settings</button>
+				<button type="button" class="button" @click.prevent="close">Close</button>
+				<button type="submit" class="button button--primary" @click.prevent="submit">Save Settings</button>
 			</div>
-        </template>
+		</template>
     </p-modal>
 </template>
 
 <script>
-	import SettingsForm from '../../pages/Settings/SharedForm.vue'
+	import Form from '../../services/Form'
+	import SharedForm from '../../pages/Settings/SharedForm.vue'
 
 	export default {
 		name: 'settings-modal',
 
 		components: {
-			'settings-form': SettingsForm
+			'shared-form': SharedForm
 		},
 
 		data() {
 			return {
 				show: false,
-				groups: [],
-				settings: []
+				group: {},
+                form: null
 			}
 		},
 
-		props: ['section'],
+		props: {
+			handle: {
+				type: String,
+				required: true
+			}
+		},
 
 		methods: {
             close() {
             	this.show = false
-            }
+            },
+
+            submit() {
+                this.form.patch(`/api/settings/${this.handle}`)
+                    .then((response) => {
+                        toast('Settings saved successfully', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
+            },
         },
 
 		created() {
-			axios.get('/api/settings/' + this.section).then((response) => {
-				let items    = response.data.data.items
-				let settings = _.filter(items, function(item) {
-					return item.gui === true
-				})
-
-				this.groups   = _.groupBy(settings, 'group')
-				this.settings = settings
-	        })
+			axios.get(`/api/settings/${this.handle}`)
+				.then((response) => {
+					this.group = response.data.data
+					this.form  = new Form(this.group.settings)
+		        })
 		}
 	}
 </script>

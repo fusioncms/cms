@@ -56,7 +56,7 @@
 		</p-card>
 
         <portal to="modals">
-            <settings-modal section="backups"></settings-modal>
+            <settings-modal handle="backups"></settings-modal>
 
             <!-- Restore from existing backup -->
             <p-modal name="restore-form" title="Restore Backup" key="restore_form">

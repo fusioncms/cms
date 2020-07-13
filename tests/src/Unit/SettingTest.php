@@ -3,6 +3,7 @@
 namespace Fusion\Tests\Unit;
 
 use Fusion\Models\Setting;
+use Fusion\Models\Fieldset;
 use Fusion\Tests\TestCase;
 use Fusion\Models\SettingSection;
 use Illuminate\Support\Facades\DB;
@@ -19,10 +20,10 @@ class SettingTest extends TestCase
      * @group unit
      * @group settings
      */
-    public function each_setting_must_have_a_unique_section_and_handle_combination()
+    public function each_setting_must_have_a_unique_handle()
     {
         $this->expectException(QueryException::class);
-        $this->expectExceptionMessage('UNIQUE constraint failed: settings.section_id, settings.handle');
+        $this->expectExceptionMessage('UNIQUE constraint failed: settings.handle');
 
         $attributes = collect(DB::table('settings')->first())->toArray();
         $attributes['id'] = null;
@@ -35,20 +36,9 @@ class SettingTest extends TestCase
      * @group unit
      * @group settings
      */
-    public function settings_can_have_non_unique_sections_or_handle_seperately()
+    public function each_setting_group_will_have_one_fieldset()
     {
-        $attributeOne = collect(DB::table('settings')->first())->toArray();
-        $attributeOne['id']     = null;
-        $attributeOne['handle'] = 'new-name';
-
-        $attributeTwo = collect(DB::table('settings')->first())->toArray();
-        $attributeTwo['id']         = null;
-        $attributeTwo['section_id'] = 99;
-
-        DB::table('settings')->insert($attributeOne);
-        DB::table('settings')->insert($attributeTwo);
-
-        $this->assertTrue(true);
+        $this->assertInstanceOf(Fieldset::class, Setting::first()->fieldset);
     }
 
     /**
@@ -56,9 +46,9 @@ class SettingTest extends TestCase
      * @group unit
      * @group settings
      */
-    public function a_setting_belongs_to_a_setting_section()
+    public function each_setting_group_will_have_one_settings_builder_class()
     {
-    	$this->assertInstanceOf(SettingSection::class, Setting::first()->section);
+        $this->assertInstanceOf(\Fusion\Models\Settings\Api::class, Setting::first()->settings);
     }
 
     /**
@@ -66,10 +56,9 @@ class SettingTest extends TestCase
      * @group unit
      * @group settings
      */
-    public function a_setting_section_has_many_settings()
+    public function each_settings_builder_will_link_back_to_its_group()
     {
-        $this->assertInstanceOf(Collection::class, SettingSection::first()->settings);
-        $this->assertInstanceOf(Setting::class, SettingSection::first()->settings->first());
+    	$this->assertInstanceOf(Setting::class, \Fusion\Models\Settings\Api::first()->group);
     }
 
     /**
@@ -79,9 +68,10 @@ class SettingTest extends TestCase
      */
     public function settings_will_be_imported_to_the_database_upon_install()
     {
-        $this->assertDatabaseHas('setting_sections', ['name' => 'System']);
+        $this->assertDatabaseHas('settings', ['name' => 'API']);
+        $this->assertDatabaseHas('settings', ['name' => 'System']);
 
-        $this->assertDatabaseHas('settings', ['name' => 'Theme', 'value' => 'Hello']);
-        $this->assertDatabaseHas('settings', ['name' => 'Website Title', 'value' => 'My FusionCMS Website']);
+        $this->assertDatabaseHasTable('settings_api');
+        $this->assertDatabaseHasTable('settings_system');
     }
 }

@@ -117,6 +117,7 @@
 
             destroy(index) {
                 this.items.splice(index, 1)
+                this.$emit('input', this.normalizedItems)
             },
 
             new(item) {

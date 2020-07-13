@@ -42,4 +42,3 @@ Vue.component('section-builder', require('../components/SectionBuilder').default
 Vue.component('settings-mail-test', require('../components/Settings/MailTest').default)
 Vue.component('settings-cache', require('../components/Settings/Cache').default)
 Vue.component('settings-mail-test', require('../components/Settings/MailTest').default)
-Vue.component('settings-fieldtypes', require('../components/Settings/FieldTypes').default)
