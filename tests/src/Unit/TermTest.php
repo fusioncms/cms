@@ -32,20 +32,6 @@ class TermTest extends TestCase
      * @group taxonomy
      * @group term
      */
-    public function terms_has_their_own_tables_and_a_pivot_table()
-    {
-        $term = $this->taxonomy->terms->first();
-
-        $this->assertDatabaseHasTable($term->getTable());
-        $this->assertDatabaseHasTable($term->pivotTable);
-    }
-
-    /**
-     * @test
-     * @group unit
-     * @group taxonomy
-     * @group term
-     */
     public function terms_have_a_relationship_with_a_taxonomy()
     {
         $term = $this->taxonomy->terms->first();
@@ -68,7 +54,6 @@ class TermTest extends TestCase
         $term = $this->taxonomy->terms->first();
 
         $this->assertDatabaseHasTable($term->getTable());
-        $this->assertDatabaseHasTable($term->pivotTable);
     }
 
     /**
