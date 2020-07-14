@@ -59,6 +59,16 @@ class {class} extends Model
         return $this->taxonomy->fieldset->fields ?? null;
     }
 
+    public function parent()
+    {
+        return $this->hasOne(Taxonomy::class, 'id', 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Taxonomy::class, 'parent_id', 'id');
+    }
+
     {relationships}
 
         /**

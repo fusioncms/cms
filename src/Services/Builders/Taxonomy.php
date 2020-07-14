@@ -46,7 +46,7 @@ class Taxonomy extends Builder implements BuilderContract
     {
         $className = Str::studly($this->taxonomy->handle);
         $traits    = [];
-        $fillable  = ['taxonomy_id', 'name', 'slug', 'status'];
+        $fillable  = ['taxonomy_id', 'parent_id', 'name', 'slug', 'status'];
         $casts     = [];
 
         if ($this->taxonomy->fieldset) {

@@ -34,6 +34,7 @@ class TaxonomyObserver
         $this->migration->schema->create($taxonomy->table, function (Blueprint $table) use ($taxonomy) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('taxonomy_id');
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('name');
             $table->string('slug')->unique()->nullable();
             $table->boolean('status')->default(true);
