@@ -36,7 +36,7 @@ return [
                 'handle'      => 'cors_allowed_origins_patterns',
                 'description' => 'Matches the request origin with preg_match.',
                 'type'        => 'list',
-                'default'     => [ ],
+                'default'     => [],
                 'override'    => 'cors.allowed_origins_patterns',
             ],
             [
@@ -44,7 +44,7 @@ return [
                 'handle'      => 'cors_allowed_headers',
                 'description' => 'Sets the Access-Control-Allow-Headers response header.',
                 'type'        => 'list',
-                'default'     => [ '*' ],
+                'default'     => ['*'],
                 'override'    => 'cors.allowed_headers',
             ],
             [
@@ -52,7 +52,7 @@ return [
                 'handle'      => 'cors_exposed_headers',
                 'description' => 'Sets the Access-Control-Expose-Headers response header.',
                 'type'        => 'list',
-                'default'     => [ ],
+                'default'     => [],
                 'override'    => 'cors.exposed_headers',
             ],
             [
@@ -65,15 +65,15 @@ return [
                     'max'  => 120,
                     'step' => 'any',
                 ],
-                'default'     => 0,
-                'override'    => 'cors.max_age',
+                'default'  => 0,
+                'override' => 'cors.max_age',
+                'required' => true
             ],
             [
                 'name'        => 'Supports Credentials',
                 'handle'      => 'cors_supports_credentials',
                 'description' => 'Sets the Access-Control-Allow-Credentials header.',
                 'type'        => 'toggle',
-                'default'     => false,
                 'override'    => 'cors.supports_credentials',
             ]
         ],

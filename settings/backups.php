@@ -14,6 +14,7 @@ return [
                 'type'        => 'select',
                 'options'     => [ 'enabled'  => 'Enabled', 'disabled' => 'Disabled' ],
                 'default'     => 'enabled',
+                'required'    => true,
             ],
         ],
     ],
