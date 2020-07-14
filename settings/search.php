@@ -16,7 +16,8 @@ return [
                     'tntsearch' => 'TNTSearch',
                     'algolia'   => 'Algolia',
                 ],
-                'default'     => 'tntsearch',
+                'default'  => 'tntsearch',
+                'required' => true,
             ],
         ],
         'TNTSearch' => [
@@ -29,8 +30,7 @@ return [
                     'true'  => 'Enabled',
                     'false' => 'Disabled',
                 ],
-                'default'     => 'false',
-                'required'    => false,
+                'default' => 'false',
             ],
             [
                 'name'        => 'TNTSearch Boolean',
@@ -41,8 +41,7 @@ return [
                     'true'  => 'Enabled',
                     'false' => 'Disabled',
                 ],
-                'default'     => 'false',
-                'required'    => false,
+                'default' => 'false',
             ],
         ],
         'Algolia' => [
@@ -50,14 +49,12 @@ return [
                 'name'        => 'Algolia App ID',
                 'handle'      => 'algolia_app_id',
                 'description' => 'This is your unique application identifier. It is used to identify yourself to the Algolia API.',
-                'required'    => false,
             ],
 
             [
                 'name'        => 'Algolia Secret',
                 'handle'      => 'algolia_secret',
                 'description' => 'Please keep this secret and use it ONLY from your FusionCMS website => this key is used to create, update and DELETE your search indices.',
-                'required'    => false,
             ],
         ],
     ],
