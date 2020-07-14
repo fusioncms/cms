@@ -18,7 +18,6 @@ return [
                 'name'        => 'View ID',
                 'handle'      => 'analytic_view_id',
                 'description' => 'Your Google Analytics View ID.',
-                'required'    => false,
                 'override'    => 'analytics.view_id',
             ],
             [
@@ -26,7 +25,6 @@ return [
                 'handle'      => 'analytic_credentials',
                 'description' => 'Your Google Analytics credentials file.',
                 'type'        => 'file',
-                'required'    => false,
             ],
         ],
     ],

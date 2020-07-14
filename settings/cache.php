@@ -12,7 +12,6 @@ return [
                 'handle'      => 'clear_cache_component',
                 'description' => 'Clear the cache files.',
                 'component'   => 'settings-cache',
-                'required'    => false,
             ],
         ],
     ],

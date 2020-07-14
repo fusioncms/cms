@@ -18,17 +18,20 @@ return [
                 'name'        => 'Website Title',
                 'handle'      => 'website_title',
                 'default'     => 'My FusionCMS Website',
+                'required'    => true,
             ],
             [
                 'name'        => 'Website Slogan',
                 'handle'      => 'website_slogan',
                 'default'     => 'Another awesome website powered by FusionCMS!',
+                'required'    => true,
             ],
             [
                 'name'        => 'Base URL',
                 'handle'      => 'site_url',
                 'description' => 'The URL of the website for email links and for use around the CMS.',
                 'default'     => 'http://localhost',
+                'required'    => true,
             ],
             [
                 'name'        => 'Site Visibility',
@@ -39,7 +42,8 @@ return [
                     'public'  => 'Public',
                     'private' => 'Private',
                 ],
-                'default'     => 'public',
+                'default'  => 'public',
+                'required' => true,
             ],
         ]
     ],

@@ -20,7 +20,7 @@ class SyncSettings
         /**
          * The following method calls will persist settings
          *  to the database.
-         *  
+         *
          * Any changes you make to the setting files will
          *  reflect in the database with subsequent calls
          *  to this action.
@@ -47,7 +47,7 @@ class SyncSettings
 
     /**
      * Sync Setting Groups.
-     * 
+     *
      * @return void
      */
     public function syncSettingGroups($groups = null)
@@ -94,7 +94,7 @@ class SyncSettings
 
     /**
      * Sync Fieldset Section for SettingGroup.
-     * 
+     *
      * @param  SettingGroup $group
      * @return void
      */
@@ -130,7 +130,7 @@ class SyncSettings
 
     /**
      * Sync Setting Fields for Section.
-     * 
+     *
      * @param  Section  $section
      * @param  array    $fields
      * @return void
@@ -149,7 +149,7 @@ class SyncSettings
                     'type'       => $item['type'] ?? 'input',
                     'help'       => $item['description'] ?? '',
                     'order'      => ++$order,
-                    'validation' => ($item['required'] ?? true) ? 'required' : '',
+                    'validation' => $this->determineValidation($item),
                     'settings'   => [
                         'default'   => $item['default'] ?? '',
                         'override'  => $item['override'] ?? false,
@@ -171,7 +171,7 @@ class SyncSettings
     /**
      * Properly format setting field options.
      * [helper]
-     * 
+     *
      * @param  array  $options
      * @return array
      */
@@ -184,5 +184,14 @@ class SyncSettings
                 'value'   => $value
             ];
         })->values()->all();
+    }
+
+    private function determineValidation($setting)
+    {
+        if (!isset($setting['required'])) {
+            return '';
+        }
+
+        return $setting['required'] === true ? 'required' : '';
     }
 }
