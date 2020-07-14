@@ -23,16 +23,16 @@ class FusionServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerMigrations();
-        $this->registerPublishing();
-        $this->registerViews();
-        $this->registerRoutes();
-        $this->registerGates();
-        $this->registerCustomRules();
+        $this->bootMigrations();
+        $this->bootPublishing();
+        $this->bootViews();
+        $this->bootRoutes();
+        $this->bootGates();
+        $this->bootCustomRules();
 
         if (app_installed()) {
-            $this->registerAddons();
-            $this->registerTheme();
+            $this->bootAddons();
+            $this->bootTheme();
         }
     }
 
@@ -91,7 +91,7 @@ class FusionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerGates()
+    protected function bootGates()
     {
         Gate::before(function (?User $user, $ability) {
             /**
@@ -121,7 +121,7 @@ class FusionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerCustomRules()
+    protected function bootCustomRules()
     {
         Validator::extend('securepassword', 'Fusion\Rules\SecurePassword@passes');
         Validator::extend('serverrequirements', 'Fusion\Rules\ServerRequirements@passes');
@@ -167,7 +167,7 @@ class FusionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerViews()
+    private function bootViews()
     {
         View::getFinder()->prependLocation(fusion_path('resources/views'));
     }
@@ -177,7 +177,7 @@ class FusionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerPublishing()
+    private function bootPublishing()
     {
         $this->publishes([
             fusion_path('/public') => public_path('vendor/fusion'),
@@ -197,7 +197,7 @@ class FusionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerAddons()
+    private function bootAddons()
     {
         Addon::register();
     }
@@ -207,7 +207,7 @@ class FusionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerTheme()
+    private function bootTheme()
     {
         Theme::activate(setting('system.theme'));
     }
@@ -217,7 +217,7 @@ class FusionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerMigrations()
+    private function bootMigrations()
     {
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
     }
@@ -273,7 +273,7 @@ class FusionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerRoutes()
+    private function bootRoutes()
     {
         Route::mixin(new \Laravel\Ui\AuthRouteMethods());
 
