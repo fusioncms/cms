@@ -46,7 +46,7 @@ class Taxonomy extends Builder implements BuilderContract
     {
         $className = Str::studly($this->taxonomy->handle);
         $traits    = [];
-        $fillable  = ['taxonomy_id', 'parent_id', 'name', 'slug', 'status'];
+        $fillable  = ['taxonomy_id', 'name', 'slug', 'status'];
         $casts     = [];
 
         if ($this->taxonomy->fieldset) {
@@ -94,48 +94,5 @@ class Taxonomy extends Builder implements BuilderContract
     public function get()
     {
         return $this->model->where('taxonomy_id', $this->taxonomy->id)->firstOrCreate(['taxonomy_id' => $this->taxonomy->id]);
-    }
-
-    public function generateRelationships()
-    {
-        $generated     = '';
-        $relationships = [];
-        $morphedBy     = Field::with('section.fieldset')
-            ->where('type', 'taxonomy')
-            ->where('settings->taxonomy', $this->taxonomy->id)
-            ->get();
-
-        if ($morphedBy->isEmpty()) {
-            return parent::generateRelationships();
-        }
-
-        foreach ($morphedBy as $field) {
-            $models = $this->getFieldsettables($field->section->fieldset);
-
-            foreach ($models as $model) {
-                /**
-                 * Note:
-                 * Add relationship method only once
-                 *   per `$model->handle`.
-                 *
-                 */
-                if (! in_array($model->handle, $relationships)) {
-                    array_push($relationships, $model->handle);
-
-                    $namespace = (new \ReflectionClass($model->getBuilder()))->getName();
-                    $stub      = File::get(fusion_path('/stubs/relationships/morphedByMany.stub'));
-
-                    $contents = strtr($stub, [
-                        '{handle}'            => $model->handle,
-                        '{related_namespace}' => $namespace,
-                        '{related_table}'     => $this->taxonomy->pivot_table,
-                    ]);
-
-                    $generated .= $contents."\n\n";
-                }
-            }
-        }
-
-        return trim($generated .= parent::generateRelationships());
     }
 }

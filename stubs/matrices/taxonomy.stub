@@ -59,24 +59,6 @@ class {class} extends Model
         return $this->taxonomy->fieldset->fields ?? null;
     }
 
-    /**
-     * Get the name of the pivot table associated with this taxonomy.
-     */
-    public function getPivotTableAttribute()
-    {
-        return $this->table.'_pivot';
-    }
-
-    public function parent()
-    {
-        return $this->hasOne(Taxonomy::class, 'id', 'parent_id');
-    }
-
-    public function children()
-    {
-        return $this->hasMany(Taxonomy::class, 'parent_id', 'id');
-    }
-
     {relationships}
 
         /**
