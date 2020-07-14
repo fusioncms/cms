@@ -11,7 +11,11 @@
             </div>
         </portal>
 
-        <shared-form v-if="form" :form="form" :group="group"></shared-form>
+        <div class="row">
+            <div class="col w-full">
+                <shared-form v-if="form" :form="form" :group="group"></shared-form>
+            </div>
+        </div>
     </div>
 </template>
 
