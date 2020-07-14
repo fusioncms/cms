@@ -154,7 +154,7 @@ class SyncSettings
                         'default'   => $item['default'] ?? '',
                         'override'  => $item['override'] ?? false,
                         'options'   => $this->formatSettingOptions($item['options'] ?? []),
-                        'gui'       => (bool) ($item['gui'] ?? true),
+                        'hidden'    => $this->determineHidden($item),
                         'component' => $item['component'] ?? false,
                     ],
                 ]);
@@ -186,12 +186,33 @@ class SyncSettings
         })->values()->all();
     }
 
-    private function determineValidation($setting)
+    /**
+     * Determine the validation attribute for the given setting.
+     *
+     * @param  array  $setting
+     * @return string
+     */
+    private function determineValidation($setting): string
     {
         if (!isset($setting['required'])) {
             return '';
         }
 
         return $setting['required'] === true ? 'required' : '';
+    }
+
+    /**
+     * Determine the hidden attribute for the given setting.
+     *
+     * @param  array  $setting
+     * @return bool
+     */
+    private function determineHidden($setting): bool
+    {
+        if (!isset($setting['hidden'])) {
+            return false;
+        }
+
+        return (bool) $setting['hidden'] === true;
     }
 }

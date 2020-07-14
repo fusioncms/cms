@@ -12,7 +12,7 @@ return [
                 'handle'      => 'theme',
                 'description' => 'The desired theme for the public frontend.',
                 'default'     => 'Hello',
-                'gui'         => false,
+                'hidden'      => true,
             ],
             [
                 'name'        => 'Website Title',
