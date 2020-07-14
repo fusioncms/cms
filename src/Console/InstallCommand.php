@@ -74,10 +74,10 @@ class InstallCommand extends Command
         //
         $this->container = [
             // application
-            'app_name'  => env('APP_NAME',     'FusionCMS'),
-            'app_env'   => env('APP_ENV',      'local'),
-            'app_debug' => env('APP_DEBUG',    $this->option('debug') ?? $dev),
-            'app_url'   => env('APP_URL',      $this->option('url')),
+            'app_name'  => env('APP_NAME',  'FusionCMS'),
+            'app_env'   => env('APP_ENV',   'local'),
+            'app_debug' => env('APP_DEBUG', $this->option('debug')),
+            'app_url'   => env('APP_URL',   $this->option('url')),
 
             // database
             'db_driver'    => env('DB_DRIVER',    'mysql'),
@@ -97,15 +97,17 @@ class InstallCommand extends Command
         // --homestead flag overrides
         //
         if ($this->option('homestead')) {
-            $this->container['db_user'] = env('DB_USERNAME', 'homestead');
-            $this->container['db_pass'] = env('DB_PASSWORD', 'secret');
+            $this->container['db_user']   = env('DB_USERNAME', 'homestead');
+            $this->container['db_pass']   = env('DB_PASSWORD', 'secret');
+            $this->container['app_debug'] = true;
         }
 
         // --valet flag overrides
         //
         if ($this->option('valet')) {
-            $this->container['db_user'] = env('DB_USERNAME', 'root');
-            $this->container['db_pass'] = env('DB_PASSWORD', '');
+            $this->container['db_user']   = env('DB_USERNAME', 'root');
+            $this->container['db_pass']   = env('DB_PASSWORD', '');
+            $this->container['app_debug'] = true;
         }
 
         if ($dev or $this->option('refresh')) {
