@@ -36,6 +36,9 @@ class SyncSettings
 
         SettingGroup::all()->each(function($group) {
             $this->syncSettingSection($group);
+
+            $group->getBuilder()
+                ->firstOrCreate(['id' => 1, 'setting_id' => $group->id]);
         });
 
         /**
