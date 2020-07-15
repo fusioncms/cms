@@ -43,7 +43,7 @@ class SettingController extends Controller
      */
     public function update(SettingRequest $request, Setting $setting)
     {
-        $setting->settings->update($request->validated());
+        $setting->settings()->update($request->validated());
 
         // persist relationships..
         foreach ($setting->fieldset->relationships() as $relationship) {
