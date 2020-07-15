@@ -18,14 +18,13 @@ class TermResource extends JsonResource
         $resource['name']     = $this->name;
         $resource['slug']     = $this->slug;
         $resource['taxonomy'] = new TaxonomyResource($this->resource['taxonomy']);
+        $resource['status']   = $this->status;
 
-        if ($this->taxonomy->fields) {
-            foreach ($this->taxonomy->fields as $field) {
+        if ($this->fields) {
+            foreach ($this->fields as $field) {
                 $resource[$field->handle] = $this->{$field->handle};
             }
         }
-
-        $resource['status'] = $this->status;
 
         return $resource;
     }

@@ -72,11 +72,11 @@ class TaxonomyFieldtype extends Fieldtype
         return strtr($stub, [
             '{handle}'            => $field->handle,
             '{studly_handle}'     => Str::studly($field->handle),
-            '{related_pivot_key}' => $model->handle . '_id',
+            '{related_pivot_key}' => 'taxonomy_id',
             '{related_namespace}' => $namespace,
-            '{related_table}'     => $model->pivot_table,
+            '{related_table}'     => 'taxonomies_pivot',
             '{where_clause}'      => "->where('field_id', {$field->id})",
-            '{order_clause}'      => '',
+            '{order_clause}'      => "->orderBy('order')",
         ]);
     }
 
@@ -92,7 +92,8 @@ class TaxonomyFieldtype extends Fieldtype
         $oldValues = $model->{$field->handle}->pluck('id');
         $newValues = collect(request()->input($field->handle))->mapWithKeys(function($id) use ($field) {
             return [
-                $id => ['field_id' => $field->id]];
+                $id => ['field_id' => $field->id]
+            ];
         });
 
         $model->{$field->handle}()->detach($oldValues);

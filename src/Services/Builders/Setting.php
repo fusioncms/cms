@@ -21,11 +21,6 @@ class Setting extends Builder implements BuilderContract
     protected $setting;
 
     /**
-     * @var \Fusion\Database\Eloquent\Model
-     */
-    protected $model;
-
-    /**
      * Constructor.
      * 
      * @param string $handle
@@ -35,7 +30,6 @@ class Setting extends Builder implements BuilderContract
         parent::__construct();
 
         $this->setting = SettingGroup::where('handle', $handle)->firstOrFail();
-        $this->model   = $this->make();
     }
 
     /**

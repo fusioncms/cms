@@ -2,6 +2,7 @@
 
 namespace Fusion\Models;
 
+use Illuminate\Support\Str;
 use Fusion\Concerns\HasFieldset;
 use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
@@ -47,15 +48,19 @@ class Setting extends Model
     }
 
     /**
-     * Group have many settings.
+     * Group have one group of settings.
      *
-     * @return HasManyRelationship
+     * @return HasOneRelationship
      */
     public function settings()
     {
-        $model = $this->getBuilder();
-        $class = new \ReflectionClass($model);
+        $name = Str::studly($this->handle);
+        $path = fusion_path("/src/Models/Settings/{$name}.php");
 
-        return $this->hasOne('\\'.$class->getName());
+        if (! file_exists($path)) {
+            $this->getBuilder()->firstOrCreate(['id' => 1, 'setting_id' => $this->id]);
+        }
+
+        return $this->hasOne("Fusion\Models\Settings\\{$name}");
     }
 }

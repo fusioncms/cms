@@ -13,14 +13,21 @@ use Illuminate\Support\ServiceProvider;
 class SettingServiceProvider extends ServiceProvider
 {
     /**
+     * @var array
+     */
+    private $settings;
+
+    /**
      * Bootstrap services.
      *
      * @return void
      */
     public function boot()
     {
+        $this->settings = SettingService::loadSettings();
+
         if (settings_available()) {
-            $this->configOverrides();
+            $this->bootConfigOverrides();
         }
     }
 
@@ -38,9 +45,7 @@ class SettingServiceProvider extends ServiceProvider
 
         // load system settings
         $this->app->singleton('setting', function() {
-            return new SettingService(
-                SettingService::loadSettings()
-            );
+            return new SettingService($this->settings);
         });
     }
 
@@ -49,7 +54,7 @@ class SettingServiceProvider extends ServiceProvider
      * 
      * @return void
      */
-    private function configOverrides()
+    private function bootConfigOverrides()
     {
         SettingGroup::all()->each(function($group) {
             if ($group->fieldset) {

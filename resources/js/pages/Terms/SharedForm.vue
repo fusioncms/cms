@@ -2,7 +2,7 @@
 	<form-container>
 		<portal to="actions">
 			<div class="buttons">
-				<router-link v-if="taxonomy.slug" :to="{ name: 'terms.index', params: {taxonomy: taxonomy.slug} }" class="button">Go Back</router-link>
+				<router-link v-if="taxonomy.id" :to="{ name: 'terms.index', params: {taxonomy: taxonomy.id} }" class="button">Go Back</router-link>
 				<button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
 			</div>
 		</portal>

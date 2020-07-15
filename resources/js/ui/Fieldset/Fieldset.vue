@@ -35,7 +35,7 @@
 
         watch: {
             fieldsets(items) {
-                let filtered = _.filter(items, (item) => item.hidden)
+                let filtered = _.reject(items, (item) => item.hidden)
 
                 _.each(filtered, (item) => {
                     this.options.push({ label: item.name, value: item.id })
