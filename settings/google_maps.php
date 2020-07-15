@@ -9,7 +9,7 @@ return [
         'General' => [
             [
                 'name'        => 'API Key',
-                'handle'      => 'google_maps_api',
+                'handle'      => 'api_key',
                 'description' => 'Your Google Maps API key.',
             ],
         ],
