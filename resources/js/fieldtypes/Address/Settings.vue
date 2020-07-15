@@ -3,7 +3,7 @@
     <p-input
         name="settings.api_key"
         label="API Key"
-        help='You will need to generate a <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Google Maps API key</a> in order to view the map component and retrieve latitude and longitude coordinates for your address'
+        help='You will need to generate a <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Google Maps API key</a> in order to view the map component and retrieve latitude and longitude coordinates for your address.'
         autocomplete="off"
         placeholder=""
         v-model="settings.api_key"
@@ -22,4 +22,3 @@
         mixins: [fieldtype],
     }
 </script>
-
