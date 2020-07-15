@@ -98,19 +98,18 @@ class Setting
 				list($handle, $column) = explode('.', $key);
 
 				$group = SettingGroup::where('handle', $handle)->firstOrFail();
-				
+
 				// persist setting..
-				$setting = $group->getBuilder()->firstOrFail();
-				$setting->update([ $column => $value ]);
+				$group->settings()->update([ $column => $value ]);
 
 				// update runtime setting..
 				$this->items[$key] = $value;
 
 				// override config (if necessary)..
-				$group->fieldset->fields->each(function($field) use ($group, $key) {
+				$group->fieldset->fields->each(function($field) use ($group, $key, $value) {
 					if ($key == "{$group->handle}.{$field->handle}") {
 						if ($field->settings['override'] !== false) {
-							config([ $field->settings['override'] => setting($key)]);
+							config([ $field->settings['override'] => $value]);
 						}
 					}
 				});
@@ -133,15 +132,13 @@ class Setting
              */
             return cache()->rememberForever('settings', function () {
                 return SettingGroup::all()->flatMap(function($group) {
-                    $setting = $group->getBuilder()->firstOrCreate([ 'id' => 1, 'setting_id' => $group->id ]);
-                    $fields  = $group->fieldset->fields ?? collect();
-
-                    return $fields->mapWithKeys(function($field) use ($group, $setting) {
-                        return [ "{$group->handle}.{$field->handle}" =>
-                            $setting->{$field->handle} ?? $field->settings['default'] ?? null ];
-                    });
-                });
-            })->all();
+                	return collect($group->fieldset->fields ?? [])
+	                	->mapWithKeys(function($field) use ($group) {
+	                        return [ "{$group->handle}.{$field->handle}" =>
+	                            $group->settings->{$field->handle} ?? $field->settings['default'] ?? null ];
+	                    });
+                })->all();
+            });
         } else {
             /**
              * Load settings from flat files

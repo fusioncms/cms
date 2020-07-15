@@ -48,7 +48,7 @@ class SettingTest extends TestCase
      */
     public function each_setting_group_will_have_one_settings_builder_class()
     {
-        $this->assertInstanceOf(\Fusion\Models\Settings\Api::class, Setting::first()->settings);
+        $this->assertInstanceOf('Fusion\Models\Settings\Api', Setting::first()->getBuilder());
     }
 
     /**
@@ -58,7 +58,10 @@ class SettingTest extends TestCase
      */
     public function each_settings_builder_will_link_back_to_its_group()
     {
-    	$this->assertInstanceOf(Setting::class, \Fusion\Models\Settings\Api::first()->group);
+        $group   = Setting::first();
+        $setting = $group->getBuilder()->firstOrCreate(['id' => 1, 'setting_id' => $group->id]);
+
+    	$this->assertInstanceOf(Setting::class, $setting->group);
     }
 
     /**
