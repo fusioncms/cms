@@ -2,6 +2,7 @@
 
 namespace Fusion\Models;
 
+use Illuminate\Support\Str;
 use Fusion\Concerns\HasFieldset;
 use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
@@ -53,9 +54,6 @@ class Setting extends Model
      */
     public function settings()
     {
-        $model = $this->getBuilder();
-        $class = new \ReflectionClass($model);
-
-        return $this->hasOne('\\'.$class->getName());
+        return $this->hasOne("Fusion\Models\Settings\\" . Str::studly($this->handle));
     }
 }

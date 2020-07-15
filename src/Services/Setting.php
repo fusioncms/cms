@@ -133,15 +133,13 @@ class Setting
              */
             return cache()->rememberForever('settings', function () {
                 return SettingGroup::all()->flatMap(function($group) {
-                    $setting = $group->getBuilder()->firstOrCreate([ 'id' => 1, 'setting_id' => $group->id ]);
-                    $fields  = $group->fieldset->fields ?? collect();
-
-                    return $fields->mapWithKeys(function($field) use ($group, $setting) {
-                        return [ "{$group->handle}.{$field->handle}" =>
-                            $setting->{$field->handle} ?? $field->settings['default'] ?? null ];
-                    });
-                });
-            })->all();
+                	return collect($group->fieldset->fields ?? [])
+	                	->mapWithKeys(function($field) use ($group) {
+	                        return [ "{$group->handle}.{$field->handle}" =>
+	                            $group->settings->{$field->handle} ?? $field->settings['default'] ?? null ];
+	                    });
+                })->all();
+            });
         } else {
             /**
              * Load settings from flat files
