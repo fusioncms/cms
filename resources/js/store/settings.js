@@ -18,7 +18,7 @@ export default {
         getGroupSections: (state) => {
             return _.groupBy(state.groups, 'group')
         },
-        
+
         getSetting: (state) => (key) => {
             return state.settings[key]
         },

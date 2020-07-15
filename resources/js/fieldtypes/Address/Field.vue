@@ -46,10 +46,13 @@
                     class="mb-2"
                 ></p-input>
             </div>
-            <div class="w-1/2 pl-2">
-                <div class="h-full" :id="mapID">
-                    <div v-if="mapError" class="p-5" v-html="mapError">
-                        
+            <div class="w-1/2 pl-6">
+                <div class="h-full rounded" :id="mapID">
+                    <div class="bg-gray-100 rounded shadow p-3" v-if="mapError" v-html="mapError"></div>
+
+                    <div class="bg-gray-100 rounded shadow p-3" v-show="hasAPIKey == false">
+                        <p>A <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Google Maps API key</a> is required in order to view the map component and retrieve latitude and longitude coordinates for your address.</p>
+                        <p>Once you've obtained one, please visit the <router-link to="/settings/google_maps">Google Maps settings page</router-link> to enter your API key.</p>
                     </div>
                 </div>
             </div>
@@ -93,7 +96,7 @@
             return {
                 marker: null,
                 data: data,
-                mapError: ''
+                mapError: '',
             }
         },
 
@@ -110,6 +113,14 @@
         },
 
         computed: {
+            apiKey() {
+                return this.setting('maps_api_key')
+            },
+
+            hasAPIKey() {
+                return (this.apiKey && this.apiKey != '')
+            },
+
             mapID() {
                 return this.field.handle + '_map'
             },
@@ -136,6 +147,14 @@
         watch: {
             addressLookup: function() {
                 this.locateAddress();
+            },
+
+            apiKey(value) {
+                if (value && value != '') {
+                    this.$nextTick(() => {
+                        this.initializeMap()
+                    })
+                }
             }
         },
 
@@ -145,7 +164,23 @@
                 this.$emit('input', this.data)
             },
 
-            createMap: function() {
+            initializeMap() {
+                if (_.isUndefined(window.google)) {
+                    let vm = this
+                    let mapScript = document.createElement('script')
+
+                    window.mapInit = function() {
+                        vm.createMap()
+                    }
+
+                    mapScript.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=mapInit`)
+                    document.head.appendChild(mapScript)
+                } else {
+                    this.createMap()
+                }
+            },
+
+            createMap() {
                 if (! _.isUndefined(window.google)) {
                     this.map = new google.maps.Map(document.getElementById(this.mapID));
 
@@ -203,25 +238,5 @@
                 }, 500
             )
         },
-
-        mounted() {
-            let vm = this
-            let apiKey = vm.field.settings.api_key
-            if (!apiKey || apiKey == '') {
-                vm.mapError = 'You will need to generate a <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Google Maps API key</a> in order to view the map component and retrieve latitude and longitude coordinates for your address'
-                return
-            }
-            if (_.isUndefined(window.google)) {
-                window.mapInit = function() {
-                    vm.createMap()
-                }
-                let mapScript = document.createElement('script')
-                mapScript.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=mapInit`)
-                document.head.appendChild(mapScript)
-            } else {
-                vm.createMap();
-            }
-        }
     }
 </script>
-
