@@ -48,12 +48,19 @@ class Setting extends Model
     }
 
     /**
-     * Group have many settings.
+     * Group have one group of settings.
      *
-     * @return HasManyRelationship
+     * @return HasOneRelationship
      */
     public function settings()
     {
-        return $this->hasOne("Fusion\Models\Settings\\" . Str::studly($this->handle));
+        $name = Str::studly($this->handle);
+        $path = fusion_path("/src/Models/Settings/{$name}.php");
+
+        if (! file_exists($path)) {
+            $this->getBuilder()->firstOrCreate(['id' => 1, 'setting_id' => $this->id]);
+        }
+
+        return $this->hasOne("Fusion\Models\Settings\\{$name}");
     }
 }

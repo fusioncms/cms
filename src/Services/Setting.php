@@ -98,19 +98,18 @@ class Setting
 				list($handle, $column) = explode('.', $key);
 
 				$group = SettingGroup::where('handle', $handle)->firstOrFail();
-				
+
 				// persist setting..
-				$setting = $group->getBuilder()->firstOrFail();
-				$setting->update([ $column => $value ]);
+				$group->settings()->update([ $column => $value ]);
 
 				// update runtime setting..
 				$this->items[$key] = $value;
 
 				// override config (if necessary)..
-				$group->fieldset->fields->each(function($field) use ($group, $key) {
+				$group->fieldset->fields->each(function($field) use ($group, $key, $value) {
 					if ($key == "{$group->handle}.{$field->handle}") {
 						if ($field->settings['override'] !== false) {
-							config([ $field->settings['override'] => setting($key)]);
+							config([ $field->settings['override'] => $value]);
 						}
 					}
 				});

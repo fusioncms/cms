@@ -36,13 +36,6 @@ class SyncSettings
 
         SettingGroup::all()->each(function($group) {
             $this->syncSettingSection($group);
-
-            // Create first and only record..
-            $group->settings()
-                ->firstOrCreate([
-                    'id'         => 1,
-                    'setting_id' => $group->id
-                ]);
         });
 
         /**
