@@ -43,9 +43,9 @@ trait HasRoles
      */
     public function getRateLimitAttribute()
     {
-        // if ($this->isOwner()) {
-        //     return 1000;
-        // }
+        if ($this->isOwner()) {
+            return 1000;
+        }
 
         return setting('api.rate_limit', 60);
     }
