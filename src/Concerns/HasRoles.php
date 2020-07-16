@@ -35,4 +35,18 @@ trait HasRoles
     {
         return $this->hasRole('owner');
     }
+
+    /**
+     * Returns throttle rate limit for authenticated user.
+     * 
+     * @return integer
+     */
+    public function getRateLimitAttribute()
+    {
+        if ($this->isOwner()) {
+            return 1000;
+        }
+
+        return setting('api.rate_limit', 60);
+    }
 }

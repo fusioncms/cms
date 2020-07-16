@@ -16,6 +16,19 @@ return [
                 'default'     => 'disabled',
                 'required'    => true,
             ],
+            [
+                'name'        => 'Rate Limit',
+                'handle'      => 'rate_limit',
+                'description' => 'Set default request limit for users within a minute.',
+                'type'        => 'number',
+                'options'     => [
+                    'min'  => 20,
+                    'max'  => 120,
+                    'step' => 10,
+                ],
+                'default'     => '60',
+                'required'    => false,
+            ]
         ],
     ],
 ];
