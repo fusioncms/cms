@@ -29,9 +29,9 @@ class CreateEnvironmentConfig
             'APP_URL'    => $container['app_url'],
             
             'DB_HOST'      => $container['db_host'],
-            'DB_DATABASE'  => $container['db_name'],
-            'DB_USERNAME'  => $container['db_user'],
-            'DB_PASSWORD'  => $container['db_pass'],
+            'DB_DATABASE'  => $container['db_database'],
+            'DB_USERNAME'  => $container['db_username'],
+            'DB_PASSWORD'  => $container['db_password'],
             'DB_CHARSET'   => $container['db_charset'],
             'DB_COLLATION' => $container['db_collation'],
         ];
@@ -62,7 +62,7 @@ class CreateEnvironmentConfig
 
         foreach ($this->container as $key => $value) {
             $pattern = "/^{$key}\=.*/m";
-            $setting = "{$key}={$value}";
+            $setting = $key . '="' . $value . '"';
             $matches = [];
 
             if (preg_match($pattern, $env, $matches)) {

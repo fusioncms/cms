@@ -72,42 +72,39 @@ class InstallCommand extends Command
 
         // installation configurations
         //
-        $this->container = [
-            // application
-            'app_name'  => env('APP_NAME',  'FusionCMS'),
-            'app_env'   => env('APP_ENV',   'local'),
-            'app_debug' => env('APP_DEBUG', $this->option('debug')),
-            'app_url'   => env('APP_URL',   $this->option('url')),
+        $this->set('app_name',  'Fusion CMS');
+        $this->set('app_env',   'local');
+        $this->set('app_debug', $this->option('debug'));
+        $this->set('app_url',   $this->option('url'));
+        
+        // database
+        $this->set('db_driver',    'mysql');
+        $this->set('db_host',      $this->option('host'));
+        $this->set('db_database',  $this->option('database'));
+        $this->set('db_username',  $this->option('username'));
+        $this->set('db_password',  $this->option('password'));
+        $this->set('db_charset',   $this->option('charset'));
+        $this->set('db_collation', $this->option('collation'));
 
-            // database
-            'db_driver'    => env('DB_DRIVER',    'mysql'),
-            'db_host'      => env('DB_HOST',      $this->option('host')),
-            'db_name'      => env('DB_DATABASE',  $this->option('database')),
-            'db_user'      => env('DB_USERNAME',  $this->option('username')),
-            'db_pass'      => env('DB_PASSWORD',  $this->option('password')),
-            'db_charset'   => env('DB_CHARSET',   $this->option('charset')),
-            'db_collation' => env('DB_COLLATION', $this->option('collation')),
-
-            // default user
-            'user_email'    => 'admin@example.com',
-            'user_password' => 'secret',
-            'user_name'     => $this->generateName(),
-        ];
+        // default user
+        $this->set('user_email',    'admin@example.com');
+        $this->set('user_password', 'secret');
+        $this->set('user_name',     $this->generateName());
 
         // --homestead flag overrides
         //
         if ($this->option('homestead')) {
-            $this->container['db_user']   = env('DB_USERNAME', 'homestead');
-            $this->container['db_pass']   = env('DB_PASSWORD', 'secret');
-            $this->container['app_debug'] = true;
+            $this->set('db_username', 'homestead');
+            $this->set('db_password', 'secret');
+            $this->set('app_debug', true);
         }
 
         // --valet flag overrides
         //
         if ($this->option('valet')) {
-            $this->container['db_user']   = env('DB_USERNAME', 'root');
-            $this->container['db_pass']   = env('DB_PASSWORD', '');
-            $this->container['app_debug'] = true;
+            $this->set('db_username', 'root');
+            $this->set('db_password', '');
+            $this->set('app_debug', true);
         }
 
         if ($dev or $this->option('refresh')) {
@@ -131,21 +128,21 @@ class InstallCommand extends Command
     private function wizard()
     {
         // application
-        $this->container['app_name']  = $this->ask('Please enter your application name:', $this->container['app_name']);
-        $this->container['app_url']   = $this->ask('Please enter your website url:',      $this->container['app_url']);
+        $this->container['app_name']  = $this->ask('Please enter your application name:', $this->get('app_name'));
+        $this->container['app_url']   = $this->ask('Please enter your website url:',      $this->get('app_url'));
 
         // database
-        $this->container['db_host']      = $this->ask('Please enter the database host:',      $this->container['db_host']);
-        $this->container['db_name']      = $this->ask('Please enter the database name:',      $this->container['db_name']);
-        $this->container['db_user']      = $this->ask('Please enter the database username:',  $this->container['db_user']);
-        $this->container['db_pass']      = $this->ask('Please enter the database password:',  $this->container['db_pass']);
-        $this->container['db_charset']   = $this->ask('Please enter the database charset:',   $this->container['db_charset']);
-        $this->container['db_collation'] = $this->ask('Please enter the database collation:', $this->container['db_collation']);
+        $this->container['db_host']      = $this->ask('Please enter the database host:',      $this->get('db_host'));
+        $this->container['db_database']  = $this->ask('Please enter the database name:',      $this->get('db_name'));
+        $this->container['db_username']  = $this->ask('Please enter the database username:',  $this->get('db_user'));
+        $this->container['db_password']  = $this->ask('Please enter the database password:',  $this->get('db_pass'));
+        $this->container['db_charset']   = $this->ask('Please enter the database charset:',   $this->get('db_charset'));
+        $this->container['db_collation'] = $this->ask('Please enter the database collation:', $this->get('db_collation'));
 
         // default user
-        $this->container['user_name']     = $this->ask('Please enter a default user name:',     $this->container['user_name']);
-        $this->container['user_email']    = $this->ask('Please enter a default user email:',    $this->container['user_email']);
-        $this->container['user_password'] = $this->ask('Please enter a default user password:', $this->container['user_password']);
+        $this->container['user_name']     = $this->ask('Please enter a default user name:',     $this->get('user_name'));
+        $this->container['user_email']    = $this->ask('Please enter a default user email:',    $this->get('user_email'));
+        $this->container['user_password'] = $this->ask('Please enter a default user password:', $this->get('user_password'));
 
         $this->confirmation();
     }
@@ -161,21 +158,21 @@ class InstallCommand extends Command
             $this->line("\n<fg=black;bg=white>--- You have entered the following...</>");
 
             // application
-            $this->comment('Application name:      ' . $this->container['app_name']);
-            $this->comment('Application URL:       ' . $this->container['app_url']);
+            $this->comment('Application name:      ' . $this->get('app_name'));
+            $this->comment('Application URL:       ' . $this->get('app_url'));
 
             // database
-            $this->comment('Database host:         ' . $this->container['db_host']);
-            $this->comment('Database name:         ' . $this->container['db_name']);
-            $this->comment('Database username:     ' . $this->container['db_user']);
-            $this->comment('Database password:     ' . $this->container['db_pass']);
-            $this->comment('Database charset:      ' . $this->container['db_charset']);
-            $this->comment('Database collation:    ' . $this->container['db_collation']);
+            $this->comment('Database host:         ' . $this->get('db_host'));
+            $this->comment('Database name:         ' . $this->get('db_database'));
+            $this->comment('Database username:     ' . $this->get('db_username'));
+            $this->comment('Database password:     ' . $this->get('db_password'));
+            $this->comment('Database charset:      ' . $this->get('db_charset'));
+            $this->comment('Database collation:    ' . $this->get('db_collation'));
 
             // default user
-            $this->comment('Default user name:     ' . $this->container['user_name']);
-            $this->comment('Default user email:    ' . $this->container['user_email']);
-            $this->comment('Default user password: ' . $this->container['user_password']);
+            $this->comment('Default user name:     ' . $this->get('user_name'));
+            $this->comment('Default user email:    ' . $this->get('user_email'));
+            $this->comment('Default user password: ' . $this->get('user_password'));
 
             // make confirmation..
             if ($this->confirm('Do you wish to proceed in installing FusionCMS?')) {
@@ -301,6 +298,12 @@ class InstallCommand extends Command
         return $people[array_rand($people)];
     }
 
+    /**
+     * Builds results table for server requirements check.
+     * [helper]
+     * 
+     * @return void
+     */
     private function verifyServerRequirements()
     {
         $this->table(['Requirement', 'Version', 'Pass'], CheckServerRequirements::requirements());
@@ -310,5 +313,31 @@ class InstallCommand extends Command
             $this->error('Your server does not meet the FusionCMS requirements.');
             die();
         }
+    }
+
+    /**
+     * Set installation config value.
+     * 
+     * @param string $key
+     * @param mixed  $default
+     */
+    private function set($key, $default = null)
+    {
+        if ($this->option('refresh')) {
+            $this->container[$key] = env(strtoupper($key), $default);
+        } else {
+            $this->container[$key] = $default;
+        }
+    }
+
+    /**
+     * Get installation config value.
+     * 
+     * @param  string $key
+     * @return mixed
+     */
+    private function get($key)
+    {
+        return $this->container[$key] ?? null;
     }
 }
