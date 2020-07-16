@@ -99,9 +99,9 @@ return [
 				'rules' => [
 					'db_driver'    => 'required',
 					'db_host'      => 'required',
-					'db_name'      => 'required',
-					'db_user'      => 'required',
-					'db_pass'      => 'required',
+					'db_database'  => 'required',
+					'db_username'  => 'required',
+					'db_password'  => 'required',
 					'db_charset'   => 'required',
 					'db_collation' => 'required',
 				],
