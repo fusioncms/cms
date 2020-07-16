@@ -25,7 +25,7 @@ class DeleteDatabase
             $pdo = new PDO("{$driver}:host={$host}", $username, $password);
             $pdo->query("DROP DATABASE IF EXISTS {$database}");
         } catch (PDOException $e) {
-            // die($e->getMessage());
+            die($e->getMessage());
         }
     }
 }
