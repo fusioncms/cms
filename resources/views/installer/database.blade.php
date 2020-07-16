@@ -20,20 +20,20 @@
 		<x-installer.input
 			name="db_name"
 			label="Database Name"
-			value="{{ $data['db_name'] ?? 'fusioncms' }}"
+			value="{{ $data['db_database'] ?? 'fusioncms' }}"
 		/>
 
 		<x-installer.input
 			name="db_user"
 			label="Username"
-			value="{{ $data['db_user'] ?? 'homestead' }}"
+			value="{{ $data['db_username'] ?? 'homestead' }}"
 		/>
 
 		<x-installer.input
 			name="db_pass"
 			type="password"
 			label="Password"
-			value="{{ $data['db_pass'] ?? 'secret' }}"
+			value="{{ $data['db_password'] ?? 'secret' }}"
 		/>
 
 		<x-installer.input

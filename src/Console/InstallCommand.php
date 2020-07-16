@@ -133,9 +133,9 @@ class InstallCommand extends Command
 
         // database
         $this->container['db_host']      = $this->ask('Please enter the database host:',      $this->get('db_host'));
-        $this->container['db_database']  = $this->ask('Please enter the database name:',      $this->get('db_name'));
-        $this->container['db_username']  = $this->ask('Please enter the database username:',  $this->get('db_user'));
-        $this->container['db_password']  = $this->ask('Please enter the database password:',  $this->get('db_pass'));
+        $this->container['db_database']  = $this->ask('Please enter the database name:',      $this->get('db_database'));
+        $this->container['db_username']  = $this->ask('Please enter the database username:',  $this->get('db_username'));
+        $this->container['db_password']  = $this->ask('Please enter the database password:',  $this->get('db_password'));
         $this->container['db_charset']   = $this->ask('Please enter the database charset:',   $this->get('db_charset'));
         $this->container['db_collation'] = $this->ask('Please enter the database collation:', $this->get('db_collation'));
 

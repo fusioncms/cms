@@ -66,14 +66,14 @@
 		<x-installer.input
 			name="db_name"
 			label="Database Name"
-			value="{{ $data['database']['db_name'] }}"
+			value="{{ $data['database']['db_database'] }}"
 			readonly
 		/>
 
 		<x-installer.input
 			name="db_user"
 			label="Username"
-			value="{{ $data['database']['db_user'] }}"
+			value="{{ $data['database']['db_username'] }}"
 			readonly
 		/>
 
@@ -81,7 +81,7 @@
 			name="db_pass"
 			type="password"
 			label="Password"
-			value="{{ $data['database']['db_pass'] }}"
+			value="{{ $data['database']['db_password'] }}"
 			readonly
 		/>
 
