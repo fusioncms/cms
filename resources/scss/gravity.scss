@@ -1,15 +1,51 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700|Source+Sans+Pro:400,600,700');
 
-// Tailwind
 @tailwind base;
 @tailwind components;
 
-@import "components/all";
-@import "elements/all";
-@import "forms/all";
-@import "core/all";
-@import "pages/all";
-@import "vendor/all";
+@import "utility/variables"; // Must come first
+@import "utility/functions";
+@import "utility/helpers";
+@import "utility/mixins";
+
+@import "base/globals";
+@import "base/typography";
+
+@import "components/animations";
+@import "components/backgrounds";
+@import "components/badges";
+@import "components/buttons";
+@import "components/cards";
+@import "components/dropdown";
+@import "components/icons";
+@import "components/loaders";
+@import "components/tables";
+@import "components/tabs";
+@import "components/forms/checkboxes";
+@import "components/forms/grid";
+@import "components/forms/inputs";
+@import "components/forms/radios";
+@import "components/forms/shared";
+@import "components/forms/toggle";
+
+@import "layout/columns";
+@import "layout/containers";
+@import "layout/footer";
+@import "layout/header";
+@import "layout/section";
+@import "layout/sidebar";
+
+@import "pages/customize";
+
+@import "vendor/codemirror";
+@import "vendor/draggable";
+@import "vendor/flatpickr";
+@import "vendor/gfm";
+@import "vendor/nprogress";
+@import "vendor/pickr";
+@import "vendor/plyr";
+@import "vendor/redactor";
+@import "vendor/vue";
 
 /**
 OLD STYLES
