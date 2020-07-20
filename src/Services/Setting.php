@@ -16,7 +16,7 @@ class Setting
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param array $items
 	 */
 	public function __construct(array $items = [])
@@ -26,7 +26,7 @@ class Setting
 
 	/**
 	 * Get settings repository.
-	 * 
+	 *
 	 * @return Collection
 	 */
 	public function all()
@@ -119,26 +119,19 @@ class Setting
 
 	/**
      * Load system settings.
-     * 
+     *
      * @return array
      */
 	public static function loadSettings($refresh = false)
 	{
 		if (settings_available()) {
-			if ($refresh) cache()->forget('settings');
-			
-            /**
-             * Load settings from database
-             */
-            return cache()->rememberForever('settings', function () {
-                return SettingGroup::all()->flatMap(function($group) {
-                	return collect($group->fieldset->fields ?? [])
-	                	->mapWithKeys(function($field) use ($group) {
-	                        return [ "{$group->handle}.{$field->handle}" =>
-	                            $group->settings->{$field->handle} ?? $field->settings['default'] ?? null ];
-	                    });
-                })->all();
-            });
+			return SettingGroup::all()->flatMap(function($group) {
+				return collect($group->fieldset->fields ?? [])
+					->mapWithKeys(function($field) use ($group) {
+						return [ "{$group->handle}.{$field->handle}" =>
+							$group->settings->{$field->handle} ?? $field->settings['default'] ?? null ];
+					});
+			})->all();
         } else {
             /**
              * Load settings from flat files
@@ -156,14 +149,14 @@ class Setting
                     }
                 }
             }
-            
+
             return $results;
         }
 	}
 
 	/**
 	 * Convienence method to pull Setting Groups.
-	 * 
+	 *
 	 * @return Collection
 	 */
 	public static function groups()
@@ -200,7 +193,7 @@ class Setting
 
 	/**
 	 * Pull all settings from filesystem.
-	 * 
+	 *
 	 * @return Collection
 	 */
 	private static function raw()

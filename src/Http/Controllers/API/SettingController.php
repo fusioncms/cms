@@ -49,7 +49,5 @@ class SettingController extends Controller
         foreach ($setting->fieldset->relationships() as $relationship) {
             $relationship->type()->persistRelationship($setting->settings, $relationship);
         }
-
-        \Setting::loadSettings(true);
     }
 }
