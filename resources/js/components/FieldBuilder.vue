@@ -35,7 +35,7 @@
 
         <div class="row">
             <div class="col w-full">
-                <a class="button" href="#" @click.prevent v-modal:add-field>Add Field</a>
+                <a class="button" href="#" @click.prevent v-modal:add-field>Add Field ({{ id }})</a>
             </div>
         </div>
 
