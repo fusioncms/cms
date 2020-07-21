@@ -28,6 +28,8 @@ class SyncCommand extends Command
      */
     public function handle()
     {
+        logger('sync');
+
         try {
             activity()->withoutLogs(function() {
                 dispatch(new \Fusion\Console\Actions\SyncResources);

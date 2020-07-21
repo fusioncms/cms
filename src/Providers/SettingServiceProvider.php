@@ -24,7 +24,7 @@ class SettingServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->settings = SettingService::loadSettings();
+        $this->settings = SettingService::load();
 
         if (settings_available()) {
             $this->bootConfigOverrides();
@@ -51,7 +51,7 @@ class SettingServiceProvider extends ServiceProvider
 
     /**
      * Override config values from settings.
-     * 
+     *
      * @return void
      */
     private function bootConfigOverrides()

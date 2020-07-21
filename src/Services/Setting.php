@@ -122,7 +122,7 @@ class Setting
      *
      * @return array
      */
-	public static function loadSettings($refresh = false)
+	public static function load()
 	{
 		if (settings_available()) {
 			return SettingGroup::all()->flatMap(function($group) {
