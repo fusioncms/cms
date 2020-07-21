@@ -14,8 +14,8 @@
         @yield('styles')
     </head>
 
-    <body class="h-full font-sans tracking-wide leading-loose bg-grey-lighter">
-        <div id="gravity" v-cloak class="h-full">
+    <body class="admin">
+        <div id="gravity" v-cloak class="admin__content">
             @yield('content')
         </div>
 

@@ -1,21 +1,20 @@
 <template>
-    <div class="flex-wrapper max-w-full">
-        <sidebar @toggle="toggleSidebar" :isOpen="isSidebarOpen">
-            <slot name="sidebar"></slot>
-        </sidebar>
+    <div class="flex flex-auto flex-col" :class="{'nav-active' : isNavOpen}">
+        <header class="header">
+            <div class="header__container relative">
+                <div class="header__toggle">
+                    <nav-toggle></nav-toggle>
+                </div>
 
-        <div
-            class="flex flex-col flex-1"
-            :class="{'md:pl-225px': isSidebarOpen, 'pl-0': !isSidebarOpen}"
-            style="margin-top: 55px; transition: all 0.3s ease;"
-            :style="{'left: 0;': isSidebarOpen, 'left: -225px;': !isSidebarOpen}"
-        >
-            <!-- Header -->
-            <div
-                class="header w-full"
-                :class="{'md:w-full-sidebar-open': isSidebarOpen, 'md:w-full-sidebar-collapsed': !isSidebarOpen}"
-                style="transition: all 0.3s ease;"
-            >
+                <div class="header__logo">
+                    <router-link to="/" class="nav-logo" @click.native="onClick()">
+                        <span class="nav-logo__image"></span>
+                        <span class="nav-logo__text">
+                            Fusion<span class="font-bold">CMS</span>
+                        </span>
+                    </router-link>
+                </div>
+
                 <div class="header__account">
                     <renderless-dropdown id="account-menu-button">
                         <div class="dropdown dropdown--right" slot-scope="props" :class="{'dropdown--open': props.isOpen}" v-click-outside="props.close">
@@ -51,26 +50,26 @@
                         </div>
                     </renderless-dropdown>
                 </div>
-
-                <div>
-                    <sidebar-toggle></sidebar-toggle>
-                </div>
             </div>
+        </header>
 
+        <nav-menu :active="isNavOpen"></nav-menu>
+
+        <main id="main-content" class="main-content w-full flex-auto">
             <!-- Local Environment Warning -->
-            <div class="w-full bg-warning-100 flex flex-col items-center justify-between text-gray-900 shadow border-l text-center" v-if="environment == 'local'" style="height: 40px;">
-                <div class="flex-1 px-6">
-                    <span class="text-sm font-bold leading-none">Local Development Environment</span>
+            <div class="local-env" v-if="environment == 'local'">
+                <div class="local-env__message">
+                    <p>Local Development Environment</p>
                 </div>
 
-                <div class="w-full" style="height: 4px; background: repeating-linear-gradient(-45deg, #F2D024, #F2D024 12px, #22292F 10px, #22292F 23px);"></div>
+                <div class="local-env__bar"></div>
             </div>
 
             <!-- Content -->
-            <main class="container--page">
-                <div class="flex justify-between mb-6">
-                    <div class="flex flex-wrap items-center">
-                        <h1 class="leading-none m-0 p-0 text-gray-800">
+            <div class="main-content__container">
+                <div class="flex flex-row flex-wrap items-center justify-between mb-3">
+                    <div class="main-content__header">
+                        <h1>
                             <portal-target name="title" slim></portal-target>
                         </h1>
 
@@ -79,55 +78,47 @@
                         </span>
                     </div>
 
-                    <div class="actions">
+                    <div class="main-content__actions">
                         <portal-target name="actions" multiple></portal-target>
                     </div>
                 </div>
 
-                <div>
+                <div class="main-content__body">
                     <slot></slot>
                 </div>
-            </main>
 
-            <!-- Footer -->
-            <footer class="page-footer">
-                <div>{{ version }}</div>
-                <div>Built with <fa-icon :icon="['fas', 'heart']" class="text-primary-500"></fa-icon> & <fa-icon :icon="['fas', 'coffee']" class="text-gray-900"></fa-icon> by the efelle team</div>
-                <div>
-                    <a href="#" @click.prevent v-modal:privacy-policy class="mr-3">Privacy Policy</a>
-                    <a href="#" @click.prevent v-modal:tos>Terms of Service</a>
-                </div>
-            </footer>
+                <portal-target name="modals" multiple></portal-target>
+            </div>
+        </main>
 
-            <portal-target name="modals" multiple></portal-target>
-        </div>
+        <footer class="page-footer mt-auto">
+            <p class="mb-0">Built with <fa-icon :icon="['fas', 'heart']" class="text-primary-500"></fa-icon> & <fa-icon :icon="['fas', 'coffee']" class="text-gray-900"></fa-icon> by the efelle team</p>
+            <p class="mb-0">{{ version }}</p>
+        </footer>
 
         <p-toast></p-toast>
-        <tos-modal></tos-modal>
-        <privacy-modal></privacy-modal>
         <confirm-modal></confirm-modal>
     </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
-    import Cookies        from 'js-cookie'
-    import Sidebar        from '../components/Sidebar'
-    import SidebarItem    from '../components/SidebarItem'
-    import SidebarToggle  from '../components/SidebarToggle'
+    import { mapGetters }    from 'vuex'
+    import Navigation        from '../components/Navigation'
+    import NavigationItem    from '../components/NavigationItem'
+    import NavigationToggle  from '../components/NavigationToggle'
 
     export default {
         name: 'admin-layout',
 
         data() {
             return {
-                isSidebarOpen: ! _.includes(['sm', 'md'], this.$mq) && Cookies.get('fusion_sidebar') === 'open'
+                isNavOpen: false
             }
         },
 
         components: {
-            'sidebar': Sidebar,
-            'sidebar-toggle': SidebarToggle,
+            'nav-menu': Navigation,
+            'nav-toggle': NavigationToggle,
         },
 
         computed: {
@@ -155,20 +146,46 @@
                 }
 
                 return greeting
-            },
-
-
+            }
         },
 
         methods: {
-            toggleSidebar(value) {
-                this.isSidebarOpen = value
+            toggleNav(event) {
+                this.isNavOpen = !this.isNavOpen
+            },
 
-                if (value) {
-                    Cookies.set('fusion_sidebar', 'open')
-                } else {
-                    Cookies.set('fusion_sidebar', 'close')
+            closeNav(event) {
+                this.isNavOpen = false
+            },
+
+            openNav(event) {
+                this.isNavOpen = true
+            },
+
+            onClick() {
+                if (_.includes(['sm', 'md'], this.$mq)) {
+                    this.closeNav()
                 }
+            },
+
+            listenForNavEvents() {
+                bus().$on('toggle-nav', () => {
+                    this.toggleNav()
+                })
+                bus().$on('close-nav', () => {
+                    this.closeNav()
+                })
+                bus().$on('open-nav', () => {
+                    this.openNav()
+                })
+            }
+        },
+
+        created() {
+            this.listenForNavEvents()
+
+            if (_.includes(['lg', 'xl', 'xxl'], this.$mq)) {
+                this.openNav()
             }
         }
     }

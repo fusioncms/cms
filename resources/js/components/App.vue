@@ -1,11 +1,9 @@
 <template>
-    <div class="h-full flex" v-cloak>
-        <transition name="fade" mode="out-in" appear>
-            <component :is="layout">
-                <router-view></router-view>
-            </component>
-        </transition>
-    </div>
+    <transition name="fade" mode="out-in" appear>
+        <component :is="layout">
+            <router-view></router-view>
+        </component>
+    </transition>
 </template>
 
 <script>

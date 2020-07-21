@@ -6,11 +6,11 @@
 
 <script>
     export default {
-        name: 'sidebar-toggle',
+        name: 'nav-toggle',
 
         methods: {
             onClick() {
-                bus().$emit('toggle-sidebar')
+                bus().$emit('toggle-nav')
             }
         }
     }

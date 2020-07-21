@@ -1,0 +1,13 @@
+.local-env {
+    @apply p-6;
+
+    &__message {
+        @apply p-3 text-sm font-bold leading-none w-full bg-warning-100 flex flex-col items-center justify-between text-gray-900 shadow border-l text-center;
+    }
+
+    &__bar {
+        width: 100%;
+        height: 4px; 
+        background: repeating-linear-gradient(-45deg, #F2D024, #F2D024 12px, #22292F 10px, #22292F 23px);
+    }
+}
