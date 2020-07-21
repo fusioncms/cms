@@ -67,7 +67,7 @@ class Addon extends Collection
         return $this->get($namespace);
     }
 
-        public function uninstall($namespace)
+    public function uninstall($namespace)
     {
         $this->disable($namespace);
         $this->setProperty($namespace, 'installed', false);

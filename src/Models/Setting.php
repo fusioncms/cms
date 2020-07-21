@@ -54,6 +54,13 @@ class Setting extends Model
      */
     public function settings()
     {
-        return $this->hasOne("Fusion\Models\Settings\\" . Str::studly($this->handle));
+        $name = Str::studly($this->handle);
+        $path = fusion_path("/src/Models/Settings/{$name}.php");
+
+        if (! file_exists($path)) {
+            $this->getBuilder()->firstOrCreate(['id' => 1, 'setting_id' => $this->id]);
+        }
+
+        return $this->hasOne("Fusion\Models\Settings\\{$name}");
     }
 }
