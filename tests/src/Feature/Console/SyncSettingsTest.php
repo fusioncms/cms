@@ -3,9 +3,9 @@
 namespace Fusion\Tests\Feature;
 
 use Fusion\Tests\TestCase;
+use Fusion\Console\Actions\SyncSettings;
 use Fusion\Models\Setting as SettingGroup;
 use Fusion\Services\Setting as SettingService;
-use Fusion\Console\Actions\SyncSettings;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SyncSettingsTest extends TestCase
@@ -21,7 +21,7 @@ class SyncSettingsTest extends TestCase
     public function console_command_will_sync_setting_group_records()
     {
         $groups = SettingService::groups();
-        
+
         // add group..
         $groups['foobar'] = [
             'name'        => 'Foobar',
@@ -33,8 +33,11 @@ class SyncSettingsTest extends TestCase
 
         // modify existing group..
         $groups['backups'] = [
-            'name'   => 'Baz',
-            'handle' => 'baz',
+            'name'        => 'Baz',
+            'handle'      => 'baz',
+            'group'       => 'Services',
+            'icon'        => 'save',
+            'description' => 'Configure backup schedule and cleanup strategy settings.'
         ];
 
         // remove existing setting group..
@@ -47,18 +50,18 @@ class SyncSettingsTest extends TestCase
         $this->assertDatabaseMissing('settings', ['handle' => 'api']);
         $this->assertDatabaseMissing('fieldsets', ['handle' => 'api']);
         $this->assertDatabaseDoesNotHaveTable('settings_api');
-    
+
         // test modification..
         $this->assertDatabaseMissing('settings', ['handle' => 'backups']);
         $this->assertDatabaseMissing('fieldsets', ['handle' => 'backups']);
         $this->assertDatabaseDoesNotHaveTable('settings_backups');
         $this->assertDatabaseHas('settings', ['handle' => 'baz']);
-        $this->assertDatabaseHas('fieldsets', ['handle' => 'baz']);
+        $this->assertDatabaseHas('fieldsets', ['handle' => 'setting_baz']);
         $this->assertDatabaseHasTable('settings_baz');
 
         // test addition..
         $this->assertDatabaseHas('settings', ['handle' => 'foobar']);
-        $this->assertDatabaseHas('fieldsets', ['handle' => 'foobar']);
+        $this->assertDatabaseHas('fieldsets', ['handle' => 'setting_foobar']);
         $this->assertDatabaseHasTable('settings_foobar');
     }
 

@@ -1,0 +1,8 @@
+// Functions required for variable conversions
+// Calculate rem units from px
+$font-size-root: 16px;
+
+@function rem($size) {
+    $remSize: $size / $font-size-root;
+    @return #{$remSize}rem;
+}

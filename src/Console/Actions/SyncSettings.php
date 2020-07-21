@@ -40,12 +40,6 @@ class SyncSettings
             $group->getBuilder()
                 ->firstOrCreate(['id' => 1, 'setting_id' => $group->id]);
         });
-
-        /**
-         * Clears cache set in:
-         *  Fusion\Services\Settings::loadSettings()
-         */
-        SettingService::loadSettings(true);
     }
 
     /**
