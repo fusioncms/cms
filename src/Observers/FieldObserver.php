@@ -48,6 +48,9 @@ class FieldObserver
      */
     public function updated(Field $field)
     {
+        $fieldtype = fieldtypes()->get($field->type);
+        $fieldtype->onSaved($field);
+        
         $fieldset   = $field->section->fieldset;
         $containers = $this->getFieldsettables($fieldset);
 

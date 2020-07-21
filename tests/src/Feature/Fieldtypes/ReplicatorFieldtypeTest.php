@@ -33,12 +33,13 @@ class ReplicatorFieldtypeTest extends TestCase
 
         $fieldset = $replicator->fieldset;
         $section  = $fieldset->sections()->first();
-        $fields   = $section->fields;
 
         // replicators
         $this->assertDatabaseHas('replicators', [
             'name' => $attributes['name'],
         ]);
+
+        $this->assertDatabaseHasTable($replicator->table);
 
         // fieldsets
         $this->assertDatabaseHas('fieldsets', [
@@ -59,13 +60,71 @@ class ReplicatorFieldtypeTest extends TestCase
             'name'        => $section->name,
             'handle'      => $section->handle,
         ]);
+    }
 
-        // fields
-        $this->assertDatabaseHas('fields', [
-            'section_id' => $section->id,
-            'name'       => $fields->first()->name,
-            'handle'     => $fields->first()->handle,
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group fieldtypes
+     * @group replicator
+     */
+    public function creating_replicator_fields_will_update_replicator_table()
+    {
+        list($replicator, $attributes) = $this->newReplicator([
+            'name'   => 'Complex',
+            'handle' => 'complex',
         ]);
+
+        $fields = $replicator->fieldset->fields;
+
+        $this->assertDatabaseTableHasColumn($replicator->table, $fields->get(0)->handle);
+        $this->assertDatabaseTableHasColumn($replicator->table, $fields->get(1)->handle);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group fieldtypes
+     * @group replicator
+     */
+    public function updating_replicator_fields_will_update_replicator_table()
+    {
+        list($replicator, $attributes) = $this->newReplicator([
+            'name'   => 'Complex',
+            'handle' => 'complex',
+        ]);
+
+        $fieldset = $replicator->fieldset;
+        $section  = $fieldset->sections->first();
+        $fields   = $section->fields;
+
+        // remove field..
+        $removed = $fields->shift();
+
+        // add field
+        $fields->push(factory(Field::class)->make()->toArray());
+
+        // alter replicator field..
+        $field = $replicator->field->toArray();
+        $field['type'] = [ 'type' => 'replicator' ];
+        $field['settings']['fields'] = $fields;
+
+        $section->fields = [ $field ];
+
+        // update
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/fieldsets/{$fieldset->id}/sections", [
+                'sections' => [ $section ]
+            ]);
+
+        $fields = $replicator->fieldset->fields;
+
+        $this->assertDatabaseTableDoesNotHaveColumn($replicator->table, $removed->handle);
+        $this->assertDatabaseTableHasColumn($replicator->table, $fields->get(0)->handle);
+        $this->assertDatabaseTableHasColumn($replicator->table, $fields->get(1)->handle);
     }
 
 
@@ -92,7 +151,7 @@ class ReplicatorFieldtypeTest extends TestCase
             'type'     => 'replicator',
             'settings' => [
                 'replicator' => null,
-                'fields'     => factory(Field::class, 3)->make()
+                'fields'     => factory(Field::class, 2)->make()
             ]
         ], $overrides);
 

@@ -177,16 +177,6 @@ class FieldsetSectionController extends Controller
         if ($fields->isNotEmpty()){
             $section->fields()->createMany($fields->all());
         }
-        // $fields->each(function ($field) use ($section) {
-        //     $section->fields()->create([
-        //         'name'      => $field['name'],
-        //         'handle'    => $field['handle'],
-        //         'help'      => $field['help'],
-        //         'settings'  => $field['settings'],
-        //         'type'      => $field['type']['handle'],
-        //         'order'     => $field['order']
-        //     ]);
-        // });
     }
 
     /**
@@ -200,7 +190,7 @@ class FieldsetSectionController extends Controller
     {
         $fields->each(function ($field) use ($section) {
             $id            = $field['id'];
-            $field['type'] = $field['type']['handle'];
+            $field['type'] = is_string($field['type']) ? $field['type'] : $field['type']['handle'];
 
             unset($field['id']);
 

@@ -126,7 +126,7 @@ class ReplicatorObserver
      * @param  Replicator  $replicator
      * @return void
      */
-    protected function udpateFieldset(Replicator $replicator)
+    protected function updateFieldset(Replicator $replicator)
     {
         $replicator->fieldset()->update([
             'name'   => ($name = "Replicator: {$replicator->name}"),
