@@ -51,7 +51,6 @@ class SyncSettings
     {
         $groups = $groups ?? SettingService::groups();
 
-
         // Pull existing elements..
         $existing = SettingGroup::all()->pluck('id', 'id');
 
