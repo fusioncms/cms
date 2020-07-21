@@ -49,7 +49,6 @@ class SyncSettings
      */
     public function syncSettingGroups($groups = null)
     {
-        // dump('sync', $groups, SettingService::groups());
         $groups = $groups ?? SettingService::groups();
 
 
