@@ -1,0 +1,79 @@
+.nav {
+    @apply fixed overflow-y-auto w-full;
+    background: #2d323b;
+    color: #ffffff;
+    right: 100%;
+    top: 55px;
+    height: calc(100vh - 55px);
+    transition: right 0.5s $transition-effect, left 0.5s $transition-effect;
+    z-index: 5;
+
+    background: #2d323b;
+    background: linear-gradient(180deg, #191b1f 0%, #2d323b 33%, #363e4e 66%, #445d6d 100%);
+
+    .nav-active & { 
+        right: 0;
+
+        @screen md { 
+            right: auto; 
+            left: 0;
+        }
+    }
+
+    @screen md { 
+        @apply overflow-y-auto z-20;
+        width: $nav-width-desktop; 
+        right: auto;
+        left: -$nav-width-desktop;
+    }
+
+    &__container {
+        @apply py-6;
+    }
+}
+
+.nav-menu {
+    &__list {}
+
+    &__item {}
+
+    &__link {
+        @apply font-semibold tracking-wide leading-none font-serif text-white no-underline text-xs flex flex-row items-center p-3;
+        transition: all 0.3s $transition-effect;
+
+        .nav-menu--nested & {
+            @apply text-gray-400;
+
+            padding-left: rem(48px);
+        }
+
+        &:hover {
+            @apply cursor-pointer bg-gray-700 text-gray-100;
+        }
+
+        &:active {
+            @apply bg-gray-900 text-white;
+        }
+
+        .link-icon {
+            @apply inline-block mr-4;
+        }
+
+        .toggle-icon {
+            @apply ml-auto;
+        }
+    }
+
+    &__heading {
+        @apply block text-xs tracking-wider font-bold uppercase my-3 pl-6 text-gray-100;
+    }
+}
+
+.nav-logo {
+    &__text {
+        @apply font-brand text-white;
+        font-size: rem(22px);
+    }
+
+    &__image {}
+}

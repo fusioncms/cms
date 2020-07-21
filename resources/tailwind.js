@@ -211,6 +211,10 @@ module.exports = {
                     'Montserrat',
                     ...defaultTheme.fontFamily.serif,
                 ],
+
+                brand: [
+                    'Montserrat Alternates'
+                ]
             },
 
             spacing: {
