@@ -65,6 +65,10 @@ class ThemeServiceProvider extends ServiceProvider
      */
     protected function generateOptions($manifest)
     {
+        if (! File::exists(storage_path('app/themes'))) {
+            File::makeDirectory(storage_path('app/themes'));
+        }
+
         $optionsPath = storage_path('app/themes/'.$manifest->get('namespace').'.json');
 
         if (! File::exists($optionsPath)) {
