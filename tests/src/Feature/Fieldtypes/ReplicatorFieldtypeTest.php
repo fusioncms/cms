@@ -37,8 +37,7 @@ class ReplicatorFieldtypeTest extends TestCase
 
         // replicators
         $this->assertDatabaseHas('replicators', [
-            'name'   => $attributes['name'],
-            'handle' => $attributes['handle'],
+            'name' => $attributes['name'],
         ]);
 
         // fieldsets
@@ -83,9 +82,7 @@ class ReplicatorFieldtypeTest extends TestCase
      */
     private function newReplicator($overrides = [])
     {
-        $section = factory(\Fusion\Models\Section::class)->make();
-        dd($section);
-        // $section  = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $section  = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $fieldset = \Facades\FieldsetFactory::withSections([$section])->create();
 
         // generate field attributes
@@ -99,7 +96,6 @@ class ReplicatorFieldtypeTest extends TestCase
             ]
         ], $overrides);
 
-        // assign fields
         $section->fields = [ $attributes ];
 
         $this

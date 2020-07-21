@@ -102,18 +102,22 @@ class ReplicatorObserver
      */
     protected function createFieldset(Replicator $replicator)
     {
-        $replicator->withoutEvents(function() use ($replicator) {
-            $replicator->fieldsets()->create([
-                'name'   => ($name = "Replicator: {$replicator->name}"),
-                'handle' => str_handle($name),
-                'hidden' => true
-            ])->sections()->create([
-                'name'   => 'General',
-                'handle' => 'general',
-            ])->fields()->createMany(
-                $replicator->field->settings['fields'] ?? []
-            );
-        });
+        $fieldset = Fieldset::create([
+            'name'   => ($name = "Replicator: {$replicator->name}"),
+            'handle' => str_handle($name),
+            'hidden' => true
+        ]);
+
+        // add section/fields
+        $section = $fieldset->sections()->create([
+            'name'   => 'General',
+            'handle' => 'general',
+        ])->fields()->createMany(
+            $replicator->field->settings['fields'] ?? []
+        );
+
+        $replicator->attachFieldset($fieldset);
+        $replicator->save();
     }
 
     /**
