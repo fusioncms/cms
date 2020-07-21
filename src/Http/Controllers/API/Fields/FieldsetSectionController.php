@@ -15,9 +15,13 @@ class FieldsetSectionController extends Controller
     {
         $sections = collect($request->sections);
 
-        $fieldset = $this->createSections($fieldset, $this->getAttachedSections($sections));
-        $fieldset = $this->updateSections($fieldset, $this->getUpdatedSections($sections));
-        $fieldset = $this->deleteSections($fieldset, $this->getDetachedSections($fieldset, $sections));
+        $attached = $this->getAttachedSections($sections);
+        $updated  = $this->getUpdatedSections($sections);
+        $detached = $this->getDetachedSections($fieldset, $sections);
+
+        $fieldset = $this->createSections($fieldset, $attached);
+        $fieldset = $this->updateSections($fieldset, $updated);
+        $fieldset = $this->deleteSections($fieldset, $detached);
 
         return new FieldsetResource($fieldset);
     }
@@ -51,6 +55,10 @@ class FieldsetSectionController extends Controller
      */
     protected function getDetachedSections(Fieldset $fieldset, Collection $sections)
     {
+        if ($sections->isEmpty()) {
+            return collect();
+        }
+
         $existing = $fieldset->sections->pluck('id');
         $saving   = $this->getUpdatedSections($sections)->pluck('id');
 
@@ -66,19 +74,22 @@ class FieldsetSectionController extends Controller
      */
     protected function createSections(Fieldset $fieldset, Collection $sections)
     {
-        $sections->each(function ($data) use ($fieldset) {
-            $section = $fieldset->sections()->create([
-                'name'        => $data['name'],
-                'handle'      => $data['handle'],
-                'description' => $data['description'],
-                'placement'   => $data['placement'],
-                'order'       => $data['order'],
-            ]);
+        if ($sections->isNotEmpty()) {
+dump('FieldsetSectionController::createSections', $fieldset->name, $sections->count());
+            $sections->each(function ($data) use ($fieldset) {
+                $section = $fieldset->sections()->create([
+                    'name'        => $data['name'],
+                    'handle'      => $data['handle'],
+                    'description' => $data['description'],
+                    'placement'   => $data['placement'],
+                    'order'       => $data['order'],
+                ]);
 
-            if (isset($data['fields'])) {
-                $this->createFields($section, collect($data['fields']));
-            }
-        });
+                if (isset($data['fields'])) {
+                    $this->createFields($section, collect($data['fields']));
+                }
+            });
+        }
 
         return $fieldset;
     }
@@ -92,20 +103,27 @@ class FieldsetSectionController extends Controller
      */
     protected function updateSections(Fieldset $fieldset, Collection $sections)
     {
-        $sections->each(function ($data) use ($fieldset) {
-            $id      = $data['id'];
-            $fields  = collect($data['fields']);
+        if ($sections->isNotEmpty()) {
+dump('FieldsetSectionController::updateSections', $fieldset->name);
+            $sections->each(function ($data) use ($fieldset) {
+                $id      = $data['id'];
+                $fields  = collect($data['fields']);
 
-            unset($data['id']);
-            unset($data['fields']);
+                unset($data['id']);
+                unset($data['fields']);
 
-            $section = $fieldset->sections()->findOrFail($id);
-            $section->update($data);
+                $section = $fieldset->sections()->findOrFail($id);
+                $section->update($data);
 
-            $this->deleteFields($section, $this->getDetachedFields($section, $fields));
-            $this->updateFields($section, $this->getUpdatedFields($fields));
-            $this->createFields($section, $this->getAttachedFields($fields));
-        });
+                $attached = $this->getDetachedFields($section, $fields);
+                $updated  = $this->getUpdatedFields($fields);
+                $detached = $this->getAttachedFields($fields);
+
+                $this->deleteFields($section, $detached);
+                $this->updateFields($section, $updated);
+                $this->createFields($section, $detached);
+            });
+        }
 
         return $fieldset;
     }
@@ -175,7 +193,17 @@ class FieldsetSectionController extends Controller
     protected function createFields(Section $section, Collection $fields)
     {
         if ($fields->isNotEmpty()){
-            $section->fields()->createMany($fields->all());
+            $fields->each(function($field) use ($section) {
+                $section->fields()->create([
+                    'name'     => $field['name'],
+                    'handle'   => $field['handle'],
+                    'help'     => $field['help'],
+                    'settings' => $field['settings'],
+                    'type'     => $field['type']['handle'],
+                    'order'    => $field['order'],
+                ]);
+            });
+            // $section->fields()->createMany($fields->all());
         }
     }
 
@@ -190,7 +218,7 @@ class FieldsetSectionController extends Controller
     {
         $fields->each(function ($field) use ($section) {
             $id            = $field['id'];
-            $field['type'] = is_string($field['type']) ? $field['type'] : $field['type']['handle'];
+            $field['type'] = $field['type']['handle'];
 
             unset($field['id']);
 

@@ -17,6 +17,7 @@ class FieldObserver
      */
     public function created(Field $field)
     {
+dump('FieldObserver::created', $field->name);
         $fieldtype = fieldtypes()->get($field->type);
         $fieldtype->onSaved($field);
 
@@ -31,6 +32,7 @@ class FieldObserver
 
         if (! is_null($column)) {
             $containers->each(function($container) use ($field, $column, $settings) {
+dump('FieldObserver::created::schema', $container->getTable());
                 Schema::table($container->getTable(), function ($table) use ($field, $column, $settings) {
                     if (! Schema::hasColumn($table->getTable(), $field->handle)) {
                         call_user_func_array([$table, $column], $settings)->nullable();
@@ -48,6 +50,7 @@ class FieldObserver
      */
     public function updated(Field $field)
     {
+dump('FieldObserver::updated');
         $fieldtype = fieldtypes()->get($field->type);
         $fieldtype->onSaved($field);
         
@@ -67,6 +70,7 @@ class FieldObserver
         ];
 
         $containers->each(function($container) use($old, $new) {
+dump('FieldObserver::updated::schema', $container->getTable());
             $table = $container->getTable();
 
             if ($old['handle'] !== $new['handle']) {
@@ -105,6 +109,7 @@ class FieldObserver
      */
     public function deleted(Field $field)
     {
+dump('FieldObserver::deleted', $field->name);
         $fieldset   = $field->section->fieldset;
         $containers = $this->getFieldsettables($fieldset);
 
@@ -126,6 +131,7 @@ class FieldObserver
                 }
             });
         }
+
     }
 
     /**

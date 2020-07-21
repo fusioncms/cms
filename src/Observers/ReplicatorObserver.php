@@ -3,6 +3,8 @@
 namespace Fusion\Observers;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Fusion\Models\Section;
 use Fusion\Models\Fieldset;
 use Fusion\Models\Replicator;
 use Fusion\Database\Migration;
@@ -33,6 +35,7 @@ class ReplicatorObserver
      */
     public function created(Replicator $replicator)
     {
+dump('ReplicatorObserver::created');
         $this->migration->schema->create($replicator->table, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('replicator_id')->index();
@@ -50,6 +53,7 @@ class ReplicatorObserver
      */
     public function updating(Replicator $replicator)
     {
+dump('ReplicatorObserver::updating');
         // Fetch our "old" instance
         $old = Replicator::find($replicator->id);
 
@@ -60,8 +64,9 @@ class ReplicatorObserver
             $oldClass = 'Fusion\\Models\\Replicators\\' . Str::studly($old->handle);
             $newClass = 'Fusion\\Models\\Replicators\\' . Str::studly($replicator->handle);
 
-            $this->updateFieldset($replicator);
         }
+
+        $this->updateFieldset($replicator);
     }
 
     /**
@@ -72,6 +77,7 @@ class ReplicatorObserver
      */
     public function deleting(Replicator $replicator)
     {
+dump('ReplicatorObserver::deleting');
         $fieldsets = $replicator->fieldsets;
 
         $replicator->detachFieldset();
@@ -90,6 +96,7 @@ class ReplicatorObserver
      */
     public function deleted(Replicator $replicator)
     {
+dump('ReplicatorObserver::deleted');
         $this->migration->schema->dropIfExists($replicator->table);
     }
 
@@ -102,22 +109,26 @@ class ReplicatorObserver
      */
     protected function createFieldset(Replicator $replicator)
     {
-        $fieldset = Fieldset::create([
+dump('ReplicatorObserver::createFieldset');
+        $replicator->withoutEvents(function() use ($replicator) {
+            $fieldset = Fieldset::create([
+                'name'   => ($name = "Replicator: {$replicator->name}"),
+                'handle' => str_handle($name),
+                'hidden' => true
+            ]);
+
+            $replicator->attachFieldset($fieldset);
+            $replicator->save();
+        });
+
+        $section = $replicator->fieldset->sections()->create([
             'name'   => ($name = "Replicator: {$replicator->name}"),
             'handle' => str_handle($name),
-            'hidden' => true
         ]);
 
-        // add section/fields
-        $section = $fieldset->sections()->create([
-            'name'   => 'General',
-            'handle' => 'general',
-        ])->fields()->createMany(
-            $replicator->field->settings['fields'] ?? []
-        );
-
-        $replicator->attachFieldset($fieldset);
-        $replicator->save();
+        if (isset($replicator->field->settings['fields'])) {
+            $this->createFields($section, collect($replicator->field->settings['fields']));
+        }
     }
 
     /**
@@ -128,6 +139,7 @@ class ReplicatorObserver
      */
     protected function updateFieldset(Replicator $replicator)
     {
+dump('ReplicatorObserver::updateFieldset');
         $replicator->fieldset()->update([
             'name'   => ($name = "Replicator: {$replicator->name}"),
             'handle' => str_handle($name)
@@ -185,8 +197,18 @@ class ReplicatorObserver
      */
     protected function createFields(Section $section, Collection $fields)
     {
-        if ($fields->isNotEmpty()){
-            $section->fields()->createMany($fields->all());
+        if ($fields->isNotEmpty()) {
+dump('ReplicatorObserver::createFields');
+            $fields->each(function($field) use ($section) {
+                $section->fields()->create([
+                    'name'     => $field['name'],
+                    'handle'   => $field['handle'],
+                    'help'     => $field['help'],
+                    'settings' => $field['settings'],
+                    'type'     => $field['type']['handle'],
+                    'order'    => $field['order'],
+                ]);
+            });
         }
     }
 
@@ -199,14 +221,17 @@ class ReplicatorObserver
      */
     protected function updateFields(Section $section, Collection $fields)
     {
-        $fields->each(function ($field) use ($section) {
-            $id            = $field['id'];
-            $field['type'] = $field['type']['handle'];
+        if ($fields->isNotEmpty()) {
+dump('ReplicatorObserver::updateFields');
+            $fields->each(function ($field) use ($section) {
+                $id            = $field['id'];
+                $field['type'] = $field['type']['handle'];
 
-            unset($field['id']);
+                unset($field['id']);
 
-            $section->fields()->find($id)->update($field);
-        });
+                $section->fields()->find($id)->update($field);
+            });
+        }
     }
 
     /**
