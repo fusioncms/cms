@@ -25,7 +25,9 @@
 
                             <p-actions :id="field.handle + '_actions'">
                                 <p-dropdown-link @click.prevent="edit(index)">Edit</p-dropdown-link>
-                                <p-dropdown-link @click.prevent="remove(index)">Delete</p-dropdown-link>
+                                <p-dropdown-link @click.prevent="openModal('move')">Move to...</p-dropdown-link>
+                                <p-dropdown-divider></p-dropdown-divider>
+                                <p-dropdown-link @click.prevent="remove(index)"><span class="text-danger-500">Delete</span></p-dropdown-link>
                             </p-actions>
                         </div>
                     </p-sortable-item>
@@ -35,12 +37,12 @@
 
         <div class="row">
             <div class="col w-full">
-                <a class="button" href="#" @click.prevent="openModal">Add Field</a>
+                <a class="button" href="#" @click.prevent="openModal('add')">Add Field</a>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="add-field" title="Add Field" v-model="open" extra-large>
+            <p-modal name="add-field" title="Add Field" v-model="opened.add" extra-large>
                 <div class="row -mb-6">
                     <div class="col w-1/2 lg:w-1/6" v-for="fieldtype in fieldtypes" :key="'add-' + fieldtype.handle">
                         <p-button class="w-full items-center justify-start" @click.prevent="add(fieldtype)">
@@ -50,7 +52,15 @@
                 </div>
 
                 <template slot="footer">
-                    <p-button @click.prevent="closeModal">Close</p-button>
+                    <p-button @click.prevent="closeModal('add')">Close</p-button>
+                </template>
+            </p-modal>
+
+            <p-modal name="move-field" title="Move Field" v-model="opened.move" small>
+                Move field
+
+                <template slot="footer">
+                    <p-button @click.prevent="closeModal('move')">Close</p-button>
                 </template>
             </p-modal>
 
@@ -72,7 +82,10 @@
             return {
                 fieldtypes: {},
                 active: false,
-                open: false,
+                opened: {
+                    add: false,
+                    move: false,
+                },
             }
         },
 
@@ -125,7 +138,7 @@
 
         methods: {
             add(fieldtype, additional = {}, external = false) {
-                this.closeModal()
+                this.closeModal('add')
 
                 this.fields.push({
                     type:     fieldtype,
@@ -171,12 +184,12 @@
                 this.field = {}
             },
 
-            openModal() {
-                this.open = true
+            openModal(modal) {
+                this.opened[modal] = true
             },
 
-            closeModal() {
-                this.open = false
+            closeModal(modal) {
+                this.opened[modal] = false
             },
         },
 
