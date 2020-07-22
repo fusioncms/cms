@@ -39,19 +39,19 @@ class Replicator extends Model
     }
 
     /**
-     * Replicator relationship.
+     * Replicants relationship.
      *
-     * @return HasOneRelationship
+     * @return HasMany|Collection
      */
-    public function replicator()
+    public function replicants()
     {
-        return $this->hasOne("Fusion\Models\Replicators\\" . Str::studly($this->handle));
+        return $this->hasMany(get_class($this->getBuilder()));
     }
 
     /**
      * Field relationship.
      *
-     * @return HasOneRelationship
+     * @return BelongsTo|Collection
      */
     public function field()
     {

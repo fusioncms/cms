@@ -36,11 +36,11 @@ class {class} extends Model
     protected $dates = {dates};
 
     /**
-     * Get parent relationship.
+     * Get replicator relationship.
      *
      * @return mixed
      */
-    public function parent()
+    public function replicator()
     {
         return $this->belongsTo(Replicator::class, 'replicator_id');
     }

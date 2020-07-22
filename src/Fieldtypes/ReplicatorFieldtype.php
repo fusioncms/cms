@@ -6,6 +6,7 @@ use Fusion\Models\Field;
 use Illuminate\Support\Str;
 use Fusion\Models\Replicator;
 use Illuminate\Support\Facades\File;
+use Fusion\Http\Resources\ReplicantResource;
 
 class ReplicatorFieldtype extends Fieldtype
 {
@@ -22,7 +23,7 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * @var string
      */
-    public $description = 'A magical field.';
+    public $description = 'A matrix-like fieldtype.';
 
     /**
      * @var array
@@ -63,21 +64,21 @@ class ReplicatorFieldtype extends Fieldtype
      */
     public function onSaved(Field $field)
     {
-        if ($field->settings['replicator']) {
+        if (@is_null($field->settings['replicator'])) {
+            $replicator = Replicator::create([
+                'field_id' => $field->id,
+                'name'     => $field->name,
+                'handle'   => $field->handle . '_' . unique_id(5),
+            ]);
+        } else {
             $replicator = Replicator::where([
                 'id'       => $field->settings['replicator'],
                 'field_id' => $field->id
             ])->firstOrFail();
 
             $replicator->touch();
-        } else {
-            $replicator = Replicator::create([
-                'field_id' => $field->id,
-                'name'     => $field->name,
-                'handle'   => $field->handle . '_' . unique_id(5),
-            ]);
         }
-        
+
         // update field w/o events..
         $field->withoutEvents(function() use ($field, $replicator) {
             $field->settings = ['replicator' => $replicator->id];
@@ -133,10 +134,10 @@ class ReplicatorFieldtype extends Fieldtype
      *
      * @param  Illuminate\Eloquent\Model  $model
      * @param  Fusion\Models\Field        $field
-     * @return TermResource
+     * @return ReplicantResource
      */
     public function getResource($model, Field $field)
     {
-        return;
+        return ReplicantResource::collection($this->getValue($model, $field));
     }
 }

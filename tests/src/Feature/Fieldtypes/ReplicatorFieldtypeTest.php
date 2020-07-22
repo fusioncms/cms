@@ -30,7 +30,7 @@ class ReplicatorFieldtypeTest extends TestCase
      * @group fieldtypes
      * @group replicator
      */
-    public function assigning_replicator_field_to_fieldset_will_auto_generate_tables()
+    public function creating_a_replicator_field_will_auto_generate_tables()
     {
         $replicator = $this->createReplicator([
             $field1 = factory(Field::class)->make(['name' => 'RF1', 'handle' => 'rf1']),
@@ -43,6 +43,8 @@ class ReplicatorFieldtypeTest extends TestCase
         ]);
 
         $this->assertDatabaseHasTable($replicator->table);
+        $this->assertDatabaseTableHasColumn($replicator->table, $field1->handle);
+        $this->assertDatabaseTableHasColumn($replicator->table, $field2->handle);
 
         $this->assertDatabaseHas('fieldsets', [
             'name'   => ($name = 'Replicator: ' . $replicator->name),
@@ -71,25 +73,7 @@ class ReplicatorFieldtypeTest extends TestCase
      * @group fieldtypes
      * @group replicator
      */
-    public function creating_replicator_fields_will_update_replicator_table()
-    {
-        $replicator = $this->createReplicator([
-            $field1 = factory(Field::class)->make(['name' => 'RF1', 'handle' => 'rf1']),
-            $field2 = factory(Field::class)->make(['name' => 'RF2', 'handle' => 'rf2']),
-        ]);
-
-        $this->assertDatabaseTableHasColumn($replicator->table, $field1->handle);
-        $this->assertDatabaseTableHasColumn($replicator->table, $field2->handle);
-    }
-
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     * @group replicator
-     */
-    public function updating_replicator_fields_will_update_replicator_table()
+    public function updating_a_replicator_field_will_auto_update_tables()
     {
         // create replicator..
         $replicator = $this->createReplicator([
