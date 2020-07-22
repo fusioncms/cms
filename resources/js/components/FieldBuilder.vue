@@ -35,22 +35,22 @@
 
         <div class="row">
             <div class="col w-full">
-                <a class="button" href="#" @click.prevent v-modal:add-field>Add Field</a>
+                <a class="button" href="#" @click.prevent="openModal">Add Field</a>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="add-field" title="Add Field" extra-large>
+            <p-modal name="add-field" title="Add Field" v-model="open" extra-large>
                 <div class="row -mb-6">
                     <div class="col w-1/2 lg:w-1/6" v-for="fieldtype in fieldtypes" :key="'add-' + fieldtype.handle">
-                        <p-button class="w-full items-center justify-start" @click.prevent="add(fieldtype)" v-modal:add-field>
+                        <p-button class="w-full items-center justify-start" @click.prevent="add(fieldtype)">
                             <fa-icon :icon="fieldtype.icon" class="icon"></fa-icon> {{ fieldtype.name }}
                         </p-button>
                     </div>
                 </div>
 
                 <template slot="footer">
-                    <p-button v-modal:add-field>Close</p-button>
+                    <p-button @click.prevent="closeModal">Close</p-button>
                 </template>
             </p-modal>
 
@@ -72,6 +72,7 @@
             return {
                 fieldtypes: {},
                 active: false,
+                open: false,
             }
         },
 
@@ -124,6 +125,8 @@
 
         methods: {
             add(fieldtype, additional = {}, external = false) {
+                this.closeModal()
+
                 this.fields.push({
                     type:     fieldtype,
                     name:     additional.name || 'Field ' + this.nextId,
@@ -166,7 +169,15 @@
                 }
 
                 this.field = {}
-            }
+            },
+
+            openModal() {
+                this.open = true
+            },
+
+            closeModal() {
+                this.open = false
+            },
         },
 
         mounted() {
