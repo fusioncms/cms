@@ -75,7 +75,6 @@ class FieldsetSectionController extends Controller
     protected function createSections(Fieldset $fieldset, Collection $sections)
     {
         if ($sections->isNotEmpty()) {
-dump('FieldsetSectionController::createSections', $fieldset->name, $sections->count());
             $sections->each(function ($data) use ($fieldset) {
                 $section = $fieldset->sections()->create([
                     'name'        => $data['name'],
@@ -104,7 +103,6 @@ dump('FieldsetSectionController::createSections', $fieldset->name, $sections->co
     protected function updateSections(Fieldset $fieldset, Collection $sections)
     {
         if ($sections->isNotEmpty()) {
-dump('FieldsetSectionController::updateSections', $fieldset->name);
             $sections->each(function ($data) use ($fieldset) {
                 $id      = $data['id'];
                 $fields  = collect($data['fields']);

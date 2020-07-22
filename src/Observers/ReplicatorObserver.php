@@ -2,82 +2,39 @@
 
 namespace Fusion\Observers;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Fusion\Models\Section;
 use Fusion\Models\Fieldset;
 use Fusion\Models\Replicator;
-use Fusion\Database\Migration;
-use Fusion\Database\Schema\Blueprint;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
 class ReplicatorObserver
 {
     /**
-     * @var \Fusion\Database\Migration
-     */
-    protected $migration;
-
-    /**
-     * Constructor.
-     *
-     * @param  \Fusion\Database\Migration  $migration
-     */
-    public function __construct(Migration $migration)
-    {
-        $this->migration = $migration;
-    }
-
-    /**
-     * Handle the "created" event.
+     * Handle 'saved' model event.
      *
      * @param  \Fusion\Models\Replicator $replicator
      * @return void
      */
-    public function created(Replicator $replicator)
+    public function saved(Replicator $replicator)
     {
-dump('ReplicatorObserver::created');
-        $this->migration->schema->create($replicator->table, function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('replicator_id')->index();
-            $table->timestamps();
-        });
-
-        $this->createFieldset($replicator);
-    }
-
-    /**
-     * Handle the "updating" event.
-     *
-     * @param  \Fusion\Models\Replicator $replicator
-     * @return void
-     */
-    public function updating(Replicator $replicator)
-    {
-dump('ReplicatorObserver::updating');
-        // Fetch our "old" instance
-        $old = Replicator::find($replicator->id);
-
-        // Rename the tables if changed
-        if ($old->table !== $replicator->table) {
-            $this->migration->schema->rename($old->table, $replicator->table);
-
-            $oldClass = 'Fusion\\Models\\Replicators\\' . Str::studly($old->handle);
-            $newClass = 'Fusion\\Models\\Replicators\\' . Str::studly($replicator->handle);
-
+        if (Schema::hasTable($replicator->table)) {
+            $this->updateReplicator($replicator);
+        } else {
+            $this->createReplicator($replicator);
         }
-
-        $this->updateFieldset($replicator);
     }
 
     /**
-     * Handle the  "deleting" event.
+     * Handle 'deleting' model event.
      *
      * @param \Fusion\Models\Replicator $replicator
      * @return void
      */
     public function deleting(Replicator $replicator)
     {
-dump('ReplicatorObserver::deleting');
         $fieldsets = $replicator->fieldsets;
 
         $replicator->detachFieldset();
@@ -89,16 +46,62 @@ dump('ReplicatorObserver::deleting');
     }
 
     /**
-     * Handle the "deleted" event.
+     * Handle 'deleted' model event.
      *
      * @param  \Fusion\Models\Replicator $replicator
      * @return void
      */
     public function deleted(Replicator $replicator)
     {
-dump('ReplicatorObserver::deleted');
-        $this->migration->schema->dropIfExists($replicator->table);
+        Schema::dropIfExists($replicator->table);
     }
+
+    /**
+     * Create replicator table.
+     * 
+     * @param  Replicator $replicator
+     * @return void
+     */
+    protected function createReplicator(Replicator $replicator)
+    {
+        Schema::create($replicator->table, function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('replicator_id')->index();
+            $table->timestamps();
+        });
+
+        $this->createFieldset($replicator);
+    }
+
+    /**
+     * 
+     * @param  Replicator $replicator
+     * @return void
+     */
+    protected function updateReplicator(Replicator $replicator)
+    {
+        $field     = $replicator->field;
+        $oldTable  = $replicator->table;
+        $oldHandle = $replicator->handle;
+        $newHandle = "{$field->handle}_" . Str::afterLast($oldHandle, '_');
+
+        // If field name changed...
+        if ($oldHandle !== $newHandle) {
+            $replicator->withoutEvents(function() use ($replicator, $field, $newHandle) {
+                $replicator->update([
+                    'name'   => $field->name,
+                    'handle' => $newHandle
+                ]);
+            });
+            
+            $replicator = $replicator->fresh();
+
+            Schema::rename($oldTable, $replicator->table);
+        }
+
+        $this->updateFieldset($replicator);
+    }
+
 
     /**
      * Automatically create a Fieldset, Section,
@@ -109,7 +112,6 @@ dump('ReplicatorObserver::deleted');
      */
     protected function createFieldset(Replicator $replicator)
     {
-dump('ReplicatorObserver::createFieldset');
         $replicator->withoutEvents(function() use ($replicator) {
             $fieldset = Fieldset::create([
                 'name'   => ($name = "Replicator: {$replicator->name}"),
@@ -139,7 +141,6 @@ dump('ReplicatorObserver::createFieldset');
      */
     protected function updateFieldset(Replicator $replicator)
     {
-dump('ReplicatorObserver::updateFieldset');
         $replicator->fieldset()->update([
             'name'   => ($name = "Replicator: {$replicator->name}"),
             'handle' => str_handle($name)
@@ -198,7 +199,6 @@ dump('ReplicatorObserver::updateFieldset');
     protected function createFields(Section $section, Collection $fields)
     {
         if ($fields->isNotEmpty()) {
-dump('ReplicatorObserver::createFields');
             $fields->each(function($field) use ($section) {
                 $section->fields()->create([
                     'name'     => $field['name'],
@@ -222,7 +222,6 @@ dump('ReplicatorObserver::createFields');
     protected function updateFields(Section $section, Collection $fields)
     {
         if ($fields->isNotEmpty()) {
-dump('ReplicatorObserver::updateFields');
             $fields->each(function ($field) use ($section) {
                 $id            = $field['id'];
                 $field['type'] = $field['type']['handle'];

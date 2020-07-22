@@ -4,6 +4,8 @@ namespace Fusion\Tests\Feature;
 
 use Fusion\Tests\TestCase;
 use Fusion\Models\Field;
+use Fusion\Models\Section;
+use Fusion\Models\Fieldset;
 use Fusion\Models\Replicator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -15,6 +17,10 @@ class ReplicatorFieldtypeTest extends TestCase
     {
         parent::setUp();
         $this->handleValidationExceptions();
+
+        // --
+        $this->fieldset = factory(Fieldset::class)->create(['name' => 'RP Fieldset', 'handle' => 'rp_fieldset']);
+        $this->section  = factory(Section::class)->make(['name' => 'RP Section','handle' => 'rp_section']);
     }
 
     /**
@@ -26,32 +32,29 @@ class ReplicatorFieldtypeTest extends TestCase
      */
     public function assigning_replicator_field_to_fieldset_will_auto_generate_tables()
     {
-        list($replicator, $fieldset, $attributes) = $this->newReplicator([
-            'name'   => 'Complex',
-            'handle' => 'complex',
+        $replicator = $this->createReplicator([
+            $field1 = factory(Field::class)->make(['name' => 'RF1', 'handle' => 'rf1']),
+            $field2 = factory(Field::class)->make(['name' => 'RF2', 'handle' => 'rf2']),
         ]);
 
-        // replicators
         $this->assertDatabaseHas('replicators', [
-            'name' => $attributes['name'],
+            'name'   => $replicator->name,
+            'handle' => $replicator->handle,
         ]);
 
         $this->assertDatabaseHasTable($replicator->table);
 
-        // fieldsets
         $this->assertDatabaseHas('fieldsets', [
             'name'   => ($name = 'Replicator: ' . $replicator->name),
             'handle' => str_handle($name),
         ]);
 
-        // fieldsetables
         $this->assertDatabaseHas('fieldsettables', [
             'fieldset_id'        => $replicator->fieldset->id,
             'fieldsettable_type' => Replicator::class,
             'fieldsettable_id'   => $replicator->id,
         ]);
 
-        // sections
         $section = $replicator->fieldset->sections()->first();
 
         $this->assertDatabaseHas('sections', [
@@ -70,15 +73,13 @@ class ReplicatorFieldtypeTest extends TestCase
      */
     public function creating_replicator_fields_will_update_replicator_table()
     {
-        list($replicator, $fieldset, $attributes) = $this->newReplicator([
-            'name'   => 'Complex',
-            'handle' => 'complex',
+        $replicator = $this->createReplicator([
+            $field1 = factory(Field::class)->make(['name' => 'RF1', 'handle' => 'rf1']),
+            $field2 = factory(Field::class)->make(['name' => 'RF2', 'handle' => 'rf2']),
         ]);
 
-        $fields = $replicator->fieldset->fields;
-
-        $this->assertDatabaseTableHasColumn($replicator->table, $fields->get(0)->handle);
-        $this->assertDatabaseTableHasColumn($replicator->table, $fields->get(1)->handle);
+        $this->assertDatabaseTableHasColumn($replicator->table, $field1->handle);
+        $this->assertDatabaseTableHasColumn($replicator->table, $field2->handle);
     }
 
     /**
@@ -90,49 +91,27 @@ class ReplicatorFieldtypeTest extends TestCase
      */
     public function updating_replicator_fields_will_update_replicator_table()
     {
-        list($replicator, $fieldset, $attributes) = $this->newReplicator([
-            'name'   => 'Complex',
-            'handle' => 'complex',
+        // create replicator..
+        $replicator = $this->createReplicator([
+            factory(Field::class)->make(['name' => 'RF1', 'handle' => 'rf1']),
+            factory(Field::class)->make(['name' => 'RF2', 'handle' => 'rf2']),
         ]);
 
-        // get fields..
-        $fields = $replicator->fieldset->fields;
-
-        // remove field..
+        // update field..
+        $fields  = $replicator->fieldset->fields;
         $removed = $fields->shift();
+        $updated = $fields->first();
+        $updated->update(['name' => 'R - Field Two', 'handle' => 'r_field_two']);
 
-        // add field..
-        $fields->push(factory(Field::class)->make(['name'=>'R - Field 3','handle'=>'r_field_3'])->toArray());
-
-        // format for save..
-        $fields->transform(function($field) {
-            $field['type'] = ['handle' => $field['type']];
-
-            return $field;
-        });
-
-        // alter replicator fields..
-        $field                       = $replicator->field->toArray();
-        $field['type']               = [ 'handle' => 'replicator' ];
-        $field['settings']['fields'] = $fields;
-
-        // --
-        // prepare save
-        $section = $fieldset->sections()->first();
-        $section->fields = [ $field ];
-dump('--');
-        // update
-        $this
-            ->be($this->owner, 'api')
-            ->json('POST', "/api/fieldsets/{$fieldset->id}/sections", [
-                'sections' => [ $section ]
-            ]);
-dd('--');
-        $fields = $replicator->fieldset->fields;
+        // update replicator
+        $replicator = $this->updateReplicator($replicator, [
+            $updated,
+            $added = factory(Field::class)->make(['name' => 'RF3', 'handle' => 'rf3']),
+        ]);
 
         $this->assertDatabaseTableDoesNotHaveColumn($replicator->table, $removed->handle);
-        $this->assertDatabaseTableHasColumn($replicator->table, $fields->get(0)->handle);
-        $this->assertDatabaseTableHasColumn($replicator->table, $fields->get(1)->handle);
+        $this->assertDatabaseTableHasColumn($replicator->table, $updated->handle);
+        $this->assertDatabaseTableHasColumn($replicator->table, $added->handle);
     }
 
 
@@ -141,60 +120,74 @@ dd('--');
     //
 
     /**
-     * Returns new replicator w/ attributes
-     * [Helper]
+     * Create replicator helper.
      *
-     * @param  array  $overrides
-     * @return array
+     * @param  array $fields
+     * @return Replicator
      */
-    private function newReplicator($overrides = [])
+    private function createReplicator($fields)
     {
-        $fieldset = factory(\Fusion\Models\Fieldset::class)->create([
-            'name'   => 'RP Fieldset',
-            'handle' => 'rp_fieldset'
-        ]);
+        // format fields..
+        $fields = collect($fields)->transform(function($field) {
+            $field['type'] = ['handle' => $field['type']];
+            return $field;
+        })->toArray();
 
-        $section = factory(\Fusion\Models\Section::class)->make([
-            'name'   => 'RP Section',
-            'handle' => 'rp_section'
-        ]);
-
-        $field1 = factory(Field::class)->make([
-            'name'   => 'R - Field 1',
-            'handle' => 'r_field_1',
-            'type'   => ['handle' => 'input']
-        ]);
-
-        $field2 = factory(Field::class)->make([
-            'name'   => 'R - Field 2',
-            'handle' => 'r_field_2',
-            'type'   => ['handle' => 'input']
-        ]);
-
-        // generate field attributes
-        $attributes = array_merge([
-            'name'     => 'Replicator',
-            'handle'   => 'replicator',
+        // add new replicator field..
+        $this->section->fields = [[
+            'name'     => 'Complex',
+            'handle'   => 'complex',
             'type'     => [ 'handle' => 'replicator' ],
-            'help'     => '',
+            'help'     => 'purely for testing',
             'order'    => 1,
             'settings' => [
                 'replicator' => null,
-                'fields'     => [$field1, $field2]
+                'fields'     => $fields
             ]
-        ], $overrides);
+        ]];
 
-        $section->fields = [ $attributes ];
-
+        // update fieldset..
         $this
             ->be($this->owner, 'api')
-            ->json('POST', "/api/fieldsets/{$fieldset->id}/sections", [
+            ->json('POST', "/api/fieldsets/{$this->fieldset->id}/sections", [
+                'sections' => [ $this->section ]
+            ]);
+
+        return Replicator::latest()->first();
+    }
+
+    /**
+     * Returns updated replicator.
+     * [Helper]
+     *
+     * @param  Replicator $replicator
+     * @param  array      $fields
+     * @return Replicator
+     */
+    private function updateReplicator(Replicator $replicator, $fields)
+    {
+        // format fields..
+        $fields = collect($fields)->transform(function($field) {
+            $field['type'] = ['handle' => $field['type']];
+            return $field;
+        })->toArray();
+
+        // update replicator field..
+        $field                       = $replicator->field->toArray();
+        $field['type']               = [ 'handle' => 'replicator' ];
+        $field['settings']['fields'] = $fields;
+
+        // update section..
+        $section = $this->fieldset->sections()->first();
+        $section->fields = [ $field ];
+
+        // update fieldset..
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/fieldsets/{$this->fieldset->id}/sections", [
                 'sections' => [ $section ]
             ]);
 
-        $replicator = Replicator::latest()->first();
-        $fieldset   = $fieldset->fresh();
-
-        return [$replicator, $fieldset, $attributes];
+        return $replicator->fresh();
     }
 }

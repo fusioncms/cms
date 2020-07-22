@@ -63,15 +63,21 @@ class ReplicatorFieldtype extends Fieldtype
      */
     public function onSaved(Field $field)
     {
-dump("ReplicatorFieldtype::onSaved -- {$field->settings['replicator']}");
-        // build replicator..
-        $replicator = Replicator::updateOrCreate([
-            'field_id' => $field->id
-        ],[
-            'name'   => $field->name,
-            'handle' => $field->handle . '_' . unique_id(5),
-        ]);
-dump("ReplicatorFieldtype::onSaved -- {$replicator->id}");
+        if ($field->settings['replicator']) {
+            $replicator = Replicator::where([
+                'id'       => $field->settings['replicator'],
+                'field_id' => $field->id
+            ])->firstOrFail();
+
+            $replicator->touch();
+        } else {
+            $replicator = Replicator::create([
+                'field_id' => $field->id,
+                'name'     => $field->name,
+                'handle'   => $field->handle . '_' . unique_id(5),
+            ]);
+        }
+        
         // update field w/o events..
         $field->withoutEvents(function() use ($field, $replicator) {
             $field->settings = ['replicator' => $replicator->id];
