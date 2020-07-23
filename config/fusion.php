@@ -64,6 +64,7 @@ return [
         \Fusion\Fieldtypes\NumberFieldtype::class,
         \Fusion\Fieldtypes\RadioFieldtype::class,
         \Fusion\Fieldtypes\RedactorFieldtype::class,
+        \Fusion\Fieldtypes\ReplicatorFieldtype::class,
         \Fusion\Fieldtypes\SelectFieldtype::class,
         \Fusion\Fieldtypes\TaxonomyFieldtype::class,
         \Fusion\Fieldtypes\TextareaFieldtype::class,

@@ -2,8 +2,10 @@
 
 namespace Fusion\Http\Controllers\API\Fields;
 
+use Fusion\Models\Section;
 use Fusion\Models\Fieldset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\FieldsetResource;
 
@@ -13,8 +15,8 @@ class FieldsetSectionController extends Controller
     {
         $sections = collect($request->sections);
 
-        $attached = $this->getAttachedSections($fieldset, $sections);
-        $updated  = $this->getUpdatedSections($fieldset, $sections);
+        $attached = $this->getAttachedSections($sections);
+        $updated  = $this->getUpdatedSections($sections);
         $detached = $this->getDetachedSections($fieldset, $sections);
 
         $fieldset = $this->createSections($fieldset, $attached);
@@ -24,31 +26,55 @@ class FieldsetSectionController extends Controller
         return new FieldsetResource($fieldset);
     }
 
-    protected function getAttachedSections($fieldset, $sections)
+    /**
+     * @param  Collection $sections
+     * @return Collection
+     */
+    protected function getAttachedSections(Collection $sections)
     {
         return $sections->filter(function ($section) {
             return ! isset($section['id']);
         });
     }
 
-    protected function getUpdatedSections($fieldset, $sections)
+    /**
+     * @param  Collection $sections
+     * @return Collection
+     */
+    protected function getUpdatedSections(Collection $sections)
     {
         return $sections->reject(function ($section) {
             return ! isset($section['id']);
         });
     }
 
-    protected function getDetachedSections($fieldset, $sections)
+    /**
+     * @param  Fieldset   $fieldset
+     * @param  Collection $sections
+     * @return Collection
+     */
+    protected function getDetachedSections(Fieldset $fieldset, Collection $sections)
     {
+        if ($sections->isEmpty()) {
+            return collect();
+        }
+
         $existing = $fieldset->sections->pluck('id');
-        $saving   = $this->getUpdatedSections($fieldset, $sections)->pluck('id');
+        $saving   = $this->getUpdatedSections($sections)->pluck('id');
 
         return $existing->diff($saving);
     }
 
-    protected function createSections($fieldset, $sections)
+    /**
+     * Create Sections on Fieldset.
+     * 
+     * @param  Fieldset   $fieldset
+     * @param  Collection $sections
+     * @return Fieldset
+     */
+    protected function createSections(Fieldset $fieldset, Collection $sections)
     {
-        if ($sections->count()) {
+        if ($sections->isNotEmpty()) {
             $sections->each(function ($data) use ($fieldset) {
                 $section = $fieldset->sections()->create([
                     'name'        => $data['name'],
@@ -59,7 +85,7 @@ class FieldsetSectionController extends Controller
                 ]);
 
                 if (isset($data['fields'])) {
-                    $this->createFields($section, $data['fields']);
+                    $this->createFields($section, collect($data['fields']));
                 }
             });
         }
@@ -67,34 +93,47 @@ class FieldsetSectionController extends Controller
         return $fieldset;
     }
 
-    protected function updateSections($fieldset, $sections)
+    /**
+     * Update Sections on Fieldset.
+     * 
+     * @param  Fieldset   $fieldset
+     * @param  Collection $sections
+     * @return Fieldset
+     */
+    protected function updateSections(Fieldset $fieldset, Collection $sections)
     {
-        if ($sections->count()) {
-            $sections->each(function ($section) use ($fieldset) {
-                $id     = $section['id'];
-                $fields = collect($section['fields']);
+        if ($sections->isNotEmpty()) {
+            $sections->each(function ($data) use ($fieldset) {
+                $id      = $data['id'];
+                $fields  = collect($data['fields']);
 
-                unset($section['id']);
-                unset($section['fields']);
-
-                $fieldset->sections()->find($id)->update($section);
+                unset($data['id']);
+                unset($data['fields']);
 
                 $section = $fieldset->sections()->findOrFail($id);
+                $section->update($data);
 
-                $attached = $this->getAttachedFields($section, $fields);
-                $updated  = $this->getUpdatedFields($section, $fields);
-                $detached = $this->getDetachedFields($section, $fields);
+                $attached = $this->getDetachedFields($section, $fields);
+                $updated  = $this->getUpdatedFields($fields);
+                $detached = $this->getAttachedFields($fields);
 
                 $this->deleteFields($section, $detached);
                 $this->updateFields($section, $updated);
-                $this->createFields($section, $attached);
+                $this->createFields($section, $detached);
             });
         }
 
         return $fieldset;
     }
 
-    protected function deleteSections($fieldset, $ids)
+    /**
+     * Remove Sections from Fieldset.
+     * 
+     * @param  Fieldset   $fieldset
+     * @param  Collection $ids
+     * @return Fieldset
+     */
+    protected function deleteSections(Fieldset $fieldset, Collection $ids)
     {
         if ($ids->count()) {
             $sections = $fieldset->sections()->whereIn('id', $ids)->get();
@@ -107,78 +146,99 @@ class FieldsetSectionController extends Controller
         return $fieldset;
     }
 
-    protected function getAttachedFields($fieldset, $fields)
+    /**
+     * @param  Collection $fields
+     * @return Collection
+     */
+    protected function getAttachedFields(Collection $fields)
     {
         return $fields->filter(function ($field) {
             return ! isset($field['id']);
         });
     }
 
-    protected function getUpdatedFields($fieldset, $fields)
+    /**
+     * @param  Collection $fields
+     * @return Collection
+     */
+    protected function getUpdatedFields(Collection $fields)
     {
         return $fields->reject(function ($field) {
             return ! isset($field['id']);
         });
     }
 
-    protected function getDetachedFields($fieldset, $fields)
+    /**
+     * @param  Section    $section
+     * @param  Collection $fields
+     * @return Collection
+     */
+    protected function getDetachedFields(Section $section, Collection $fields)
     {
-        if (! $fieldset->fields) {
-            return collect();
-        }
-
-        $existing = $fieldset->fields->pluck('id');
-        $saving   = $this->getUpdatedFields($fieldset, $fields)->pluck('id');
+        $existing = $section->fields->pluck('id');
+        $saving   = $this->getUpdatedFields($fields)->pluck('id');
 
         return $existing->diff($saving);
     }
 
-    protected function createFields($fieldset, $fields)
+    /**
+     * Create Fields on Section.
+     * 
+     * @param  Section    $section
+     * @param  Collection $fields
+     * @return void
+     */
+    protected function createFields(Section $section, Collection $fields)
     {
-        if (count($fields)) {
-            foreach ($fields as $field) {
-                $fieldset->fields()->create([
-                    'name'      => $field['name'],
-                    'handle'    => $field['handle'],
-                    'help'      => $field['help'],
-                    'settings'  => $field['settings'],
-                    'type'      => $field['type']['handle'],
-                    'order'     => $field['order']
+        if ($fields->isNotEmpty()){
+            $fields->each(function($field) use ($section) {
+                $section->fields()->create([
+                    'name'     => $field['name'],
+                    'handle'   => $field['handle'],
+                    'help'     => $field['help'],
+                    'settings' => $field['settings'],
+                    'type'     => $field['type']['handle'],
+                    'order'    => $field['order'],
                 ]);
-            }
-        }
-
-        return $fieldset;
-    }
-
-    protected function updateFields($fieldset, $fields)
-    {
-        if ($fields->count()) {
-            $fields->each(function ($field) use ($fieldset) {
-                $id            = $field['id'];
-                $field['type'] = $field['type']['handle'];
-
-                unset($field['id']);
-
-                $fieldset->fields()
-                    ->find($id)
-                    ->update($field);
             });
+            // $section->fields()->createMany($fields->all());
         }
-
-        return $fieldset;
     }
 
-    protected function deleteFields($fieldset, $ids)
+    /**
+     * Update Fields on Section.
+     * 
+     * @param  Section    $section
+     * @param  Collection $fields
+     * @return void
+     */
+    protected function updateFields(Section $section, Collection $fields)
+    {
+        $fields->each(function ($field) use ($section) {
+            $id            = $field['id'];
+            $field['type'] = $field['type']['handle'];
+
+            unset($field['id']);
+
+            $section->fields()->find($id)->update($field);
+        });
+    }
+
+    /**
+     * Remove Fields from Section.
+     * 
+     * @param  Section    $section
+     * @param  Collection $ids
+     * @return void
+     */
+    protected function deleteFields(Section $section, Collection $ids)
     {
         if ($ids->count()) {
-            $fields = $fieldset->fields()->whereIn('id', $ids)->get();
+            $fields = $section->fields()->whereIn('id', $ids)->get();
 
             $fields->each(function ($field) {
                 $field->delete();
             });
         }
-
-        return $fieldset;
     }
 }
