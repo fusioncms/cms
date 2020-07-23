@@ -19,6 +19,7 @@ class ReplicatorResource extends JsonResource
             'name'       => $this->name,
             'handle'     => $this->handle,
             'field'      => new FieldResource($this->field),
+            'fields'     => FieldResource::collection($this->fieldset->fields),
             'replicants' => ReplicantsResource::collection($this->replicants),
         ];
         

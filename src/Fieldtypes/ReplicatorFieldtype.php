@@ -36,14 +36,15 @@ class ReplicatorFieldtype extends Fieldtype
      * @var array
      */
     public $rules = [
-        'settings.replicator' => 'required'
+        'settings.fields' => 'required|array'
     ];
 
     /**
      * @var array
      */
     public $attributes = [
-        'settings.replicator' => 'replicator'
+        'settings.replicator' => 'replicator',
+        'settings.fields'     => 'fields',
     ];
 
     /**

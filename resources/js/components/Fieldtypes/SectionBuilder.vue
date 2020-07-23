@@ -57,9 +57,9 @@
             <div class="row">
                 <div class="col mt-6 w-full">
                     <field-builder
+                        v-if="section.fields"
                         v-model="section.fields"
-                        @input="reorder(section.fields)"
-                        :id="section.handle">
+                        @input="reorder(section.fields)">
                     </field-builder>
                 </div>
             </div>

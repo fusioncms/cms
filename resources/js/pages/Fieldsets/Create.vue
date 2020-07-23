@@ -48,19 +48,20 @@
 
         methods: {
             submit() {
-                this.form.post('/api/fieldsets')
-                    .then((response) => {
-                        axios.post(`/api/fieldsets/${response.data.id}/sections`, { sections: this.sections })
-                            .then(() => {
-                                toast('Fieldset successfully created', 'success')
+console.log({ sections: this.sections })
+                // this.form.post('/api/fieldsets')
+                //     .then((response) => {
+                //         axios.post(`/api/fieldsets/${response.data.id}/sections`, { sections: this.sections })
+                //             .then(() => {
+                //                 toast('Fieldset successfully created', 'success')
 
-                                this.$router.push('/fieldsets')
-                            }).catch((response) => {
-                                toast(response.message, 'failed')
-                            })
-                    }).catch((response) => {
-                        toast(response.message, 'failed')
-                    })
+                //                 this.$router.push('/fieldsets')
+                //             }).catch((response) => {
+                //                 toast(response.message, 'failed')
+                //             })
+                //     }).catch((response) => {
+                //         toast(response.message, 'failed')
+                //     })
             },
         },
 
