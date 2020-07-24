@@ -1,6 +1,5 @@
 .page-footer {
-    @apply leading-loose text-gray-600 text-xs text-center p-6;
-    background: #f5f5f5;
+    @apply bg-gray-100 leading-loose text-gray-600 text-xs text-center p-6;
 
     @screen lg {
         transition: padding 0.5s $transition-effect;

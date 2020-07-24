@@ -14,9 +14,7 @@
         @apply bg-gray-200 border-gray-300; 
     }
 
-    &:active:not([disabled]) { 
-        @apply bg-gray-300; 
-    }
+    &:active:not([disabled]) { @apply bg-gray-300; }
 
     &:focus {
         @apply outline-none shadow-focus;
@@ -98,9 +96,7 @@
             @apply bg-success-900 border-success-900; 
         }
 
-        &:focus {
-            @apply shadow-focus-success;
-        }
+        &:focus { @apply shadow-focus-success; }
     }
 
     &--info {
@@ -138,9 +134,7 @@
             @apply bg-danger-900 border-danger-900; 
         }
 
-        &:focus {
-            @apply shadow-focus-danger;
-        }
+        &:focus { @apply shadow-focus-danger; }
     }
 }
 
@@ -161,9 +155,7 @@
         > .button:focus { z-index: 1; }
 
         > .button:first-child,
-        > .dropdown.button:first-child {
-            @apply rounded-r-none;
-        }
+        > .dropdown.button:first-child { @apply rounded-r-none; }
 
         > .button:last-child,
         > .dropdown.button:last-child { @apply rounded-l-none; }
