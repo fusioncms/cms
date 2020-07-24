@@ -113,13 +113,13 @@ class FieldsetSectionController extends Controller
                 $section = $fieldset->sections()->findOrFail($id);
                 $section->update($data);
 
-                $attached = $this->getDetachedFields($section, $fields);
+                $detached = $this->getDetachedFields($section, $fields);
                 $updated  = $this->getUpdatedFields($fields);
-                $detached = $this->getAttachedFields($fields);
+                $attached = $this->getAttachedFields($fields);
 
                 $this->deleteFields($section, $detached);
                 $this->updateFields($section, $updated);
-                $this->createFields($section, $detached);
+                $this->createFields($section, $attached);
             });
         }
 
@@ -219,7 +219,7 @@ class FieldsetSectionController extends Controller
 
             unset($field['id']);
 
-            $section->fields()->updateOrCreate(['id' => $id], $field);
+            $section->fields()->find($id)->update($field);
         });
     }
 

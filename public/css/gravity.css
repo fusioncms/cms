@@ -10318,8 +10318,8 @@ select.form__control {
   color: rgba(74, 85, 104, var(--text-opacity));
   border-width: 1px;
   --border-opacity: 1;
-  border-color: #cbd5e0;
-  border-color: rgba(203, 213, 224, var(--border-opacity));
+  border-color: #e2e8f0;
+  border-color: rgba(226, 232, 240, var(--border-opacity));
   border-radius: 0.25rem;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -10332,6 +10332,12 @@ select.form__control {
 .form__select-button:focus {
   outline: 0;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+}
+
+.form__select-button:hover {
+  --border-opacity: 1;
+  border-color: #cbd5e0;
+  border-color: rgba(203, 213, 224, var(--border-opacity));
 }
 
 .form__select-dropdown {
