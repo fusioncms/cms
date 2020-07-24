@@ -27,6 +27,10 @@
             active: {
                 required: true,
                 type: Boolean
+            },
+            greeting: {
+                required: false,
+                type: String
             }
         },
 

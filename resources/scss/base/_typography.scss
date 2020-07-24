@@ -10,7 +10,7 @@
     &--sm,
     &--xs,
     &--xxs {
-        @apply tracking-wide mb-4;
+        @apply tracking-wide leading-normal mb-4;
     }
 
     &--xl { font-size: rem(22px); }

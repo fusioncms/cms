@@ -14,6 +14,7 @@
         px-3
         py-2
     ;
+    transition: all 0.3s $transition-effect;
 
     &:hover {
         @apply
@@ -70,50 +71,26 @@
 }
 
 .field__title {
-    @apply
-        appearance-none
-        bg-transparent
-        leading-normal
-        text-gray-700
-        outline-none
-        font-bold
-        text-3xl
-        w-full
-        px-6
-        py-3
-    ;
+    @apply appearance-none rounded bg-gray-100 leading-normal text-gray-700 outline-none font-bold text-3xl w-full px-6 py-3;
+    transition: all 0.3s $transition-effect;
 
-    &:hover,
-    &:focus {
-        @apply
-            bg-gray-100
-        ;
-    }
+    &:hover { @apply bg-gray-200; }
+
+    &:focus { @apply bg-transparent shadow-focus; }
 
     &--success {
-        @apply
-            bg-success-50
-        ;
+        @apply bg-success-50;
 
         &:hover,
-        &:focus {
-            @apply
-                bg-success-100
-            ;
-        }
+        &:focus { @apply bg-success-100; }
     }
 
     &--danger {
-        @apply
-            bg-danger-50
-        ;
+        @apply bg-danger-100;
 
-        &:hover,
-        &:focus {
-            @apply
-                bg-danger-100
-            ;
-        }
+        &:hover { @apply bg-danger-200; }
+
+        &:focus { @apply bg-danger-100; }
     }
 }
 
