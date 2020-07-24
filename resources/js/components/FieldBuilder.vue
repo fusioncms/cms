@@ -35,12 +35,12 @@
 
         <div class="row">
             <div class="col w-full">
-                <a class="button" href="#" @click.prevent="openModal">Add Field</a>
+                <a class="button" href="#" @click.prevent="openModal('add')">Add Field</a>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="add-field" title="Add Field" v-model="open" extra-large>
+            <p-modal name="add-field" title="Add Field" v-model="opened.add" extra-large>
                 <div class="row -mb-6">
                     <div class="col w-1/2 lg:w-1/6" v-for="fieldtype in fieldtypes" :key="'add-' + fieldtype.handle">
                         <p-button class="w-full items-center justify-start" @click.prevent="add(fieldtype)">
@@ -50,7 +50,16 @@
                 </div>
 
                 <template slot="footer">
-                    <p-button @click.prevent="closeModal">Close</p-button>
+                    <p-button @click.prevent="closeModal('add')">Close</p-button>
+                </template>
+            </p-modal>
+
+            <p-modal name="move-field" title="Move Field" v-model="opened.move">
+                <p-select name="move_to" v-model="section" placeholder="Please select a section..." :options="sectionOptions"></p-select>
+
+                <template slot="footer">
+                    <p-button class="button--primary" @click.prevent="move(field, section) & closeModal('move')">Move</p-button>
+                    <p-button class="button--secondary mr-2" @click.prevent="closeModal('move')">Cancel</p-button>
                 </template>
             </p-modal>
 
@@ -72,7 +81,11 @@
             return {
                 fieldtypes: {},
                 active: false,
-                open: false,
+                section: false,
+                opened: {
+                    add: false,
+                    move: false,
+                },
             }
         },
 
@@ -84,6 +97,10 @@
             id: {
                 type: String,
                 required: true
+            },
+            sections: {
+                type: Array,
+                required: false,
             }
         },
 
@@ -108,6 +125,15 @@
                 }
             },
 
+            sectionOptions() {
+                return _.map(this.sections, function(section) {
+                    return {
+                        label: section.name,
+                        value: section.handle
+                    }
+                })
+            },
+
             total() {
                 return this.fields.length
             },
@@ -125,7 +151,7 @@
 
         methods: {
             add(fieldtype, additional = {}, external = false) {
-                this.closeModal()
+                this.closeModal('add')
 
                 this.fields.push({
                     type:     fieldtype,
@@ -171,12 +197,12 @@
                 this.field = {}
             },
 
-            openModal() {
-                this.open = true
+            openModal(modal) {
+                this.opened[modal] = true
             },
 
-            closeModal() {
-                this.open = false
+            closeModal(modal) {
+                this.opened[modal] = false
             },
         },
 
