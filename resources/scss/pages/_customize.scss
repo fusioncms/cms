@@ -32,7 +32,7 @@
     }
 
     &__footer {
-        @apply flex items-stretch justify-between mt-auto border-t border-gray-300 h-14;
+        @apply flex items-stretch justify-between mt-auto border-t border-gray-300;
     }
 
     &__content {
@@ -80,7 +80,6 @@
 
 .show-controls-button {
     @apply
-        h-14
         fixed
         bottom-0
         left-0

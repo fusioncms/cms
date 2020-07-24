@@ -2,7 +2,7 @@
     @apply leading-loose text-gray-600 text-xs text-center p-6;
     background: #f5f5f5;
 
-    @screen md {
+    @screen lg {
         transition: padding 0.5s $transition-effect;
 
         .nav-active & { padding-left: $nav-width-desktop; }
