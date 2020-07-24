@@ -67,7 +67,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Create Sections on Fieldset.
-     * 
+     *
      * @param  Fieldset   $fieldset
      * @param  Collection $sections
      * @return Fieldset
@@ -95,7 +95,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Update Sections on Fieldset.
-     * 
+     *
      * @param  Fieldset   $fieldset
      * @param  Collection $sections
      * @return Fieldset
@@ -128,7 +128,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Remove Sections from Fieldset.
-     * 
+     *
      * @param  Fieldset   $fieldset
      * @param  Collection $ids
      * @return Fieldset
@@ -183,7 +183,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Create Fields on Section.
-     * 
+     *
      * @param  Section    $section
      * @param  Collection $fields
      * @return void
@@ -201,32 +201,31 @@ class FieldsetSectionController extends Controller
                     'order'    => $field['order'],
                 ]);
             });
-            // $section->fields()->createMany($fields->all());
         }
     }
 
     /**
      * Update Fields on Section.
-     * 
+     *
      * @param  Section    $section
      * @param  Collection $fields
      * @return void
      */
     protected function updateFields(Section $section, Collection $fields)
     {
-        $fields->each(function ($field) use ($section) {
+        $fields->each(function ($field) use ($section, $fields) {
             $id            = $field['id'];
             $field['type'] = $field['type']['handle'];
 
             unset($field['id']);
 
-            $section->fields()->find($id)->update($field);
+            $section->fields()->updateOrCreate(['id' => $id], $field);
         });
     }
 
     /**
      * Remove Fields from Section.
-     * 
+     *
      * @param  Section    $section
      * @param  Collection $ids
      * @return void

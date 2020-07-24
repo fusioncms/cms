@@ -24,8 +24,8 @@
                             </div>
 
                             <p-actions :id="field.handle + '_actions'">
-                                <p-dropdown-link @click.prevent="edit(index)">Edit</p-dropdown-link>
-                                <p-dropdown-link @click.prevent="openModal('move')">Move to...</p-dropdown-link>
+                                <p-dropdown-link @click.prevent="setIsActive(field.handle) & setIsEditing(true)">Edit</p-dropdown-link>
+                                <p-dropdown-link @click.prevent="setIsActive(field.handle) & openModal('move')">Move to...</p-dropdown-link>
                                 <p-dropdown-divider></p-dropdown-divider>
                                 <p-dropdown-link @click.prevent="remove(index)"><span class="text-danger-500">Delete</span></p-dropdown-link>
                             </p-actions>
@@ -56,11 +56,12 @@
                 </template>
             </p-modal>
 
-            <p-modal name="move-field" title="Move Field" v-model="opened.move" small>
-                Move field
+            <p-modal name="move-field" title="Move Field" v-model="opened.move">
+                <p-select name="move_to" v-model="section" placeholder="Please select a section..." :options="sectionOptions"></p-select>
 
                 <template slot="footer">
                     <p-button @click.prevent="closeModal('move')">Close</p-button>
+                    <p-button theme="primary" @click.prevent="move(field, section) & closeModal('move')">Move</p-button>
                 </template>
             </p-modal>
 
@@ -81,7 +82,9 @@
         data() {
             return {
                 fieldtypes: {},
-                active: false,
+                isActive: false,
+                isEditing: false,
+                section: '',
                 opened: {
                     add: false,
                     move: false,
@@ -97,6 +100,10 @@
             id: {
                 type: String,
                 required: true
+            },
+            sections: {
+                type: Array,
+                required: false,
             }
         },
 
@@ -113,12 +120,21 @@
 
             field: {
                 get() {
-                    return _.find(this.fields, (field) => field.handle == this.active) || {}
+                    return _.find(this.fields, (field) => field.handle == this.isActive) || {}
                 },
 
                 set(value) {
-                    this.active = value.handle || false
+                    this.isActive = value.handle || false
                 }
+            },
+
+            sectionOptions() {
+                return _.map(this.sections, function(section) {
+                    return {
+                        label: section.name,
+                        value: section.handle
+                    }
+                })
             },
 
             total() {
@@ -131,8 +147,8 @@
         },
 
         watch: {
-            active(value) {
-                this.$refs.editField.modalOpen = _.isString(value)
+            isEditing(value) {
+                this.$refs.editField.modalOpen = value
             }
         },
 
@@ -150,19 +166,15 @@
                 })
 
                 if (! external) {
-                    let active = _.last(this.fields)
+                    let isActive = _.last(this.fields)
 
-                    this.active     = active.handle
-                    active['proto'] = true // prototype flag
+                    this.isActive     = isActive.handle
+                    isActive['proto'] = true // prototype flag
                 }
             },
 
             remove(index) {
                 this.fields.splice(index, 1)
-            },
-
-            edit(index) {
-                this.active = this.fields[index].handle
             },
 
             save(handle, value) {
@@ -172,6 +184,20 @@
 
                 this.fields.splice(index, 1, value)
                 this.field = {}
+            },
+
+            move(field, section) {
+                this.$bus.$emit('move-field-' + section, field)
+                this.setIsActive(false)
+                this.remove(_.findIndex(this.fields, (f) => f.handle == field.handle))
+            },
+
+            setIsActive(handle) {
+                this.isActive = handle
+            },
+
+            setIsEditing(value) {
+                this.isEditing = value
             },
 
             cancel(handle) {
@@ -207,6 +233,14 @@
 
                 if (index == -1) {
                     this.add(adding.fieldtype, adding, true)
+                }
+            })
+
+            bus().$on('move-field-' + this.id, (moving) => {
+                let index = _.findIndex(this.fields, (field) => field.handle == moving.handle)
+
+                if (index == -1) {
+                    this.fields.push(moving)
                 }
             })
 
