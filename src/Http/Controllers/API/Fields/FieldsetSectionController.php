@@ -213,7 +213,7 @@ class FieldsetSectionController extends Controller
      */
     protected function updateFields(Section $section, Collection $fields)
     {
-        $fields->each(function ($field) use ($section, $fields) {
+        $fields->each(function ($field) use ($section) {
             $id            = $field['id'];
             $field['type'] = $field['type']['handle'];
 
