@@ -201,7 +201,6 @@ class FieldsetSectionController extends Controller
                     'order'    => $field['order'],
                 ]);
             });
-            // $section->fields()->createMany($fields->all());
         }
     }
 

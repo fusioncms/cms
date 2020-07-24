@@ -57,25 +57,42 @@ class ReplicatorObserver
     }
 
     /**
-     * Create replicator table.
+     * Create replicator.
      * 
-     * @param  Replicator $replicator
+     * @param  \Fusion\Models\Replicator $replicator
      * @return void
      */
     protected function createReplicator(Replicator $replicator)
     {
-        Schema::create($replicator->table, function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('replicator_id')->index();
-            $table->timestamps();
-        });
-
         $this->createFieldset($replicator);
+
+        $prefix = "rp_{$replicator->field->handle}";
+        $suffix = $replicator->uniqid;
+
+        $replicator->fieldset->sections
+            ->each(function($section) use ($prefix, $suffix) {
+                $tableName = str_handle("{$prefix}_{$section->handle}_{$suffix}");
+
+                Schema::create($tableName, function(Blueprint $table) use ($section) {
+                    $table->bigIncrements('id');
+                    $table->unsignedBigInteger('replicator_id')->index();
+                    $table->timestamps();
+
+                    // create columns..
+                    $section->fields->each(function($field) use ($table) {
+                        $fieldtype = fieldtypes()->get($field->type);
+                        $column    = $fieldtype->getColumn('type');
+
+                        call_user_func_array([$table, $column], [$field->handle])->nullable();
+                    });
+                });
+            });
     }
 
     /**
+     * Update replicator.
      * 
-     * @param  Replicator $replicator
+     * @param  \Fusion\Models\Replicator $replicator
      * @return void
      */
     protected function updateReplicator(Replicator $replicator)
@@ -104,34 +121,72 @@ class ReplicatorObserver
 
 
     /**
-     * Automatically create a Fieldset, Section,
-     *  & Fields for our Replicator.
+     * Auto-generate Fieldset.
      *
-     * @param  Replicator  $replicator
+     * @param  \Fusion\Models\Replicator  $replicator
      * @return void
      */
     protected function createFieldset(Replicator $replicator)
     {
         $replicator->withoutEvents(function() use ($replicator) {
-            $fieldset = Fieldset::create([
+            $fieldset = $replicator->fieldsets()->create([
                 'name'   => ($name = "Replicator: {$replicator->name}"),
                 'handle' => str_handle($name),
                 'hidden' => true
             ]);
 
-            $replicator->attachFieldset($fieldset);
-            $replicator->save();
+            $this->createSections($fieldset,
+                collect($replicator->field->settings['sections']));
         });
 
-        $section = $replicator->fieldset->sections()->create([
-            'name'   => ($name = "Replicator: {$replicator->name}"),
-            'handle' => str_handle($name),
-        ]);
+    }
 
-        if (isset($replicator->field->settings['fields'])) {
-            $this->createFields($section, collect($replicator->field->settings['fields']));
+    /**
+     * Create fieldset sections.
+     * 
+     * @param  \Fusion\Models\Fieldset         $fieldset
+     * @param  \Illuminate\Support\Collection  $sections
+     * @return void
+     */
+    protected function createSections(Fieldset $fieldset, Collection $sections)
+    {
+        if ($sections->isNotEmpty()) {
+            $sections->each(function ($data) use ($fieldset) {
+                $section = $fieldset->sections()->create([
+                    'name'        => $data['name'],
+                    'handle'      => $data['handle'],
+                    'description' => $data['description'],
+                    'placement'   => $data['placement'],
+                    'order'       => $data['order'],
+                ]);
+
+               $this->createFields($section, collect($data['fields']));
+            });
         }
     }
+
+    // /**
+    //  * Update fieldset sections.
+    //  * 
+    //  * @param  \Fusion\Models\Fieldset         $fieldset
+    //  * @param  \Illuminate\Support\Collection  $sections
+    //  * @return void
+    //  */
+    // protected function updateSections(Fieldset $fieldset, Collection $sections)
+    // {
+    //     if ($sections->isNotEmpty()) {
+    //         $sections->each(function ($data) use ($fieldset) {
+    //             $id      = $data['id'];
+    //             $fields  = collect($data['fields']);
+
+    //     $attached = $this->getDetachedFields($section, $fields);
+    //             $updated  = $this->getUpdatedFields($fields);
+    //             $detached = $this->getAttachedFields($fields);
+
+    //             $this->deleteFields($section, $detached);
+    //             $this->updateFields($section, $updated);
+    //             $this->createFields($section, $detached);
+    // }
 
     /**
      * Automatically update Fieldset for Replicator.
@@ -146,12 +201,19 @@ class ReplicatorObserver
             'handle' => str_handle($name)
         ]);
 
-        $fields  = collect($replicator->field->settings['fields'] ?? []);
-        $section = $replicator->fieldset()->sections()->first();
+        if (isset($replicator->field->settings['sections'])) {
+            fusion()
+                ->post("fieldsets/{$replicator->fieldset->id}/sections", [
+                    'sections' => $replicator->field->settings['sections']
+                ]);
+        }
 
-        $this->deleteFields($section, $this->getDetachedFields($section, $fields));
-        $this->updateFields($section, $this->getUpdatedFields($fields));
-        $this->createFields($section, $this->getAttachedFields($fields));
+        // $fields  = collect($replicator->field->settings['fields'] ?? []);
+        // $section = $replicator->fieldset()->sections()->first();
+
+        // $this->deleteFields($section, $this->getDetachedFields($section, $fields));
+        // $this->updateFields($section, $this->getUpdatedFields($fields));
+        // $this->createFields($section, $this->getAttachedFields($fields));
     }
 
     /**
@@ -190,7 +252,7 @@ class ReplicatorObserver
     }
 
     /**
-     * Create Fields on Section.
+     * Create section fields.
      * 
      * @param  Section    $section
      * @param  Collection $fields

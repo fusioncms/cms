@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Fusion\Concerns\HasFieldset;
 use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
+use Fusion\Services\Builders\Replicator as Builder;
 
 class Replicator extends Model
 {
@@ -16,36 +17,40 @@ class Replicator extends Model
      *
      * @var array
      */
-    protected $fillable = [ 'field_id', 'name', 'handle' ];
+    protected $fillable = [ 'field_id', 'name', 'handle', 'uniqid' ];
 
     /**
+     * @param  \Fusion\Models\Section $section
      * @return \Fusion\Database\Eloquent\Model
      */
-    public function getBuilder()
+    public function getBuilder(Section $section)
     {
-        $builder = new \Fusion\Services\Builders\Replicator($this->handle);
-
-        return $builder->make();
+        return Builder::resolve($this->handle, $section);
     }
 
     /**
-     * Get the "table" attribute value.
-     *
-     * @return string
+     * Get `sections` attribute value.
+     * 
+     * @return [type] [description]
      */
-    public function getTableAttribute()
+    public function getSectionsAttribute()
     {
-        return "{$this->table}_{$this->handle}";
+        return $this->fieldset->sections;
     }
 
     /**
-     * Replicants relationship.
-     *
-     * @return HasMany|Collection
+     * Get all relating replicant builders.
+     * 
+     * @return Collection
      */
-    public function replicants()
+    public function getReplicantsAttribute()
     {
-        return $this->hasMany(get_class($this->getBuilder()));
+        return $this->sections->map(function($section) {
+            $builder   = $this->getBuilder($section);
+            $namespace = get_class($builder);
+
+            return $this->hasMany($namespace);
+        });
     }
 
     /**

@@ -68,7 +68,8 @@ class ReplicatorFieldtype extends Fieldtype
             $replicator = Replicator::create([
                 'field_id' => $field->id,
                 'name'     => $field->name,
-                'handle'   => $field->handle . '_' . unique_id(5),
+                'handle'   => $field->handle,
+                'uniqid'   => unique_id(5),
             ]);
         } else {
             $replicator = Replicator::where([

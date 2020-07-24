@@ -18,6 +18,7 @@ class CreateReplicatorsTable extends Migration
             $table->unsignedBigInteger('field_id');
             $table->string('name');
             $table->string('handle');
+            $table->string('uniqid')->unique();
             $table->timestamps();
 
             $table->foreign('field_id')
