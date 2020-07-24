@@ -18,26 +18,40 @@
                 <div class="header__account">
                     <renderless-dropdown id="account-menu-button">
                         <div class="dropdown dropdown--right" slot-scope="props" :class="{'dropdown--open': props.isOpen}" v-click-outside="props.close">
-                            <a href="#" class="text-gray-400 hover:text-gray-900 p-1" @click.prevent="props.toggle()"><fa-icon icon="ellipsis-v" class="fa-fw fa-lg"></fa-icon></a>
+                            <button class="nav-button nav-button--full" @click.prevent="props.toggle()">
+                                <mq-layout mq="xl+">
+                                    <span>{{ greeting }}, <strong>{{ user.name }}</strong></span>
+                                </mq-layout>
+
+                                <mq-layout mq="xl+">
+                                    <fa-icon icon="chevron-down" class="hidden lg:inline-block fa-fw ml-2"></fa-icon>
+                                </mq-layout>
+
+                                <mq-layout :mq="['sm', 'md', 'lg']">
+                                    <span class="sr-only">User Menu</span>
+                                    <fa-icon icon="ellipsis-v" class="inline-block lg:hidden fa-fw fa-lg"></fa-icon>
+                                </mq-layout>
+                            </button>
 
                             <div class="dropdown__menu">
-                                <p-dropdown-item>
-                                    <p>
-                                        Hello and {{ greeting }},<br>
-                                        <strong>{{ user.name }}</strong>
-                                    </p>
-                                </p-dropdown-item>
+                                <mq-layout :mq="['sm', 'md', 'lg']">
+                                    <p-dropdown-item>
+                                        <p class="mb-0">
+                                            {{ greeting }}, <strong>{{ user.name }}</strong>
+                                        </p>
+                                    </p-dropdown-item>
+                                </mq-layout>
 
                                 <p-dropdown-divider />
 
-                                <p-dropdown-link href="/" target="_blank">
+                                <p-dropdown-link href="/" target="_blank" @click.native="onClick()">
                                     <fa-icon icon="eye" class="icon"></fa-icon>
                                     View website
                                 </p-dropdown-link>
 
                                 <p-dropdown-divider />
 
-                                <p-dropdown-link :to="'/users/' + user.id + '/edit'">
+                                <p-dropdown-link :to="'/users/' + user.id + '/edit'" @click.native="onClick()">
                                     <fa-icon icon="user" class="icon"></fa-icon>
                                     Account
                                 </p-dropdown-link>
@@ -53,12 +67,12 @@
             </div>
         </header>
 
-        <nav-menu :active="isNavOpen"></nav-menu>
+        <nav-menu :active="isNavOpen" :greeting="greeting"></nav-menu>
 
         <main id="main-content" class="main-content w-full flex-auto">
             <!-- Content -->
             <div class="main-content__container">
-                <div class="flex flex-row flex-wrap items-center justify-between mb-3">
+                <div class="flex flex-row flex-wrap items-center justify-between mb-6">
                     <div class="main-content__header">
                         <portal-target name="title" slim></portal-target>
                     </div>
@@ -122,14 +136,14 @@
             greeting() {
                 let today = new Date
                 let currentHour = today.getHours()
-                let greeting = 'good day'
+                let greeting = 'Good day'
 
                 if (currentHour > 18) {
-                    greeting = 'good evening'
+                    greeting = 'Good evening'
                 } else if (currentHour > 12) {
-                    greeting = 'good afternoon'
+                    greeting = 'Good afternoon'
                 } else if (currentHour > 0) {
-                    greeting = 'good morning'
+                    greeting = 'Good morning'
                 }
 
                 return greeting

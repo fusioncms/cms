@@ -1,10 +1,10 @@
 <template>
-    <div class="row">
-        <div class="col w-full lg:flex-1">
+    <div class="form-container">
+        <div class="form-container__content">
             <slot></slot>
         </div>
 
-        <div class="col w-full lg:w-500px">
+        <div class="form-container__sidebar">
             <slot name="sidebar"></slot>
         </div>
     </div>

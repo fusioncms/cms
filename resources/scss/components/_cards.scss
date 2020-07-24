@@ -1,5 +1,7 @@
 .card {
-    @apply bg-white border border-gray-300 rounded relative mb-6;
+    @apply bg-white border border-gray-300 rounded relative mb-4;
+
+    @screen xl { @apply mb-6; }
 
     &__body {
         @apply p-4;
