@@ -152,24 +152,28 @@
         },
 
         methods: {
-            add(fieldtype, additional = {}, external = false) {
+            add(type, field = {}, external = false) {
                 this.closeModal('add')
 
-                this.fields.push({
-                    type:     fieldtype,
-                    name:     additional.name || 'Field ' + this.nextId,
-                    handle:   additional.handle || 'field_' + this.nextId,
-                    help:     additional.help || '',
-                    settings: additional.settings ? _.cloneDeep(additional.settings, true) : _.cloneDeep(fieldtype.settings, true),
-                    order:    this.total,
-                })
+                this.push(type, field)
 
                 if (! external) {
                     let editing = _.last(this.fields)
 
-                    this.editing     = editing.handle
-                    editing['proto'] = true // prototype flag
+                    this.editing         = editing.handle
+                    editing['prototype'] = true
                 }
+            },
+
+            push(type, field) {
+                this.fields.push({
+                    type:     type,
+                    name:     field.name || 'Field ' + this.nextId,
+                    handle:   field.handle || 'field_' + this.nextId,
+                    help:     field.help || '',
+                    settings: field.settings ? _.cloneDeep(field.settings, true) : _.cloneDeep(type.settings, true),
+                    order:    this.total,
+                })
             },
 
             move() {
@@ -187,14 +191,14 @@
             save(handle, value) {
                 let index = _.findIndex(this.fields, (field) => field.handle == handle)
 
-                delete value['proto']
+                delete value['prototype']
 
                 this.fields.splice(index, 1, value)
                 this.field = {}
             },
 
             cancel(handle) {
-                if (this.field.proto) {
+                if (this.field.prototype) {
                     this.remove(
                         _.findIndex(this.fields, (field) => field.handle == handle)
                     )
