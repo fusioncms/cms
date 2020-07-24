@@ -38,15 +38,14 @@ class Replicator extends Builder implements BuilderContract
      */
     public function make()
     {
-        $prefix = $this->replicator->field->handle;
-        $middle = $this->section->handle;
+        $prefix = $this->replicator->handle;
         $suffix = $this->replicator->uniqid;
+        $handle = "{$prefix}_{$this->section->handle}_{$suffix}";
 
-        $handleName = "{$prefix}_{$middle}_{$suffix}";
-        $className  = Str::studly("{$prefix}_{$middle}_{$suffix}");
-        $fillable   = [ 'replicator_id' ];
-        $casts      = [];
-        $fields     = $this->section->fields ?? collect();
+        $className = Str::studly($handle);
+        $fillable  = [ 'replicator_id' ];
+        $casts     = [];
+        $fields    = $this->section->fields ?? collect();
 
         $fields = $fields->reject(function ($field) {
             $fieldtype = fieldtypes()->get($field->type);
@@ -69,7 +68,7 @@ class Replicator extends Builder implements BuilderContract
 
         $contents = strtr($stub, [
             '{class}'         => $className,
-            '{handle}'        => $handleName,
+            '{tableName}'     => str_handle("rp_{$handle}"),
             '{fillable}'      => '[\'' . implode('\', \'', $fillable) . '\']',
             '{casts}'         => '[\'' . implode('\', \'', $casts) . '\']',
             '{dates}'         => '[\'' . implode('\', \'', $this->getDates()) . '\']',

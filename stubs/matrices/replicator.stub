@@ -12,7 +12,7 @@ class {class} extends Model
      *
      * @var string
      */
-    protected $table = 'rp_{handle}';
+    protected $table = '{tableName}';
 
 	/**
      * Mass assignment protection.

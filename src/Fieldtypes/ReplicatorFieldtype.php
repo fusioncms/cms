@@ -88,6 +88,22 @@ class ReplicatorFieldtype extends Fieldtype
     }
 
     /**
+     * Delete Field model after saved.
+     * 
+     * @param  Field  $field
+     * @return void
+     */
+    public function onDeleted(Field $field)
+    {
+        $replicator = Replicator::where([
+            'id'       => $field->settings['replicator'],
+            'field_id' => $field->id
+        ])->firstOrFail();
+
+        $replicator->delete();
+    }
+
+    /**
      * Generate relationship methods for associated Model.
      *
      * @param  Fusion\Models\Field $field
@@ -139,6 +155,6 @@ class ReplicatorFieldtype extends Fieldtype
      */
     public function getResource($model, Field $field)
     {
-        return ReplicantResource::collection($this->getValue($model, $field));
+        return new ReplicatorResource($field->settings['replicator']);
     }
 }

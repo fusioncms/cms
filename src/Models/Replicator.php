@@ -29,28 +29,24 @@ class Replicator extends Model
     }
 
     /**
-     * Get `sections` attribute value.
+     * Get `sections` relationship.
      * 
-     * @return [type] [description]
+     * @return Builder|Collection
      */
-    public function getSectionsAttribute()
+    public function sections()
     {
-        return $this->fieldset->sections;
+        return $this->fieldset->sections();
     }
 
     /**
-     * Get all relating replicant builders.
+     * Get `replicant` relationship.
      * 
-     * @return Collection
+     * @param  Section $section
+     * @return Builder
      */
-    public function getReplicantsAttribute()
+    public function replicant(Section $section)
     {
-        return $this->sections->map(function($section) {
-            $builder   = $this->getBuilder($section);
-            $namespace = get_class($builder);
-
-            return $this->hasMany($namespace);
-        });
+        return $this->hasMany(get_class($this->getBuilder($section)));
     }
 
     /**

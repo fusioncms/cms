@@ -21,13 +21,14 @@ class ReplicatorFieldtypeTest extends TestCase
 
         // --
         $this->section  = \Facades\SectionFactory::times(1)->withoutFields()->create();
-        $this->field    = \Facades\FieldFactory::withName('Replicator')->withType('replicator')->withSection($this->section)->create();
+        $this->field    = \Facades\FieldFactory::withName('Replicator')->withType('replicator')->withSection($this->section)->withSettings(['replicator'=>null,'sections'=>[]])->create();
         $this->fieldset = \Facades\FieldsetFactory::withSections(collect([$this->section]))->create();
-    
+
         DB::table('replicators')->insert([
             'field_id' => $this->field->id,
             'name'     => 'Content',
-            'handle'   => 'content_12345',
+            'handle'   => 'content',
+            'uniqid'   => unique_id(5)
         ]);
 
         $this->replicator = Replicator::first();
@@ -43,24 +44,5 @@ class ReplicatorFieldtypeTest extends TestCase
     {
         $this->assertInstanceOf(Field::class, $this->replicator->field);
         $this->assertTrue($this->replicator->field->id == $this->field->id);
-    }
-
-    /**
-     * @test
-     * @group unit
-     * @group fieldtypes
-     * @group replicator
-     */
-    public function each_replicator_has_many_replicants()
-    {
-        $this->assertInstanceOf(
-            'Illuminate\Support\Collection',
-            $this->replicator->replicants
-        );
-
-        $this->assertInstanceOf(
-            'Illuminate\Database\Eloquent\Relations\HasMany',
-            $this->replicator->replicants()
-        );
     }
 }
