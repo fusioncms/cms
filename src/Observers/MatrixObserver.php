@@ -69,8 +69,8 @@ class MatrixObserver
             // Update model classes in the activity log to match the new class name
             Activity::where('subject_type', $oldClass)
                 ->update([
-                    'subject_type'      => $newClass,
-                    'properties'  => DB::raw("REPLACE(properties, '" . $old->slug . "', '" . $matrix->slug . "')")
+                    'subject_type' => $newClass,
+                    'properties'   => DB::raw("REPLACE(properties, '" . $old->slug . "', '" . $matrix->slug . "')")
             ]);
 
         }

@@ -1,0 +1,31 @@
+.quicklink {
+    @apply flex bg-white rounded border border-gray-300 leading-normal w-full mb-6;
+    transition: border-color 0.3s $transition-effect;
+
+    &:hover {
+        @apply border-gray-400;
+
+        .quicklink__icon { @apply bg-primary-700; }
+    }
+
+    &__link {
+        @apply flex flex-row w-full;
+        color: inherit;
+
+        &:hover { color: inherit; }
+    }
+
+    &__icon {
+        @apply flex items-center justify-center flex-shrink-0 bg-primary-500 border-r border-primary-500 rounded-tl rounded-bl text-white p-3;
+        font-size: rem(20px);
+        width: rem(50px);
+        transition: background 0.3s $transition-effect;
+    }
+
+    &__text {
+        @apply text-sm p-3;
+        @extend %no-bottom;
+
+        h2 { @apply mb-2; }
+    }
+}

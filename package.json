@@ -25,7 +25,7 @@
         "dragula": "^3.7.2",
         "glob-all": "^3.1.0",
         "laravel-mix": "^4.0.14",
-        "lodash": "^4.17.11",
+        "lodash": "^4.17.19",
         "moment": "^2.22.2",
         "nprogress": "^0.2.0",
         "portal-vue": "^1.5.1",

@@ -1,13 +1,31 @@
-.local-env {
-    @apply p-6;
+.alert {
+    @apply bg-gray-100 border bg-white border-gray-300 rounded text-gray-700 p-4 mb-6;
 
-    &__message {
-        @apply p-3 text-sm font-bold leading-none w-full bg-warning-100 flex flex-col items-center justify-between text-gray-900 shadow border-l text-center;
+    &--info,
+    &--success,
+    &--warning,
+    &--danger {  @apply text-white; }
+
+    &--info {
+        @apply bg-info-500 border-info-500;
     }
 
-    &__bar {
-        width: 100%;
-        height: 4px; 
-        background: repeating-linear-gradient(-45deg, #F2D024, #F2D024 12px, #22292F 10px, #22292F 23px);
+    &--success {
+        @apply bg-success-500 border-success-500;
     }
+
+    &--warning {
+        @apply bg-warning-500 border-warning-500;
+    }
+
+    &--danger {
+        @apply bg-danger-500 border-danger-500;
+    }
+
+    &__container {
+        @apply flex flex-row;
+        @extend %no-bottom;
+    }
+
+    &__icon { @apply pr-4; }
 }

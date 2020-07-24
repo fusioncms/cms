@@ -4,78 +4,217 @@
             <app-title icon="swatchbook">Styleguide</app-title>
         </portal>
 
+        <!-- Colors -->
         <div class="row">
             <div class="col w-full">
                 <div class="card">
+                    <div class="card__header">
+                        <h2 class="card__title">Color Pallet</h2>
+                    </div>
+
                     <div class="card__body">
-                        <h2 class="text-2xl"><fa-icon icon="angle-double-right" class="fa-fw"></fa-icon> Buttons</h2>
-
                         <div class="row">
-                            <div class="col w-1/4">
-                                <h3>Colors</h3>
+                            <div class="col w-full md:w-1/2 xxl:w-1/3 flex flex-row flex-wrap mb-4">
+                                <h3 class="w-full">Primary</h3>
 
-                                <div class="buttons">
-                                    <button class="button">Default</button>
-                                    <button class="button button--primary">Primary</button>
-                                    <button class="button button--brand">Brand</button>
+                                <div class="bg-primary-100 w-10 h-10 text-xs text-center p-2">100</div>
+                                <div class="bg-primary-200 w-10 h-10 text-xs text-center p-2">200</div>
+                                <div class="bg-primary-300 w-10 h-10 text-xs text-center p-2">300</div>
+                                <div class="bg-primary-400 w-10 h-10 text-xs text-center p-2">400</div>
+                                <div class="bg-primary-500 w-10 h-10 text-xs text-white text-center p-2">500</div>
+                                <div class="bg-primary-600 w-10 h-10 text-xs text-white text-center p-2">600</div>
+                                <div class="bg-primary-700 w-10 h-10 text-xs text-white text-center p-2">700</div>
+                                <div class="bg-primary-800 w-10 h-10 text-xs text-white text-center p-2">800</div>
+                                <div class="bg-primary-900 w-10 h-10 text-xs text-white text-center p-2">900</div>
+                            </div>
+
+                            <div class="col w-full md:w-1/2 xxl:w-1/3 flex flex-row flex-wrap mb-4">
+                                <h3 class="w-full">Secondary</h3>
+
+                                <div class="bg-secondary-100 w-10 h-10 text-xs text-center p-2">100</div>
+                                <div class="bg-secondary-200 w-10 h-10 text-xs text-center p-2">200</div>
+                                <div class="bg-secondary-300 w-10 h-10 text-xs text-center p-2">300</div>
+                                <div class="bg-secondary-400 w-10 h-10 text-xs text-center p-2">400</div>
+                                <div class="bg-secondary-500 w-10 h-10 text-xs text-white text-center p-2">500</div>
+                                <div class="bg-secondary-600 w-10 h-10 text-xs text-white text-center p-2">600</div>
+                                <div class="bg-secondary-700 w-10 h-10 text-xs text-white text-center p-2">700</div>
+                                <div class="bg-secondary-800 w-10 h-10 text-xs text-white text-center p-2">800</div>
+                                <div class="bg-secondary-900 w-10 h-10 text-xs text-white text-center p-2">900</div>
+                            </div>
+
+                            <div class="col w-full md:w-1/2 xxl:w-1/3 flex flex-row flex-wrap mb-4">
+                                <h3 class="w-full">Info</h3>
+
+                                <div class="bg-info-100 w-10 h-10 text-xs text-center p-2">100</div>
+                                <div class="bg-info-200 w-10 h-10 text-xs text-center p-2">200</div>
+                                <div class="bg-info-300 w-10 h-10 text-xs text-center p-2">300</div>
+                                <div class="bg-info-400 w-10 h-10 text-xs text-center p-2">400</div>
+                                <div class="bg-info-500 w-10 h-10 text-xs text-white text-center p-2">500</div>
+                                <div class="bg-info-600 w-10 h-10 text-xs text-white text-center p-2">600</div>
+                                <div class="bg-info-700 w-10 h-10 text-xs text-white text-center p-2">700</div>
+                                <div class="bg-info-800 w-10 h-10 text-xs text-white text-center p-2">800</div>
+                                <div class="bg-info-900 w-10 h-10 text-xs text-white text-center p-2">900</div>
+                            </div>
+
+                            <div class="col w-full md:w-1/2 xxl:w-1/3 flex flex-row flex-wrap mb-4">
+                                <h3 class="w-full">Success</h3>
+
+                                <div class="bg-success-100 w-10 h-10 text-xs text-center p-2">100</div>
+                                <div class="bg-success-200 w-10 h-10 text-xs text-center p-2">200</div>
+                                <div class="bg-success-300 w-10 h-10 text-xs text-center p-2">300</div>
+                                <div class="bg-success-400 w-10 h-10 text-xs text-center p-2">400</div>
+                                <div class="bg-success-500 w-10 h-10 text-xs text-white text-center p-2">500</div>
+                                <div class="bg-success-600 w-10 h-10 text-xs text-white text-center p-2">600</div>
+                                <div class="bg-success-700 w-10 h-10 text-xs text-white text-center p-2">700</div>
+                                <div class="bg-success-800 w-10 h-10 text-xs text-white text-center p-2">800</div>
+                                <div class="bg-success-900 w-10 h-10 text-xs text-white text-center p-2">900</div>
+                            </div>
+
+                            <div class="col w-full md:w-1/2 xxl:w-1/3 flex flex-row flex-wrap mb-4">
+                                <h3 class="w-full">Warning</h3>
+
+                                <div class="bg-warning-100 w-10 h-10 text-xs text-center p-2">100</div>
+                                <div class="bg-warning-200 w-10 h-10 text-xs text-center p-2">200</div>
+                                <div class="bg-warning-300 w-10 h-10 text-xs text-center p-2">300</div>
+                                <div class="bg-warning-400 w-10 h-10 text-xs text-center p-2">400</div>
+                                <div class="bg-warning-500 w-10 h-10 text-xs text-white text-center p-2">500</div>
+                                <div class="bg-warning-600 w-10 h-10 text-xs text-white text-center p-2">600</div>
+                                <div class="bg-warning-700 w-10 h-10 text-xs text-white text-center p-2">700</div>
+                                <div class="bg-warning-800 w-10 h-10 text-xs text-white text-center p-2">800</div>
+                                <div class="bg-warning-900 w-10 h-10 text-xs text-white text-center p-2">900</div>
+                            </div>
+
+                            <div class="col w-full md:w-1/2 xxl:w-1/3 flex flex-row flex-wrap mb-4">
+                                <h3 class="w-full">Danger</h3>
+
+                                <div class="bg-danger-100 w-10 h-10 text-xs text-center p-2">100</div>
+                                <div class="bg-danger-200 w-10 h-10 text-xs text-center p-2">200</div>
+                                <div class="bg-danger-300 w-10 h-10 text-xs text-center p-2">300</div>
+                                <div class="bg-danger-400 w-10 h-10 text-xs text-center p-2">400</div>
+                                <div class="bg-danger-500 w-10 h-10 text-xs text-white text-center p-2">500</div>
+                                <div class="bg-danger-600 w-10 h-10 text-xs text-white text-center p-2">600</div>
+                                <div class="bg-danger-700 w-10 h-10 text-xs text-white text-center p-2">700</div>
+                                <div class="bg-danger-800 w-10 h-10 text-xs text-white text-center p-2">800</div>
+                                <div class="bg-danger-900 w-10 h-10 text-xs text-white text-center p-2">900</div>
+                            </div>
+
+                            <div class="col w-full md:w-1/2 xxl:w-1/3 flex flex-row flex-wrap mb-4">
+                                <h3 class="w-full">Grayscale</h3>
+
+                                <div class="bg-gray-100 w-10 h-10 text-xs text-center p-2">100</div>
+                                <div class="bg-gray-200 w-10 h-10 text-xs text-center p-2">200</div>
+                                <div class="bg-gray-300 w-10 h-10 text-xs text-center p-2">300</div>
+                                <div class="bg-gray-400 w-10 h-10 text-xs text-center p-2">400</div>
+                                <div class="bg-gray-500 w-10 h-10 text-xs text-white text-center p-2">500</div>
+                                <div class="bg-gray-600 w-10 h-10 text-xs text-white text-center p-2">600</div>
+                                <div class="bg-gray-700 w-10 h-10 text-xs text-white text-center p-2">700</div>
+                                <div class="bg-gray-800 w-10 h-10 text-xs text-white text-center p-2">800</div>
+                                <div class="bg-gray-900 w-10 h-10 text-xs text-white text-center p-2">900</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Typography -->
+        <div class="row">
+            <div class="col w-full">
+                <div class="card">
+                    <div class="card__header">
+                        <h3 class="card__title">Typography</h3>
+                    </div>
+
+                    <div class="card__body">
+                        <div class="row">
+                            <div class="col w-full lg:w-1/2">
+                                <h1>Heading 1 <small>Sub Heading</small></h1>
+                                <h2>Heading 2 <small>Sub Heading</small></h2>
+                                <h3>Heading 3 <small>Sub Heading</small></h3>
+                                <h4>Heading 4 <small>Sub Heading</small></h4>
+                                <h5>Heading 5 <small>Sub Heading</small></h5>
+                                <h6>Heading 6 <small>Sub Heading</small></h6>
+                            </div>
+
+                            <div class="col w-full lg:w-1/2">
+                                <p>Body text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum luctus sagittis erat, imperdiet luctus arcu pellentesque vitae.</p>
+
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum luctus sagittis erat, imperdiet luctus arcu pellentesque vitae.</p>
+                                
+                                <p><a href="#">Inline Link</a></p>
+                                <!-- <div class="flex">
+                                    <ul class="w-1/2">
+                                        <li>List item</li>
+                                        <li>List item</li>
+                                        <li>List item</li>
+                                        <li>
+                                            List item
+                                            <ul>
+                                                <li>List item</li>
+                                                <li>List item</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+
+                                    <ol class="w-1/2">
+                                        <li>List item</li>
+                                        <li>List item</li>
+                                        <li>List item</li>
+                                        <li>List item</li>
+                                        <li>List item</li>
+                                    </ol>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="row">
+            <div class="col w-full">
+                <div class="card">
+                    <div class="card__header">
+                        <h2 class="card__title">Buttons</h2>
+                    </div>
+
+                    <div class="card__body">
+                        <div class="row">
+                            <div class="col w-full xl:w-1/2">
+                                <div class="mb-4">
+                                    <h3>Standard</h3>
+
+                                    <div class="buttons">
+                                        <button class="button">Default</button>
+                                        <button class="button button--primary">Primary</button>
+                                        <button class="button button--secondary">Secondary</button>
+                                        <button class="button button--info">Info</button>
+                                        <button class="button button--success">Success</button>
+                                        <button class="button button--warning">Warning</button>
+                                        <button class="button button--danger">Danger</button>
+                                    </div>
                                 </div>
 
-                                <div class="buttons">
-                                    <button class="button button--info">Info</button>
-                                    <button class="button button--success">Success</button>
-                                    <button class="button button--warning">Warning</button>
-                                    <button class="button button--danger">Danger</button>
+                                <div class="mb-4">
+                                    <h3>Disabled</h3>
+
+                                    <div class="buttons">
+                                        <button class="button" disabled>Default</button>
+                                        <button class="button button--primary" disabled>Primary</button>
+                                        <button class="button button--secondary" disabled>Secondary</button>
+                                        <button class="button button--info" disabled>Info</button>
+                                        <button class="button button--success" disabled>Success</button>
+                                        <button class="button button--warning" disabled>Warning</button>
+                                        <button class="button button--danger" disabled>Danger</button>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col w-1/4">
-                                <h3>Disabled</h3>
-
-                                <div class="buttons">
-                                    <button class="button" disabled>Default</button>
-                                    <button class="button button--primary" disabled>Primary</button>
-                                    <button class="button button--brand" disabled>Brand</button>
-                                </div>
-
-                                <div class="buttons">
-                                    <button class="button button--info" disabled>Info</button>
-                                    <button class="button button--success" disabled>Success</button>
-                                    <button class="button button--warning" disabled>Warning</button>
-                                    <button class="button button--danger" disabled>Danger</button>
-                                </div>
-                            </div>
-
-                            <div class="col w-1/4">
-                                <h3>Buttons</h3>
-
-                                <div class="buttons">
-                                    <button class="button">One</button>
-                                    <button class="button">Two</button>
-                                    <button class="button">Three</button>
-                                    <button class="button">Four</button>
-                                    <button class="button">Five</button>
-                                    <button class="button">Six</button>
-                                    <button class="button">Seven</button>
-                                    <button class="button">Eight</button>
-                                    <button class="button">Nine</button>
-                                    <button class="button">Ten</button>
-                                    <button class="button">Eleven</button>
-                                    <button class="button">Twelve</button>
-                                    <button class="button">Thirteen</button>
-                                    <button class="button">Fourteen</button>
-                                    <button class="button">Fifteen</button>
-                                    <button class="button">Sixteen</button>
-                                    <button class="button">Seventeen</button>
-                                    <button class="button">Eighteen</button>
-                                    <button class="button">Nineteen</button>
-                                    <button class="button">Twenty</button>
-                                </div>
-                            </div>
-
-                            <div class="col w-1/4">
+                            <div class="col w-full lg:w-1/2 xl:w-1/4">
                                 <h3>Button Groups</h3>
 
-                                <div class="buttons mb-6">
+                                <div class="buttons mb-4">
                                     <div class="buttons__group">
                                         <button class="button">Years</button>
                                         <button class="button">Months</button>
@@ -83,127 +222,132 @@
                                     </div>
                                 </div>
 
-                                <div class="buttons mb-6">
+                                <div class="buttons mb-4">
                                     <div class="buttons__group">
                                         <button class="button button--icon"><fa-icon icon="chevron-left" class="icon"></fa-icon></button>
                                         <button class="button button--icon"><fa-icon icon="chevron-right" class="icon"></fa-icon></button>
                                     </div>
                                 </div>
 
-                                <div class="buttons mb-6">
+                                <div class="buttons mb-4">
                                     <div class="buttons__group">
                                         <button class="button button--info"><fa-icon icon="bookmark" class="icon"></fa-icon> Bookmark</button>
                                         <button class="button">12.5k</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col w-1/4">
+                            <div class="col w-full lg:w-1/2 xl:w-1/4">
                                 <h3>Sizes</h3>
 
-                                <div class="buttons">
+                                <div class="buttons mb-4">
                                     <button class="button button--small">Small</button>
                                     <button class="button">Normal</button>
                                     <button class="button button--large">Large</button>
                                 </div>
                             </div>
 
-                            <div class="col w-1/4">
+                            <div class="col w-full">
                                 <h3>Icons</h3>
 
-                                <div class="buttons mb-6">
-                                    <button class="button button--icon"><fa-icon icon="moon"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="star"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="meteor"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="sun"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="satellite"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="user-astronaut"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="robot"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="brain"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="rocket"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="hand-spock"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="bars"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="ellipsis-h"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="circle-notch" class="fa-spin"></fa-icon></button>
-                                    <button class="button button--icon"><fa-icon icon="sync" class="fa-spin"></fa-icon></button>
-                                </div>
+                                <div class="row">
+                                    <div class="col w-full lg:w-1/2">
+                                        <div class="buttons mb-4">
+                                            <button class="button button--icon"><fa-icon icon="moon"></fa-icon><span class="sr-only">Moon</span></button>
+                                            <button class="button button--icon"><fa-icon icon="star"></fa-icon><span class="sr-only">Star</span></button>
+                                            <button class="button button--icon"><fa-icon icon="meteor"></fa-icon><span class="sr-only">Meteor</span></button>
+                                            <button class="button button--icon"><fa-icon icon="sun"></fa-icon><span class="sr-only">Sun</span></button>
+                                            <button class="button button--icon"><fa-icon icon="satellite"></fa-icon><span class="sr-only">Satellite</span></button>
+                                            <button class="button button--icon"><fa-icon icon="user-astronaut"></fa-icon><span class="sr-only">Astronaut</span></button>
+                                            <button class="button button--icon"><fa-icon icon="robot"></fa-icon><span class="sr-only">Robot</span></button>
+                                            <button class="button button--icon"><fa-icon icon="brain"></fa-icon><span class="sr-only">Brain</span></button>
+                                            <button class="button button--icon"><fa-icon icon="rocket"></fa-icon><span class="sr-only">Rocket</span></button>
+                                            <button class="button button--icon"><fa-icon icon="hand-spock"></fa-icon><span class="sr-only">Spock</span></button>
+                                            <button class="button button--icon"><fa-icon icon="bars"></fa-icon><span class="sr-only">Bars</span></button>
+                                            <button class="button button--icon"><fa-icon icon="ellipsis-h"></fa-icon><span class="sr-only">Ellipsis</span></button>
+                                            <button class="button button--icon"><fa-icon icon="circle-notch" class="fa-spin"></fa-icon><span class="sr-only">Circle</span></button>
+                                            <button class="button button--icon"><fa-icon icon="sync" class="fa-spin"></fa-icon><span class="sr-only">Spin</span></button>
+                                        </div>
 
-                                <div class="buttons mb-6">
-                                    <button class="button button--icon button--primary"><fa-icon icon="moon"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="star"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="meteor"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="sun"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="satellite"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="user-astronaut"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="robot"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="brain"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="rocket"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="hand-spock"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="bars"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="ellipsis-h"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="circle-notch" class="fa-spin"></fa-icon></button>
-                                    <button class="button button--icon button--primary"><fa-icon icon="sync" class="fa-spin"></fa-icon></button>
-                                </div>
+                                        <div class="buttons mb-4">
+                                            <button class="button button--icon button--rounded"><fa-icon icon="moon"></fa-icon><span class="sr-only">Moon</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="star"></fa-icon><span class="sr-only">Star</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="meteor"></fa-icon><span class="sr-only">Meteor</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="sun"></fa-icon><span class="sr-only">Sun</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="satellite"></fa-icon><span class="sr-only">Satellite</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="user-astronaut"></fa-icon><span class="sr-only">Astronaut</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="robot"></fa-icon><span class="sr-only">Robot</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="brain"></fa-icon><span class="sr-only">Brain</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="rocket"></fa-icon><span class="sr-only">Rocket</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="hand-spock"></fa-icon><span class="sr-only">Spock</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="bars"></fa-icon><span class="sr-only">Bars</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="ellipsis-h"></fa-icon><span class="sr-only">Ellipsis</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="circle-notch" class="fa-spin"></fa-icon><span class="sr-only">Circle</span></button>
+                                            <button class="button button--icon button--rounded"><fa-icon icon="sync" class="fa-spin"></fa-icon><span class="sr-only">Spin</span></button>
+                                        </div>
+                                    </div>
 
-                                <div class="buttons mb-6">
-                                    <button class="button button--icon button--rounded"><fa-icon icon="moon"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="star"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="meteor"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="sun"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="satellite"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="user-astronaut"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="robot"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="brain"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="rocket"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="hand-spock"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="bars"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="ellipsis-h"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="circle-notch" class="fa-spin"></fa-icon></button>
-                                    <button class="button button--icon button--rounded"><fa-icon icon="sync" class="fa-spin"></fa-icon></button>
-                                </div>
+                                    <div class="col w-full lg:w-1/2">
+                                        <div class="buttons mb-4">
+                                            <button class="button button--icon button--primary"><fa-icon icon="moon"></fa-icon><span class="sr-only">Moon</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="star"></fa-icon><span class="sr-only">Star</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="meteor"></fa-icon><span class="sr-only">Meteor</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="sun"></fa-icon><span class="sr-only">Sun</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="satellite"></fa-icon><span class="sr-only">Satellite</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="user-astronaut"></fa-icon><span class="sr-only">Astronaut</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="robot"></fa-icon><span class="sr-only">Robot</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="brain"></fa-icon><span class="sr-only">Brain</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="rocket"></fa-icon><span class="sr-only">Rocket</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="hand-spock"></fa-icon><span class="sr-only">Spock</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="bars"></fa-icon><span class="sr-only">Bars</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="ellipsis-h"></fa-icon><span class="sr-only">Ellipsis</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="circle-notch" class="fa-spin"></fa-icon><span class="sr-only">Circle</span></button>
+                                            <button class="button button--icon button--primary"><fa-icon icon="sync" class="fa-spin"></fa-icon><span class="sr-only">Spin</span></button>
+                                        </div>
 
-                                <div class="buttons mb-6">
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="moon"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="star"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="meteor"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="sun"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="satellite"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="user-astronaut"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="robot"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="brain"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="rocket"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="hand-spock"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="bars"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="ellipsis-h"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="circle-notch" class="fa-spin"></fa-icon></button>
-                                    <button class="button button--icon button--rounded button--primary"><fa-icon icon="sync" class="fa-spin"></fa-icon></button>
+                                        <div class="buttons mb-4">
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="moon"></fa-icon><span class="sr-only">Moon</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="star"></fa-icon><span class="sr-only">Star</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="meteor"></fa-icon><span class="sr-only">Meteor</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="sun"></fa-icon><span class="sr-only">Sun</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="satellite"></fa-icon><span class="sr-only">Satellite</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="user-astronaut"></fa-icon><span class="sr-only">Astronaut</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="robot"></fa-icon><span class="sr-only">Robot</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="brain"></fa-icon><span class="sr-only">Brain</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="rocket"></fa-icon><span class="sr-only">Rocket</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="hand-spock"></fa-icon><span class="sr-only">Spock</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="bars"></fa-icon><span class="sr-only">Bars</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="ellipsis-h"></fa-icon><span class="sr-only">Ellipsis</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="circle-notch" class="fa-spin"></fa-icon><span class="sr-only">Circle</span></button>
+                                            <button class="button button--icon button--primary button--rounded"><fa-icon icon="sync" class="fa-spin"></fa-icon><span class="sr-only">Spin</span></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col w-1/4">
+                            <div class="col w-full">
                                 <h3>Loading</h3>
 
-                                <div class="buttons">
-                                    <p-button :value="true">Default</p-button>
-                                    <p-button :value="true" classes="button--primary">Primary</p-button>
-                                    <p-button :value="true" classes="button--brand">Brand</p-button>
-                                </div>
-
-                                <div class="buttons">
-                                    <p-button :value="true" classes="button--info">Info</p-button>
-                                    <p-button :value="true" classes="button--success">Success</p-button>
-                                    <p-button :value="true" classes="button--warning">Warning</p-button>
-                                    <p-button :value="true" classes="button--danger">Danger</p-button>
-                                </div>
-
-                                <hr>
-
-                                <div class="buttons">
-                                    <p-button @click="start">Start</p-button>
-                                    <p-button @click="stop">Stop</p-button>
-                                    <p-button v-model="defaultTest" classes="button--primary">Save</p-button>
+                                <div class="row">
+                                    <div class="col w-full lg:w-1/2">
+                                        <div class="buttons mb-4">
+                                            <p-button :value="true">Default</p-button>
+                                            <p-button :value="true" classes="button--primary">Primary</p-button>
+                                            <p-button :value="true" classes="button--secondary">Secondary</p-button>
+                                            <p-button :value="true" classes="button--info">Info</p-button>
+                                            <p-button :value="true" classes="button--success">Success</p-button>
+                                            <p-button :value="true" classes="button--warning">Warning</p-button>
+                                            <p-button :value="true" classes="button--danger">Danger</p-button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col w-full lg:w-1/2">
+                                        <div class="buttons m-4">
+                                            <p-button @click="start" classes="button--secondary">Start Loading</p-button>
+                                            <p-button @click="stop" classes="button--secondary">Stop Loading</p-button>
+                                            <p-button v-model="defaultTest" classes="button--primary">Save</p-button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -211,6 +355,72 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col w-full">
+                <div class="card">
+                    <div class="card__header">
+                        <h2 class="card__title">Alerts</h2>
+                    </div>
+
+                    <div class="card__body">
+                        <div class="alert">
+                            <div class="alert__container container">
+                                <div class="alert__icon">
+                                    <fa-icon icon="info-circle" class="fa-fw"></fa-icon> 
+                                </div>
+
+                                <p>Lorum Ipsum dolor sit amet.</p>
+                            </div>
+                        </div>
+
+                        <div class="alert alert--info">
+                            <div class="alert__container container">
+                                <div class="alert__icon">
+                                    <fa-icon icon="info-circle" class="fa-fw"></fa-icon> 
+                                </div>
+
+                                <p>Lorum Ipsum dolor sit amet.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert--success">
+                            <div class="alert__container container">
+                                <div class="alert__icon">
+                                    <fa-icon icon="check-circle" class="fa-fw"></fa-icon> 
+                                </div>
+
+                                <p>Lorum Ipsum dolor sit amet.</p>
+                            </div>
+                        </div>
+
+                        <div class="alert alert--warning">
+                            <div class="alert__container container">
+                                <div class="alert__icon">
+                                    <fa-icon icon="exclamation-circle" class="fa-fw"></fa-icon> 
+                                </div>
+
+                                <p>Lorum Ipsum dolor sit amet.</p>
+                            </div>
+                        </div>
+
+                        <div class="alert alert--danger">
+                            <div class="alert__container container">
+                                <div class="alert__icon">
+                                    <fa-icon icon="exclamation-triangle" class="fa-fw"></fa-icon> 
+                                </div>
+
+                                <p>Lorum Ipsum dolor sit amet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        old code...
 
         <div class="row">
             <div class="col w-1/2">

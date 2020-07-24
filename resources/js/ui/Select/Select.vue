@@ -1,94 +1,99 @@
 <template>
-	<div class="form__group">
-		<label v-if="label" :for="name" class="form__label" v-html="label"></label>
+	<div class="field">
+        <label
+            class="field__label"
+            :for="name"
+            v-if="label"
+            v-html="label">
+        </label>
 
-        <div class="form__select" :class="{ 'form__select--open': isOpen }" v-click-outside="close">
-            <button
-                type="button"
-                ref="button"
-                class="form__select-button"
-                :disabled="disabled"
-                @click="toggle">
+        <div class="field__control">
+            <div class="form__select" :class="{ 'form__select--open': isOpen }" v-click-outside="close">
+                <button
+                    type="button"
+                    ref="button"
+                    class="form__select-button"
+                    :disabled="disabled"
+                    @click="toggle">
 
-                <div v-if="selectedOptions.length > 0">
-                    <div v-if="multiple" v-for="(option, index) in selectedOptions" :key="index" class="badge">
-                        {{ option.label || option }}
-                        <button @click.stop="removeSelection(index)" class="w-6 h-6 inline-block align-middle text-gray-500 hover:text-gray-600 focus:outline-none">
-                            <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg>
-                        </button>
+                    <div v-if="selectedOptions.length > 0">
+                        <div v-if="multiple">
+                            <div  v-for="(option, index) in selectedOptions" :key="index" class="badge">
+                                {{ option.label || option }}
+                                <button @click.stop="removeSelection(index)" class="w-6 h-6 inline-block align-middle text-gray-500 hover:text-gray-600 focus:outline-none">
+                                    <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <span v-else v-html="selectedOptions[0].label || selectedOptions[0]"></span>
                     </div>
 
-                    <span v-else v-html="selectedOptions[0].label || selectedOptions[0]"></span>
+                    <span v-else class="form__select-placeholder" v-html="placeholder"></span>
+
+                    <div class="form__select-arrow">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </button>
+
+                <div
+                    v-show="isOpen"
+                    class="form__select-dropdown"
+                    ref="dropdown"
+                    @keydown.down="highlightNext"
+                    @keydown.up="highlightPrevious"
+                    @keydown.enter.prevent="selectHighlighted"
+                    @keydown.esc="close">
+                    <input
+                        v-if="filterable"
+                        type="search"
+                        ref="search"
+                        class="form__select-search"
+                        v-model="search"
+                        placeholder="Search for option..."/>
+
+                    <div class="form__select-controls" v-if="showControls">
+                        <span>Press enter to select</span>
+                        <span>↑ ↓ to navigate</span>
+                        <span>esc to dismiss</span>
+                    </div>
+
+                    <div v-if="filteredOptions.length > 0">
+                        <p-checkbox-group ref="options" v-if="multiple" class="form__select-options">
+                            <p-checkbox
+                                v-for="(option, index) in filteredOptions"
+                                :id="index"
+                                :key="index"
+                                :native-value="option.value"
+                                :class="{ 'form__select-option--highlighted': isHighlighted(index) }"
+                                name="selection"
+                                v-model="selection">
+                                {{ option.label }}
+                            </p-checkbox>
+                        </p-checkbox-group>
+
+                        <ul ref="options" v-else v-show="filteredOptions.length > 0" class="form__select-options">
+                            <li v-for="(option, index) in filteredOptions"
+                                :key="index"
+                                class="form__select-option"
+                                :class="{
+                                    'form__select-option--selected': inSelection(option),
+                                    'form__select-option--highlighted': isHighlighted(index)
+                                }"
+                                @click="addSelection(option)">
+                                {{ option.label }}
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div v-else class="form__select-search-empty">
+                        No results found for "{{ search }}"
+                    </div>
                 </div>
-
-                <span v-else class="form__select-placeholder" v-html="placeholder"></span>
-
-                <div class="form__select-arrow">
-                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                </div>
-            </button>
-
-            <div
-                v-show="isOpen"
-                class="form__select-dropdown"
-                ref="dropdown"
-                @keydown.down="highlightNext"
-                @keydown.up="highlightPrevious"
-                @keydown.enter.prevent="selectHighlighted"
-                @keydown.esc="close">
-                <input
-                    v-if="filterable"
-                    type="search"
-                    ref="search"
-                    class="form__select-search"
-                    v-model="search"
-                    placeholder="Search for option..."/>
-
-                <div class="form__select-controls" v-if="showControls">
-                    <span>Press enter to select</span>
-                    <span>↑ ↓ to navigate</span>
-                    <span>esc to dismiss</span>
-                </div>
-
-                <div v-if="filteredOptions.length > 0">
-                    <p-checkbox-group ref="options" v-if="multiple" class="form__select-options">
-                        <p-checkbox
-                            v-for="(option, index) in filteredOptions"
-                            :id="index"
-                            :key="index"
-                            :native-value="option.value"
-                            :class="{ 'form__select-option--highlighted': isHighlighted(index) }"
-                            name="selection"
-                            v-model="selection">
-                            {{ option.label }}
-                        </p-checkbox>
-                    </p-checkbox-group>
-
-                    <ul ref="options" v-else v-show="filteredOptions.length > 0" class="form__select-options">
-                        <li v-for="(option, index) in filteredOptions"
-                            :key="index"
-                            class="form__select-option"
-                            :class="{
-                                'form__select-option--selected': inSelection(option),
-                                'form__select-option--highlighted': isHighlighted(index)
-                            }"
-                            @click="addSelection(option)">
-                            {{ option.label }}
-                        </li>
-                    </ul>
-                </div>
-
-                <div v-else class="form__select-search-empty">
-                    No results found for "{{ search }}"
-                </div>
-			</div>
-        </div>
-
-        <div class="form__control--meta" v-if="help || errorMessage">
-            <div class="form__help">
-                <span v-if="help" v-html="help"></span>
-                <span v-if="errorMessage" class="form__error--message" v-html="errorMessage"></span>
             </div>
+
+            <p class="field__help" v-if="help" v-html="help"></p>
+            <p class="field__help field__help--danger" v-if="errorMessage" v-html="errorMessage"></p>
         </div>
 	</div>
 </template>
@@ -206,7 +211,7 @@
             filteredOptions() {
                 return this.availOptions.filter((option) => {
                     const label = _.has(option, 'label') ? option['label'] : option
-                    
+
                     return label.toLowerCase().startsWith(this.search.toLowerCase())
                 })
             },
@@ -262,7 +267,7 @@
 
                     this.isOpen = false
                     this.$refs.button.focus()
-                }                
+                }
             },
 
             setupPopper() {

@@ -59,7 +59,9 @@
                     <field-builder
                         v-if="section.fields"
                         v-model="section.fields"
-                        @input="reorder(section.fields)">
+                        @input="reorder(section.fields)"
+                        :sections="sections"
+                        :id="section.handle">
                     </field-builder>
                 </div>
             </div>
