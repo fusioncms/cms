@@ -19,7 +19,7 @@
             inline-flex
             relative
             border-2
-            w-11
+            w-10
             h-6
         ;
 
@@ -74,7 +74,7 @@
         }
 
         &--checked:after {
-            transform: translateX(20px);
+            transform: translateX(rem(15px));
         }
     }
 }

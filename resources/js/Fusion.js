@@ -21,10 +21,10 @@ export default class Fusion {
     Vue.use(VueHead)
     Vue.use(VueMq, {
       breakpoints: {
-        sm: 767,
-        md: 991,
-        lg: 1199,
-        xl: 1599,
+        sm: 576,
+        md: 768,
+        lg: 992,
+        xl: 1200,
         xxl: Infinity
       }
     })
