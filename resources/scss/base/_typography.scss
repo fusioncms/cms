@@ -1,79 +1,108 @@
 ::selection {
-    @apply bg-brand-200 text-brand-900 opacity-100 p-2;
+    @apply bg-primary-200 text-primary-900 opacity-100 p-2;
     text-shadow: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    @apply .mb-3 .text-black .font-bold .font-serif;
+.text-heading {
+    &--xl,
+    &--lg,
+    &--md,
+    &--sm,
+    &--xs,
+    &--xxs {
+        @apply tracking-wide mb-4;
+    }
 
-    &:not(:first-child) {
-        @apply .mt-2;
+    &--xl { font-size: rem(22px); }
+
+    &--lg { font-size: rem(20px); }
+
+    &--md { font-size: rem(17px); }
+
+    &--sm {
+        font-size: rem(16px);
+        font-weight: 600;
+    }
+
+    &--xs {
+        font-size: rem(15px);
+        font-weight: 600;
+    }
+
+    &--xxs {
+        font-size: rem(15px);
+        font-weight: 600;
+        text-transform: uppercase;
     }
 }
 
-p {
-    @apply .mb-6 .text-gray-800;
+h1 { @extend .text-heading--xl; }
 
-    &:last-child {
-        @apply .mb-0;
-    }
-}
+h2 { @extend .text-heading--lg; }
+
+h3 { @extend .text-heading--md; }
+
+h4 { @extend .text-heading--sm; }
+
+h5 { @extend .text-heading--xs; }
+
+h6 { @extend .text-heading--xxs; }
+
+p { @apply mb-6; }
 
 a {
-    @apply
-        text-info-500
-        no-underline
-        outline-none
-    ;
+    @apply text-info-500 no-underline outline-none;
 
     &:focus {
-        @apply
-            shadow-focus
-        ;
-
+        @apply shadow-focus;
         z-index: 1;
     }
 
-    &:hover {
-        @apply
-            text-info-800
-        ;
-    }
+    &:hover { @apply text-info-800; }
 }
 
-hr {
-    @apply border-none border-b border-dashed my-6 block;
-}
+// ul,
+// ol {
+//     .main-content__body & {
+//         @apply mb-6;
+//         display: block;
+//         margin-block-start: 1em;
+//         margin-block-end: 1em;
+//         margin-inline-start: 0px;
+//         margin-inline-end: 0px;
+//         padding-inline-start: 40px;
 
-code {
-    @apply
-        text-gray-600
-        text-xs
-    ;
-}
+//         ul {
+//             list-style-type: circle;
+//             margin-block-start: 0px;
+//             margin-block-end: 0px;
+//         }
+//     }
+// }
+
+
+// ul {
+//     .main-content__body & { @apply list-disc; }
+// }
+
+// ol {
+//     .main-content__body & { @apply list-decimal; }
+// }
+
+hr { @apply border-none border-b my-6 block; }
+
+code { @apply text-gray-600 text-xs; }
 
 .link {
     &--success {
-        @apply
-            text-success-500
-        ;
+        @apply text-success-500;
 
-        &:hover {
-            @apply
-                text-success-600
-            ;
-        }
+        &:hover { @apply text-success-700; }
     }
 
     &--danger {
-        @apply
-            text-danger-500
-        ;
+        @apply text-danger-500;
 
-        &:hover {
-            @apply
-                text-danger-600
-            ;
-        }
+        &:hover { @apply text-danger-700; }
     }
 }

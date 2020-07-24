@@ -56,26 +56,11 @@
         <nav-menu :active="isNavOpen"></nav-menu>
 
         <main id="main-content" class="main-content w-full flex-auto">
-            <!-- Local Environment Warning -->
-            <div class="local-env" v-if="environment == 'local'">
-                <div class="local-env__message">
-                    <p>Local Development Environment</p>
-                </div>
-
-                <div class="local-env__bar"></div>
-            </div>
-
             <!-- Content -->
             <div class="main-content__container">
                 <div class="flex flex-row flex-wrap items-center justify-between mb-3">
                     <div class="main-content__header">
-                        <h1>
-                            <portal-target name="title" slim></portal-target>
-                        </h1>
-
-                        <span class="text-sm ml-3 text-gray-600">
-                            <portal-target name="subtitle" slim></portal-target>
-                        </span>
+                        <portal-target name="title" slim></portal-target>
                     </div>
 
                     <div class="main-content__actions">
@@ -93,7 +78,7 @@
 
         <footer class="page-footer mt-auto">
             <p class="mb-0">Built with <fa-icon :icon="['fas', 'heart']" class="text-primary-500"></fa-icon> & <fa-icon :icon="['fas', 'coffee']" class="text-gray-900"></fa-icon> by the efelle team</p>
-            <p class="mb-0">{{ version }}</p>
+            <p class="mb-0"><span v-if="environment == 'local'">Local Dev Environment - </span>{{ version }}</p>
         </footer>
 
         <p-toast></p-toast>
@@ -112,7 +97,9 @@
 
         data() {
             return {
-                isNavOpen: false
+                isNavOpen: false,
+                isMobile: true,
+                closeOnResize: false
             }
         },
 
@@ -151,7 +138,11 @@
 
         methods: {
             toggleNav(event) {
-                this.isNavOpen = !this.isNavOpen
+                if (this.isNavOpen) {
+                    this.closeNav()
+                } else {
+                    this.openNav()
+                }
             },
 
             closeNav(event) {
@@ -162,8 +153,12 @@
                 this.isNavOpen = true
             },
 
+            getScreenSize() {
+                this.isMobile = _.includes(['sm', 'md', 'lg'], this.$mq)
+            },
+
             onClick() {
-                if (_.includes(['sm', 'md'], this.$mq)) {
+                if (this.isMobile) {
                     this.closeNav()
                 }
             },
@@ -178,13 +173,29 @@
                 bus().$on('open-nav', () => {
                     this.openNav()
                 })
+
+                window.addEventListener('resize', () => {
+                    this.closeOnResize = !this.isMobile
+                    this.getScreenSize()
+
+                    if (this.closeOnResize && this.isMobile) {
+                        this.closeNav()
+                    }
+
+                    if (!this.closeOnResize && !this.isMobile) {
+                        this.openNav()
+                    }
+
+                    this.closeOnResize = false
+                })
             }
         },
 
         created() {
             this.listenForNavEvents()
+            this.getScreenSize()
 
-            if (_.includes(['lg', 'xl', 'xxl'], this.$mq)) {
+            if (!this.isMobile) {
                 this.openNav()
             }
         }
