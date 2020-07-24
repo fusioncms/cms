@@ -158,7 +158,7 @@
             },
 
             onClick() {
-                if (_.includes(['sm', 'md'], this.$mq)) {
+                if (this.isMobile) {
                     this.closeNav()
                 }
             },
