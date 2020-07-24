@@ -82,7 +82,7 @@
         data() {
             return {
                 fieldtypes: {},
-                active: false,
+                editing: false,
                 section: false,
                 opened: {
                     add: false,
@@ -119,11 +119,11 @@
 
             field: {
                 get() {
-                    return _.find(this.fields, (field) => field.handle == this.active) || {}
+                    return _.find(this.fields, (field) => field.handle == this.editing) || {}
                 },
 
                 set(value) {
-                    this.active = value.handle || false
+                    this.editing = value.handle || false
                 }
             },
 
@@ -146,7 +146,7 @@
         },
 
         watch: {
-            active(value) {
+            editing(value) {
                 this.$refs.editField.modalOpen = _.isString(value)
             }
         },
@@ -165,10 +165,10 @@
                 })
 
                 if (! external) {
-                    let active = _.last(this.fields)
+                    let editing = _.last(this.fields)
 
-                    this.active     = active.handle
-                    active['proto'] = true // prototype flag
+                    this.editing     = editing.handle
+                    editing['proto'] = true // prototype flag
                 }
             },
 
@@ -181,7 +181,7 @@
             },
 
             edit(index) {
-                this.active = this.fields[index].handle
+                this.editing = this.fields[index].handle
             },
 
             save(handle, value) {
