@@ -67,7 +67,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Create Sections on Fieldset.
-     * 
+     *
      * @param  Fieldset   $fieldset
      * @param  Collection $sections
      * @return Fieldset
@@ -95,7 +95,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Update Sections on Fieldset.
-     * 
+     *
      * @param  Fieldset   $fieldset
      * @param  Collection $sections
      * @return Fieldset
@@ -128,7 +128,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Remove Sections from Fieldset.
-     * 
+     *
      * @param  Fieldset   $fieldset
      * @param  Collection $ids
      * @return Fieldset
@@ -183,7 +183,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Create Fields on Section.
-     * 
+     *
      * @param  Section    $section
      * @param  Collection $fields
      * @return void
@@ -206,7 +206,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Update Fields on Section.
-     * 
+     *
      * @param  Section    $section
      * @param  Collection $fields
      * @return void
@@ -225,7 +225,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Remove Fields from Section.
-     * 
+     *
      * @param  Section    $section
      * @param  Collection $ids
      * @return void
