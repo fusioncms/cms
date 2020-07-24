@@ -19,5 +19,6 @@ class DeleteModelFiles
         File::delete(glob(fusion_path('src/Models/Settings') . '/*.php'));
         File::delete(glob(fusion_path('src/Models/Singles') . '/*.php'));
         File::delete(glob(fusion_path('src/Models/Taxonomies') . '/*.php'));
+        File::delete(glob(fusion_path('src/Models/Replicators') . '/*.php'));
     }
 }
