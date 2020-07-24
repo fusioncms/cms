@@ -24,8 +24,10 @@
                             </div>
 
                             <p-actions :id="field.handle + '_actions'">
-                                <p-dropdown-link @click.prevent="edit(index)">Edit</p-dropdown-link>
-                                <p-dropdown-link @click.prevent="remove(index)">Delete</p-dropdown-link>
+                                <p-dropdown-link @click.prevent="setEditing(index)">Edit</p-dropdown-link>
+                                <p-dropdown-link v-if="sections.length > 1" @click.prevent="setMoving(index)">Move to...</p-dropdown-link>
+                                <p-dropdown-divider></p-dropdown-divider>
+                                <p-dropdown-link @click.prevent="remove(index)"><span class="text-danger-500">Delete</span></p-dropdown-link>
                             </p-actions>
                         </div>
                     </p-sortable-item>
@@ -35,12 +37,12 @@
 
         <div class="row">
             <div class="col w-full">
-                <a class="button" href="#" @click.prevent="openModal">Add Field</a>
+                <a class="button" href="#" @click.prevent="openModal('add')">Add Field</a>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="add-field" title="Add Field" v-model="open" extra-large>
+            <p-modal name="add-field" title="Add Field" v-model="opened.add" extra-large>
                 <div class="row -mb-6">
                     <div class="col w-1/2 lg:w-1/6" v-for="fieldtype in fieldtypes" :key="'add-' + fieldtype.handle">
                         <p-button class="w-full items-center justify-start" @click.prevent="add(fieldtype)">
@@ -50,7 +52,16 @@
                 </div>
 
                 <template slot="footer">
-                    <p-button @click.prevent="closeModal">Close</p-button>
+                    <p-button @click.prevent="closeModal('add')">Close</p-button>
+                </template>
+            </p-modal>
+
+            <p-modal name="move-field" title="Move Field" v-model="opened.move">
+                <p-select name="move_to" v-model="section" placeholder="Please select a section..." :options="sectionOptions"></p-select>
+
+                <template slot="footer">
+                    <p-button class="button--primary" @click.prevent="move">Move</p-button>
+                    <p-button class="button--secondary mr-2" @click.prevent="resetMove">Cancel</p-button>
                 </template>
             </p-modal>
 
@@ -71,8 +82,13 @@
         data() {
             return {
                 fieldtypes: {},
-                active: false,
-                open: false,
+                editing: false,
+                moving: false,
+                section: false,
+                opened: {
+                    add: false,
+                    move: false,
+                },
             }
         },
 
@@ -84,6 +100,10 @@
             id: {
                 type: String,
                 required: true
+            },
+            sections: {
+                type: Array,
+                required: false,
             }
         },
 
@@ -100,12 +120,27 @@
 
             field: {
                 get() {
-                    return _.find(this.fields, (field) => field.handle == this.active) || {}
+                    return _.find(this.fields, (field) => field.handle == this.editing) || {}
                 },
 
                 set(value) {
-                    this.active = value.handle || false
+                    this.editing = value.handle || false
                 }
+            },
+
+            sectionOptions() {
+                let vm = this
+
+                let sections = _.map(this.sections, function(section) {
+                    return {
+                        label: section.name,
+                        value: section.handle
+                    }
+                })
+
+                return _.reject(sections, function(section) {
+                    return section.value == vm.id
+                })
             },
 
             total() {
@@ -118,51 +153,88 @@
         },
 
         watch: {
-            active(value) {
+            editing(value) {
                 this.$refs.editField.modalOpen = _.isString(value)
+            },
+
+            moving(value) {
+                if (_.isString(value)) {
+                    this.openModal('move')
+                } else {
+                    this.closeModal('move')
+                }
             }
         },
 
         methods: {
-            add(fieldtype, additional = {}, external = false) {
-                this.closeModal()
+            add(type, field = {}, external = false) {
+                this.closeModal('add')
 
-                this.fields.push({
-                    type:     fieldtype,
-                    name:     additional.name || 'Field ' + this.nextId,
-                    handle:   additional.handle || 'field_' + this.nextId,
-                    help:     additional.help || '',
-                    settings: additional.settings ? _.cloneDeep(additional.settings, true) : _.cloneDeep(fieldtype.settings, true),
-                    order:    this.total,
-                })
+                this.push(type, field)
 
                 if (! external) {
-                    let active = _.last(this.fields)
+                    let editing = _.last(this.fields)
 
-                    this.active     = active.handle
-                    active['proto'] = true // prototype flag
+                    this.editing         = editing.handle
+                    editing['prototype'] = true
                 }
+            },
+
+            push(type, field) {
+                this.fields.push({
+                    type:     type,
+                    name:     field.name || 'Field ' + this.nextId,
+                    handle:   field.handle || 'field_' + this.nextId,
+                    help:     field.help || '',
+                    settings: field.settings ? _.cloneDeep(field.settings, true) : _.cloneDeep(type.settings, true),
+                    order:    this.total,
+                })
+            },
+
+            move() {
+                let field = _.find(this.fields, (f) => f.handle == this.moving) || {}
+                let index = _.findIndex(this.fields, (f) => f.handle == this.moving)
+
+                delete field.id
+
+                this.$bus.$emit('move-field-' + this.section, field)
+                this.remove(index)
+
+                this.resetMove()
+            },
+
+            resetMove() {
+                this.moving = false
+                this.section = false
             },
 
             remove(index) {
                 this.fields.splice(index, 1)
             },
 
-            edit(index) {
-                this.active = this.fields[index].handle
+            setEditing(index) {
+                let field = this.fields[index]
+
+                this.editing = field.handle
+            },
+
+            setMoving(index) {
+                let field = this.fields[index]
+
+                this.moving = field.handle
             },
 
             save(handle, value) {
                 let index = _.findIndex(this.fields, (field) => field.handle == handle)
 
-                delete value['proto']
+                delete value['prototype']
 
                 this.fields.splice(index, 1, value)
                 this.field = {}
             },
 
             cancel(handle) {
-                if (this.field.proto) {
+                if (this.field.prototype) {
                     this.remove(
                         _.findIndex(this.fields, (field) => field.handle == handle)
                     )
@@ -171,12 +243,12 @@
                 this.field = {}
             },
 
-            openModal() {
-                this.open = true
+            openModal(modal) {
+                this.opened[modal] = true
             },
 
-            closeModal() {
-                this.open = false
+            closeModal(modal) {
+                this.opened[modal] = false
             },
         },
 
@@ -194,6 +266,15 @@
 
                 if (index == -1) {
                     this.add(adding.fieldtype, adding, true)
+                }
+            })
+
+            bus().$on('move-field-' + this.id, (moving) => {
+                let index = _.findIndex(this.fields, (field) => field.handle == moving.handle)
+
+                if (index == -1) {
+                    moving.order = this.total
+                    this.fields.push(moving)
                 }
             })
 

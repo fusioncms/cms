@@ -2,8 +2,8 @@
     @apply flex bg-white rounded border border-gray-300 leading-normal w-full mb-6;
     transition: border-color 0.3s $transition-effect;
 
-    &:hover { 
-        @apply border-gray-400; 
+    &:hover {
+        @apply border-gray-400;
 
         .quicklink__icon { @apply bg-primary-700; }
     }

@@ -67,7 +67,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Create Sections on Fieldset.
-     * 
+     *
      * @param  Fieldset   $fieldset
      * @param  Collection $sections
      * @return Fieldset
@@ -95,7 +95,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Update Sections on Fieldset.
-     * 
+     *
      * @param  Fieldset   $fieldset
      * @param  Collection $sections
      * @return Fieldset
@@ -113,13 +113,13 @@ class FieldsetSectionController extends Controller
                 $section = $fieldset->sections()->findOrFail($id);
                 $section->update($data);
 
-                $attached = $this->getDetachedFields($section, $fields);
+                $detached = $this->getDetachedFields($section, $fields);
                 $updated  = $this->getUpdatedFields($fields);
-                $detached = $this->getAttachedFields($fields);
+                $attached = $this->getAttachedFields($fields);
 
                 $this->deleteFields($section, $detached);
                 $this->updateFields($section, $updated);
-                $this->createFields($section, $detached);
+                $this->createFields($section, $attached);
             });
         }
 
@@ -128,7 +128,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Remove Sections from Fieldset.
-     * 
+     *
      * @param  Fieldset   $fieldset
      * @param  Collection $ids
      * @return Fieldset
@@ -183,7 +183,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Create Fields on Section.
-     * 
+     *
      * @param  Section    $section
      * @param  Collection $fields
      * @return void
@@ -201,13 +201,12 @@ class FieldsetSectionController extends Controller
                     'order'    => $field['order'],
                 ]);
             });
-            // $section->fields()->createMany($fields->all());
         }
     }
 
     /**
      * Update Fields on Section.
-     * 
+     *
      * @param  Section    $section
      * @param  Collection $fields
      * @return void
@@ -226,7 +225,7 @@ class FieldsetSectionController extends Controller
 
     /**
      * Remove Fields from Section.
-     * 
+     *
      * @param  Section    $section
      * @param  Collection $ids
      * @return void
