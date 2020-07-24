@@ -25,7 +25,7 @@
 
                             <p-actions :id="field.handle + '_actions'">
                                 <p-dropdown-link @click.prevent="edit(index)">Edit</p-dropdown-link>
-                                <p-dropdown-link @click.prevent="openModal('move')">Move to...</p-dropdown-link>
+                                <p-dropdown-link v-if="sections.length > 1" @click.prevent="openModal('move')">Move to...</p-dropdown-link>
                                 <p-dropdown-divider></p-dropdown-divider>
                                 <p-dropdown-link @click.prevent="remove(index)"><span class="text-danger-500">Delete</span></p-dropdown-link>
                             </p-actions>
@@ -128,11 +128,17 @@
             },
 
             sectionOptions() {
-                return _.map(this.sections, function(section) {
+                let vm = this
+
+                let sections = _.map(this.sections, function(section) {
                     return {
                         label: section.name,
                         value: section.handle
                     }
+                })
+
+                return _.reject(sections, function(section) {
+                    return section.value == vm.id
                 })
             },
 
