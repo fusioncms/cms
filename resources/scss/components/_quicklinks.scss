@@ -5,7 +5,7 @@
     @screen xl { @apply mb-6; }
 
     &:hover { 
-        @apply border-gray-400; 
+        @apply border-gray-400;
 
         .quicklink__icon { @apply bg-primary-700; }
     }
