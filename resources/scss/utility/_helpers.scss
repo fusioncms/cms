@@ -1,0 +1,11 @@
+  // Remove top margin from first element
+.no-top,
+%no-top {
+    > *:first-child { margin-top: 0!important; }
+}
+
+// Remove bottom margin from last element
+.no-bottom,
+%no-bottom {
+    > *:last-child { margin-bottom: 0!important; }
+}

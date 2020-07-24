@@ -1,281 +1,180 @@
 .simple-button {
-    @apply
-        appearance-none
-    ;
+    @apply appearance-none;
 
     &:focus {
-        @apply
-            outline-none
-            shadow-focus
-        ;
+        @apply outline-none shadow-focus;
     }
 }
 
 .button {
-    @apply
-        appearance-none
-        border-gray-300
-        cursor-pointer
-        leading-normal
-        justify-start
-        text-gray-700
-        no-underline
-        items-center
-        inline-flex
-        bg-white
-        rounded
-        text-sm
-        border
-        px-3
-        py-2
-    ;
+    @apply appearance-none bg-white border border-gray-300 rounded text-sm leading-normal text-gray-700 no-underline cursor-pointer px-3 py-2;
+    transition: all 0.2s $transition-effect;
 
-    &:hover:not([disabled]) {
-        @apply
-            border-gray-400
-        ;
+    &:hover:not([disabled]) { 
+        @apply bg-gray-200 border-gray-300; 
+    }
+
+    &:active:not([disabled]) { 
+        @apply bg-gray-300; 
     }
 
     &:focus {
-        @apply
-            outline-none
-            shadow-focus
-        ;
+        @apply outline-none shadow-focus;
     }
 
     &[disabled] {
-        @apply
-            cursor-not-allowed
-            opacity-50
-        ;
+        @apply cursor-not-allowed opacity-50;
     }
 
-    > .icon {
-        @apply
-            mr-3
-        ;
-    }
+    > .icon { @apply mr-3; }
 
     &--borderless {
-        @apply
-            border-0
-            p-0
-        ;
+        @apply border-0 p-0;
     }
 
-    &--rounded {
-        @apply
-            rounded-full
-        ;
-    }
+    &--rounded { @apply rounded-full; }
 
     &--icon {
-        @apply
-            justify-center
-            items-center
-            flex
-        ;
+        @apply justify-center items-center flex;
 
         width: 39px;
         height: 39px;
 
-        > .icon {
-            @apply
-                m-0
-            ;
-        }
+        > .icon { @apply m-0; }
     }
 
-    &--small {
-        @apply
-            text-xs
-        ;
-    }
+    &--small { @apply text-xs; }
 
-    &--large {
-        @apply
-            text-base
-        ;
-    }
+    &--large { @apply text-base; }
 
-    &--brand, &--primary, &--secondary, &--info, &--success, &--warning, &--danger,
-    &--brand:hover:not([disabled]), &--primary:hover:not([disabled]), &--secondary:hover:not([disabled]), &--info:hover:not([disabled]), &--success:hover:not([disabled]), &--warning:hover:not([disabled]), &--danger:hover:not([disabled]) {
-        @apply
-            text-white
-        ;
-    }
+    &--brand, 
+    &--primary, 
+    &--secondary, 
+    &--info, 
+    &--success, 
+    &--warning, 
+    &--danger,
+    &--brand:hover:not([disabled]), 
+    &--primary:hover:not([disabled]), 
+    &--secondary:hover:not([disabled]), 
+    &--info:hover:not([disabled]), 
+    &--success:hover:not([disabled]), 
+    &--warning:hover:not([disabled]), 
+    &--danger:hover:not([disabled]) { @apply text-white; }
 
+    &--primary,
     &--brand {
-        @apply
-            bg-brand-500
-            border-brand-500
-        ;
+        @apply bg-primary-500 border-primary-500;
 
-        &:hover:not([disabled]) {
-            @apply
-                bg-brand-600
-            ;
+        &:hover:not([disabled]) { 
+            @apply bg-primary-700 border-primary-700; 
         }
 
-        &:focus {
-            @apply
-                shadow-focus
-            ;
+        &:active:not([disabled]) { 
+            @apply bg-primary-900 border-primary-900; 
         }
     }
 
-    &--primary {
-        @apply
-            bg-gray-900
-            border-gray-900
-        ;
+    &--secondary {
+        @apply bg-secondary-500 border-secondary-500;
 
-        &:hover:not([disabled]) {
-            @apply
-                bg-gray-800
-            ;
+        &:hover:not([disabled]) { 
+            @apply bg-secondary-700 border-secondary-700; 
+        }
+        
+        &:active:not([disabled]) { 
+            @apply bg-secondary-900 border-secondary-900; 
         }
     }
 
     &--success {
-        @apply
-            bg-success-500
-            border-success-500
-        ;
+        @apply bg-success-500 border-success-500;
 
         &:hover:not([disabled]) {
-            @apply
-                bg-success-600
-            ;
+            @apply bg-success-600 border-success-600;
+        }
+
+        &:active:not([disabled]) { 
+            @apply bg-success-900 border-success-900; 
         }
 
         &:focus {
-            @apply
-                shadow-focus-success
-            ;
+            @apply shadow-focus-success;
         }
     }
 
     &--info {
-        @apply
-            bg-info-500
-            border-info-500
-        ;
+        @apply bg-info-500 border-info-500;
 
-        &:hover:not([disabled]) {
-            @apply
-                bg-info-600
-            ;
+        &:hover:not([disabled]) { 
+            @apply bg-info-600 border-info-600; 
+        }
+
+        &:active:not([disabled]) { 
+            @apply bg-info-900 border-info-900; 
         }
     }
 
     &--warning {
-        @apply
-            bg-warning-500
-            border-warning-500
-        ;
+        @apply bg-warning-500 border-warning-500;
 
         &:hover:not([disabled]) {
-            @apply
-                bg-warning-600
-            ;
+            @apply bg-warning-600 border-warning-600;
+        }
+
+        &:active:not([disabled]) { 
+            @apply bg-warning-900 border-warning-900; 
         }
     }
 
     &--danger {
-        @apply
-            bg-danger-500
-            border-danger-500
-        ;
+        @apply bg-danger-500 border-danger-500;
 
         &:hover:not([disabled]) {
-            @apply
-                bg-danger-600
-            ;
+            @apply bg-danger-600 border-danger-600;
+        }
+
+        &:active:not([disabled]) { 
+            @apply bg-danger-900 border-danger-900; 
         }
 
         &:focus {
-            @apply
-                shadow-focus-danger
-            ;
+            @apply shadow-focus-danger;
         }
     }
 }
 
 .buttons {
-    @apply
-        flex
-        flex-wrap
-        items-center
-        justify-start
-    ;
+    @apply flex flex-wrap items-center justify-start;
 
     &__group {
-        @apply
-            flex
-            flex-wrap
-            items-center
-            justify-start
-        ;
+        @apply flex flex-wrap items-center justify-start;
 
-        &:not(:last-child) {
-            @apply
-                mr-3
-            ;
-        }
+        &:not(:last-child) { @apply mr-3; }
 
         > .button {
-            @apply
-                m-0
-            ;
+            @apply m-0;
 
-            &:not(:first-child) {
-                margin-left: -1px;
-            }
+            &:not(:first-child) { margin-left: -1px; }
         }
 
-        > .button:focus {
-            z-index: 1;
-        }
+        > .button:focus { z-index: 1; }
 
         > .button:first-child,
         > .dropdown.button:first-child {
-            @apply
-                rounded-r-none
-            ;
+            @apply rounded-r-none;
         }
 
         > .button:last-child,
-        > .dropdown.button:last-child {
-            @apply
-                rounded-l-none
-            ;
-        }
+        > .dropdown.button:last-child { @apply rounded-l-none; }
 
         > .button:not(:first-child):not(:last-child),
         > .dropdown.button:not(:first-child):not(:last-child) {
-            @apply
-                rounded-r-none
-                rounded-l-none
-            ;
+            @apply rounded-r-none rounded-l-none;
         }
     }
 
-    > .button {
-        @apply
-            mb-2
-        ;
-    }
+    > .button { @apply mb-2; }
 
-    > .button:not(:last-child):not(.buttons--grouped) {
-        @apply
-            mr-2
-        ;
-    }
-
-    &:last-child {
-        @apply
-            -mb-2
-        ;
-    }
+    > .button:not(:last-child):not(.buttons--grouped) { @apply mr-2; }
 }

@@ -20,7 +20,7 @@
         }
     }
 
-    @screen md { 
+    @screen lg { 
         @apply overflow-y-auto z-20;
         width: $nav-width-desktop; 
         right: auto;
