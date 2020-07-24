@@ -27,7 +27,7 @@
                                 <p-dropdown-link @click.prevent="edit(index)">Edit</p-dropdown-link>
                                 <p-dropdown-link @click.prevent="openModal('move')">Move to...</p-dropdown-link>
                                 <p-dropdown-divider></p-dropdown-divider>
-                                <p-dropdown-link @click.prevent="remove(index)">Delete</p-dropdown-link>
+                                <p-dropdown-link @click.prevent="remove(index)"><span class="text-danger-500">Delete</span></p-dropdown-link>
                             </p-actions>
                         </div>
                     </p-sortable-item>
