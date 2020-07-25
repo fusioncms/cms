@@ -286,33 +286,28 @@ class FieldsetTest extends TestCase
     {
         // Create fieldset..
         $section  = SectionFactory::times(1)->withoutFields()->create();
-        $field    = FieldFactory::withName('Foo')->withSection($section)->create();
+        $fieldA   = FieldFactory::withName('Foo')->withSection($section)->create();
         $fieldset = FieldsetFactory::withSections([$section])->create();
 
         // Assign to matrix..
         $matrix   = MatrixFactory::asSingle()->withFieldset($fieldset)->create();
         $table    = $matrix->getBuilder()->getTable();
 
-        // origial field - updated
-        $field->name   = 'Bar';
-        $field->handle = 'bar';
-        $field->type   = ['handle' => 'textarea'];
+        // old field - updated
+        $fieldA->name   = 'Bar';
+        $fieldA->handle = 'bar';
+        $fieldA->type   = ['handle' => 'textarea'];
 
-        $section->fields = [
-            $field,
-            factory(\Fusion\Models\Field::class)->make([
-                'section_id' => $section->id,
-                'name'       => 'Foo',
-                'handle'     => 'foo',
-                'type'       => 'input'
-            ])
-        ];
+        // new field - w/ previous name
+        $fieldB = factory(\Fusion\Models\Field::class)->make(['name' => 'Foo', 'handle' => 'foo']);
+
+        $section = $section->fresh();
+        $section->fields = [ $fieldA, $fieldB ];
 
         // Save fieldset through API..
-        $this->actingAs($this->owner, 'api')
-            ->json(
-                'POST',
-                '/api/fieldsets/' . $fieldset->id . '/sections',
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/fieldsets/' . $fieldset->id . '/sections',
                 [ 'sections' => [ $section ] ]
             );
 

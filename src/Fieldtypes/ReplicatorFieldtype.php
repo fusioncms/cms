@@ -68,7 +68,8 @@ class ReplicatorFieldtype extends Fieldtype
             $replicator = Replicator::create([
                 'field_id' => $field->id,
                 'name'     => $field->name,
-                'handle'   => $field->handle . '_' . unique_id(5),
+                'handle'   => $field->handle,
+                'uniqid'   => unique_id(5),
             ]);
         } else {
             $replicator = Replicator::where([
@@ -84,6 +85,22 @@ class ReplicatorFieldtype extends Fieldtype
             $field->settings = ['replicator' => $replicator->id];
             $field->save();
         });
+    }
+
+    /**
+     * Delete Field model after saved.
+     * 
+     * @param  Field  $field
+     * @return void
+     */
+    public function onDeleted(Field $field)
+    {
+        $replicator = Replicator::where([
+            'id'       => $field->settings['replicator'],
+            'field_id' => $field->id
+        ])->firstOrFail();
+
+        $replicator->delete();
     }
 
     /**
@@ -138,6 +155,6 @@ class ReplicatorFieldtype extends Fieldtype
      */
     public function getResource($model, Field $field)
     {
-        return ReplicantResource::collection($this->getValue($model, $field));
+        return new ReplicatorResource($field->settings['replicator']);
     }
 }
