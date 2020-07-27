@@ -9,15 +9,16 @@
 
         <div class="card">
             <div class="card__body">
-                <p-title
+                <p-input
                     name="name"
+                    label="Name"
+                    help="Give your matrix a name."
                     autocomplete="off"
-                    autofocus
                     required
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </p-title>
+                </p-input>
 
                 <p-input
                     name="description"
