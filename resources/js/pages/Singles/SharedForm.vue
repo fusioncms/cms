@@ -2,7 +2,7 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'dashboard' }" class="button">Go Back</router-link>
+                <router-link :to="{ name: 'dashboard' }" class="button button--secondary">Go Back</router-link>
                 <button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
             </div>
         </portal>
@@ -11,9 +11,11 @@
             <div class="card__body">
                 <p-title
                     name="name"
+                    :label="matrix.name_label || 'Name'" 
                     autocomplete="off"
                     autofocus
                     required
+                    :placeholder="matrix.name_label || 'Name'" 
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name"
