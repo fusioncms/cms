@@ -89,7 +89,9 @@ a {
 //     .main-content__body & { @apply list-decimal; }
 // }
 
-hr { @apply border-none border-b my-6 block; }
+hr { 
+    @apply block border-solid border-gray-300 border-none border-b my-6; 
+}
 
 code { @apply text-gray-600 text-xs; }
 
