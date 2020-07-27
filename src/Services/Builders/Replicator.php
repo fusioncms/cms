@@ -2,6 +2,7 @@
 
 namespace Fusion\Services\Builders;
 
+use Fusion\Models\Section;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Fusion\Contracts\Builder as BuilderContract;
@@ -21,13 +22,15 @@ class Replicator extends Builder implements BuilderContract
     /**
      * Constructor.
      * 
-     * @param string $handle
+     * @param string  $handle
+     * @param Section $section
      */
-    public function __construct(string $handle)
+    public function __construct(string $handle, Section $section)
     {
         parent::__construct();
 
         $this->replicator = \Fusion\Models\Replicator::where('handle', $handle)->firstOrFail();
+        $this->section    = $section;
     }
 
     /**
@@ -35,10 +38,14 @@ class Replicator extends Builder implements BuilderContract
      */
     public function make()
     {
-        $className = Str::studly($this->replicator->handle);
+        $prefix = $this->replicator->handle;
+        $suffix = $this->replicator->uniqid;
+        $handle = "{$prefix}_{$this->section->handle}_{$suffix}";
+
+        $className = Str::studly($handle);
         $fillable  = [ 'replicator_id' ];
         $casts     = [];
-        $fields    = $this->replicator->fieldset->fields ?? collect();
+        $fields    = $this->section->fields ?? collect();
 
         $fields = $fields->reject(function ($field) {
             $fieldtype = fieldtypes()->get($field->type);
@@ -61,7 +68,7 @@ class Replicator extends Builder implements BuilderContract
 
         $contents = strtr($stub, [
             '{class}'         => $className,
-            '{handle}'        => $this->replicator->handle,
+            '{tableName}'     => str_handle("rp_{$handle}"),
             '{fillable}'      => '[\'' . implode('\', \'', $fillable) . '\']',
             '{casts}'         => '[\'' . implode('\', \'', $casts) . '\']',
             '{dates}'         => '[\'' . implode('\', \'', $this->getDates()) . '\']',
@@ -71,5 +78,17 @@ class Replicator extends Builder implements BuilderContract
         File::put($path, $contents);
 
         return app()->make("{$this->namespace}\\{$className}");
+    }
+
+    /**
+     * Static make method.
+     * 
+     * @param  string  $handle
+     * @param  Section $section
+     * @return Builder       
+     */
+    public static function resolve(string $handle, Section $section)
+    {
+        return (new static($handle, $section))->make();
     }
 }

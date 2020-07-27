@@ -19,9 +19,9 @@ class FieldsetSectionController extends Controller
         $updated  = $this->getUpdatedSections($sections);
         $detached = $this->getDetachedSections($fieldset, $sections);
 
-        $fieldset = $this->createSections($fieldset, $attached);
-        $fieldset = $this->updateSections($fieldset, $updated);
         $fieldset = $this->deleteSections($fieldset, $detached);
+        $fieldset = $this->updateSections($fieldset, $updated);
+        $fieldset = $this->createSections($fieldset, $attached);
 
         return new FieldsetResource($fieldset);
     }
