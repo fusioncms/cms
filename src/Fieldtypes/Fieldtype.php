@@ -245,6 +245,17 @@ abstract class Fieldtype
     }
 
     /**
+     * Delete Field model after saved.
+     * 
+     * @param  Field  $field
+     * @return void
+     */
+    public function onDeleted(Field $field)
+    {
+
+    }
+
+    /**
      * Perform an action before the given fieldtype has saved data.
      *
      * @param  mixed  $value

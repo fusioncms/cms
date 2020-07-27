@@ -1,5 +1,5 @@
 <template>
-    <div class="field -mx-6">
+    <div class="field">
         <div class="field__control">
             <input
                 class="field__title"

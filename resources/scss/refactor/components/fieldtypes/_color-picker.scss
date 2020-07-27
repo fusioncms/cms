@@ -22,7 +22,8 @@
 
 .color-picker {
   .pickr {
-    @apply .button .p-1;
+    @extend .button;
+    @apply .p-1;
   }
   .pickr .pcr-button {
     height: 2.5em;

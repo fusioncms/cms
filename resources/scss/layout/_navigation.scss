@@ -28,7 +28,7 @@
     }
 
     &__container {
-        @apply py-6;
+        @apply pb-6;
     }
 }
 
@@ -59,13 +59,31 @@
             @apply inline-block mr-4;
         }
 
-        .toggle-icon {
-            @apply ml-auto;
-        }
+        .toggle-icon {  @apply ml-auto; }
     }
 
     &__heading {
         @apply block text-xs tracking-wider font-bold uppercase my-3 pl-6 text-gray-100;
+    }
+}
+
+.nav-button {
+    @extend .button;
+    @apply flex items-center justify-center bg-transparent border-0 rounded text-white;
+    width: rem(35px);
+    height: rem(35px);
+
+    &:hover:not([disabled]),
+    &:focus {
+        @apply text-white bg-transparent border-0;
+    }
+
+    &:active:not([disabled]) {
+        @apply text-white bg-transparent border-0;
+    }
+
+    &--full {
+        @apply w-auto px-3
     }
 }
 
@@ -77,3 +95,15 @@
 
     &__image {}
 }
+
+// .nav-account {
+//     @apply flex items-center leading-normal text-sm mb-4;
+//     padding: 10px;
+//     background: rgba(black, 0.3);
+
+//     &__icon {
+//         @apply flex-shrink-0 mr-3;
+//     }
+
+//     &__user {}
+// }

@@ -10,7 +10,7 @@
     }
 
     &__container {
-        @apply flex flex-row justify-between items-center w-full px-6;
+        @apply flex flex-row justify-between items-center w-full px-3;
         height: 55px;
     }
 
@@ -27,21 +27,7 @@
 
     &__toggle {}
 
-    &__account {
-        @apply flex items-center text-sm;
-
-        a {
-            @apply text-gray-600;
-
-            &:hover {
-                @apply text-gray-900;
-            }
-        }
-
-        .dropdown__button { height: 34px;}
-
-        .dropdown__options { margin-top: 0; }
-    }
+    &__account {}
 }
 
 .site-body {

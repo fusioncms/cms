@@ -1,6 +1,6 @@
 .main-content { 
+    @apply bg-gray-100;
     margin-top: 55px;
-    background: #f5f5f5;
     
     @screen lg {
         transition: padding 0.5s $transition-effect;
@@ -9,20 +9,53 @@
     }
 
     &__container {
-        padding: rem(30px) rem(20px);
+        @apply py-6 px-4;
 
-        @screen md { padding: rem(30px); }
+        @screen xl { @apply p-6; }
     }
 
     &__header {
-        @apply flex flex-row flex-wrap items-center justify-between mb-3;
+        @apply flex flex-row flex-wrap items-center justify-between mb-0 mr-2;
+        min-height: rem(50px);
     }
 
     &__actions {
-        @apply flex-shrink-0 mb-3;
+        @apply flex items-center flex-shrink-0 mb-0;
+        min-height: rem(50px);
 
         .button { @apply mb-0; }
     }
 
     &__body {}
+}
+
+.form-container {
+    @extend .row;
+
+    @screen xl { @apply flex-no-wrap; }
+
+    &__content {
+        @extend .col;
+        width: 100%;
+        transition: width 0.5s $transition-effect;
+
+        @screen xl { flex: 1 1 auto; }
+    }
+
+    &__sidebar {
+        @extend .col;
+        width: 100%;
+        transition: width 0.5s $transition-effect;
+
+        @screen xl { 
+            @apply flex-shrink-0;
+            width: 400px;
+
+            .nav-active & { width: 300px; }
+        }
+
+        @screen xxl {  
+            .nav-active & { width: 400px; }
+        }
+    }
 }

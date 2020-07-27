@@ -147,10 +147,12 @@ select {
 .form__number {
     @apply .flex;
     &-decrease {
-        @apply .button .mr-2;
+        @extend .button;
+        @apply mr-2;
     }
     &-increase {
-        @apply .button .ml-2;
+        @extend .button;
+        @apply ml-2;
     }
 }
 
