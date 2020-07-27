@@ -2,7 +2,7 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'matrices' }" class="button">Go Back</router-link>
+                <router-link :to="{ name: 'matrices' }" class="button button--secondary">Go Back</router-link>
                 <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
             </div>
         </portal>
@@ -60,7 +60,6 @@
 
                     <p-tab name="Customize">
                         <p-input
-                            v-if="form.show_name_field"
                             name="name_label"
                             label="Name Label"
                             placeholder="Name"
@@ -68,17 +67,6 @@
                             :has-error="form.errors.has('name_label')"
                             :error-message="form.errors.get('name_label')"
                             v-model="form.name_label">
-                        </p-input>
-
-                        <p-input
-                            v-else
-                            monospaced
-                            name="name_format"
-                            label="Name Format"
-                            help="What format would you like your generated names and slugs to follow?"
-                            :has-error="form.errors.has('name_format')"
-                            :error-message="form.errors.get('name_format')"
-                            v-model="form.name_format">
                         </p-input>
 
                         <p-input
@@ -99,6 +87,28 @@
                             :has-error="form.errors.has('reference_plural')"
                             :error-message="form.errors.get('reference_plural')"
                             v-model="form.reference_plural">
+                        </p-input>
+
+                        <hr>
+
+                        <p-toggle
+                            v-if="form.type == 'collection'"
+                            name="show_name_field"
+                            label="Show name field"
+                            v-model="form.show_name_field"
+                            :true-value="1"
+                            :false-value="0">
+                        </p-toggle>
+
+                        <p-input
+                            v-if="!form.show_name_field"
+                            monospaced
+                            name="name_format"
+                            label="Name Format"
+                            help="What format would you like your generated names and slugs to follow?"
+                            :has-error="form.errors.has('name_format')"
+                            :error-message="form.errors.get('name_format')"
+                            v-model="form.name_format">
                         </p-input>
                     </p-tab>
 
@@ -190,15 +200,6 @@
                         name="quicklink"
                         label="Show as Quicklink"
                         v-model="form.quicklink"
-                        :true-value="1"
-                        :false-value="0">
-                    </p-toggle>
-
-                    <p-toggle
-                        v-if="form.type == 'collection'"
-                        name="show_name_field"
-                        label="Show name field"
-                        v-model="form.show_name_field"
                         :true-value="1"
                         :false-value="0">
                     </p-toggle>
