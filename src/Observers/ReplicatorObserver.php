@@ -204,7 +204,7 @@ class ReplicatorObserver
                 'handle'   => $data['handle'],
                 'help'     => $data['help'],
                 'settings' => $data['settings'],
-                'type'     => is_string($data['type']) ? $data['type'] : $data['handle']['type'],
+                'type'     => is_string($data['type']) ? $data['type'] : $data['type']['handle'],
                 'order'    => $data['order'],
             ]);
 
@@ -229,7 +229,7 @@ class ReplicatorObserver
                 'handle'   => $data['handle'],
                 'help'     => $data['help'],
                 'settings' => $data['settings'],
-                'type'     => is_string($data['type']) ? $data['type'] : $data['handle']['type'],
+                'type'     => is_string($data['type']) ? $data['type'] : $data['type']['handle'],
                 'order'    => $data['order'],
             ]);
 

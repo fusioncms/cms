@@ -24,7 +24,9 @@
                             </div>
 
                             <p-actions :id="field.handle + '_actions'">
-                                <p-dropdown-link @click.prevent="edit(index)">Edit</p-dropdown-link>
+                                <p-dropdown-link @click.prevent="set('edit', index)">Edit</p-dropdown-link>
+                                <p-dropdown-link v-if="sections.length > 1" @click.prevent="set('move', index)">Move to...</p-dropdown-link>
+                                <p-dropdown-divider></p-dropdown-divider>
                                 <p-dropdown-link @click.prevent="remove(index)">Delete</p-dropdown-link>
                             </p-actions>
                         </div>
@@ -35,27 +37,36 @@
 
         <div class="row">
             <div class="col w-full">
-                <a class="button" href="#" @click.prevent="open = true">Add Field</a>
+                <a class="button" href="#" @click.prevent="field.add = true">Add Field</a>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="add-field" title="Add Field" v-model="open" extra-large>
+            <p-modal name="add-field" title="Add Field" v-model="field.add" extra-large>
                 <div class="row -mb-6">
                     <div class="col w-1/2 lg:w-1/6" v-for="fieldtype in fieldtypes" :key="'add-' + fieldtype.handle">
-                        <p-button class="w-full items-center justify-start" @click.prevent="add(fieldtype, {}, true)">
+                        <p-button class="w-full items-center justify-start" @click.prevent="add(fieldtype)">
                             <fa-icon :icon="fieldtype.icon" class="icon"></fa-icon> {{ fieldtype.name }}
                         </p-button>
                     </div>
                 </div>
 
                 <template slot="footer">
-                    <p-button @click.prevent="open = false">Close</p-button>
+                    <p-button @click.prevent="field.add = false">Close</p-button>
+                </template>
+            </p-modal>
+
+            <p-modal name="move-field" title="Move Field" v-model="!! field.move">
+                <p-select name="move_to" v-model="section" placeholder="Please select a section..." :options="sectionOptions"></p-select>
+
+                <template slot="footer">
+                    <p-button class="button--primary" @click.prevent="move">Move</p-button>
+                    <p-button class="button--secondary mr-2" @click.prevent="field.move = false">Cancel</p-button>
                 </template>
             </p-modal>
 
             <field-editor
-                v-model="field"
+                v-model="field.edit"
                 @save="save"
                 @close="close">
             </field-editor>
@@ -73,9 +84,12 @@
 
         data() {
             return {
-                fieldtypes: {},
-                field: false,
-                open: false
+                section: false,
+                field: {                
+                    edit: false,
+                    add: false,
+                    move: false
+                }
             }
         },
 
@@ -84,6 +98,21 @@
                 type: Array,
                 required: false,
                 default: () => []
+            },
+
+            fieldtypes: {
+                type: Object,
+                required: true
+            },
+
+            sectionHandle: {
+                type: String,
+                required: true
+            },
+
+            sections: {
+                type: Array,
+                required: false,
             }
         },
 
@@ -92,108 +121,113 @@
                 get() {
                     return this.value
                 },
+
                 set(value) {
-                    console.log('FieldBuilder::fields')
                     this.$emit('input', value)
                 }
             },
 
-            options() {
-                let options = _.map(this.fieldtypes, (item) => {
-                    return { label: item.name, value: item.handle }
+            sectionOptions() {
+                let options = _.map(this.sections, (section) => {
+                    return {
+                        label: section.name,
+                        value: section.handle
+                    }
                 })
 
-                options.unshift({ label: 'Select a fieldtype..', value: '' })
-
-                return options
+                return _.reject(options, (option) => this.sectionHandle == option.handle)
             }
         },
 
         methods: {
-            add(type, extra = {}, prototype) {
-                let name   = this.rename(extra.name || type.name)
-                let handle = _.snakeCase(name)
-                
-                this.open = false
-                this.field = {
+            add(type, data = {}, prototype = true) {
+                let name   = this.uniqName(data.name || type.name)
+                let field  = {
                     type,
                     name,
-                    handle,
-                    help:       extra.help || '',
-                    settings:   extra.settings ? _.cloneDeep(extra.settings, true) : _.cloneDeep(type.settings, true),
+                    handle:     _.snakeCase(name),
+                    help:       data.help || '',
+                    settings:   data.settings ? _.cloneDeep(data.settings, true) : _.cloneDeep(type.settings, true),
                     order:      this.fields.length,
-                    validation: extra.validation || '',
-                    proto:      prototype
+                    validation: data.validation || '',
+                    prototype:  prototype
+                }
+                
+                if (prototype) {
+                    this.field.add  = false
+                    this.field.edit = field
                 }
 
-                this.fields.push(this.field)
+                this.fields.push(field)
             },
 
             remove(index) {
                 this.fields.splice(index, 1)
             },
 
-            edit(index) {
-                this.field = this.fields[index]
+            set(action, index) {
+                this.field[action] = this.fields[index]
+            },
+
+            move() {
+                if (this.section) {
+                    bus().$emit(`add-field-${this.section}`, this.field.move)
+                    bus().$emit(`remove-field-${this.sectionHandle}`, this.field.move)
+
+                    this.section    = false
+                    this.field.move = false
+                }
             },
 
             save(handle, field) {
-                delete field.proto
+                delete field.prototype
                 
                 this.fields.splice(this.findBy('handle', handle), 1, field)
-                this.field = false
+                this.field.edit = false
             },
 
             close() {
-                if (this.field.proto) {
-                    this.remove(
-                        _.findIndex(this.fields, (field) => field.handle == this.field.handle)
-                    )
+                if (this.field.edit.prototype) {
+                    this.remove(this.findBy('handle', this.field.edit.handle))
                 }
 
-                this.field = false
+                this.field.edit = false
             },
 
             findBy(key, value) {
                 return _.findIndex(this.fields, (field) => field[key] == value)
             },
 
-            rename(original, name, count = 0) {
+            uniqName(original, name, count = 0) {
                 name = original + (count ? ` ${count}` : '')
 
                 if (this.findBy('name', name) != -1) {
-                    return this.rename(original, name, ++count)
+                    return this.uniqName(original, name, ++count)
                 }
 
                 return name
             },
         },
 
-        mounted() {
-            axios.get('/api/fieldtypes')
-                .then((response) =>
-                    this.fieldtypes = response.data.data)
-        },
-
         created() {
-            bus().$on('add-field', (field) => {
-                if (this.findBy('handle', field.handle) != -1) {
-                    this.add(field.fieldtype, field, false)
+            bus().$on(`add-field-${this.sectionHandle}`, (field) => {
+                if (this.findBy('handle', field.handle) == -1) {
+                    this.add(field.type, field, false)
                 }
             })
 
-            bus().$on('remove-field', (handle) => {
-                let index = this.findBy('handle', handle)
+            bus().$on(`remove-field-${this.sectionHandle}`, (field) => {
+                let index = this.findBy('handle', field.handle)
 
-                if (index > -1) {
+                if (index != -1) {
                     this.remove(index)
                 }
             })
         },
 
         beforeDestroy() {
-            bus().$off('add-field')
-            bus().$off('remove-field')
+            bus().$off(`add-field-${this.sectionHandle}`)
+            bus().$off(`remove-field-${this.sectionHandle}`)
         }
     }
 </script>

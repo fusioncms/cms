@@ -52,6 +52,10 @@ Route::prefix('fieldtypes')->group(function() {
 	Route::get('',       'Fields\FieldtypeController@index');
 });
 
+/**
+ * API - Replicator Field Routes
+ */
+Route::get('replicators/{replicator}', 'Fields\ReplicatorController@show');
 
 /**
  * API - Fieldset Routes

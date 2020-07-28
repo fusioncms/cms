@@ -9,7 +9,7 @@
             </li>
 
             <li class="tab">
-                <a href="#" class="tab__link" @click.prevent="add"><fa-icon icon="plus" class="fa-fw text-xs"></fa-icon></a>
+                <a href="#" class="tab__link" @click.prevent="add()"><fa-icon icon="plus" class="fa-fw text-xs"></fa-icon></a>
             </li>
         </ul>
 
@@ -57,11 +57,11 @@
             <div class="row">
                 <div class="col mt-6 w-full">
                     <field-builder
-                        v-if="section.fields"
                         v-model="section.fields"
                         @input="reorder(section.fields)"
+                        :fieldtypes="fieldtypes"
                         :sections="sections"
-                        :id="section.handle">
+                        :sectionHandle="section.handle">
                     </field-builder>
                 </div>
             </div>
@@ -73,8 +73,9 @@
     export default {
         data() {
             return {
-                active: 0,
-                sections: []
+                fieldtypes: {},
+                // sections: [],
+                active: 0
             }
         },
 
@@ -85,31 +86,50 @@
             }
         },
 
-        watch: {
+        computed: {
             sections: {
-                deep: true,
-                handler(value) {
+                get() {
+                    return this.value
+                },
+                set(value) {
                     this.$emit('input', value)
                 }
             }
         },
 
-        computed: {
-            total() {
-                return this.sections.length || 0
-            }
-        },
+        // watch: {
+        //     sections: {
+        //         deep: true,
+        //         handler(value) {
+        //             this.$emit('input', value)
+        //         }
+        //     }
+        // },
 
         methods: {
-            add() {
+            add(newName = 'Section') {
+                let name   = this.uniqName(newName)
+                let handle = _.snakeCase(name)
+
                 this.sections.push({
-                    name: `Section ${this.total}`,
-                    handle: `section-${this.total}`,
+                    name: name,
+                    handle: handle,
                     description: '',
                     placement: 'body',
-                    order: this.total,
+                    order: this.sections.length,
                     fields: [],
                 })
+            },
+
+            uniqName(orig, count = 0) {
+                let name  = orig + (count ? ` ${count}` : '')
+                let index = _.findIndex(this.sections, (item) => item.name == name)
+
+                if (index != -1) {
+                    return this.uniqName(orig, ++count)
+                }
+
+                return name
             },
 
             remove(index) {
@@ -146,18 +166,16 @@
         },
 
         mounted() {
-            if (this.value.length > 0) {
-                this.sections = this.value
-            } else {
-                this.sections = [{
-                    name: 'General',
-                    handle: 'general',
-                    description: '',
-                    placement: 'body',
-                    order: 0,
-                    fields: [],
-                }]
+            if (this.value.length == 0) {
+                this.add('General')
+            // } else {
+            //     this.sections = this.value
             }
+
+            axios.get('/api/fieldtypes')
+                .then((response) => {
+                    this.fieldtypes = response.data.data
+                })
         }
     }
 </script>

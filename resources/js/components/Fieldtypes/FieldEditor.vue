@@ -1,5 +1,5 @@
 <template>
-    <p-modal name="edit-field" title="Edit Field" noCloseButton noEscClose extra-large v-model="isOpen">
+    <p-modal name="edit-field" title="Edit Field" noCloseButton noEscClose extra-large v-model="modalOpen">
         <form-container v-if="form">
             <div class="row mb-6">
                 <div class="col w-1/2">
@@ -64,8 +64,8 @@
         </form-container>
 
         <template slot="footer">
-            <p-button class="ml-2" @click="close">Close</p-button>
-            <p-button theme="primary" @click="submit" class="mr-1">Save</p-button>
+            <p-button theme="button--primary" @click="submit">Save</p-button>
+            <p-button class="button--secondary mr-2" @click="close">Close</p-button>
         </template>
     </p-modal>
 </template>
@@ -79,7 +79,7 @@
         data() {
             return {
                 form: false,
-                isOpen: false
+                modalOpen: false
             }
         },
 
@@ -92,8 +92,8 @@
 
         watch: {
             value(value) {
-                this.isOpen = !! value
-                this.form   = value ? new Form(_.cloneDeep(value)) : false
+                this.modalOpen = !! value
+                this.form      = value ? new Form(_.cloneDeep(value)) : false
             }
         },
 
@@ -101,11 +101,11 @@
             submit() {
                 this.form.post('/api/fields/validate')
                     .then((response) => this.$emit('save', this.value.handle, this.form.data()))
-                    .catch((error)   => console.log(error))
+                    .catch((error)   => {})
             },
 
             close() {
-                this.isOpen = false
+                this.modalOpen = false
                 this.$emit('close')
             }
         }

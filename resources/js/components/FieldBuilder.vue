@@ -288,8 +288,8 @@
         },
 
         beforeDestroy() {
-            this.$bus.$off('add-field-' + this.id)
-            this.$bus.$off('remove-field-' + this.id)
+            bus().$off('add-field-' + this.id)
+            bus().$off('remove-field-' + this.id)
         }
     }
 </script>
