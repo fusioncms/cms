@@ -1,5 +1,12 @@
 <template>
     <div class="field">
+        <label
+            class="field__label sr-only"
+            :for="name"
+            v-if="label"
+            v-html="label">
+        </label>
+
         <div class="field__control">
             <input
                 class="field__title"
@@ -33,9 +40,12 @@
             id: String,
             placeholder: {
                 type: String,
-                default: 'Untitled',
+                default: 'Name',
             },
-            label: String,
+            label: {
+                type: String,
+                default: 'Name',
+            },
             help: String,
             value: {
                 type: [String, Number],
@@ -82,5 +92,9 @@
                 default: false,
             },
         },
+
+        created() {
+            console.log(this.placeholder)
+        }
     }
 </script>
