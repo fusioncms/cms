@@ -36,7 +36,8 @@ class ReplicatorFieldtype extends Fieldtype
      * @var array
      */
     public $rules = [
-        'settings.sections' => 'required|array'
+        'settings.replicator' => 'sometimes',
+        'settings.sections'   => 'required|array'
     ];
 
     /**
@@ -80,10 +81,11 @@ class ReplicatorFieldtype extends Fieldtype
 
             $replicator->touch();
         }
-
+       
         // update field w/o events..
+        $field = Field::find($field->id);
         $field->withoutEvents(function() use ($field, $replicator) {
-            $field->settings = ['replicator' => $replicator->id];
+            $field->settings = [ 'replicator' => $replicator->id ];
             $field->save();
         });
     }
@@ -136,15 +138,27 @@ class ReplicatorFieldtype extends Fieldtype
      */
     public function persistRelationship($model, Field $field)
     {
-        $oldValues = $model->{$field->handle}->pluck('id');
-        $newValues = collect(request()->input($field->handle))->mapWithKeys(function($id) use ($field) {
-            return [
-                $id => ['field_id' => $field->id]
-            ];
+        $replicator = Replicator::find($field->settings['replicator']);
+        $replicants = collect(request()->input($field->handle) ?? []);
+
+        $replicants->each(function($replicant) use ($replicator) {
+            $section = Section::find($replicant->section);
+
+            $replicator->replicant($section)
+                ->updateOrCreate([
+                    'id'           => $replicant->id,
+                    'replicant_id' => $replicator->id
+                ], $replicant->fields ?? []);
+
+            // // persist relationships..
+            // $section->fields->each(function($field) use ($replicant) {
+            //     if ($field->type()->hasRelationship()) {
+            //         $field->type()->persistRelationship($replicant, $field);
+            //     }
+            // });
         });
 
-        $model->{$field->handle}()->detach($oldValues);
-        $model->{$field->handle}()->attach($newValues);
+        $model->touch();
     }
 
     /**

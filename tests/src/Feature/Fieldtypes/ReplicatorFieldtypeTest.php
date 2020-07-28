@@ -57,6 +57,12 @@ class ReplicatorFieldtypeTest extends TestCase
             'handle' => str_handle($name),
         ]);
 
+        // associated field..
+        $this->assertDatabaseHas('fields', [
+            'id'       => $replicator->field->id,
+            'settings' => json_encode([ 'replicator' => $replicator->id ])
+        ]);
+
         // fieldsettables (not necessary)
         $this->assertDatabaseHas('fieldsettables', [
             'fieldset_id'        => $replicator->fieldset->id,
@@ -115,6 +121,12 @@ class ReplicatorFieldtypeTest extends TestCase
         // --
         // update replicator..
         $replicator = $this->updateReplicator($replicator, [ $updSection, $newSection ]);
+
+        // associated field..
+        $this->assertDatabaseHas('fields', [
+            'id'       => $replicator->field->id,
+            'settings' => json_encode([ 'replicator' => $replicator->id ])
+        ]);
 
         // --
         // replicants..

@@ -60,6 +60,15 @@
                 },
 
                 set(value) {
+                    // this.$emit('input', value)
+                }
+            }
+        },
+
+        watch: {
+            sections: {
+                deep: true,
+                handler(value) {
                     this.$emit('input', value)
                 }
             }
