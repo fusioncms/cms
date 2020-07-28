@@ -67,6 +67,16 @@ class SettingServiceProvider extends ServiceProvider
                             $value = $value->all();
                         }
 
+                        // For file types we want to pass the path of the file
+                        // through to override config values.
+                        //
+                        // TODO: Think of a more sustainable way to configure
+                        // these instances so other fields can determine how
+                        // they should override config values.
+                        if ($field->type == 'file' and isset($value[0])) {
+                            $value = storage_path('app/public/'.$value[0]->location);
+                        }
+
                         config([ $key => $value ]);
                     }
                 });
