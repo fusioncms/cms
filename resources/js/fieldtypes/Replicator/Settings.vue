@@ -18,6 +18,8 @@
         			.then((response) => {
                         this.$set(this.settings, 'sections', response.data.data.sections)
                     })
+            } else {
+                this.settings.sections = []
             }
         }
     }

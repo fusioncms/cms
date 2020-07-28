@@ -34,7 +34,6 @@ Vue.component('delete-file-modal', require('../components/FileManager/Modals/Del
 Vue.component('delete-selected-files-modal', require('../components/FileManager/Modals/DeleteSelectedFilesModal').default)
 
 // Fieldtypes
-Vue.component('field-builder', require('../components/Fieldtypes/FieldBuilder').default)
 Vue.component('section-builder', require('../components/Fieldtypes/SectionBuilder').default)
 
 // Settings

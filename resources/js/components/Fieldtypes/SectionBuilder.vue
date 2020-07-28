@@ -2,9 +2,17 @@
     <div class="tabs">
         <ul class="tab__list overflow-x-scroll">
             <li v-for="(section, index) in sections" :key="index" class="tab flex-shrink-0 flex-1 border-r border-gray-200" :class="{ 'tab--active': index == active }">
-                <a href="#" class="tab__link flex justify-between items-center" @click.prevent="select(index, true)">
-                    <span>{{ section.name }} <span class="text-xs">({{ section.placement }}, {{ fieldCount(section.fields.length) }})</span></span>
-                    <span @click.prevent="remove(index)" v-if="sections.length > 1" class="flex items-center justify-center w-6 h-6 rounded hover:bg-black hover:text-white"><fa-icon icon="times" class="fa-xs"></fa-icon></span>
+                <a href="#" class="tab__link flex justify-between items-center" @click.prevent="select(index)">
+                    <span>
+                        {{ section.name }}
+                        <span class="text-xs">
+                            ({{ section.placement }}, {{ fieldCount(section.fields.length) }})
+                        </span>
+                    </span>
+
+                    <span @click.prevent="remove(index)" v-if="sections.length > 1" class="flex items-center justify-center w-6 h-6 rounded hover:bg-black hover:text-white">
+                        <fa-icon icon="times" class="fa-xs"></fa-icon>
+                    </span>
                 </a>
             </li>
 
@@ -13,70 +21,29 @@
             </li>
         </ul>
 
-        <div class="tab__panel" v-for="(section, index) in sections" :key="index" v-show="isSelected(index)">
-            <div class="row">
-                <div class="col mb-6 w-full lg:w-1/2">
-                    <p-input
-                        name="label"
-                        label="Section Label"
-                        v-model="section.name"
-                        required>
-                    </p-input>
-                </div>
-
-                <div class="col mb-6 w-full lg:w-1/2">
-                    <p-slug
-                        name="handle"
-                        label="Section Handle"
-                        autocomplete="off"
-                        delimiter="-"
-                        :watch="section.name"
-                        v-model="section.handle"
-                        required>
-                    </p-slug>
-                </div>
-
-                <div class="col mb-6 w-full lg:w-1/2">
-                    <p-input name="description" label="Section Description" v-model="section.description"></p-input>
-                </div>
-
-                <div class="col mb-6 w-full lg:w-1/2">
-                    <p-select name="placement" label="Section Placement" v-model="section.placement" :options="[
-                        {
-                            'label': 'Body',
-                            'value': 'body',
-                        },
-                        {
-                            'label': 'Sidebar',
-                            'value': 'sidebar',
-                        },
-                    ]"></p-select>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col mt-6 w-full">
-                    <field-builder
-                        v-model="section.fields"
-                        @input="reorder(section.fields)"
-                        :fieldtypes="fieldtypes"
-                        :sections="sections"
-                        :sectionHandle="section.handle">
-                    </field-builder>
-                </div>
-            </div>
-        </div>
+        <section-editor
+            v-for="(section, index) in sections"
+            v-show="index == active"
+            :key="index"
+            :section="section"
+            class="tab__panel">
+        </section-editor>
     </div>
 </template>
 
 <script>
     export default {
+        name: 'section-builder',
+
         data() {
             return {
                 fieldtypes: {},
-                // sections: [],
                 active: 0
             }
+        },
+
+        components: {
+            'section-editor': require('./SectionEditor').default
         },
 
         props: {
@@ -91,20 +58,12 @@
                 get() {
                     return this.value
                 },
+
                 set(value) {
                     this.$emit('input', value)
                 }
             }
         },
-
-        // watch: {
-        //     sections: {
-        //         deep: true,
-        //         handler(value) {
-        //             this.$emit('input', value)
-        //         }
-        //     }
-        // },
 
         methods: {
             add(newName = 'Section') {
@@ -133,27 +92,14 @@
             },
 
             remove(index) {
-                if (index === 0 && this.sections.length === 1) return
-
-                const newIndex = index === 0 ? 1 : 0
-
-                this.sections.splice(index, 1)
-
-                this.active = newIndex
+                if (this.sections.length > 0) {
+                    this.sections.splice(index, 1)
+                    this.active = index === 0 ? 1 : 0
+                }
             },
 
             select(index) {
-                if (typeof this.sections[index] === 'undefined') {
-                    this.active = 0
-                    return
-                }
-
-                this.selectedFieldtype = null
-                this.active = index
-            },
-
-            isSelected(index) {
-                return this.active == index
+                this.active = this.sections[index] ? index : 0
             },
 
             fieldCount(count) {
@@ -168,8 +114,6 @@
         mounted() {
             if (this.value.length == 0) {
                 this.add('General')
-            // } else {
-            //     this.sections = this.value
             }
 
             axios.get('/api/fieldtypes')

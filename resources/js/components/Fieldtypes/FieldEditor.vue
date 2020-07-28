@@ -74,7 +74,7 @@
     import Form from '../../services/Form'
 
     export default {
-        name: 'fieldtype-field-editor',
+        name: 'field-editor',
 
         data() {
             return {
