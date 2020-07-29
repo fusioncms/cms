@@ -3,7 +3,6 @@
 namespace Fusion\Console\Installer;
 
 use Fusion\Models\User;
-use Fusion\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
 class CreateDefaultUser
@@ -30,7 +29,7 @@ class CreateDefaultUser
      */
     public function handle()
     {
-        activity()->withoutLogs(function() {
+        activity()->withoutLogs(function () {
             User::create([
                 'name'              => $this->container['user_name'],
                 'email'             => $this->container['user_email'],

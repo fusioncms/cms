@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Models\Role;
 use Fusion\Http\Controllers\DataTableController;
+use Fusion\Models\Role;
 
 class RoleController extends DataTableController
 {

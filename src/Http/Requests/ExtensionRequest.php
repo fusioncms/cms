@@ -14,7 +14,7 @@ class ExtensionRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('extensions.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('extensions.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**
@@ -28,7 +28,7 @@ class ExtensionRequest extends FormRequest
 
         return [
             'name'   => 'required|regex:/^[A-z]/i',
-            'handle' => [ 'required', 'unique:extensions,handle,' . $id, new NotAReservedKeyword ],
+            'handle' => ['required', 'unique:extensions,handle,'.$id, new NotAReservedKeyword()],
         ];
     }
 }

@@ -11,8 +11,8 @@ class DeleteLogFiles
      */
     public function handle()
     {
-    	if (! empty(glob(storage_path('logs/*.log')))) {
-        	exec('rm ' . storage_path('logs/*.log'));
-    	}
+        if (!empty(glob(storage_path('logs/*.log')))) {
+            exec('rm '.storage_path('logs/*.log'));
+        }
     }
 }

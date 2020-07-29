@@ -2,9 +2,9 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Support\Str;
 use Fusion\Rules\NotAReservedKeyword;
 use Illuminate\Foundation\Http\FormRequest as BaseFormRequest;
+use Illuminate\Support\Str;
 
 class FormRequest extends BaseFormRequest
 {
@@ -15,7 +15,7 @@ class FormRequest extends BaseFormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('forms.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('forms.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**
@@ -41,8 +41,8 @@ class FormRequest extends BaseFormRequest
 
         return [
             'name'                    => 'required|regex:/^[A-z]/i',
-            'handle'                  => [ 'required', 'unique:forms,handle,' . $id, new NotAReservedKeyword ],
-            'slug'                    => 'required|unique:forms,slug,' . $id,
+            'handle'                  => ['required', 'unique:forms,handle,'.$id, new NotAReservedKeyword()],
+            'slug'                    => 'required|unique:forms,slug,'.$id,
             'description'             => 'sometimes',
             'collect_email_addresses' => 'sometimes',
             'collect_ip_addresses'    => 'sometimes',
@@ -68,7 +68,8 @@ class FormRequest extends BaseFormRequest
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param \Illuminate\Validation\Validator $validator
+     *
      * @return void
      */
     public function withValidator($validator)

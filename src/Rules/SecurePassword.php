@@ -9,7 +9,7 @@ class SecurePassword implements Rule
     /**
      * Min password length requirement.
      *
-     * @var integer
+     * @var int
      */
     protected $minLength = 6;
 
@@ -23,8 +23,9 @@ class SecurePassword implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed  $value
+     *
      * @return bool
      */
     public function passes($attribute, $value)
@@ -36,8 +37,9 @@ class SecurePassword implements Rule
             return empty($this->error);
         }
 
-        if (strlen($value) < $this->minLength)
+        if (strlen($value) < $this->minLength) {
             $this->error = "The :attribute field must be at least {$this->minLength} characters long.";
+        }
         // elseif (! preg_match('/[a-z]{1,}/', $value))
         //     $this->error = "The :attribute field must have at least 1 lowercase letter.";
         // elseif (! preg_match('/[A-Z]{1,}/', $value))

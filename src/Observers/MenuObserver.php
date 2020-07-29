@@ -2,13 +2,11 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Models\Menu;
-use Fusion\Models\Field;
-use Fusion\Models\Section;
-use Fusion\Models\Fieldset;
 use Fusion\Database\Migration;
-use Illuminate\Support\Str;
 use Fusion\Database\Schema\Blueprint;
+use Fusion\Models\Fieldset;
+use Fusion\Models\Menu;
+use Illuminate\Support\Str;
 
 class MenuObserver
 {
@@ -20,7 +18,7 @@ class MenuObserver
     /**
      * Create a new MenuObserver instance.
      *
-     * @param  \Fusion\Database\Migration  $migration
+     * @param \Fusion\Database\Migration $migration
      */
     public function __construct(Migration $migration)
     {
@@ -30,12 +28,13 @@ class MenuObserver
     /**
      * Handle the menu "created" event.
      *
-     * @param  \Fusion\Models\Menu  $menu
+     * @param \Fusion\Models\Menu $menu
+     *
      * @return void
      */
     public function created(Menu $menu)
     {
-        $this->migration->schema->create($menu->table, function (Blueprint $table) use ($menu) {
+        $this->migration->schema->create($menu->table, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('menu_id')->index();
             $table->unsignedBigInteger('parent_id')->index()->default(0);
@@ -54,7 +53,8 @@ class MenuObserver
     /**
      * Handle the menu "updating" event.
      *
-     * @param  \Fusion\Models\Menu  $menu
+     * @param \Fusion\Models\Menu $menu
+     *
      * @return void
      */
     public function updating(Menu $menu)
@@ -73,7 +73,8 @@ class MenuObserver
     /**
      * Handle the menu "deleting" event.
      *
-     * @param  \Fusion\Models\Menu  $menu
+     * @param \Fusion\Models\Menu $menu
+     *
      * @return void
      */
     public function deleting(Menu $menu)
@@ -84,7 +85,8 @@ class MenuObserver
     /**
      * Handle the menu "deleted" event.
      *
-     * @param  \Fusion\Models\Menu  $menu
+     * @param \Fusion\Models\Menu $menu
+     *
      * @return void
      */
     public function deleted(Menu $menu)
@@ -95,7 +97,7 @@ class MenuObserver
     /**
      * Automatically create a fieldset for our menu.
      *
-     * @param  Menu  $menu
+     * @param Menu $menu
      */
     protected function createFieldset($menu)
     {
@@ -122,7 +124,7 @@ class MenuObserver
     /**
      * Automatically update the fieldset for our menu.
      *
-     * @param  Menu  $menu
+     * @param Menu $menu
      */
     protected function updateFieldset($old, $new)
     {
@@ -131,7 +133,7 @@ class MenuObserver
         if ($old->name !== $new->name) {
             $fieldsetName = 'Menu: '.$new->name;
 
-            $fieldset->name   = $fieldsetName;
+            $fieldset->name = $fieldsetName;
             $fieldset->handle = Str::slug($fieldsetName, '_');
             $fieldset->save();
         }
@@ -140,7 +142,7 @@ class MenuObserver
     /**
      * Automatically delete the fieldset from our menu.
      *
-     * @param  Menu  $menu
+     * @param Menu $menu
      */
     protected function deleteFieldset($menu)
     {

@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Models\Menu;
 use Fusion\Http\Controllers\DataTableController;
+use Fusion\Models\Menu;
 
 class MenuController extends DataTableController
 {

@@ -2,53 +2,52 @@
 
 namespace Fusion\Mail;
 
-use File;
-use Storage;
 use Exception;
+use File;
 use Fusion\Models\Mailable;
+use Illuminate\Mail\Mailable as BaseMailable;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Mail\Mailable as BaseMailable;
+use Storage;
 
 abstract class DatabaseMailable extends BaseMailable
 {
-	/**
+    /**
      * Default outer template.
      *
      * @var string
      */
     protected $layout = 'emails.layouts.default';
 
-	/**
-	 * Get mailable name.
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		if (isset($this->name)) {
-			return $this->name;
-		}
+    /**
+     * Get mailable name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        if (isset($this->name)) {
+            return $this->name;
+        }
 
-		$name = class_basename(get_class($this));
-		$name = implode(' ', preg_split('/(?<=[a-z])(?=[A-Z])/', $name));
+        $name = class_basename(get_class($this));
+        $name = implode(' ', preg_split('/(?<=[a-z])(?=[A-Z])/', $name));
 
-		return $name;
-	}
+        return $name;
+    }
 
-	/**
-	 * Get mailable handle.
-	 *
-	 * @return string
-	 */
+    /**
+     * Get mailable handle.
+     *
+     * @return string
+     */
     public function getHandle()
     {
-    	if (isset($this->handle)) {
-    		return $this->handle;
-    	}
+        if (isset($this->handle)) {
+            return $this->handle;
+        }
 
-    	return Str::slug($this->getName(), '_');
+        return Str::slug($this->getName(), '_');
     }
 
     /**
@@ -58,8 +57,8 @@ abstract class DatabaseMailable extends BaseMailable
      */
     public function getTemplate()
     {
-        if (! property_exists($this, 'template')) {
-            throw new Exception('Undefined property: `template` not defined in class: ' . get_class($this));
+        if (!property_exists($this, 'template')) {
+            throw new Exception('Undefined property: `template` not defined in class: '.get_class($this));
         }
 
         try {
@@ -76,27 +75,27 @@ abstract class DatabaseMailable extends BaseMailable
      */
     public function build()
     {
-		// Setup
-		$mailable = $this->getMailableModel();
-		$path     = Storage::disk('temp')->path("views/emails");
-		$template = "views/emails/{$mailable->handle}.blade.php";
+        // Setup
+        $mailable = $this->getMailableModel();
+        $path = Storage::disk('temp')->path('views/emails');
+        $template = "views/emails/{$mailable->handle}.blade.php";
 
-		// Register temporary template path..
-    	app('view.finder')->addLocation($path);
+        // Register temporary template path..
+        app('view.finder')->addLocation($path);
 
-    	// Layout contents
-    	$contents = File::get(view($this->layout)->getPath());
-    	$contents = str_replace('--markdown--', $mailable->markdown, $contents);
+        // Layout contents
+        $contents = File::get(view($this->layout)->getPath());
+        $contents = str_replace('--markdown--', $mailable->markdown, $contents);
 
-		// Temporarily store email template..
-		Storage::disk('temp')->put($template, $contents);
+        // Temporarily store email template..
+        Storage::disk('temp')->put($template, $contents);
 
-		// Remove after finished..
-		register_shutdown_function(function () use ($template) {
-			Storage::disk('temp')->delete($template);
-		});
+        // Remove after finished..
+        register_shutdown_function(function () use ($template) {
+            Storage::disk('temp')->delete($template);
+        });
 
-		return $this->markdown($mailable->handle);
+        return $this->markdown($mailable->handle);
     }
 
     /**
@@ -106,6 +105,6 @@ abstract class DatabaseMailable extends BaseMailable
      */
     protected function getMailableModel()
     {
-    	return Mailable::where('handle', $this->getHandle())->firstOrFail();
+        return Mailable::where('handle', $this->getHandle())->firstOrFail();
     }
 }

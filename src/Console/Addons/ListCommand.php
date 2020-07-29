@@ -29,12 +29,12 @@ class ListCommand extends Command
     public function handle()
     {
         $headers = ['Name', 'Version', 'Description', 'Status'];
-        $addons  = Addon::map(function($addon) {
+        $addons = Addon::map(function ($addon) {
             return [
-                'name' => $addon['name'],
-                'version' => $addon['version'],
+                'name'        => $addon['name'],
+                'version'     => $addon['version'],
                 'description' => $addon['description'],
-                'status' => $addon['installed'] ? ($addon['enabled'] ? 'Enabled' : 'Disabled') : 'Not installed',
+                'status'      => $addon['installed'] ? ($addon['enabled'] ? 'Enabled' : 'Disabled') : 'Not installed',
             ];
         })->toArray();
 

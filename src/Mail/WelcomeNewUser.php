@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 
 class WelcomeNewUser extends DatabaseMailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * User instance.
@@ -24,11 +25,11 @@ class WelcomeNewUser extends DatabaseMailable
      */
     protected $template = 'emails.templates.welcome';
 
-
     /**
      * Create a new message instance.
      *
-     * @param  User  $user
+     * @param User $user
+     *
      * @return void
      */
     public function __construct(User $user)

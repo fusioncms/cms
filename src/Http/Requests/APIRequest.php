@@ -2,11 +2,11 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 abstract class APIRequest extends FormRequest
 {
@@ -27,7 +27,8 @@ abstract class APIRequest extends FormRequest
     /**
      * Handle failed validation.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @param \Illuminate\Contracts\Validation\Validator $validator
+     *
      * @return void
      */
     protected function validationFailed(Validator $validator)

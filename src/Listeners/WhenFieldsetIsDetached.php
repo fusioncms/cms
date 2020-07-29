@@ -10,20 +10,21 @@ class WhenFieldsetIsDetached
     /**
      * Handle the event.
      *
-     * @param  FieldsetDetached  $event
+     * @param FieldsetDetached $event
+     *
      * @return void
      */
     public function handle(FieldsetDetached $event)
     {
-        if($event->fieldset) {
+        if ($event->fieldset) {
             $fields = $event->fieldset->fields;
-            $table     = $event->model->getTable();
+            $table = $event->model->getTable();
 
-            foreach($fields as $field) {
+            foreach ($fields as $field) {
                 $fieldtype = fieldtypes()->get($field->type);
-                $column    = $fieldtype->getColumn('type');
-                $settings  = $fieldtype->getColumn('settings') ?? [];
-                $name      = $field->handle;
+                $column = $fieldtype->getColumn('type');
+                $settings = $fieldtype->getColumn('settings') ?? [];
+                $name = $field->handle;
 
                 array_unshift($settings, $field->handle);
 
@@ -40,7 +41,8 @@ class WhenFieldsetIsDetached
      * Determine if the column should be deleted or not.
      *
      * @param
-     * @return boolean
+     *
+     * @return bool
      */
     protected function shouldDeleteTableColumn($table, $column, $name)
     {

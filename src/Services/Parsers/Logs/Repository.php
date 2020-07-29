@@ -3,9 +3,9 @@
 namespace Fusion\Services\Logs;
 
 use File;
-use ReflectionClass;
-use Psr\Log\LogLevel;
 use Illuminate\Support\Str;
+use Psr\Log\LogLevel;
+use ReflectionClass;
 
 class Repository
 {
@@ -19,7 +19,8 @@ class Repository
      */
     protected $maxFileSize;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->maxFileSize = env('LOG_MAX_SIZE', 52428800);
     }
 
@@ -30,15 +31,15 @@ class Repository
      */
     public function all()
     {
-        $log       = [];
+        $log = [];
         $logLevels = $this->getLogLevels();
 
-        $pattern   = '/(\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\].*?\} \n)/s';
+        $pattern = '/(\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\].*?\} \n)/s';
 
-        if (! $this->file) {
+        if (!$this->file) {
             $logFile = $this->getFiles();
 
-            if (! count($logFile)) {
+            if (!count($logFile)) {
                 return [];
             }
 
@@ -51,11 +52,12 @@ class Repository
                     'name'   => 'Error',
                     'slug'   => 'error',
                     'icon'   => 'exclamation-triangle',
-                    'status' => 'warning'],
+                    'status' => 'warning', ],
                 'date'   => '',
                 'text'   => "Unable to display error log: log file at {$this->file} exceeds maximum size of {$this->maxFileSize} bytes",
-                'inFile' => null
+                'inFile' => null,
             ];
+
             return $log;
         }
 
@@ -63,7 +65,7 @@ class Repository
 
         preg_match_all($pattern, $file, $headings);
 
-        if (! is_array($headings)) {
+        if (!is_array($headings)) {
             return $log;
         }
 
@@ -74,17 +76,16 @@ class Repository
         }
         foreach ($headings[0] as $heading) {
             $timestampPattern = '^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\]';
-            $logLevelPattern = '(^' . implode('|', array_keys($logLevels)) . '$): ';
+            $logLevelPattern = '(^'.implode('|', array_keys($logLevels)).'$): ';
             $textPattern = '(.*?)\{';
             $filePattern = '.*?(at .*?)';
             $stackTracePattern = '\[stacktrace\]\n(.*?)"\} ';
 
-
-            $regexPattern = '/' . $timestampPattern . '.*?\.' . $logLevelPattern .  $textPattern .  $filePattern . $stackTracePattern . '/s';
+            $regexPattern = '/'.$timestampPattern.'.*?\.'.$logLevelPattern.$textPattern.$filePattern.$stackTracePattern.'/s';
 
             preg_match($regexPattern, $heading, $current);
 
-            if (! isset($current[2])) {
+            if (!isset($current[2])) {
                 continue;
             }
 
@@ -94,7 +95,7 @@ class Repository
                 'text'       => Str::limit(ucfirst($current[3]), 200, ' <span class="text-primary">(...)</span>'),
                 'textFull'   => $current[3],
                 'inFile'     => isset($current[4]) ? $current[4] : null,
-                'stackTrace' => $current[5] ? explode(PHP_EOL, $current[5]) : null
+                'stackTrace' => $current[5] ? explode(PHP_EOL, $current[5]) : null,
             ];
         }
 
@@ -104,7 +105,8 @@ class Repository
     /**
      * Get log files from storage.
      *
-     * @param  bool  $basename
+     * @param bool $basename
+     *
      * @return array
      */
     public function getFiles($basename = false)
@@ -134,13 +136,14 @@ class Repository
     /**
      * Set the current file to be viewed.
      *
-     * @param  string  $file
+     * @param string $file
+     *
      * @return null
      */
     public function setFile($file)
     {
-        if (File::exists(storage_path('logs/' . $file))) {
-            $this->file = storage_path('logs/' . $file);
+        if (File::exists(storage_path('logs/'.$file))) {
+            $this->file = storage_path('logs/'.$file);
         }
     }
 
@@ -151,42 +154,42 @@ class Repository
      */
     public function getLogLevels()
     {
-        $class     = new ReflectionClass(new LogLevel);
+        $class = new ReflectionClass(new LogLevel());
         $constants = $class->getConstants();
-        $levels    = [];
+        $levels = [];
 
         foreach ($constants as $key => $level) {
             switch ($key) {
                 case 'EMERGENCY':
-                    $icon   = 'bug';
+                    $icon = 'bug';
                     $status = 'danger';
                     break;
                 case 'ALERT':
-                    $icon   = 'bullhorn';
+                    $icon = 'bullhorn';
                     $status = 'danger';
                     break;
                 case 'CRITICAL':
-                    $icon   = 'heartbeat';
+                    $icon = 'heartbeat';
                     $status = 'danger';
                     break;
                 case 'ERROR':
-                    $icon   = 'times-circle';
+                    $icon = 'times-circle';
                     $status = 'danger';
                     break;
                 case 'WARNING':
-                    $icon   = 'exclamation-triangle';
+                    $icon = 'exclamation-triangle';
                     $status = 'warning';
                     break;
                 case 'NOTICE':
-                    $icon   = 'exclamation-circle';
+                    $icon = 'exclamation-circle';
                     $status = 'warning';
                     break;
                 case 'INFO':
-                    $icon   = 'info-circle';
+                    $icon = 'info-circle';
                     $status = 'info';
                     break;
                 case 'DEBUG':
-                    $icon   = 'life-ring';
+                    $icon = 'life-ring';
                     $status = 'info';
                     break;
             }

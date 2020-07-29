@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Str;
 use Faker\Generator as Faker;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------

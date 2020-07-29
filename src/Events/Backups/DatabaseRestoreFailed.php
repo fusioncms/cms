@@ -6,10 +6,10 @@ use Exception;
 
 class DatabaseRestoreFailed
 {
-	/**
-	 * @var Exception
-	 */
-	public $exception;
+    /**
+     * @var Exception
+     */
+    public $exception;
 
     /**
      * @var string
@@ -18,7 +18,7 @@ class DatabaseRestoreFailed
 
     public function __construct(Exception $exception, string $dbDumpPath)
     {
-    	$this->exception  = $exception;
+        $this->exception = $exception;
         $this->dbDumpPath = $dbDumpPath;
     }
 }

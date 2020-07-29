@@ -2,23 +2,20 @@
 
 namespace Fusion\Tests\Feature\Users;
 
+use Fusion\Mail\WelcomeNewUser;
 use Fusion\Models\User;
 use Fusion\Tests\TestCase;
-use Illuminate\Support\Arr;
-use Fusion\Mail\WelcomeNewUser;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class RegisterTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
@@ -175,7 +172,7 @@ class RegisterTest extends TestCase
         $user = User::where(['email' => $attributes['email']])->first();
 
         // Assert #5 - notification set to user to verify email..
-        Notification::assertSentTo([ $user ], VerifyEmail::class);
+        Notification::assertSentTo([$user], VerifyEmail::class);
     }
 
     /**

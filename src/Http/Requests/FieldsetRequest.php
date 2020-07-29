@@ -2,7 +2,6 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Support\Str;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FieldsetRequest extends FormRequest
@@ -14,7 +13,7 @@ class FieldsetRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('fieldsets.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('fieldsets.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**
@@ -28,7 +27,7 @@ class FieldsetRequest extends FormRequest
 
         return [
             'name'   => 'required',
-            'handle' => 'required|unique:fieldsets,handle,' . $id,
+            'handle' => 'required|unique:fieldsets,handle,'.$id,
         ];
     }
 }

@@ -15,7 +15,7 @@ trait CachesQueries
      */
     public static function bootCacheable()
     {
-        static::observe(new CacheObserver);
+        static::observe(new CacheObserver());
     }
 
     /**
@@ -68,7 +68,7 @@ trait CachesQueries
     protected function newBaseQueryBuilder()
     {
         $connection = $this->getConnection();
-        $grammar    = $connection->getQueryGrammar();
+        $grammar = $connection->getQueryGrammar();
 
         return new QueryCacheBuilder(
             $this->queryCache(),
@@ -91,7 +91,8 @@ trait CachesQueries
     /**
      * Flush the cache if auto-busting is true on create/update events.
      *
-     * @param  array  $options
+     * @param array $options
+     *
      * @return void
      */
     public function finishSave(array $options)

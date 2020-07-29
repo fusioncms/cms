@@ -2,8 +2,8 @@
 
 namespace Fusion\Services\Cache;
 
-use Illuminate\Database\Query\Builder;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Database\Query\Processors\Processor;
 
@@ -17,10 +17,10 @@ class QueryCacheBuilder extends Builder
     /**
      * Create a new QueryCacheBuilder instance.
      *
-     * @param  QueryCache  $cache
-     * @param  ConnectionInterface  $connection
-     * @param  Grammar  $grammar
-     * @param  Processor  $processor
+     * @param QueryCache          $cache
+     * @param ConnectionInterface $connection
+     * @param Grammar             $grammar
+     * @param Processor           $processor
      */
     public function __construct(QueryCache $cache, ConnectionInterface $connection, Grammar $grammar, Processor $processor)
     {
@@ -42,7 +42,8 @@ class QueryCacheBuilder extends Builder
     /**
      * Return the query results.
      *
-     * @param  array  $columns
+     * @param array $columns
+     *
      * @return Collection
      */
     public function get($columns = ['*'])
@@ -53,7 +54,8 @@ class QueryCacheBuilder extends Builder
     /**
      * Put the query's results in random order.
      *
-     * @param  string  $seed
+     * @param string $seed
+     *
      * @return self
      */
     public function inRandomOrder($seed = '')
@@ -66,7 +68,8 @@ class QueryCacheBuilder extends Builder
     /**
      * Remember (cache) the query for X minutes.
      *
-     * @param  int  $minutes
+     * @param int $minutes
+     *
      * @return self
      */
     public function remember($minutes)

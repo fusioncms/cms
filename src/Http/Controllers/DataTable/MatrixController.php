@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Models\Matrix;
 use Fusion\Http\Controllers\DataTableController;
+use Fusion\Models\Matrix;
 
 class MatrixController extends DataTableController
 {

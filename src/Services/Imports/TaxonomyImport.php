@@ -3,8 +3,8 @@
 namespace Fusion\Services\Imports;
 
 use Fusion\Models\Import;
-use Fusion\Models\Taxonomy;
 use Fusion\Models\ImportLog;
+use Fusion\Models\Taxonomy;
 use Fusion\Services\Builders\Taxonomy as Builder;
 
 class TaxonomyImport extends BaseImport
@@ -33,13 +33,14 @@ class TaxonomyImport extends BaseImport
         parent::__construct($import, $log);
 
         $this->taxonomy = Taxonomy::findOrFail($import->group);
-        $this->terms    = (new Builder($this->taxonomy->handle))->make();
+        $this->terms = (new Builder($this->taxonomy->handle))->make();
     }
 
     /**
      * Collect existing records for Import Strategies.
      *
      * @throws Exception
+     *
      * @return void
      */
     protected function collectExistingIds()
@@ -50,7 +51,8 @@ class TaxonomyImport extends BaseImport
     /**
      * Store newly created record in storage.
      *
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return void
      */
     protected function store(array $attributes)
@@ -66,7 +68,8 @@ class TaxonomyImport extends BaseImport
     /**
      * Update existing record in storage.
      *
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return void
      */
     protected function update(array $attributes)
@@ -82,8 +85,10 @@ class TaxonomyImport extends BaseImport
     /**
      * Disable existing records in storage.
      *
-     * @param  array $ids
+     * @param array $ids
+     *
      * @throws Exception
+     *
      * @return void
      */
     protected function disableCollection(array $ids)
@@ -98,8 +103,10 @@ class TaxonomyImport extends BaseImport
     /**
      * Remove existing records from storage.
      *
-     * @param  array $ids
+     * @param array $ids
+     *
      * @throws Exception
+     *
      * @return void
      */
     protected function deleteCollection(array $ids)

@@ -10,7 +10,8 @@ class WhenFieldsetIsAttached
     /**
      * Handle the event.
      *
-     * @param  FieldsetAttached  $event
+     * @param FieldsetAttached $event
+     *
      * @return void
      */
     public function handle(FieldsetAttached $event)
@@ -19,9 +20,9 @@ class WhenFieldsetIsAttached
 
         foreach ($fields as $field) {
             $fieldtype = fieldtypes()->get($field->type);
-            $column    = $fieldtype->getColumn('type');
-            $settings  = $fieldtype->getColumn('settings') ?? [];
-            $table     = $event->model->getTable();
+            $column = $fieldtype->getColumn('type');
+            $settings = $fieldtype->getColumn('settings') ?? [];
+            $table = $event->model->getTable();
 
             array_unshift($settings, $field->handle);
 
@@ -37,7 +38,8 @@ class WhenFieldsetIsAttached
      * Determine if the column should be created or not.
      *
      * @param
-     * @return boolean
+     *
+     * @return bool
      */
     protected function shouldCreateTableColumn($table, $column, $settings)
     {

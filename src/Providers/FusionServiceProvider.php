@@ -2,17 +2,16 @@
 
 namespace Fusion\Providers;
 
-use Fusion\Models\User;
-use Fusion\Models\Role;
 use Fusion\Facades\Addon;
 use Fusion\Facades\Theme;
-use Fusion\Models\Mailable;
+use Fusion\Models\Role;
+use Fusion\Models\User;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class FusionServiceProvider extends ServiceProvider
 {
@@ -43,7 +42,7 @@ class FusionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (! defined('FUSION_VERSION')) {
+        if (!defined('FUSION_VERSION')) {
             define('FUSION_VERSION', '6.0.0-beta.10');
         }
 
@@ -97,7 +96,6 @@ class FusionServiceProvider extends ServiceProvider
             /**
              * Authenticated users undergo auth check
              *  based on their assigned Role.
-             *
              */
             if ($user) {
                 return $user->isOwner() or
@@ -108,7 +106,6 @@ class FusionServiceProvider extends ServiceProvider
             /**
              * Unauthenticated users undergo auth check.
              *  based on `guest` Role.
-             *
              */
             return Role::whereName('guest')
                 ->firstOrFail()
@@ -136,8 +133,8 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerFusion()
     {
-        $this->app->bind('fusion', function() {
-            return new \Fusion\Fusion;
+        $this->app->bind('fusion', function () {
+            return new \Fusion\Fusion();
         });
     }
 
@@ -230,41 +227,49 @@ class FusionServiceProvider extends ServiceProvider
     private function registerConfig()
     {
         $this->mergeConfigFile(
-            __DIR__.'/../../config/session.php', 'session'
+            __DIR__.'/../../config/session.php',
+            'session'
         );
 
         $this->mergeConfigFile(
-            __DIR__.'/../../config/analytics.php', 'analytics'
+            __DIR__.'/../../config/analytics.php',
+            'analytics'
         );
 
         $this->mergeConfigFile(
-            __DIR__.'/../../config/fusion.php', 'fusion'
+            __DIR__.'/../../config/fusion.php',
+            'fusion'
         );
 
         $this->mergeConfigFile(
-            __DIR__.'/../../config/installer.php', 'installer'
+            __DIR__.'/../../config/installer.php',
+            'installer'
         );
 
         $this->mergeConfigFile(
-            __DIR__.'/../../config/permission.php', 'permission'
+            __DIR__.'/../../config/permission.php',
+            'permission'
         );
 
         $this->mergeConfigFile(
-            __DIR__.'/../../config/sanctum.php', 'sanctum'
+            __DIR__.'/../../config/sanctum.php',
+            'sanctum'
         );
     }
 
     /**
      * Merge in `fusioncms` config values.
      *
-     * @param  string $key
-     * @param  string $path
+     * @param string $key
+     * @param string $path
+     *
      * @return void
      */
     private function mergeConfigFile($path, $key)
     {
         $this->app['config']->set($key, array_merge(
-            $this->app['config']->get($key, []), require $path
+            $this->app['config']->get($key, []),
+            require $path
         ));
     }
 
@@ -350,11 +355,11 @@ class FusionServiceProvider extends ServiceProvider
             return new \Spatie\Backup\BackupDestination\Backup(Storage::disk('public'), "backups/{$filename}.zip");
         });
 
-        Route::bind('fieldset', function($id) {
+        Route::bind('fieldset', function ($id) {
             return \Fusion\Models\Fieldset::findOrFail($id);
         });
 
-        Route::bind('addon', function($slug) {
+        Route::bind('addon', function ($slug) {
             return \Fusion\Facades\Addon::where('slug', $slug)->first();
         });
     }
@@ -379,8 +384,8 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerRouteMiddleware()
     {
-        Route::aliasMiddleware('role',               \Spatie\Permission\Middlewares\RoleMiddleware::class);
-        Route::aliasMiddleware('permission',         \Spatie\Permission\Middlewares\PermissionMiddleware::class);
+        Route::aliasMiddleware('role', \Spatie\Permission\Middlewares\RoleMiddleware::class);
+        Route::aliasMiddleware('permission', \Spatie\Permission\Middlewares\PermissionMiddleware::class);
         Route::aliasMiddleware('role_or_permission', \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class);
     }
 
@@ -392,7 +397,7 @@ class FusionServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-            'fusion'
+            'fusion',
         ];
     }
 }

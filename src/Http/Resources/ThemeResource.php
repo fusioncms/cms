@@ -3,15 +3,16 @@
 namespace Fusion\Http\Resources;
 
 use Fusion\Facades\Theme;
-use Illuminate\Support\Facades\File;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\File;
 
 class ThemeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -33,11 +34,11 @@ class ThemeResource extends JsonResource
     {
         $optionsFilepath = storage_path('app/themes/'.$this->get('namespace').'.json');
 
-        $defaults = collect($this->get('options'))->mapWithKeys(function($option, $handle) {
+        $defaults = collect($this->get('options'))->mapWithKeys(function ($option, $handle) {
             return [$handle => $option['default'] ?? null];
         });
 
-        if (! File::exists($optionsFilepath)) {
+        if (!File::exists($optionsFilepath)) {
             return $defaults;
         }
 

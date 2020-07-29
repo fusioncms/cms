@@ -4,33 +4,33 @@ namespace Fusion\Services\Exports;
 
 use Google_Client;
 use Google_Service_Sheets;
-use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Facades\Log;
-use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Excel;
 
 class GoogleExport implements FromArray
 {
-	use Exportable;
+    use Exportable;
 
-	/**
-	 * Optional Writer Type
-	 *
-	 * @var string
-	 */
+    /**
+     * Optional Writer Type.
+     *
+     * @var string
+     */
     private $writerType = Excel::CSV;
 
     /**
-    * Optional headers
-    *
-    * @var arry
-    */
+     * Optional headers.
+     *
+     * @var arry
+     */
     private $headers = [
         'Content-Type' => 'text/csv',
     ];
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $isPreview;
 
@@ -42,20 +42,21 @@ class GoogleExport implements FromArray
      */
     public function __construct($source, $isPreview = false)
     {
-        $this->source    = $source;
+        $this->source = $source;
         $this->isPreview = $isPreview;
     }
 
     /**
      * Parse source for matching `regex` value.
      *
-     * @param  string $regex
-     * @return string|boolean
+     * @param string $regex
+     *
+     * @return string|bool
      */
     protected function getFromSource(string $regex)
     {
         $matches = [];
-        $match   = preg_match($regex, $this->source, $matches);
+        $match = preg_match($regex, $this->source, $matches);
 
         if ($match and @$matches[1]) {
             return $matches[1];
@@ -67,8 +68,9 @@ class GoogleExport implements FromArray
     /**
      * Determin if source contains matching `regex` value.
      *
-     * @param  string $regex
-     * @return boolean
+     * @param string $regex
+     *
+     * @return bool
      */
     protected function sourceContains(string $regex)
     {
@@ -84,7 +86,7 @@ class GoogleExport implements FromArray
     {
         $queryString = parse_url($this->source, PHP_URL_QUERY);
         $queryParams = explode('&', $queryString);
-        $params      = [];
+        $params = [];
 
         foreach ($queryParams as $queryParam) {
             @list($name, $value) = explode('=', $queryParam, 2);
@@ -106,7 +108,7 @@ class GoogleExport implements FromArray
     /**
      * Get API Key from source url.
      *
-     * @return string|boolean
+     * @return string|bool
      */
     protected function getApiKey()
     {
@@ -116,7 +118,7 @@ class GoogleExport implements FromArray
     /**
      * Get Sheet ID from source url.
      *
-     * @return string|boolean
+     * @return string|bool
      */
     protected function getSheetId()
     {
@@ -156,49 +158,49 @@ class GoogleExport implements FromArray
     /**
      * Determine if request is batch request.
      *
-     * @return boolean
+     * @return bool
      */
     protected function isBatchRequest()
     {
         return $this->sourceContains('/spreadsheets\/(.+)\/values:batchGet/i');
     }
 
-	/**
-	 * Values for export.
-	 *
-	 * @return array
-	 */
-	public function array(): array
-	{
-		try {
-			$client = new Google_Client();
-			$client->setApplicationName('Google Sheets API v4');
-			$client->setScopes(Google_Service_Sheets::SPREADSHEETS_READONLY);
-			$client->setDeveloperKey($this->getApiKey());
+    /**
+     * Values for export.
+     *
+     * @return array
+     */
+    public function array(): array
+    {
+        try {
+            $client = new Google_Client();
+            $client->setApplicationName('Google Sheets API v4');
+            $client->setScopes(Google_Service_Sheets::SPREADSHEETS_READONLY);
+            $client->setDeveloperKey($this->getApiKey());
 
             $service = new Google_Service_Sheets($client);
 
             if ($this->isPreview) {
                 $sheetName = $this->getRangeSheetName();
-                $response  = $service->spreadsheets_values->get($this->getSheetId(), "{$sheetName}!1:2");
-                $values    = $response->getValues();
+                $response = $service->spreadsheets_values->get($this->getSheetId(), "{$sheetName}!1:2");
+                $values = $response->getValues();
             } else {
                 if ($this->isBatchRequest()) {
                     $response = $service->spreadsheets_values->batchGet($this->getSheetId(), ['ranges' => $this->getRange()]);
-                    $values   = [];
+                    $values = [];
 
                     foreach ($response->getValueRanges() as $valueRange) {
                         $values = array_merge($values, $valueRange->getValues());
                     }
                 } else {
                     $response = $service->spreadsheets_values->get($this->getSheetId(), $this->getRange());
-                    $values   = $response->getValues();
+                    $values = $response->getValues();
                 }
             }
 
-			return $values;
-		} catch(Exception $ex) {
-			Log::error(__NAMESPACE__ . ": " . $ex->getMessage());
-		}
-	}
+            return $values;
+        } catch (Exception $ex) {
+            Log::error(__NAMESPACE__.': '.$ex->getMessage());
+        }
+    }
 }

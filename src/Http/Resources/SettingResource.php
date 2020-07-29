@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Fusion\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -10,7 +9,8 @@ class SettingResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -24,7 +24,7 @@ class SettingResource extends JsonResource
             'description' => $this->description,
             'fieldset'    => new FieldsetResource($this->fieldset),
         ];
-        
+
         if ($this->fieldset) {
             foreach ($this->fieldset->fields as $field) {
                 $resource['settings'][$field->handle] = setting("{$this->handle}.{$field->handle}");

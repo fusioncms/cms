@@ -2,10 +2,9 @@
 
 namespace Fusion\Console\Installer;
 
-use File;
-use Config;
 use Artisan;
-use Illuminate\Support\Str;
+use Config;
+use File;
 
 class CreateEnvironmentConfig
 {
@@ -27,7 +26,7 @@ class CreateEnvironmentConfig
             'APP_DEBUG'  => $container['app_debug'] ? 'true' : 'false',
             'APP_KEY'    => $container['app_key'] ?? $this->generateRandomKey(),
             'APP_URL'    => $container['app_url'],
-            
+
             'DB_HOST'      => $container['db_host'],
             'DB_DATABASE'  => $container['db_database'],
             'DB_USERNAME'  => $container['db_username'],
@@ -44,7 +43,7 @@ class CreateEnvironmentConfig
      */
     public function handle()
     {
-        if (! app()->environment('testing')) {
+        if (!app()->environment('testing')) {
             $this->createConfigFile();
         }
 
@@ -62,7 +61,7 @@ class CreateEnvironmentConfig
 
         foreach ($this->container as $key => $value) {
             $pattern = "/^{$key}\=.*/m";
-            $setting = $key . '="' . $value . '"';
+            $setting = $key.'="'.$value.'"';
             $matches = [];
 
             if (preg_match($pattern, $env, $matches)) {
@@ -93,12 +92,12 @@ class CreateEnvironmentConfig
     /**
      * Returns contents of `.env` file.
      * Will create an `.env` file, if one doesn't exist.
-     * 
+     *
      * @return string
      */
     private function getEnv()
     {
-        if (! file_exists(app()->environmentFilePath())) {
+        if (!file_exists(app()->environmentFilePath())) {
             copy(base_path('.env.example'), app()->environmentFilePath());
         }
 

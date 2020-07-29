@@ -2,15 +2,15 @@
 
 namespace Fusion\Http\Controllers\Web\Account;
 
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
-use Illuminate\Validation\ValidationException;
 use Fusion\Http\Requests\Account\SecurityRequest;
+use Illuminate\Http\Request;
 
 class SecurityController extends Controller
 {
     /**
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return mixed
      */
     public function edit(Request $request)
@@ -21,7 +21,8 @@ class SecurityController extends Controller
     /**
      * Update storage record.
      *
-     * @param  \Fusion\Http\Requests\Account\SecurityRequest $request
+     * @param \Fusion\Http\Requests\Account\SecurityRequest $request
+     *
      * @return Redirect
      */
     public function update(SecurityRequest $request)
@@ -33,6 +34,6 @@ class SecurityController extends Controller
             'password_changed_at' => now(),
         ]);
 
-        return back()->with('success','Password successfully updated!');
+        return back()->with('success', 'Password successfully updated!');
     }
 }

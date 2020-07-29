@@ -25,14 +25,14 @@ class CreateDefaultRoles
             'label'       => 'Administrator',
             'description' => 'Administrators have control panel access with a base set of assigned permissions.',
             'permissions' => [
-                'access.controlPanel'
+                'access.controlPanel',
             ],
         ],
         'owner' => [
             'name'        => 'owner',
             'label'       => 'Owner',
             'description' => 'Owners have full control panel access.',
-        ]
+        ],
     ];
 
     /**
@@ -44,10 +44,10 @@ class CreateDefaultRoles
     {
         foreach ($this->roles as $role) {
             Role::create([
-            'name'        => $role['name'],
-            'guard_name'  => '*',
-            'label'       => $role['label'],
-            'description' => $role['description'],
+                'name'        => $role['name'],
+                'guard_name'  => '*',
+                'label'       => $role['label'],
+                'description' => $role['description'],
             ])->givePermissionTo($role['permissions'] ?? []);
         }
     }

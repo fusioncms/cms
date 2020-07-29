@@ -2,18 +2,18 @@
 
 namespace Tests\Unit;
 
-use Fusion\Tests\TestCase;
 use Fusion\Models\Mailable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
+use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class MailableTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
@@ -35,13 +35,13 @@ class MailableTest extends TestCase
         DB::table('mailables')->insert([
             'name'      => ($name = $this->faker->word),
             'handle'    => Str::slug($name),
-            'namespace' => 'Fusion\Mail\FakeMailable'
+            'namespace' => 'Fusion\Mail\FakeMailable',
         ]);
 
         DB::table('mailables')->insert([
             'name'      => $name,
             'handle'    => Str::slug($name),
-            'namespace' => 'Fusion\Mail\FakeMailable'
+            'namespace' => 'Fusion\Mail\FakeMailable',
         ]);
     }
 
@@ -55,7 +55,7 @@ class MailableTest extends TestCase
         $this->assertDatabaseHas('mailables', [
             'name'      => 'Welcome New User',
             'handle'    => 'welcome_new_user',
-            'namespace' => 'Fusion\Mail\WelcomeNewUser'
+            'namespace' => 'Fusion\Mail\WelcomeNewUser',
         ]);
     }
 
@@ -78,7 +78,7 @@ class MailableTest extends TestCase
      */
     public function a_request_can_be_made_to_generate_a_set_of_placeholders_for_the_mailable_class()
     {
-        $model        = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
+        $model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
         $placeholders = $model->placeholders;
         $attributes = app()->make(\Fusion\Models\User::class)->getFillable();
 

@@ -2,13 +2,13 @@
 
 namespace Fusion\Fieldtypes;
 
-use Fusion\Models\File as FileModel;
-use Fusion\Models\Field;
+use Fusion\Http\Resources\FileResource;
 use Fusion\Models\Directory;
-use Illuminate\Support\Str;
+use Fusion\Models\Field;
+use Fusion\Models\File as FileModel;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Fusion\Http\Resources\FileResource;
+use Illuminate\Support\Str;
 
 class FileFieldtype extends Fieldtype
 {
@@ -49,7 +49,8 @@ class FileFieldtype extends Fieldtype
     /**
      * Generate relationship methods for associated Model.
      *
-     * @param  Fusion\Models\Field $field
+     * @param Fusion\Models\Field $field
+     *
      * @return string
      */
     public function generateRelationship($field)
@@ -70,14 +71,15 @@ class FileFieldtype extends Fieldtype
     /**
      * Update relationship data in storage.
      *
-     * @param  Illuminate\Eloquent\Model  $model
-     * @param  Fusion\Models\Field           $field
+     * @param Illuminate\Eloquent\Model $model
+     * @param Fusion\Models\Field       $field
+     *
      * @return void
      */
     public function persistRelationship($model, Field $field)
     {
         if (request()->hasFile($field->handle)) {
-            $files     = request()->file($field->handle);
+            $files = request()->file($field->handle);
             $directory = Directory::firstOrCreate([
                 'name' => ($name = $field->settings['directory'] ?? 'uploads'),
                 'slug' => Str::slug($name),
@@ -85,14 +87,14 @@ class FileFieldtype extends Fieldtype
 
             $oldValues = $model->{$field->handle}->pluck('id');
             $newValues = collect($files)
-                ->mapWithKeys(function($file, $key) use ($field, $directory) {
-                    $uuid      = unique_id();
-                    $name      = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                ->mapWithKeys(function ($file, $key) use ($field, $directory) {
+                    $uuid = unique_id();
+                    $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                     $extension = $file->extension();
-                    $bytes     = $file->getSize();
-                    $mimetype  = $file->getClientMimeType();
-                    $filetype  = strtok($mimetype, '/');
-                    $location  = "files/{$uuid}-{$name}.{$extension}";
+                    $bytes = $file->getSize();
+                    $mimetype = $file->getClientMimeType();
+                    $filetype = strtok($mimetype, '/');
+                    $location = "files/{$uuid}-{$name}.{$extension}";
 
                     Storage::disk('public')->putFileAs('', $file, $location);
 
@@ -112,9 +114,9 @@ class FileFieldtype extends Fieldtype
                         'height'       => $height ?? null,
                     ]);
 
-                    return [ $model['id'] => [
+                    return [$model['id'] => [
                         'field_id' => $field->id,
-                        'order'    => $key + 1
+                        'order'    => $key + 1,
                     ]];
                 });
 
@@ -126,8 +128,9 @@ class FileFieldtype extends Fieldtype
     /**
      * Returns resource object of field.
      *
-     * @param  Illuminate\Eloquent\Model  $model
-     * @param  Fusion\Models\Field           $field
+     * @param Illuminate\Eloquent\Model $model
+     * @param Fusion\Models\Field       $field
+     *
      * @return FileResource
      */
     public function getResource($model, Field $field)

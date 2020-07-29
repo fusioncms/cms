@@ -1,7 +1,7 @@
 <?php
 
-use Fusion\Models\File;
 use Fusion\Contracts\Factory;
+use Fusion\Models\File;
 use Illuminate\Support\Str;
 
 class FileFactory implements Factory
@@ -22,12 +22,12 @@ class FileFactory implements Factory
     protected $mimetype;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $bytes;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $directory;
 
@@ -48,9 +48,9 @@ class FileFactory implements Factory
         ];
 
         if ($this->name) {
-            $overrides['uuid']     = unique_id();
-            $overrides['name']     = $this->name;
-            $overrides['slug']     = Str::slug("{$overrides['uuid']}-{$overrides['name']}");
+            $overrides['uuid'] = unique_id();
+            $overrides['name'] = $this->name;
+            $overrides['slug'] = Str::slug("{$overrides['uuid']}-{$overrides['name']}");
             $overrides['original'] = $this->name.'.'.$this->extension;
         }
 
@@ -72,7 +72,8 @@ class FileFactory implements Factory
     /**
      * Create a file with the given name.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \FileFactory
      */
     public function withName($name)
@@ -85,7 +86,8 @@ class FileFactory implements Factory
     /**
      * Create a file with the given size in bytes.
      *
-     * @param  integer  $bytes
+     * @param int $bytes
+     *
      * @return \FileFactory
      */
     public function withSize($bytes)
@@ -98,7 +100,8 @@ class FileFactory implements Factory
     /**
      * Create a file with the given extension.
      *
-     * @param  string  $extension
+     * @param string $extension
+     *
      * @return \FileFactory
      */
     public function withExtension($extension)
@@ -111,7 +114,8 @@ class FileFactory implements Factory
     /**
      * Create a file with the given mimetype.
      *
-     * @param  string  $mimetype
+     * @param string $mimetype
+     *
      * @return \FileFactory
      */
     public function withMimetype($mimetype)
@@ -136,7 +140,8 @@ class FileFactory implements Factory
     /**
      * Create a directory with the given parent_id.
      *
-     * @param  \Fusion\Models\Directory|integer  $parent
+     * @param \Fusion\Models\Directory|int $parent
+     *
      * @return \DirectoryFactory
      */
     public function withDirectory($directory)

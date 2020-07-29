@@ -17,7 +17,8 @@ class Model extends EloquentModel
     /**
      * Create a new Eloquent model instance.
      *
-     * @param  array  $attributes
+     * @param array $attributes
+     *
      * @return void
      */
     public function __construct(array $attributes = [])
@@ -40,7 +41,8 @@ class Model extends EloquentModel
     /**
      * Set the casts attributes for the model.
      *
-     * @param  array  $casts
+     * @param array $casts
+     *
      * @return $this
      */
     public function casts(array $casts)
@@ -55,6 +57,7 @@ class Model extends EloquentModel
      *
      * @param $attribute
      * @param null $timezone
+     *
      * @return mixed
      */
     public function getDate($attribute, $timezone = null)

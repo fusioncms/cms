@@ -18,7 +18,7 @@ class RSSController extends Controller
             'title'         => 'Get FusionCMS',
             'home_page_url' => 'http://fusioncms.test/',
             'feed_url'      => 'http://fusioncms.test/feed.json',
-            'items'         => $news->map(function($item) {
+            'items'         => $news->map(function ($item) {
                 return [
                     'id'             => $item->id,
                     'title'          => $item->name,

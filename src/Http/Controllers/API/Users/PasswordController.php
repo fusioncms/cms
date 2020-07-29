@@ -2,19 +2,20 @@
 
 namespace Fusion\Http\Controllers\API\Users;
 
+use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Requests\PasswordRequest;
+use Fusion\Http\Resources\UserResource;
 use Fusion\Models\User;
 use Illuminate\Http\Request;
-use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\UserResource;
-use Fusion\Http\Requests\PasswordRequest;
 
 class PasswordController extends Controller
 {
     /**
      * Handle the incoming request.
      *
-     * @param  \Fusion\Http\Requests\PasswordRequest  $request
-     * @param  \Fusion\Models\User                    $user
+     * @param \Fusion\Http\Requests\PasswordRequest $request
+     * @param \Fusion\Models\User                   $user
+     *
      * @return \Fusion\Http\Resources\UserResource
      */
     public function index(PasswordRequest $request, User $user)

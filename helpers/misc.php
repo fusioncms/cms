@@ -1,6 +1,6 @@
 <?php
 
-if (! function_exists('unique_id')) {
+if (!function_exists('unique_id')) {
     /**
      * Generates a unique id independent of the systems
      * current date and time.

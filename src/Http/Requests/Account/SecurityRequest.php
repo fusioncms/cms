@@ -25,7 +25,7 @@ class SecurityRequest extends FormRequest
     public function rules()
     {
         return [
-            'password'              => [ 'required', new SecurePassword ],
+            'password'              => ['required', new SecurePassword()],
             'password_confirmation' => 'required|same:password',
         ];
     }

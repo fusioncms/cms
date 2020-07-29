@@ -3,9 +3,8 @@
 namespace Fusion\Tests\Feature;
 
 use Fusion\Models\Form;
-use Fusion\Tests\TestCase;
 use Fusion\Services\Builders\Collection;
-use Illuminate\Validation\ValidationException;
+use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FormFieldtypeTest extends TestCase
@@ -18,12 +17,12 @@ class FormFieldtypeTest extends TestCase
         $this->handleValidationExceptions();
 
         // --
-        $this->section    = \Facades\SectionFactory::times(1)->withoutFields()->create();
-        $this->fieldForm  = \Facades\FieldFactory::withName('Form')->withType('form')->withSection($this->section)->create();
-        $this->fieldset   = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->matrix     = \Facades\MatrixFactory::withName('FooBar')->asCollection()->withFieldset($this->fieldset)->create();
-        $this->model      = (new Collection($this->matrix->handle))->make();
-    
+        $this->section = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $this->fieldForm = \Facades\FieldFactory::withName('Form')->withType('form')->withSection($this->section)->create();
+        $this->fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
+        $this->matrix = \Facades\MatrixFactory::withName('FooBar')->asCollection()->withFieldset($this->fieldset)->create();
+        $this->model = (new Collection($this->matrix->handle))->make();
+
         // --
         $this->forms = factory(Form::class, 3)->create();
     }
@@ -41,7 +40,7 @@ class FormFieldtypeTest extends TestCase
             'slug' => 'new post',
             'form' => [
                 $this->forms->get(0)->toArray(),
-                $this->forms->get(1)->toArray()
+                $this->forms->get(1)->toArray(),
             ],
         ];
 
@@ -53,21 +52,21 @@ class FormFieldtypeTest extends TestCase
 
         $this->assertDatabaseHas($this->matrix->table, [
             'name' => $attributes['name'],
-            'slug' => $attributes['slug']
+            'slug' => $attributes['slug'],
         ]);
 
         $this->assertDatabaseHas('forms_pivot', [
             'form_id'    => $this->forms->first()->id,
             'field_id'   => $this->fieldForm->id,
             'pivot_type' => 'Fusion\Models\Collections\Foobar',
-            'pivot_id'   => $entry->id
+            'pivot_id'   => $entry->id,
         ]);
 
         $this->assertDatabaseHas('forms_pivot', [
             'form_id'    => $this->forms->get(1)->id,
             'field_id'   => $this->fieldForm->id,
             'pivot_type' => 'Fusion\Models\Collections\Foobar',
-            'pivot_id'   => $entry->id
+            'pivot_id'   => $entry->id,
         ]);
     }
 
@@ -83,7 +82,6 @@ class FormFieldtypeTest extends TestCase
         $this->fieldForm->validation = 'array|size:2';
         $this->fieldForm->save();
 
-
         $attributes = [
             'name' => 'New Post',
             'slug' => 'new post',
@@ -91,7 +89,7 @@ class FormFieldtypeTest extends TestCase
                 $this->forms->get(0)->toArray(),
                 $this->forms->get(1)->toArray(),
                 $this->forms->get(2)->toArray(),
-            ]
+            ],
         ];
 
         $this
@@ -122,10 +120,10 @@ class FormFieldtypeTest extends TestCase
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/collections/foobar', $attributes);
-        
+
         \Cache::flush();
         $entry = $this->model->first();
-        
+
         $this->assertInstanceOf('Fusion\Models\Form', $entry->form->first());
         $this->assertCount(3, $entry->form);
     }

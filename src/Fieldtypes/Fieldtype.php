@@ -112,7 +112,8 @@ abstract class Fieldtype
     /**
      * Set the fieldtype field.
      *
-     * @param  object  $field
+     * @param object $field
+     *
      * @return self
      */
     public function setField($field)
@@ -159,7 +160,8 @@ abstract class Fieldtype
     /**
      * Get either all or a specific value from the data property.
      *
-     * @param  string|null  $handle
+     * @param string|null $handle
+     *
      * @return mixed|null
      */
     public function getData($handle = null)
@@ -197,14 +199,15 @@ abstract class Fieldtype
      */
     public function hasRelationship()
     {
-        return ! is_null($this->relationship);
+        return !is_null($this->relationship);
     }
 
     /**
      * Set custom rules for form request validator.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      * @param  $field
+     *
      * @return array
      */
     public function rules($value = null, $field = null)
@@ -223,7 +226,7 @@ abstract class Fieldtype
     /**
      * Set custom attributes for validator errors.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      * @param  $field
      *
      * @return array
@@ -235,31 +238,32 @@ abstract class Fieldtype
 
     /**
      * Update Field model after saved.
-     * 
-     * @param  Field  $field
+     *
+     * @param Field $field
+     *
      * @return void
      */
     public function onSaved(Field $field)
     {
-
     }
 
     /**
      * Delete Field model after saved.
-     * 
-     * @param  Field  $field
+     *
+     * @param Field $field
+     *
      * @return void
      */
     public function onDeleted(Field $field)
     {
-
     }
 
     /**
      * Perform an action before the given fieldtype has saved data.
      *
-     * @param  mixed  $value
-     * @param  Field  $field
+     * @param mixed $value
+     * @param Field $field
+     *
      * @return mixed
      */
     public function onBeforeSave($value, Field $field)
@@ -270,8 +274,9 @@ abstract class Fieldtype
     /**
      * Perform an action after the given fieldtype has saved data.
      *
-     * @param  mixed  $value
-     * @param  Field  $field
+     * @param mixed $value
+     * @param Field $field
+     *
      * @return mixed
      */
     public function onAfterSave($value, Field $field)
@@ -282,8 +287,9 @@ abstract class Fieldtype
     /**
      * Cast the variable to the appropriate data type.
      *
-     * @param  mixed  $value
-     * @param  Field  $field
+     * @param mixed $value
+     * @param Field $field
+     *
      * @return mixed
      */
     public function cast($value, Field $field)
@@ -308,7 +314,7 @@ abstract class Fieldtype
      */
     public function getRelationship()
     {
-        if (! $this->relationship) {
+        if (!$this->relationship) {
             return null;
         }
 
@@ -348,8 +354,9 @@ abstract class Fieldtype
     /**
      * Destroy relationship data in storage.
      *
-     * @param  Illuminate\Eloquent\Model  $model
-     * @param  Fusion\Models\Field           $field
+     * @param Illuminate\Eloquent\Model $model
+     * @param Fusion\Models\Field       $field
+     *
      * @return void
      */
     public function destroyRelationship($model, Field $field)

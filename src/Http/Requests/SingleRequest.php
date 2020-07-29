@@ -3,22 +3,20 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Models\Matrix;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Fusion\Services\Builders\Single;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SingleRequest extends FormRequest
 {
-
     public function __construct()
     {
-        $this->matrix        = Matrix::findOrFail(request()->route('single'));
-        $this->model         = (new Single($this->matrix->handle))->make();
-        $this->fieldset      = $this->matrix->fieldset;
-        $this->fields        = $this->fieldset ? $this->fieldset->database() : [];
+        $this->matrix = Matrix::findOrFail(request()->route('single'));
+        $this->model = (new Single($this->matrix->handle))->make();
+        $this->fieldset = $this->matrix->fieldset;
+        $this->fields = $this->fieldset ? $this->fieldset->database() : [];
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
     }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,7 +35,7 @@ class SingleRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'matrix_id' => $this->matrix->id
+            'matrix_id' => $this->matrix->id,
         ]);
     }
 

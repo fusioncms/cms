@@ -1,10 +1,10 @@
 <?php
 
 return [
-	'name'        => 'Backups',
-	'group'       => 'Services',
-	'icon'        => 'save',
-	'description' => 'Configure backup schedule and cleanup strategy settings.',
+    'name'        => 'Backups',
+    'group'       => 'Services',
+    'icon'        => 'save',
+    'description' => 'Configure backup schedule and cleanup strategy settings.',
     'settings'    => [
         'General' => [
             [
@@ -12,7 +12,7 @@ return [
                 'handle'      => 'scheduled_backups',
                 'description' => 'Control whether backups will run on a regular schedule or not.',
                 'type'        => 'select',
-                'options'     => [ 'enabled'  => 'Enabled', 'disabled' => 'Disabled' ],
+                'options'     => ['enabled'  => 'Enabled', 'disabled' => 'Disabled'],
                 'default'     => 'enabled',
                 'required'    => true,
             ],

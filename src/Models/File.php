@@ -3,11 +3,11 @@
 namespace Fusion\Models;
 
 use File as FileSystem;
-use Storage;
-use Illuminate\Support\Str;
 use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
+use Storage;
 
 class File extends Model
 {
@@ -31,7 +31,7 @@ class File extends Model
     protected $appends = [
         'isFile',
         'type',
-        'url'
+        'url',
     ];
 
     /**
@@ -61,7 +61,7 @@ class File extends Model
     /**
      * Is file a file (or directory)?
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsFileAttribute()
     {
@@ -75,7 +75,7 @@ class File extends Model
      */
     public function getTypeAttribute()
     {
-        $type  = strtok($this->mimetype, '/');
+        $type = strtok($this->mimetype, '/');
         $types = ['image', 'audio', 'video'];
 
         return in_array($type, $types) ? $type : 'document';
@@ -84,7 +84,8 @@ class File extends Model
     /**
      * Get the user-friendly url.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return string
      */
     public function getUrlAttribute()
@@ -105,7 +106,8 @@ class File extends Model
     /**
      * Scope to query search filter.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSearchQuery(Builder $query, $value)
@@ -120,7 +122,8 @@ class File extends Model
     /**
      * Scope to query display type.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeDisplayQuery(Builder $query, $value)
@@ -130,7 +133,7 @@ class File extends Model
                 $displays = ['text', 'application'];
                 break;
             default:
-                $displays = [ Str::singular($value) ];
+                $displays = [Str::singular($value)];
                 break;
         }
 

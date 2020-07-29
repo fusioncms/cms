@@ -3,18 +3,18 @@
 namespace Fusion\Http\Controllers\API\Addons;
 
 use Fusion\Facades\Addon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\AddonResource;
+use Illuminate\Http\Request;
 
 class StatusController extends Controller
 {
     /**
      * Enable module.
      *
-     * @param  \Illuminate\Http\Request        $request
-     * @param  \Illuminate\Support\Collection  $addon
+     * @param \Illuminate\Http\Request       $request
+     * @param \Illuminate\Support\Collection $addon
+     *
      * @return Redirect|void
      */
     public function enable(Request $request, $addon)
@@ -29,8 +29,9 @@ class StatusController extends Controller
     /**
      * Disable module.
      *
-     * @param  \Illuminate\Http\Request        $request
-     * @param  \Illuminate\Support\Collection  $addon
+     * @param \Illuminate\Http\Request       $request
+     * @param \Illuminate\Support\Collection $addon
+     *
      * @return void
      */
     public function disable(Request $request, $addon)

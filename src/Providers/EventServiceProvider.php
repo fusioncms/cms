@@ -2,8 +2,8 @@
 
 namespace Fusion\Providers;
 
-use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -14,7 +14,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         'Fusion\Events\ServingFusion' => [
-            'Fusion\Listeners\FusionServed'
+            'Fusion\Listeners\FusionServed',
         ],
 
         'Illuminate\Auth\Events\Verified' => [

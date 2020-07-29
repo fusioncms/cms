@@ -3,7 +3,6 @@
 namespace Fusion\Http\Controllers\Web\Themes;
 
 use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\ThemeResource;
 
 class ScreenshotController extends Controller
 {

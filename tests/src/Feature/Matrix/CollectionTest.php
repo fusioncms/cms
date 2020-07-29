@@ -3,15 +3,16 @@
 namespace Fusion\Tests\Feature\Matrix;
 
 use Fusion\Tests\TestCase;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CollectionTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
@@ -19,12 +20,12 @@ class CollectionTest extends TestCase
         $this->handleValidationExceptions();
 
         // --
-        $this->section      = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $this->section = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $this->fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($this->section)->create();
         $this->fieldContent = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($this->section)->create();
-        $this->fieldset     = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->matrix       = \Facades\MatrixFactory::withName('Collectibles')->asCollection()->withFieldset($this->fieldset)->withRoute('collectibles/{slug}')->withTemplate('index')->create();
-        $this->model        = (new \Fusion\Services\Builders\Collection($this->matrix->handle))->make();
+        $this->fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
+        $this->matrix = \Facades\MatrixFactory::withName('Collectibles')->asCollection()->withFieldset($this->fieldset)->withRoute('collectibles/{slug}')->withTemplate('index')->create();
+        $this->model = (new \Fusion\Services\Builders\Collection($this->matrix->handle))->make();
     }
 
     /**
@@ -41,7 +42,7 @@ class CollectionTest extends TestCase
             'slug'    => 'example-page',
             'excerpt' => 'This is an excerpt of the content.',
             'content' => 'This is the content. Lorem ipsum dolor sit amit.',
-            'status'  => 1
+            'status'  => 1,
         ];
 
         $this
@@ -102,7 +103,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/collections/collectibles/' . $entry->id, $attributes)
+            ->json('PATCH', '/api/collections/collectibles/'.$entry->id, $attributes)
             ->assertStatus(200);
 
         $this->assertDatabaseHas('mx_collectibles', $attributes);
@@ -121,9 +122,9 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', '/api/collections/collectibles/' . $entry->id);
+            ->json('DELETE', '/api/collections/collectibles/'.$entry->id);
 
-        $this->assertDatabaseMissing('mx_collectibles', [ 'id' => $entry->id ]);
+        $this->assertDatabaseMissing('mx_collectibles', ['id' => $entry->id]);
     }
 
     /**
@@ -157,7 +158,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->user)
-            ->get('/collectibles/' . $entry->slug)
+            ->get('/collectibles/'.$entry->slug)
             ->assertStatus(200);
     }
 
@@ -176,7 +177,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->user)
-            ->get('/collectibles/' . $entry->slug);
+            ->get('/collectibles/'.$entry->slug);
     }
 
     /**
@@ -194,7 +195,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner)
-            ->get('/collectibles/' . $entry->slug);
+            ->get('/collectibles/'.$entry->slug);
     }
 
     /**
@@ -210,7 +211,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner)
-            ->get('/collectibles/' . $entry->slug . '?preview=true')
+            ->get('/collectibles/'.$entry->slug.'?preview=true')
             ->assertStatus(200);
     }
 
@@ -229,7 +230,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->user)
-            ->get('/collectibles/' . $entry->slug . '?preview=true');
+            ->get('/collectibles/'.$entry->slug.'?preview=true');
     }
 
     //
@@ -238,9 +239,10 @@ class CollectionTest extends TestCase
 
     /**
      * Returns new entry w/ attributes
-     * [Helper]
+     * [Helper].
      *
-     * @param  array  $overrides
+     * @param array $overrides
+     *
      * @return array
      */
     protected function newEntry($overrides = []): array
@@ -250,7 +252,7 @@ class CollectionTest extends TestCase
             'slug'    => 'example-page',
             'excerpt' => 'This is the excerpt of the content.',
             'content' => 'This is the content. Lorem ipsume dolor sit amit.',
-            'status'  => true
+            'status'  => true,
         ], $overrides);
 
         $this

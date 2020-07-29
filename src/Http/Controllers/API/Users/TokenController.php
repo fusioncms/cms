@@ -2,18 +2,19 @@
 
 namespace Fusion\Http\Controllers\API\Users;
 
+use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Requests\Account\TokenRequest;
+use Fusion\Http\Resources\TokenResource;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
-use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\TokenResource;
-use Fusion\Http\Requests\Account\TokenRequest;
 
 class TokenController extends Controller
 {
     /**
      * Return a paginated resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Support\Collection
      */
     public function index(Request $request)
@@ -24,7 +25,8 @@ class TokenController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  TokenRequest  $request
+     * @param TokenRequest $request
+     *
      * @return TokenResource
      */
     public function store(TokenRequest $request)
@@ -42,7 +44,8 @@ class TokenController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  PersonalAccessToken $token
+     * @param PersonalAccessToken $token
+     *
      * @return void
      */
     public function destroy(PersonalAccessToken $token)

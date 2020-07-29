@@ -2,13 +2,11 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Models\Form;
-use Fusion\Models\Field;
-use Fusion\Models\Section;
-use Fusion\Models\Fieldset;
 use Fusion\Database\Migration;
-use Illuminate\Support\Str;
 use Fusion\Database\Schema\Blueprint;
+use Fusion\Models\Field;
+use Fusion\Models\Fieldset;
+use Fusion\Models\Form;
 
 class FormObserver
 {
@@ -20,7 +18,7 @@ class FormObserver
     /**
      * Create a new FormObserver instance.
      *
-     * @param  \Fusion\Database\Migration  $migration
+     * @param \Fusion\Database\Migration $migration
      */
     public function __construct(Migration $migration)
     {
@@ -30,12 +28,13 @@ class FormObserver
     /**
      * Handle the form "created" event.
      *
-     * @param  \Fusion\Models\Form  $form
+     * @param \Fusion\Models\Form $form
+     *
      * @return void
      */
     public function created(Form $form)
     {
-        $this->migration->schema->create($form->table, function (Blueprint $table) use ($form) {
+        $this->migration->schema->create($form->table, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('form_id');
 
@@ -50,7 +49,8 @@ class FormObserver
     /**
      * Handle the form "updating" event.
      *
-     * @param  \Fusion\Models\Form  $form
+     * @param \Fusion\Models\Form $form
+     *
      * @return void
      */
     public function updating(Form $form)
@@ -69,7 +69,8 @@ class FormObserver
     /**
      * Handle the form "deleting" event.
      *
-     * @param  \Fusion\Models\Form  $form
+     * @param \Fusion\Models\Form $form
+     *
      * @return void
      */
     public function deleting(Form $form)
@@ -80,7 +81,8 @@ class FormObserver
     /**
      * Handle the form "deleted" event.
      *
-     * @param  \Fusion\Models\Form  $form
+     * @param \Fusion\Models\Form $form
+     *
      * @return void
      */
     public function deleted(Form $form)
@@ -91,14 +93,15 @@ class FormObserver
     /**
      * Automatically create a fieldset for our form.
      *
-     * @param  Form  $form
+     * @param Form $form
+     *
      * @return void
      */
     protected function createFieldset(Form $form)
     {
-        $form->withoutEvents(function() use ($form) {
+        $form->withoutEvents(function () use ($form) {
             $fieldset = Fieldset::create([
-                'name'   => ($name = 'Form: ' . $form->name),
+                'name'   => ($name = 'Form: '.$form->name),
                 'handle' => str_handle($name),
             ]);
 
@@ -116,18 +119,19 @@ class FormObserver
     /**
      * Automatically update the fieldset for our form.
      *
-     * @param  Form  $old - old Form instance
-     * @param  Form  $new - new Form instance
+     * @param Form $old - old Form instance
+     * @param Form $new - new Form instance
+     *
      * @return void
      */
     protected function updateFieldset(Form $old, Form $new)
     {
         if ($old->name !== $new->name) {
             $fieldset = $old->fieldset;
-            $newName  = $new->name;
+            $newName = $new->name;
 
-            $fieldset->withoutEvents(function() use ($fieldset, $newName) {
-                $fieldset->name   = ($name = 'Form: ' . $newName);
+            $fieldset->withoutEvents(function () use ($fieldset, $newName) {
+                $fieldset->name = ($name = 'Form: '.$newName);
                 $fieldset->handle = str_handle($name);
                 $fieldset->save();
             });
@@ -137,7 +141,8 @@ class FormObserver
     /**
      * Automatically delete the fieldset from our form.
      *
-     * @param  Form  $form
+     * @param Form $form
+     *
      * @return void
      */
     protected function deleteFieldset(Form $form)
@@ -147,9 +152,10 @@ class FormObserver
 
     /**
      * Assure fieldset has e-mail collection field.
-     * [Note: added for unit testing assurance]
+     * [Note: added for unit testing assurance].
      *
-     * @param  Fieldset  $fieldset
+     * @param Fieldset $fieldset
+     *
      * @return void
      */
     protected function verifyEmailFieldExists(Fieldset $fieldset)
@@ -164,7 +170,7 @@ class FormObserver
                 'required' => true,
                 'help'     => 'Please enter your e-mail address.',
                 'type'     => 'input',
-                'settings' => [ 'type' => 'email' ],
+                'settings' => ['type' => 'email'],
                 'order'    => 1,
             ]);
         }

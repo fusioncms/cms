@@ -2,12 +2,11 @@
 
 namespace Fusion\Tests\Feature\Form;
 
-use Fusion\Models\Form;
 use Facades\FormFactory;
+use Fusion\Models\Form;
 use Fusion\Tests\TestCase;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FormTest extends TestCase
@@ -60,7 +59,7 @@ class FormTest extends TestCase
 
         // assert associated fieldset exists..
         $this->assertDatabaseHas('fieldsets', [
-            'name'   => ($name = 'Form: ' . $form->name),
+            'name'   => ($name = 'Form: '.$form->name),
             'handle' => str_handle($name),
         ]);
 
@@ -117,7 +116,7 @@ class FormTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/forms/' . $form->id);
+            ->json('GET', '/api/forms/'.$form->id);
     }
 
     /**
@@ -151,7 +150,7 @@ class FormTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/forms/' . $form->id, []);
+            ->json('PATCH', '/api/forms/'.$form->id, []);
     }
 
     /**
@@ -169,7 +168,7 @@ class FormTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/forms/' . $form->id);
+            ->json('DELETE', '/api/forms/'.$form->id);
     }
 
     /**
@@ -183,17 +182,17 @@ class FormTest extends TestCase
         $form = FormFactory::create();
 
         // Update ----
-        $attributes                = $form->toArray();
+        $attributes = $form->toArray();
         $attributes['description'] = 'This is the new form description';
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/forms/' . $form->id, $attributes)
+            ->json('PATCH', '/api/forms/'.$form->id, $attributes)
             ->assertStatus(200);
 
         $this->assertDatabaseHas('forms', [
             'id'          => $form->id,
-            'description' => $attributes['description']
+            'description' => $attributes['description'],
         ]);
     }
 
@@ -210,22 +209,22 @@ class FormTest extends TestCase
         $oldName = $form->name;
 
         // Update ----
-        $attributes         = $form->toArray();
+        $attributes = $form->toArray();
         $attributes['name'] = 'New Name';
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/forms/' . $form->id, $attributes)
+            ->json('PATCH', '/api/forms/'.$form->id, $attributes)
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('fieldsets', [
             'id'   => $form->fieldset->id,
-            'name' => $oldName
+            'name' => $oldName,
         ]);
 
         $this->assertDatabaseHas('fieldsets', [
             'id'   => $form->fieldset->id,
-            'name' => 'Form: ' . $attributes['name'],
+            'name' => 'Form: '.$attributes['name'],
         ]);
     }
 
@@ -241,11 +240,11 @@ class FormTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', '/api/forms/' . $form->id)
+            ->json('DELETE', '/api/forms/'.$form->id)
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('forms', [
-            'name' => $form->name
+            'name' => $form->name,
         ]);
     }
 
@@ -257,16 +256,16 @@ class FormTest extends TestCase
     public function a_deleted_form_request_will_also_delete_associated_tables()
     {
         $this->actingAs($this->owner, 'api');
-        $form     = FormFactory::create();
+        $form = FormFactory::create();
         $fieldset = $form->fieldset;
 
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', '/api/forms/' . $form->id)
+            ->json('DELETE', '/api/forms/'.$form->id)
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('fieldsets', [
-            'name'   => ($name = 'Form: ' . $form->name),
+            'name'   => ($name = 'Form: '.$form->name),
             'handle' => str_handle($name),
         ]);
 
@@ -324,8 +323,8 @@ class FormTest extends TestCase
             ->post($form->path());
 
         $this->assertDatabaseMissing($form->table, [
-            'form_id' => $form->id,
-            'identifiable_ip_address' => '127.0.0.1'
+            'form_id'                 => $form->id,
+            'identifiable_ip_address' => '127.0.0.1',
         ]);
     }
 
@@ -345,8 +344,8 @@ class FormTest extends TestCase
             ->post($form->path());
 
         $this->assertDatabaseHas($form->table, [
-            'form_id' => $form->id,
-            'identifiable_ip_address' => '127.0.0.1'
+            'form_id'                 => $form->id,
+            'identifiable_ip_address' => '127.0.0.1',
         ]);
     }
 
@@ -363,10 +362,10 @@ class FormTest extends TestCase
 
         $this
             ->be($this->user)
-            ->post($form->path(), [ 'identifiable_email_address' => $this->user->email ]);
+            ->post($form->path(), ['identifiable_email_address' => $this->user->email]);
 
         $this->assertDatabaseHas($form->table, [
-            'form_id' => $form->id,
+            'form_id'                    => $form->id,
             'identifiable_email_address' => $this->user->email,
         ]);
     }
@@ -408,7 +407,8 @@ class FormTest extends TestCase
     }
 
     /**
-     * TODO:
+     * TODO:.
+     *
      * @group feature
      * @group form
      * @group response
@@ -431,7 +431,7 @@ class FormTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         $form = factory(Form::class)->create()->toArray();
-        $form['id']     = null;
+        $form['id'] = null;
         $form['handle'] = 'new_handle';
 
         $this
@@ -451,7 +451,7 @@ class FormTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         $form = factory(Form::class)->create()->toArray();
-        $form['id']   = null;
+        $form['id'] = null;
         $form['slug'] = 'new-slug';
 
         $this
@@ -471,21 +471,21 @@ class FormTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         $this
-            ->json('POST', '/api/forms', [ 'handle' => 'default' ])
+            ->json('POST', '/api/forms', ['handle' => 'default'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
 
         $this
-            ->json('POST', '/api/forms', [ 'handle' => 'for' ])
+            ->json('POST', '/api/forms', ['handle' => 'for'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
 
         $this
-            ->json('POST', '/api/forms', [ 'handle' => 'true' ])
+            ->json('POST', '/api/forms', ['handle' => 'true'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
     }
 
@@ -523,10 +523,10 @@ class FormTest extends TestCase
         $form = FormFactory::create();
 
         // Update ----
-        $attributes         = $form->toArray();
+        $attributes = $form->toArray();
         $attributes['name'] = 'New Name';
 
-        $this->json('PATCH', '/api/forms/' . $form->id, $attributes);
+        $this->json('PATCH', '/api/forms/'.$form->id, $attributes);
 
         $this->assertDatabaseHas('activity_log', [
             'description' => "Updated form ({$attributes['name']})",
@@ -547,7 +547,7 @@ class FormTest extends TestCase
         $this->actingAs($this->owner, 'api');
         $form = FormFactory::create();
 
-        $this->json('DELETE', '/api/forms/' . $form->id);
+        $this->json('DELETE', '/api/forms/'.$form->id);
 
         $this->assertDatabaseMissing('activity_log', [
             'subject_id'   => $form->id,

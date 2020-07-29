@@ -2,12 +2,12 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Models\Matrix;
 use Fusion\Database\Migration;
 use Fusion\Database\Schema\Blueprint;
-use Spatie\Activitylog\Models\Activity;
+use Fusion\Models\Matrix;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-Use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
 
 class MatrixObserver
 {
@@ -19,7 +19,7 @@ class MatrixObserver
     /**
      * Create a new MatrixObserver instance.
      *
-     * @param  \Fusion\Database\Migration  $migration
+     * @param \Fusion\Database\Migration $migration
      */
     public function __construct(Migration $migration)
     {
@@ -29,7 +29,8 @@ class MatrixObserver
     /**
      * Handle the matrix "created" event.
      *
-     * @param  \Fusion\Models\Matrix  $matrix
+     * @param \Fusion\Models\Matrix $matrix
+     *
      * @return void
      */
     public function created(Matrix $matrix)
@@ -51,7 +52,8 @@ class MatrixObserver
     /**
      * Handle the matrix "updating" event.
      *
-     * @param  \Fusion\Models\Matrix  $matrix
+     * @param \Fusion\Models\Matrix $matrix
+     *
      * @return void
      */
     public function updating(Matrix $matrix)
@@ -63,16 +65,15 @@ class MatrixObserver
         if ($old->table !== $matrix->table) {
             $this->migration->schema->rename($old->table, $matrix->table);
 
-            $oldClass = 'Fusion\\Models\\Collections\\' . Str::studly($old->handle);
-            $newClass = 'Fusion\\Models\\Collections\\' . Str::studly($matrix->handle);
+            $oldClass = 'Fusion\\Models\\Collections\\'.Str::studly($old->handle);
+            $newClass = 'Fusion\\Models\\Collections\\'.Str::studly($matrix->handle);
 
             // Update model classes in the activity log to match the new class name
             Activity::where('subject_type', $oldClass)
                 ->update([
                     'subject_type' => $newClass,
-                    'properties'   => DB::raw("REPLACE(properties, '" . $old->slug . "', '" . $matrix->slug . "')")
-            ]);
-
+                    'properties'   => DB::raw("REPLACE(properties, '".$old->slug."', '".$matrix->slug."')"),
+                ]);
         }
 
         // Create the ID column if converting from a single to a collection type
@@ -94,6 +95,7 @@ class MatrixObserver
      * Handle the matrix "deleting" event.
      *
      * @param \Fusion\Models\Matrix $matrix
+     *
      * @return void
      */
     public function deleting(Matrix $matrix)
@@ -104,7 +106,8 @@ class MatrixObserver
     /**
      * Handle the matrix "deleted" event.
      *
-     * @param  \Fusion\Models\Matrix  $matrix
+     * @param \Fusion\Models\Matrix $matrix
+     *
      * @return void
      */
     public function deleted(Matrix $matrix)
@@ -115,7 +118,8 @@ class MatrixObserver
     /**
      * Drop the matrix database table.
      *
-     * @param  \Fusion\Models\Matrix  $matrix
+     * @param \Fusion\Models\Matrix $matrix
+     *
      * @return void
      */
     protected function dropTable($matrix)

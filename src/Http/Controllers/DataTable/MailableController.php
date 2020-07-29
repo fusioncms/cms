@@ -2,10 +2,8 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use File;
-use ReflectionClass;
-use Fusion\Models\Mailable;
 use Fusion\Http\Controllers\DataTableController;
+use Fusion\Models\Mailable;
 
 class MailableController extends DataTableController
 {

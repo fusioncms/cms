@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Models\Taxonomy;
 use Fusion\Http\Controllers\DataTableController;
+use Fusion\Models\Taxonomy;
 
 class TermController extends DataTableController
 {

@@ -2,11 +2,10 @@
 
 namespace Fusion\Tests\Feature\Settings;
 
-use Mail;
-use Storage;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mail;
 
 class MailTest extends TestCase
 {
@@ -34,7 +33,7 @@ class MailTest extends TestCase
         $this
             ->be($this->owner, 'api')
             ->json('PATCH', 'api/settings/api', [
-                'personal_access_tokens' => 'enabled'
+                'personal_access_tokens' => 'enabled',
             ])->assertStatus(200);
     }
 
@@ -76,7 +75,7 @@ class MailTest extends TestCase
         $this
             ->be($this->owner, 'api')
             ->json('PATCH', 'api/settings/api', [
-                'personal_access_tokens' => 'enabled'
+                'personal_access_tokens' => 'enabled',
             ])->assertStatus(200);
 
         $this->assertDatabaseHas('settings_api', [
@@ -96,7 +95,7 @@ class MailTest extends TestCase
         $this->actingAs($this->owner, 'api');
         $this->json('GET', 'api/mail/test', []);
 
-        Mail::assertSent(\Fusion\Mail\WelcomeNewUser::class, function($mail) {
+        Mail::assertSent(\Fusion\Mail\WelcomeNewUser::class, function ($mail) {
             return $mail->user->id === $this->owner->id;
         });
     }
