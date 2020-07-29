@@ -2,7 +2,7 @@
 
 use Illuminate\Support\HtmlString;
 
-if (! function_exists('fieldtypes')) {
+if (!function_exists('fieldtypes')) {
     /**
      * Returns the fieldtype registry instance from the container.
      *
@@ -14,13 +14,13 @@ if (! function_exists('fieldtypes')) {
     }
 }
 
-if (! function_exists('validationRules')) {
+if (!function_exists('validationRules')) {
     /**
      * Get list of validation rules to apply against Field Assignments.
      *
-     * @param   array  $validation
+     * @param array $validation
      *
-     * @return  array
+     * @return array
      */
     function validationRules($validation)
     {
@@ -44,12 +44,12 @@ if (! function_exists('validationRules')) {
             * Rule: 'dimensions'
             */
             } elseif ($field == 'dimensions') {
-                $dimensions   = [];
-                $dimensions[] = isset($value['min_width']) ? 'min_width=' . $value['min_width'] : '';
-                $dimensions[] = isset($value['min_height']) ? 'min_height=' . $value['min_height'] : '';
+                $dimensions = [];
+                $dimensions[] = isset($value['min_width']) ? 'min_width='.$value['min_width'] : '';
+                $dimensions[] = isset($value['min_height']) ? 'min_height='.$value['min_height'] : '';
 
                 if (count($dimensions) > 0) {
-                    $rules[] = 'dimensions:' . implode(',', $dimensions);
+                    $rules[] = 'dimensions:'.implode(',', $dimensions);
                 }
 
                 /*
@@ -57,20 +57,20 @@ if (! function_exists('validationRules')) {
                 * File size requirements
                 */
             } elseif ($field == 'file_min') {
-                $bytes     = convert_to_bytes($value);
+                $bytes = convert_to_bytes($value);
                 $kilobytes = byte_converter($bytes, 'B', 'KB');
-                $rules[]   = 'min:' . $kilobytes;
+                $rules[] = 'min:'.$kilobytes;
 
             /*
             * Rule: 'file_max'
             * File size requirements
             */
             } elseif ($field == 'file_max') {
-                $bytes     = convert_to_bytes($value);
+                $bytes = convert_to_bytes($value);
                 $kilobytes = byte_converter($bytes, 'B', 'KB');
-                $rules[]   = 'max:' . $kilobytes;
+                $rules[] = 'max:'.$kilobytes;
             } else {
-                $rules[] = $field . ':' . $value;
+                $rules[] = $field.':'.$value;
             }
         }
 
@@ -78,7 +78,7 @@ if (! function_exists('validationRules')) {
     }
 }
 
-if (! function_exists('fieldtypes_field')) {
+if (!function_exists('fieldtypes_field')) {
     /**
      * Generate a hidden fieldtypes form field to inform the CMS to resolve
      * custom fields against the request.
@@ -91,12 +91,13 @@ if (! function_exists('fieldtypes_field')) {
     }
 }
 
-if (! function_exists('resolve_fieldable')) {
+if (!function_exists('resolve_fieldable')) {
     /**
      * Resolve fieldable model.
      *
-     * @param  string   $type
-     * @param  int  $id
+     * @param string $type
+     * @param int    $id
+     *
      * @return \Fusion\Database\Eloquent\Model
      */
     function resolve_fieldable($type, $id)

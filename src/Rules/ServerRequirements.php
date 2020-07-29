@@ -2,16 +2,17 @@
 
 namespace Fusion\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
 use Fusion\Console\Actions\CheckServerRequirements;
+use Illuminate\Contracts\Validation\Rule;
 
 class ServerRequirements implements Rule
 {
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed   $value
+     * @param string $attribute
+     * @param mixed  $value
+     *
      * @return bool
      */
     public function passes($attribute, $value)
@@ -27,6 +28,6 @@ class ServerRequirements implements Rule
      */
     public function message()
     {
-        return "Does not meet expected server requirements.";
+        return 'Does not meet expected server requirements.';
     }
 }

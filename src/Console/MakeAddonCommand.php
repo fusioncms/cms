@@ -2,8 +2,6 @@
 
 namespace Fusion\Console;
 
-use Fusion\Facades\Addon;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
@@ -31,8 +29,8 @@ class MakeAddonCommand extends Command
     public function handle()
     {
         $namespace = $this->argument('namespace');
-        $manifest  = $this->getManifest();
-        $template  = fusion_path('stubs/addon');
+        $manifest = $this->getManifest();
+        $template = fusion_path('stubs/addon');
 
         if (File::isDirectory(addon_path($namespace))) {
             return $this->error('Addon already exists!');
@@ -41,12 +39,12 @@ class MakeAddonCommand extends Command
         File::makeDirectory(addon_path($namespace, 0755, true));
 
         foreach (File::allFiles($template, true) as $file) {
-            $content      = $this->replacePlaceholders($file->getContents(), $manifest);
+            $content = $this->replacePlaceholders($file->getContents(), $manifest);
             $relativePath = $file->getRelativePathname();
-            $filePath     = addon_path("{$namespace}/{$relativePath}");
-            $directory    = dirname($filePath);
+            $filePath = addon_path("{$namespace}/{$relativePath}");
+            $directory = dirname($filePath);
 
-            if (! File::isDirectory($directory)) {
+            if (!File::isDirectory($directory)) {
                 File::makeDirectory($directory, 0755, true);
             }
 
@@ -55,7 +53,7 @@ class MakeAddonCommand extends Command
 
         $this->callSilent('addon:discover');
 
-        $this->info("Addon created successfully.");
+        $this->info('Addon created successfully.');
     }
 
     /**
@@ -75,7 +73,8 @@ class MakeAddonCommand extends Command
     /**
      * Replace placeholders with actual content.
      *
-     * @param  string  $content
+     * @param string $content
+     *
      * @return mixed
      */
     protected function replacePlaceholders($content, $manifest)

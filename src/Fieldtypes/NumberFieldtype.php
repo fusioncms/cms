@@ -31,7 +31,7 @@ class NumberFieldtype extends Fieldtype
         'decimals' => 0,
         'steps'    => 1,
         'min'      => null,
-        'max'      => null
+        'max'      => null,
     ];
 
     /**
@@ -58,7 +58,7 @@ class NumberFieldtype extends Fieldtype
      * @var array
      */
     public $column = [
-        'type'    => 'float',
+        'type'     => 'float',
         'settings' => [24, 12],
     ];
 }

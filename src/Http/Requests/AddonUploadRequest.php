@@ -2,9 +2,9 @@
 
 namespace Fusion\Http\Requests;
 
-use ZipArchive;
 use Fusion\Rules\ValidAddon;
 use Illuminate\Foundation\Http\FormRequest;
+use ZipArchive;
 
 class AddonUploadRequest extends FormRequest
 {
@@ -21,7 +21,7 @@ class AddonUploadRequest extends FormRequest
     /**
      * Create a new AddonUploadRequest instance.
      *
-     * @param  \ZipArchive  $zipArchive
+     * @param \ZipArchive $zipArchive
      */
     public function __construct(ZipArchive $zipArchive)
     {
@@ -49,9 +49,9 @@ class AddonUploadRequest extends FormRequest
             'file-upload' => [
                 'required',
                 'file',
-                'mimes:' . implode(',', $this->acceptedMimes),
+                'mimes:'.implode(',', $this->acceptedMimes),
                 new ValidAddon($this->zipArchive),
-            ]
+            ],
         ];
     }
 }

@@ -3,15 +3,16 @@
 namespace Fusion\Tests\Feature\Users;
 
 use Fusion\Tests\TestCase;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserSettingsTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
@@ -95,13 +96,13 @@ class UserSettingsTest extends TestCase
         $this->assertDatabaseHas('users', [
             'id'    => $this->owner->id,
             'name'  => $new['name'],
-            'email' => $new['email']
+            'email' => $new['email'],
         ]);
 
         $this->assertDatabaseMissing('users', [
             'id'    => $this->owner->id,
             'name'  => $old['name'],
-            'email' => $old['email'] ]);
+            'email' => $old['email'], ]);
     }
 
     /**
@@ -131,7 +132,7 @@ class UserSettingsTest extends TestCase
     public function a_user_can_update_their_own_password()
     {
         $this->withoutMiddleware([
-            \Illuminate\Auth\Middleware\RequirePassword::class
+            \Illuminate\Auth\Middleware\RequirePassword::class,
         ]);
 
         $oldPassword = $this->owner->password;
@@ -172,7 +173,7 @@ class UserSettingsTest extends TestCase
 
         // 2) confirm password to redirect back..
         $this
-            ->post(route('password.confirm'), [ 'password' => 'secret123' ])
+            ->post(route('password.confirm'), ['password' => 'secret123'])
             ->assertStatus(302)
             ->assertRedirect('account/security');
     }

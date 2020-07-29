@@ -10,7 +10,8 @@ class LogActivityWhenUserLogsIn implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  Login $event
+     * @param Login $event
+     *
      * @return void
      */
     public function handle(Login $event)
@@ -25,8 +26,9 @@ class LogActivityWhenUserLogsIn implements ShouldQueue
     /**
      * Handle a job failure.
      *
-     * @param  \Illuminate\Auth\Events\Login  $event
-     * @param  \Exception  $exception
+     * @param \Illuminate\Auth\Events\Login $event
+     * @param \Exception                    $exception
+     *
      * @return void
      */
     public function failed(Login $event, $exception)

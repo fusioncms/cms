@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'name'        => 'Search',
+    'name'        => 'Search',
     'group'       => 'Services',
     'icon'        => 'search',
     'description' => 'Configure your desired search provider.',

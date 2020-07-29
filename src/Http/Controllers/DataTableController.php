@@ -2,13 +2,13 @@
 
 namespace Fusion\Http\Controllers;
 
-use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\QueryException;
-use Illuminate\Database\Eloquent\Builder;
-use Spatie\QueryBuilder\{AllowedFilter,QueryBuilder};
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 abstract class DataTableController extends Controller
 {
@@ -47,8 +47,8 @@ abstract class DataTableController extends Controller
     /**
      * Destroy the given resource.
      *
-     * @param  int  $id
-     * @param  \Illuminate\Http\Request  $request
+     * @param int                      $id
+     * @param \Illuminate\Http\Request $request
      */
     public function destroy($id, Request $request)
     {
@@ -106,14 +106,12 @@ abstract class DataTableController extends Controller
     protected function getAllowedFilters()
     {
         return AllowedFilter::callback('search', function (Builder $query, $value) {
-            return $query->where(function(Builder $query) use ($value) {
+            return $query->where(function (Builder $query) use ($value) {
                 foreach ($this->getFilterable() as $field) {
                     $query->orWhere($field, 'LIKE', "%$value%");
                 }
             });
         });
-
-
     }
 
     /**
@@ -155,7 +153,8 @@ abstract class DataTableController extends Controller
     /**
      * Perform the necessary queries to fetch our records.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     protected function getRecords(Request $request)
@@ -163,7 +162,7 @@ abstract class DataTableController extends Controller
         try {
             /**
              * Using Swpatie's `laravel-query-builder` package.
-             * https://docs.spatie.be/laravel-query-builder/v2/introduction/
+             * https://docs.spatie.be/laravel-query-builder/v2/introduction/.
              */
             return QueryBuilder::for($this->builder())
 

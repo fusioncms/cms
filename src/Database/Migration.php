@@ -1,11 +1,10 @@
 <?php
 
-
 namespace Fusion\Database;
 
 use Fusion\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration as IlluminateMigration;
+use Illuminate\Support\Facades\DB;
 
 class Migration extends IlluminateMigration
 {

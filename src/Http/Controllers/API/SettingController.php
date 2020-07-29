@@ -2,19 +2,19 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Fusion\Models\Setting;
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Artisan;
 use Fusion\Http\Requests\SettingRequest;
 use Fusion\Http\Resources\SettingResource;
+use Fusion\Models\Setting;
+use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
     /**
      * Request collection from storage.
      *
-     * @param  Request $request
+     * @param Request $request
+     *
      * @return SettingResource
      */
     public function index(Request $request)
@@ -22,13 +22,14 @@ class SettingController extends Controller
         return SettingResource::collection(Setting::all());
     }
 
-     /**
-      * Request specific resource from storage.
-      *
-      * @param  Request  $request
-      * @param  Setting  $setting
-      * @return SettingResource
-      */
+    /**
+     * Request specific resource from storage.
+     *
+     * @param Request $request
+     * @param Setting $setting
+     *
+     * @return SettingResource
+     */
     public function show(Request $request, Setting $setting)
     {
         return new SettingResource($setting);
@@ -37,15 +38,16 @@ class SettingController extends Controller
     /**
      * Update settings.
      *
-     * @param  SettingRequest  $request
-     * @param  Setting         $setting
+     * @param SettingRequest $request
+     * @param Setting        $setting
+     *
      * @return void
      */
     public function update(SettingRequest $request, Setting $setting)
     {
         // Filter out relationships
         $relationships = $setting->fieldset->relationships();
-        $validated     = collect($request->validated())->reject(function($value, $handle) use($relationships) {
+        $validated = collect($request->validated())->reject(function ($value, $handle) use ($relationships) {
             return $relationships->contains('handle', $handle);
         })->toArray();
 

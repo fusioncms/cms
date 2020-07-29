@@ -9,8 +9,9 @@ trait FilterScope
     /**
      * Apply the scope to the given Eloquent query builder.
      *
-     * @param  Builder  $builder
-     * @param  Filter  $filters
+     * @param Builder $builder
+     * @param Filter  $filters
+     *
      * @return void
      */
     public function scopeFilter(Builder $builder, Filter $filters)

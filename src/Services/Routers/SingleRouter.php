@@ -3,8 +3,8 @@
 namespace Fusion\Services\Routers;
 
 use Fusion\Models\Matrix;
-use Illuminate\Http\Request;
 use Fusion\Services\Builders\Single;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class SingleRouter extends Router
@@ -21,7 +21,7 @@ class SingleRouter extends Router
             }
 
             $model = (new Single($matrix->handle))->make();
-            $page  = $model->firstOrFail();
+            $page = $model->firstOrFail();
 
             if (!$page->status) {
                 if (Gate::denies('access.controlPanel') || !request()->has('preview')) {

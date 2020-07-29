@@ -3,9 +3,8 @@
 namespace Fusion\Http;
 
 use Exception;
-use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Crypt;
-
+use Illuminate\Support\HtmlString;
 
 class Honeypot
 {
@@ -35,7 +34,8 @@ class Honeypot
     /**
      * Decrypt an encrypted timestamp.
      *
-     * @param  string  $timestamp
+     * @param string $timestamp
+     *
      * @return null|string
      */
     protected function decryptTimestamp($timestamp)
@@ -50,9 +50,10 @@ class Honeypot
     /**
      * Validate that the honeypot is empty.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @param  array  $parameters
+     * @param string $attribute
+     * @param mixed  $value
+     * @param array  $parameters
+     *
      * @return bool
      */
     public function validateHoneypot($value)
@@ -63,8 +64,9 @@ class Honeypot
     /**
      * Validate that the honeypot timestamp was about the minimum time limit.
      *
-     * @param  string  $value
-     * @param  integer  $timeLimit
+     * @param string $value
+     * @param int    $timeLimit
+     *
      * @return bool
      */
     public function validateHoneypotTimestamp($value, $timeLimit = 3)

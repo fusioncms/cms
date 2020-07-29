@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Models\Import;
 use Fusion\Http\Controllers\DataTableController;
+use Fusion\Models\Import;
 
 class ImportController extends DataTableController
 {

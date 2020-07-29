@@ -2,10 +2,10 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Models\Setting;
-use Illuminate\Support\Str;
 use Fusion\Database\Migration;
 use Fusion\Database\Schema\Blueprint;
+use Fusion\Models\Setting;
+use Illuminate\Support\Str;
 
 class SettingObserver
 {
@@ -17,7 +17,7 @@ class SettingObserver
     /**
      * Constructor.
      *
-     * @param  \Fusion\Database\Migration  $migration
+     * @param \Fusion\Database\Migration $migration
      */
     public function __construct(Migration $migration)
     {
@@ -27,7 +27,8 @@ class SettingObserver
     /**
      * Handle the setting "created" event.
      *
-     * @param  \Fusion\Models\Setting $setting
+     * @param \Fusion\Models\Setting $setting
+     *
      * @return void
      */
     public function created(Setting $setting)
@@ -42,7 +43,8 @@ class SettingObserver
     /**
      * Handle the setting "updating" event.
      *
-     * @param  \Fusion\Models\Setting $setting
+     * @param \Fusion\Models\Setting $setting
+     *
      * @return void
      */
     public function updating(Setting $setting)
@@ -54,8 +56,8 @@ class SettingObserver
         if ($old->table !== $setting->table) {
             $this->migration->schema->rename($old->table, $setting->table);
 
-            $oldClass = 'Fusion\\Models\\Settings\\' . Str::studly($old->handle);
-            $newClass = 'Fusion\\Models\\Settings\\' . Str::studly($setting->handle);
+            $oldClass = 'Fusion\\Models\\Settings\\'.Str::studly($old->handle);
+            $newClass = 'Fusion\\Models\\Settings\\'.Str::studly($setting->handle);
         }
     }
 
@@ -63,6 +65,7 @@ class SettingObserver
      * Handle the setting  "deleting" event.
      *
      * @param \Fusion\Models\Setting $setting
+     *
      * @return void
      */
     public function deleting(Setting $setting)
@@ -72,7 +75,7 @@ class SettingObserver
         $setting->detachFieldset();
 
         // Manually remove fieldsets..
-        $fieldsets->each(function($fieldset) {
+        $fieldsets->each(function ($fieldset) {
             $fieldset->delete();
         });
     }
@@ -80,7 +83,8 @@ class SettingObserver
     /**
      * Handle the setting "deleted" event.
      *
-     * @param  \Fusion\Models\Setting $setting
+     * @param \Fusion\Models\Setting $setting
+     *
      * @return void
      */
     public function deleted(Setting $setting)
@@ -91,7 +95,8 @@ class SettingObserver
     /**
      * Drop the setting database table.
      *
-     * @param  \Fusion\Models\Setting $setting
+     * @param \Fusion\Models\Setting $setting
+     *
      * @return void
      */
     protected function dropTable(Setting $setting)

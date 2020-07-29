@@ -2,9 +2,8 @@
 
 namespace Fusion\Concerns;
 
-use Illuminate\Support\Str;
-use Fusion\Models\Extension;
 use Fusion\Database\Eloquent\Relations\HasOneExtension;
+use Fusion\Models\Extension;
 
 trait HasExtension
 {
@@ -13,7 +12,6 @@ trait HasExtension
         static::saved(function ($model) {
             /**
              * Pull new instance w/ relations.
-             * 
              */
             $model = static::find($model->id);
 
@@ -31,10 +29,11 @@ trait HasExtension
 
                     if ($fieldtype->hasRelationship()) {
                         $fieldtype->persistRelationship($model->extension, $field);
+
                         return [];
                     }
 
-                    return [ $field->handle => request()->input($field->handle) ];
+                    return [$field->handle => request()->input($field->handle)];
                 })->toArray();
 
                 $model->extension->update($attributes);
@@ -44,9 +43,10 @@ trait HasExtension
 
     /**
      * Get an attribute from the model.
-     * [override]
+     * [override].
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function getAttribute($key)

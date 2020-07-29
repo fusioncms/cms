@@ -2,11 +2,11 @@
 
 namespace Fusion\Fieldtypes;
 
+use Fusion\Http\Resources\ReplicantResource;
 use Fusion\Models\Field;
-use Illuminate\Support\Str;
 use Fusion\Models\Replicator;
 use Illuminate\Support\Facades\File;
-use Fusion\Http\Resources\ReplicantResource;
+use Illuminate\Support\Str;
 
 class ReplicatorFieldtype extends Fieldtype
 {
@@ -29,21 +29,21 @@ class ReplicatorFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
-        'replicator' => null
+        'replicator' => null,
     ];
 
     /**
      * @var array
      */
     public $rules = [
-        'settings.replicator' => 'required'
+        'settings.replicator' => 'required',
     ];
 
     /**
      * @var array
      */
     public $attributes = [
-        'settings.replicator' => 'replicator'
+        'settings.replicator' => 'replicator',
     ];
 
     /**
@@ -58,8 +58,9 @@ class ReplicatorFieldtype extends Fieldtype
 
     /**
      * Update Field Upon Save.
-     * 
-     * @param  Field  $field
+     *
+     * @param Field $field
+     *
      * @return void
      */
     public function onSaved(Field $field)
@@ -74,14 +75,14 @@ class ReplicatorFieldtype extends Fieldtype
         } else {
             $replicator = Replicator::where([
                 'id'       => $field->settings['replicator'],
-                'field_id' => $field->id
+                'field_id' => $field->id,
             ])->firstOrFail();
 
             $replicator->touch();
         }
 
         // update field w/o events..
-        $field->withoutEvents(function() use ($field, $replicator) {
+        $field->withoutEvents(function () use ($field, $replicator) {
             $field->settings = ['replicator' => $replicator->id];
             $field->save();
         });
@@ -89,15 +90,16 @@ class ReplicatorFieldtype extends Fieldtype
 
     /**
      * Delete Field model after saved.
-     * 
-     * @param  Field  $field
+     *
+     * @param Field $field
+     *
      * @return void
      */
     public function onDeleted(Field $field)
     {
         $replicator = Replicator::where([
             'id'       => $field->settings['replicator'],
-            'field_id' => $field->id
+            'field_id' => $field->id,
         ])->firstOrFail();
 
         $replicator->delete();
@@ -106,14 +108,15 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Generate relationship methods for associated Model.
      *
-     * @param  Fusion\Models\Field $field
+     * @param Fusion\Models\Field $field
+     *
      * @return string
      */
     public function generateRelationship(Field $field)
     {
-        $model     = Replicator::find($field->settings['replicator']);
-        $namespace = $this->namespace . '\\' . Str::studly($model->handle);
-        $stub      = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
+        $model = Replicator::find($field->settings['replicator']);
+        $namespace = $this->namespace.'\\'.Str::studly($model->handle);
+        $stub = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
 
         return strtr($stub, [
             '{handle}'            => $field->handle,
@@ -129,16 +132,17 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Update relationship data in storage.
      *
-     * @param  Illuminate\Eloquent\Model  $model
-     * @param  Fusion\Models\Field        $field
+     * @param Illuminate\Eloquent\Model $model
+     * @param Fusion\Models\Field       $field
+     *
      * @return void
      */
     public function persistRelationship($model, Field $field)
     {
         $oldValues = $model->{$field->handle}->pluck('id');
-        $newValues = collect(request()->input($field->handle))->mapWithKeys(function($id) use ($field) {
+        $newValues = collect(request()->input($field->handle))->mapWithKeys(function ($id) use ($field) {
             return [
-                $id => ['field_id' => $field->id]
+                $id => ['field_id' => $field->id],
             ];
         });
 
@@ -149,8 +153,9 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Returns resource object of field.
      *
-     * @param  Illuminate\Eloquent\Model  $model
-     * @param  Fusion\Models\Field        $field
+     * @param Illuminate\Eloquent\Model $model
+     * @param Fusion\Models\Field       $field
+     *
      * @return ReplicantResource
      */
     public function getResource($model, Field $field)

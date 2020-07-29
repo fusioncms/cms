@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Resources;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory;
 
@@ -12,22 +12,22 @@ class BackupResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
         $backupConfig = config('backup.monitor_backups');
-        $statuses     = BackupDestinationStatusFactory::createForMonitorConfig($backupConfig);
+        $statuses = BackupDestinationStatusFactory::createForMonitorConfig($backupConfig);
         $destinations = [];
 
         $destinations = $statuses->map(function (BackupDestinationStatus $status) {
-            $isNewest    = true;
+            $isNewest = true;
             $destination = $status->backupDestination();
-            $backups     = [];
+            $backups = [];
 
-            foreach ($destination->backups() as $backup)
-            {
+            foreach ($destination->backups() as $backup) {
                 $backups[] = [
                     'name'     => basename($backup->path(), '.zip'),
                     'happened' => Carbon::parse($backup->date())->diffForHumans(),

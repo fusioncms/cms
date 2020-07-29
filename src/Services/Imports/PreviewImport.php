@@ -2,8 +2,8 @@
 
 namespace Fusion\Services\Imports;
 
-use Maatwebsite\Excel\Concerns\WithLimit;
 use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\WithLimit;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
@@ -25,9 +25,9 @@ class PreviewImport implements WithStartRow, WithLimit, WithMapping
      */
     public function __construct(int $startRow = 1, int $limit = 5)
     {
-        $this->startRow  = $startRow;
-        $this->limit     = $limit;
-        $this->rowIndex  = 0;
+        $this->startRow = $startRow;
+        $this->limit = $limit;
+        $this->rowIndex = 0;
     }
 
     /**
@@ -53,13 +53,15 @@ class PreviewImport implements WithStartRow, WithLimit, WithMapping
     /**
      * Row Mapping.
      *
-     * @param  mixed $row
+     * @param mixed $row
+     *
      * @return array
      */
     public function map($row): array
     {
-        if (++$this->rowIndex == $this->startRow)
+        if (++$this->rowIndex == $this->startRow) {
             $row = HeadingRowFormatter::format($row);
+        }
 
         return $row;
     }

@@ -10,12 +10,13 @@ class FusionServed
     /**
      * Handle the event.
      *
-     * @param  Verified $verified
+     * @param Verified $verified
+     *
      * @return void
      */
     public function handle()
     {
-    	LoadNavigation::dispatchNow();
+        LoadNavigation::dispatchNow();
 
         Addon::enabled()->each(function ($addon) {
             if (class_exists("Addons\\{$addon['namespace']}\\Jobs\\LoadNavigation")) {

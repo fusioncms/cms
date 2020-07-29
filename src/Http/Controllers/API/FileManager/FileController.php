@@ -2,25 +2,18 @@
 
 namespace Fusion\Http\Controllers\API\FileManager;
 
-use Image;
-use Fusion\Models\File;
-use Ramsey\Uuid\Uuid;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\FileResource;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedFilter;
-use Illuminate\Support\Facades\Storage;
-use Fusion\Http\Requests\FileUploadRequest;
 use Fusion\Http\Requests\FileUpdateRequest;
+use Fusion\Http\Requests\FileUploadRequest;
+use Fusion\Http\Resources\FileResource;
+use Fusion\Models\File;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class FileController extends Controller
 {
-    /**
-     *
-     */
     public function index(Request $request)
     {
         $this->authorize('files.viewAny');
@@ -46,7 +39,8 @@ class FileController extends Controller
     /**
      * Show the specific resource.
      *
-     * @param  string  $uuid
+     * @param string $uuid
+     *
      * @return
      */
     public function show(Request $request, $uuid)
@@ -61,20 +55,21 @@ class FileController extends Controller
     /**
      * Persist a new resource in storage.
      *
-     * @param  \Fusion\Http\Requests\FileUploadRequest  $request
+     * @param \Fusion\Http\Requests\FileUploadRequest $request
+     *
      * @return \Fusion\Http\Resources\FileResource
      */
     public function store(FileUploadRequest $request)
     {
-        $upload    = $request->file('file');
+        $upload = $request->file('file');
         $directory = $request->input('directory_id', 0);
-        $uuid      = unique_id();
-        $name      = pathinfo($upload->getClientOriginalName(), PATHINFO_FILENAME);
+        $uuid = unique_id();
+        $name = pathinfo($upload->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $upload->extension();
-        $bytes     = $upload->getSize();
-        $mimetype  = $upload->getClientMimeType();
-        $filetype  = strtok($mimetype, '/');
-        $location  = "files/{$uuid}-{$name}.{$extension}";
+        $bytes = $upload->getSize();
+        $mimetype = $upload->getClientMimeType();
+        $filetype = strtok($mimetype, '/');
+        $location = "files/{$uuid}-{$name}.{$extension}";
 
         Storage::disk('public')->putFileAs('', $upload, $location);
 
@@ -107,8 +102,9 @@ class FileController extends Controller
     /**
      * Update an existing resource in storage.
      *
-     * @param  \Fusion\Http\Requests\FileUpdateRequest  $request
-     * @param  \Fusion\Models\File  $file
+     * @param \Fusion\Http\Requests\FileUpdateRequest $request
+     * @param \Fusion\Models\File                     $file
+     *
      * @return \Fusion\Http\Resources\FileResource
      */
     public function update(FileUpdateRequest $request, File $file)

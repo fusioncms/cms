@@ -4,17 +4,18 @@ namespace Fusion\Tests\Unit;
 
 use Fusion\Models\Menu;
 use Fusion\Tests\TestCase;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class MenuTest extends TestCase
 {
-	use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
-	/**
+    /**
      * @test
      * @group unit
      * @group menu

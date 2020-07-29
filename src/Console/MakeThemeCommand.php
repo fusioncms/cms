@@ -2,10 +2,9 @@
 
 namespace Fusion\Console;
 
-use Fusion\Facades\Theme;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class MakeThemeCommand extends Command
 {
@@ -31,10 +30,10 @@ class MakeThemeCommand extends Command
     public function handle()
     {
         $namespace = $this->argument('namespace');
-        $template  = $this->getTemplate();
-        $manifest  = $this->getManifest();
+        $template = $this->getTemplate();
+        $manifest = $this->getManifest();
 
-        if (! File::isDirectory($template)) {
+        if (!File::isDirectory($template)) {
             return $this->error("No template found at '{$template}'");
         }
 
@@ -45,19 +44,19 @@ class MakeThemeCommand extends Command
         File::makeDirectory(theme_path($namespace, 0755, true));
 
         foreach (File::allFiles($template, true) as $file) {
-            $content      = $this->replacePlaceholders($file->getContents(), $manifest);
+            $content = $this->replacePlaceholders($file->getContents(), $manifest);
             $relativePath = $file->getRelativePathname();
-            $filePath     = theme_path("{$namespace}/{$relativePath}");
-            $directory    = dirname($filePath);
+            $filePath = theme_path("{$namespace}/{$relativePath}");
+            $directory = dirname($filePath);
 
-            if (! File::isDirectory($directory)) {
+            if (!File::isDirectory($directory)) {
                 File::makeDirectory($directory, 0755, true);
             }
 
             File::put($filePath, $content);
         }
 
-        $this->info("Theme created successfully.");
+        $this->info('Theme created successfully.');
     }
 
     protected function getTemplate()
@@ -91,7 +90,8 @@ class MakeThemeCommand extends Command
     /**
      * Replace placeholders with actual content.
      *
-     * @param  string  $content
+     * @param string $content
+     *
      * @return mixed
      */
     protected function replacePlaceholders($content, $manifest)

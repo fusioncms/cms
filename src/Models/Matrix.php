@@ -2,16 +2,18 @@
 
 namespace Fusion\Models;
 
-use Illuminate\Support\Str;
+use Fusion\Concerns\CachesQueries;
 use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasFieldset;
-use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 
 class Matrix extends Model
 {
-    use CachesQueries, HasFieldset, HasActivity;
+    use CachesQueries;
+    use HasFieldset;
+    use HasActivity;
 
     protected $with = ['fieldsets'];
 
@@ -60,7 +62,7 @@ class Matrix extends Model
 
     public function getBuilder()
     {
-        $builder = 'Fusion\\Services\\Builders\\' . Str::studly($this->type);
+        $builder = 'Fusion\\Services\\Builders\\'.Str::studly($this->type);
         $builder = new $builder($this->handle);
 
         return $builder->make();
@@ -69,9 +71,9 @@ class Matrix extends Model
     public function getAdminPathAttribute()
     {
         if ($this->type === 'single') {
-            return '/single/' . $this->slug;
+            return '/single/'.$this->slug;
         } else {
-            return '/collection/' . $this->slug;
+            return '/collection/'.$this->slug;
         }
     }
 
@@ -82,7 +84,7 @@ class Matrix extends Model
      */
     public function getTableAttribute()
     {
-        return 'mx_' . $this->handle;
+        return 'mx_'.$this->handle;
     }
 
     public function parent()
@@ -98,20 +100,21 @@ class Matrix extends Model
     /**
      * Tap into activity before persisting to database.
      *
-     * @param  \Spatie\Activitylog\Models\Activity $activity
-     * @param  string   $eventName
+     * @param \Spatie\Activitylog\Models\Activity $activity
+     * @param string                              $eventName
+     *
      * @return void
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $matrix     = $activity->subject;
-        $action     = Str::ucfirst($eventName);
+        $matrix = $activity->subject;
+        $action = Str::ucfirst($eventName);
         $properties = [
             'icon' => 'hashtag',
-            'link' => "matrices/{$matrix->id}/edit"
+            'link' => "matrices/{$matrix->id}/edit",
         ];
 
         $activity->description = "{$action} matrix ({$matrix->name})";
-        $activity->properties  = $properties;
+        $activity->properties = $properties;
     }
 }

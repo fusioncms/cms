@@ -2,15 +2,11 @@
 
 namespace Fusion\Tests\Feature\Menu;
 
-use Fusion\Models\Menu;
 use Facades\MenuFactory;
+use Fusion\Models\Menu;
 use Fusion\Tests\TestCase;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MenuTest extends TestCase
@@ -58,7 +54,7 @@ class MenuTest extends TestCase
         $menu = MenuFactory::withName('Header')->create();
 
         $this->assertDatabaseHas('fieldsets', [
-            'name' => 'Menu: '.$menu->name
+            'name' => 'Menu: '.$menu->name,
         ]);
     }
 
@@ -105,7 +101,7 @@ class MenuTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/menus/' . $menu->id);
+            ->json('GET', '/api/menus/'.$menu->id);
     }
 
     /**
@@ -138,7 +134,7 @@ class MenuTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/menus/' . $menu->id, []);
+            ->json('PATCH', '/api/menus/'.$menu->id, []);
     }
 
     /**
@@ -156,7 +152,7 @@ class MenuTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/menus/' . $menu->id);
+            ->json('DELETE', '/api/menus/'.$menu->id);
     }
 
     /**
@@ -171,7 +167,7 @@ class MenuTest extends TestCase
 
         $menu = MenuFactory::create();
 
-        $data                = $menu->toArray();
+        $data = $menu->toArray();
         $data['description'] = 'This is the new menu description';
 
         $this
@@ -180,7 +176,7 @@ class MenuTest extends TestCase
 
         $this->assertDatabaseHas('menus', [
             'name'        => $data['name'],
-            'description' => $data['description']
+            'description' => $data['description'],
         ]);
     }
 
@@ -201,7 +197,7 @@ class MenuTest extends TestCase
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('menus', [
-            'name' => $menu->name
+            'name' => $menu->name,
         ]);
     }
 
@@ -341,7 +337,7 @@ class MenuTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $menu       = factory(Menu::class)->create()->toArray();
+        $menu = factory(Menu::class)->create()->toArray();
         $menu['id'] = null;
 
         $this
@@ -361,21 +357,21 @@ class MenuTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         $this
-            ->json('POST', '/api/menus', [ 'handle' => 'default' ])
+            ->json('POST', '/api/menus', ['handle' => 'default'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
 
         $this
-            ->json('POST', '/api/menus', [ 'handle' => 'for' ])
+            ->json('POST', '/api/menus', ['handle' => 'for'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
 
         $this
-            ->json('POST', '/api/menus', [ 'handle' => 'true' ])
+            ->json('POST', '/api/menus', ['handle' => 'true'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
     }
 }

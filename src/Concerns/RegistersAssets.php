@@ -45,12 +45,12 @@ trait RegistersAssets
     /**
      * @var array
      */
-    private $nodes = array();
+    private $nodes = [];
 
     /**
      * @var array
      */
-    private $nodeNames = array();
+    private $nodeNames = [];
 
     /**
      * Constructor method.
@@ -59,7 +59,7 @@ trait RegistersAssets
      */
     public function __construct()
     {
-        $this->assets = new Collection(['css' => array(), 'js' => array()]);
+        $this->assets = new Collection(['css' => [], 'js' => []]);
     }
 
     /**
@@ -91,10 +91,10 @@ trait RegistersAssets
 
         foreach ($assets as $path => $item) {
             if ($path === $this->lastAddedAsset) {
-                $assets[$path] = array(
+                $assets[$path] = [
                     'namespace'  => $item['namespace'],
-                    'dependency' => $dependency
-                );
+                    'dependency' => $dependency,
+                ];
 
                 $this->assets->put($this->lastAddedType, $assets);
             }
@@ -111,7 +111,7 @@ trait RegistersAssets
     public function css()
     {
         $cssCollection = $this->sort($this->assets->get('css'), 'css');
-        $output        = '';
+        $output = '';
 
         foreach ($cssCollection as $key => $value) {
             $output .= '<link rel="stylesheet" href="'.$value.'">'."\n";
@@ -128,7 +128,7 @@ trait RegistersAssets
     public function js()
     {
         $jsCollection = $this->sort($this->assets->get('js'), 'js');
-        $output       = '';
+        $output = '';
 
         foreach ($jsCollection as $key => $value) {
             $output .= '<script type="text/javascript" src="'.$value.'"></script>'."\n";
@@ -140,7 +140,8 @@ trait RegistersAssets
     /**
      * Determines if the passed asset is indeed an asset.
      *
-     * @param  string  $asset
+     * @param string $asset
+     *
      * @return bool
      */
     protected function isAsset($asset)
@@ -151,7 +152,8 @@ trait RegistersAssets
     /**
      * Determines if the passed asset is a Javascript file.
      *
-     * @param  string  $asset
+     * @param string $asset
+     *
      * @return bool
      */
     protected function isJs($asset)
@@ -162,7 +164,8 @@ trait RegistersAssets
     /**
      * Determines if the passed asset is a CSS file.
      *
-     * @param  string  $asset
+     * @param string $asset
+     *
      * @return bool
      */
     protected function isCss($asset)
@@ -173,7 +176,8 @@ trait RegistersAssets
     /**
      * Add an asset file to the collection.
      *
-     * @param  array|string  $assets
+     * @param array|string $assets
+     *
      * @return Assets
      */
     protected function addAsset($assets, $namespace = null)
@@ -186,18 +190,18 @@ trait RegistersAssets
             return $this;
         }
 
-        $type       = ($this->isCss($assets)) ? 'css' : 'js';
+        $type = ($this->isCss($assets)) ? 'css' : 'js';
         $collection = $this->assets->get($type);
 
-        if (! in_array($assets, $collection)) {
-            $collection[$assets] = array(
+        if (!in_array($assets, $collection)) {
+            $collection[$assets] = [
                 'namespace'  => $namespace,
-                'dependency' => array()
-            );
+                'dependency' => [],
+            ];
 
             $this->assets->put($type, $collection);
 
-            $this->lastAddedType  = $type;
+            $this->lastAddedType = $type;
             $this->lastAddedAsset = $assets;
         }
 
@@ -208,22 +212,23 @@ trait RegistersAssets
      * Sorts the dependencies of all assets, to ensure dependant
      * assets are loaded first.
      *
-     * @param  array  $assets
+     * @param array $assets
+     *
      * @return array
      */
-    protected function sort($assets = array(), $type)
+    protected function sort($assets = [], $type)
     {
-        $list = array();
+        $list = [];
 
         foreach ($assets as $key => $value) {
             if (isset($value['dependency'])) {
-                $list[$key] = array($this->getNamespacedAsset($value['dependency'], $type));
+                $list[$key] = [$this->getNamespacedAsset($value['dependency'], $type)];
             } else {
                 $list[$key] = null;
             }
         }
 
-        $dependencies       = $this->buildDependencies($list);
+        $dependencies = $this->buildDependencies($list);
         $sortedDependencies = $this->sortDependencies();
 
         return array_filter($sortedDependencies);
@@ -232,8 +237,9 @@ trait RegistersAssets
     /**
      * Retrievs the asset based on the defined namespace.
      *
-     * @param  string  $namespace
-     * @param  string  $type       (css|js)
+     * @param string $namespace
+     * @param string $type      (css|js)
+     *
      * @return string
      */
     protected function getNamespacedAsset($namespace, $type)
@@ -247,7 +253,7 @@ trait RegistersAssets
         }
     }
 
-    protected function buildDependencies($dependencies = array(), $parse = true)
+    protected function buildDependencies($dependencies = [], $parse = true)
     {
         $this->nodeNames = array_keys($dependencies);
 
@@ -257,19 +263,19 @@ trait RegistersAssets
 
         foreach ($dependencies as $pair) {
             foreach ($pair as $asset => $dependency) {
-                if (! isset($this->nodes[$asset])) {
+                if (!isset($this->nodes[$asset])) {
                     $this->addNode($asset);
                 }
 
-                if (! isset($this->nodes[$dependency])) {
+                if (!isset($this->nodes[$dependency])) {
                     $this->addNode($dependency);
                 }
 
-                if (! in_array($dependency, $this->nodes[$asset]->children)) {
+                if (!in_array($dependency, $this->nodes[$asset]->children)) {
                     $this->nodes[$asset]['children'][] = $dependency;
                 }
 
-                if (! in_array($asset, $this->nodes[$dependency]->parents)) {
+                if (!in_array($asset, $this->nodes[$dependency]->parents)) {
                     $this->nodes[$dependency]['parents'][] = $asset;
                 }
             }
@@ -279,12 +285,13 @@ trait RegistersAssets
     /**
      * Parses a list of dependencies into an array of dependency pairs.
      *
-     * @param  array  $list
+     * @param array $list
+     *
      * @return array
      */
-    protected function parseDependencyList(array $list = array())
+    protected function parseDependencyList(array $list = [])
     {
-        $parsedList = array();
+        $parsedList = [];
 
         foreach ($list as $name => $dependencies) {
             foreach ($dependencies as $dependency) {
@@ -298,15 +305,16 @@ trait RegistersAssets
     /**
      * Add a new asset node.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return void
      */
     protected function addNode($name = '')
     {
         $this->nodes[$name] = [
             'name'     => $name,
-            'parents'  => array(),
-            'children' => array(),
+            'parents'  => [],
+            'children' => [],
         ];
     }
 
@@ -317,16 +325,16 @@ trait RegistersAssets
      */
     protected function sortDependencies()
     {
-        $nodes     = $this->nodes;
+        $nodes = $this->nodes;
         $rootNodes = array_values($this->getRootNodes($nodes));
-        $sorted    = array();
+        $sorted = [];
 
         while (count($nodes) > 0) {
-            if ($rootNodes === array()) {
-                return array();
+            if ($rootNodes === []) {
+                return [];
             }
 
-            $node     = array_pop($rootNodes);
+            $node = array_pop($rootNodes);
             $sorted[] = $node['name'];
 
             for ($i = count($node['children']) - 1; $i >= 0; $i--) {
@@ -338,7 +346,7 @@ trait RegistersAssets
 
                 unset($nodes[$childNode]->parents[$parentPosition]);
 
-                if (! count($nodes[$childNode]['parents'])) {
+                if (!count($nodes[$childNode]['parents'])) {
                     array_push($rootNodes, $nodes[$childNode]);
                 }
             }
@@ -346,10 +354,10 @@ trait RegistersAssets
             unset($nodes[$node['name']]);
         }
 
-        $looseNodes = array();
+        $looseNodes = [];
 
         foreach ($this->nodeNames as $name) {
-            if (! in_array($name, $sorted)) {
+            if (!in_array($name, $sorted)) {
                 $looseNodes[] = $name;
             }
         }
@@ -360,15 +368,16 @@ trait RegistersAssets
     /**
      * Returns an array of node objects that do not have parents.
      *
-     * @param  array  $nodes
+     * @param array $nodes
+     *
      * @return array
      */
     protected function getRootNodes(array $nodes)
     {
-        $rootNodes = array();
+        $rootNodes = [];
 
         foreach ($nodes as $name => $node) {
-            if (! count($node->parents)) {
+            if (!count($node->parents)) {
                 $rootNodes[$name] = $node;
             }
         }

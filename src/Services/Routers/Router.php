@@ -15,7 +15,8 @@ abstract class Router
     /**
      * Handle the router request.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return mixed
      */
     abstract public function handle(Request $request);
@@ -23,8 +24,9 @@ abstract class Router
     /**
      * Determine if the passed route matches the request.
      *
-     * @param  string  $route
-     * @param  Request  $request
+     * @param string  $route
+     * @param Request $request
+     *
      * @return bool
      */
     protected function matchRoute($route, $request)
@@ -41,8 +43,9 @@ abstract class Router
     /**
      * Bind and return the data array to the passed route.
      *
-     * @param  string  $route
-     * @param  Request  $request
+     * @param string  $route
+     * @param Request $request
+     *
      * @return array
      */
     protected function bindRouteData($route, $request, array $additionalData = [])

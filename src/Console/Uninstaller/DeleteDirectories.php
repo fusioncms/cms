@@ -7,7 +7,7 @@ use Fusion\Concerns\CleansDirectories;
 class DeleteDirectories
 {
     use CleansDirectories;
-    
+
     /**
      * Execute the command.
      *

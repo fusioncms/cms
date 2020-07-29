@@ -2,14 +2,14 @@
 
 namespace Fusion\Concerns;
 
-use Storage;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\JsonFormatter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Storage;
 
 trait HasCustomLogger
 {
-	/**
+    /**
      * @var Monolog\Logger
      */
     protected $logger;
@@ -22,23 +22,25 @@ trait HasCustomLogger
     /**
      * Set logger instance.
      *
-     * @param  string $logPath
+     * @param string $logPath
+     *
      * @return void
      */
     protected function createLogger($logPath)
     {
-    	$stream = new StreamHandler(Storage::path($logPath));
-    	$stream->setFormatter(new JsonFormatter());
+        $stream = new StreamHandler(Storage::path($logPath));
+        $stream->setFormatter(new JsonFormatter());
 
         $this->logPath = $logPath;
-    	$this->logger  = new Logger(basename($logPath), [ $stream ]);
+        $this->logger = new Logger(basename($logPath), [$stream]);
     }
 
     /**
      * Record info message w/ context.
      *
-     * @param  string $message
-     * @param  array  $context
+     * @param string $message
+     * @param array  $context
+     *
      * @return void
      */
     protected function info($message, array $context = [])
@@ -49,8 +51,9 @@ trait HasCustomLogger
     /**
      * Record notice message w/ context.
      *
-     * @param  string $message
-     * @param  array  $context
+     * @param string $message
+     * @param array  $context
+     *
      * @return void
      */
     protected function notice($message, array $context = [])
@@ -61,8 +64,9 @@ trait HasCustomLogger
     /**
      * Record error message w/ context.
      *
-     * @param  string $message
-     * @param  arra   $context
+     * @param string $message
+     * @param arra   $context
+     *
      * @return void
      */
     protected function error($message, array $context = [])

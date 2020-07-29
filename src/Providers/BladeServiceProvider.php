@@ -3,7 +3,6 @@
 namespace Fusion\Providers;
 
 use Blade;
-use Fusion;
 use Illuminate\Support\ServiceProvider;
 
 class BladeServiceProvider extends ServiceProvider
@@ -38,13 +37,13 @@ class BladeServiceProvider extends ServiceProvider
         });
 
         Blade::directive('assets', function ($type) {
-            switch($type) {
+            switch ($type) {
                 case "'css'":
-                    return "<?php echo Fusion::css(); ?>";
+                    return '<?php echo Fusion::css(); ?>';
                     break;
 
                 case "'js'":
-                return "<?php echo Fusion::js(); ?>";
+                return '<?php echo Fusion::js(); ?>';
                     break;
 
                 default:
@@ -72,8 +71,8 @@ class BladeServiceProvider extends ServiceProvider
             preg_match_all('/\((.*?)\)/i', $expression, $matches);
 
             $match = $matches[1][0];
-            $args  = explode(',', $match);
-            $name  = $args[0];
+            $args = explode(',', $match);
+            $name = $args[0];
 
             $name = str_replace('"', '', $name);
             $name = str_replace("'", '', $name);
@@ -84,7 +83,7 @@ class BladeServiceProvider extends ServiceProvider
  function {$name}";
 
             if (count($args)) {
-                $code .= '(' . implode(',', $args) . ')';
+                $code .= '('.implode(',', $args).')';
             } else {
                 $code .= '()';
             }
@@ -113,8 +112,8 @@ class BladeServiceProvider extends ServiceProvider
         });
 
         Blade::directive('honeypot', function ($expression) {
-            return "<?php
- echo honeypot_fields(); ?>";
+            return '<?php
+ echo honeypot_fields(); ?>';
         });
     }
 }

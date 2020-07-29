@@ -2,11 +2,11 @@
 
 namespace Fusion\Http\Controllers\API\Fields;
 
-use Fusion\Models\Fieldset;
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\FieldsetRequest;
 use Fusion\Http\Resources\FieldsetResource;
+use Fusion\Models\Fieldset;
+use Illuminate\Http\Request;
 
 class FieldsetController extends Controller
 {
@@ -14,6 +14,7 @@ class FieldsetController extends Controller
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -28,7 +29,8 @@ class FieldsetController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Fusion\Models\Fieldset  $fieldset
+     * @param \Fusion\Models\Fieldset $fieldset
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Fieldset $fieldset)
@@ -41,7 +43,8 @@ class FieldsetController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Fusion\Http\Requests\FieldsetRequest $request
+     * @param \Fusion\Http\Requests\FieldsetRequest $request
+     *
      * @return \Fusion\Http\Resources\FieldsetResource
      */
     public function store(FieldsetRequest $request)
@@ -54,8 +57,9 @@ class FieldsetController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Fusion\Http\Requests\FieldsetRequest $request
-     * @param  \Fusion\Models\Fieldset               $fieldset
+     * @param \Fusion\Http\Requests\FieldsetRequest $request
+     * @param \Fusion\Models\Fieldset               $fieldset
+     *
      * @return \Fusion\Http\Resources\FieldsetResource
      */
     public function update(FieldsetRequest $request, Fieldset $fieldset)
@@ -68,7 +72,8 @@ class FieldsetController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Fusion\Models\Fieldset  $fieldset
+     * @param \Fusion\Models\Fieldset $fieldset
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Fieldset $fieldset)

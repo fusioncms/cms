@@ -4,7 +4,6 @@ namespace Fusion\Console\Addons;
 
 use Fusion\Facades\Addon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Database\Migrations\Migrator;
 
@@ -36,7 +35,8 @@ class ResetCommand extends Command
     /**
      * Create a new migration rollback command instance.
      *
-     * @param  \Illuminate\Database\Migrations\Migrator  $migrator
+     * @param \Illuminate\Database\Migrations\Migrator $migrator
+     *
      * @return void
      */
     public function __construct(Migrator $migrator)
@@ -53,14 +53,15 @@ class ResetCommand extends Command
      */
     public function handle()
     {
-        if (! $this->confirmToProceed()) {
+        if (!$this->confirmToProceed()) {
             return 1;
         }
 
         $addon = Addon::where('namespace', $this->argument('namespace'))->first();
 
-        if (! $addon and $this->argument('namespace')) {
+        if (!$addon and $this->argument('namespace')) {
             $this->comment("The \"{$this->argument('namespace')}\" addon does not exist.");
+
             return;
         }
 
@@ -69,7 +70,7 @@ class ResetCommand extends Command
         if ($addon) {
             $paths[] = addon_path("{$addon['namespace']}/database/migrations");
         } else {
-            Addon::enabled()->each(function($addon) use (&$paths) {
+            Addon::enabled()->each(function ($addon) use (&$paths) {
                 $paths[] = addon_path("{$addon['namespace']}/database/migrations");
             });
         }
@@ -82,7 +83,8 @@ class ResetCommand extends Command
         $migrations = $this->migrator->reset($paths);
 
         if (count($migrations) === 0) {
-            $this->info("Nothing to rollback.");
+            $this->info('Nothing to rollback.');
+
             return;
         }
 

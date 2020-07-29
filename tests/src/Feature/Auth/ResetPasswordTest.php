@@ -2,12 +2,12 @@
 
 namespace Fusion\Tests\Feature\Users;
 
-use Hash;
 use Event;
-use Password;
 use Fusion\Tests\TestCase;
+use Hash;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Password;
 
 class ResetPasswordTest extends TestCase
 {

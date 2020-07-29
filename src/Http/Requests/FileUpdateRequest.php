@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Storage;
 
 class FileUpdateRequest extends FormRequest
 {
@@ -31,7 +31,7 @@ class FileUpdateRequest extends FormRequest
         if ($oldLocation !== $newLocation) {
             Storage::disk('public')->move($oldLocation, $newLocation);
 
-            $this->merge([ 'location' => $newLocation ]);
+            $this->merge(['location' => $newLocation]);
         }
     }
 

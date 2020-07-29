@@ -29,7 +29,7 @@ class SelectFieldtype extends Fieldtype
      */
     public $settings = [
         'multiple' => 0,
-        'options' => []
+        'options'  => [],
     ];
 
     /**

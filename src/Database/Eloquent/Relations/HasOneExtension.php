@@ -2,35 +2,34 @@
 
 namespace Fusion\Database\Eloquent\Relations;
 
-use Illuminate\Support\Str;
 use Fusion\Models\Extension;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 class HasOneExtension extends HasOne
 {
-	/**
-	 * Extension Manager
-	 * 
-	 * @var \Fusion\Models\Extension
-	 */
-	protected $extension;
+    /**
+     * Extension Manager.
+     *
+     * @var \Fusion\Models\Extension
+     */
+    protected $extension;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param \Illuminate\Database\Eloquent\Model
-	 */
-	public function __construct(Model $parent)
-	{
-		$this->extension = Extension::firstOrCreate([
-			'name'   => Str::studly($parent->getTable()),
-			'handle' => $parent->getTable(),
-		]);
+    /**
+     * Constructor.
+     *
+     * @param \Illuminate\Database\Eloquent\Model
+     */
+    public function __construct(Model $parent)
+    {
+        $this->extension = Extension::firstOrCreate([
+            'name'   => Str::studly($parent->getTable()),
+            'handle' => $parent->getTable(),
+        ]);
 
-		parent::__construct($this->extension->getBuilder()->query(), $parent, 'related_id', 'id');
-	}
+        parent::__construct($this->extension->getBuilder()->query(), $parent, 'related_id', 'id');
+    }
 
     /**
      * Set the base constraints on the relation query.
@@ -40,10 +39,10 @@ class HasOneExtension extends HasOne
     public function addConstraints()
     {
         if (static::$constraints && $this->parent->exists) {
-        	$this->query->firstOrCreate([
-				'extension_id' => $this->extension->id,
-				'related_id'   => $this->getParentKey(),
-			]);
+            $this->query->firstOrCreate([
+                'extension_id' => $this->extension->id,
+                'related_id'   => $this->getParentKey(),
+            ]);
         }
     }
 }

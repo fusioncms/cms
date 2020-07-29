@@ -2,24 +2,22 @@
 
 namespace Fusion\Tests\Feature;
 
-use ZipArchive;
 use Fusion\Facades\Addon;
 use Fusion\Tests\TestCase;
-use Illuminate\Support\Str;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use ZipArchive;
 
 class AddonTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
@@ -52,7 +50,7 @@ class AddonTest extends TestCase
         $response = $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/addons/upload', [
-                'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true)
+                'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true),
             ])->assertStatus(200);
 
         $addon = Addon::where('namespace', 'Omega')->first();
@@ -75,7 +73,7 @@ class AddonTest extends TestCase
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/addons/upload', [
-                'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true)
+                'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true),
             ])->assertStatus(200);
 
         $addon = Addon::where('namespace', 'Omega')->first();
@@ -106,7 +104,7 @@ class AddonTest extends TestCase
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/addons/upload', [
-                'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true)
+                'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true),
             ]);
 
         $this
@@ -232,11 +230,11 @@ class AddonTest extends TestCase
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/addons/upload', [
-                'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true)
+                'file-upload' => new UploadedFile($addonPath, $addonName, 'application/zip', null, true),
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'file-upload' => 'An addon requires the following files: addon.json.'
+                'file-upload' => 'An addon requires the following files: addon.json.',
             ]);
     }
 
@@ -251,7 +249,7 @@ class AddonTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', "/api/addons/foobar/disable")
+            ->json('POST', '/api/addons/foobar/disable')
             ->assertStatus(200);
 
         $this->assertTrue(Addon::isNotEnabled('Foobar'));
@@ -268,7 +266,7 @@ class AddonTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', "/api/addons/foobar/enable")
+            ->json('POST', '/api/addons/foobar/enable')
             ->assertStatus(200);
 
         $this->assertTrue(Addon::isEnabled('Foobar'));
@@ -277,16 +275,17 @@ class AddonTest extends TestCase
     /**
      * Generate fake addon zip for testing.
      *
-     * @param  string $addonName
+     * @param string $addonName
+     *
      * @return string
      */
     private function generateAddon($addonNamespace = null, $includesRequirements = true)
     {
         Storage::fake();
 
-        $zipArchive     = new ZipArchive;
+        $zipArchive = new ZipArchive();
         $addonNamespace = $addonNamespace ?? $this->faker->word;
-        $addonPath      = Storage::path($addonNamespace . '.zip');
+        $addonPath = Storage::path($addonNamespace.'.zip');
 
         $settings = [
             'name'        => $addonNamespace,
@@ -295,7 +294,7 @@ class AddonTest extends TestCase
             'description' => $this->faker->text,
         ];
 
-        if ($zipArchive->open($addonPath, ZipArchive::CREATE) === TRUE) {
+        if ($zipArchive->open($addonPath, ZipArchive::CREATE) === true) {
             $zipArchive->addEmptyDir($addonNamespace);
             $zipArchive->addEmptyDir("{$addonNamespace}/src");
             $zipArchive->addEmptyDir("{$addonNamespace}/src/Models");
@@ -305,7 +304,7 @@ class AddonTest extends TestCase
             $zipArchive->addEmptyDir("{$addonNamespace}/public/css");
 
             if ($includesRequirements) {
-                $zipArchive->addFromString($addonNamespace . '/addon.json', collect($settings)->toJson());
+                $zipArchive->addFromString($addonNamespace.'/addon.json', collect($settings)->toJson());
             }
 
             $zipArchive->close();

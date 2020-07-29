@@ -13,6 +13,6 @@ class CreateDefaultPermissions
      */
     public function handle()
     {
-    	dispatch(new SyncPermissions);
+        dispatch(new SyncPermissions());
     }
 }

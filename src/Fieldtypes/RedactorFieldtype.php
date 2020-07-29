@@ -28,7 +28,7 @@ class RedactorFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
-        'placeholder' => ''
+        'placeholder' => '',
     ];
 
     /**

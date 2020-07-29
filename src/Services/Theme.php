@@ -2,7 +2,6 @@
 
 namespace Fusion\Services;
 
-use Illuminate\Support\Str;
 use Composer\Autoload\ClassLoader;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -19,7 +18,8 @@ class Theme extends Collection
     /**
      * Activate the specified theme.
      *
-     * @param  string  $theme
+     * @param string $theme
+     *
      * @return void
      */
     public function activate($theme)
@@ -58,7 +58,8 @@ class Theme extends Collection
     /**
      * Set the active theme property.
      *
-     * @param  string  $theme
+     * @param string $theme
+     *
      * @return void
      */
     public function setTheme($theme)
@@ -83,7 +84,7 @@ class Theme extends Collection
      */
     protected function createSymlink()
     {
-        if (! File::exists(public_path('theme'))) {
+        if (!File::exists(public_path('theme'))) {
             $folder = $this->active()->get('namespace');
 
             if (File::exists(theme_path("{$folder}/public"))) {
@@ -131,7 +132,7 @@ class Theme extends Collection
     protected function registerClassLoader()
     {
         $namespace = $this->active()->get('namespace');
-        $loader    = new ClassLoader();
+        $loader = new ClassLoader();
 
         $loader->addPsr4("Themes\\{$namespace}\\", theme_path("{$namespace}/src"));
         $loader->register();

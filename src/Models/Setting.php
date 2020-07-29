@@ -2,16 +2,15 @@
 
 namespace Fusion\Models;
 
-use Illuminate\Support\Str;
-use Fusion\Concerns\HasFieldset;
 use Fusion\Concerns\CachesQueries;
+use Fusion\Concerns\HasFieldset;
 use Fusion\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Str;
 
 class Setting extends Model
 {
-    use CachesQueries, HasFieldset;
+    use CachesQueries;
+    use HasFieldset;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -57,7 +56,7 @@ class Setting extends Model
         $name = Str::studly($this->handle);
         $path = fusion_path("/src/Models/Settings/{$name}.php");
 
-        if (! file_exists($path)) {
+        if (!file_exists($path)) {
             $this->getBuilder()->firstOrCreate(['id' => 1, 'setting_id' => $this->id]);
         }
 

@@ -2,9 +2,9 @@
 
 namespace Fusion\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 
 class DirectoryRequest extends FormRequest
 {
@@ -15,7 +15,7 @@ class DirectoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('directories.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('directories.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**
@@ -47,14 +47,15 @@ class DirectoryRequest extends FormRequest
                                 return $query
                                     ->where('slug', $this->slug)
                                     ->where('parent_id', $this->parent_id);
-                        }),
+                            }),
         ];
     }
 
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param \Illuminate\Validation\Validator $validator
+     *
      * @return void
      */
     public function withValidator($validator)
