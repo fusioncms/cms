@@ -44,7 +44,7 @@ class FusionServiceProvider extends ServiceProvider
     public function register()
     {
         if (! defined('FUSION_VERSION')) {
-            define('FUSION_VERSION', '6.0.0-beta.9');
+            define('FUSION_VERSION', '6.0.0-beta.10');
         }
 
         $this->registerProviders();
