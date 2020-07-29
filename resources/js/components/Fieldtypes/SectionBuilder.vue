@@ -54,14 +54,8 @@
         },
 
         computed: {
-            sections: {
-                get() {
-                    return this.value
-                },
-
-                set(value) {
-                    // this.$emit('input', value)
-                }
+            sections() {
+                return this.value
             }
         },
 
@@ -84,7 +78,6 @@
                     handle: handle,
                     description: '',
                     placement: 'body',
-                    order: this.sections.length,
                     fields: [],
                 })
             },
@@ -114,10 +107,6 @@
             fieldCount(count) {
                 return `${count >= 0 ? count : 1} field`
             },
-
-            reorder(fields) {
-                _.each(fields, (field, order) => field.order = order)
-            }
         },
 
         mounted() {

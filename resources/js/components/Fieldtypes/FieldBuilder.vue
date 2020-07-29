@@ -148,7 +148,6 @@
                     handle:     _.snakeCase(name),
                     help:       data.help || '',
                     settings:   data.settings ? _.cloneDeep(data.settings, true) : _.cloneDeep(type.settings, true),
-                    order:      this.fields.length,
                     validation: data.validation || '',
                     prototype:  prototype
                 }

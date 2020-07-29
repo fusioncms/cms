@@ -44,7 +44,6 @@
             <div class="col mt-6 w-full">
                 <field-builder
                     v-model="section.fields"
-                    @input="reorder(section.fields)"
                     :fieldtypes="$parent.fieldtypes"
                     :sections="$parent.sections"
                     :sectionHandle="section.handle">
