@@ -2,11 +2,11 @@
 
 namespace Fusion\Jobs;
 
-use Menu;
 use Fusion\Models\Matrix;
 use Fusion\Models\Taxonomy;
-use Illuminate\Support\Str;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Str;
+use Menu;
 
 class LoadNavigation
 {
@@ -19,7 +19,7 @@ class LoadNavigation
      */
     public function handle()
     {
-        $matrices   = Matrix::where('sidebar', true)->where('parent_id', 0)->orderBy('name')->get();
+        $matrices = Matrix::where('sidebar', true)->where('parent_id', 0)->orderBy('name')->get();
         $taxonomies = Taxonomy::where('sidebar', true)->orderBy('name')->get();
 
         Menu::make('admin', function ($menu) use ($matrices, $taxonomies) {
@@ -34,7 +34,7 @@ class LoadNavigation
             ]);
 
             $menu->add('Inbox')->data([
-                'to' => '/inbox',
+                'to'   => '/inbox',
                 'icon' => 'inbox',
             ]);
 
@@ -48,12 +48,12 @@ class LoadNavigation
                         ]);
 
                         $menu->{Str::camel($matrix->name)}->add(($matrix->type == 'single' ? $matrix->reference_singular : $matrix->reference_plural), '#')->data([
-                            'to' => $matrix->adminPath
+                            'to' => $matrix->adminPath,
                         ]);
 
                         foreach ($matrix->children as $child) {
                             $menu->{Str::camel($matrix->name)}->add(($child->type == 'single' ? $child->reference_singular : $child->reference_plural))->data([
-                                'to' => $child->adminPath
+                                'to' => $child->adminPath,
                             ]);
                         }
                     } else {
@@ -62,7 +62,6 @@ class LoadNavigation
                             'icon' => $matrix->icon ?: 'pencil-alt',
                         ]);
                     }
-
                 }
             }
 
@@ -102,7 +101,7 @@ class LoadNavigation
             ]);
 
             $menu->configure->add('Forms')->data([
-                'to' => '/forms',
+                'to'   => '/forms',
                 'icon' => 'paper-plane',
             ]);
 
@@ -147,7 +146,7 @@ class LoadNavigation
 
             $menu->tools->add('Logs')->data([
                 'to'   => '/logs',
-                'icon' => 'bug'
+                'icon' => 'bug',
             ]);
 
             $menu->add('Users', '#')->data([
@@ -172,7 +171,7 @@ class LoadNavigation
             ]);
 
             $menu->add('Addons', '#')->data([
-                'to'   => '/addons',
+                'to'    => '/addons',
                 'icon'  => 'box-open',
             ]);
 

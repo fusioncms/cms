@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Models\Addon;
 use Fusion\Http\Controllers\DataTableController;
+use Fusion\Models\Addon;
 
 class AddonController extends DataTableController
 {
@@ -17,7 +17,7 @@ class AddonController extends DataTableController
         return [
             'name',
             'version',
-            'description'
+            'description',
         ];
     }
 
@@ -26,7 +26,7 @@ class AddonController extends DataTableController
         return [
             'name',
             'version',
-            'description'
+            'description',
         ];
     }
 
@@ -35,7 +35,7 @@ class AddonController extends DataTableController
         return [
             'name',
             'version',
-            'description'
+            'description',
         ];
     }
 

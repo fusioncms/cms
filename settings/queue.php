@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'name'        => 'Queue',
+    'name'        => 'Queue',
     'group'       => 'Services',
     'icon'        => 'inbox',
     'description' => 'Configure your desired queue provider.',

@@ -2,10 +2,8 @@
 
 namespace Fusion\Tests\FeatureSettings;
 
-use Exception;
-use Fusion\Tests\TestCase;
 use Fusion\Facades\Setting;
-use InvalidArgumentException;
+use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SettingTest extends TestCase
@@ -19,16 +17,16 @@ class SettingTest extends TestCase
      */
     public function a_setting_can_be_set_at_runtime()
     {
-    	$this->assertTrue(setting('system.website_title') === 'My FusionCMS Website');
-    	$this->assertTrue(setting('system.website_slogan') === 'Another awesome website powered by FusionCMS!');
+        $this->assertTrue(setting('system.website_title') === 'My FusionCMS Website');
+        $this->assertTrue(setting('system.website_slogan') === 'Another awesome website powered by FusionCMS!');
 
-		setting([
-			'system.website_title'  => 'My New Website',
-			'system.website_slogan' => 'An awesome website!'
-		]);
+        setting([
+            'system.website_title'  => 'My New Website',
+            'system.website_slogan' => 'An awesome website!',
+        ]);
 
-		$this->assertTrue(setting('system.website_title') === 'My New Website');
-		$this->assertTrue(setting('system.website_slogan') === 'An awesome website!');
+        $this->assertTrue(setting('system.website_title') === 'My New Website');
+        $this->assertTrue(setting('system.website_slogan') === 'An awesome website!');
     }
 
     /**
@@ -111,7 +109,7 @@ class SettingTest extends TestCase
 
         Setting::set([
             'system.website_title'  => 'My New Website',
-            'system.website_slogan' => 'An awesome website!'
+            'system.website_slogan' => 'An awesome website!',
         ]);
 
         $this->assertTrue(Setting::get('system.website_title') === 'My New Website');
@@ -126,7 +124,7 @@ class SettingTest extends TestCase
     public function settings_facade_can_handle_requests_for_setting_existence()
     {
         $this->assertTrue(Setting::has('system.website_title'));
-        
+
         $this->assertFalse(Setting::has('system'));
         $this->assertFalse(Setting::has('system.foo'));
         $this->assertFalse(Setting::has('bar'));
@@ -145,7 +143,7 @@ class SettingTest extends TestCase
         // update two `overridding` settings
         setting([
             'mail.mail_server' => 'admin@website.com',
-            'mail.mail_name'   => 'FusionCMS Admin'
+            'mail.mail_name'   => 'FusionCMS Admin',
         ]);
 
         $this->assertEquals(config('mail.from.address'), 'admin@website.com');

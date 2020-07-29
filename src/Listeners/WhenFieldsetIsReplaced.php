@@ -10,7 +10,8 @@ class WhenFieldsetIsReplaced
     /**
      * Handle the event.
      *
-     * @param  FieldsetReplaced  $event
+     * @param FieldsetReplaced $event
+     *
      * @return void
      */
     public function handle(FieldsetReplaced $event)
@@ -18,7 +19,7 @@ class WhenFieldsetIsReplaced
         $columns = $event->previous->diff($event->current)->toArray();
 
         foreach ($columns as $column) {
-            if ($this->shouldDeleteTableColumn($event->table, $column)){
+            if ($this->shouldDeleteTableColumn($event->table, $column)) {
                 Schema::table($event->table, function ($blueprint) use ($column) {
                     $blueprint->dropColumn($column);
                 });
@@ -30,7 +31,8 @@ class WhenFieldsetIsReplaced
      * Determine if the column should be deleted or not.
      *
      * @param
-     * @return boolean
+     *
+     * @return bool
      */
     protected function shouldDeleteTableColumn($table, $column)
     {

@@ -2,9 +2,9 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Models\Extension;
 use Fusion\Database\Migration;
 use Fusion\Database\Schema\Blueprint;
+use Fusion\Models\Extension;
 
 class ExtensionObserver
 {
@@ -16,7 +16,7 @@ class ExtensionObserver
     /**
      * Create a new ExtensionObserver instance.
      *
-     * @param  \Fusion\Database\Migration  $migration
+     * @param \Fusion\Database\Migration $migration
      */
     public function __construct(Migration $migration)
     {
@@ -26,7 +26,8 @@ class ExtensionObserver
     /**
      * Handle the extension "created" event.
      *
-     * @param  \Fusion\Models\Extension  $extension
+     * @param \Fusion\Models\Extension $extension
+     *
      * @return void
      */
     public function created(Extension $extension)
@@ -46,11 +47,11 @@ class ExtensionObserver
         });
     }
 
-
     /**
      * Handle the extension "deleted" event.
      *
-     * @param  \Fusion\Models\Extension  $extension
+     * @param \Fusion\Models\Extension $extension
+     *
      * @return void
      */
     public function deleted(Extension $extension)

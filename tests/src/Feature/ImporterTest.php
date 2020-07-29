@@ -3,17 +3,14 @@
 namespace Fusion\Tests\Feature;
 
 use Fusion\Models\Import;
-use Facades\ImportFactory;
 use Fusion\Tests\TestCase;
-use Fusion\Services\Imports\PreviewImport;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ImporterTest extends TestCase
 {
-	use RefreshDatabase;
+    use RefreshDatabase;
 
     public function setUp(): void
     {
@@ -27,8 +24,8 @@ class ImporterTest extends TestCase
      * @group fusioncms
      * @group imports
      */
-	public function a_user_with_permission_can_create_an_import()
-	{
+    public function a_user_with_permission_can_create_an_import()
+    {
         $attributes = factory(Import::class)->make()->toArray();
 
         $this
@@ -42,21 +39,21 @@ class ImporterTest extends TestCase
             'module' => $attributes['module'],
             'source' => $attributes['source'],
         ]);
-	}
+    }
 
-	/**
+    /**
      * @test
      * @group fusioncms
      * @group feature
      * @group imports
      * @group auth
      */
-	public function a_guest_cannot_not_create_an_import()
-	{
-		$this->expectException(AuthenticationException::class);
+    public function a_guest_cannot_not_create_an_import()
+    {
+        $this->expectException(AuthenticationException::class);
 
         $this->json('POST', '/api/imports', []);
-	}
+    }
 
     /**
      * @test
@@ -105,7 +102,7 @@ class ImporterTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/imports/' . $import->id);
+            ->json('GET', '/api/imports/'.$import->id);
     }
 
     /**
@@ -123,7 +120,7 @@ class ImporterTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/imports/' . $import->id, []);
+            ->json('PATCH', '/api/imports/'.$import->id, []);
     }
 
     /**
@@ -141,7 +138,7 @@ class ImporterTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/imports/' . $import->id);
+            ->json('DELETE', '/api/imports/'.$import->id);
     }
 
     /**
@@ -153,7 +150,7 @@ class ImporterTest extends TestCase
     public function an_import_cannot_not_create_with_disable_and_delete_strategies()
     {
         $attributes = factory(Import::class)->make(
-            ['strategy' => ['disable','delete']]
+            ['strategy' => ['disable', 'delete']]
         )->toArray();
 
         $this
@@ -188,50 +185,50 @@ class ImporterTest extends TestCase
     //     ], $import->fresh()->preview->toArray());
     // }
 
-	/**
+    /**
      * @test
      * @group fusioncms
      * @group imports
      */
-	public function a_user_with_permission_can_update_an_import()
-	{
+    public function a_user_with_permission_can_update_an_import()
+    {
         $this->actingAs($this->owner, 'api');
 
         $import = factory(Import::class)->create();
 
-        $attributes           = $import->toArray();
-        $attributes['name']   = 'Updated Name';
+        $attributes = $import->toArray();
+        $attributes['name'] = 'Updated Name';
         $attributes['handle'] = str_handle($attributes['name']);
 
         // ..when PATCH request submitted
         // ..assert 200 status response
         $response = $this->json(
             'PATCH',
-            '/api/imports/' . $import->id,
+            '/api/imports/'.$import->id,
             $attributes
         )->assertStatus(200);
 
         // ..assert data was persisted.
         $this->assertDatabaseHas('imports', [
             'name'   => 'Updated Name',
-            'handle' => 'updated_name'
+            'handle' => 'updated_name',
         ]);
-	}
+    }
 
-	/**
+    /**
      * @test
      * @group fusioncms
      * @group imports
      */
-	public function a_user_with_permission_can_delete_an_import()
-	{
+    public function a_user_with_permission_can_delete_an_import()
+    {
         $this->actingAs($this->owner, 'api');
 
         $import = factory(Import::class)->create();
 
         $response = $this->json(
             'DELETE',
-            '/api/imports/' . $import->id
+            '/api/imports/'.$import->id
         )->assertStatus(200);
-	}
+    }
 }

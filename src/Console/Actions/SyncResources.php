@@ -15,7 +15,7 @@ class SyncResources
     {
         foreach ($this->links() as $link => $target) {
             try {
-                if (! file_exists($link) && file_exists($target)) {
+                if (!file_exists($link) && file_exists($target)) {
                     File::link($target, $link);
                 }
             } catch (\Exception $e) {

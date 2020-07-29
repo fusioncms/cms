@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Support\Str;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class RoleRequest extends FormRequest
 {
@@ -14,7 +14,7 @@ class RoleRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('roles.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('roles.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**

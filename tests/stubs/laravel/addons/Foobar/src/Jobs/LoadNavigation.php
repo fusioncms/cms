@@ -2,8 +2,8 @@
 
 namespace Addons\Foobar\Jobs;
 
-use Menu;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Menu;
 
 class LoadNavigation
 {
@@ -19,7 +19,7 @@ class LoadNavigation
         if ($menu = Menu::get('admin')) {
             $menu->add('Foobar')->data([
                 'to'    => '/foobar',
-                'icon'  => 'rocket'
+                'icon'  => 'rocket',
             ]);
 
             $menu->foobar->add('Dashboard')->data([

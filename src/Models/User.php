@@ -2,27 +2,27 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\HasRoles;
 use Fusion\Concerns\HasActivity;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
 use Fusion\Concerns\HasDynamicRelationships;
+use Fusion\Concerns\HasRoles;
+use Fusion\Concerns\MustVerifyEmail as UserMustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\CausesActivity;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Fusion\Concerns\MustVerifyEmail as UserMustVerifyEmail;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasRoles,
-        UserMustVerifyEmail,
-        HasApiTokens,
-        Notifiable,
-        HasDynamicRelationships,
-        HasActivity,
-        CausesActivity;
+    use HasRoles;
+    use UserMustVerifyEmail;
+    use HasApiTokens;
+    use Notifiable;
+    use HasDynamicRelationships;
+    use HasActivity;
+    use CausesActivity;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -120,7 +120,8 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Returns the URL to the user's Gravatar.
      *
-     * @param  int $size
+     * @param int $size
+     *
      * @return string
      */
     public function gravatar($size = 30)
@@ -132,13 +133,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getVerifiedAttribute()
     {
-        return ! is_null($this->email_verified_at);
+        return !is_null($this->email_verified_at);
     }
 
     /**
      * Scope to query resource.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSearchQuery(Builder $query, $value)
@@ -151,20 +153,21 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Tap into activity before persisting to database.
      *
-     * @param  \Spatie\Activitylog\Models\Activity $activity
-     * @param  string   $eventName
+     * @param \Spatie\Activitylog\Models\Activity $activity
+     * @param string                              $eventName
+     *
      * @return void
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $subject    = $activity->subject;
-        $action     = ucfirst($eventName);
+        $subject = $activity->subject;
+        $action = ucfirst($eventName);
         $properties = [
             'link' => "users/{$subject->id}/edit",
-            'icon' => 'users'
+            'icon' => 'users',
         ];
 
         $activity->description = "{$action} user account ({$subject->name})";
-        $activity->properties  = $properties;
+        $activity->properties = $properties;
     }
 }

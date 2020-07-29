@@ -13,7 +13,7 @@ class HomepageRouter extends Router
             $single = Matrix::where('route', '/')->first();
 
             if ($single) {
-                $data = fusion()->get('singles/' . $single->id);
+                $data = fusion()->get('singles/'.$single->id);
                 $data = $this->bindRouteData('/', $request, (array) $data->data);
 
                 return view($single->template, $data);

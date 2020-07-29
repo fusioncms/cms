@@ -29,7 +29,7 @@ class USStateFieldtype extends Fieldtype
      */
     public $settings = [
         'multiple'   => 0,
-        'filterable' => false
+        'filterable' => false,
     ];
 
     public $data = [
@@ -91,7 +91,7 @@ class USStateFieldtype extends Fieldtype
         'WA' => 'Washington',
         'WV' => 'West Virginia',
         'WI' => 'Wisconsin',
-        'WY' => 'Wyoming'
+        'WY' => 'Wyoming',
     ];
 
     /**

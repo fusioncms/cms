@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'name'        => 'Cache',
+    'name'        => 'Cache',
     'group'       => 'General',
     'icon'        => 'bolt',
     'description' => 'Flush your websites cache.',

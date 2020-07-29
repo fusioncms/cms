@@ -2,19 +2,20 @@
 
 namespace Fusion\Http\Controllers\API\Users;
 
-use Fusion\Models\User;
 use Fusion\Events\UserDeleted;
-use Illuminate\Http\Request;
-use Fusion\Http\Requests\UserRequest;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Requests\UserRequest;
 use Fusion\Http\Resources\UserResource;
+use Fusion\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     /**
      * Return a paginated resource of all users.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Support\Collection
      */
     public function index(Request $request)
@@ -29,7 +30,8 @@ class UserController extends Controller
     /**
      * Return the specific user.
      *
-     * @param  \Fusion\Models\User  $user
+     * @param \Fusion\Models\User $user
+     *
      * @return \Fusion\Http\Resources\UserResource
      */
     public function show(User $user)
@@ -42,12 +44,13 @@ class UserController extends Controller
     /**
      * Store a new user.
      *
-     * @param  \Fusion\Http\Requests\UserRequest  $request
+     * @param \Fusion\Http\Requests\UserRequest $request
+     *
      * @return \Fusion\Http\Resources\UserResource
      */
     public function store(UserRequest $request)
     {
-        $attributes             = $request->validated();
+        $attributes = $request->validated();
         $attributes['password'] = bcrypt($attributes['password']);
 
         $user = User::create($attributes);
@@ -57,7 +60,7 @@ class UserController extends Controller
             if ($attributes['role'] === 'owner') {
                 User::role('owner')
                     ->where('id', '<>', $user->id)
-                    ->each(function($user) {
+                    ->each(function ($user) {
                         $user->syncRoles('admin');
                     });
             }
@@ -71,8 +74,9 @@ class UserController extends Controller
     /**
      * Update an existing user.
      *
-     * @param  \Fusion\Http\Requests\UserRequest  $request
-     * @param  \Fusion\Models\User  $user
+     * @param \Fusion\Http\Requests\UserRequest $request
+     * @param \Fusion\Models\User               $user
+     *
      * @return \Fusion\Http\Resources\UserResource
      */
     public function update(UserRequest $request, User $user)
@@ -91,7 +95,7 @@ class UserController extends Controller
             if ($attributes['role'] === 'owner') {
                 User::role('owner')
                     ->where('id', '<>', $user->id)
-                    ->each(function($user) {
+                    ->each(function ($user) {
                         $user->syncRoles('admin');
                     });
             }
@@ -105,7 +109,8 @@ class UserController extends Controller
     /**
      * Destroy an existing user.
      *
-     * @param  \Fusion\Models\User  $user
+     * @param \Fusion\Models\User $user
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)

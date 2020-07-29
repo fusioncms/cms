@@ -2,8 +2,8 @@
 
 namespace Addons\Foobar\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -49,7 +49,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::group([
             'middleware' => 'api',
-            'namespace'  => $this->namespace . '\DataTable',
+            'namespace'  => $this->namespace.'\DataTable',
             'prefix'     => 'datatable',
         ], function ($router) {
             require addon_path('Foobar/routes/datatable.php');
@@ -67,7 +67,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::group([
             'middleware' => 'web',
-            'namespace'  => $this->namespace . '\Web',
+            'namespace'  => $this->namespace.'\Web',
         ], function ($router) {
             require addon_path('Foobar/routes/web.php');
         });
@@ -84,7 +84,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::group([
             'middleware' => 'api',
-            'namespace'  => $this->namespace . '\API',
+            'namespace'  => $this->namespace.'\API',
             'prefix'     => 'api',
         ], function ($router) {
             require addon_path('Foobar/routes/api.php');

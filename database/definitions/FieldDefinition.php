@@ -11,13 +11,13 @@ $factory->define(Fusion\Models\Field::class, function (Faker $faker) {
     }
 
     return [
-        'name'       => $name,
-        'handle'     => str_handle($name),
-        'help'       => $faker->sentence,
-        'required'   => false,
-        'type'       => 'input',
+        'name'        => $name,
+        'handle'      => str_handle($name),
+        'help'        => $faker->sentence,
+        'required'    => false,
+        'type'        => 'input',
         'settings'    => [],
-        'order'      => 99,
-        'section_id' => 999,
+        'order'       => 99,
+        'section_id'  => 999,
     ];
 });

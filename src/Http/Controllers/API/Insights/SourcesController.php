@@ -3,9 +3,9 @@
 namespace Fusion\Http\Controllers\API\Insights;
 
 use Analytics;
-use Spatie\Analytics\Period;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\InsightResource;
+use Spatie\Analytics\Period;
 
 class SourcesController extends Controller
 {

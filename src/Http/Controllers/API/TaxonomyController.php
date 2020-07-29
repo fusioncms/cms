@@ -2,12 +2,11 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Fusion\Models\Taxonomy;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\TaxonomyRequest;
 use Fusion\Http\Resources\TaxonomyResource;
+use Fusion\Models\Taxonomy;
+use Illuminate\Http\Request;
 
 class TaxonomyController extends Controller
 {
@@ -15,6 +14,7 @@ class TaxonomyController extends Controller
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Support\Collection
      */
     public function index(Request $request)
@@ -29,7 +29,8 @@ class TaxonomyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Fusion\Models\Taxonomy  $taxonomy
+     * @param \Fusion\Models\Taxonomy $taxonomy
+     *
      * @return \Fusion\Http\Resources\TaxonomyResource
      */
     public function show(Taxonomy $taxonomy)
@@ -42,7 +43,8 @@ class TaxonomyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Fusion\Http\Requests\TaxonomyRequest  $request
+     * @param \Fusion\Http\Requests\TaxonomyRequest $request
+     *
      * @return \Fusion\Http\Resources\TaxonomyResource
      */
     public function store(TaxonomyRequest $request)
@@ -59,17 +61,18 @@ class TaxonomyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Fusion\Http\Requests\TaxonomyRequest  $request
-     * @param  \Fusion\Models\Taxonomy  $taxonomy
+     * @param \Fusion\Http\Requests\TaxonomyRequest $request
+     * @param \Fusion\Models\Taxonomy               $taxonomy
+     *
      * @return \Fusion\Http\Resources\TaxonomyResource
      */
     public function update(TaxonomyRequest $request, Taxonomy $taxonomy)
     {
         $taxonomy->update($request->validated());
 
-        if ($request->fieldset && (! isset($taxonomy->fieldset) || $taxonomy->fieldset->id !== $request->fieldset)) {
+        if ($request->fieldset && (!isset($taxonomy->fieldset) || $taxonomy->fieldset->id !== $request->fieldset)) {
             $taxonomy->attachFieldset($request->fieldset);
-        } elseif (! $request->fieldset) {
+        } elseif (!$request->fieldset) {
             $taxonomy->detachFieldset();
         }
 
@@ -79,7 +82,8 @@ class TaxonomyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Fusion\Models\Taxonomy  $taxonomy
+     * @param \Fusion\Models\Taxonomy $taxonomy
+     *
      * @return void
      */
     public function destroy(Taxonomy $taxonomy)

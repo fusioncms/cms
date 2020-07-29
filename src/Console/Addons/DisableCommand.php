@@ -31,14 +31,15 @@ class DisableCommand extends Command
      */
     public function handle()
     {
-        if (! $this->confirmToProceed()) {
+        if (!$this->confirmToProceed()) {
             return 1;
         }
 
         $addon = Addon::where('namespace', $this->argument('namespace'))->first();
 
-        if (! $addon) {
+        if (!$addon) {
             $this->comment("The \"{$this->argument('namespace')}\" addon does not exist.");
+
             return;
         }
 

@@ -2,11 +2,11 @@
 
 namespace Fusion\Http\Controllers\API;
 
+use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Requests\MatrixRequest;
+use Fusion\Http\Resources\MatrixResource;
 use Fusion\Models\Matrix;
 use Illuminate\Http\Request;
-use Fusion\Http\Requests\MatrixRequest;
-use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\MatrixResource;
 
 class MatrixController extends Controller
 {
@@ -14,6 +14,7 @@ class MatrixController extends Controller
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -28,7 +29,8 @@ class MatrixController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Fusion\Models\Matrix  $matrix
+     * @param \Fusion\Models\Matrix $matrix
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Matrix $matrix)
@@ -41,7 +43,8 @@ class MatrixController extends Controller
     /**
      * Display the specified resource by slug value.
      *
-     * @param  string  $matrix
+     * @param string $matrix
+     *
      * @return \Illuminate\Http\Response
      */
     public function slug($matrix)
@@ -56,7 +59,8 @@ class MatrixController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Fusion\Http\Requests\MatrixRequest  $request
+     * @param \Fusion\Http\Requests\MatrixRequest $request
+     *
      * @return \Fusion\Http\Resources\MatrixResource
      */
     public function store(MatrixRequest $request)
@@ -73,17 +77,18 @@ class MatrixController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Fusion\Http\Requests\MatrixRequest  $request
-     * @param  \Fusion\Models\Matrix                $matrix
+     * @param \Fusion\Http\Requests\MatrixRequest $request
+     * @param \Fusion\Models\Matrix               $matrix
+     *
      * @return \Fusion\Http\Resources\MatrixResource
      */
     public function update(MatrixRequest $request, Matrix $matrix)
     {
         $matrix->update($request->validated());
 
-        if ($request->fieldset && (! isset($matrix->fieldset) || $matrix->fieldset->id !== $request->fieldset)) {
+        if ($request->fieldset && (!isset($matrix->fieldset) || $matrix->fieldset->id !== $request->fieldset)) {
             $matrix->attachFieldset($request->fieldset);
-        } else if (! $request->fieldset) {
+        } elseif (!$request->fieldset) {
             $matrix->detachFieldset();
         }
 
@@ -93,7 +98,8 @@ class MatrixController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Fusion\Models\Matrix  $matrix
+     * @param \Fusion\Models\Matrix $matrix
+     *
      * @return void
      */
     public function destroy(Matrix $matrix)

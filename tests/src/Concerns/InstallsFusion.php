@@ -2,15 +2,14 @@
 
 namespace Fusion\Tests\Concerns;
 
-use Fusion\Models\User;
-use Fusion\Facades\Theme;
-use Fusion\Facades\Addon;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
-use Fusion\Console\Installer\CreateDefaultRoles;
 use Fusion\Console\Installer\CreateDatabaseTables;
-use Fusion\Console\Installer\PublishFusionResources;
 use Fusion\Console\Installer\CreateDefaultPermissions;
+use Fusion\Console\Installer\CreateDefaultRoles;
+use Fusion\Facades\Addon;
+use Fusion\Facades\Theme;
+use Fusion\Models\User;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 
 trait InstallsFusion
 {
@@ -36,9 +35,9 @@ trait InstallsFusion
      */
     protected function install()
     {
-        dispatch_now(new CreateDatabaseTables);
-        dispatch_now(new CreateDefaultPermissions);
-        dispatch_now(new CreateDefaultRoles);
+        dispatch_now(new CreateDatabaseTables());
+        dispatch_now(new CreateDefaultPermissions());
+        dispatch_now(new CreateDefaultRoles());
 
         Theme::activate('Hello');
         Addon::discover();
@@ -62,17 +61,17 @@ trait InstallsFusion
 
         File::delete(storage_path('app/addons.json'));
 
-        dispatch_now(new \Fusion\Console\Uninstaller\DeleteModelFiles);
+        dispatch_now(new \Fusion\Console\Uninstaller\DeleteModelFiles());
     }
 
     /**
      * Create a new user account.
      *
-     * @param  String  $name
-     * @param  String  $email
-     * @param  String  $password
-     * @param  String|Array|Null  $role
-     * @param  Array  $overrides
+     * @param string            $name
+     * @param string            $email
+     * @param string            $password
+     * @param string|array|null $role
+     * @param array             $overrides
      *
      * @return Fusion\Models\User
      */
@@ -86,7 +85,7 @@ trait InstallsFusion
 
         $user = factory(User::class)->create($attributes);
 
-        if (! is_null($role)) {
+        if (!is_null($role)) {
             $user->assignRole($role);
         }
 

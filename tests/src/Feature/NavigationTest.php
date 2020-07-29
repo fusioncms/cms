@@ -3,8 +3,8 @@
 namespace Fusion\Tests\Feature;
 
 use Fusion\Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class NavigationTest extends TestCase
 {

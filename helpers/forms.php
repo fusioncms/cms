@@ -1,13 +1,13 @@
 <?php
 
-use Fusion\Models\Form;
 use Fusion\Http\Honeypot;
+use Fusion\Models\Form;
 
-if (! function_exists('render_form')) {
+if (!function_exists('render_form')) {
     /**
      * Render the given form.
      *
-     * @return String
+     * @return string
      */
     function render_form($handle, $template = null, $additional = [])
     {
@@ -21,15 +21,15 @@ if (! function_exists('render_form')) {
     }
 }
 
-if (! function_exists('honeypot_fields')) {
+if (!function_exists('honeypot_fields')) {
     /**
      * Render the honeypot fields.
      *
-     * @return String
+     * @return string
      */
     function honeypot_fields()
     {
-        $honeypot = new Honeypot;
+        $honeypot = new Honeypot();
 
         return $honeypot->generate();
     }

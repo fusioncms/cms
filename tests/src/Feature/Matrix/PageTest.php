@@ -3,15 +3,16 @@
 namespace Fusion\Tests\Feature\Matrix;
 
 use Fusion\Tests\TestCase;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SingleTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Called before each test is run...
@@ -24,12 +25,12 @@ class SingleTest extends TestCase
         $this->handleValidationExceptions();
 
         // --
-        $this->section      = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $this->section = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $this->fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($this->section)->create();
         $this->fieldContent = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($this->section)->create();
-        $this->fieldset     = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->matrix       = \Facades\MatrixFactory::withName('Single')->asSingle()->withFieldset($this->fieldset)->withRoute('{slug}')->withTemplate('index')->create();
-        $this->model        = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
+        $this->fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
+        $this->matrix = \Facades\MatrixFactory::withName('Single')->asSingle()->withFieldset($this->fieldset)->withRoute('{slug}')->withTemplate('index')->create();
+        $this->model = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
     }
 
     /**
@@ -46,12 +47,12 @@ class SingleTest extends TestCase
             'slug'    => 'example-single',
             'excerpt' => $this->faker->sentence(),
             'content' => $this->faker->paragraph(),
-            'status'  => true
+            'status'  => true,
         ];
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/singles/' . $this->matrix->id, $attributes)
+            ->json('PATCH', '/api/singles/'.$this->matrix->id, $attributes)
             ->assertStatus(201);
 
         $this->assertDatabaseHas('mx_single', $attributes);
@@ -68,7 +69,7 @@ class SingleTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->json('PATCH', '/api/singles/' . $this->matrix->id, []);
+        $this->json('PATCH', '/api/singles/'.$this->matrix->id, []);
     }
 
     /**
@@ -84,7 +85,7 @@ class SingleTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/singles/' . $this->matrix->id, []);
+            ->json('PATCH', '/api/singles/'.$this->matrix->id, []);
     }
 
     /**
@@ -98,7 +99,7 @@ class SingleTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/singles/' . $this->matrix->id, [])
+            ->json('PATCH', '/api/singles/'.$this->matrix->id, [])
             ->assertStatus(422)
             ->assertJsonValidationErrors(['name', 'slug', 'status']);
     }
@@ -185,7 +186,7 @@ class SingleTest extends TestCase
 
         $this
             ->be($this->owner)
-            ->get($single->slug . '?preview=true')
+            ->get($single->slug.'?preview=true')
             ->assertStatus(200);
     }
 
@@ -204,7 +205,7 @@ class SingleTest extends TestCase
 
         $this
             ->be($this->user)
-            ->get($single->slug . '?preview=true');
+            ->get($single->slug.'?preview=true');
     }
 
     //
@@ -213,9 +214,10 @@ class SingleTest extends TestCase
 
     /**
      * Returns new entry w/ attributes
-     * [Helper]
+     * [Helper].
      *
-     * @param  array  $overrides
+     * @param array $overrides
+     *
      * @return array
      */
     protected function newSingle($overrides = []): array
@@ -225,13 +227,12 @@ class SingleTest extends TestCase
             'slug'    => 'example-single',
             'excerpt' => $this->faker->sentence(),
             'content' => $this->faker->paragraph(),
-            'status'  => true
+            'status'  => true,
         ], $overrides);
-
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/singles/' . $this->matrix->id, $attributes);
+            ->json('PATCH', '/api/singles/'.$this->matrix->id, $attributes);
 
         $single = \DB::table($this->model->getTable())->first();
 

@@ -2,9 +2,9 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Support\Str;
 use Fusion\Rules\NotAReservedKeyword;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class MatrixRequest extends FormRequest
 {
@@ -15,9 +15,9 @@ class MatrixRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('matrices.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('matrices.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
-    
+
     /**
      * Prepare the data for validation.
      *
@@ -40,10 +40,10 @@ class MatrixRequest extends FormRequest
         $id = $this->matrix->id ?? null;
 
         return [
-            'parent_id'          => 'sometimes|not_in:' . $id,
+            'parent_id'          => 'sometimes|not_in:'.$id,
             'name'               => 'required|regex:/^[A-z]/i',
-            'handle'             => [ 'required', 'unique:matrices,handle,' . $id, new NotAReservedKeyword ],
-            'slug'               => 'required|unique:matrices,slug,' . $id,
+            'handle'             => ['required', 'unique:matrices,handle,'.$id, new NotAReservedKeyword()],
+            'slug'               => 'required|unique:matrices,slug,'.$id,
             'description'        => 'sometimes',
             'type'               => 'required',
             'fieldset'           => 'sometimes',
@@ -70,7 +70,8 @@ class MatrixRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param \Illuminate\Validation\Validator $validator
+     *
      * @return void
      */
     public function withValidator($validator)

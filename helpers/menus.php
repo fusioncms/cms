@@ -2,18 +2,18 @@
 
 use Fusion\Models\Menu as MenuModel;
 
-if (! function_exists('menu')) {
+if (!function_exists('menu')) {
     /**
      * Fetch and register the given menu.
      *
-     * @return String
+     * @return string
      */
     function menu($handle)
     {
-        $menu  = Menu::make($handle, function() {});
+        $menu = Menu::make($handle, function () {});
         $model = MenuModel::where('handle', $handle)->first();
 
-        $add = function($node, $parent = null) use ($menu) {
+        $add = function ($node, $parent = null) use ($menu) {
             $item = $menu->add($node->name, $node->url);
 
             if ($node->new_window) {

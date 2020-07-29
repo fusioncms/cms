@@ -2,8 +2,8 @@
 
 namespace Fusion\Rules;
 
-use ZipArchive;
 use Illuminate\Contracts\Validation\Rule;
+use ZipArchive;
 
 class ValidAddon implements Rule
 {
@@ -24,20 +24,22 @@ class ValidAddon implements Rule
      */
     public function __construct(ZipArchive $zipArchive)
     {
-        $this->zipArchive    = $zipArchive;
+        $this->zipArchive = $zipArchive;
         $this->requiredFiles = ['addon.json'];
     }
+
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed  $value
+     *
      * @return bool
      */
     public function passes($attribute, $value)
     {
         $canUnzip = $this->zipArchive->open($value);
-        $isValid  = $canUnzip === true;
+        $isValid = $canUnzip === true;
 
         if ($canUnzip) {
             foreach ($this->requiredFiles as $requiredFile) {
@@ -59,6 +61,6 @@ class ValidAddon implements Rule
      */
     public function message()
     {
-        return 'An addon requires the following files: ' . implode(', ', $this->requiredFiles) . '.';
+        return 'An addon requires the following files: '.implode(', ', $this->requiredFiles).'.';
     }
 }

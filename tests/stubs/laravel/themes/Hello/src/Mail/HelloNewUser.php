@@ -2,14 +2,15 @@
 
 namespace Themes\Hello\Mail;
 
+use Fusion\Mail\DatabaseMailable;
 use Fusion\Models\User;
 use Illuminate\Bus\Queueable;
-use Fusion\Mail\DatabaseMailable;
 use Illuminate\Queue\SerializesModels;
 
 class HelloNewUser extends DatabaseMailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * User instance.
@@ -21,7 +22,8 @@ class HelloNewUser extends DatabaseMailable
     /**
      * Create a new message instance.
      *
-     * @param  User  $user
+     * @param User $user
+     *
      * @return void
      */
     public function __construct(User $user)

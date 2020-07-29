@@ -28,7 +28,7 @@ class TextareaFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
-        'placeholder' => ''
+        'placeholder' => '',
     ];
 
     /**

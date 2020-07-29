@@ -2,9 +2,9 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Models\Taxonomy;
 use Fusion\Database\Migration;
 use Fusion\Database\Schema\Blueprint;
+use Fusion\Models\Taxonomy;
 
 class TaxonomyObserver
 {
@@ -16,7 +16,7 @@ class TaxonomyObserver
     /**
      * Create a new TaxonomyObserver instance.
      *
-     * @param  \Fusion\Database\Migration  $migration
+     * @param \Fusion\Database\Migration $migration
      */
     public function __construct(Migration $migration)
     {
@@ -26,12 +26,13 @@ class TaxonomyObserver
     /**
      * Handle the taxonomy "created" event.
      *
-     * @param  \Fusion\Models\Taxonomy  $taxonomy
+     * @param \Fusion\Models\Taxonomy $taxonomy
+     *
      * @return void
      */
     public function created(Taxonomy $taxonomy)
     {
-        $this->migration->schema->create($taxonomy->table, function (Blueprint $table) use ($taxonomy) {
+        $this->migration->schema->create($taxonomy->table, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('taxonomy_id');
             $table->unsignedBigInteger('parent_id')->nullable();
@@ -49,7 +50,8 @@ class TaxonomyObserver
     /**
      * Handle the taxonomy "updating" event.
      *
-     * @param  \Fusion\Models\Taxonomy  $taxonomy
+     * @param \Fusion\Models\Taxonomy $taxonomy
+     *
      * @return void
      */
     public function updating(Taxonomy $taxonomy)
@@ -66,7 +68,8 @@ class TaxonomyObserver
     /**
      * Handle the taxonomy "deleting" event.
      *
-     * @param  \Fusion\Models\Taxonomy  $taxonomy
+     * @param \Fusion\Models\Taxonomy $taxonomy
+     *
      * @return void
      */
     public function deleting(Taxonomy $taxonomy)
@@ -77,7 +80,8 @@ class TaxonomyObserver
     /**
      * Handle the taxonomy "deleted" event.
      *
-     * @param  \Fusion\Models\Taxonomy  $taxonomy
+     * @param \Fusion\Models\Taxonomy $taxonomy
+     *
      * @return void
      */
     public function deleted(Taxonomy $taxonomy)

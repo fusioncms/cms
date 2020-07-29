@@ -17,7 +17,7 @@ trait MustVerifyEmail
             return true;
         }
 
-        return ! is_null($this->email_verified_at);
+        return !is_null($this->email_verified_at);
     }
 
     /**
@@ -43,7 +43,7 @@ trait MustVerifyEmail
             return;
         }
 
-        $this->notify(new VerifyEmail);
+        $this->notify(new VerifyEmail());
     }
 
     /**

@@ -2,20 +2,20 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Fusion\Models\Taxonomy;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Fusion\Http\Requests\TermRequest;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Requests\TermRequest;
 use Fusion\Http\Resources\TermResource;
+use Fusion\Models\Taxonomy;
 use Fusion\Services\Builders\Taxonomy as Builder;
+use Illuminate\Http\Request;
 
 class TermController extends Controller
 {
     /**
      * Display the specified resource.
      *
-     * @param  \Fusion\Models\Taxonomy  $taxonomy
+     * @param \Fusion\Models\Taxonomy $taxonomy
+     *
      * @return \Fusion\Http\Resources\TermResource
      */
     public function index(Taxonomy $taxonomy)
@@ -30,8 +30,9 @@ class TermController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Fusion\Models\Taxonomy  $taxonomy
-     * @param  integer $id
+     * @param \Fusion\Models\Taxonomy $taxonomy
+     * @param int                     $id
+     *
      * @return \Fusion\Http\Resources\TermResource
      */
     public function show(Taxonomy $taxonomy, $id)
@@ -46,8 +47,9 @@ class TermController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Fusion\Http\Requests\TermRequest  $request
-     * @param  \Fusion\Models\Taxonomy            $taxonomy
+     * @param \Fusion\Http\Requests\TermRequest $request
+     * @param \Fusion\Models\Taxonomy           $taxonomy
+     *
      * @return \Fusion\Http\Resources\TermResource
      */
     public function store(TermRequest $request, Taxonomy $taxonomy)
@@ -65,9 +67,10 @@ class TermController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Fusion\Http\Requests\TermRequest  $request
-     * @param  \Fusion\Models\Taxonomy            $taxonomy
-     * @param  integer $id
+     * @param \Fusion\Http\Requests\TermRequest $request
+     * @param \Fusion\Models\Taxonomy           $taxonomy
+     * @param int                               $id
+     *
      * @return \Fusion\Http\Resources\TermResource
      */
     public function update(TermRequest $request, Taxonomy $taxonomy, $id)
@@ -86,9 +89,10 @@ class TermController extends Controller
     /**
      * Destroy resource from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Fusion\Models\Taxonomy   $taxonomy
-     * @param  integer  $id
+     * @param \Illuminate\Http\Request $request
+     * @param \Fusion\Models\Taxonomy  $taxonomy
+     * @param int                      $id
+     *
      * @return void
      */
     public function destroy(Request $request, Taxonomy $taxonomy, $id)
@@ -96,7 +100,7 @@ class TermController extends Controller
         $this->authorize('terms.delete');
 
         $model = (new Builder($taxonomy->handle))->make();
-        $term  = $model->findOrFail($id);
+        $term = $model->findOrFail($id);
 
         $term->delete();
     }

@@ -2,23 +2,20 @@
 
 namespace Fusion\Tests\Feature;
 
-use Fusion\Tests\TestCase;
-use Illuminate\Support\Str;
-use Fusion\Models\Fieldset;
-use Fusion\Models\Extension;
 use Addons\Foobar\Models\Foobar;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Fusion\Models\Extension;
+use Fusion\Models\Fieldset;
+use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Collection;
 
 class ExtensionTest extends TestCase
 {
-	use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
@@ -26,7 +23,7 @@ class ExtensionTest extends TestCase
         $this->handleValidationExceptions();
 
         // --
-        $section  = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $section = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $fieldOne = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($section)->create();
         $fieldTwo = \Facades\FieldFactory::withName('Profiles')->withType('user')->withSection($section)->create();
         $fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$section]))->create();
@@ -78,7 +75,7 @@ class ExtensionTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/extensions/' . $this->extension->id);
+            ->json('GET', '/api/extensions/'.$this->extension->id);
     }
 
     /**
@@ -93,7 +90,7 @@ class ExtensionTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/extensions/' . $this->extension->id, []);
+            ->json('PATCH', '/api/extensions/'.$this->extension->id, []);
     }
 
     /**
@@ -108,7 +105,7 @@ class ExtensionTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/extensions/' . $this->extension->id);
+            ->json('DELETE', '/api/extensions/'.$this->extension->id);
     }
 
     /**
@@ -136,7 +133,7 @@ class ExtensionTest extends TestCase
         $this->assertDatabaseHasTable('ext_foobars');
         $this->assertDatabaseHas('extensions', [
             'name'   => 'Foobars',
-            'handle' => 'foobars'
+            'handle' => 'foobars',
         ]);
     }
 
@@ -148,7 +145,7 @@ class ExtensionTest extends TestCase
     public function an_extended_model_can_have_a_fieldset_attached()
     {
         $this->assertInstanceOf(Fieldset::class, $this->model->fieldset);
-    	$this->assertCount(2, $this->model->fields);
+        $this->assertCount(2, $this->model->fields);
     }
 
     /**
@@ -174,7 +171,7 @@ class ExtensionTest extends TestCase
         $attributes = factory(Foobar::class)->make()->toArray();
 
         // extending fields..
-        $attributes['content']  = $this->faker->sentence;
+        $attributes['content'] = $this->faker->sentence;
         $attributes['profiles'] = factory('Fusion\Models\User', 2)->create()->toArray();
 
         $this
@@ -191,19 +188,19 @@ class ExtensionTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('ext_foobars', [
-            'content' => $attributes['content']
+            'content' => $attributes['content'],
         ]);
 
         $this->assertDatabaseHas('users_pivot', [
             'pivot_type' => 'Fusion\Models\Extensions\Foobars',
             'pivot_id'   => $model->id,
-            'user_id'    => $attributes['profiles'][0]['id']
+            'user_id'    => $attributes['profiles'][0]['id'],
         ]);
 
         $this->assertDatabaseHas('users_pivot', [
             'pivot_type' => 'Fusion\Models\Extensions\Foobars',
             'pivot_id'   => $model->id,
-            'user_id'    => $attributes['profiles'][1]['id']
+            'user_id'    => $attributes['profiles'][1]['id'],
         ]);
     }
 
@@ -217,16 +214,16 @@ class ExtensionTest extends TestCase
         $attributes = $this->model->toArray();
 
         // updates..
-        $attributes['name']   = 'New Name';
+        $attributes['name'] = 'New Name';
         $attributes['handle'] = 'new_handle';
 
         // extending fields..
-        $attributes['content']  = 'New Content';
+        $attributes['content'] = 'New Content';
         $attributes['profiles'] = factory('Fusion\Models\User', 2)->create()->toArray();
 
         $this
             ->be($this->owner, 'api')
-            ->patch('/api/foobar/' . $this->model->id, $attributes)
+            ->patch('/api/foobar/'.$this->model->id, $attributes)
             ->assertStatus(200);
 
         $this->assertDataBaseHas('foobars', [
@@ -236,19 +233,19 @@ class ExtensionTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('ext_foobars', [
-            'content' => $attributes['content']
+            'content' => $attributes['content'],
         ]);
 
         $this->assertDatabaseHas('users_pivot', [
             'pivot_type' => 'Fusion\Models\Extensions\Foobars',
             'pivot_id'   => $this->model->id,
-            'user_id'    => $attributes['profiles'][0]['id']
+            'user_id'    => $attributes['profiles'][0]['id'],
         ]);
 
         $this->assertDatabaseHas('users_pivot', [
             'pivot_type' => 'Fusion\Models\Extensions\Foobars',
             'pivot_id'   => $this->model->id,
-            'user_id'    => $attributes['profiles'][1]['id']
+            'user_id'    => $attributes['profiles'][1]['id'],
         ]);
     }
 
@@ -271,7 +268,7 @@ class ExtensionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->patch('/api/foobar/' . $this->model->id, $attributes);
+            ->patch('/api/foobar/'.$this->model->id, $attributes);
 
         $this->assertEquals($this->model->content, $attributes['content']);
         $this->assertEquals($this->model->profiles->pluck('id'), collect($attributes['profiles'])->pluck('id'));

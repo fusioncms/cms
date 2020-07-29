@@ -7,7 +7,8 @@ class CacheObserver
     /**
      * Handle the created event for the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
      * @return void
      */
     public function created($model)
@@ -18,7 +19,8 @@ class CacheObserver
     /**
      * Handle the updated event for the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
      * @return void
      */
     public function updated($model)
@@ -29,7 +31,8 @@ class CacheObserver
     /**
      * Handle the updated event for the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
      * @return void
      */
     public function saved($model)
@@ -40,7 +43,8 @@ class CacheObserver
     /**
      * Handle the deleted event for the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
      * @return void
      */
     public function deleted($model)
@@ -51,7 +55,8 @@ class CacheObserver
     /**
      * Bust the cache on the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
      * @return void
      */
     public static function bustCache($model)

@@ -2,14 +2,13 @@
 
 namespace Fusion\Tests\Unit;
 
-use Fusion\Models\Matrix;
 use Facades\MatrixFactory;
-use Fusion\Tests\TestCase;
 use Fusion\Models\Fieldset;
-use Illuminate\Support\Facades\DB;
+use Fusion\Models\Matrix;
+use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Facades\DB;
 
 class MatrixTest extends TestCase
 {
@@ -22,7 +21,7 @@ class MatrixTest extends TestCase
      */
     public function a_matrix_can_have_a_fieldset()
     {
-        $matrix   = factory(Matrix::class)->create();
+        $matrix = factory(Matrix::class)->create();
         $fieldset = factory(Fieldset::class)->create();
 
         $matrix->attachFieldset($fieldset);
@@ -54,7 +53,7 @@ class MatrixTest extends TestCase
     public function a_matrix_can_have_children()
     {
         $matrix = factory(Matrix::class)->create();
-        $child  = factory(Matrix::class)->create();
+        $child = factory(Matrix::class)->create();
 
         $child->parent_id = $matrix->id;
         $child->save();
@@ -87,7 +86,7 @@ class MatrixTest extends TestCase
 
         $this->assertDatabaseHasTable('mx_blog');
 
-        $collection->name   = 'Posts';
+        $collection->name = 'Posts';
         $collection->handle = 'posts';
         $collection->save();
 
@@ -106,7 +105,7 @@ class MatrixTest extends TestCase
 
         $matrix = factory(Matrix::class)->create();
         $matrix = $matrix->toArray();
-        $matrix['id']   = null;
+        $matrix['id'] = null;
         $matrix['slug'] = 'new-slug';
 
         DB::table('matrices')->insert($matrix);
@@ -124,7 +123,7 @@ class MatrixTest extends TestCase
 
         $matrix = factory(Matrix::class)->create();
         $matrix = $matrix->toArray();
-        $matrix['id']     = null;
+        $matrix['id'] = null;
         $matrix['handle'] = 'new-handle';
 
         DB::table('matrices')->insert($matrix);

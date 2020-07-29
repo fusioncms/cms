@@ -2,16 +2,18 @@
 
 namespace Fusion\Models;
 
-use Illuminate\Support\Str;
+use Fusion\Concerns\CachesQueries;
 use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasFieldset;
-use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 
 class Taxonomy extends Model
 {
-    use CachesQueries, HasFieldset, HasActivity;
+    use CachesQueries;
+    use HasFieldset;
+    use HasActivity;
 
     protected $with = ['fieldsets'];
 
@@ -29,7 +31,7 @@ class Taxonomy extends Model
         'sidebar',
         'icon',
         'route',
-        'template'
+        'template',
     ];
 
     /**
@@ -50,7 +52,7 @@ class Taxonomy extends Model
 
     public function getAdminPathAttribute()
     {
-        return '/taxonomies/' . $this->id;
+        return '/taxonomies/'.$this->id;
     }
 
     /**
@@ -70,7 +72,7 @@ class Taxonomy extends Model
      */
     public function getTableAttribute()
     {
-        return 'taxonomy_' . $this->handle;
+        return 'taxonomy_'.$this->handle;
     }
 
     /**
@@ -89,20 +91,21 @@ class Taxonomy extends Model
     /**
      * Tap into activity before persisting to database.
      *
-     * @param  \Spatie\Activitylog\Models\Activity $activity
-     * @param  string   $eventName
+     * @param \Spatie\Activitylog\Models\Activity $activity
+     * @param string                              $eventName
+     *
      * @return void
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $subject    = $activity->subject;
-        $action     = ucfirst($eventName);
+        $subject = $activity->subject;
+        $action = ucfirst($eventName);
         $properties = [
             'link' => "taxonomies/{$subject->id}/edit",
-            'icon' => 'sitemap'
+            'icon' => 'sitemap',
         ];
 
         $activity->description = "{$action} taxonomy ({$subject->name})";
-        $activity->properties  = $properties;
+        $activity->properties = $properties;
     }
 }

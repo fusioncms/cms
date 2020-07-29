@@ -2,11 +2,10 @@
 
 namespace Fusion\Services\Builders;
 
-use Illuminate\Support\Str;
+use Fusion\Contracts\Builder as BuilderContract;
 use Fusion\Models\Setting as SettingGroup;
 use Illuminate\Support\Facades\File;
-use Fusion\Services\Setting as SettingService;
-use Fusion\Contracts\Builder as BuilderContract;
+use Illuminate\Support\Str;
 
 class Setting extends Builder implements BuilderContract
 {
@@ -22,7 +21,7 @@ class Setting extends Builder implements BuilderContract
 
     /**
      * Constructor.
-     * 
+     *
      * @param string $handle
      */
     public function __construct(string $handle)
@@ -38,9 +37,9 @@ class Setting extends Builder implements BuilderContract
     public function make()
     {
         $className = Str::studly($this->setting->handle);
-        $fillable  = [ 'setting_id' ];
-        $casts     = [];
-        $fields    = $this->setting->fieldset->fields ?? collect();
+        $fillable = ['setting_id'];
+        $casts = [];
+        $fields = $this->setting->fieldset->fields ?? collect();
 
         $fields = $fields->reject(function ($field) {
             $fieldtype = fieldtypes()->get($field->type);
@@ -53,9 +52,9 @@ class Setting extends Builder implements BuilderContract
         });
 
         foreach ($fields as $field) {
-            $fieldtype  = fieldtypes()->get($field->type);
+            $fieldtype = fieldtypes()->get($field->type);
             $fillable[] = $field->handle;
-            $casts[]    = $field->handle . '\' => \'' . $fieldtype->cast ;
+            $casts[] = $field->handle.'\' => \''.$fieldtype->cast;
         }
 
         $path = fusion_path("/src/Models/Settings/{$className}.php");
@@ -64,9 +63,9 @@ class Setting extends Builder implements BuilderContract
         $contents = strtr($stub, [
             '{class}'         => $className,
             '{handle}'        => $this->setting->handle,
-            '{fillable}'      => '[\'' . implode('\', \'', $fillable) . '\']',
-            '{casts}'         => '[\'' . implode('\', \'', $casts) . '\']',
-            '{dates}'         => '[\'' . implode('\', \'', $this->getDates()) . '\']',
+            '{fillable}'      => '[\''.implode('\', \'', $fillable).'\']',
+            '{casts}'         => '[\''.implode('\', \'', $casts).'\']',
+            '{dates}'         => '[\''.implode('\', \'', $this->getDates()).'\']',
             '{relationships}' => $this->generateRelationships(),
         ]);
 

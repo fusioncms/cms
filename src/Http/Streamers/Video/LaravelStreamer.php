@@ -1,6 +1,7 @@
 <?php
 
 namespace Fusion\Http\Streamers\Video;
+
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class LaravelStreamer
@@ -11,7 +12,7 @@ class LaravelStreamer
 
     public function __construct($source, $mimetype)
     {
-        $this->source   = $source;
+        $this->source = $source;
         $this->mimetype = $mimetype;
     }
 

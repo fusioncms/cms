@@ -2,13 +2,13 @@
 
 namespace Fusion\Console\Actions;
 
-use Fusion\Facades\Addon;
-use Illuminate\Support\Str;
-use Fusion\Models\Extension;
 use Fusion\Concerns\HasExtension;
-use Illuminate\Support\Facades\File;
-use Symfony\Component\Finder\Finder;
+use Fusion\Facades\Addon;
+use Fusion\Models\Extension;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Symfony\Component\Finder\Finder;
 
 class SyncExtensions
 {
@@ -21,7 +21,6 @@ class SyncExtensions
 
     /**
      * Constructor.
-     *
      */
     public function __construct()
     {
@@ -35,16 +34,16 @@ class SyncExtensions
      */
     public function handle()
     {
-        Addon::enabled()->filter(function($addon) {
+        Addon::enabled()->filter(function ($addon) {
             return File::exists(addon_path("{$addon['namespace']}/src/Models"));
-        })->each(function($addon) {
+        })->each(function ($addon) {
             $files = Finder::create()
                 ->files()
                 ->in(addon_path("{$addon['namespace']}/src/Models"))
                 ->name('*.php');
 
             foreach ($files as $file) {
-                $name  = Str::studly($file->getFilenameWithoutExtension());
+                $name = Str::studly($file->getFilenameWithoutExtension());
                 $class = "Addons\\{$addon['namespace']}\\Models\\{$name}";
 
                 if (class_exists($class)) {
@@ -63,14 +62,15 @@ class SyncExtensions
     /**
      * Generate Extension for Model using `HasExtension`.
      *
-     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
      * @return void
      */
     protected function syncExtension(Model $model)
     {
         $handle = $model->getTable();
 
-        if (! isset($this->extensions[$handle])) {
+        if (!isset($this->extensions[$handle])) {
             Extension::firstOrCreate([
                 'name'   => Str::studly($handle),
                 'handle' => $handle,

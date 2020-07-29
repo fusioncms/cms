@@ -2,14 +2,15 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\HasFieldset;
 use Fusion\Concerns\CachesQueries;
+use Fusion\Concerns\HasFieldset;
 use Fusion\Database\Eloquent\Model;
 use Fusion\Services\Builders\Extension as Builder;
 
 class Extension extends Model
 {
-    use CachesQueries, HasFieldset;
+    use CachesQueries;
+    use HasFieldset;
 
     protected $with = ['fieldsets'];
 
@@ -18,14 +19,14 @@ class Extension extends Model
      *
      * @var array
      */
-    protected $fillable = [ 'name', 'handle', 'status' ];
+    protected $fillable = ['name', 'handle', 'status'];
 
     /**
      * The attributes that should be casted to native types.
      *
      * @var array
      */
-    protected $casts = [ 'status' => 'boolean' ];
+    protected $casts = ['status' => 'boolean'];
 
     /**
      * Get the builder instance.
@@ -44,6 +45,6 @@ class Extension extends Model
      */
     public function getTableAttribute()
     {
-        return 'ext_' . $this->handle;
+        return 'ext_'.$this->handle;
     }
 }

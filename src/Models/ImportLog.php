@@ -2,12 +2,11 @@
 
 namespace Fusion\Models;
 
-use Fusion\Models\Import;
 use Fusion\Database\Eloquent\Model;
 
 class ImportLog extends Model
 {
-	/**
+    /**
      * The attributes that are fillable via mass assignment.
      *
      * @var array
@@ -29,7 +28,7 @@ class ImportLog extends Model
      * @var array
      */
     protected $casts = [
-        'processed' => 'collection'
+        'processed' => 'collection',
     ];
 
     /**
@@ -39,6 +38,6 @@ class ImportLog extends Model
      */
     public function import()
     {
-    	return $this->belongsTo(Import::class);
+        return $this->belongsTo(Import::class);
     }
 }

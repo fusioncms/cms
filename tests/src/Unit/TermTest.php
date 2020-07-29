@@ -2,11 +2,11 @@
 
 namespace Fusion\Tests\Unit;
 
-use Fusion\Tests\TestCase;
 use Fusion\Models\Taxonomy;
-use Illuminate\Support\Facades\DB;
+use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 
 class TermTest extends TestCase
 {
@@ -18,10 +18,10 @@ class TermTest extends TestCase
         $this->handleValidationExceptions();
 
         // --
-        $section      = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $section = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($section)->create();
         $fieldContent = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($section)->create();
-        $fieldset     = \Facades\FieldsetFactory::withName('General')->withSections(collect([$section]))->create();
+        $fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$section]))->create();
 
         $this->taxonomy = \Facades\TaxonomyFactory::withName('Categories')->withFieldset($fieldset)->withStates(['terms'])->create();
     }
@@ -47,10 +47,10 @@ class TermTest extends TestCase
      */
     public function the_database_table_is_renamed_when_renaming_a_taxonomy()
     {
-        $this->taxonomy->name   = 'Tags';
+        $this->taxonomy->name = 'Tags';
         $this->taxonomy->handle = 'tags';
         $this->taxonomy->save();
-        
+
         $term = $this->taxonomy->terms->first();
 
         $this->assertDatabaseHasTable($term->getTable());
@@ -69,7 +69,7 @@ class TermTest extends TestCase
         $this->expectException(QueryException::class);
         $this->expectExceptionMessage("UNIQUE constraint failed: {$term->getTable()}.slug");
 
-        $data       = $term->toArray();
+        $data = $term->toArray();
         $data['id'] = null;
 
         DB::table($term->getTable())->insert($data);

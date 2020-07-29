@@ -2,10 +2,10 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
-use Spatie\Activitylog\Models\Activity;
 use Fusion\Http\Resources\ActivityResource;
+use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
 
 class ActivityController extends Controller
 {
@@ -17,7 +17,7 @@ class ActivityController extends Controller
     public function index(Request $request)
     {
         $this->authorize('access.controlPanel');
-        
+
         $activities = Activity::orderBy('created_at', 'desc')->paginate(10);
 
         return ActivityResource::collection($activities);

@@ -2,23 +2,24 @@
 
 namespace Fusion\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Services\Routers\EntryRouter;
-use Fusion\Services\Routers\SingleRouter;
 use Fusion\Services\Routers\HomepageRouter;
+use Fusion\Services\Routers\SingleRouter;
+use Illuminate\Http\Request;
 
 class RouterController extends Controller
 {
     /**
      * Delegate the request out to determine the route needed.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return Response
      */
     public function handle(Request $request)
     {
-        if (! app_installed()) {
+        if (!app_installed()) {
             return redirect('/install');
         }
 

@@ -9,7 +9,8 @@ class ReplicatorResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -21,7 +22,7 @@ class ReplicatorResource extends JsonResource
             'field'      => new FieldResource($this->field),
             'replicants' => ReplicantsResource::collection($this->replicants),
         ];
-        
+
         return $resource;
     }
 }

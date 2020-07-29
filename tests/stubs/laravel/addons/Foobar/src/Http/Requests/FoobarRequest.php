@@ -13,7 +13,7 @@ class FoobarRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('foobar.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('foobar.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**
@@ -39,7 +39,7 @@ class FoobarRequest extends FormRequest
 
         return [
             'name'        => 'required',
-            'handle'      => 'required|unique:foobars,handle,' . $id,
+            'handle'      => 'required|unique:foobars,handle,'.$id,
             'description' => 'sometimes',
             'status'      => 'required|boolean',
         ];

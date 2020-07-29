@@ -10,11 +10,11 @@ class FieldsetObserver
     /**
      * Listen to the Fieldset deleting event.
      *
-     * @param  Fieldset  $section
+     * @param Fieldset $section
      */
     public function deleting(Fieldset $fieldset)
     {
-        DB::table('fieldsettables')->where('fieldset_id', $fieldset->id)->get()->each(function($morph){
+        DB::table('fieldsettables')->where('fieldset_id', $fieldset->id)->get()->each(function ($morph) {
             $model = app()->make($morph->fieldsettable_type);
             $model = $model->find($morph->fieldsettable_id);
             $model->detachFieldset();

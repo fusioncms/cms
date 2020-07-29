@@ -2,25 +2,26 @@
 
 namespace Fusion\Models;
 
-use Illuminate\Support\Str;
-use Fusion\Concerns\HasFieldset;
 use Fusion\Concerns\CachesQueries;
+use Fusion\Concerns\HasFieldset;
 use Fusion\Database\Eloquent\Model;
 use Fusion\Services\Builders\Replicator as Builder;
 
 class Replicator extends Model
 {
-    use CachesQueries, HasFieldset;
+    use CachesQueries;
+    use HasFieldset;
 
     /**
      * The attributes that are fillable via mass assignment.
      *
      * @var array
      */
-    protected $fillable = [ 'field_id', 'name', 'handle', 'uniqid' ];
+    protected $fillable = ['field_id', 'name', 'handle', 'uniqid'];
 
     /**
-     * @param  \Fusion\Models\Section $section
+     * @param \Fusion\Models\Section $section
+     *
      * @return \Fusion\Database\Eloquent\Model
      */
     public function getBuilder(Section $section)
@@ -30,7 +31,7 @@ class Replicator extends Model
 
     /**
      * Get `sections` relationship.
-     * 
+     *
      * @return Builder|Collection
      */
     public function sections()
@@ -40,8 +41,9 @@ class Replicator extends Model
 
     /**
      * Get `replicant` relationship.
-     * 
-     * @param  Section $section
+     *
+     * @param Section $section
+     *
      * @return Builder
      */
     public function replicant(Section $section)

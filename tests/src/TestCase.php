@@ -2,23 +2,24 @@
 
 namespace Fusion\Tests;
 
-use Laravel\Sanctum\Sanctum;
-use Laravel\Ui\UiServiceProvider;
-use Illuminate\Support\Facades\Hash;
-use Spatie\Backup\BackupServiceProvider;
-use Fusion\Tests\Concerns\InstallsFusion;
-use Fusion\Providers\FusionServiceProvider;
 use Caffeinated\Flash\FlashServiceProvider;
 use Caffeinated\Menus\MenusServiceProvider;
-use Laravel\Sanctum\SanctumServiceProvider;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Fusion\Providers\FusionServiceProvider;
+use Fusion\Tests\Concerns\InstallsFusion;
 use Fusion\Tests\Concerns\MakesDatabaseAssertions;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\Sanctum;
+use Laravel\Sanctum\SanctumServiceProvider;
+use Laravel\Ui\UiServiceProvider;
 use Spatie\Activitylog\ActivitylogServiceProvider;
+use Spatie\Backup\BackupServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
-    use InstallsFusion, MakesDatabaseAssertions;
+    use InstallsFusion;
+    use MakesDatabaseAssertions;
 
     /**
      * @var \Fusion\Models\User
@@ -50,18 +51,19 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->install();
 
-        $this->owner          = $this->createUser('Jane Doe', 'admin@example.com', 'secret', 'owner');
-        $this->user           = $this->createUser('Ducky Consumer', 'guest@example.com', 'secret', 'user');
+        $this->owner = $this->createUser('Jane Doe', 'admin@example.com', 'secret', 'owner');
+        $this->user = $this->createUser('Ducky Consumer', 'guest@example.com', 'secret', 'user');
         $this->unverifiedUser = $this->createUser('Unverified Consumer', 'unverified@example.com', 'secret', null, ['email_verified_at' => null]);
-        $this->guest          = $this->createGuest();
+        $this->guest = $this->createGuest();
     }
 
     /**
      * Set the currently logged in user for the application.
-     * [override]
+     * [override].
      *
      * @param \Illuminate\Contracts\Auth\Authenticatable $user
-     * @param string|null  $driver
+     * @param string|null                                $driver
+     *
      * @return $this
      */
     public function actingAs(Authenticatable $user, $driver = null)
@@ -70,11 +72,12 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     }
 
     /**
-     * Decorator for Sanctum::actingAs()
+     * Decorator for Sanctum::actingAs().
      *
      * @param \Illuminate\Contracts\Auth\Authenticatable $user
-     * @param string|null  $driver
-     * @param array        $abilities
+     * @param string|null                                $driver
+     * @param array                                      $abilities
+     *
      * @return $this
      */
     public function be(Authenticatable $user, $driver = null)
@@ -95,7 +98,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
+     *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
@@ -130,7 +134,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Load the bundled FusionCMS service providers.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
+     *
      * @return array
      */
     protected function getPackageProviders($app)
@@ -157,7 +162,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Load the bundled FusionCMS aliases.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
+     *
      * @return array
      */
     protected function getPackageAliases($app)

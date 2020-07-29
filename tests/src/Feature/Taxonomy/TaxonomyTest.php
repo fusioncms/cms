@@ -2,17 +2,18 @@
 
 namespace Fusion\Tests\Feature\Taxonomy;
 
-use Fusion\Tests\TestCase;
 use Fusion\Models\Taxonomy;
-use Illuminate\Support\Str;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Auth\AuthenticationException;
+use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 
 class TaxonomyTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Called before each test is run...
@@ -93,7 +94,7 @@ class TaxonomyTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/taxonomies/' . $taxonomy->id);
+            ->json('GET', '/api/taxonomies/'.$taxonomy->id);
     }
 
     /**
@@ -127,7 +128,7 @@ class TaxonomyTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/taxonomies/' . $taxonomy->id, []);
+            ->json('PATCH', '/api/taxonomies/'.$taxonomy->id, []);
     }
 
     /**
@@ -145,7 +146,7 @@ class TaxonomyTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/taxonomies/' . $taxonomy->id);
+            ->json('DELETE', '/api/taxonomies/'.$taxonomy->id);
     }
 
     /**
@@ -159,16 +160,16 @@ class TaxonomyTest extends TestCase
         $taxonomy = factory(Taxonomy::class)->create();
 
         // update ----
-        $attributes           = $taxonomy->toArray();
-        $attributes['name']   = 'New Name';
+        $attributes = $taxonomy->toArray();
+        $attributes['name'] = 'New Name';
         $attributes['handle'] = 'new_name';
-        $attributes['slug']   = 'new-name';
+        $attributes['slug'] = 'new-name';
 
         unset($attributes['created_at'], $attributes['updated_at']);
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/taxonomies/' . $taxonomy->id, $attributes)
+            ->json('PATCH', '/api/taxonomies/'.$taxonomy->id, $attributes)
             ->assertStatus(200);
 
         $this->assertDatabaseHas('taxonomies', $attributes);
@@ -194,9 +195,8 @@ class TaxonomyTest extends TestCase
             ->json('POST', '/api/taxonomies', $attributes)
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'handle' => 'Handle must contain only letters, numbers, and underscores.'
+                'handle' => 'Handle must contain only letters, numbers, and underscores.',
             ]);
-
     }
 
     /**
@@ -228,21 +228,21 @@ class TaxonomyTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         $this
-            ->json('POST', '/api/taxonomies', [ 'handle' => 'default' ])
+            ->json('POST', '/api/taxonomies', ['handle' => 'default'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
 
         $this
-            ->json('POST', '/api/taxonomies', [ 'handle' => 'for' ])
+            ->json('POST', '/api/taxonomies', ['handle' => 'for'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
 
         $this
-            ->json('POST', '/api/taxonomies', [ 'handle' => 'true' ])
+            ->json('POST', '/api/taxonomies', ['handle' => 'true'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
     }
 }

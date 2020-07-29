@@ -2,9 +2,8 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Models\User;
-use Fusion\Models\Role;
 use Fusion\Http\Controllers\DataTableController;
+use Fusion\Models\User;
 
 class UserController extends DataTableController
 {

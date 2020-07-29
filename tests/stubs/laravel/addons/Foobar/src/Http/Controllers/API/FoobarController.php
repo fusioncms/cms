@@ -2,18 +2,19 @@
 
 namespace Addons\Foobar\Http\Controllers\API;
 
-use Illuminate\Http\Request;
-use Addons\Foobar\Models\Foobar;
-use Fusion\Http\Controllers\Controller;
 use Addons\Foobar\Http\Requests\FoobarRequest;
 use Addons\Foobar\Http\Resources\FoobarResource;
+use Addons\Foobar\Models\Foobar;
+use Fusion\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class FoobarController extends Controller
 {
     /**
      * Display all resources.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return JsonResponse
      */
     public function index(Request $request)
@@ -28,8 +29,9 @@ class FoobarController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request   $request
-     * @param  \Addons\Foobar\Models\Foobar  $foobar
+     * @param \Illuminate\Http\Request     $request
+     * @param \Addons\Foobar\Models\Foobar $foobar
+     *
      * @return \Addons\Http\Responses\FoobarResource
      */
     public function show(Request $request, Foobar $foobar)
@@ -42,7 +44,8 @@ class FoobarController extends Controller
     /**
      * Store newly created record in storage.
      *
-     * @param  \Addons\Foobar\Http\Requests\FoobarRequest  $request
+     * @param \Addons\Foobar\Http\Requests\FoobarRequest $request
+     *
      * @return \Addons\Http\Responses\FoobarResource
      */
     public function store(FoobarRequest $request)
@@ -55,8 +58,9 @@ class FoobarController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Addons\Foobar\Http\Requests\FoobarRequest  $request
-     * @param  \Addons\Foobar\Models\Foobar                $foobar
+     * @param \Addons\Foobar\Http\Requests\FoobarRequest $request
+     * @param \Addons\Foobar\Models\Foobar               $foobar
+     *
      * @return \Addons\Http\Responses\FoobarResource
      */
     public function update(FoobarRequest $request, Foobar $foobar)
@@ -69,8 +73,9 @@ class FoobarController extends Controller
     /**
      * Remove specified resource from storage.
      *
-     * @param  \Illuminate\Http\Request   $request
-     * @param  \Addons\Foobar\Models\Foobar  $foobar
+     * @param \Illuminate\Http\Request     $request
+     * @param \Addons\Foobar\Models\Foobar $foobar
+     *
      * @return void
      */
     public function destroy(Request $request, Foobar $foobar)

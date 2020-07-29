@@ -2,13 +2,14 @@
 
 namespace Addons\Foobar\Models;
 
-use Fusion\Concerns\HasExtension;
 use Fusion\Concerns\CachesQueries;
+use Fusion\Concerns\HasExtension;
 use Fusion\Database\Eloquent\Model;
 
 class Foobar extends Model
 {
-    use CachesQueries, HasExtension;
+    use CachesQueries;
+    use HasExtension;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -19,7 +20,7 @@ class Foobar extends Model
         'name',
         'handle',
         'description',
-        'status'
+        'status',
     ];
 
     /**

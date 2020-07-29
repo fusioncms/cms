@@ -2,14 +2,14 @@
 
 namespace Fusion\Tests\Feature\Matrix;
 
-use Fusion\Models\Matrix;
 use Facades\MatrixFactory;
-use Fusion\Tests\TestCase;
 use Fusion\Models\Fieldset;
-use Illuminate\Support\Str;
-use Illuminate\Auth\AuthenticationException;
+use Fusion\Models\Matrix;
+use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 
 class MatrixTest extends TestCase
 {
@@ -64,7 +64,7 @@ class MatrixTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/matrices/' . $matrix->id);
+            ->json('GET', '/api/matrices/'.$matrix->id);
     }
 
     /**
@@ -96,7 +96,7 @@ class MatrixTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/matrices/' . $matrix->id, []);
+            ->json('PATCH', '/api/matrices/'.$matrix->id, []);
     }
 
     /**
@@ -113,7 +113,7 @@ class MatrixTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/matrices/' . $matrix->id);
+            ->json('DELETE', '/api/matrices/'.$matrix->id);
     }
 
     /**
@@ -125,7 +125,7 @@ class MatrixTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $matrix   = factory(Matrix::class)->make()->toArray();
+        $matrix = factory(Matrix::class)->make()->toArray();
         $fieldset = factory(Fieldset::class)->create();
 
         $matrix['fieldset'] = $fieldset->id;
@@ -170,7 +170,7 @@ class MatrixTest extends TestCase
         $matrix->description = 'This is the new matrix description';
 
         $this
-            ->json('PATCH', '/api/matrices/' . $matrix->id, $matrix->toArray())
+            ->json('PATCH', '/api/matrices/'.$matrix->id, $matrix->toArray())
             ->assertStatus(200);
     }
 
@@ -187,7 +187,7 @@ class MatrixTest extends TestCase
         $matrix->name_label = 'Custom Title';
 
         $this
-            ->json('PATCH', '/api/matrices/' . $matrix->id, $matrix->toArray())
+            ->json('PATCH', '/api/matrices/'.$matrix->id, $matrix->toArray())
             ->assertStatus(200);
 
         $this->assertDatabaseHas('matrices', [
@@ -207,10 +207,10 @@ class MatrixTest extends TestCase
 
         $matrix = MatrixFactory::create();
         $matrix->show_name_field = false;
-        $matrix->name_format     = '{id}-{name}';
+        $matrix->name_format = '{id}-{name}';
 
         $this
-            ->json('PATCH', '/api/matrices/' . $matrix->id, $matrix->toArray())
+            ->json('PATCH', '/api/matrices/'.$matrix->id, $matrix->toArray())
             ->assertStatus(200);
 
         $this->assertDatabaseHas('matrices', [
@@ -233,9 +233,9 @@ class MatrixTest extends TestCase
 
         $matrix = MatrixFactory::asCollection()->create();
 
-        $data                     = $matrix->toArray();
+        $data = $matrix->toArray();
         $data['show_name_field'] = false;
-        $data['name_format']     = "{id} {created_at->format('Y')}";
+        $data['name_format'] = "{id} {created_at->format('Y')}";
 
         $this->json('PATCH', '/api/matrices/'.$matrix->id, $data);
 
@@ -245,7 +245,7 @@ class MatrixTest extends TestCase
 
         $response->assertStatus(201);
 
-        $id    = $response->getData()->data->entry->id;
+        $id = $response->getData()->data->entry->id;
         $entry = matrix_entries($matrix->handle)->find($id);
 
         $name = $entry->id.' '.$entry->created_at->format('Y');
@@ -287,21 +287,21 @@ class MatrixTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         $this
-            ->json('POST', '/api/forms', [ 'handle' => 'default' ])
+            ->json('POST', '/api/forms', ['handle' => 'default'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
 
         $this
-            ->json('POST', '/api/forms', [ 'handle' => 'for' ])
+            ->json('POST', '/api/forms', ['handle' => 'for'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
 
         $this
-            ->json('POST', '/api/forms', [ 'handle' => 'true' ])
+            ->json('POST', '/api/forms', ['handle' => 'true'])
             ->assertJsonValidationErrors([
-                'handle' => 'The handle conflicts with a reserved keyword and may not be used.'
+                'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
     }
 }

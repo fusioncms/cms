@@ -2,10 +2,9 @@
 
 namespace Fusion\Services\Builders;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
-use Fusion\Models\Extension as ExtensionModel;
 use Fusion\Contracts\Builder as BuilderContract;
+use Fusion\Models\Extension as ExtensionModel;
+use Illuminate\Support\Facades\File;
 
 class Extension extends Builder implements BuilderContract
 {
@@ -27,7 +26,7 @@ class Extension extends Builder implements BuilderContract
     public function __construct($handle)
     {
         $this->extension = ExtensionModel::where(['handle' => $handle])->firstOrFail();
-        $this->model     = $this->make();
+        $this->model = $this->make();
     }
 
     /**
@@ -37,9 +36,9 @@ class Extension extends Builder implements BuilderContract
      */
     public function make()
     {
-        $fillable = [ 'extension_id', 'related_id' ];
-        $casts    = [];
-        $fields   = [];
+        $fillable = ['extension_id', 'related_id'];
+        $casts = [];
+        $fields = [];
 
         if ($this->extension->fieldset) {
             $fields = $this->extension->fieldset->fields->reject(function ($field) {
@@ -53,9 +52,9 @@ class Extension extends Builder implements BuilderContract
             });
 
             foreach ($fields as $field) {
-                $fieldtype  = fieldtypes()->get($field->type);
+                $fieldtype = fieldtypes()->get($field->type);
                 $fillable[] = $field->handle;
-                $casts[]    = $field->handle . '\' => \'' . $fieldtype->cast;
+                $casts[] = $field->handle.'\' => \''.$fieldtype->cast;
             }
         }
 
@@ -65,13 +64,13 @@ class Extension extends Builder implements BuilderContract
         $contents = strtr($stub, [
             '{class}'         => $this->extension->name,
             '{handle}'        => $this->extension->handle,
-            '{fillable}'      => '[\'' . implode('\', \'', $fillable) . '\']',
-            '{casts}'         => '[\'' . implode('\', \'', $casts) . '\']',
+            '{fillable}'      => '[\''.implode('\', \'', $fillable).'\']',
+            '{casts}'         => '[\''.implode('\', \'', $casts).'\']',
             '{relationships}' => $this->generateRelationships(),
         ]);
 
         File::put($path, $contents);
 
-        return app()->make('Fusion\Models\Extensions\\'. $this->extension->name);
+        return app()->make('Fusion\Models\Extensions\\'.$this->extension->name);
     }
 }

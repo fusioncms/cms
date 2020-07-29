@@ -2,16 +2,16 @@
 
 namespace Fusion\Concerns;
 
-use DateTimeInterface;
 use Carbon\CarbonInterface;
-use Illuminate\Support\Str;
+use DateTimeInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Str;
 
 trait HasAttributes
 {
-	/**
+    /**
      * Row attribute values.
      *
      * @var array
@@ -28,8 +28,8 @@ trait HasAttributes
     /**
      * Set casting property.
      *
-     * @param  string $key
-     * @param  string $value
+     * @param string $key
+     * @param string $value
      */
     protected function setCast($key, $value)
     {
@@ -39,7 +39,8 @@ trait HasAttributes
     /**
      * Get casting property.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return void
      */
     protected function getCast($key)
@@ -50,7 +51,8 @@ trait HasAttributes
     /**
      * Determine whether an attribute should be cast to a native type.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return bool
      */
     protected function hasCast($key)
@@ -61,12 +63,12 @@ trait HasAttributes
     /**
      * Set individual attribute value.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      */
     protected function setAttribute($key, $value)
     {
-    	$this->attributes[$key] = $value;
+        $this->attributes[$key] = $value;
     }
 
     /**
@@ -78,7 +80,7 @@ trait HasAttributes
     {
         $attributes = [];
 
-        foreach($this->attributes as $key => $value) {
+        foreach ($this->attributes as $key => $value) {
             $attributes[$key] = $this->getAttribute($key, $value);
         }
 
@@ -88,12 +90,13 @@ trait HasAttributes
     /**
      * Determines if attribute exists.
      *
-     * @param  string $key
-     * @return boolean
+     * @param string $key
+     *
+     * @return bool
      */
     protected function hasAttribute($key)
     {
-        if (! $key) {
+        if (!$key) {
             return false;
         }
 
@@ -104,27 +107,29 @@ trait HasAttributes
      * Returns current row value by key,
      *   else a default value if not found.
      *
-     * @param  string $key
-     * @param  mixed  $default
+     * @param string $key
+     * @param mixed  $default
+     *
      * @return mixed
      */
     protected function getAttribute($key, $default = null)
     {
-		if (! $key) {
-			return;
-		}
+        if (!$key) {
+            return;
+        }
 
-    	if ($this->hasAttribute($key) || $this->hasGetMutator($key)) {
-    		return $this->getAttributeValue($key);
-    	}
+        if ($this->hasAttribute($key) || $this->hasGetMutator($key)) {
+            return $this->getAttributeValue($key);
+        }
 
-    	return $default;
+        return $default;
     }
 
     /**
      * Get a plain attribute (not a relationship).
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     protected function getAttributeValue($key)
@@ -145,31 +150,34 @@ trait HasAttributes
     /**
      * Determine if a get mutator exists for an attribute.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return bool
      */
     protected function hasGetMutator($key)
     {
-    	return method_exists($this, 'get' . Str::studly($key) . 'Attribute');
+        return method_exists($this, 'get'.Str::studly($key).'Attribute');
     }
 
     /**
      * Get the value of an attribute using its mutator.
      *
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return mixed
      */
     protected function mutateAttribute($key, $value)
     {
-        return $this->{'get' . Str::studly($key) . 'Attribute'}($value);
+        return $this->{'get'.Str::studly($key).'Attribute'}($value);
     }
 
     /**
      * Cast value to desired casting type.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return mixed
      */
     protected function castAttribute($key, $value)
@@ -211,7 +219,8 @@ trait HasAttributes
     /**
      * Decode the given float.
      *
-     * @param  mixed  $value
+     * @param mixed $value
+     *
      * @return mixed
      */
     protected function fromFloat($value)
@@ -231,8 +240,9 @@ trait HasAttributes
     /**
      * Return a decimal as string.
      *
-     * @param  float  $value
-     * @param  int  $decimals
+     * @param float $value
+     * @param int   $decimals
+     *
      * @return string
      */
     protected function asDecimal($value, $decimals)
@@ -243,19 +253,21 @@ trait HasAttributes
     /**
      * Decode the given JSON back into an array or object.
      *
-     * @param  string  $value
-     * @param  bool  $asObject
+     * @param string $value
+     * @param bool   $asObject
+     *
      * @return mixed
      */
     protected function fromJson($value, $asObject = false)
     {
-        return json_decode($value, ! $asObject);
+        return json_decode($value, !$asObject);
     }
 
     /**
      * Return a timestamp as DateTime object with time set to 00:00:00.
      *
-     * @param  mixed  $value
+     * @param mixed $value
+     *
      * @return \Illuminate\Support\Carbon
      */
     protected function asDate($value)
@@ -266,7 +278,8 @@ trait HasAttributes
     /**
      * Return a timestamp as unix timestamp.
      *
-     * @param  mixed  $value
+     * @param mixed $value
+     *
      * @return int
      */
     protected function asTimestamp($value)
@@ -277,7 +290,8 @@ trait HasAttributes
     /**
      * Return a timestamp as DateTime object.
      *
-     * @param  mixed  $value
+     * @param mixed $value
+     *
      * @return \Illuminate\Support\Carbon
      */
     protected function asDateTime($value)
@@ -294,7 +308,8 @@ trait HasAttributes
         // when checking the field. We will just return the DateTime right away.
         if ($value instanceof DateTimeInterface) {
             return Date::parse(
-                $value->format('Y-m-d H:i:s.u'), $value->getTimezone()
+                $value->format('Y-m-d H:i:s.u'),
+                $value->getTimezone()
             );
         }
 
@@ -321,7 +336,8 @@ trait HasAttributes
     /**
      * Determine if the given value is a standard date format.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return bool
      */
     protected function isStandardDateFormat($value)

@@ -3,11 +3,10 @@
 namespace Fusion\Http\Controllers\Web\Installer;
 
 use Exception;
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Artisan;
 use Fusion\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class InstallController extends Controller
@@ -15,20 +14,22 @@ class InstallController extends Controller
     /**
      * Installation wizard confirmation.
      *
-     * @param  Request $request
+     * @param Request $request
+     *
      * @return View
      */
     public function index(Request $request)
     {
         return view('installer.confirm', [
-            'data' => cache(config('installer.wizard.storage.key'), [])
+            'data' => cache(config('installer.wizard.storage.key'), []),
         ]);
     }
 
     /**
      * Install FusionCMS.
      *
-     * @param  Request $request
+     * @param Request $request
+     *
      * @return Redirect
      */
     public function store(Request $request)
@@ -44,21 +45,21 @@ class InstallController extends Controller
         }
 
         $jobs = [
-            'Deleting asset files...'           => new \Fusion\Console\Uninstaller\DeleteUserFiles,
-            'Deleting model files...'           => new \Fusion\Console\Uninstaller\DeleteModelFiles,
-            'Deleting addon assets...'          => new \Fusion\Console\Uninstaller\DeleteAddonAssets,
-            'Deleting addon cache...'           => new \Fusion\Console\Uninstaller\DeleteAddonCache,
-            'Deleting log files...'             => new \Fusion\Console\Uninstaller\DeleteLogFiles,
-            'Deleting database...'              => new \Fusion\Console\Uninstaller\DeleteDatabase,
+            'Deleting asset files...'           => new \Fusion\Console\Uninstaller\DeleteUserFiles(),
+            'Deleting model files...'           => new \Fusion\Console\Uninstaller\DeleteModelFiles(),
+            'Deleting addon assets...'          => new \Fusion\Console\Uninstaller\DeleteAddonAssets(),
+            'Deleting addon cache...'           => new \Fusion\Console\Uninstaller\DeleteAddonCache(),
+            'Deleting log files...'             => new \Fusion\Console\Uninstaller\DeleteLogFiles(),
+            'Deleting database...'              => new \Fusion\Console\Uninstaller\DeleteDatabase(),
 
-            'Creating directories...'           => new \Fusion\Console\Installer\CreateDirectories,
+            'Creating directories...'           => new \Fusion\Console\Installer\CreateDirectories(),
             'Creating database...'              => new \Fusion\Console\Installer\CreateDatabase($data),
             'Creating environment config...'    => new \Fusion\Console\Installer\CreateEnvironmentConfig($data),
-            'Creating database tables...'       => new \Fusion\Console\Installer\CreateDatabaseTables,
-            'Publishing Fusion resources...'    => new \Fusion\Console\Installer\PublishFusionResources,
-            'Creating storage link...'          => new \Fusion\Console\Installer\CreateStorageLink,
-            'Creating default permissions...'   => new \Fusion\Console\Installer\CreateDefaultPermissions,
-            'Creating default roles...'         => new \Fusion\Console\Installer\CreateDefaultRoles,
+            'Creating database tables...'       => new \Fusion\Console\Installer\CreateDatabaseTables(),
+            'Publishing Fusion resources...'    => new \Fusion\Console\Installer\PublishFusionResources(),
+            'Creating storage link...'          => new \Fusion\Console\Installer\CreateStorageLink(),
+            'Creating default permissions...'   => new \Fusion\Console\Installer\CreateDefaultPermissions(),
+            'Creating default roles...'         => new \Fusion\Console\Installer\CreateDefaultRoles(),
             'Creating default user account...'  => new \Fusion\Console\Installer\CreateDefaultUser($data),
         ];
 
@@ -87,7 +88,7 @@ class InstallController extends Controller
     private function getData()
     {
         return collect(cache(config('installer.wizard.storage.key'), []))
-            ->flatMap(function($item) {
+            ->flatMap(function ($item) {
                 return $item;
             })->toArray();
     }
@@ -100,10 +101,10 @@ class InstallController extends Controller
     private function getRules()
     {
         return collect(config('installer.wizard.steps'))
-            ->mapWithKeys(function($item, $step) {
+            ->mapWithKeys(function ($item, $step) {
                 return collect($item['rules'] ?? [])
-                    ->mapWithKeys(function($value, $field) use ($step) {
-                        return [ $field => $value ];
+                    ->mapWithKeys(function ($value, $field) {
+                        return [$field => $value];
                     });
             })->toArray();
     }
@@ -116,10 +117,10 @@ class InstallController extends Controller
     private function getMessages()
     {
         return collect(config('installer.wizard.steps'))
-            ->mapWithKeys(function($item, $step) {
+            ->mapWithKeys(function ($item, $step) {
                 return collect($item['messages'] ?? [])
-                    ->mapWithKeys(function($value, $field) use ($step) {
-                        return [ $field => $value ];
+                    ->mapWithKeys(function ($value, $field) {
+                        return [$field => $value];
                     });
             })->toArray();
     }

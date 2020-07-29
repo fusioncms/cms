@@ -14,7 +14,7 @@ class MenuRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('menus.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('menus.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**
@@ -28,7 +28,7 @@ class MenuRequest extends FormRequest
 
         return [
             'name'        => 'required|regex:/^[A-z]/i',
-            'handle'      => [ 'required', 'unique:menus,handle,' . $id, new NotAReservedKeyword ],
+            'handle'      => ['required', 'unique:menus,handle,'.$id, new NotAReservedKeyword()],
             'description' => 'sometimes',
         ];
     }

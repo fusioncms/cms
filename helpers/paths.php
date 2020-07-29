@@ -1,10 +1,11 @@
 <?php
 
-if (! function_exists('addon_path')) {
+if (!function_exists('addon_path')) {
     /**
      * Get the path to the addons folder.
      *
-     * @param  string  $path
+     * @param string $path
+     *
      * @return string
      */
     function addon_path($path = '')
@@ -13,24 +14,26 @@ if (! function_exists('addon_path')) {
     }
 }
 
-if (! function_exists('fusion_path')) {
+if (!function_exists('fusion_path')) {
     /**
      * Get the path to the fusion folder.
      *
-     * @param  string  $path
+     * @param string $path
+     *
      * @return string
      */
     function fusion_path($path = '')
     {
-        return realpath(__DIR__ . '/../') . ($path ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : $path);
+        return realpath(__DIR__.'/../').($path ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : $path);
     }
 }
 
-if (! function_exists('theme_path')) {
+if (!function_exists('theme_path')) {
     /**
      * Get the path to the themes folder.
      *
-     * @param  string  $path
+     * @param string $path
+     *
      * @return string
      */
     function theme_path($path = '')

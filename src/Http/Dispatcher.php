@@ -3,10 +3,10 @@
 namespace Fusion\Http;
 
 use Exception;
-use Illuminate\Support\Str;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class Dispatcher
@@ -44,7 +44,7 @@ class Dispatcher
     public function withoutAuthorization()
     {
         app()->bind(Gate::class, function ($app) {
-            return new class {
+            return new class() {
                 public function authorize($ability, $arguments = [])
                 {
                     return true;
@@ -82,9 +82,9 @@ class Dispatcher
     /**
      * GET request.
      *
-     * @param  string  $endpoint
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $endpoint
+     * @param string $method
+     * @param array  $parameters
      */
     public function get($endpoint, $parameters = [])
     {
@@ -94,9 +94,9 @@ class Dispatcher
     /**
      * POST request.
      *
-     * @param  string  $endpoint
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $endpoint
+     * @param string $method
+     * @param array  $parameters
      */
     public function post($endpoint, $parameters = [])
     {
@@ -106,9 +106,9 @@ class Dispatcher
     /**
      * PATCH request.
      *
-     * @param  string  $endpoint
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $endpoint
+     * @param string $method
+     * @param array  $parameters
      */
     public function patch($endpoint, $parameters = [])
     {
@@ -118,9 +118,9 @@ class Dispatcher
     /**
      * DELETE request.
      *
-     * @param  string  $endpoint
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $endpoint
+     * @param string $method
+     * @param array  $parameters
      */
     public function delete($endpoint, $parameters = [])
     {
@@ -130,25 +130,25 @@ class Dispatcher
     /**
      * Dispatch a new request.
      *
-     * @param  string  $endpoint
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $endpoint
+     * @param string $method
+     * @param array  $parameters
      */
     protected function dispatch($endpoint, $method, $parameters = [])
     {
         $this->disableMiddleware();
 
-        $uri     = url($this->baseUrl . '/' . $endpoint);
+        $uri = url($this->baseUrl.'/'.$endpoint);
         $current = request();
         $request = Request::create($uri, $method, $parameters);
 
-        if (! $this->validApiRoute($request)) {
+        if (!$this->validApiRoute($request)) {
             throw new Exception('The Fusion dispatcher requires a valid API endpoint.');
         }
 
         $response = app()->handle($request);
 
-        if ($response->exception instanceOf ValidationException) {
+        if ($response->exception instanceof ValidationException) {
             throw new ValidationException($response->exception->validator);
         }
 
@@ -160,13 +160,14 @@ class Dispatcher
     /**
      * Determine if the given request is a valid API request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return bool
      */
     protected function validApiRoute(Request $request)
     {
         $routes = Route::getRoutes();
-        $route  = $routes->match($request);
+        $route = $routes->match($request);
 
         if (Str::startsWith($route->uri(), 'api/')) {
             return true;
@@ -197,7 +198,7 @@ class Dispatcher
     protected function disableMiddleware()
     {
         foreach ((array) $this->middleware as $abstract) {
-            app()->instance($abstract, new class {
+            app()->instance($abstract, new class() {
                 public function handle($request, $next)
                 {
                     return $next($request);

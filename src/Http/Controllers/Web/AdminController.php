@@ -12,11 +12,11 @@ class AdminController extends Controller
      * @return \Illuminate\View\Factory
      */
     public function index()
-	{
-		if (auth()->check()) {
-			$this->authorize('access.controlPanel');
-		}
+    {
+        if (auth()->check()) {
+            $this->authorize('access.controlPanel');
+        }
 
-		return view('admin.index');
+        return view('admin.index');
     }
 }
