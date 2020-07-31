@@ -27,7 +27,7 @@
                     <a href="#"
                         class="tab__link flex justify-between items-center"
                         @click.prevent="select(index)"
-                        v-text="replicant.name">
+                        v-text="replicant.section.name">
                         <span
                             class="flex items-center justify-center w-6 h-6 rounded hover:bg-black hover:text-white"
                             @click.prevent="remove(index)">
@@ -40,7 +40,7 @@
             <template v-for="(replicant, index) in replicants">
                 <div v-show="index == active" :key="`replicant-${index}-panel`" class="tab__panel">
                     <component
-                        v-for="field in fields(replicant.index)"
+                        v-for="field in fields(replicant.section)"
                         :key="field.handle"
                         class="form__group"
                         :is="field.type.id + '-fieldtype'"
@@ -85,24 +85,24 @@
         },
 
         methods: {
-            fields(index) {
-                return this.sections[index].fields
+            fields(section) {
+                let index = _.findIndex(this.sections,
+                    (item) => item.id == section.id)
+
+                if (index != -1)
+                    return this.sections[index].fields
+                else
+                    return []
             },
 
             add(index) {
                 let section = this.sections[index]
                 let fields  = {}
                 
-                _.each(this.fields(index), (field) =>
+                _.each(section.fields, (field) =>
                     fields[field.handle] = field.default)
 
-                this.replicants.push({
-                    section: section.id,
-                    name:    section.name,
-                    handle:  section.handle,
-                    index,
-                    fields
-                })
+                this.replicants.push({ section, fields })
             },
 
             remove(index) {

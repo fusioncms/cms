@@ -72,7 +72,7 @@ class ReplicatorObserver
     {
         $fieldset = $replicator->fieldsets()->create([
             'name'   => ($name = "Replicator: {$replicator->name}"),
-            'handle' => str_handle($name),
+            'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
             'hidden' => true
         ]);
 
@@ -91,7 +91,7 @@ class ReplicatorObserver
         $fieldset = $replicator->fieldset;
         $fieldset->update([
             'name'   => ($name = "Replicator: {$replicator->name}"),
-            'handle' => str_handle($name),
+            'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
         ]);
 
         $sections = collect($replicator->field->settings['sections']);
@@ -265,6 +265,7 @@ class ReplicatorObserver
         Schema::create($this->getTable($section), function(Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('replicator_id')->index();
+            $table->unsignedBigInteger('section_id')->index();
             $table->timestamps();
         });
     }

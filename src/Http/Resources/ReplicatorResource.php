@@ -14,13 +14,10 @@ class ReplicatorResource extends JsonResource
      */
     public function toArray($request)
     {
-        $resource = [
-            'id'       => $this->id,
-            'name'     => $this->name,
-            'handle'   => $this->handle,
-            'field'    => new FieldResource($this->field),
-            'sections' => SectionResource::collection($this->sections),
-        ];
+        $resource = parent::toArray($request);
+        
+        $resource['field']    = new FieldResource($this->field);
+        $resource['sections'] = SectionResource::collection($this->sections);
         
         return $resource;
     }

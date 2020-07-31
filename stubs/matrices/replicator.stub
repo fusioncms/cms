@@ -2,6 +2,7 @@
 
 namespace Fusion\Models\Replicators;
 
+use Fusion\Models\Section;
 use Fusion\Models\Replicator;
 use Fusion\Database\Eloquent\Model;
 
@@ -36,13 +37,23 @@ class {class} extends Model
     protected $dates = {dates};
 
     /**
-     * Get replicator relationship.
+     * Get BelongsTo 'Replicator' relationship.
      *
-     * @return mixed
+     * @return BelongsTo
      */
     public function replicator()
     {
-        return $this->belongsTo(Replicator::class, 'replicator_id');
+        return $this->belongsTo(Replicator::class);
+    }
+
+    /**
+     * Get BelongsTo 'Section' relationship.
+     *
+     * @return BelongsTo
+     */
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
     }
 
     {relationships}

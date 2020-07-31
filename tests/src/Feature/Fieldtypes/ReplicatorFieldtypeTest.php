@@ -54,7 +54,7 @@ class ReplicatorFieldtypeTest extends TestCase
         // fieldset
         $this->assertDatabaseHas('fieldsets', [
             'name'   => ($name = 'Replicator: ' . $replicator->name),
-            'handle' => str_handle($name),
+            'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
         ]);
 
         // associated field..
@@ -193,6 +193,80 @@ class ReplicatorFieldtypeTest extends TestCase
                 str_handle("rp_{$replicator->handle}_{$section->handle}_{$replicator->uniqid}")
             );
         });
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group fieldtypes
+     * @group replicator
+     */
+    public function persisting_replicator_field_will_persist_its_own_fields()
+    {
+        // create replicator..
+        $replicator = $this->createReplicator([ $this->sectionA, $this->sectionB ]);
+        $matrix     = \Facades\MatrixFactory::withName('Collectibles')->asCollection()->withFieldset($this->fieldset)->create();
+        $model      = (new \Fusion\Services\Builders\Collection($matrix->handle))->make();
+
+        $sectionA = $replicator->sections->get(0);
+        $sectionB = $replicator->sections->get(1);
+
+        // new single attributes..
+        $attributes = [
+            'name'   => 'Test Page',
+            'slug'   => 'test-page',
+            'status' => true
+        ];
+
+        // relicator field..
+        $attributes[$replicator->handle] = [
+            [
+                'section' => $sectionA->toArray(),
+                'fields'  => [ 'rfa1' => 'Foo1', 'rfa2' => 'Bar1' ]
+            ],
+            [
+                'section' => $sectionB->toArray(),
+                'fields'  => [ 'rfb1' => 'Baz', 'rfb2' => 'Boz' ]
+            ],
+            [
+                'section' => $sectionA->toArray(),
+                'fields'  => [ 'rfa1' => 'Foo2', 'rfa2' => 'Bar2' ]
+            ],
+        ];
+
+        // persist..
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/collections/{$matrix->handle}", $attributes)
+            ->assertStatus(201);
+        
+        // --
+        $instance = $model->first();
+
+        // pivot..
+        $replicator->sections->each(function($section) use ($instance) {
+            $instance
+                ->{"rp_{$section->handle}"}
+                ->pluck('id')
+                ->each(function($id) use ($instance) {
+                    $this->assertDatabaseHas('replicators_pivot', [
+                        'replicant_id' => $id,
+                        'pivot_type'   => get_class($instance),
+                        'pivot_id'     => $instance->id
+                    ]);
+                });
+
+        });
+
+        foreach ($attributes[$replicator->handle] as $replicant) {
+            $section = Section::find($replicant['section']['id']);
+            $builder = $replicator->getBuilder($section);
+
+            foreach($replicant['fields'] as $key => $value) {
+                $this->assertDatabaseHas($builder->getTable(), [ $key => $value ]);
+            }
+        }
     }
 
     //

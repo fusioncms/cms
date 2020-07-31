@@ -25,7 +25,7 @@ class Replicator extends Model
      */
     public function getBuilder(Section $section)
     {
-        return Builder::resolve($this->handle, $section);
+        return Builder::resolve($this->uniqid, $section);
     }
 
     /**
@@ -36,17 +36,6 @@ class Replicator extends Model
     public function sections()
     {
         return $this->fieldset->sections();
-    }
-
-    /**
-     * Get `replicant` relationship.
-     * 
-     * @param  Section $section
-     * @return Builder
-     */
-    public function replicant(Section $section)
-    {
-        return $this->hasMany(get_class($this->getBuilder($section)));
     }
 
     /**

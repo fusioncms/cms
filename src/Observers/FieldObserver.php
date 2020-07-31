@@ -22,10 +22,8 @@ class FieldObserver
 
         $fieldset   = $field->section->fieldset;
         $containers = $this->getFieldsettables($fieldset);
-
-        $relationship = $fieldtype->getRelationship();
-        $column       = $fieldtype->getColumn('type');
-        $settings     = $fieldtype->getColumn('settings') ?? [];
+        $column     = $fieldtype->getColumn('type');
+        $settings   = $fieldtype->getColumn('settings') ?? [];
 
         array_unshift($settings, $field->handle);
 
@@ -70,9 +68,8 @@ class FieldObserver
             $table = $container->getTable();
 
             if ($old['handle'] !== $new['handle']) {
-                $fieldtype    = fieldtypes()->get($new['type']);
-                $column       = $fieldtype->getColumn('type');
-                $relationship = $fieldtype->getRelationship();
+                $fieldtype = fieldtypes()->get($new['type']);
+                $column    = $fieldtype->getColumn('type');
 
                 if (! is_null($column)) {
                     Schema::table($table, function ($table) use ($old, $new) {
@@ -111,9 +108,8 @@ class FieldObserver
         $fieldset   = $field->section->fieldset;
         $containers = $this->getFieldsettables($fieldset);
 
-        $relationship = $fieldtype->getRelationship();
-        $column       = $fieldtype->getColumn('type');
-        $settings     = $fieldtype->getColumn('settings') ?? [];
+        $column   = $fieldtype->getColumn('type');
+        $settings = $fieldtype->getColumn('settings') ?? [];
 
         array_unshift($settings, $field->handle);
 
