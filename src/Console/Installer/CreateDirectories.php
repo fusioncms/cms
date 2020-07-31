@@ -13,17 +13,17 @@ class CreateDirectories
      */
     public function handle()
     {
-        if (! File::exists(base_path('addons'))) {
+        if (!File::exists(base_path('addons'))) {
             File::makeDirectory(base_path('addons'));
             File::put(base_path('addons/.gitignore'), "*\n!.gitignore");
         }
 
-        if (! File::exists(base_path('themes'))) {
+        if (!File::exists(base_path('themes'))) {
             File::makeDirectory(base_path('themes'));
             File::put(base_path('themes/.gitignore'), "*\n!.gitignore");
         }
 
-        if (! File::exists(storage_path('app/themes'))) {
+        if (!File::exists(storage_path('app/themes'))) {
             File::makeDirectory(storage_path('app/themes'));
             File::put(storage_path('app/themes/.gitignore'), "*\n!.gitignore");
         }

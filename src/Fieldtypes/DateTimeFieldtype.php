@@ -29,21 +29,21 @@ class DateTimeFieldtype extends Fieldtype
      */
     public $settings = [
         'format' => 'Y-m-d',
-        'time' => false
+        'time'   => false,
     ];
 
     /**
      * @var array
      */
     public $rules = [
-        'settings.format' => 'required'
+        'settings.format' => 'required',
     ];
 
     /**
      * @var array
      */
     public $attributes = [
-        'settings.format' => 'format'
+        'settings.format' => 'format',
     ];
 
     /**

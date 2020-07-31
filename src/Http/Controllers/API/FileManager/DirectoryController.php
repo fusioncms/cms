@@ -2,15 +2,14 @@
 
 namespace Fusion\Http\Controllers\API\FileManager;
 
-use Fusion\Models\Directory;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedFilter;
 use Fusion\Http\Requests\DirectoryRequest;
 use Fusion\Http\Resources\DirectoryResource;
+use Fusion\Models\Directory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class DirectoryController extends Controller
 {
@@ -32,7 +31,7 @@ class DirectoryController extends Controller
                     AllowedFilter::exact('parent_id')->default(0),
                     AllowedFilter::callback('search', function (Builder $query, $value) {
                         $query->where('name', 'like', "%{$value}%");
-                    })
+                    }),
                 ])
                 ->allowedSorts('name')
                 ->defaultSort('name')
@@ -45,7 +44,8 @@ class DirectoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Fusion\Http\Requests\DirectoryRequest  $request
+     * @param \Fusion\Http\Requests\DirectoryRequest $request
+     *
      * @return \Fusion\Http\Resources\DirectoryResource
      */
     public function store(DirectoryRequest $request)
@@ -58,7 +58,8 @@ class DirectoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Fusion\Models\Directory  $directory
+     * @param \Fusion\Models\Directory $directory
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Directory $directory)
@@ -71,8 +72,9 @@ class DirectoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Fusion\Http\Requests\DirectoryRequest  $request
-     * @param  \Fusion\Models\Directory  $directory
+     * @param \Fusion\Http\Requests\DirectoryRequest $request
+     * @param \Fusion\Models\Directory               $directory
+     *
      * @return \Fusion\Http\Resources\DirectoryResource
      */
     public function update(DirectoryRequest $request, Directory $directory)
@@ -85,7 +87,8 @@ class DirectoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Fusion\Models\Directory  $directory
+     * @param \Fusion\Models\Directory $directory
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Directory $directory)

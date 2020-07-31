@@ -2,15 +2,16 @@
 
 namespace Fusion\Jobs\Backups;
 
-use Log;
 use Artisan;
-use Storage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Log;
+use Storage;
 
 class BackupRun
 {
-    use Dispatchable, Queueable;
+    use Dispatchable;
+    use Queueable;
 
     /**
      * @var string
@@ -39,14 +40,14 @@ class BackupRun
         // Clean existing backup collection..
         Artisan::call('backup:clean', [
             '--no-interaction' => true,
-            '--quiet'          => true
+            '--quiet'          => true,
         ]);
 
         // Run backup procedre..
         Artisan::call('backup:run', [
             '--only-to-disk'   => $this->disk,
             '--no-interaction' => true,
-            '--quiet'          => true
+            '--quiet'          => true,
         ]);
 
         $this->tearDown();
@@ -61,14 +62,15 @@ class BackupRun
     {
         // Create file-manager folder if it doesn't exist..
         // TODO: maybe create this upon fusion:install?
-        if (! Storage::disk('public')->exists('files')) {
+        if (!Storage::disk('public')->exists('files')) {
             Storage::disk('public')->makeDirectory('files');
         }
 
         // Store .env variables for backing up..
-        Storage::disk('temp')->put('env.json',
+        Storage::disk('temp')->put(
+            'env.json',
             collect(config('backup.backup.source.env'))
-                ->mapWithKeys(function($item) {
+                ->mapWithKeys(function ($item) {
                     return [$item => env($item)];
                 })->toJson()
         );
@@ -87,7 +89,8 @@ class BackupRun
     /**
      * The job failed to process.
      *
-     * @param  Exception  $exception
+     * @param Exception $exception
+     *
      * @return void
      */
     public function failed(Exception $exception)

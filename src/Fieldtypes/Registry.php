@@ -26,14 +26,15 @@ class Registry
     /**
      * Register a new fieldtype within the registry.
      *
-     * @param  string  $name
-     * @param  Fieldtype  $fieldtype
+     * @param string    $name
+     * @param Fieldtype $fieldtype
+     *
      * @return self
      */
     public function register($fieldtype)
     {
         if ($this->fieldtypes->search($fieldtype) === false) {
-            $instance = new $fieldtype;
+            $instance = new $fieldtype();
 
             // $this->registerSettings($instance);
 
@@ -46,7 +47,8 @@ class Registry
     /**
      * Determine if the registry has a given fieldtype.
      *
-     * @param  string  $fieldtype
+     * @param string $fieldtype
+     *
      * @return bool
      */
     public function has($fieldtype)
@@ -57,24 +59,25 @@ class Registry
     /**
      * Get the given fieldtype from the registry.
      *
-     * @param  string  $fieldtype
+     * @param string $fieldtype
+     *
      * @return \Fusion\Modules\Fields\Fieldtypes\Fieldtype
      */
     public function get($fieldtype)
     {
         $type = $this->fieldtypes->get($fieldtype);
 
-        if (! is_null($type)) {
+        if (!is_null($type)) {
             return $type;
         }
 
-        throw new Exception('Fieldtype not found in registry. [' . $fieldtype . ']');
+        throw new Exception('Fieldtype not found in registry. ['.$fieldtype.']');
     }
 
     public function all($include = ['matrix', 'forms'])
     {
         $fieldtypes = $this->fieldtypes->filter(function ($value, $key) use ($include) {
-            return ! in_array($include, $value->getExclude());
+            return !in_array($include, $value->getExclude());
         })->sortBy('name');
 
         return $fieldtypes;
@@ -86,7 +89,7 @@ class Registry
             foreach ($fieldtype->getSettings() as $handle => $data) {
                 $setting = Setting::where(['handle' => $handle])->first();
 
-                if (! $setting) {
+                if (!$setting) {
                     $data['handle'] = $handle;
 
                     Setting::create($data);

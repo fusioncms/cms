@@ -12,6 +12,7 @@ class Directory extends Model
 
     /**
      * Fillable fields for Directory model.
+     *
      * @var
      */
     protected $fillable = ['parent_id', 'name', 'slug'];
@@ -76,8 +77,9 @@ class Directory extends Model
     /**
      * Scope a query to only include users of a given type.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  mixed  $type
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed                                 $type
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeHierarchy($query, $parentId = 0)
@@ -91,16 +93,17 @@ class Directory extends Model
     /**
      * Tap into activity before persisting to database.
      *
-     * @param  \Spatie\Activitylog\Models\Activity $activity
-     * @param  string   $eventName
+     * @param \Spatie\Activitylog\Models\Activity $activity
+     * @param string                              $eventName
+     *
      * @return void
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
         $subject = $activity->subject;
-        $action  = ucfirst($eventName);
+        $action = ucfirst($eventName);
 
         $activity->description = "{$action} folder ({$subject->name})";
-        $activity->properties  = ['icon' => 'folder'];
+        $activity->properties = ['icon' => 'folder'];
     }
 }

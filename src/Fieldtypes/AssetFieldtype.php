@@ -3,10 +3,9 @@
 namespace Fusion\Fieldtypes;
 
 use File;
+use Fusion\Http\Resources\FileResource;
 use Fusion\Models\Field;
 use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
-use Fusion\Http\Resources\FileResource;
 
 class AssetFieldtype extends Fieldtype
 {
@@ -61,7 +60,8 @@ class AssetFieldtype extends Fieldtype
     /**
      * Generate relationship methods for associated Model.
      *
-     * @param  Fusion\Models\Field $field
+     * @param Fusion\Models\Field $field
+     *
      * @return string
      */
     public function generateRelationship($field)
@@ -82,19 +82,20 @@ class AssetFieldtype extends Fieldtype
     /**
      * Update relationship data in storage.
      *
-     * @param  Illuminate\Eloquent\Model  $model
-     * @param  Fusion\Models\Field           $field
+     * @param Illuminate\Eloquent\Model $model
+     * @param Fusion\Models\Field       $field
+     *
      * @return void
      */
     public function persistRelationship($model, Field $field)
     {
         $oldValues = $model->{$field->handle}->pluck('id');
-        $newValues = collect(request()->input($field->handle))->mapWithKeys(function($item, $key) use ($field) {
+        $newValues = collect(request()->input($field->handle))->mapWithKeys(function ($item, $key) use ($field) {
             return [
                 $item['id'] => [
                     'field_id' => $field->id,
-                    'order'    => $key + 1
-                ]];
+                    'order'    => $key + 1,
+                ], ];
         });
 
         $model->{$field->handle}()->detach($oldValues);
@@ -104,8 +105,9 @@ class AssetFieldtype extends Fieldtype
     /**
      * Returns resource object of field.
      *
-     * @param  Illuminate\Eloquent\Model  $model
-     * @param  Fusion\Models\Field           $field
+     * @param Illuminate\Eloquent\Model $model
+     * @param Fusion\Models\Field       $field
+     *
      * @return FileResource
      */
     public function getResource($model, Field $field)

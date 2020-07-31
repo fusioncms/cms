@@ -36,7 +36,7 @@ class MigrateCommand extends Command
     {
         parent::__construct();
 
-        $this->migrator = app("migrator");;
+        $this->migrator = app('migrator');
     }
 
     /**
@@ -46,23 +46,25 @@ class MigrateCommand extends Command
      */
     public function handle()
     {
-        if (! $this->confirmToProceed()) {
+        if (!$this->confirmToProceed()) {
             return 1;
         }
 
         $addon = Addon::where('namespace', $this->argument('namespace'))->first();
 
-        if (! $addon and $this->argument('namespace')) {
+        if (!$addon and $this->argument('namespace')) {
             $this->comment("The \"{$this->argument('namespace')}\" addon does not exist.");
+
             return;
         }
 
         if ($addon) {
             $this->migrate($addon);
+
             return;
         }
 
-        Addon::enabled()->each(function($addon) {
+        Addon::enabled()->each(function ($addon) {
             $this->migrate($addon);
         });
     }

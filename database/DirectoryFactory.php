@@ -1,7 +1,7 @@
 <?php
 
-use Fusion\Models\Directory;
 use Fusion\Contracts\Factory;
+use Fusion\Models\Directory;
 use Illuminate\Support\Str;
 
 class DirectoryFactory implements Factory
@@ -12,7 +12,7 @@ class DirectoryFactory implements Factory
     protected $name;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $parent;
 
@@ -40,7 +40,8 @@ class DirectoryFactory implements Factory
     /**
      * Create a directory with the given name.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \DirectoryFactory
      */
     public function withName(string $name)
@@ -53,7 +54,8 @@ class DirectoryFactory implements Factory
     /**
      * Create a directory with the given parent_id.
      *
-     * @param  \Fusion\Models\Directory|integer  $parent
+     * @param \Fusion\Models\Directory|int $parent
+     *
      * @return \DirectoryFactory
      */
     public function withParent($parent)

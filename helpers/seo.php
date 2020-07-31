@@ -1,6 +1,6 @@
 <?php
 
-if (! function_exists('seo')) {
+if (!function_exists('seo')) {
     /**
      * Fetch an instance of SEO.
      */

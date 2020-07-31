@@ -16,6 +16,6 @@ class Theme extends Facade
      */
     protected static function getFacadeAccessor()
     {
-    	return 'theme';
+        return 'theme';
     }
 }

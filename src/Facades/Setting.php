@@ -16,6 +16,6 @@ class Setting extends Facade
      */
     protected static function getFacadeAccessor()
     {
-    	return 'setting';
+        return 'setting';
     }
 }

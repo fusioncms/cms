@@ -2,9 +2,8 @@
 
 namespace Fusion\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Facade;
 use Fusion\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class CustomizeController extends Controller
 {
@@ -14,7 +13,7 @@ class CustomizeController extends Controller
 
         array_pop($segments);
 
-        $url        = '/'.implode('/', $segments);
+        $url = '/'.implode('/', $segments);
         $subRequest = $this->createNewRequest($request, $url);
 
         $subRequest->session()->flash('customizing', true);
@@ -26,8 +25,9 @@ class CustomizeController extends Controller
     /**
      * Create a new request object.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $url
+     * @param \Illuminate\Http\Request $request
+     * @param string                   $url
+     *
      * @return \Illuminate\Http\Request
      */
     protected function createNewRequest(Request $from, $url)

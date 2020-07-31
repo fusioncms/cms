@@ -2,10 +2,9 @@
 
 namespace Fusion\Http\Controllers\Web\Account;
 
-use Fusion\Models\User;
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\Account\SettingRequest;
+use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
@@ -22,7 +21,8 @@ class SettingController extends Controller
     /**
      * Show the specific resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return View
      */
     public function edit(Request $request)
@@ -33,13 +33,14 @@ class SettingController extends Controller
     /**
      * Update an existing resource in storage.
      *
-     * @param  \Fusion\Http\Requests\Account\SettingRequest $request
+     * @param \Fusion\Http\Requests\Account\SettingRequest $request
+     *
      * @return Redirect
      */
     public function update(SettingRequest $request)
     {
         auth()->user()->update($request->validated());
 
-        return back()->with('success','Account successfully updated!');
+        return back()->with('success', 'Account successfully updated!');
     }
 }

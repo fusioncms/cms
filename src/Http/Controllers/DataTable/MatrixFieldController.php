@@ -2,9 +2,9 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
+use Fusion\Http\Controllers\DataTableController;
 use Fusion\Models\Matrix;
 use Illuminate\Http\Request;
-use Fusion\Http\Controllers\DataTableController;
 
 class MatrixFieldController extends DataTableController
 {

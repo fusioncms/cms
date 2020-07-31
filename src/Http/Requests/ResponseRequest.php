@@ -3,19 +3,18 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Models\Form;
-use Fusion\Services\Builders\Form as Builder;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ResponseRequest extends FormRequest
 {
-
     public function __construct()
     {
-        $this->form          = Form::where('slug', request()->route('form'))->firstOrFail();
-        $this->fieldset      = $this->form->fieldset;
-        $this->fields        = $this->fieldset->fields ?? [];
+        $this->form = Form::where('slug', request()->route('form'))->firstOrFail();
+        $this->fieldset = $this->form->fieldset;
+        $this->fields = $this->fieldset->fields ?? [];
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
     }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -34,7 +33,7 @@ class ResponseRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'form_id' => $this->form->id,
+            'form_id'                 => $this->form->id,
             'identifiable_ip_address' => $this->form->collect_ip_addresses ? request()->ip() : null,
         ]);
     }

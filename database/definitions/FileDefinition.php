@@ -1,20 +1,19 @@
 <?php
 
-use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Default definition
+ * Default definition.
  */
 $factory->define(Fusion\Models\File::class, function (Faker $faker) {
     return [
         'directory_id' => 0,
         'uuid'         => ($uuid = unique_id()),
         'name'         => ($name = $this->faker->word),
-        'title'        => null,       
-        'alt'          => null,       
+        'title'        => null,
+        'alt'          => null,
         'caption'      => null,
         'extension'    => ($extn = 'png'),
         'mimetype'     => 'image/png',
@@ -26,7 +25,7 @@ $factory->define(Fusion\Models\File::class, function (Faker $faker) {
 });
 
 /**
- * Image definition
+ * Image definition.
  */
 $factory->state(Fusion\Models\File::class, 'image', function ($faker) {
     return [
@@ -35,7 +34,7 @@ $factory->state(Fusion\Models\File::class, 'image', function ($faker) {
 });
 
 /**
- * Audio definition
+ * Audio definition.
  */
 $factory->state(Fusion\Models\File::class, 'audio', function ($faker) {
     return [
@@ -50,7 +49,7 @@ $factory->state(Fusion\Models\File::class, 'audio', function ($faker) {
 });
 
 /**
- * Video definition
+ * Video definition.
  */
 $factory->state(Fusion\Models\File::class, 'video', function ($faker) {
     return [
@@ -65,7 +64,7 @@ $factory->state(Fusion\Models\File::class, 'video', function ($faker) {
 });
 
 /**
- * Document definition
+ * Document definition.
  */
 $factory->state(Fusion\Models\File::class, 'document', function ($faker) {
     return [
@@ -80,22 +79,21 @@ $factory->state(Fusion\Models\File::class, 'document', function ($faker) {
 });
 
 /**
- * Post create image - upload image
+ * Post create image - upload image.
  */
 $factory->afterCreatingState(Fusion\Models\File::class, 'image', function ($file, $faker) {
     $location = "{$file->uuid}-{$file->name}.{$file->extension}";
-    $file     = UploadedFile::fake()->image($location);
+    $file = UploadedFile::fake()->image($location);
 
     Storage::fake('public')->putFileAs('files', $file, $location);
-
 });
 
 /**
- * Post create document - upload file
+ * Post create document - upload file.
  */
 $factory->afterCreatingState(Fusion\Models\File::class, 'document', function ($file, $faker) {
     $location = "{$file->uuid}-{$file->name}.{$file->extension}";
-    $file     = UploadedFile::fake()->createWithContent($location, $faker->paragraphs(3, true));
+    $file = UploadedFile::fake()->createWithContent($location, $faker->paragraphs(3, true));
 
     Storage::fake('public')->putFileAs('files', $file, $location);
 });

@@ -2,11 +2,11 @@
 
 namespace Fusion\Http\Controllers\API\Forms;
 
+use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Requests\FormRequest;
+use Fusion\Http\Resources\FormResource;
 use Fusion\Models\Form;
 use Illuminate\Http\Request;
-use Fusion\Http\Requests\FormRequest;
-use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\FormResource;
 
 class FormController extends Controller
 {
@@ -14,6 +14,7 @@ class FormController extends Controller
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Support\Collection
      */
     public function index(Request $request)
@@ -28,7 +29,8 @@ class FormController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Fusion\Models\Form  $form
+     * @param \Fusion\Models\Form $form
+     *
      * @return \Fusion\Http\Resources\FormResource
      */
     public function show(Form $form)
@@ -41,7 +43,8 @@ class FormController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Fusion\Http\Requests\FormRequest  $request
+     * @param \Fusion\Http\Requests\FormRequest $request
+     *
      * @return \Fusion\Http\Resources\FormResource
      */
     public function store(FormRequest $request)
@@ -54,8 +57,9 @@ class FormController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Fusion\Http\Requests\FormRequest  $request
-     * @param  \Fusion\Models\Form  $form
+     * @param \Fusion\Http\Requests\FormRequest $request
+     * @param \Fusion\Models\Form               $form
+     *
      * @return \Fusion\Http\Resources\FormResource
      */
     public function update(FormRequest $request, Form $form)
@@ -68,7 +72,8 @@ class FormController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Fusion\Models\Form  $form
+     * @param \Fusion\Models\Form $form
+     *
      * @return void
      */
     public function destroy(Form $form)

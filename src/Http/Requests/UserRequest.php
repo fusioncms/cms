@@ -3,8 +3,6 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Rules\SecurePassword;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
@@ -16,8 +14,8 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        $authorized = $this->user()->can('users.' . ($this->method() === 'POST' ? 'create' : 'update'));
-        
+        $authorized = $this->user()->can('users.'.($this->method() === 'POST' ? 'create' : 'update'));
+
         /**
          * Only user with role `owner` may re-assign this role.
          */
@@ -51,7 +49,7 @@ class UserRequest extends FormRequest
 
         $rules = [
             'name'              => 'required',
-            'email'             => 'required|email|unique:users,email,' . $id,
+            'email'             => 'required|email|unique:users,email,'.$id,
             'role'              => 'sometimes|exists:roles,name',
             'status'            => 'sometimes|boolean',
             'email_verified_at' => 'sometimes|required',
@@ -60,9 +58,9 @@ class UserRequest extends FormRequest
         ];
 
         if ($this->method() === 'POST') {
-            $rules['password'] = [ 'required', new SecurePassword ];
+            $rules['password'] = ['required', new SecurePassword()];
         } else {
-            $rules['password'] = [ 'sometimes', new SecurePassword ];
+            $rules['password'] = ['sometimes', new SecurePassword()];
         }
 
         return $rules;

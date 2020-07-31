@@ -1,8 +1,8 @@
 <?php
 
-use Fusion\Models\Matrix;
-use Fusion\Models\Fieldset;
 use Fusion\Contracts\Factory;
+use Fusion\Models\Fieldset;
+use Fusion\Models\Matrix;
 use Illuminate\Support\Str;
 
 class MatrixFactory implements Factory
@@ -23,12 +23,12 @@ class MatrixFactory implements Factory
     protected $template;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $asSingle = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $asCollection = false;
 
@@ -47,8 +47,8 @@ class MatrixFactory implements Factory
         $overrides = [];
 
         if ($this->name) {
-            $overrides['name']   = $this->name;
-            $overrides['slug']   = Str::slug($this->name, '-');
+            $overrides['name'] = $this->name;
+            $overrides['slug'] = Str::slug($this->name, '-');
             $overrides['handle'] = Str::slug($this->name, '_');
         }
 
@@ -68,7 +68,7 @@ class MatrixFactory implements Factory
             $overrides['type'] = 'single';
         }
 
-        if (! $this->fieldset) {
+        if (!$this->fieldset) {
             $this->fieldset = factory(Fieldset::class)->create();
         }
 
@@ -82,7 +82,8 @@ class MatrixFactory implements Factory
     /**
      * Create a matrix with the given name.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \MatrixFactory
      */
     public function withName($name)
@@ -119,7 +120,8 @@ class MatrixFactory implements Factory
     /**
      * Create a matrix with the given fieldset.
      *
-     * @param  \Fusion\Models\Fieldset  $fieldset
+     * @param \Fusion\Models\Fieldset $fieldset
+     *
      * @return \MatrixFactory
      */
     public function withFieldset(Fieldset $fieldset)
@@ -132,7 +134,8 @@ class MatrixFactory implements Factory
     /**
      * Create a matrix with the given route.
      *
-     * @param  String $route
+     * @param string $route
+     *
      * @return \MatrixFactory
      */
     public function withRoute($route)
@@ -145,7 +148,8 @@ class MatrixFactory implements Factory
     /**
      * Create a matrix with the given template.
      *
-     * @param  String $template
+     * @param string $template
+     *
      * @return \MatrixFactory
      */
     public function withTemplate($template)

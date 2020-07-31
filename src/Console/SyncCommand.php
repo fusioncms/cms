@@ -29,12 +29,12 @@ class SyncCommand extends Command
     public function handle()
     {
         try {
-            activity()->withoutLogs(function() {
-                dispatch(new \Fusion\Console\Actions\SyncResources);
-                dispatch(new \Fusion\Console\Actions\SyncAddons);
-                dispatch(new \Fusion\Console\Actions\SyncExtensions);
-                dispatch(new \Fusion\Console\Actions\SyncSettings);
-                dispatch(new \Fusion\Console\Actions\SyncPermissions);
+            activity()->withoutLogs(function () {
+                dispatch(new \Fusion\Console\Actions\SyncResources());
+                dispatch(new \Fusion\Console\Actions\SyncAddons());
+                dispatch(new \Fusion\Console\Actions\SyncExtensions());
+                dispatch(new \Fusion\Console\Actions\SyncSettings());
+                dispatch(new \Fusion\Console\Actions\SyncPermissions());
             });
         } catch (Exception $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);

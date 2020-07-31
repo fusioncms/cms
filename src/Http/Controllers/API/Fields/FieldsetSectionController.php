@@ -2,12 +2,12 @@
 
 namespace Fusion\Http\Controllers\API\Fields;
 
-use Fusion\Models\Section;
-use Fusion\Models\Fieldset;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\FieldsetResource;
+use Fusion\Models\Fieldset;
+use Fusion\Models\Section;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class FieldsetSectionController extends Controller
 {
@@ -16,7 +16,7 @@ class FieldsetSectionController extends Controller
         $sections = collect($request->sections);
 
         $attached = $this->getAttachedSections($sections);
-        $updated  = $this->getUpdatedSections($sections);
+        $updated = $this->getUpdatedSections($sections);
         $detached = $this->getDetachedSections($fieldset, $sections);
 
         $fieldset = $this->deleteSections($fieldset, $detached);
@@ -27,30 +27,33 @@ class FieldsetSectionController extends Controller
     }
 
     /**
-     * @param  Collection $sections
+     * @param Collection $sections
+     *
      * @return Collection
      */
     protected function getAttachedSections(Collection $sections)
     {
         return $sections->filter(function ($section) {
-            return ! isset($section['id']);
+            return !isset($section['id']);
         });
     }
 
     /**
-     * @param  Collection $sections
+     * @param Collection $sections
+     *
      * @return Collection
      */
     protected function getUpdatedSections(Collection $sections)
     {
         return $sections->reject(function ($section) {
-            return ! isset($section['id']);
+            return !isset($section['id']);
         });
     }
 
     /**
-     * @param  Fieldset   $fieldset
-     * @param  Collection $sections
+     * @param Fieldset   $fieldset
+     * @param Collection $sections
+     *
      * @return Collection
      */
     protected function getDetachedSections(Fieldset $fieldset, Collection $sections)
@@ -60,7 +63,7 @@ class FieldsetSectionController extends Controller
         }
 
         $existing = $fieldset->sections->pluck('id');
-        $saving   = $this->getUpdatedSections($sections)->pluck('id');
+        $saving = $this->getUpdatedSections($sections)->pluck('id');
 
         return $existing->diff($saving);
     }
@@ -68,8 +71,9 @@ class FieldsetSectionController extends Controller
     /**
      * Create Sections on Fieldset.
      *
-     * @param  Fieldset   $fieldset
-     * @param  Collection $sections
+     * @param Fieldset   $fieldset
+     * @param Collection $sections
+     *
      * @return Fieldset
      */
     protected function createSections(Fieldset $fieldset, Collection $sections)
@@ -96,8 +100,9 @@ class FieldsetSectionController extends Controller
     /**
      * Update Sections on Fieldset.
      *
-     * @param  Fieldset   $fieldset
-     * @param  Collection $sections
+     * @param Fieldset   $fieldset
+     * @param Collection $sections
+     *
      * @return Fieldset
      */
     protected function updateSections(Fieldset $fieldset, Collection $sections)
@@ -116,7 +121,7 @@ class FieldsetSectionController extends Controller
                 $section->update($data);
 
                 $detached = $this->getDetachedFields($section, $fields);
-                $updated  = $this->getUpdatedFields($fields);
+                $updated = $this->getUpdatedFields($fields);
                 $attached = $this->getAttachedFields($fields);
 
                 $this->deleteFields($section, $detached);
@@ -131,8 +136,9 @@ class FieldsetSectionController extends Controller
     /**
      * Remove Sections from Fieldset.
      *
-     * @param  Fieldset   $fieldset
-     * @param  Collection $ids
+     * @param Fieldset   $fieldset
+     * @param Collection $ids
+     *
      * @return Fieldset
      */
     protected function deleteSections(Fieldset $fieldset, Collection $ids)
@@ -149,36 +155,39 @@ class FieldsetSectionController extends Controller
     }
 
     /**
-     * @param  Collection $fields
+     * @param Collection $fields
+     *
      * @return Collection
      */
     protected function getAttachedFields(Collection $fields)
     {
         return $fields->filter(function ($field) {
-            return ! isset($field['id']);
+            return !isset($field['id']);
         });
     }
 
     /**
-     * @param  Collection $fields
+     * @param Collection $fields
+     *
      * @return Collection
      */
     protected function getUpdatedFields(Collection $fields)
     {
         return $fields->reject(function ($field) {
-            return ! isset($field['id']);
+            return !isset($field['id']);
         });
     }
 
     /**
-     * @param  Section    $section
-     * @param  Collection $fields
+     * @param Section    $section
+     * @param Collection $fields
+     *
      * @return Collection
      */
     protected function getDetachedFields(Section $section, Collection $fields)
     {
         $existing = $section->fields->pluck('id');
-        $saving   = $this->getUpdatedFields($fields)->pluck('id');
+        $saving = $this->getUpdatedFields($fields)->pluck('id');
 
         return $existing->diff($saving);
     }
@@ -186,8 +195,9 @@ class FieldsetSectionController extends Controller
     /**
      * Create Fields on Section.
      *
-     * @param  Section    $section
-     * @param  Collection $fields
+     * @param Section    $section
+     * @param Collection $fields
+     *
      * @return void
      */
     protected function createFields(Section $section, Collection $fields)
@@ -209,8 +219,9 @@ class FieldsetSectionController extends Controller
     /**
      * Update Fields on Section.
      *
-     * @param  Section    $section
-     * @param  Collection $fields
+     * @param Section    $section
+     * @param Collection $fields
+     *
      * @return void
      */
     protected function updateFields(Section $section, Collection $fields)
@@ -231,8 +242,9 @@ class FieldsetSectionController extends Controller
     /**
      * Remove Fields from Section.
      *
-     * @param  Section    $section
-     * @param  Collection $ids
+     * @param Section    $section
+     * @param Collection $ids
+     *
      * @return void
      */
     protected function deleteFields(Section $section, Collection $ids)

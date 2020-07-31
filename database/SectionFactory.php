@@ -1,8 +1,8 @@
 <?php
 
+use Fusion\Contracts\Factory;
 use Fusion\Models\Field;
 use Fusion\Models\Section;
-use Fusion\Contracts\Factory;
 
 class SectionFactory implements Factory
 {
@@ -19,9 +19,9 @@ class SectionFactory implements Factory
     {
         $sections = factory(Section::class, $this->times)->create();
 
-        if (! $this->withoutFields) {
+        if (!$this->withoutFields) {
             foreach ($sections as $index => $section) {
-                if (! isset($this->fields[$index])) {
+                if (!isset($this->fields[$index])) {
                     $this->fields[$index] = factory(Field::class, 3)->make()->toArray();
                 }
 
@@ -39,7 +39,8 @@ class SectionFactory implements Factory
     /**
      * Create a section with the given fields.
      *
-     * @param  array  $fields
+     * @param array $fields
+     *
      * @return \SectionFactory
      */
     public function withFields(array $fields)
@@ -59,7 +60,8 @@ class SectionFactory implements Factory
     /**
      * Create N number of instances.
      *
-     * @param  integer  $times
+     * @param int $times
+     *
      * @return \SectionFactory
      */
     public function times($times)

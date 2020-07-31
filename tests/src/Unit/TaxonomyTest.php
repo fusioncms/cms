@@ -2,14 +2,13 @@
 
 namespace Fusion\Tests\Unit;
 
-use Fusion\Tests\TestCase;
-use Fusion\Models\Taxonomy;
-use Fusion\Models\Fieldset;
 use Facades\TaxonomyFactory;
-use Illuminate\Support\Facades\DB;
+use Fusion\Models\Fieldset;
+use Fusion\Models\Taxonomy;
+use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Facades\DB;
 
 class TaxonomyTest extends TestCase
 {
@@ -55,7 +54,7 @@ class TaxonomyTest extends TestCase
 
         $this->assertDatabaseHasTable('taxonomy_categories');
 
-        $taxonomy->name   = 'Tags';
+        $taxonomy->name = 'Tags';
         $taxonomy->handle = 'tags';
         $taxonomy->save();
 
@@ -74,7 +73,7 @@ class TaxonomyTest extends TestCase
 
         $taxonomy = factory(Taxonomy::class)->create();
         $taxonomy = $taxonomy->toArray();
-        $taxonomy['id']   = null;
+        $taxonomy['id'] = null;
         $taxonomy['slug'] = 'new-slug';
 
         DB::table('taxonomies')->insert($taxonomy);
@@ -92,7 +91,7 @@ class TaxonomyTest extends TestCase
 
         $taxonomy = factory(Taxonomy::class)->create();
         $taxonomy = $taxonomy->toArray();
-        $taxonomy['id']     = null;
+        $taxonomy['id'] = null;
         $taxonomy['handle'] = 'new-handle';
 
         DB::table('taxonomies')->insert($taxonomy);

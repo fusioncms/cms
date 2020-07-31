@@ -1,10 +1,10 @@
 <?php
 
 return [
-	'name'        => 'CORS',
-	'group'       => 'General',
-	'icon'        => 'lock',
-	'description' => 'Configure Cross-Origin Resource Sharing.',
+    'name'        => 'CORS',
+    'group'       => 'General',
+    'icon'        => 'lock',
+    'description' => 'Configure Cross-Origin Resource Sharing.',
     'settings'    => [
         'General' => [
             [
@@ -12,7 +12,7 @@ return [
                 'handle'      => 'cors_paths',
                 'description' => 'You can enable CORS for 1 or multiple paths.',
                 'type'        => 'list',
-                'default'     => [ 'api/*' ],
+                'default'     => ['api/*'],
                 'override'    => 'cors.paths',
             ],
             [
@@ -20,7 +20,7 @@ return [
                 'handle'      => 'cors_allowed_methods',
                 'description' => 'Matches the request method.',
                 'type'        => 'list',
-                'default'     => [ '*' ],
+                'default'     => ['*'],
                 'override'    => 'cors.allowed_methods',
             ],
             [
@@ -28,7 +28,7 @@ return [
                 'handle'      => 'cors_allowed_origins',
                 'description' => 'Matches the request origin. Wildcards can be used, eg. *.mydomain.com',
                 'type'        => 'list',
-                'default'     => [ '*' ],
+                'default'     => ['*'],
                 'override'    => 'cors.allowed_origins',
             ],
             [
@@ -67,7 +67,7 @@ return [
                 ],
                 'default'  => 0,
                 'override' => 'cors.max_age',
-                'required' => true
+                'required' => true,
             ],
             [
                 'name'        => 'Supports Credentials',
@@ -75,7 +75,7 @@ return [
                 'description' => 'Sets the Access-Control-Allow-Credentials header.',
                 'type'        => 'toggle',
                 'override'    => 'cors.supports_credentials',
-            ]
+            ],
         ],
     ],
 ];

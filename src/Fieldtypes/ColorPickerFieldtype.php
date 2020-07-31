@@ -33,7 +33,7 @@ class ColorPickerFieldtype extends Fieldtype
      */
     public $settings = [
         'transparency' => 1,
-        'default' => ''
+        'default'      => '',
     ];
 
     /**

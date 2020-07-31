@@ -2,29 +2,29 @@
 
 namespace Fusion\Models;
 
-use File;
 use Exception;
+use File;
+use Fusion\Facades\Theme;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionProperty;
-use Fusion\Facades\Theme;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model;
 
 class Mailable extends Model
 {
-	/**
+    /**
      * The attributes that are fillable via mass assignment.
      *
      * @var array
      */
     protected $fillable = [
-    	'name',
-    	'handle',
+        'name',
+        'handle',
         'namespace',
-    	'markdown',
-    	'status'
+        'markdown',
+        'status',
     ];
 
     /**
@@ -33,7 +33,7 @@ class Mailable extends Model
      * @var array
      */
     protected $casts = [
-    	'status' => 'boolean'
+        'status' => 'boolean',
     ];
 
     /**
@@ -45,7 +45,7 @@ class Mailable extends Model
 
     /**
      * Get resolved DatabaseMailable class.
-     * [Derived]
+     * [Derived].
      *
      * @return DatabaseMailable
      */
@@ -56,7 +56,7 @@ class Mailable extends Model
 
     /**
      * Get which Theme this Mailable comes from.
-     * [Derived]
+     * [Derived].
      *
      * @return DatabaseMailable
      */
@@ -71,9 +71,10 @@ class Mailable extends Model
 
     /**
      * Scope a query to only include active mailables.
-     * AKA Fusion and Current Theme
+     * AKA Fusion and Current Theme.
      *
-     * @param  Builder  $query
+     * @param Builder $query
+     *
      * @return Builder
      */
     public function scopeActive($query)
@@ -86,7 +87,7 @@ class Mailable extends Model
 
     /**
      * Get `placeholder` attribute.
-     * [Derived]
+     * [Derived].
      *
      * @return Collection
      */
@@ -97,12 +98,12 @@ class Mailable extends Model
 
         return collect($properties)->map(function ($property) {
             if ($property->getDeclaringClass()->getName() == $this->namespace) {
-                return [ $property->getName() => $property->getValue($this->mailable) ];
+                return [$property->getName() => $property->getValue($this->mailable)];
             }
         })->collapse()->filter()->map(function ($value, $name) {
-            if ($value instanceOf Model) {
+            if ($value instanceof Model) {
                 return $value->getFillable();
-            } elseif ($value instanceOf Collection) {
+            } elseif ($value instanceof Collection) {
                 return $value->keys();
             } elseif (is_array($value)) {
                 if (Arr::isAssoc($value)) {
@@ -118,7 +119,7 @@ class Mailable extends Model
 
     /**
      * Register new Mailables in storage.
-     * [Helper]
+     * [Helper].
      *
      * @return void
      */
@@ -127,11 +128,11 @@ class Mailable extends Model
         $namespace = Theme::active()->get('namespace');
 
         $fusionMailFiles = File::files(__DIR__.'/../Mail');
-        $themeMailFiles  = File::files(theme_path("{$namespace}/src/Mail"));
+        $themeMailFiles = File::files(theme_path("{$namespace}/src/Mail"));
 
         // Resolve fusion mailables..
         foreach ($fusionMailFiles as $file) {
-            self::resolveNewMailable('Fusion\\Mail\\' . $file->getFilenameWithoutExtension());
+            self::resolveNewMailable('Fusion\\Mail\\'.$file->getFilenameWithoutExtension());
         }
 
         // Resolve theme mailables..
@@ -142,9 +143,10 @@ class Mailable extends Model
 
     /**
      * Resolve and create new Database Mailable.
-     * [Helper]
+     * [Helper].
      *
-     * @param  string $namespace
+     * @param string $namespace
+     *
      * @return void
      */
     private static function resolveNewMailable($namespace)

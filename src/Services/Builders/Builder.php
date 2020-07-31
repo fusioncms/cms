@@ -2,11 +2,9 @@
 
 namespace Fusion\Services\Builders;
 
-use Fusion\Models\Taxonomy;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Fusion\Contracts\Builder as BuilderContract;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 abstract class Builder implements BuilderContract
 {
@@ -45,18 +43,19 @@ abstract class Builder implements BuilderContract
         $handle = $this->collection;
 
         if ($this->type) {
-            $handle .= '_' . $this->type;
+            $handle .= '_'.$this->type;
         }
 
         $className = Str::studlyCase($handle);
 
-        return $this->namespace . '\\' . $className;
+        return $this->namespace.'\\'.$className;
     }
 
     /**
      * Set the root namespace.
      *
-     * @param  string  $namespace
+     * @param string $namespace
+     *
      * @return self
      */
     public function setNamespace($namespace)
@@ -162,15 +161,15 @@ abstract class Builder implements BuilderContract
      */
     public function generateRelationships()
     {
-        if (! $this->hasRelationships()) {
+        if (!$this->hasRelationships()) {
             return '';
         }
 
         $relationships = $this->getRelationships();
-        $generated     = '';
+        $generated = '';
 
         foreach ($relationships as $handle => list($field, $fieldtype)) {
-            $generated .= $fieldtype->generateRelationship($field) . "\n\n";
+            $generated .= $fieldtype->generateRelationship($field)."\n\n";
         }
 
         return trim($generated);
@@ -182,19 +181,20 @@ abstract class Builder implements BuilderContract
      *
      * https://media.giphy.com/media/zIwIWQx12YNEI/giphy.gif
      *
-     * @param  Fieldset  $fieldset
+     * @param Fieldset $fieldset
+     *
      * @return \Illuminate\Support\Collection
      */
     protected function getFieldsettables($fieldset)
     {
-        return DB::table('fieldsettables')->where('fieldset_id', $fieldset->id)->get()->map(function($morph) {
+        return DB::table('fieldsettables')->where('fieldset_id', $fieldset->id)->get()->map(function ($morph) {
             $model = app()->make($morph->fieldsettable_type);
             $model = $model->find($morph->fieldsettable_id);
 
             return $model;
-        })->reject(function($model) {
+        })->reject(function ($model) {
             return is_null($model);
-        })->map(function($model) {
+        })->map(function ($model) {
             return $model;
         });
     }

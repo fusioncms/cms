@@ -1,8 +1,8 @@
 <?php
 
+use Faker\Generator as Faker;
 use Fusion\Models\User;
 use Illuminate\Support\Str;
-use Faker\Generator as Faker;
 
 /*
 |--------------------------------------------------------------------------

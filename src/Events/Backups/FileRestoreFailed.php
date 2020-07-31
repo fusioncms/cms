@@ -6,10 +6,10 @@ use Exception;
 
 class FileRestoreFailed
 {
-	/**
-	 * @var Exception
-	 */
-	public $exception;
+    /**
+     * @var Exception
+     */
+    public $exception;
 
     /**
      * @var array
@@ -18,7 +18,7 @@ class FileRestoreFailed
 
     public function __construct(Exception $exception, array $filesToCopy)
     {
-    	$this->exception   = $exception;
+        $this->exception = $exception;
         $this->filesToCopy = $filesToCopy;
     }
 }

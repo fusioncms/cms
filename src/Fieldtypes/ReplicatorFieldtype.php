@@ -30,7 +30,7 @@ class ReplicatorFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
-        'replicator' => null
+        'replicator' => null,
     ];
 
     /**
@@ -56,8 +56,9 @@ class ReplicatorFieldtype extends Fieldtype
 
     /**
      * Update Field Upon Save.
-     * 
-     * @param  Field  $field
+     *
+     * @param Field $field
+     *
      * @return void
      */
     public function onSaved(Field $field)
@@ -72,7 +73,7 @@ class ReplicatorFieldtype extends Fieldtype
         } else {
             $replicator = Replicator::where([
                 'id'       => $field->settings['replicator'],
-                'field_id' => $field->id
+                'field_id' => $field->id,
             ])->firstOrFail();
 
             $replicator->touch();
@@ -88,8 +89,9 @@ class ReplicatorFieldtype extends Fieldtype
 
     /**
      * Delete Field model after saved.
-     * 
-     * @param  Field  $field
+     *
+     * @param Field $field
+     *
      * @return void
      */
     public function onDeleted(Field $field)
@@ -105,7 +107,8 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Generate relationship methods for associated Model.
      *
-     * @param  Fusion\Models\Field $field
+     * @param Fusion\Models\Field $field
+     *
      * @return string
      */
     public function generateRelationship(Field $field)
@@ -132,8 +135,9 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Update relationship data in storage.
      *
-     * @param  Illuminate\Eloquent\Model  $model
-     * @param  Fusion\Models\Field        $field
+     * @param Illuminate\Eloquent\Model $model
+     * @param Fusion\Models\Field       $field
+     *
      * @return void
      */
     public function persistRelationship($model, Field $field)
@@ -201,8 +205,9 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Returns resource object of field.
      *
-     * @param  Illuminate\Eloquent\Model  $model
-     * @param  Fusion\Models\Field        $field
+     * @param Illuminate\Eloquent\Model $model
+     * @param Fusion\Models\Field       $field
+     *
      * @return ReplicantResource
      */
     public function getResource($model, Field $field)

@@ -2,9 +2,9 @@
 
 namespace Fusion\Http\Controllers\Web;
 
+use Fusion\Http\Controllers\Controller;
 use Fusion\Models\Form;
 use Illuminate\Http\Request;
-use Fusion\Http\Controllers\Controller;
 
 class ThankyouController extends Controller
 {
@@ -12,7 +12,7 @@ class ThankyouController extends Controller
     {
         $form = Form::where('slug', $form)->first();
 
-        if (! $form) {
+        if (!$form) {
             abort(404);
         }
 

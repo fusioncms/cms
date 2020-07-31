@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Str;
 use Faker\Generator as Faker;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,15 +25,14 @@ $factory->define(Fusion\Models\Taxonomy::class, function (Faker $faker) {
         'sidebar'          => $faker->boolean(50),
         'icon'             => $faker->randomElement(['tag', 'swatchbook', 'map-marker-alt', 'feather-alt']),
         'route'            => 'taxonomy/{slug}',
-        'template'         => 'taxonomy.' . Str::slug($name, '_'),
+        'template'         => 'taxonomy.'.Str::slug($name, '_'),
     ];
 });
-
 
 $factory->afterCreatingState(Fusion\Models\Taxonomy::class, 'terms', function ($taxonomy, $faker) {
     $terms = [];
 
-    for ($i = 0; $i < 5; ++$i) {
+    for ($i = 0; $i < 5; $i++) {
         array_push($terms, [
             'name' => ($name = $faker->unique()->word),
             'slug' => Str::slug($name, '-'),

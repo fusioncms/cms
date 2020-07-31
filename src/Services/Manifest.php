@@ -14,12 +14,12 @@ class Manifest extends Collection
     /**
      * @var string
      */
-    protected $content = "";
+    protected $content = '';
 
     /**
      * Create a new Manifest.
      *
-     * @param  null|string  $path
+     * @param null|string $path
      */
     public function __construct($path = null)
     {
@@ -32,7 +32,8 @@ class Manifest extends Collection
     /**
      * Make a new manifest collection based on the passed file path.
      *
-     * @param  string  $path
+     * @param string $path
+     *
      * @return static
      */
     public static function make($path = null)
@@ -89,7 +90,7 @@ class Manifest extends Collection
     /**
      * Set the manifest file path property.
      *
-     * @param  string  $path
+     * @param string $path
      */
     public function setPath($path)
     {
@@ -109,7 +110,7 @@ class Manifest extends Collection
     /**
      * Set the manifest content property.
      *
-     * @param  string  $content
+     * @param string $content
      */
     public function setContent($content)
     {

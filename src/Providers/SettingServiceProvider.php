@@ -4,10 +4,9 @@ namespace Fusion\Providers;
 
 use Fusion\Models\Setting as SettingGroup;
 use Fusion\Services\Setting as SettingService;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class SettingServiceProvider extends ServiceProvider
@@ -39,12 +38,12 @@ class SettingServiceProvider extends ServiceProvider
     public function register()
     {
         // Explicit model binding..
-        Route::bind('group', function($handle) {
+        Route::bind('group', function ($handle) {
             return SettingGroup::where('handle', $handle)->first() ?? abort(404);
         });
 
         // load system settings
-        $this->app->singleton('setting', function() {
+        $this->app->singleton('setting', function () {
             return new SettingService($this->settings);
         });
     }
@@ -56,18 +55,28 @@ class SettingServiceProvider extends ServiceProvider
      */
     private function bootConfigOverrides()
     {
-        SettingGroup::all()->each(function($group) {
+        SettingGroup::all()->each(function ($group) {
             if ($group->fieldset) {
-                $group->fieldset->fields->each(function($field) use ($group) {
+                $group->fieldset->fields->each(function ($field) use ($group) {
                     if ($field->settings['override'] !== false) {
-                        $key   = $field->settings['override'];
+                        $key = $field->settings['override'];
                         $value = setting("{$group->handle}.{$field->handle}");
 
                         if (is_a($value, Collection::class)) {
                             $value = $value->all();
                         }
 
-                        config([ $key => $value ]);
+                        // For file types we want to pass the path of the file
+                        // through to override config values.
+                        //
+                        // TODO: Think of a more sustainable way to configure
+                        // these instances so other fields can determine how
+                        // they should override config values.
+                        if ($field->type == 'file' and isset($value[0])) {
+                            $value = storage_path('app/public/'.$value[0]->location);
+                        }
+
+                        config([$key => $value]);
                     }
                 });
             }

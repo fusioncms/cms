@@ -2,18 +2,19 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Fusion\Models\Extension;
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\ExtensionRequest;
 use Fusion\Http\Resources\ExtensionResource;
+use Fusion\Models\Extension;
+use Illuminate\Http\Request;
 
 class ExtensionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Fusion\Http\Resources\ExtensionResource
      */
     public function index(Request $request)
@@ -28,7 +29,8 @@ class ExtensionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Fusion\Models\Extension  $extension
+     * @param \Fusion\Models\Extension $extension
+     *
      * @return \Fusion\Http\Resources\ExtensionResource
      */
     public function show(Extension $extension)
@@ -41,7 +43,8 @@ class ExtensionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Fusion\Http\Requests\ExtensionRequest  $request
+     * @param \Fusion\Http\Requests\ExtensionRequest $request
+     *
      * @return \Fusion\Http\Responses\ExtensionResource
      */
     public function store(ExtensionRequest $request)
@@ -58,17 +61,18 @@ class ExtensionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Fusion\Http\Requests\ExtensionRequest  $request
-     * @param  \Fusion\Models\Extension  $extension
+     * @param \Fusion\Http\Requests\ExtensionRequest $request
+     * @param \Fusion\Models\Extension               $extension
+     *
      * @return \Fusion\Http\Responses\ExtensionResource
      */
     public function update(ExtensionRequest $request, Extension $extension)
     {
         $extension->update($request->validated());
 
-        if ($request->fieldset && (! isset($extension->fieldset) || $extension->fieldset->id !== $extension->fieldset)) {
+        if ($request->fieldset && (!isset($extension->fieldset) || $extension->fieldset->id !== $extension->fieldset)) {
             $extension->attachFieldset($request->fieldset);
-        } elseif (! $request->fieldset) {
+        } elseif (!$request->fieldset) {
             $extension->detachFieldset();
         }
 
@@ -78,7 +82,8 @@ class ExtensionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Fusion\Models\Extension  $extension
+     * @param \Fusion\Models\Extension $extension
+     *
      * @return void
      */
     public function destroy(Extension $extension)

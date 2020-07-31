@@ -2,9 +2,9 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Support\Str;
 use Fusion\Rules\NotAReservedKeyword;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class TaxonomyRequest extends FormRequest
 {
@@ -15,7 +15,7 @@ class TaxonomyRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('taxonomies.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('taxonomies.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**
@@ -41,8 +41,8 @@ class TaxonomyRequest extends FormRequest
 
         return [
             'name'        => 'required|regex:/^[A-z]/i',
-            'handle'      => [ 'required', 'not_regex:/[^a-z0-9_]/i', 'unique:taxonomies,handle,' . $id, new NotAReservedKeyword ],
-            'slug'        => 'required|unique:taxonomies,slug,' . $id,
+            'handle'      => ['required', 'not_regex:/[^a-z0-9_]/i', 'unique:taxonomies,handle,'.$id, new NotAReservedKeyword()],
+            'slug'        => 'required|unique:taxonomies,slug,'.$id,
             'description' => 'sometimes',
             'fieldset'    => 'sometimes',
 
@@ -69,7 +69,8 @@ class TaxonomyRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param \Illuminate\Validation\Validator $validator
+     *
      * @return void
      */
     public function withValidator($validator)

@@ -1,8 +1,8 @@
 <?php
 
+use Faker\Generator as Faker;
 use Fusion\Models\Form;
 use Illuminate\Support\Str;
-use Faker\Generator as Faker;
 
 $factory->define(Form::class, function (Faker $faker) {
     return [

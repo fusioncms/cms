@@ -28,7 +28,7 @@ class CodeFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
-        'syntax' => 'text'
+        'syntax' => 'text',
     ];
 
     /**

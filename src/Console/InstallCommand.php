@@ -2,12 +2,12 @@
 
 namespace Fusion\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Fusion\Console\Actions\CheckServerRequirements;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class InstallCommand extends Command
 {
@@ -16,19 +16,18 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'fusion:install' .
-                           ' {--H|homestead                : Quick install; uses default homestead configurations. }' .
-                           ' {--A|valet                    : Quick install; uses default valet configurations. }' .
-                           ' {--R|refresh                  : Same as running uninstall/install but wont\'t refresh .env file. }' .
-                           ' {--D|debug                    : Enables error logging; for development purposes. }' .
-                           ' {--url=http://localhost       : Sets .env variable APP_URL }' .
-                           ' {--host=localhost             : Sets .env variable DB_HOST }' .
-                           ' {--database=fusioncms         : Sets .env variable DB_DATABASE }' .
-                           ' {--username=root              : Sets .env variable DB_USERNAME }' .
-                           ' {--password=secret            : Sets .env variable DB_PASSWORD }' .
-                           ' {--charset=utf8               : Sets .env variable DB_CHARSET }' .
-                           ' {--collation=utf8_general_ci  : Sets .env variable DB_COLLATION }'
-                           ;
+    protected $signature = 'fusion:install'.
+                           ' {--H|homestead                : Quick install; uses default homestead configurations. }'.
+                           ' {--A|valet                    : Quick install; uses default valet configurations. }'.
+                           ' {--R|refresh                  : Same as running uninstall/install but wont\'t refresh .env file. }'.
+                           ' {--D|debug                    : Enables error logging; for development purposes. }'.
+                           ' {--url=http://localhost       : Sets .env variable APP_URL }'.
+                           ' {--host=localhost             : Sets .env variable DB_HOST }'.
+                           ' {--database=fusioncms         : Sets .env variable DB_DATABASE }'.
+                           ' {--username=root              : Sets .env variable DB_USERNAME }'.
+                           ' {--password=secret            : Sets .env variable DB_PASSWORD }'.
+                           ' {--charset=utf8               : Sets .env variable DB_CHARSET }'.
+                           ' {--collation=utf8_general_ci  : Sets .env variable DB_COLLATION }';
 
     /**
      * The console command description.
@@ -51,18 +50,20 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        if (app_installed() and ! $this->option('refresh')) {
+        if (app_installed() and !$this->option('refresh')) {
             $this->error('FusionCMS is already installed.');
             $this->comment('Did you mean?');
             $this->line('fusion:uninstall - Uninstall FusionCMS.');
             $this->line('fusion:refresh   - Refresh installation; resets database and default settings.');
+
             return;
         }
 
-        if (! app_installed() and $this->option('refresh')) {
+        if (!app_installed() and $this->option('refresh')) {
             $this->error('FusionCMS first needs to be installed.');
             $this->comment('Did you mean?');
             $this->line('fusion:install - Install FusionCMS.');
+
             return;
         }
 
@@ -72,24 +73,24 @@ class InstallCommand extends Command
 
         // installation configurations
         //
-        $this->set('app_name',  'Fusion CMS');
-        $this->set('app_env',   'local');
+        $this->set('app_name', 'Fusion CMS');
+        $this->set('app_env', 'local');
         $this->set('app_debug', $this->option('debug'));
-        $this->set('app_url',   $this->option('url'));
-        
+        $this->set('app_url', $this->option('url'));
+
         // database
-        $this->set('db_driver',    'mysql');
-        $this->set('db_host',      $this->option('host'));
-        $this->set('db_database',  $this->option('database'));
-        $this->set('db_username',  $this->option('username'));
-        $this->set('db_password',  $this->option('password'));
-        $this->set('db_charset',   $this->option('charset'));
+        $this->set('db_driver', 'mysql');
+        $this->set('db_host', $this->option('host'));
+        $this->set('db_database', $this->option('database'));
+        $this->set('db_username', $this->option('username'));
+        $this->set('db_password', $this->option('password'));
+        $this->set('db_charset', $this->option('charset'));
         $this->set('db_collation', $this->option('collation'));
 
         // default user
-        $this->set('user_email',    'admin@example.com');
+        $this->set('user_email', 'admin@example.com');
         $this->set('user_password', 'secret');
-        $this->set('user_name',     $this->generateName());
+        $this->set('user_name', $this->generateName());
 
         // --homestead flag overrides
         //
@@ -110,7 +111,7 @@ class InstallCommand extends Command
         if ($dev or $this->option('refresh')) {
             $this->confirmation(true);
         } else {
-            $this->line('<fg=white;options=bold>' . File::get(fusion_path('/stubs/console/wizard.stub')) . '</>');
+            $this->line('<fg=white;options=bold>'.File::get(fusion_path('/stubs/console/wizard.stub')).'</>');
 
             $this->line("\n<fg=black;bg=white>--- Verifying server for requirements...</>");
             $this->verifyServerRequirements();
@@ -128,51 +129,51 @@ class InstallCommand extends Command
     private function wizard()
     {
         // application
-        $this->container['app_name']  = $this->ask('Please enter your application name:', $this->get('app_name'));
-        $this->container['app_url']   = $this->ask('Please enter your website url:',      $this->get('app_url'));
+        $this->container['app_name'] = $this->ask('Please enter your application name:', $this->get('app_name'));
+        $this->container['app_url'] = $this->ask('Please enter your website url:', $this->get('app_url'));
 
         // database
-        $this->container['db_host']      = $this->ask('Please enter the database host:',      $this->get('db_host'));
-        $this->container['db_database']  = $this->ask('Please enter the database name:',      $this->get('db_database'));
-        $this->container['db_username']  = $this->ask('Please enter the database username:',  $this->get('db_username'));
-        $this->container['db_password']  = $this->ask('Please enter the database password:',  $this->get('db_password'));
-        $this->container['db_charset']   = $this->ask('Please enter the database charset:',   $this->get('db_charset'));
+        $this->container['db_host'] = $this->ask('Please enter the database host:', $this->get('db_host'));
+        $this->container['db_database'] = $this->ask('Please enter the database name:', $this->get('db_database'));
+        $this->container['db_username'] = $this->ask('Please enter the database username:', $this->get('db_username'));
+        $this->container['db_password'] = $this->ask('Please enter the database password:', $this->get('db_password'));
+        $this->container['db_charset'] = $this->ask('Please enter the database charset:', $this->get('db_charset'));
         $this->container['db_collation'] = $this->ask('Please enter the database collation:', $this->get('db_collation'));
 
         // default user
-        $this->container['user_name']     = $this->ask('Please enter a default user name:',     $this->get('user_name'));
-        $this->container['user_email']    = $this->ask('Please enter a default user email:',    $this->get('user_email'));
+        $this->container['user_name'] = $this->ask('Please enter a default user name:', $this->get('user_name'));
+        $this->container['user_email'] = $this->ask('Please enter a default user email:', $this->get('user_email'));
         $this->container['user_password'] = $this->ask('Please enter a default user password:', $this->get('user_password'));
 
         $this->confirmation();
     }
 
     /**
-     * Installation confirmation
+     * Installation confirmation.
      *
      * @return void
      */
     private function confirmation($confirmed = false)
     {
-        if (! $confirmed) {
+        if (!$confirmed) {
             $this->line("\n<fg=black;bg=white>--- You have entered the following...</>");
 
             // application
-            $this->comment('Application name:      ' . $this->get('app_name'));
-            $this->comment('Application URL:       ' . $this->get('app_url'));
+            $this->comment('Application name:      '.$this->get('app_name'));
+            $this->comment('Application URL:       '.$this->get('app_url'));
 
             // database
-            $this->comment('Database host:         ' . $this->get('db_host'));
-            $this->comment('Database name:         ' . $this->get('db_database'));
-            $this->comment('Database username:     ' . $this->get('db_username'));
-            $this->comment('Database password:     ' . $this->get('db_password'));
-            $this->comment('Database charset:      ' . $this->get('db_charset'));
-            $this->comment('Database collation:    ' . $this->get('db_collation'));
+            $this->comment('Database host:         '.$this->get('db_host'));
+            $this->comment('Database name:         '.$this->get('db_database'));
+            $this->comment('Database username:     '.$this->get('db_username'));
+            $this->comment('Database password:     '.$this->get('db_password'));
+            $this->comment('Database charset:      '.$this->get('db_charset'));
+            $this->comment('Database collation:    '.$this->get('db_collation'));
 
             // default user
-            $this->comment('Default user name:     ' . $this->get('user_name'));
-            $this->comment('Default user email:    ' . $this->get('user_email'));
-            $this->comment('Default user password: ' . $this->get('user_password'));
+            $this->comment('Default user name:     '.$this->get('user_name'));
+            $this->comment('Default user email:    '.$this->get('user_email'));
+            $this->comment('Default user password: '.$this->get('user_password'));
 
             // make confirmation..
             if ($this->confirm('Do you wish to proceed in installing FusionCMS?')) {
@@ -195,29 +196,29 @@ class InstallCommand extends Command
     private function install()
     {
         $jobs = [
-            'Entering maintenance mode...'      => new \Fusion\Console\Actions\EnterMaintenanceMode,
+            'Entering maintenance mode...'      => new \Fusion\Console\Actions\EnterMaintenanceMode(),
 
-            'Deleting asset files...'           => new \Fusion\Console\Uninstaller\DeleteUserFiles,
-            'Deleting model files...'           => new \Fusion\Console\Uninstaller\DeleteModelFiles,
-            'Deleting addon assets...'          => new \Fusion\Console\Uninstaller\DeleteAddonAssets,
-            'Deleting addon cache...'           => new \Fusion\Console\Uninstaller\DeleteAddonCache,
-            'Deleting theme assets...'          => new \Fusion\Console\Uninstaller\DeleteThemeAssets,
-            'Deleting theme cache...'           => new \Fusion\Console\Uninstaller\DeleteThemeCache,
-            'Deleting log files...'             => new \Fusion\Console\Uninstaller\DeleteLogFiles,
-            'Deleting environment config...'    => new \Fusion\Console\Uninstaller\DeleteEnvironmentConfig,
-            'Deleting database...'              => new \Fusion\Console\Uninstaller\DeleteDatabase,
+            'Deleting asset files...'           => new \Fusion\Console\Uninstaller\DeleteUserFiles(),
+            'Deleting model files...'           => new \Fusion\Console\Uninstaller\DeleteModelFiles(),
+            'Deleting addon assets...'          => new \Fusion\Console\Uninstaller\DeleteAddonAssets(),
+            'Deleting addon cache...'           => new \Fusion\Console\Uninstaller\DeleteAddonCache(),
+            'Deleting theme assets...'          => new \Fusion\Console\Uninstaller\DeleteThemeAssets(),
+            'Deleting theme cache...'           => new \Fusion\Console\Uninstaller\DeleteThemeCache(),
+            'Deleting log files...'             => new \Fusion\Console\Uninstaller\DeleteLogFiles(),
+            'Deleting environment config...'    => new \Fusion\Console\Uninstaller\DeleteEnvironmentConfig(),
+            'Deleting database...'              => new \Fusion\Console\Uninstaller\DeleteDatabase(),
 
-            'Creating directories...'           => new \Fusion\Console\Installer\CreateDirectories,
+            'Creating directories...'           => new \Fusion\Console\Installer\CreateDirectories(),
             'Creating database...'              => new \Fusion\Console\Installer\CreateDatabase($this->container),
             'Creating environment config...'    => new \Fusion\Console\Installer\CreateEnvironmentConfig($this->container),
-            'Creating database tables...'       => new \Fusion\Console\Installer\CreateDatabaseTables,
-            'Publishing Fusion resources...'    => new \Fusion\Console\Installer\PublishFusionResources,
-            'Creating storage link...'          => new \Fusion\Console\Installer\CreateStorageLink,
-            'Creating default permissions...'   => new \Fusion\Console\Installer\CreateDefaultPermissions,
-            'Creating default roles...'         => new \Fusion\Console\Installer\CreateDefaultRoles,
+            'Creating database tables...'       => new \Fusion\Console\Installer\CreateDatabaseTables(),
+            'Publishing Fusion resources...'    => new \Fusion\Console\Installer\PublishFusionResources(),
+            'Creating storage link...'          => new \Fusion\Console\Installer\CreateStorageLink(),
+            'Creating default permissions...'   => new \Fusion\Console\Installer\CreateDefaultPermissions(),
+            'Creating default roles...'         => new \Fusion\Console\Installer\CreateDefaultRoles(),
             'Creating default user account...'  => new \Fusion\Console\Installer\CreateDefaultUser($this->container),
 
-            'Exiting maintenance mode...'       => new \Fusion\Console\Actions\ExitMaintenanceMode,
+            'Exiting maintenance mode...'       => new \Fusion\Console\Actions\ExitMaintenanceMode(),
         ];
 
         if ($this->option('refresh')) {
@@ -249,9 +250,9 @@ class InstallCommand extends Command
             } catch (\Exception $exception) {
                 Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
 
-                $this->comment("\n\n" . 'Uh oh! The following error was encountered during the installation process:' . "\n");
+                $this->comment("\n\n".'Uh oh! The following error was encountered during the installation process:'."\n");
                 $this->error($exception->getMessage());
-                $this->comment("\n" . 'Please check the error logs for more information.');
+                $this->comment("\n".'Please check the error logs for more information.');
 
                 exit;
             }
@@ -300,24 +301,24 @@ class InstallCommand extends Command
 
     /**
      * Builds results table for server requirements check.
-     * [helper]
-     * 
+     * [helper].
+     *
      * @return void
      */
     private function verifyServerRequirements()
     {
         $this->table(['Requirement', 'Version', 'Pass'], CheckServerRequirements::requirements());
-        $this->table(['Folder', 'Actual', 'Required', 'Pass'],   CheckServerRequirements::permissions());
+        $this->table(['Folder', 'Actual', 'Required', 'Pass'], CheckServerRequirements::permissions());
 
-        if (! CheckServerRequirements::verify()) {
+        if (!CheckServerRequirements::verify()) {
             $this->error('Your server does not meet the FusionCMS requirements.');
-            die();
+            exit();
         }
     }
 
     /**
      * Set installation config value.
-     * 
+     *
      * @param string $key
      * @param mixed  $default
      */
@@ -332,8 +333,9 @@ class InstallCommand extends Command
 
     /**
      * Get installation config value.
-     * 
-     * @param  string $key
+     *
+     * @param string $key
+     *
      * @return mixed
      */
     private function get($key)

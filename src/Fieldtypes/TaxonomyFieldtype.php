@@ -3,11 +3,10 @@
 namespace Fusion\Fieldtypes;
 
 use File;
+use Fusion\Http\Resources\TermResource;
 use Fusion\Models\Field;
 use Fusion\Models\Taxonomy;
 use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
-use Fusion\Http\Resources\TermResource;
 
 class TaxonomyFieldtype extends Fieldtype
 {
@@ -30,21 +29,21 @@ class TaxonomyFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
-        'taxonomy' => null
+        'taxonomy' => null,
     ];
 
     /**
      * @var array
      */
     public $rules = [
-        'settings.taxonomy' => 'required'
+        'settings.taxonomy' => 'required',
     ];
 
     /**
      * @var array
      */
     public $attributes = [
-        'settings.taxonomy' => 'taxonomy'
+        'settings.taxonomy' => 'taxonomy',
     ];
 
     /**
@@ -60,14 +59,15 @@ class TaxonomyFieldtype extends Fieldtype
     /**
      * Generate relationship methods for associated Model.
      *
-     * @param  Fusion\Models\Field $field
+     * @param Fusion\Models\Field $field
+     *
      * @return string
      */
     public function generateRelationship($field)
     {
-        $model     = Taxonomy::find($field->settings['taxonomy']);
-        $namespace = $this->namespace . '\\' . Str::studly($model->handle);
-        $stub      = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
+        $model = Taxonomy::find($field->settings['taxonomy']);
+        $namespace = $this->namespace.'\\'.Str::studly($model->handle);
+        $stub = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
 
         return strtr($stub, [
             '{handle}'            => $field->handle,
@@ -83,16 +83,17 @@ class TaxonomyFieldtype extends Fieldtype
     /**
      * Update relationship data in storage.
      *
-     * @param  Illuminate\Eloquent\Model  $model
-     * @param  Fusion\Models\Field           $field
+     * @param Illuminate\Eloquent\Model $model
+     * @param Fusion\Models\Field       $field
+     *
      * @return void
      */
     public function persistRelationship($model, Field $field)
     {
         $oldValues = $model->{$field->handle}->pluck('id');
-        $newValues = collect(request()->input($field->handle))->mapWithKeys(function($id) use ($field) {
+        $newValues = collect(request()->input($field->handle))->mapWithKeys(function ($id) use ($field) {
             return [
-                $id => ['field_id' => $field->id]
+                $id => ['field_id' => $field->id],
             ];
         });
 
@@ -103,8 +104,9 @@ class TaxonomyFieldtype extends Fieldtype
     /**
      * Returns resource object of field.
      *
-     * @param  Illuminate\Eloquent\Model  $model
-     * @param  Fusion\Models\Field           $field
+     * @param Illuminate\Eloquent\Model $model
+     * @param Fusion\Models\Field       $field
+     *
      * @return TermResource
      */
     public function getResource($model, Field $field)

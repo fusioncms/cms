@@ -3,7 +3,6 @@
 namespace Fusion\Http\Controllers\Web\Auth;
 
 use Fusion\Http\Controllers\Controller;
-use Fusion\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
 
 class ConfirmPasswordController extends Controller

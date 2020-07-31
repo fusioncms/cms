@@ -2,9 +2,9 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasLocalEloquentData;
 use Fusion\Database\Eloquent\Model;
 use Fusion\Facades\Addon as AddonFacade;
-use Fusion\Concerns\HasLocalEloquentData;
 
 class Addon extends Model
 {

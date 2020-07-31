@@ -2,29 +2,29 @@
 
 namespace Fusion\Tests\Feature\Form;
 
-use Facades\FormFactory;
 use Fusion\Tests\TestCase;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class ResponseTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->handleValidationExceptions();
         // --
-        
+
         $this->form = \Facades\FormFactory::withName('Reply All')->create();
-        
+
         $this->form->responses()->createMany([
-            [ 'form_id' => $this->form->id, 'identifiable_ip_address' => $this->faker->ipv4 ],
-            [ 'form_id' => $this->form->id, 'identifiable_ip_address' => $this->faker->ipv4 ],
-            [ 'form_id' => $this->form->id, 'identifiable_ip_address' => $this->faker->ipv4 ],
+            ['form_id' => $this->form->id, 'identifiable_ip_address' => $this->faker->ipv4],
+            ['form_id' => $this->form->id, 'identifiable_ip_address' => $this->faker->ipv4],
+            ['form_id' => $this->form->id, 'identifiable_ip_address' => $this->faker->ipv4],
         ]);
     }
 

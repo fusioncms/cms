@@ -2,12 +2,11 @@
 
 namespace Fusion\Http\Controllers\API\Menus;
 
-use Fusion\Models\Menu;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\NodeResource;
+use Fusion\Models\Menu;
 use Fusion\Services\Builders\Menu as Builder;
+use Illuminate\Http\Request;
 
 class NodeController extends Controller
 {
@@ -24,16 +23,17 @@ class NodeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Fusion\Models\Menu  $menu
+     * @param \Fusion\Models\Menu $menu
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($menu, $id)
     {
         $this->authorize('nodes.view');
 
-        $menu  = Menu::find($menu);
+        $menu = Menu::find($menu);
         $model = (new Builder($menu->handle))->make();
-        $node  = $model->find($id);
+        $node = $model->find($id);
 
         return new NodeResource($node);
     }
@@ -42,8 +42,8 @@ class NodeController extends Controller
     {
         $this->authorize('nodes.create');
 
-        $menu          = Menu::find($menu);
-        $model         = (new Builder($menu->handle))->make();
+        $menu = Menu::find($menu);
+        $model = (new Builder($menu->handle))->make();
         $relationships = [];
 
         $rules = [
@@ -54,8 +54,8 @@ class NodeController extends Controller
             'status'     => 'sometimes',
         ];
 
-        if(isset($menu->fieldset)) {
-            $fields        = $menu->fieldset->database();
+        if (isset($menu->fieldset)) {
+            $fields = $menu->fieldset->database();
             $relationships = $menu->fieldset->relationships();
 
             foreach ($fields as $field) {
@@ -63,9 +63,9 @@ class NodeController extends Controller
             }
         }
 
-        $attributes            = $request->validate($rules);
+        $attributes = $request->validate($rules);
         $attributes['menu_id'] = $menu->id;
-        $attributes['order']   = $model->orderLast();
+        $attributes['order'] = $model->orderLast();
 
         $node = $model->create($attributes);
 
@@ -79,18 +79,19 @@ class NodeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $menu
+     * @param \Illuminate\Http\Request $request
+     * @param string                   $menu
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $menu, $id)
     {
         $this->authorize('nodes.update');
 
-        $menu          = Menu::findOrFail($menu);
-        $node          = (new Builder($menu->handle))->make()->findOrFail($id);
+        $menu = Menu::findOrFail($menu);
+        $node = (new Builder($menu->handle))->make()->findOrFail($id);
         $relationships = [];
-        $rules         = [
+        $rules = [
             'name'       => 'required',
             'url'        => 'sometimes',
             'new_window' => 'sometimes',
@@ -98,8 +99,8 @@ class NodeController extends Controller
             'status'     => 'sometimes',
         ];
 
-        if(isset($menu->fieldset)) {
-            $fields        = $menu->fieldset->database();
+        if (isset($menu->fieldset)) {
+            $fields = $menu->fieldset->database();
             $relationships = $menu->fieldset->relationships();
 
             foreach ($fields as $field) {
@@ -126,9 +127,9 @@ class NodeController extends Controller
     {
         $this->authorize('nodes.delete');
 
-        $menu  = Menu::findOrFail($menu);
+        $menu = Menu::findOrFail($menu);
         $model = (new Builder($menu->handle))->make();
-        $node  = $model->findOrFail($id);
+        $node = $model->findOrFail($id);
 
         $node->delete();
     }

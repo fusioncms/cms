@@ -15,7 +15,7 @@ class CreateEditPermissionRequest extends FormRequest
     {
         return [
             'name'        => 'required',
-            'handle'      => 'required|regex:/^[a-z0-9\.]+$/|unique:permissions,handle,' . $this->get('id'),
+            'handle'      => 'required|regex:/^[a-z0-9\.]+$/|unique:permissions,handle,'.$this->get('id'),
             'description' => 'required',
         ];
     }

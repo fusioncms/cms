@@ -2,9 +2,6 @@
 
 namespace Fusion\Http\Controllers\API\Themes;
 
-use Storage;
-use ZipArchive;
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\VerifyThemeRequest;
 

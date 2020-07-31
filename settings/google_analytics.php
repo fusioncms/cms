@@ -24,6 +24,7 @@ return [
                 'name'        => 'Credentials',
                 'handle'      => 'analytic_credentials',
                 'description' => 'Your Google Analytics credentials file.',
+                'override'    => 'analytics.service_account_credentials_json',
                 'type'        => 'file',
             ],
         ],

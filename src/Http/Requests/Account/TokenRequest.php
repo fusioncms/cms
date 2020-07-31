@@ -25,7 +25,7 @@ class TokenRequest extends FormRequest
     {
         return [
             'name'      => 'required|unique:personal_access_tokens,name',
-            'abilities' => 'sometimes|array'
+            'abilities' => 'sometimes|array',
         ];
     }
 }

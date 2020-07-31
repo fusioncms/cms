@@ -2,16 +2,17 @@
 
 namespace Fusion\Jobs\Backups;
 
-use Log;
-use File;
-use Storage;
 use Exception;
+use File;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Log;
+use Storage;
 
 class RestoreEnvVariables
 {
-    use Dispatchable, Queueable;
+    use Dispatchable;
+    use Queueable;
 
     /**
      * Execute the job.
@@ -22,12 +23,12 @@ class RestoreEnvVariables
     {
         if (Storage::disk('temp')->exists('env.json')) {
             // Setup..
-            $envContents  = File::get(app()->environmentFilePath());
+            $envContents = File::get(app()->environmentFilePath());
             $varsContents = Storage::disk('temp')->get('env.json');
-            $variables    = collect(json_decode($varsContents));
+            $variables = collect(json_decode($varsContents));
 
             // Perform surgery..
-            $variables->each(function($value, $key) use (&$envContents) {
+            $variables->each(function ($value, $key) use (&$envContents) {
                 $envContents = preg_replace("/^({$key})=([^\r\n]*)$/m", "$1={$value}", $envContents);
             });
 
@@ -42,7 +43,8 @@ class RestoreEnvVariables
     /**
      * The job failed to process.
      *
-     * @param  Exception  $exception
+     * @param Exception $exception
+     *
      * @return void
      */
     public function failed(Exception $exception)

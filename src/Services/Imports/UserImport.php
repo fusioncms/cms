@@ -2,9 +2,9 @@
 
 namespace Fusion\Services\Imports;
 
-use Fusion\Models\User;
 use Fusion\Models\Import;
 use Fusion\Models\ImportLog;
+use Fusion\Models\User;
 
 class UserImport extends BaseImport
 {
@@ -16,7 +16,8 @@ class UserImport extends BaseImport
     /**
      * Set default role if one isn't provided.
      *
-     * @param  string $value
+     * @param string $value
+     *
      * @return string
      */
     public function getRoleAttribute($value)
@@ -28,6 +29,7 @@ class UserImport extends BaseImport
      * Collect existing records for Import Strategies.
      *
      * @throws Exception
+     *
      * @return void
      */
     protected function collectExistingIds()
@@ -38,13 +40,14 @@ class UserImport extends BaseImport
     /**
      * Store newly created record in storage.
      *
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return void
      */
     protected function store(array $attributes)
     {
         $attributes = array_merge($attributes, [
-            'password_confirmation' => $attributes['password']
+            'password_confirmation' => $attributes['password'],
         ]);
 
         fusion()
@@ -55,13 +58,14 @@ class UserImport extends BaseImport
     /**
      * Update existing record in storage.
      *
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return void
      */
     protected function update(array $attributes)
     {
         $attributes = array_merge($attributes, [
-            'password_confirmation' => $attributes['password']
+            'password_confirmation' => $attributes['password'],
         ]);
 
         fusion()
@@ -72,8 +76,10 @@ class UserImport extends BaseImport
     /**
      * Disable existing records in storage.
      *
-     * @param  array $ids
+     * @param array $ids
+     *
      * @throws Exception
+     *
      * @return void
      */
     protected function disableCollection(array $ids)
@@ -88,8 +94,10 @@ class UserImport extends BaseImport
     /**
      * Remove existing records from storage.
      *
-     * @param  array $ids
+     * @param array $ids
+     *
      * @throws Exception
+     *
      * @return void
      */
     protected function deleteCollection(array $ids)

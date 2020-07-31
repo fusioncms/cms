@@ -3,13 +3,12 @@
 namespace Fusion\Services\Routers;
 
 use Fusion\Models\Matrix;
-use Illuminate\Http\Request;
 use Fusion\Services\Builders\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class EntryRouter extends Router
 {
-
     public function handle(Request $request)
     {
         $collections = Matrix::where('type', 'collection')
@@ -36,7 +35,7 @@ class EntryRouter extends Router
             }
 
             $model = (new Collection($matrix->handle))->make();
-            $page  = $model->with($relationships)->where('slug', $found->parameter('slug'))->first();
+            $page = $model->with($relationships)->where('slug', $found->parameter('slug'))->first();
 
             if (is_null($page)) {
                 continue 1;

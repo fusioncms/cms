@@ -3,13 +3,14 @@
 namespace Fusion\Models;
 
 use Fusion\Concerns\HasActivity;
+use Fusion\Concerns\HasDynamicRelationships;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
-use Fusion\Concerns\HasDynamicRelationships;
 
 class Fieldset extends Model
 {
-    use HasDynamicRelationships, HasActivity;
+    use HasDynamicRelationships;
+    use HasActivity;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -19,7 +20,7 @@ class Fieldset extends Model
     protected $fillable = [
         'name',
         'handle',
-        'hidden'
+        'hidden',
     ];
 
     /**
@@ -28,7 +29,7 @@ class Fieldset extends Model
      * @var array
      */
     protected $casts = [
-        'hidden' => 'boolean'
+        'hidden' => 'boolean',
     ];
 
     /**
@@ -88,7 +89,7 @@ class Fieldset extends Model
      */
     public function database()
     {
-        return $this->fields->reject(function($field) {
+        return $this->fields->reject(function ($field) {
             return is_null($field->type()->getColumn());
         });
     }
@@ -100,7 +101,7 @@ class Fieldset extends Model
      */
     public function relationships()
     {
-        return $this->fields->reject(function($field) {
+        return $this->fields->reject(function ($field) {
             return is_null($field->type()->getRelationship());
         });
     }
@@ -108,7 +109,8 @@ class Fieldset extends Model
     /**
      * Scope a query to only include visible records.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeActive($query)
@@ -119,20 +121,21 @@ class Fieldset extends Model
     /**
      * Tap into activity before persisting to database.
      *
-     * @param  \Spatie\Activitylog\Models\Activity $activity
-     * @param  string   $eventName
+     * @param \Spatie\Activitylog\Models\Activity $activity
+     * @param string                              $eventName
+     *
      * @return void
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $subject    = $activity->subject;
-        $action     = ucfirst($eventName);
+        $subject = $activity->subject;
+        $action = ucfirst($eventName);
         $properties = [
             'link' => "fieldsets/{$subject->id}/edit",
-            'icon' => 'list'
+            'icon' => 'list',
         ];
 
         $activity->description = "{$action} fieldset ({$subject->name})";
-        $activity->properties  = $properties;
+        $activity->properties = $properties;
     }
 }

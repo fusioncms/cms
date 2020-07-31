@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Models\Permission;
 use Fusion\Http\Controllers\DataTableController;
+use Fusion\Models\Permission;
 
 class PermissionController extends DataTableController
 {

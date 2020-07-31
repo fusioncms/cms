@@ -55,20 +55,21 @@ class Import extends Model
     /**
      * Tap into activity before persisting to database.
      *
-     * @param  \Spatie\Activitylog\Models\Activity $activity
-     * @param  string   $eventName
+     * @param \Spatie\Activitylog\Models\Activity $activity
+     * @param string                              $eventName
+     *
      * @return void
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $subject    = $activity->subject;
-        $action     = ucfirst($eventName);
+        $subject = $activity->subject;
+        $action = ucfirst($eventName);
         $properties = [
             'link' => "importer/{$subject->id}/edit",
-            'icon' => 'ship'
+            'icon' => 'ship',
         ];
 
         $activity->description = "{$action} import ({$subject->name})";
-        $activity->properties  = $properties;
+        $activity->properties = $properties;
     }
 }

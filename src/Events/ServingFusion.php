@@ -2,7 +2,6 @@
 
 namespace Fusion\Events;
 
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 
 class ServingFusion

@@ -2,14 +2,14 @@
 
 namespace Fusion\Tests\Feature\Users;
 
-use URL;
 use Auth;
-use Fusion\Tests\TestCase;
 use Fusion\Mail\WelcomeNewUser;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
+use Fusion\Tests\TestCase;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use URL;
 
 class EmailVerificationTest extends TestCase
 {

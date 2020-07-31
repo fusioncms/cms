@@ -19,13 +19,14 @@ class ImportStrategy implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed  $value
+     *
      * @return bool
      */
     public function passes($attribute, $value)
     {
-        return collect($value)->intersect(['disable','delete'])->count() !== 2;
+        return collect($value)->intersect(['disable', 'delete'])->count() !== 2;
     }
 
     /**

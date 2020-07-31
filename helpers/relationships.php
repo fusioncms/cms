@@ -3,7 +3,8 @@
 /**
  * [HELPER] Convert fieldable to relationship name (if applicable).
  *
- * @param  Model  $model
+ * @param Model $model
+ *
  * @return array
  */
 function getRelationshipName($model)
@@ -39,8 +40,9 @@ function getRelationshipName($model)
 /**
  * [HELPER] Get relationships table name.
  *
- * @param  string $relatedName
- * @param  string $foreignName
+ * @param string $relatedName
+ * @param string $foreignName
+ *
  * @return string
  */
 function getRelationshipTableName($relatedName, $foreignName)

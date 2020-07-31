@@ -9,7 +9,7 @@ trait HasOrder
         $first = static::orderBy('order', 'asc')
             ->first();
 
-        if (! $first) {
+        if (!$first) {
             return 1;
         }
 
@@ -21,7 +21,7 @@ trait HasOrder
         $last = static::orderBy('order', 'desc')
             ->first();
 
-        if (! $last) {
+        if (!$last) {
             return 1;
         }
 
@@ -34,7 +34,7 @@ trait HasOrder
             ->orderBy('order', 'asc')
             ->first();
 
-        if (! $adjacent) {
+        if (!$adjacent) {
             return static::orderBy('order', 'desc')
                 ->first()
                 ->order + 1;
@@ -49,7 +49,7 @@ trait HasOrder
             ->orderBy('order', 'desc')
             ->first();
 
-        if (! $adjacent) {
+        if (!$adjacent) {
             return $this->orderFirst();
         }
 

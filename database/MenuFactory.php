@@ -1,8 +1,8 @@
 <?php
 
-use Fusion\Models\Menu;
-use Fusion\Models\Fieldset;
 use Fusion\Contracts\Factory;
+use Fusion\Models\Fieldset;
+use Fusion\Models\Menu;
 use Illuminate\Support\Str;
 
 class MenuFactory implements Factory
@@ -27,7 +27,7 @@ class MenuFactory implements Factory
         $overrides = [];
 
         if ($this->name) {
-            $overrides['name']   = $this->name;
+            $overrides['name'] = $this->name;
             $overrides['handle'] = Str::snake($this->name);
         }
 
@@ -39,7 +39,8 @@ class MenuFactory implements Factory
     /**
      * Create a form with the given name.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \MenuFactory
      */
     public function withName($name)
@@ -52,7 +53,8 @@ class MenuFactory implements Factory
     /**
      * Create a form with the given fieldset.
      *
-     * @param  \Fusion\Models\Fieldset  $fieldset
+     * @param \Fusion\Models\Fieldset $fieldset
+     *
      * @return \MenuFactory
      */
     public function withFieldset(Fieldset $fieldset)
