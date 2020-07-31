@@ -1,22 +1,12 @@
 <template>
-    <fieldset class="form__radio-group">
-        <label
-            class="form__label"
-            :for="name"
-            v-if="label"
-            v-html="label">
-        </label>
+    <fieldset class="form-group" :class="{'form-group--danger': hasError, 'form-group--success': hasSuccess}">
+        <p-legend :text="label" v-if="hasMessage">
+            <p-help-danger :text="errorMessage" v-if="errorMessage"></p-help-danger>
+            <p-help-success :text="successMessage" v-if="successMessage"></p-help-success>
+            <p-help :text="help" v-if="help"></p-help>
+        </p-legend>
 
-        <div class="form__radio-group--block" :class="{'form__radio-group--inline': inline}">
-            <slot></slot>
-        </div>
-
-        <div class="form__control--meta">
-            <div class="form__help">
-                <span v-if="help" v-html="help"></span>
-                <span v-if="errorMessage" class="form__error--message" v-html="errorMessage"></span>
-            </div>
-        </div>
+        <slot></slot>
     </fieldset>
 </template>
 
@@ -25,14 +15,8 @@
         name: 'p-radio-group',
 
         props: {
-            name: String,
             label: String,
             help: String,
-            value: {
-                required: false,
-                type: String,
-                default: undefined,
-            },
             hasError: {
                 required: false,
                 type: Boolean,
@@ -43,11 +27,27 @@
                 type: String,
                 default: '',
             },
-            inline: {
+            hasSuccess: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
+            successMessage: {
+                required: false,
+                type: String,
+                default: '',
+            },
+            inline: {
+                required: false,
+                type: Boolean,
+                default: false,
+            }
+        },
+
+        computed: {
+            hasMessage() {
+                return this.help || this.errorMessage || this.successMessage
+            }
         }
     }
 </script>

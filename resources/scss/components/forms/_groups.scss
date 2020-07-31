@@ -1,0 +1,6 @@
+.form-group {
+    @apply leading-none box-border clear-both text-left relative w-full;
+    margin-bottom: rem(25px);
+
+    &__messages { @apply mt-2; }
+}

@@ -1,57 +1,41 @@
 <template>
     <p-field-group
         :name="name"
-        :label="label"
         :required="required"
         :hasError="hasError"
         :errorMessage="errorMessage"
         :hasSuccess="hasSuccess"
         :successMessage="successMessage"
         :help="help">
-        <textarea
-            class="field field--textarea"
-            :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
-            :id="id"
+        <p-checkbox
             :name="name"
-            :placeholder="placeholder"
-            :readonly="readonly"
+            :id="id"
             :disabled="disabled"
-            :value="value"
-            :rows="rows"
-            :required="required"
-            :aria-required="required" 
-            :aria-describedby="hasMessage ? name + '_message' : null"
-            @input="$emit('input', $event.target.value)"></textarea>
+            :required="required">
+            <slot></slot>
+        </p-checkbox>
     </p-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-textarea',
+        name: 'p-checkbox-single',
 
         props: {
-            name: String,
-            id: String,
-            placeholder: String,
+            name: {
+                required: true,
+                type: String,
+            },
             label: String,
             help: String,
-            value: {
-                type: [String, Number],
-                default: '',
+            id: {
+                required: false
             },
             required: {
                 type: Boolean,
                 default: false,
             },
-            readonly: {
-                type: Boolean,
-                default: false,
-            },
             disabled: {
-                type: Boolean,
-                default: false,
-            },
-            monospaced: {
                 type: Boolean,
                 default: false,
             },
@@ -74,12 +58,7 @@
                 required: false,
                 type: String,
                 default: '',
-            },
-            rows: {
-                required: false,
-                type: Number,
-                default: 2,
-            },
+            }
         },
 
         computed: {

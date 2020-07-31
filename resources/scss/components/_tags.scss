@@ -1,0 +1,12 @@
+.tag {
+    @apply flex items-center bg-gray-700 rounded text-white text-sm px-2 py-2;
+    line-height: 1.2;
+
+    button {
+        @apply border-l border-gray-600 inline-block align-middle text-gray-500 ml-2 -mr-2 px-2;
+
+        &:hover { @apply text-gray-100;}
+
+        &:focus { @apply outline-none; }
+    }
+}

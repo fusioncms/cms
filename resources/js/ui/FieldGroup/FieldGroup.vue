@@ -1,22 +1,28 @@
 <template>
-    <fieldset class="form-group" :class="{'form-group--danger': hasError, 'form-group--success': hasSuccess}">
-        <p-legend :text="label" v-if="hasMessage">
-            <p-help-danger :text="errorMessage" v-if="errorMessage"></p-help-danger>
-            <p-help-success :text="successMessage" v-if="successMessage"></p-help-success>
-            <p-help :text="help" v-if="help"></p-help>
-        </p-legend>
-
+    <div class="form-group" :class="{'form-group--danger': hasError, 'form-group--success': hasSuccess}">
+        <p-label :text="label" :field_name="name" :required="required" v-if="label"></p-label>
         <slot></slot>
-    </fieldset>
+
+        <div :id="name + '_message'" class="form-group__messages" v-if="hasMessage">
+            <p-help-danger v-if="errorMessage">{{ errorMessage }}</p-help-danger>
+            <p-help-success v-if="successMessage">{{ successMessage }}</p-help-success>
+            <p-help v-if="help">{{ help }}</p-help>
+        </div>
+    </div>
 </template>
 
 <script>
     export default {
-        name: 'p-checkbox-group',
+        name: 'p-field-group',
 
         props: {
+            name: String,
             label: String,
             help: String,
+            required: {
+                type: Boolean,
+                default: false,
+            },
             hasError: {
                 required: false,
                 type: Boolean,
@@ -36,11 +42,6 @@
                 required: false,
                 type: String,
                 default: '',
-            },
-            inline: {
-                required: false,
-                type: Boolean,
-                default: false,
             }
         },
 

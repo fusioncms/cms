@@ -1,11 +1,12 @@
 <template>
-    <div class="field">
-        <label
-            class="field__label"
-            :for="name"
-            v-if="label"
-            v-html="label">
-        </label>
+    <p-field-group
+        :name="name"
+        :required="required"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess"
+        :successMessage="successMessage"
+        :help="help">
 
         <span class="toggle__wrap"
             :class="[computedValue ? 'toggle__wrap--checked' : 'toggle__wrap--unchecked']">
@@ -23,7 +24,7 @@
                 v-model="computedValue"
             >
         </span>
-    </div>
+    </p-field-group>
 
     <!-- <div class="form__group">
         <label

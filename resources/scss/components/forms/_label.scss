@@ -1,0 +1,13 @@
+.label {
+    @apply block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2;
+    @extend %no-bottom;
+
+    &--required:after { 
+        @apply inline-block text-danger-500 ml-1; 
+        content: '*';
+    }
+}
+
+.legend {
+    @apply mb-2;
+}
