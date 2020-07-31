@@ -12,7 +12,8 @@ trait HasImportStrategies
     /**
      * Add existing ID.
      *
-     * @param  integer $id
+     * @param int $id
+     *
      * @return void
      */
     protected function addExistingIds(...$ids)
@@ -23,8 +24,9 @@ trait HasImportStrategies
     /**
      * Determing if record exists.
      *
-     * @param  mixed $id
-     * @return boolean
+     * @param mixed $id
+     *
+     * @return bool
      */
     protected function hasExistingId($id)
     {
@@ -34,7 +36,8 @@ trait HasImportStrategies
     /**
      * Set existing IDs from storage.
      *
-     * @param  array $existingIds
+     * @param array $existingIds
+     *
      * @return void
      */
     protected function setExistingIds(array $existingIds)
@@ -55,8 +58,9 @@ trait HasImportStrategies
     /**
      * Determines if `strategies` have been selected.
      *
-     * @param  array ...$strategies
-     * @return boolean
+     * @param array ...$strategies
+     *
+     * @return bool
      */
     protected function containsStrategies(...$strategies)
     {
@@ -66,8 +70,9 @@ trait HasImportStrategies
     /**
      * Determine only if `strategies` have been selected.
      *
-     * @param  array ...$strategy
-     * @return boolean
+     * @param array ...$strategy
+     *
+     * @return bool
      */
     protected function onlyContainsStrategies(...$strategies)
     {

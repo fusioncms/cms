@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'name'        => 'Date & Time',
+    'name'        => 'Date & Time',
     'group'       => 'General',
     'icon'        => 'calendar-day',
     'description' => 'Configure your CMS date and time settings.',

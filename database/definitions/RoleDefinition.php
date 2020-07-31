@@ -1,7 +1,7 @@
 <?php
 
-use Fusion\Models\Role;
 use Faker\Generator as Faker;
+use Fusion\Models\Role;
 
 $factory->define(Role::class, function (Faker $faker) {
     return [

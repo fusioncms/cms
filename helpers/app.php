@@ -3,8 +3,9 @@
 function app_installed()
 {
     try {
-        return (DB::table('settings')->count() > 0);
-    } catch (Exception $exception) { }
+        return DB::table('settings')->count() > 0;
+    } catch (Exception $exception) {
+    }
 
     return false;
 }
@@ -20,7 +21,7 @@ function app_memory_usage()
 
     $unit = ['b', 'kb', 'mb', 'gb', 'tb', 'pb'];
 
-    return round($size / pow(1024, ($i = floor(log($size, 1024)))), 1) . $unit[$i];
+    return round($size / pow(1024, ($i = floor(log($size, 1024)))), 1).$unit[$i];
 }
 
 /**
@@ -32,7 +33,7 @@ function app_loading_time()
 {
     $time = (microtime(true)) - (constant('LARAVEL_START'));
 
-    return number_format($time, 2) . 's';
+    return number_format($time, 2).'s';
 }
 
 /**
@@ -52,7 +53,7 @@ function fusion()
 
 function glide()
 {
-    $request    = app('request');
+    $request = app('request');
     $filesystem = app('filesystem')->getDriver();
 
     return League\Glide\ServerFactory::create([

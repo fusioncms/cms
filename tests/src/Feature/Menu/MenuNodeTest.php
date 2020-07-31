@@ -3,14 +3,14 @@
 namespace Fusion\Tests\Feature\Menu;
 
 use Fusion\Tests\TestCase;
-use Illuminate\Support\Str;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class MenuNodeTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
@@ -20,12 +20,12 @@ class MenuNodeTest extends TestCase
         // --
         $this->actingAs($this->owner, 'api');
 
-        $this->section      = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $this->section = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $this->fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($this->section)->create();
         $this->fieldContent = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($this->section)->create();
-        $this->fieldset     = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->menu         = \Facades\MenuFactory::withName('Header')->withFieldset($this->fieldset)->create();
-        $this->model        = (new \Fusion\Services\Builders\Menu($this->menu->handle))->make();
+        $this->fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
+        $this->menu = \Facades\MenuFactory::withName('Header')->withFieldset($this->fieldset)->create();
+        $this->model = (new \Fusion\Services\Builders\Menu($this->menu->handle))->make();
     }
 
     /**
@@ -43,7 +43,7 @@ class MenuNodeTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/menus/' . $this->menu->id . '/nodes', $attributes)
+            ->json('POST', '/api/menus/'.$this->menu->id.'/nodes', $attributes)
             ->assertStatus(201);
 
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
@@ -62,18 +62,18 @@ class MenuNodeTest extends TestCase
         $attributes = [
             'name'  => $this->faker->word,
             'url'   => $this->faker->url,
-            'order' => null
+            'order' => null,
         ];
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/menus/' . $this->menu->id . '/nodes', $attributes)
+            ->json('POST', '/api/menus/'.$this->menu->id.'/nodes', $attributes)
             ->assertStatus(201);
 
         $this->assertDatabaseHas($this->model->getTable(), [
             'name'  => $attributes['name'],
             'url'   => $attributes['url'],
-            'order' => 1
+            'order' => 1,
         ]);
     }
 
@@ -89,7 +89,7 @@ class MenuNodeTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('POST', '/api/menus/' . $this->menu->id . '/nodes', []);
+            ->json('POST', '/api/menus/'.$this->menu->id.'/nodes', []);
     }
 
     /**
@@ -110,7 +110,7 @@ class MenuNodeTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/menus/' . $this->menu->id . '/nodes/' . $node->id);
+            ->json('GET', '/api/menus/'.$this->menu->id.'/nodes/'.$node->id);
     }
 
     /**
@@ -147,7 +147,7 @@ class MenuNodeTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/menus/' . $this->menu->id . '/nodes/' . $node->id, []);
+            ->json('PATCH', '/api/menus/'.$this->menu->id.'/nodes/'.$node->id, []);
     }
 
     /**
@@ -168,7 +168,7 @@ class MenuNodeTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/menus/' . $this->menu->id . '/nodes/' . $node->id);
+            ->json('DELETE', '/api/menus/'.$this->menu->id.'/nodes/'.$node->id);
     }
 
     /**
@@ -186,11 +186,11 @@ class MenuNodeTest extends TestCase
 
         // Update ----
         $attributes['name'] = 'Updated Name';
-        $attributes['url']  = 'https://updated.com';
+        $attributes['url'] = 'https://updated.com';
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/menus/' . $this->menu->id . '/nodes/' . $node->id, $attributes)
+            ->json('PATCH', '/api/menus/'.$this->menu->id.'/nodes/'.$node->id, $attributes)
             ->assertStatus(200);
 
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
@@ -209,9 +209,9 @@ class MenuNodeTest extends TestCase
         // Delete ----
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', '/api/menus/' . $this->menu->id . '/nodes/' . $node->id);
+            ->json('DELETE', '/api/menus/'.$this->menu->id.'/nodes/'.$node->id);
 
-        $this->assertDatabaseMissing($this->model->getTable(), [ 'id' => $node->id ]);
+        $this->assertDatabaseMissing($this->model->getTable(), ['id' => $node->id]);
     }
 
     //
@@ -220,9 +220,10 @@ class MenuNodeTest extends TestCase
 
     /**
      * Returns new menu node w/ attributes
-     * [Helper]
+     * [Helper].
      *
-     * @param  array  $overrides
+     * @param array $overrides
+     *
      * @return array
      */
     protected function newMenuNode($overrides = []): array
@@ -233,7 +234,7 @@ class MenuNodeTest extends TestCase
         ], $overrides);
 
         $node = $this
-            ->json('POST', '/api/menus/' . $this->menu->id . '/nodes', $attributes)
+            ->json('POST', '/api/menus/'.$this->menu->id.'/nodes', $attributes)
             ->getData()
             ->data;
 

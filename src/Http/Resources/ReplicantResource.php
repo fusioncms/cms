@@ -9,14 +9,15 @@ class ReplicantResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
         $resource = [
             'id'         => $this->id,
-            'replicator' => new ReplicatorResource($this->parent)
+            'replicator' => new ReplicatorResource($this->parent),
         ];
 
         if ($this->fields) {

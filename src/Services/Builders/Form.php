@@ -2,12 +2,10 @@
 
 namespace Fusion\Services\Builders;
 
-use Fusion\Models\Field;
-use Illuminate\Support\Str;
-use Fusion\Models\Form as FormModel;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Fusion\Contracts\Builder as BuilderContract;
+use Fusion\Models\Form as FormModel;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class Form extends Builder implements BuilderContract
 {
@@ -29,13 +27,13 @@ class Form extends Builder implements BuilderContract
     /**
      * Create a new Form instance.
      *
-     * @param  string  $form
+     * @param string $form
      */
     public function __construct($form)
     {
         parent::__construct();
 
-        $this->form  = FormModel::where('handle', $form)->firstOrFail();
+        $this->form = FormModel::where('handle', $form)->firstOrFail();
         $this->model = $this->make();
     }
 
@@ -45,12 +43,12 @@ class Form extends Builder implements BuilderContract
     public function make()
     {
         $className = Str::studly($this->form->handle);
-        $traits    = [];
-        $fillable  = ['form_id', 'identifiable_ip_address'];
-        $casts     = [];
+        $traits = [];
+        $fillable = ['form_id', 'identifiable_ip_address'];
+        $casts = [];
 
         if ($this->form->fieldset) {
-            $fields    = $this->form->fieldset->fields->reject(function ($field) {
+            $fields = $this->form->fieldset->fields->reject(function ($field) {
                 $fieldtype = fieldtypes()->get($field->type);
 
                 if ($fieldtype->hasRelationship()) {
@@ -61,9 +59,9 @@ class Form extends Builder implements BuilderContract
             });
 
             foreach ($fields as $field) {
-                $fieldtype  = fieldtypes()->get($field->type);
+                $fieldtype = fieldtypes()->get($field->type);
                 $fillable[] = $field->handle;
-                $casts[]    = $field->handle . '\' => \'' . $fieldtype->cast ;
+                $casts[] = $field->handle.'\' => \''.$fieldtype->cast;
             }
         }
 
@@ -73,10 +71,10 @@ class Form extends Builder implements BuilderContract
         $contents = strtr($stub, [
             '{class}'         => $className,
             '{handle}'        => $this->form->handle,
-            '{fillable}'      => '[\'' . implode('\', \'', $fillable) . '\']',
-            '{casts}'         => '[\'' . implode('\', \'', $casts) . '\']',
-            '{with}'          => '[\'' . implode('\', \'', $this->getWith()) . '\']',
-            '{dates}'         => '[\'' . implode('\', \'', $this->getDates()) . '\']',
+            '{fillable}'      => '[\''.implode('\', \'', $fillable).'\']',
+            '{casts}'         => '[\''.implode('\', \'', $casts).'\']',
+            '{with}'          => '[\''.implode('\', \'', $this->getWith()).'\']',
+            '{dates}'         => '[\''.implode('\', \'', $this->getDates()).'\']',
             '{trait_classes}' => $this->getTraitImportStatements($traits),
             '{traits}'        => $this->getTraitUseStatements($traits),
             '{form_id}'       => $this->form->id,
@@ -85,7 +83,7 @@ class Form extends Builder implements BuilderContract
 
         File::put($path, $contents);
 
-        return app()->make('Fusion\Models\Forms\\'. $className);
+        return app()->make('Fusion\Models\Forms\\'.$className);
     }
 
     /**

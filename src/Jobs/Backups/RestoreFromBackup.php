@@ -2,18 +2,18 @@
 
 namespace Fusion\Jobs\Backups;
 
-use DB;
-use Log;
-use Storage;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Log;
 use Spatie\Backup\BackupDestination\Backup;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
+use Storage;
 
 class RestoreFromBackup
 {
-    use Dispatchable, Queueable;
+    use Dispatchable;
+    use Queueable;
 
     /**
      * Backup file to restore from.
@@ -39,8 +39,8 @@ class RestoreFromBackup
      */
     public function handle()
     {
-        $backupPath       = Storage::disk('public')->path($this->backup->path());
-        $extractionPath   = Storage::disk('temp')->path('restore-temp');
+        $backupPath = Storage::disk('public')->path($this->backup->path());
+        $extractionPath = Storage::disk('temp')->path('restore-temp');
         $restoreDirectory = (new TemporaryDirectory($extractionPath))
                 ->name('temp')
                 ->force()
@@ -48,12 +48,12 @@ class RestoreFromBackup
                 ->empty();
 
         $jobs = [
-            'Enter maintenance mode...'       => new \Fusion\Console\Actions\EnterMaintenanceMode,
+            'Enter maintenance mode...'       => new \Fusion\Console\Actions\EnterMaintenanceMode(),
             'Unzip backup for processing....' => new \Fusion\Jobs\Backups\UnzipBackup($restoreDirectory, $backupPath),
             'Restore database from backup...' => new \Fusion\Jobs\Backups\RestoreDatabase($restoreDirectory),
             'Restore files from backup...'    => new \Fusion\Jobs\Backups\RestoreFiles($restoreDirectory),
             'Restore .env variables...'       => new \Fusion\Jobs\Backups\RestoreEnvVariables(),
-            'Exit maintenance mode...'        => new \Fusion\Console\Actions\ExitMaintenanceMode,
+            'Exit maintenance mode...'        => new \Fusion\Console\Actions\ExitMaintenanceMode(),
         ];
 
         foreach ($jobs as $message => $instance) {
@@ -62,7 +62,7 @@ class RestoreFromBackup
             } catch (Exception $exception) {
                 $restoreDirectory->delete();
 
-                throw new Exception('There was an error trying to restore from a backup: ' . $exception->getMessage());
+                throw new Exception('There was an error trying to restore from a backup: '.$exception->getMessage());
             }
         }
 
@@ -72,7 +72,8 @@ class RestoreFromBackup
     /**
      * The job failed to process.
      *
-     * @param  Exception  $exception
+     * @param Exception $exception
+     *
      * @return void
      */
     public function failed(Exception $exception)

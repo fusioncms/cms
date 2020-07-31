@@ -16,6 +16,6 @@ class Fusion extends Facade
      */
     protected static function getFacadeAccessor()
     {
-    	return 'fusion';
+        return 'fusion';
     }
 }

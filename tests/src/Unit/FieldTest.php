@@ -2,13 +2,12 @@
 
 namespace Fusion\Tests\Unit;
 
-use Fusion\Models\Field;
 use Facades\FieldFactory;
-use Fusion\Tests\TestCase;
 use Facades\SectionFactory;
-use Illuminate\Support\Facades\DB;
+use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 
 class FieldTest extends TestCase
 {
@@ -25,9 +24,9 @@ class FieldTest extends TestCase
         $this->expectExceptionMessage('UNIQUE constraint failed: fields.section_id, fields.handle');
 
         $section = SectionFactory::times(1)->withoutFields()->create();
-        $field   = FieldFactory::withSection($section)->create();
+        $field = FieldFactory::withSection($section)->create();
 
-        $attributes       = collect(DB::table('fields')->first())->toArray();
+        $attributes = collect(DB::table('fields')->first())->toArray();
         $attributes['id'] = null;
 
         DB::table('fields')->insert($attributes);
@@ -41,14 +40,14 @@ class FieldTest extends TestCase
     public function fields_can_have_non_unique_section_id_or_handle_seperately()
     {
         $section = SectionFactory::times(1)->withoutFields()->create();
-        $field   = FieldFactory::withSection($section)->create();
+        $field = FieldFactory::withSection($section)->create();
 
         $fieldOne = collect(DB::table('fields')->first())->toArray();
-        $fieldOne['id']     = null;
+        $fieldOne['id'] = null;
         $fieldOne['handle'] = 'new-handle';
 
         $fieldTwo = collect(DB::table('fields')->first())->toArray();
-        $fieldTwo['id']         = null;
+        $fieldTwo['id'] = null;
         $fieldTwo['section_id'] = 99;
 
         DB::table('fields')->insert($fieldOne);

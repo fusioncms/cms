@@ -2,10 +2,10 @@
 
 namespace Fusion\Tests\Feature;
 
-use Fusion\Tests\TestCase;
 use Fusion\Console\Actions\SyncSettings;
 use Fusion\Models\Setting as SettingGroup;
 use Fusion\Services\Setting as SettingService;
+use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SyncSettingsTest extends TestCase
@@ -28,7 +28,7 @@ class SyncSettingsTest extends TestCase
             'handle'      => 'foobar',
             'group'       => 'General',
             'icon'        => 'fake',
-            'description' => 'Test setting group.'
+            'description' => 'Test setting group.',
         ];
 
         // modify existing group..
@@ -37,14 +37,14 @@ class SyncSettingsTest extends TestCase
             'handle'      => 'baz',
             'group'       => 'Services',
             'icon'        => 'save',
-            'description' => 'Configure backup schedule and cleanup strategy settings.'
+            'description' => 'Configure backup schedule and cleanup strategy settings.',
         ];
 
         // remove existing setting group..
         unset($groups['api']);
 
         // run test..
-        (new SyncSettings)->syncSettingGroups($groups);
+        (new SyncSettings())->syncSettingGroups($groups);
 
         // test removal..
         $this->assertDatabaseMissing('settings', ['handle' => 'api']);
@@ -73,9 +73,9 @@ class SyncSettingsTest extends TestCase
      */
     public function console_command_will_sync_setting_section_records()
     {
-        $group    = SettingGroup::where('handle', 'api')->firstOrFail();
+        $group = SettingGroup::where('handle', 'api')->firstOrFail();
         $fieldset = $group->fieldset();
-        $fields   = SettingService::fields($group->handle);
+        $fields = SettingService::fields($group->handle);
 
         // add group..
         $fields['FooBar'] = [];
@@ -84,18 +84,18 @@ class SyncSettingsTest extends TestCase
         unset($fields['General']);
 
         // run test
-        (new SyncSettings)->syncSettingSection($group, $fields);
+        (new SyncSettings())->syncSettingSection($group, $fields);
 
         // test removal..
         $this->assertDatabaseMissing('sections', [
             'fieldset_id' => $fieldset->id,
-            'handle'      => 'general'
+            'handle'      => 'general',
         ]);
 
         // test addition..
         $this->assertDatabaseHas('sections', [
             'fieldset_id' => $fieldset->id,
-            'handle'      => 'foobar'
+            'handle'      => 'foobar',
         ]);
     }
 
@@ -107,10 +107,10 @@ class SyncSettingsTest extends TestCase
      */
     public function console_command_will_sync_setting_field_records()
     {
-        $group   = SettingGroup::where('handle', 'files')->firstOrFail();
+        $group = SettingGroup::where('handle', 'files')->firstOrFail();
         $section = $group->fieldset()->sections->first();
-        $fields  = SettingService::fields($group->handle);
-        $fields  = $fields->get('General');
+        $fields = SettingService::fields($group->handle);
+        $fields = $fields->get('General');
 
         // remove existing field..
         array_shift($fields);
@@ -118,7 +118,7 @@ class SyncSettingsTest extends TestCase
         // modify existing group..
         $fields[0] = [
             'name'   => 'Baz',
-            'handle' => 'baz'
+            'handle' => 'baz',
         ];
 
         // add field..
@@ -131,7 +131,7 @@ class SyncSettingsTest extends TestCase
         ]);
 
         // run test
-        (new SyncSettings)->syncSettingFields($section, $fields);
+        (new SyncSettings())->syncSettingFields($section, $fields);
 
         // test removal..
         $this->assertDatabaseMissing('fields', [

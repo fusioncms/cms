@@ -9,7 +9,8 @@ use Illuminate\Queue\SerializesModels;
 
 class ImportComplete extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Import record.
@@ -21,7 +22,8 @@ class ImportComplete extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param  Import $import
+     * @param Import $import
+     *
      * @return void
      */
     public function __construct(Import $import)
@@ -44,7 +46,8 @@ class ImportComplete extends Mailable
      *
      * @return string
      */
-    public function getHandle() {
+    public function getHandle()
+    {
         return 'import-complete';
     }
 }

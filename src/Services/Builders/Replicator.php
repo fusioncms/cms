@@ -2,10 +2,10 @@
 
 namespace Fusion\Services\Builders;
 
-use Fusion\Models\Section;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
 use Fusion\Contracts\Builder as BuilderContract;
+use Fusion\Models\Section;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class Replicator extends Builder implements BuilderContract
 {
@@ -21,7 +21,7 @@ class Replicator extends Builder implements BuilderContract
 
     /**
      * Constructor.
-     * 
+     *
      * @param string  $handle
      * @param Section $section
      */
@@ -30,7 +30,7 @@ class Replicator extends Builder implements BuilderContract
         parent::__construct();
 
         $this->replicator = \Fusion\Models\Replicator::where('handle', $handle)->firstOrFail();
-        $this->section    = $section;
+        $this->section = $section;
     }
 
     /**
@@ -43,9 +43,9 @@ class Replicator extends Builder implements BuilderContract
         $handle = "{$prefix}_{$this->section->handle}_{$suffix}";
 
         $className = Str::studly($handle);
-        $fillable  = [ 'replicator_id' ];
-        $casts     = [];
-        $fields    = $this->section->fields ?? collect();
+        $fillable = ['replicator_id'];
+        $casts = [];
+        $fields = $this->section->fields ?? collect();
 
         $fields = $fields->reject(function ($field) {
             $fieldtype = fieldtypes()->get($field->type);
@@ -58,9 +58,9 @@ class Replicator extends Builder implements BuilderContract
         });
 
         foreach ($fields as $field) {
-            $fieldtype  = fieldtypes()->get($field->type);
+            $fieldtype = fieldtypes()->get($field->type);
             $fillable[] = $field->handle;
-            $casts[]    = $field->handle . '\' => \'' . $fieldtype->cast ;
+            $casts[] = $field->handle.'\' => \''.$fieldtype->cast;
         }
 
         $path = fusion_path("/src/Models/Replicators/{$className}.php");
@@ -69,9 +69,9 @@ class Replicator extends Builder implements BuilderContract
         $contents = strtr($stub, [
             '{class}'         => $className,
             '{tableName}'     => str_handle("rp_{$handle}"),
-            '{fillable}'      => '[\'' . implode('\', \'', $fillable) . '\']',
-            '{casts}'         => '[\'' . implode('\', \'', $casts) . '\']',
-            '{dates}'         => '[\'' . implode('\', \'', $this->getDates()) . '\']',
+            '{fillable}'      => '[\''.implode('\', \'', $fillable).'\']',
+            '{casts}'         => '[\''.implode('\', \'', $casts).'\']',
+            '{dates}'         => '[\''.implode('\', \'', $this->getDates()).'\']',
             '{relationships}' => $this->generateRelationships(),
         ]);
 
@@ -82,10 +82,11 @@ class Replicator extends Builder implements BuilderContract
 
     /**
      * Static make method.
-     * 
-     * @param  string  $handle
-     * @param  Section $section
-     * @return Builder       
+     *
+     * @param string  $handle
+     * @param Section $section
+     *
+     * @return Builder
      */
     public static function resolve(string $handle, Section $section)
     {

@@ -2,22 +2,23 @@
 
 namespace Fusion\Jobs\Importer;
 
-use Exception;
 use Fusion\Models\Import;
 use Fusion\Models\ImportLog;
-use Illuminate\Support\Str;
-use Maatwebsite\Excel\Excel;
-use Illuminate\Bus\Queueable;
 use Fusion\Services\Exports\GoogleExport;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Fusion\Jobs\Importer\NotifyUserOfImportComplete;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Excel;
 
 class BeforeImport implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var Import
@@ -37,9 +38,9 @@ class BeforeImport implements ShouldQueue
     public function __construct(Import $import)
     {
         $this->import = $import;
-        $this->log    = ImportLog::create([
+        $this->log = ImportLog::create([
             'import_id' => $import->id,
-            'status'    => 'setup'
+            'status'    => 'setup',
         ]);
     }
 
@@ -81,15 +82,15 @@ class BeforeImport implements ShouldQueue
      */
     private function runImport()
     {
-        $name   = Str::singular($this->import->module);
-        $name   = ucwords($name);
+        $name = Str::singular($this->import->module);
+        $name = ucwords($name);
         $module = "Fusion\\Services\\Imports\\{$name}Import";
 
         (new $module($this->import, $this->log))
             ->queue("imports/{$this->import->handle}.csv", null, Excel::CSV)
             ->onQueue('imports')
             ->chain([
-                new NotifyUserOfImportComplete($this->import)
+                new NotifyUserOfImportComplete($this->import),
             ]);
     }
 }

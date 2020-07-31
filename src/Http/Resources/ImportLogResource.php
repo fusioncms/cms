@@ -2,25 +2,26 @@
 
 namespace Fusion\Http\Resources;
 
-use SplFileObject;
-use LimitIterator;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Http\Resources\Json\JsonResource;
+use LimitIterator;
+use SplFileObject;
 
 class ImportLogResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
-        $response             = parent::toArray($request);
+        $response = parent::toArray($request);
         $response['happened'] = Carbon::parse($response['created_at'])->diffForHumans();
-        $response['logs']     = [];
+        $response['logs'] = [];
 
         if ($this->status !== 'setup') {
             $response['logs'] = $this->packageLogs();
@@ -42,7 +43,7 @@ class ImportLogResource extends JsonResource
 
         // Settings..
         $total = $logFile->key();
-        $page  = (int) Arr::get(request()->query(), 'page', 1);
+        $page = (int) Arr::get(request()->query(), 'page', 1);
         $limit = (int) Arr::get(request()->query(), 'limit', 25);
         $pages = ceil($total / $limit);
 

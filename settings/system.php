@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'name'        => 'System',
+    'name'        => 'System',
     'group'       => 'General',
     'icon'        => 'sliders-h',
     'description' => 'Global system settings of your website.',
@@ -45,6 +45,6 @@ return [
                 'default'  => 'public',
                 'required' => true,
             ],
-        ]
+        ],
     ],
 ];

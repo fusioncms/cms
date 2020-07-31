@@ -20,7 +20,7 @@ class NotAReservedKeyword implements Rule
      */
     public function __construct()
     {
-       $this->reserved = [
+        $this->reserved = [
             // PHP keywords
             'abstract', 'and', 'array', 'as', 'bool', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue',
             'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif',
@@ -38,13 +38,14 @@ class NotAReservedKeyword implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed  $value
+     *
      * @return bool
      */
     public function passes($attribute, $value)
     {
-        return ! in_array($value, $this->reserved);
+        return !in_array($value, $this->reserved);
     }
 
     /**

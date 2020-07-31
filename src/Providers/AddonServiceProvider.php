@@ -15,7 +15,7 @@ class AddonServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('addon', function($app) {
+        $this->app->singleton('addon', function ($app) {
             $addons = [];
 
             if (file_exists(storage_path('app/addons.json'))) {

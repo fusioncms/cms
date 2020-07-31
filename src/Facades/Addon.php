@@ -16,6 +16,6 @@ class Addon extends Facade
      */
     protected static function getFacadeAccessor()
     {
-    	return 'addon';
+        return 'addon';
     }
 }

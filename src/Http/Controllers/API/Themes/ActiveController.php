@@ -3,9 +3,9 @@
 namespace Fusion\Http\Controllers\API\Themes;
 
 use Fusion\Facades\Theme;
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\ThemeResource;
+use Illuminate\Http\Request;
 
 class ActiveController extends Controller
 {
@@ -26,8 +26,9 @@ class ActiveController extends Controller
     /**
      * Update the currently active theme.
      *
-     * @param  Request  $request
-     * @param  String   $theme
+     * @param Request $request
+     * @param string  $theme
+     *
      * @return JsonResponse
      */
     public function update(Request $request, $theme)
@@ -40,7 +41,7 @@ class ActiveController extends Controller
         $theme = Theme::active();
 
         setting([
-            'system.theme' => $theme->get('namespace')
+            'system.theme' => $theme->get('namespace'),
         ]);
 
         activity()
@@ -48,6 +49,6 @@ class ActiveController extends Controller
                 'icon' => 'swatchbook',
                 'link' => 'themes',
             ])
-            ->log('Set theme to ' . $theme->get('name') . ' (' . $theme->get('version') . ')');
+            ->log('Set theme to '.$theme->get('name').' ('.$theme->get('version').')');
     }
 }

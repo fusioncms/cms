@@ -1,9 +1,8 @@
 <?php
 
-use Fusion\Models\Section;
-use Fusion\Models\Fieldset;
-use Fusion\Contracts\Factory;
 use Facades\SectionFactory;
+use Fusion\Contracts\Factory;
+use Fusion\Models\Fieldset;
 use Illuminate\Support\Str;
 
 class FieldsetFactory implements Factory
@@ -28,11 +27,11 @@ class FieldsetFactory implements Factory
         $fieldset = factory(Fieldset::class)->create();
 
         if ($this->name) {
-            $overrides['name']   = $this->name;
+            $overrides['name'] = $this->name;
             $overrides['handle'] = Str::slug($this->name, '_');
         }
 
-        if (! $this->sections) {
+        if (!$this->sections) {
             $this->sections = SectionFactory::times(3)->create();
         }
 
@@ -44,7 +43,8 @@ class FieldsetFactory implements Factory
     /**
      * Set fieldset name.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \FieldsetFactory
      */
     public function withName($name)
@@ -57,7 +57,8 @@ class FieldsetFactory implements Factory
     /**
      * Create a fieldset with the given sections.
      *
-     * @param  array|\Illuminate\Support\Collection  $sections
+     * @param array|\Illuminate\Support\Collection $sections
+     *
      * @return \FieldsetFactory
      */
     public function withSections($sections)

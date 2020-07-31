@@ -11,7 +11,7 @@
 |
 */
 
-Route::prefix('install')->group(function() {
+Route::prefix('install')->group(function () {
     Route::get('confirm', 'Installer\InstallController@index');
     Route::post('confirm', 'Installer\InstallController@store')
         ->withoutMiddleware([App\Http\Middleware\VerifyCsrfToken::class]);
@@ -38,7 +38,7 @@ Route::get('sitemap.xml', [
 Auth::routes([
     'verify'   => setting('users.user_email_verification') === 'enabled',
     'register' => setting('users.public_registration') === 'enabled',
-    'confirm'  => true
+    'confirm'  => true,
 ]);
 
 Route::get('logout', 'Auth\LoginController@logout');
@@ -50,8 +50,8 @@ Route::group(['prefix' => 'account', 'middleware' => ['auth', 'verified']], func
     Route::post('settings', 'Account\SettingController@update');
 
     Route::group(['prefix' => 'security', 'middleware' => ['password.confirm']], function () {
-    	Route::get('', 'Account\SecurityController@edit');
-    	Route::post('', 'Account\SecurityController@update');
+        Route::get('', 'Account\SecurityController@edit');
+        Route::post('', 'Account\SecurityController@update');
     });
 
     if (setting('api.personal_access_tokens') === 'enabled') {
@@ -66,7 +66,7 @@ Route::group(['prefix' => config('fusion.path')], function () {
     ])->where('any', '.*');
 });
 
-Route::group(['middleware' => ['can:themes.update']], function() {
+Route::group(['middleware' => ['can:themes.update']], function () {
     Route::post('/customize', 'CustomizeController@show');
     Route::post('{any?}/customize', 'CustomizeController@show')->where('any', '.*');
 });

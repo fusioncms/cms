@@ -3,20 +3,21 @@
 namespace Fusion\Jobs\Backups;
 
 use DB;
-use Log;
 use Exception;
-use Illuminate\Bus\Queueable;
-use Symfony\Component\Process\Process;
-use Spatie\Backup\Tasks\Backup\Manifest;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Fusion\Events\Backups\DatabaseRestoreFailed;
 use Fusion\Events\Backups\DatabaseRestoreSuccessful;
+use Illuminate\Bus\Queueable;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Log;
+use Spatie\Backup\Tasks\Backup\Manifest;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class RestoreDatabase
 {
-    use Dispatchable, Queueable;
+    use Dispatchable;
+    use Queueable;
 
     /**
      * @var TemporaryDirectory
@@ -28,7 +29,7 @@ class RestoreDatabase
      */
     protected $manifest;
 
-	/**
+    /**
      * Constructor.
      *
      * @param Backup $backup
@@ -36,19 +37,20 @@ class RestoreDatabase
     public function __construct(TemporaryDirectory $tempDirectory)
     {
         $this->tempDirectory = $tempDirectory;
-        $this->manifest      = new Manifest($tempDirectory->path('manifest.txt'));
+        $this->manifest = new Manifest($tempDirectory->path('manifest.txt'));
     }
 
     /**
      * Execute the job.
      *
      * @throws Exception
+     *
      * @return void
      */
     public function handle()
     {
         try {
-        	if ($dbDumpPath = $this->fetchDBDump()) {
+            if ($dbDumpPath = $this->fetchDBDump()) {
                 if (config('database.default') == 'mysql') {
                     $this->restoreFromMySqlFile($dbDumpPath);
                 } elseif (config('database.default') == 'sqlite') {
@@ -56,20 +58,21 @@ class RestoreDatabase
                 }
 
                 event(new DatabaseRestoreSuccessful($dbDumpPath));
-        	} else {
-        		throw new Exception('Failed to locate database dump from backup.');
-        	}
+            } else {
+                throw new Exception('Failed to locate database dump from backup.');
+            }
         } catch (Exception $exception) {
             event(new DatabaseRestoreFailed($exception, $dbDumpPath));
 
-            Log::error('There was an error restoring database backup: ' . $exception->getMessage(), (array) $exception->getTrace()[0]);
+            Log::error('There was an error restoring database backup: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
         }
     }
 
     /**
      * The job failed to process.
      *
-     * @param  Exception  $exception
+     * @param Exception $exception
+     *
      * @return void
      */
     public function failed(Exception $exception)
@@ -77,27 +80,28 @@ class RestoreDatabase
         Log::error('There was an error trying to restore from a backup: ', $exception->getMessage(), (array) $exception->getTrace()[0]);
     }
 
-	/**
-	 * Fetch db-dump recorded in manifest file.
-	 *
-	 * @return string|boolean
-	 */
-	private function fetchDBDump()
-	{
-		foreach ($this->manifest->files() as $file) {
-			if (pathinfo($file, PATHINFO_EXTENSION) == 'sql') {
-				return $this->tempDirectory->path($file);
-			}
-		}
+    /**
+     * Fetch db-dump recorded in manifest file.
+     *
+     * @return string|bool
+     */
+    private function fetchDBDump()
+    {
+        foreach ($this->manifest->files() as $file) {
+            if (pathinfo($file, PATHINFO_EXTENSION) == 'sql') {
+                return $this->tempDirectory->path($file);
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
     /**
      * Run command to restore mysql file.
      *
      * @throws ProcessFailedException
-     * @return boolean
+     *
+     * @return bool
      */
     private function restoreFromMySqlFile($dbDumpPath)
     {
@@ -114,7 +118,8 @@ class RestoreDatabase
             "host = '{$dbHost}'",
         ]));
 
-        $command = sprintf('mysql --defaults-extra-file="%s" %s < %s',
+        $command = sprintf(
+            'mysql --defaults-extra-file="%s" %s < %s',
             stream_get_meta_data($tempFile)['uri'],
             escapeshellarg($dbName),
             escapeshellarg($dbDumpPath)
@@ -123,7 +128,7 @@ class RestoreDatabase
         $process = new Process($command);
         $process->run();
 
-        if (! $process->isSuccessful()) {
+        if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
 
@@ -134,17 +139,18 @@ class RestoreDatabase
      * Run command to restore sqlite file.
      *
      * @throws ProcessFailedException
-     * @return boolean
+     *
+     * @return bool
      */
     private function restoreFromSqliteFile($dbDumpPath)
     {
-        $dbName  = config('database.connections.' . $default . '.database');
+        $dbName = config('database.connections.'.$default.'.database');
         $command = "sqlite3 {$dbName} < {$dbDumpPath}";
 
         $process = new Process($command);
         $process->run();
 
-        if (! $process->isSuccessful()) {
+        if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
 

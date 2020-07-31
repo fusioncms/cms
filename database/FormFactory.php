@@ -1,8 +1,8 @@
 <?php
 
-use Fusion\Models\Form;
-use Fusion\Models\Fieldset;
 use Fusion\Contracts\Factory;
+use Fusion\Models\Fieldset;
+use Fusion\Models\Form;
 use Illuminate\Support\Str;
 
 class FormFactory implements Factory
@@ -18,17 +18,17 @@ class FormFactory implements Factory
     protected $fieldset;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $collectsEmails = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $collectsIPs = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $redirectOnSubmission = false;
 
@@ -52,9 +52,9 @@ class FormFactory implements Factory
         ];
 
         if ($this->name) {
-            $overrides['name']   = $this->name;
+            $overrides['name'] = $this->name;
             $overrides['handle'] = Str::snake($this->name);
-            $overrides['slug']   = Str::slug($this->name);
+            $overrides['slug'] = Str::slug($this->name);
         }
 
         $form = factory(Form::class)->create($overrides);
@@ -65,7 +65,8 @@ class FormFactory implements Factory
     /**
      * Create a form with the given name.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \FormFactory
      */
     public function withName($name)
@@ -78,7 +79,8 @@ class FormFactory implements Factory
     /**
      * Enable custom redirect.
      *
-     * @param  string  $uri
+     * @param string $uri
+     *
      * @return \FormFactory
      */
     public function withCustomRedirect($uri)
@@ -92,7 +94,8 @@ class FormFactory implements Factory
     /**
      * Create a form with the given fieldset.
      *
-     * @param  \Fusion\Models\Fieldset  $fieldset
+     * @param \Fusion\Models\Fieldset $fieldset
+     *
      * @return \FormFactory
      */
     public function withFieldset(Fieldset $fieldset)

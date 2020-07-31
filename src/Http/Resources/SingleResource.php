@@ -9,13 +9,14 @@ class SingleResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
         $resource = [
-            'matrix' => new MatrixResource($this->matrix),
+            'matrix'   => new MatrixResource($this->matrix),
             'single'   => [
                 'name'   => $this->name ?? $this->matrix->name,
                 'slug'   => $this->slug ?? $this->matrix->slug,

@@ -27,8 +27,8 @@ class MailableRequest extends FormRequest
 
         return [
             'name'     => 'required',
-            'handle'   => 'required|unique:mailables,id,' . $id,
-            'markdown' => 'required'
+            'handle'   => 'required|unique:mailables,id,'.$id,
+            'markdown' => 'required',
         ];
     }
 }

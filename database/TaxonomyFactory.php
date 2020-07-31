@@ -1,8 +1,8 @@
 <?php
 
-use Fusion\Models\Taxonomy;
-use Fusion\Models\Fieldset;
 use Fusion\Contracts\Factory;
+use Fusion\Models\Fieldset;
+use Fusion\Models\Taxonomy;
 use Illuminate\Support\Str;
 
 class TaxonomyFactory implements Factory
@@ -34,12 +34,12 @@ class TaxonomyFactory implements Factory
         $overrides = [];
 
         if ($this->name) {
-            $overrides['name']   = $this->name;
+            $overrides['name'] = $this->name;
             $overrides['handle'] = str_handle($this->name);
-            $overrides['slug']   = Str::slug($this->name);
+            $overrides['slug'] = Str::slug($this->name);
         }
 
-        if (! $this->fieldset) {
+        if (!$this->fieldset) {
             $this->fieldset = factory(Fieldset::class)->create();
         }
 
@@ -57,7 +57,8 @@ class TaxonomyFactory implements Factory
     /**
      * Create a taxonomy with the given name.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \TaxonomyFactory
      */
     public function withName($name)
@@ -70,7 +71,8 @@ class TaxonomyFactory implements Factory
     /**
      * Create a taxonomy with the given fieldset.
      *
-     * @param  \Fusion\Models\Fieldset  $fieldset
+     * @param \Fusion\Models\Fieldset $fieldset
+     *
      * @return \TaxonomyFactory
      */
     public function withFieldset(Fieldset $fieldset)
@@ -83,7 +85,8 @@ class TaxonomyFactory implements Factory
     /**
      * Add states to Taxonomy.
      *
-     * @param  array  $states
+     * @param array $states
+     *
      * @return \TaxonomyFactory
      */
     public function withStates(array $states)

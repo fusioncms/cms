@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Str;
 use Fusion\Services\Parsers\ParsedownExtra;
+use Illuminate\Support\Str;
 
 function render_markdown($content)
 {

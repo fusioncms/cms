@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use Fusion\Models\Import;
 use Facades\ImportFactory;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,8 +13,8 @@ class ImportTest extends TestCase
     /** @test */
     public function an_import_can_exist()
     {
-    	$import = ImportFactory::create();
+        $import = ImportFactory::create();
 
-    	$this->assertDatabaseHas('imports', $import->getAttributes());
+        $this->assertDatabaseHas('imports', $import->getAttributes());
     }
 }

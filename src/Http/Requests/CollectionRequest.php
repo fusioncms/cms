@@ -8,15 +8,15 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CollectionRequest extends FormRequest
 {
-
     public function __construct()
     {
-        $this->matrix        = Matrix::where('slug', request()->route('slug'))->firstOrFail();
-        $this->model         = (new Collection($this->matrix->handle))->make();
-        $this->fieldset      = $this->matrix->fieldset;
-        $this->fields        = $this->fieldset->fields ?? [];
+        $this->matrix = Matrix::where('slug', request()->route('slug'))->firstOrFail();
+        $this->model = (new Collection($this->matrix->handle))->make();
+        $this->fieldset = $this->matrix->fieldset;
+        $this->fields = $this->fieldset->fields ?? [];
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
     }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,7 +24,7 @@ class CollectionRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('entries.' . ($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('entries.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**
@@ -36,7 +36,7 @@ class CollectionRequest extends FormRequest
     {
         $this->merge([
             'matrix_id' => $this->matrix->id,
-            'status'    => $this->status ?? 1
+            'status'    => $this->status ?? 1,
         ]);
     }
 
@@ -49,7 +49,7 @@ class CollectionRequest extends FormRequest
     {
         $rules = [
             'matrix_id' => 'required|integer',
-            'slug'      => 'unique:' . $this->model->getTable() . ',slug,' . request()->id,
+            'slug'      => 'unique:'.$this->model->getTable().',slug,'.request()->id,
             'status'    => 'required|boolean',
         ];
 

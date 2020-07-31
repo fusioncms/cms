@@ -4,10 +4,10 @@ namespace Fusion\Tests\Feature;
 
 use Fusion\Models\Matrix;
 use Fusion\Tests\TestCase;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Spatie\Activitylog\Models\Activity;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Auth\Access\AuthorizationException;
 
 class ActivityTest extends TestCase
 {
@@ -42,19 +42,19 @@ class ActivityTest extends TestCase
      */
     public function models_with_activity_logging_will_log_created_event()
     {
-    	$attributes = factory(Matrix::class)->make()->toArray();
+        $attributes = factory(Matrix::class)->make()->toArray();
 
-    	$this
-    		->be($this->owner, 'api')
-    		->json('POST', '/api/matrices', $attributes);
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/matrices', $attributes);
 
-    	$matrix = Matrix::latest()->first();
+        $matrix = Matrix::latest()->first();
 
-    	$this->assertDatabaseHas('activity_log', [
-    		'description'  => "Created matrix ({$attributes['name']})",
-    		'subject_id'   => $matrix->id,
-    		'subject_type' => 'Fusion\Models\Matrix',
-    	]);
+        $this->assertDatabaseHas('activity_log', [
+            'description'  => "Created matrix ({$attributes['name']})",
+            'subject_id'   => $matrix->id,
+            'subject_type' => 'Fusion\Models\Matrix',
+        ]);
     }
 
     /**
@@ -64,21 +64,21 @@ class ActivityTest extends TestCase
      */
     public function models_with_activity_logging_will_log_updated_event()
     {
-		$matrix = factory(Matrix::class)->create();
+        $matrix = factory(Matrix::class)->create();
 
-		$attributes         = $matrix->toArray();
-		$attributes['name'] = 'New Name';
-		$attributes['slug'] = 'new-name';
+        $attributes = $matrix->toArray();
+        $attributes['name'] = 'New Name';
+        $attributes['slug'] = 'new-name';
 
-		$this
-			->be($this->owner, 'api')
-			->json('PATCH', '/api/matrices/' . $matrix->id, $attributes);
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', '/api/matrices/'.$matrix->id, $attributes);
 
-		$this->assertDatabaseHas('activity_log', [
-			'description'  => "Updated matrix ({$attributes['name']})",
-			'subject_id'   => $attributes['id'],
-			'subject_type' => 'Fusion\Models\Matrix',
-		]);
+        $this->assertDatabaseHas('activity_log', [
+            'description'  => "Updated matrix ({$attributes['name']})",
+            'subject_id'   => $attributes['id'],
+            'subject_type' => 'Fusion\Models\Matrix',
+        ]);
     }
 
     /**
@@ -88,23 +88,23 @@ class ActivityTest extends TestCase
      */
     public function activity_log_will_store_pertenant_info_for_the_dashboard()
     {
-    	$this->actingAs($this->owner, 'api');
+        $this->actingAs($this->owner, 'api');
 
-    	$matrix   = factory(Matrix::class)->create();
-    	$activity = Activity::latest('id')->first();
+        $matrix = factory(Matrix::class)->create();
+        $activity = Activity::latest('id')->first();
 
-    	$this->assertDatabaseHas('activity_log', [
-    		'id'           => $activity->id,
-    		'log_name'     => 'default',
-    		'description'  => "Created matrix ({$matrix->name})",
-    		'subject_id'   => $matrix->id,
-    		'subject_type' => 'Fusion\Models\Matrix',
-    		'causer_id'    => $this->owner->id,
-    		'causer_type'  => 'Fusion\Models\User'
-    	]);
+        $this->assertDatabaseHas('activity_log', [
+            'id'           => $activity->id,
+            'log_name'     => 'default',
+            'description'  => "Created matrix ({$matrix->name})",
+            'subject_id'   => $matrix->id,
+            'subject_type' => 'Fusion\Models\Matrix',
+            'causer_id'    => $this->owner->id,
+            'causer_type'  => 'Fusion\Models\User',
+        ]);
 
-    	$this->assertEquals($activity->properties['icon'], 'hashtag');
-    	$this->assertEquals($activity->properties['link'], "matrices/{$matrix->id}/edit");
+        $this->assertEquals($activity->properties['icon'], 'hashtag');
+        $this->assertEquals($activity->properties['link'], "matrices/{$matrix->id}/edit");
     }
 
     /**
@@ -114,11 +114,11 @@ class ActivityTest extends TestCase
      */
     public function hosting_model_can_ask_for_all_activities_recorded_by_it()
     {
-    	$matrix = factory(Matrix::class)->create();
+        $matrix = factory(Matrix::class)->create();
 
-    	$this->assertInstanceOf(Collection::class, $matrix->activities);
-    	$this->assertInstanceOf(Activity::class, $matrix->activities->first());
-    	$this->assertCount(1, $matrix->activities);
+        $this->assertInstanceOf(Collection::class, $matrix->activities);
+        $this->assertInstanceOf(Activity::class, $matrix->activities->first());
+        $this->assertCount(1, $matrix->activities);
     }
 
     /**
@@ -128,15 +128,15 @@ class ActivityTest extends TestCase
      */
     public function a_deleted_model_will_delete_its_own_logged_activities()
     {
-    	$matrix = factory(Matrix::class)->create();
-    	$matrix->delete();
+        $matrix = factory(Matrix::class)->create();
+        $matrix->delete();
 
-    	$this->assertInstanceOf(Collection::class, $matrix->activities);
-    	$this->assertCount(0, $matrix->activities);
+        $this->assertInstanceOf(Collection::class, $matrix->activities);
+        $this->assertCount(0, $matrix->activities);
 
-    	$this->assertDatabaseMissing('activity_log', [
-			'subject_id'   => $matrix->id,
-			'subject_type' => 'Fusion\Models\Matrix',
-		]);
+        $this->assertDatabaseMissing('activity_log', [
+            'subject_id'   => $matrix->id,
+            'subject_type' => 'Fusion\Models\Matrix',
+        ]);
     }
 }

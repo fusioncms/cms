@@ -2,23 +2,22 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Fusion\Rules\NotAReservedKeyword;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class FieldRequest extends FormRequest
 {
     /**
      * Fieldtype of requesting Field.
-     * 
+     *
      * @var array
      */
     protected $fieldtype;
 
     /**
      * Additional rules for fieldtype.
-     * 
+     *
      * @var array
      */
     protected $fieldMessages;
@@ -60,7 +59,7 @@ class FieldRequest extends FormRequest
         return [
             'name'   => 'required|regex:/^[A-z]/i',
             'type'   => 'required',
-            'handle' => [ 'required', 'not_regex:/[^a-z0-9_]/i', new NotAReservedKeyword ],
+            'handle' => ['required', 'not_regex:/[^a-z0-9_]/i', new NotAReservedKeyword()],
         ] + $this->fieldtype->rules;
     }
 

@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Models\Form;
 use Fusion\Http\Controllers\DataTableController;
+use Fusion\Models\Form;
 
 class FormController extends DataTableController
 {

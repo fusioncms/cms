@@ -2,12 +2,13 @@
 
 namespace Fusion\Events;
 
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
 class FieldsetReplaced
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /**
      * @var \Fusion\Concerns\HasFieldset
@@ -31,8 +32,8 @@ class FieldsetReplaced
      */
     public function __construct($table, $current, $previous)
     {
-        $this->table    = $table;
-        $this->current  = $current;
+        $this->table = $table;
+        $this->current = $current;
         $this->previous = $previous;
     }
 }

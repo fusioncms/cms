@@ -2,11 +2,11 @@
 
 namespace Fusion\Rules;
 
-use Log;
 use Exception;
-use ZipArchive;
 use Fusion\Facades\Theme;
 use Illuminate\Contracts\Validation\Rule;
+use Log;
+use ZipArchive;
 
 class UniqueThemeName implements Rule
 {
@@ -27,27 +27,28 @@ class UniqueThemeName implements Rule
      */
     public function __construct()
     {
-        $this->zipArchive = new ZipArchive;
-        $this->themes     = collect(Theme::all());
+        $this->zipArchive = new ZipArchive();
+        $this->themes = collect(Theme::all());
     }
 
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed  $value
+     *
      * @return bool
      */
     public function passes($attribute, $value)
     {
-        $canUnzip   = $this->zipArchive->open($value);
+        $canUnzip = $this->zipArchive->open($value);
         $validTheme = $canUnzip === true;
 
         if ($canUnzip) {
-            $index      = $this->zipArchive->locateName('theme.json', ZipArchive::FL_NODIR);
-            $filename   = $this->zipArchive->getNameIndex($index);
+            $index = $this->zipArchive->locateName('theme.json', ZipArchive::FL_NODIR);
+            $filename = $this->zipArchive->getNameIndex($index);
             $fileHandle = $this->zipArchive->getStream($filename);
-            $settings   = $this->parseStream($fileHandle);
+            $settings = $this->parseStream($fileHandle);
 
             $validTheme = $this->themes->every(function ($theme) use ($settings) {
                 return $theme->pull('name') != ($settings['name'] ?? null) and
@@ -72,9 +73,10 @@ class UniqueThemeName implements Rule
 
     /**
      * Parse theme.json settings file for validation.
-     * [helper]
+     * [helper].
      *
-     * @param  resource $handle
+     * @param resource $handle
+     *
      * @return Collection
      */
     private function parseStream($handle)

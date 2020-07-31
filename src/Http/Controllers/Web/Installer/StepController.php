@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Controllers\Web\Installer;
 
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class StepController extends Controller
@@ -11,7 +11,8 @@ class StepController extends Controller
     /**
      * Installation step.
      *
-     * @param  string $step
+     * @param string $step
+     *
      * @return View
      */
     public function index(Request $request, $step = 'index')
@@ -23,9 +24,10 @@ class StepController extends Controller
 
     /**
      * Validate and save form request.
-     * 
-     * @param  Request $request
-     * @param  string   $step
+     *
+     * @param Request $request
+     * @param string  $step
+     *
      * @return Redirect
      */
     public function store(Request $request, $step)
@@ -53,8 +55,9 @@ class StepController extends Controller
 
     /**
      * Get validation rules for step.
-     * 
-     * @param  string $step
+     *
+     * @param string $step
+     *
      * @return array
      */
     private function getStepRules($step)
@@ -64,8 +67,9 @@ class StepController extends Controller
 
     /**
      * Get validation messages for step.
-     * 
-     * @param  string $step
+     *
+     * @param string $step
+     *
      * @return array
      */
     private function getStepMessages($step)
@@ -82,12 +86,12 @@ class StepController extends Controller
      */
     private function set($step, array $value = [])
     {
-        $key          = config('installer.wizard.storage.key');
-        $expires      = now()->addMinutes(config('installer.wizard.storage.expires'));
-        $cache        = $this->all();
+        $key = config('installer.wizard.storage.key');
+        $expires = now()->addMinutes(config('installer.wizard.storage.expires'));
+        $cache = $this->all();
         $cache[$step] = array_merge($this->get($step), $value);
 
-        cache([ $key => $cache ], $expires);
+        cache([$key => $cache], $expires);
     }
 
     /**
@@ -113,7 +117,7 @@ class StepController extends Controller
 
     /**
      * Get step data or throw 404 if not found.
-     * 
+     *
      * @param string $step
      * @param void
      */
@@ -132,7 +136,7 @@ class StepController extends Controller
 
     /**
      * Converts multi-dimensional array to key-based array.
-     * 
+     *
      * @return array
      */
     private function getStepKeys()
@@ -142,9 +146,10 @@ class StepController extends Controller
 
     /**
      * Gets current step index.
-     * 
-     * @param  string $step
-     * @return integer|false
+     *
+     * @param string $step
+     *
+     * @return int|false
      */
     private function getStepIndex($step)
     {
@@ -153,17 +158,18 @@ class StepController extends Controller
 
     /**
      * Get previous step link.
-     * 
-     * @param  string $step
+     *
+     * @param string $step
+     *
      * @return string|null
      */
     private function getPrevStepLink($step)
     {
-        $keys   = $this->getStepKeys();
-        $index  = $this->getStepIndex($step);
+        $keys = $this->getStepKeys();
+        $index = $this->getStepIndex($step);
 
         if (array_key_exists($index - 1, $keys)) {
-            return '/install/' . $keys[$index - 1];
+            return '/install/'.$keys[$index - 1];
         }
 
         return null;
@@ -171,17 +177,18 @@ class StepController extends Controller
 
     /**
      * Get next step link.
-     * 
-     * @param  string $step
+     *
+     * @param string $step
+     *
      * @return string|null
      */
     private function getNextStepLink($step)
     {
-        $keys   = $this->getStepKeys();
-        $index  = $this->getStepIndex($step);
+        $keys = $this->getStepKeys();
+        $index = $this->getStepIndex($step);
 
         if (array_key_exists($index + 1, $keys)) {
-            return '/install/' . $keys[$index + 1];
+            return '/install/'.$keys[$index + 1];
         }
 
         return null;

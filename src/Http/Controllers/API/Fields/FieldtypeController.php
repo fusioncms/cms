@@ -2,9 +2,9 @@
 
 namespace Fusion\Http\Controllers\API\Fields;
 
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\FieldtypeResource;
+use Illuminate\Http\Request;
 
 class FieldtypeController extends Controller
 {
@@ -12,6 +12,7 @@ class FieldtypeController extends Controller
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)

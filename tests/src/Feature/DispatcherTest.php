@@ -43,7 +43,7 @@ class DispatcherTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         // ...dispatcher won't be throttled for 60 attempts...
-        for ($i = 0; $i < 60; ++$i) {
+        for ($i = 0; $i < 60; $i++) {
             $response = fusion()->get('users/1');
             $this->assertNotNull($response);
         }

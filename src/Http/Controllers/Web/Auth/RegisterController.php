@@ -2,14 +2,13 @@
 
 namespace Fusion\Http\Controllers\Web\Auth;
 
+use Fusion\Http\Controllers\Controller;
 use Fusion\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Auth\Events\Registered;
-use Fusion\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -48,7 +47,8 @@ class RegisterController extends Controller
     /**
      * Handle a registration request for the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function register(Request $request)
@@ -68,12 +68,12 @@ class RegisterController extends Controller
         );
 
         if (setting('users.user_email_verification') === 'disabled') {
-        // Automatically verify registration
+            // Automatically verify registration
             if ($user->markEmailAsVerified()) {
                 event(new Verified($user));
             }
         } else {
-        // Requires email verification
+            // Requires email verification
             event(new Registered($user));
         }
 

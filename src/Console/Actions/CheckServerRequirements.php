@@ -38,41 +38,41 @@ class CheckServerRequirements
 
     /**
      * Get PHP version requirements.
-     * 
+     *
      * @return array
      */
     private static function getPHPVersion()
     {
-        return [[ 'PHP', phpversion(), self::verifyPHPVersion() ? '√' : 'x' ]];
+        return [['PHP', phpversion(), self::verifyPHPVersion() ? '√' : 'x']];
     }
 
     /**
      * Get array of extension requirements.
-     * 
+     *
      * @return array
      */
     private static function getExtensions()
     {
-        return collect(config('installer.requirements.extensions'))->map(function($extension) {
-            return [ $extension, phpversion($extension), extension_loaded($extension) ? '√' : 'x' ];
+        return collect(config('installer.requirements.extensions'))->map(function ($extension) {
+            return [$extension, phpversion($extension), extension_loaded($extension) ? '√' : 'x'];
         })->toArray();
     }
 
     /**
      * Get array of folder permission requirements.
-     * 
+     *
      * @return array
      */
     private static function getFolderPermissions()
     {
-        return collect(config('installer.permissions'))->map(function($perm, $folder) {
+        return collect(config('installer.permissions'))->map(function ($perm, $folder) {
             $actual = substr(sprintf('%o', fileperms(base_path($folder))), -3);
-            
+
             return [
                 $folder,
                 $actual,
                 $perm,
-                ($actual >= $perm) ? '√' : 'x'
+                ($actual >= $perm) ? '√' : 'x',
             ];
         })->toArray();
     }
@@ -84,8 +84,7 @@ class CheckServerRequirements
      */
     public static function verifyPHPVersion()
     {
-       return version_compare(phpversion(), config('installer.requirements.php'), '>=');
-       
+        return version_compare(phpversion(), config('installer.requirements.php'), '>=');
     }
 
     /**
@@ -95,7 +94,7 @@ class CheckServerRequirements
      */
     public static function verifyExtensions()
     {
-        return collect(config('installer.requirements.extensions'))->every(function($extension) {
+        return collect(config('installer.requirements.extensions'))->every(function ($extension) {
             return extension_loaded($extension);
         });
     }
@@ -107,7 +106,7 @@ class CheckServerRequirements
      */
     public static function verifyFolderPermissions()
     {
-       return collect(config('installer.permissions'))->every(function($perm, $folder) {
+        return collect(config('installer.permissions'))->every(function ($perm, $folder) {
             return substr(sprintf('%o', fileperms(base_path($folder))), -3) >= $perm;
         });
     }

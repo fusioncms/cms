@@ -3,8 +3,8 @@
 namespace Fusion\Services\Imports;
 
 use Fusion\Models\Import;
-use Fusion\Models\Matrix;
 use Fusion\Models\ImportLog;
+use Fusion\Models\Matrix;
 use Fusion\Services\Builders\Collection as Builder;
 
 class MatrixImport extends BaseImport
@@ -32,7 +32,7 @@ class MatrixImport extends BaseImport
     {
         parent::__construct($import, $log);
 
-        $this->matrix     = Matrix::findOrFail($import->group);
+        $this->matrix = Matrix::findOrFail($import->group);
         $this->collection = (new Builder($this->matrix->handle))->make();
     }
 
@@ -40,6 +40,7 @@ class MatrixImport extends BaseImport
      * Collect existing records for Import Strategies.
      *
      * @throws Exception
+     *
      * @return void
      */
     protected function collectExistingIds()
@@ -50,7 +51,8 @@ class MatrixImport extends BaseImport
     /**
      * Store newly created record in storage.
      *
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return void
      */
     protected function store(array $attributes)
@@ -67,7 +69,8 @@ class MatrixImport extends BaseImport
     /**
      * Update existing record in storage.
      *
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return void
      */
     protected function update(array $attributes)
@@ -84,8 +87,10 @@ class MatrixImport extends BaseImport
     /**
      * Disable existing records in storage.
      *
-     * @param  array $ids
+     * @param array $ids
+     *
      * @throws Exception
+     *
      * @return void
      */
     protected function disableCollection(array $ids)
@@ -100,8 +105,10 @@ class MatrixImport extends BaseImport
     /**
      * Remove existing records from storage.
      *
-     * @param  array $ids
+     * @param array $ids
+     *
      * @throws Exception
+     *
      * @return void
      */
     protected function deleteCollection(array $ids)

@@ -2,7 +2,7 @@
 
 /**
  * Sushi
- * Copyright (c) 2020 Caleb Porzio
+ * Copyright (c) 2020 Caleb Porzio.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -49,7 +49,7 @@ trait HasLocalEloquentData
 
     public static function bootHasLocalEloquentData()
     {
-        $instance = (new static);
+        $instance = (new static());
 
         $cacheFileName = config('sushi.cache-prefix', 'sushi').'-'.Str::kebab(str_replace('\\', '', static::class)).'.sqlite';
         $cacheDirectory = realpath(config('sushi.cache-path', storage_path('framework/cache')));
@@ -77,7 +77,7 @@ trait HasLocalEloquentData
         ];
 
         switch (true) {
-            case ! property_exists($instance, 'rows'):
+            case !property_exists($instance, 'rows'):
                 $states['no-caching-capabilities']();
                 break;
 
@@ -98,7 +98,7 @@ trait HasLocalEloquentData
     protected static function setSqliteConnection($database)
     {
         static::$sushiConnection = app(ConnectionFactory::class)->make([
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => $database,
         ]);
     }
@@ -106,15 +106,17 @@ trait HasLocalEloquentData
     public function migrate()
     {
         $rows = $this->getRows();
-        
-        if (empty($rows)) return false;
+
+        if (empty($rows)) {
+            return false;
+        }
 
         $firstRow = $rows[0];
         $tableName = $this->getTable();
 
         static::resolveConnection()->getSchemaBuilder()->create($tableName, function ($table) use ($firstRow) {
             // Add the "id" column if it doesn't already exist in the rows.
-            if ($this->incrementing && ! in_array($this->primaryKey, array_keys($firstRow))) {
+            if ($this->incrementing && !in_array($this->primaryKey, array_keys($firstRow))) {
                 $table->increments($this->primaryKey);
             }
 
@@ -148,7 +150,7 @@ trait HasLocalEloquentData
                 $table->{$type}($column)->nullable();
             }
 
-            if ($this->usesTimestamps() && (! in_array('updated_at', array_keys($firstRow)) || ! in_array('created_at', array_keys($firstRow)))) {
+            if ($this->usesTimestamps() && (!in_array('updated_at', array_keys($firstRow)) || !in_array('created_at', array_keys($firstRow)))) {
                 $table->timestamps();
             }
         });

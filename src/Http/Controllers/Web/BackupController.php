@@ -2,9 +2,9 @@
 
 namespace Fusion\Http\Controllers\Web;
 
-use Storage;
 use Fusion\Http\Controllers\Controller;
 use Spatie\Backup\BackupDestination\Backup;
+use Storage;
 
 class BackupController extends Controller
 {
@@ -12,7 +12,7 @@ class BackupController extends Controller
     {
         $this->authorize('backups.download');
 
-        if (! $backup->exists()) {
+        if (!$backup->exists()) {
             abort('404', 'File does not exist.');
         }
 

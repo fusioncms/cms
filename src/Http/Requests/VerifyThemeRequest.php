@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Requests;
 
-use Fusion\Rules\ValidTheme;
 use Fusion\Rules\UniqueThemeName;
+use Fusion\Rules\ValidTheme;
 use Illuminate\Foundation\Http\FormRequest;
 
 class VerifyThemeRequest extends FormRequest
@@ -13,9 +13,6 @@ class VerifyThemeRequest extends FormRequest
      */
     protected $acceptedMimes;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->acceptedMimes = ['zip'];
@@ -32,10 +29,10 @@ class VerifyThemeRequest extends FormRequest
             'file-upload' => [
                 'required',
                 'file',
-                'mimes:' . implode(',', $this->acceptedMimes),
-                new ValidTheme,
-                new UniqueThemeName,
-            ]
+                'mimes:'.implode(',', $this->acceptedMimes),
+                new ValidTheme(),
+                new UniqueThemeName(),
+            ],
         ];
     }
 

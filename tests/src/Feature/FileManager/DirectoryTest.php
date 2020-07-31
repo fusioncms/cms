@@ -3,10 +3,9 @@
 namespace Fusion\Tests\Feature\FileManager;
 
 use Fusion\Tests\TestCase;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Auth\Access\AuthorizationException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DirectoryTest extends TestCase
 {
@@ -35,12 +34,12 @@ class DirectoryTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('POST', 'api/directories', [ 'name' => 'Test Folder' ])
+            ->json('POST', 'api/directories', ['name' => 'Test Folder'])
             ->assertStatus(201);
 
         $this->assertDatabaseHas('directories', [
             'name' => 'Test Folder',
-            'slug' => 'test-folder'
+            'slug' => 'test-folder',
         ]);
     }
 
@@ -54,7 +53,7 @@ class DirectoryTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('POST', 'api/directories', [ 'name' => 'Test Folder' ]);
+            ->json('POST', 'api/directories', ['name' => 'Test Folder']);
 
         $this->assertDatabaseHas('activity_log', [
             'description' => 'Created folder (Test Folder)',
@@ -72,8 +71,8 @@ class DirectoryTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', 'api/directories/' . $this->directoryA->id, [
-                'name' => 'Updated Name'
+            ->json('PATCH', 'api/directories/'.$this->directoryA->id, [
+                'name' => 'Updated Name',
             ]);
 
         $this->assertDatabaseHas('activity_log', [
@@ -93,7 +92,7 @@ class DirectoryTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', 'api/directories/' . $this->directoryA->id);
+            ->json('DELETE', 'api/directories/'.$this->directoryA->id);
 
         $this->assertDatabaseMissing('activity_log', [
             'subject_id'   => $this->directoryA->id,
@@ -139,14 +138,14 @@ class DirectoryTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', 'api/directories/' . $this->directoryA->id, [
-                'name' => 'Updated Name'
+            ->json('PATCH', 'api/directories/'.$this->directoryA->id, [
+                'name' => 'Updated Name',
             ])
             ->assertStatus(200);
 
         $this->assertDatabaseHas('directories', [
             'name' => 'Updated Name',
-            'slug' => 'updated-name'
+            'slug' => 'updated-name',
         ]);
     }
 
@@ -161,15 +160,15 @@ class DirectoryTest extends TestCase
         // delete directory..
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', 'api/directories/' . $this->directoryA->id)
+            ->json('DELETE', 'api/directories/'.$this->directoryA->id)
             ->assertStatus(200);
 
         // assert directory was removed..
-        $this->assertDatabaseMissing('directories', [ 'id' => $this->directoryA->id ]);
+        $this->assertDatabaseMissing('directories', ['id' => $this->directoryA->id]);
 
         // assert children were removed..
-        $this->assertDatabaseMissing('directories', [ 'id' => $this->directoryC->id ]);
-        $this->assertDatabaseMissing('directories', [ 'id' => $this->directoryD->id ]);
+        $this->assertDatabaseMissing('directories', ['id' => $this->directoryC->id]);
+        $this->assertDatabaseMissing('directories', ['id' => $this->directoryD->id]);
     }
 
     /**
@@ -183,14 +182,14 @@ class DirectoryTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         $response = $this->json('GET', '/api/directories?filter[search]=lor');
-        $data     = collect($response->getData()->data);
+        $data = collect($response->getData()->data);
 
         $this->assertCount(2, $data);
         $this->assertCount(1, $data->where('name', 'Lorem'));
         $this->assertCount(1, $data->where('name', 'Dolor'));
 
         $response = $this->json('GET', '/api/directories?filter[search]=lorem');
-        $data     = collect($response->getData()->data);
+        $data = collect($response->getData()->data);
 
         $this->assertCount(1, $data);
         $this->assertCount(1, $data->where('name', 'Lorem'));
@@ -207,14 +206,14 @@ class DirectoryTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         $response = $this->json('GET', '/api/directories');
-        $data     = collect($response->getData()->data);
+        $data = collect($response->getData()->data);
 
         $this->assertCount(2, $data);
         $this->assertCount(1, $data->where('name', 'Lorem'));
         $this->assertCount(1, $data->where('name', 'Dolor'));
 
         $response = $this->json('GET', '/api/directories?filter[parent_id]=1');
-        $data     = collect($response->getData()->data);
+        $data = collect($response->getData()->data);
 
         $this->assertCount(2, $data);
         $this->assertCount(1, $data->where('name', 'Ipsum'));
@@ -229,7 +228,7 @@ class DirectoryTest extends TestCase
      */
     public function directories_must_have_a_unique_parent_id_and_slug_combination()
     {
-        $directory       = $this->directoryA->toArray();
+        $directory = $this->directoryA->toArray();
         $directory['id'] = null;
 
         $this
@@ -280,8 +279,8 @@ class DirectoryTest extends TestCase
                     'directories' => [
                         $directoryA2->id,
                         $directoryB1->id,
-                    ]
-                ]
+                    ],
+                ],
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors(['moving']);

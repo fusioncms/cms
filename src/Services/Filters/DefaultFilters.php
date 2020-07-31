@@ -11,10 +11,10 @@ trait DefaultFilters
         foreach (explode(',', $_sort) as $element) {
             $pairs = explode(':', $element);
 
-            $key       = $pairs[0];
+            $key = $pairs[0];
             $direction = $pairs[1] ?? 'asc';
-            $pair      = [$key, $direction];
-            $fillable  = $this->builder->getModel()->getFillable();
+            $pair = [$key, $direction];
+            $fillable = $this->builder->getModel()->getFillable();
 
             if (in_array($key, $fillable)) {
                 call_user_func_array([$this->builder, 'orderBy'], $pair);
@@ -29,16 +29,16 @@ trait DefaultFilters
         foreach (explode(',', $_filter) as $element) {
             $pairs = explode(':', $element);
 
-            $key        = $pairs[0];
+            $key = $pairs[0];
             $comparison = $pairs[1] ?? null;
-            $value      = $pairs[2] ?? null;
+            $value = $pairs[2] ?? null;
 
             if (is_null($comparison)) {
                 continue;
             }
 
             if (is_null($value)) {
-                $value      = $comparison;
+                $value = $comparison;
                 $comparison = 'eq';
             }
 
@@ -60,8 +60,8 @@ trait DefaultFilters
                     break;
             }
 
-            $pair      = [$key, $comparison, $value];
-            $fillable  = $this->builder->getModel()->getFillable();
+            $pair = [$key, $comparison, $value];
+            $fillable = $this->builder->getModel()->getFillable();
 
             if (in_array($key, $fillable)) {
                 call_user_func_array([$this->builder, 'where'], $pair);

@@ -2,16 +2,16 @@
 
 namespace Fusion\Tests\Unit;
 
-use Fusion\Tests\TestCase;
-use Fusion\Models\User;
-use Fusion\Models\Role;
 use Fusion\Models\Permission;
-use Illuminate\Support\Collection;
+use Fusion\Models\Role;
+use Fusion\Models\User;
+use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Collection;
 
 class RoleTest extends TestCase
 {
-	use RefreshDatabase;
+    use RefreshDatabase;
 
     /**
      * @test

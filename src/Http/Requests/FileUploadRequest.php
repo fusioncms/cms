@@ -8,14 +8,14 @@ class FileUploadRequest extends FormRequest
 {
     /**
      * Max file size upload limit.
-     * 
+     *
      * @var int
      */
     protected $maxFileSize;
 
     /**
      * Accepted file extensions.
-     * 
+     *
      * @var string
      */
     protected $acceptedMimes;
@@ -25,7 +25,7 @@ class FileUploadRequest extends FormRequest
      */
     public function __construct()
     {
-        $this->maxFileSize   = setting('files.file_size_upload_limit');
+        $this->maxFileSize = setting('files.file_size_upload_limit');
         $this->acceptedMimes = setting('files.accepted_files');
     }
 
@@ -57,7 +57,7 @@ class FileUploadRequest extends FormRequest
 
     /**
      * Get the error messages for the defined validation rules.
-    *
+     *
      * @return array
      */
     public function messages()

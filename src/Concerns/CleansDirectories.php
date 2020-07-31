@@ -2,15 +2,16 @@
 
 namespace Fusion\Concerns;
 
-use Symfony\Component\Finder\Finder;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Finder\Finder;
 
 trait CleansDirectories
 {
     /**
      * Remove all files and folders, ignoring `dot` files.
      *
-     * @param  string  $directory
+     * @param string $directory
+     *
      * @return void
      */
     protected function cleanDirectory($directory)

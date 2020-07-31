@@ -28,7 +28,7 @@ class AddressFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
-        'api_key' => ''
+        'api_key' => '',
     ];
 
     /**
