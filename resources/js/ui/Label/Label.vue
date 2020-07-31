@@ -1,6 +1,6 @@
 <template>
-    <label class="label" :class="{'label--required': required}" :for="field_name" :id="id">
-        <span class="label__text" v-html="text"></span>
+    <label class="label" :class="{'label--required': required}" :for="fieldId" :id="id">
+        <slot></slot>
     </label>
 </template>
 
@@ -9,8 +9,11 @@
         name: 'p-label',
 
         props: {
-            field_name: String,
-            text: String,
+            label: String,
+            fieldId: {
+                required: true,
+                type: String
+            },
             id: {
                 required: false,
                 type: String

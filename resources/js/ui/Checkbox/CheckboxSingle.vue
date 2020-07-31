@@ -1,6 +1,7 @@
 <template>
     <p-field-group
         :name="name"
+        :fieldId="id + '_field'"
         :required="required"
         :hasError="hasError"
         :errorMessage="errorMessage"
@@ -9,7 +10,7 @@
         :help="help">
         <p-checkbox
             :name="name"
-            :id="id"
+            :id="id + '_field'"
             :disabled="disabled"
             :required="required">
             <slot></slot>

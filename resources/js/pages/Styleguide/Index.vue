@@ -224,8 +224,8 @@
 
                                 <div class="buttons mb-4">
                                     <div class="buttons__group">
-                                        <button class="button button--icon"><fa-icon icon="chevron-left" class="icon"></fa-icon></button>
-                                        <button class="button button--icon"><fa-icon icon="chevron-right" class="icon"></fa-icon></button>
+                                        <button class="button button--icon"><fa-icon icon="chevron-left" class="icon"></fa-icon><span class="sr-only">Previous</span></button>
+                                        <button class="button button--icon"><fa-icon icon="chevron-right" class="icon"></fa-icon><span class="sr-only">Next</span></button>
                                     </div>
                                 </div>
 
@@ -436,6 +436,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-title
                                     name="title"
+                                    id="title"
                                     label="Title"
                                     help="What is your name?"
                                     autocomplete="off"
@@ -446,6 +447,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-title
                                     name="title_success"
+                                    id="title_success"
                                     label="Title Success"
                                     help="What is your name?"
                                     autocomplete="off"
@@ -460,6 +462,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-title
                                     name="title_error"
+                                    id="title_error"
                                     label="Title Error"
                                     help="What is your name?"
                                     autocomplete="off"
@@ -483,6 +486,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-input
                                     name="input"
+                                    id="input"
                                     label="Input"
                                     help="Help text for input."
                                     autocomplete="off">
@@ -492,6 +496,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-input
                                     name="input_success"
+                                    id="input_success"
                                     label="Input Success"
                                     help="What shall we call you?"
                                     autocomplete="off"
@@ -505,6 +510,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-input
                                     name="input_error"
+                                    id="input_error"
                                     type="email"
                                     label="Input Error"
                                     help="What is your email address?"
@@ -529,6 +535,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-textarea
                                     name="textarea"
+                                    id="textarea"
                                     label="Textarea"
                                     help="Help text for textarea."
                                     autocomplete="off"
@@ -539,6 +546,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-textarea
                                     name="textarea_success"
+                                    id="textarea_success"
                                     label="Textarea Success"
                                     help="Enter a message."
                                     autocomplete="off"
@@ -553,6 +561,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-textarea
                                     name="textarea_error"
+                                    id="textarea_error"
                                     label="Textarea Error"
                                     help="Enter a message."
                                     autocomplete="off"
@@ -577,6 +586,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-select
                                     name="select"
+                                    id="select"
                                     label="Select"
                                     help="Help text for select dropdown."
                                     :options="[
@@ -607,6 +617,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-select
                                     name="select_success"
+                                    id="select_success"
                                     label="Select Success"
                                     value="option-1"
                                     help="Help text for select dropdown."
@@ -640,6 +651,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-select
                                     name="select_error"
+                                    id="select_error"
                                     label="Select Error"
                                     help="Help text for select dropdown."
                                     :hasError="true"
@@ -672,6 +684,7 @@
                             <div class="col w-full xl:w-1/3">
                                 <p-select
                                     name="select_multiple"
+                                    id="select_multiple"
                                     label="Select Multiple"
                                     help="Help text for select dropdown."
                                     :multiple="true"
@@ -732,7 +745,7 @@
                             </div>
 
                             <div class="col w-full md:w-1/2">
-                                <p-checkbox-group 
+                                <p-fieldset 
                                     label="Checkboxes" 
                                     help="Select all that apply.">
                                     <p-checkbox
@@ -769,11 +782,11 @@
                                         name="checkbox">
                                         Checkbox 5
                                     </p-checkbox>
-                                </p-checkbox-group>
+                                </p-fieldset>
                             </div>
 
                             <div class="col w-full md:w-1/2">
-                                <p-radio-group 
+                                <p-fieldset 
                                     label="Radios" 
                                     help="Select an option.">
                                     <p-radio
@@ -810,11 +823,11 @@
                                         name="radio">
                                         Radio 5
                                     </p-radio>
-                                </p-radio-group>
+                                </p-fieldset>
                             </div>
 
                             <div class="col w-full md:w-1/2">
-                                <p-checkbox-group 
+                                <p-fieldset
                                     label="Checkboxes Inline" 
                                     help="Select all that apply.">
                                     <p-checkbox
@@ -856,11 +869,11 @@
                                         :inline="true">
                                         Checkbox 5
                                     </p-checkbox>
-                                </p-checkbox-group>
+                                </p-fieldset>
                             </div>
 
                             <div class="col w-full md:w-1/2">
-                                <p-radio-group 
+                                <p-fieldset 
                                     label="Radios" 
                                     help="Select an option.">
                                     <p-radio
@@ -902,7 +915,7 @@
                                         :inline="true">
                                         Radio 5
                                     </p-radio>
-                                </p-radio-group>
+                                </p-fieldset>
                             </div>
 
                             <div class="col w-full">

@@ -1,6 +1,7 @@
 <template>
 	<p-field-group
         :name="name"
+        :fieldId="id + '_field'"
         :label="label"
         :required="required"
         :hasError="hasError"
@@ -25,7 +26,7 @@
                 <!-- Selected Item/Items -->
                 <div v-if="selectedOptions.length > 0" class="field-select__selected" :class="{'field-select__selected--multiple': multiple}">
                     <ul v-if="multiple" class="field-select__list">
-                        <li v-if="multiple" v-for="(option, index) in selectedOptions" :key="index" class="field-select__item tag">
+                        <li v-for="(option, index) in selectedOptions" :key="index" class="field-select__item tag">
                             {{ option.label || option }}
                             
                             <button @click.stop="removeSelection(index)">
@@ -44,6 +45,8 @@
                     <fa-icon icon="chevron-down" class="fa-fw"></fa-icon>
                 </div>
             </button>
+
+            <input :id="id + '_field'" type="hidden" :value="selectedOptions">
 
             <!-- Select Dropdown -->
             <div
@@ -64,8 +67,8 @@
                 </div>
 
                 <p :id="name + '_controls'" class="field-dropdown__controls" v-if="showControls">
-                    <span>Press enter to select</span>
-                    <span>↑ ↓ to navigate</span>
+                    <span>Press enter to select,</span>
+                    <span>↑ ↓ to navigate,</span>
                     <span>esc to dismiss</span>
                 </p>
 
@@ -75,7 +78,7 @@
                         ref="options" 
                         class="field-dropdown__options field-dropdown__options--check" 
                         :aria-describedby="name + '_controls'" 
-                        v-if="multiple" >
+                        v-if="multiple">
                         <p-checkbox
                             v-for="(option, index) in filteredOptions"
                             class="field-dropdown__option"
@@ -129,6 +132,10 @@
         	name: {
                 required: true,
                 type: String,
+            },
+            id: {
+                required: true,
+                type: String
             },
             value: {
                 required: false,

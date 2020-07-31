@@ -1,6 +1,7 @@
 <template>
     <p-field-group
         :name="name"
+        :fieldId="id + '_field'"
         :label="label"
         :required="required"
         :hasError="hasError"
@@ -11,7 +12,7 @@
         <input
             class="field field--input"
             :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
-            :id="id"
+            :id="id + '_field'"
             :name="name"
             :type="type"
             :placeholder="placeholder"
@@ -33,7 +34,10 @@
 
         props: {
             name: String,
-            id: String,
+            id: {
+                required: true,
+                type: String
+            },
             placeholder: String,
             label: String,
             help: String,

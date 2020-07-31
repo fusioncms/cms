@@ -1,5 +1,5 @@
 .label {
-    @apply block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2;
+    @apply block uppercase leading-normal tracking-wide text-gray-700 text-sm font-bold mb-3;
     @extend %no-bottom;
 
     &--required:after { 
@@ -8,6 +8,4 @@
     }
 }
 
-.legend {
-    @apply mb-2;
-}
+.legend { @apply leading-normal mb-3; }

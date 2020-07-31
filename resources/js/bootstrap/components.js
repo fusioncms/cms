@@ -34,6 +34,7 @@ Vue.component('delete-file-modal', require('../components/FileManager/Modals/Del
 Vue.component('delete-selected-files-modal', require('../components/FileManager/Modals/DeleteSelectedFilesModal').default)
 
 // Matrix
+Vue.component('field-set', require('../components/Fieldset').default)
 Vue.component('field-editor', require('../components/FieldEditor').default)
 Vue.component('field-builder', require('../components/FieldBuilder').default)
 Vue.component('section-builder', require('../components/SectionBuilder').default)

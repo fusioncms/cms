@@ -15,11 +15,11 @@
             <div class="card__body">
                 <p-title name="name" readonly v-model="form.name"></p-title>
 
-                <p-fieldset
+                <field-set
                     :has-error="form.errors.has('fieldset')"
                     :error-message="form.errors.get('fieldset')"
                     v-model="form.fieldset">
-                </p-fieldset>
+                </field-set>
             </div>
         </div>
 

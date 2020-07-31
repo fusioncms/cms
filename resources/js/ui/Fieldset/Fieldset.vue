@@ -1,49 +1,22 @@
 <template>
-    <p-select
-        name="fieldset"
-        label="Fieldset"
-        help="What fieldset would you like to attach?"
-        :options="options"
-        :has-error="hasError"
-        :error-message="errorMessage"
-        v-model="model">
-    </p-select>
+    <fieldset class="form-group" :class="{'form-group--danger': hasError, 'form-group--success': hasSuccess}">
+        <p-legend :label="label" v-if="hasMessage">
+            <p-help-danger v-if="errorMessage">{{ errorMessage }}</p-help-danger>
+            <p-help-success v-if="successMessage">{{ successMessage }}</p-help-success>
+            <p-help v-if="help">{{ help }}</p-help>
+        </p-legend>
+
+        <slot></slot>
+    </fieldset>
 </template>
 
 <script>
     export default {
         name: 'p-fieldset',
 
-        data() {
-            return {
-                fieldsets: null,
-                options: [{ label: 'None', value: null }]
-            }
-        },
-
-        computed: {
-            model: {
-                get() {
-                    return this.value
-                },
-
-                set(value) {
-                    this.$emit('input', value)
-                }
-            }
-        },
-
-        watch: {
-            fieldsets(items) {
-                let filtered = _.reject(items, (item) => item.hidden)
-
-                _.each(filtered, (item) => {
-                    this.options.push({ label: item.name, value: item.id })
-                })
-            },
-        },
-
         props: {
+            label: String,
+            help: String,
             hasError: {
                 required: false,
                 type: Boolean,
@@ -54,16 +27,27 @@
                 type: String,
                 default: '',
             },
-            value: {
+            hasSuccess: {
                 required: false,
-                default: null,
+                type: Boolean,
+                default: false,
             },
+            successMessage: {
+                required: false,
+                type: String,
+                default: '',
+            },
+            inline: {
+                required: false,
+                type: Boolean,
+                default: false,
+            }
         },
 
-        mounted() {
-            axios.get('/api/fieldsets')
-                .then((response) => this.fieldsets = response.data.data)
-                .catch((error) => console.log(error))
+        computed: {
+            hasMessage() {
+                return this.help || this.errorMessage || this.successMessage
+            }
         }
     }
 </script>

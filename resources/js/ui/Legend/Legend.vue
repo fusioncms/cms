@@ -1,6 +1,6 @@
 <template>
     <legend class="legend" :id="id">
-        <span class="label" :class="{'label--required': required}" v-html="text"></span>
+        <span class="label" :class="{'label--required': required}" v-if="label">{{ label }}</span>
         <slot></slot>
     </legend>
 </template>
@@ -10,9 +10,7 @@
         name: 'p-legend',
 
         props: {
-            field_name: String,
-            text: String,
-            help: String,
+            label: String,
             id: {
                 required: false,
                 type: String

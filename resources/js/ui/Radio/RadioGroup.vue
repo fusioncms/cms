@@ -1,13 +1,12 @@
 <template>
-    <fieldset class="form-group" :class="{'form-group--danger': hasError, 'form-group--success': hasSuccess}">
-        <p-legend :text="label" v-if="hasMessage">
-            <p-help-danger :text="errorMessage" v-if="errorMessage"></p-help-danger>
-            <p-help-success :text="successMessage" v-if="successMessage"></p-help-success>
-            <p-help :text="help" v-if="help"></p-help>
-        </p-legend>
-
+    <p-fieldset
+        :label="label"
+        :help="help"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess">
         <slot></slot>
-    </fieldset>
+    </p-fieldset>
 </template>
 
 <script>
@@ -36,17 +35,6 @@
                 required: false,
                 type: String,
                 default: '',
-            },
-            inline: {
-                required: false,
-                type: Boolean,
-                default: false,
-            }
-        },
-
-        computed: {
-            hasMessage() {
-                return this.help || this.errorMessage || this.successMessage
             }
         }
     }

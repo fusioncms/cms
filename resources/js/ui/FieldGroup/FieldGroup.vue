@@ -1,6 +1,6 @@
 <template>
     <div class="form-group" :class="{'form-group--danger': hasError, 'form-group--success': hasSuccess}">
-        <p-label :text="label" :field_name="name" :required="required" v-if="label"></p-label>
+        <p-label :fieldId="fieldId" :required="required" v-if="label">{{ label }}</p-label>
         <slot></slot>
 
         <div :id="name + '_message'" class="form-group__messages" v-if="hasMessage">
@@ -18,6 +18,10 @@
         props: {
             name: String,
             label: String,
+            fieldId: {
+                required: true,
+                type: String
+            },
             help: String,
             required: {
                 type: Boolean,

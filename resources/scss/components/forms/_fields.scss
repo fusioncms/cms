@@ -101,7 +101,7 @@
     }
 
     &__options {
-        max-height: rem(380px);
+        max-height: rem(385px);
         overflow-y: auto;
         
         &--list {
@@ -118,8 +118,6 @@
         &--highlighted:not(.field-check)  { @apply bg-gray-200; }
 
         &--selected:not(.field-check) { @apply bg-gray-300; }
-
-        &.field-check { @apply mb-6; }
     }
 
     &__empty {
@@ -128,7 +126,7 @@
 }
 
 .field-check {
-    @apply flex relative leading-normal mb-3;
+    @apply flex relative leading-normal mb-4;
 
     &--inline {
         @apply inline-flex items-center mr-2;
@@ -212,7 +210,6 @@
         z-10
     ;
 }
-
 .toggle {
     &__wrap {
         @apply
