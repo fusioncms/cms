@@ -1,7 +1,7 @@
 <template>
     <p-field-group
         :name="name"
-        :fieldId="name + '_field'"
+        :fieldId="formattedId"
         :label="label"
         :required="required"
         :hasError="hasError"
@@ -13,7 +13,7 @@
             class="field field--title"
             :class="{'field--danger': hasError, 'field--success': hasSuccess}"
             type="text"
-            :id="name + '_field'"
+            :id="formattedId"
             :name="name"
             :placeholder="placeholder"
             :readonly="readonly"
@@ -37,6 +37,7 @@
                 required: true,
                 type: String
             },
+            id: String,
             placeholder: {
                 type: String,
                 default: 'Name',
@@ -101,6 +102,10 @@
         computed: {
             hasMessage() {
                 return this.help || this.errorMessage || this.successMessage
+            },
+
+            formattedId() {
+                return this.id ? this.id : this.name + '_field'
             }
         }
     }

@@ -3,7 +3,7 @@
         <p-label :fieldId="fieldId" :required="required" v-if="label">{{ label }}</p-label>
         <slot></slot>
 
-        <div :id="name + '_message'" class="form-group__messages" v-if="hasMessage">
+        <div :id="fieldId + '_message'" class="form-group__messages" v-if="hasMessage">
             <p-help-danger v-if="errorMessage">{{ errorMessage }}</p-help-danger>
             <p-help-success v-if="successMessage">{{ successMessage }}</p-help-success>
             <p-help v-if="help">{{ help }}</p-help>

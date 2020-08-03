@@ -1,7 +1,7 @@
 <template>
 	<p-field-group
         :name="name"
-        :fieldId="name + '_field'"
+        :fieldId="formattedId"
         :label="label"
         :required="required"
         :hasError="hasError"
@@ -46,7 +46,7 @@
                 </div>
             </button>
 
-            <input :id="name + '_field'" type="hidden" :value="selectedOptions">
+            <input :id="formattedId" type="hidden" :value="selectedOptions">
 
             <!-- Select Dropdown -->
             <div
@@ -66,7 +66,7 @@
                         placeholder="Search for option..."/>
                 </div>
 
-                <p :id="name + '_controls'" class="field-dropdown__controls" v-if="showControls">
+                <p :id="formattedId + '_controls'" class="field-dropdown__controls" v-if="showControls">
                     <span>Press enter to select,</span>
                     <span>↑ ↓ to navigate,</span>
                     <span>esc to dismiss</span>
@@ -82,10 +82,10 @@
                         <p-checkbox
                             v-for="(option, index) in filteredOptions"
                             class="field-dropdown__option"
-                            :id="name + '_' + index"
+                            :id="formattedId + '_' + index"
                             :key="index"
                             :native-value="option.value"
-                            :name="name + '_option'"
+                            :name="formattedId + '_option'"
                             v-model="selection">
                             {{ option.label }}
                         </p-checkbox>
@@ -137,6 +137,7 @@
                 required: false,
                 default: null,
             },
+            id: String,
             label: {
                 required: false,
                 type: String,
@@ -250,6 +251,10 @@
 
             hasMessage() {
                 return this.help || this.errorMessage || this.successMessage
+            },
+
+            formattedId() {
+                return this.id ? this.id : this.name + '_field'
             }
         },
 

@@ -1,5 +1,5 @@
 <template>
-    <label class="label" :class="{'label--required': required}" :for="fieldId" :id="id">
+    <label :id="id" class="label" :class="{'label--required': required}" :for="fieldId">
         <slot></slot>
     </label>
 </template>

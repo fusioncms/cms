@@ -7,7 +7,7 @@
 }
 
 .button {
-    @apply appearance-none bg-white border border-gray-300 rounded text-sm leading-normal text-gray-700 no-underline cursor-pointer px-3 py-2;
+    @apply appearance-none bg-white border border-gray-300 rounded leading-normal text-gray-700 no-underline cursor-pointer px-3 py-2;
     transition: all 0.2s $transition-effect;
 
     &:hover:not([disabled]) { 
@@ -41,9 +41,9 @@
         > .icon { @apply m-0; }
     }
 
-    &--small { @apply text-xs; }
+    &--small { @apply text-sm; }
 
-    &--large { @apply text-base; }
+    &--large { @apply text-lg; }
 
     &--brand, 
     &--primary, 

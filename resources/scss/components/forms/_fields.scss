@@ -62,6 +62,16 @@
     }
 }
 
+.field-number {
+    @apply flex items-center text-center w-full;
+
+    &__button {}
+
+    &__input {
+        @apply flex-auto text-center mx-2;
+    }
+}
+
 .field-select {
     @apply flex justify-between items-center w-full px-3 py-2;
 

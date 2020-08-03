@@ -477,7 +477,7 @@
                         <!-- Input Field -->
                         <div class="row">
                             <div class="col w-full">
-                                <h3>Input Field</h3>
+                                <h3>Text Input Field</h3>
                             </div>
                             
                             <div class="col w-full xl:w-1/3">
@@ -566,6 +566,55 @@
                             </div>
                         </div>
 
+                        <hr>
+
+                        <!-- Number Field -->
+                        <div class="row">
+                            <div class="col w-full">
+                                <h3>Number Input Field</h3>
+                            </div>
+
+                            <div class="col w-full sm:w-1/2 lg:w-1/4">
+                                <p-number
+                                    name="number"
+                                    label="Number"
+                                    :value="0"
+                                    :min="1"
+                                    :max="200"
+                                    :steps="5"
+                                    help="Choose an integer divisible by 5.">
+                                </p-number>
+                            </div>
+
+                            <div class="col w-full sm:w-1/2 lg:w-1/4">
+                                <p-number
+                                    name="number_error"
+                                    label="Number Error"
+                                    :value="7"
+                                    :min="1"
+                                    :max="200"
+                                    :steps="5"
+                                    help="Choose an integer divisible by 5."
+                                    :hasError="true"
+                                    errorMessage="This is not a valid integer.">
+                                </p-number>
+                            </div>
+                            
+                            <div class="col w-full sm:w-1/2 lg:w-1/4">
+                                <p-number
+                                    name="number_success"
+                                    label="Number Success"
+                                    :value="5"
+                                    :min="1"
+                                    :max="200"
+                                    :steps="5"
+                                    help="Choose an integer divisible by 5."
+                                    :hasSuccess="true"
+                                    successMessage="This value is valid!">
+                                </p-number>
+                            </div>
+                        </div>
+                        
                         <hr>
 
                         <!-- Select Field -->
