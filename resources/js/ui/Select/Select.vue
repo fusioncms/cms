@@ -1,7 +1,7 @@
 <template>
 	<p-field-group
         :name="name"
-        :fieldId="id + '_field'"
+        :fieldId="name + '_field'"
         :label="label"
         :required="required"
         :hasError="hasError"
@@ -46,7 +46,7 @@
                 </div>
             </button>
 
-            <input :id="id + '_field'" type="hidden" :value="selectedOptions">
+            <input :id="name + '_field'" type="hidden" :value="selectedOptions">
 
             <!-- Select Dropdown -->
             <div
@@ -130,10 +130,6 @@
 
         props: {
         	name: {
-                required: true,
-                type: String,
-            },
-            id: {
                 required: true,
                 type: String
             },

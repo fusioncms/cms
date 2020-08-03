@@ -1,7 +1,7 @@
 <template>
     <p-field-group
         :name="name"
-        :fieldId="id + '_field'"
+        :fieldId="name + '_field'"
         :label="label"
         :required="required"
         :hasError="hasError"
@@ -12,7 +12,7 @@
         <textarea
             class="field field--textarea"
             :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
-            :id="id + '_field'"
+            :id="name + '_field'"
             :name="name"
             :placeholder="placeholder"
             :readonly="readonly"
@@ -31,8 +31,7 @@
         name: 'p-textarea',
 
         props: {
-            name: String,
-            id: {
+            name: {
                 required: true,
                 type: String
             },

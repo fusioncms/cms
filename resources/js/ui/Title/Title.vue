@@ -1,7 +1,7 @@
 <template>
     <p-field-group
         :name="name"
-        :fieldId="id + '_field'"
+        :fieldId="name + '_field'"
         :label="label"
         :required="required"
         :hasError="hasError"
@@ -13,7 +13,7 @@
             class="field field--title"
             :class="{'field--danger': hasError, 'field--success': hasSuccess}"
             type="text"
-            :id="id + '_field'"
+            :id="name + '_field'"
             :name="name"
             :placeholder="placeholder"
             :readonly="readonly"
@@ -33,8 +33,7 @@
         name: 'p-title',
 
         props: {
-            name: String,
-            id: {
+            name: {
                 required: true,
                 type: String
             },
