@@ -26,8 +26,8 @@
                     
                     <a href="#"
                         class="tab__link flex justify-between items-center"
-                        @click.prevent="select(index)"
-                        v-text="replicant.section.name">
+                        @click.prevent="select(index)">
+                        <span>{{ replicant.section.name }}</span>
                         <span
                             class="flex items-center justify-center w-6 h-6 rounded hover:bg-black hover:text-white"
                             @click.prevent="remove(index)">
