@@ -189,16 +189,16 @@ class ReplicatorFieldtype extends Fieldtype
                     ->mapWithKeys(function($replicant, $index) use ($section) {
                         return [$replicant->id => ['section_id' => $section->id,'order' => ($index + 1)]];
                     });
-                $detached = $existing[$section->id]->diff($attached->keys());
 
                 // removal..
-                $detached->each(function($id) use ($model, $replicator, $section) {
-                    $replicator
-                        ->getBuilder($section)
-                        ->findOrFail($id)
-                        ->delete();
-
-                });
+                $existing[$section->id]
+                    ->diff($attached->keys())
+                    ->each(function($id) use ($model, $replicator, $section) {
+                        $replicator
+                            ->getBuilder($section)
+                            ->findOrFail($id)
+                            ->delete();
+                    });
 
                 // update `replicators_pivot` table..
                 $model->{"rp_{$section->handle}"}()->newPivotStatementForId($existing[$section->id])->where('section_id', $section->id)->delete();
