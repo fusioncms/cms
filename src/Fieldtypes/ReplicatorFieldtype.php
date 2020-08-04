@@ -143,22 +143,31 @@ class ReplicatorFieldtype extends Fieldtype
     public function persistRelationship($model, Field $field)
     {
         $replicator = Replicator::find($field->settings['replicator']);
+        
+        /**
+         * Retrieve existing replicants/section.
+         */
+        $existing = $replicator->sections->mapWithKeys(function($section) use ($model) {
+                return [$section->id => $model->{"rp_{$section->handle}"}->pluck('id')];
+            });
 
+        /**
+         * Persist replicants.
+         */
         $replicants = collect(request()->input($field->handle, []))
-            ->map(function($item) use ($replicator) {
-                $section = Section::find($item['section']['id']);
+            ->map(function($input) use ($replicator) {
+                $section = Section::findOrFail($input['section']['id']);
                 $builder = $replicator->getBuilder($section);
 
                 // persist replicant..
-                if (isset($item['id'])) {
-                    $replicant = $builder->find($item['id']);
-                    $replicant->update($item['fields']);
+                if (isset($input['id'])) {
+                    $replicant = $builder->find($input['id']);
+                    $replicant->update($input['fields']);
                 } else {
                     $replicant = $builder->create(array_merge([
-                            'replicator_id' => $replicator->id,
-                            'section_id'    => $section->id
-                        ], $item['fields'])
-                    );
+                        'replicator_id' => $replicator->id,
+                        'section_id'    => $section->id
+                    ], $input['fields']));
                 }
 
                 // persist relationships..
@@ -171,21 +180,30 @@ class ReplicatorFieldtype extends Fieldtype
                 return $replicant;
             });
 
-        // update `replicators_pivot` table..
-        $replicator->sections->each(function($section) use ($model, $replicants) {
-            $oldValues = $model->{"rp_{$section->handle}"}->pluck('id');
-            $newValues = $replicants->where('section_id', $section->id)
-                ->mapWithKeys(function($replicant, $index) use ($section) {
-                    return [ $replicant->id => [
-                            'section_id' => $section->id,
-                            'order'      => ($index + 1)
-                        ]
-                    ];
+        /**
+         * Update `replicators_pivot` table..
+         */
+        $replicator->sections
+            ->each(function($section) use ($replicator, $model, $replicants, $existing) {
+                $attached = $replicants->where('section_id', $section->id)
+                    ->mapWithKeys(function($replicant, $index) use ($section) {
+                        return [$replicant->id => ['section_id' => $section->id,'order' => ($index + 1)]];
+                    });
+                $detached = $existing[$section->id]->diff($attached->keys());
+
+                // removal..
+                $detached->each(function($id) use ($model, $replicator, $section) {
+                    $replicator
+                        ->getBuilder($section)
+                        ->findOrFail($id)
+                        ->delete();
+
                 });
 
-            $model->{"rp_{$section->handle}"}()->detach($oldValues);
-            $model->{"rp_{$section->handle}"}()->attach($newValues);
-        });
+                // update `replicators_pivot` table..
+                $model->{"rp_{$section->handle}"}()->newPivotStatementForId($existing[$section->id])->where('section_id', $section->id)->delete();
+                $model->{"rp_{$section->handle}"}()->attach($attached);
+            });
     }
 
     /**
