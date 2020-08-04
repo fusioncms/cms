@@ -32,7 +32,7 @@
             :min="min"
             :max="max"
             :aria-required="required" 
-            :aria-describedby="hasMessage ? name + '_message' : null"
+            :aria-describedby="hasMessage ? formattedId + '_message' : null"
             v-model="inputValue"
             @blur="emitValue($event.target.value)">
             <button class="field-number__button button button--icon" @click.prevent="increase" :disabled="disabled">
@@ -50,7 +50,11 @@
         name: 'p-number',
 
         props: {
-            name: String,
+            name:  {
+                required: true,
+                type: String
+            },
+            id: String,
             placeholder: String,
             label: String,
             help: String,

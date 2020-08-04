@@ -520,6 +520,99 @@
 
                         <hr>
 
+                        <!-- Password Field -->
+                        <div class="row">
+                            <div class="col w-full">
+                                <h3>Password Input Field</h3>
+                            </div>
+
+                            <div class="col w-full md:w-1/3">
+                                <p-password
+                                    name="password"
+                                    label="password"
+                                    required
+                                    help="Please enter a password.">
+                                </p-password>
+                            </div>
+
+                            <div class="col w-full md:w-1/3">
+                                <p-password
+                                    name="password_error"
+                                    label="Password Error"
+                                    required
+                                    help="Please enter a password."
+                                    value="Password"
+                                    :hasSuccess="true"
+                                    successMessage="Thank you!">
+                                </p-password>
+                            </div>
+
+                            <div class="col w-full md:w-1/3">
+                                <p-password
+                                    name="password_success"
+                                    label="Password Success"
+                                    required
+                                    help="Please enter a password."
+                                    value="Password"
+                                    :hasError="true"
+                                    errorMessage="This password is incorrect.">
+                                </p-password>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Number Field -->
+                        <div class="row">
+                            <div class="col w-full">
+                                <h3>Number Input Field</h3>
+                            </div>
+
+                            <div class="col w-full sm:w-1/2 lg:w-1/4">
+                                <p-number
+                                    name="number"
+                                    label="Number"
+                                    :value="0"
+                                    :min="1"
+                                    :max="200"
+                                    :steps="5"
+                                    help="Choose an integer divisible by 5.">
+                                </p-number>
+                            </div>
+                            
+                            <div class="col w-full sm:w-1/2 lg:w-1/4">
+                                <p-number
+                                    name="number_success"
+                                    label="Number Success"
+                                    :required="true"
+                                    :value="5"
+                                    :min="1"
+                                    :max="200"
+                                    :steps="5"
+                                    help="Choose an integer divisible by 5."
+                                    :hasSuccess="true"
+                                    successMessage="This value is valid!">
+                                </p-number>
+                            </div>
+
+                            <div class="col w-full sm:w-1/2 lg:w-1/4">
+                                <p-number
+                                    name="number_error"
+                                    label="Number Error"
+                                    :required="true"
+                                    :value="7"
+                                    :min="1"
+                                    :max="200"
+                                    :steps="5"
+                                    help="Choose an integer divisible by 5."
+                                    :hasError="true"
+                                    errorMessage="This is not a valid integer.">
+                                </p-number>
+                            </div>
+                        </div>
+                        
+                        <hr>
+
                         <!-- Textarea Field -->
                         <div class="row">
                             <div class="col w-full">
@@ -566,55 +659,6 @@
                             </div>
                         </div>
 
-                        <hr>
-
-                        <!-- Number Field -->
-                        <div class="row">
-                            <div class="col w-full">
-                                <h3>Number Input Field</h3>
-                            </div>
-
-                            <div class="col w-full sm:w-1/2 lg:w-1/4">
-                                <p-number
-                                    name="number"
-                                    label="Number"
-                                    :value="0"
-                                    :min="1"
-                                    :max="200"
-                                    :steps="5"
-                                    help="Choose an integer divisible by 5.">
-                                </p-number>
-                            </div>
-
-                            <div class="col w-full sm:w-1/2 lg:w-1/4">
-                                <p-number
-                                    name="number_error"
-                                    label="Number Error"
-                                    :value="7"
-                                    :min="1"
-                                    :max="200"
-                                    :steps="5"
-                                    help="Choose an integer divisible by 5."
-                                    :hasError="true"
-                                    errorMessage="This is not a valid integer.">
-                                </p-number>
-                            </div>
-                            
-                            <div class="col w-full sm:w-1/2 lg:w-1/4">
-                                <p-number
-                                    name="number_success"
-                                    label="Number Success"
-                                    :value="5"
-                                    :min="1"
-                                    :max="200"
-                                    :steps="5"
-                                    help="Choose an integer divisible by 5."
-                                    :hasSuccess="true"
-                                    successMessage="This value is valid!">
-                                </p-number>
-                            </div>
-                        </div>
-                        
                         <hr>
 
                         <!-- Select Field -->

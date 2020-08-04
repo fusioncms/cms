@@ -77,7 +77,7 @@
                     <p-checkbox-group 
                         ref="options" 
                         class="field-dropdown__options field-dropdown__options--check" 
-                        :aria-describedby="name + '_controls'" 
+                        :aria-describedby="formattedId + '_controls'" 
                         v-if="multiple">
                         <p-checkbox
                             v-for="(option, index) in filteredOptions"
