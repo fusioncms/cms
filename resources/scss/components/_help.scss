@@ -1,0 +1,8 @@
+.help {
+    @apply block text-sm leading-normal mb-0;
+    @extend %no-bottom;
+
+    &--danger { @apply text-danger-600; }
+
+    &--success { @apply text-success-600; }
+}

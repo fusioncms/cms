@@ -1,37 +1,30 @@
 <template>
-    <div class="form__group">
-        <label
-            class="form__label"
-            :for="name"
-            v-if="label"
-            v-html="label">
-        </label>
-
+    <p-field-group
+        :name="name"
+        :fieldId="formattedId"
+        :label="label"
+        :required="required"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess"
+        :successMessage="successMessage"
+        :help="help">
         <input
-            class="form__control"
-            :class="{'font-mono': monospaced}"
-            :id="name"
+            class="field field--input"
+            :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
+            :id="formattedId"
             :name="name"
-            :type="type"
+            type="password"
             :placeholder="placeholder"
             :readonly="readonly"
             :disabled="disabled"
+            :value="value"
             :autocomplete="autocomplete"
             :autofocus="autofocus"
-        >
-
-        <div class="form__control--meta" v-if="help || ! neverShow">
-            <div class="form__help">
-                <span v-if="help" v-html="help"></span>
-            </div>
-
-            <div class="form__password">
-                <a href="#" @click.prevent="toggleVisibility" v-if="! neverShow">
-                    {{ revealed ? hideText : showText }}
-                </a>
-            </div>
-        </div>
-    </div>
+            :required="required"
+            :aria-required="required" 
+            :aria-describedby="hasMessage ? formattedId + '_message' : null">
+    </p-field-group>
 </template>
 
 <script>
@@ -46,10 +39,18 @@
         },
 
         props: {
-            name: String,
+            name:  {
+                required: true,
+                type: String
+            },
+            id: String,
             placeholder: String,
             label: String,
             help: String,
+            value: {
+                type: String,
+                default: '',
+            },
             required: {
                 type: Boolean,
                 default: false,
@@ -81,6 +82,26 @@
                 type: String,
                 default: 'Hide Password',
             },
+            hasError: {
+                required: false,
+                type: Boolean,
+                default: false,
+            },
+            errorMessage: {
+                required: false,
+                type: String,
+                default: '',
+            },
+            hasSuccess: {
+                required: false,
+                type: Boolean,
+                default: false,
+            },
+            successMessage: {
+                required: false,
+                type: String,
+                default: '',
+            },
             autocomplete: {
                 required: false,
                 type: String,
@@ -91,6 +112,16 @@
                 type: Boolean,
                 default: false,
             },
+        },
+
+        computed: {
+            hasMessage() {
+                return this.help || this.errorMessage || this.successMessage
+            },
+
+            formattedId() {
+                return this.id ? this.id : this.name + '_field'
+            }
         },
 
         methods: {

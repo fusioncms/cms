@@ -1,32 +1,31 @@
 <template>
-    <div class="field">
-        <label
-            class="field__label"
-            :for="name"
-            v-if="label"
-            v-html="label">
-        </label>
-
-        <div class="field__control">
-            <input
-                class="field__input"
-                :class="{'font-mono': monospaced, 'text-xs': monospaced, 'field__input--danger': hasError}"
-                :id="id"
-                :name="name"
-                :type="type"
-                :placeholder="placeholder"
-                :readonly="readonly"
-                :disabled="disabled"
-                :value="value"
-                @input="$emit('input', $event.target.value)"
-                :autocomplete="autocomplete"
-                :autofocus="autofocus"
-            >
-        </div>
-
-        <p class="field__help" v-if="help" v-html="help"></p>
-        <p class="field__help field__help--danger" v-if="errorMessage" v-html="errorMessage"></p>
-    </div>
+    <p-field-group
+        :name="name"
+        :fieldId="formattedId"
+        :label="label"
+        :required="required"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess"
+        :successMessage="successMessage"
+        :help="help">
+        <input
+            class="field field--input"
+            :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
+            :id="formattedId"
+            :name="name"
+            :type="type"
+            :placeholder="placeholder"
+            :readonly="readonly"
+            :disabled="disabled"
+            :value="value"
+            :autocomplete="autocomplete"
+            :autofocus="autofocus"
+            :required="required"
+            :aria-required="required" 
+            :aria-describedby="hasMessage ? formattedId + '_message' : null"
+            @input="$emit('input', $event.target.value)">
+    </p-field-group>
 </template>
 
 <script>
@@ -34,7 +33,10 @@
         name: 'p-input',
 
         props: {
-            name: String,
+            name:  {
+                required: true,
+                type: String
+            },
             id: String,
             placeholder: String,
             label: String,
@@ -73,6 +75,16 @@
                 type: String,
                 default: '',
             },
+            hasSuccess: {
+                required: false,
+                type: Boolean,
+                default: false,
+            },
+            successMessage: {
+                required: false,
+                type: String,
+                default: '',
+            },
             autocomplete: {
                 required: false,
                 type: String,
@@ -84,5 +96,15 @@
                 default: false,
             },
         },
+
+        computed: {
+            hasMessage() {
+                return this.help || this.errorMessage || this.successMessage
+            },
+
+            formattedId() {
+                return this.id ? this.id : this.name + '_field'
+            }
+        }
     }
 </script>

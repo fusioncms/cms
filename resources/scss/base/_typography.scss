@@ -90,7 +90,7 @@ a {
 // }
 
 hr { 
-    @apply block border-solid border-gray-300 border-none border-b my-6; 
+    @apply block border-0 border-b border-solid border-gray-300 my-6; 
 }
 
 code { @apply text-gray-600 text-xs; }
