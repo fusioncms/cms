@@ -3,15 +3,17 @@
 namespace Fusion\Tests\Feature;
 
 use Fusion\Models\Field;
+use Fusion\Models\Section;
 use Fusion\Models\Fieldset;
 use Fusion\Models\Replicator;
-use Fusion\Models\Section;
 use Fusion\Tests\TestCase;
+use Illuminate\Support\Str;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ReplicatorFieldtypeTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     public function setUp(): void
     {
@@ -20,9 +22,10 @@ class ReplicatorFieldtypeTest extends TestCase
 
         // --
         $this->fieldset = factory(Fieldset::class)->create(['name' => 'RP Fieldset', 'handle' => 'rp_fieldset']);
-        $this->section = factory(Section::class)->make(['name' => 'RS', 'handle' => 'rs_section']);
-        $this->field = factory(Field::class)->make(['name' => 'RF', 'handle' => 'rf', 'type' => ['handle' => 'replicator']]);
+        $this->section  = factory(Section::class)->make(['name' => 'RS', 'handle' => 'rs_section']);
+        $this->field    = factory(Field::class)->make(['name' => 'RF', 'handle' => 'rf', 'type' => ['handle' => 'replicator']]);
 
+        // some sections to test with..
         $this->sectionA = factory(Section::class)->make(['name' => 'RSA', 'handle' => 'rsa', 'fields' => [
             factory(Field::class)->make(['name' => 'RFA1', 'handle' => 'rfa1']),
             factory(Field::class)->make(['name' => 'RFA2', 'handle' => 'rfa2']),
@@ -53,8 +56,14 @@ class ReplicatorFieldtypeTest extends TestCase
 
         // fieldset
         $this->assertDatabaseHas('fieldsets', [
-            'name'   => ($name = 'Replicator: '.$replicator->name),
-            'handle' => str_handle($name),
+            'name'   => ($name = 'Replicator: ' . $replicator->name),
+            'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
+        ]);
+
+        // associated field..
+        $this->assertDatabaseHas('fields', [
+            'id'       => $replicator->field->id,
+            'settings' => json_encode([ 'replicator' => $replicator->id ])
         ]);
 
         // fieldsettables (not necessary)
@@ -115,6 +124,12 @@ class ReplicatorFieldtypeTest extends TestCase
         // --
         // update replicator..
         $replicator = $this->updateReplicator($replicator, [$updSection, $newSection]);
+
+        // associated field..
+        $this->assertDatabaseHas('fields', [
+            'id'       => $replicator->field->id,
+            'settings' => json_encode([ 'replicator' => $replicator->id ])
+        ]);
 
         // --
         // replicants..
@@ -182,6 +197,88 @@ class ReplicatorFieldtypeTest extends TestCase
         });
     }
 
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group fieldtypes
+     * @group replicator
+     */
+    public function persisting_entry_with_replicator_field_will_persist_to_database()
+    {
+        // new entry..
+        $replicator = $this->createReplicator([$this->sectionA, $this->sectionB]);
+        list($entry, $replicants) = $this->createEntryWithReplicant($replicator);
+
+        // --
+        // make assertions..
+        foreach ($replicator->sections as $section) {
+            $builder = $replicator->getBuilder($section);
+
+            foreach ($entry->{"rp_{$section->handle}"} as $replicant) {
+                $this->assertDatabaseHas('replicators_pivot', [
+                    'replicant_id' => $replicant->id,
+                    'section_id'   => $section->id,
+                    'pivot_type'   => get_class($entry),
+                    'pivot_id'     => $entry->id,
+                ]);
+
+                // replicant fields..
+                foreach ($section->fields as $field) {
+                    $this->assertDatabaseHas($builder->getTable(), [
+                        $field->handle => $replicant[$field->handle]
+                    ]);
+                }
+            }
+        }
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group fieldtypes
+     * @group replicator
+     */
+    public function updating_replicants_for_replicator_field_will_persist_to_database()
+    {
+        // new entry..
+        $replicator               = $this->createReplicator([$this->sectionA, $this->sectionB]);
+        list($entry, $replicants) = $this->createEntryWithReplicant($replicator);
+        list($entry, $upd, $del)  = $this->updateEntryWithReplicant($entry, $replicator);
+
+        // --
+        // make assertions..
+        $del->each(function($removed) use ($replicator, $entry) {
+            $section = $removed->section;
+            $builder = $replicator->getBuilder($section);
+
+            $this->assertDatabaseMissing('replicators_pivot', [
+                'replicant_id' => $removed->id,
+                'section_id'   => $section->id,
+                'pivot_type'   => get_class($entry),
+                'pivot_id'     => $entry->id,
+            ]);
+
+            $this->assertDatabaseMissing($builder->getTable(), ['id' => $removed->id]);
+        });
+
+        // check for existing records..
+        $upd->each(function($updated) use ($replicator, $entry) {
+            $section = $updated['section'];
+            $builder = $replicator->getBuilder($section);
+
+            $this->assertDatabaseHas('replicators_pivot', [
+                'replicant_id' => $updated['id'],
+                'section_id'   => $section->id,
+                'pivot_type'   => get_class($entry),
+                'pivot_id'     => $entry->id,
+            ]);
+
+            $this->assertDatabaseHas($builder->getTable(), ['id' => $updated['id']]);
+        });
+    }
+
     //
     // ------------------------------------------------
     //
@@ -189,16 +286,16 @@ class ReplicatorFieldtypeTest extends TestCase
     /**
      * Create replicator helper.
      *
-     * @param array $data
+     * @param array $sections
      *
-     * @return Replicator
+     * @return \Fusion\Models\Replicator
      */
-    private function createReplicator($data)
+    private function createReplicator($sections)
     {
         // set new field..
         $this->field->settings = [
             'replicator' => null,
-            'sections'   => $data,
+            'sections'   => $sections,
         ];
 
         // set new section..
@@ -220,16 +317,16 @@ class ReplicatorFieldtypeTest extends TestCase
      * Create replicator helper.
      *
      * @param Replicator $replicator
-     * @param array      $data
+     * @param array      $sections
      *
-     * @return Replicator
+     * @return \Fusion\Models\Replicator
      */
-    private function updateReplicator(Replicator $replicator, $data)
+    private function updateReplicator(Replicator $replicator, $sections)
     {
         // update existing field..
         $field = $replicator->field->toArray();
         $field['type'] = ['handle' => 'replicator'];
-        $field['settings']['sections'] = $data;
+        $field['settings']['sections'] = $sections;
 
         // update existing section..
         $section = $this->fieldset->sections()->first();
@@ -243,5 +340,96 @@ class ReplicatorFieldtypeTest extends TestCase
             ]);
 
         return $replicator->fresh();
+    }
+
+    /**
+     * POST Entry w/ Replicator Field.
+     * [helper]
+     * 
+     * @param  Replicator $replicator
+     * @return array
+     */
+    private function createEntryWithReplicant(Replicator $replicator)
+    {
+        $matrix     = \Facades\MatrixFactory::withName($this->faker->word)->asCollection()->withFieldset($this->fieldset)->create();
+        $model      = (new \Fusion\Services\Builders\Collection($matrix->handle))->make();
+        $replicants = [];
+
+        // generate replicants..
+        foreach ($replicator->sections as $section) {
+            for ($i = 0; $i < 2; ++$i) {
+                $replicant = [
+                    'section' => $section,
+                    'fields'  => []
+                ];
+
+                foreach ($section->fields as $field) {
+                    $replicant['fields'][$field->handle] = $this->faker->sentence();
+                }
+
+                array_push($replicants, $replicant);
+            }
+        }
+
+        // --
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/collections/{$matrix->handle}", [
+                'name'              => ($name = $this->faker->word),
+                'slug'              => Str::slug($name),
+                'status'            => true,
+                $replicator->handle => $replicants
+            ])
+            ->assertStatus(201);
+        
+        return [$model->first(), $replicants];
+    }
+
+    /**
+     * PATCH Entry w/ Replicator Field.
+     * [helper]
+     *
+     * @param  Model      $entry
+     * @param  Replicator $replicator
+     * @param  array      $replicants = []
+     *
+     * @return array
+     */
+    private function updateEntryWithReplicant($entry, Replicator $replicator)
+    {
+        $removed = collect([]);
+        $updated = collect([]);
+
+        foreach ($replicator->sections as $section) {
+            foreach ($entry->{"rp_{$section->handle}"} as $key => $replicant) {
+                if ($key == 0) {
+                    $removed->push($replicant);
+                } else {
+                    $replicant = [
+                        'id'      => $replicant->id,
+                        'section' => $section,
+                        'fields'  => []
+                    ];
+
+                    foreach ($section->fields as $field) {
+                        $replicant['fields'][$field->handle] = $this->faker->sentence();
+                    }
+
+                    $updated->push($replicant);
+                }
+            }
+        }
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', "/api/collections/{$entry->matrix->handle}/{$entry->id}", [
+                'name'              => $entry->name,
+                'slug'              => $entry->slug,
+                'status'            => $entry->status,
+                $replicator->handle => $updated
+            ])
+            ->assertStatus(200);
+
+        return [$entry->refresh(), $updated, $removed];
     }
 }

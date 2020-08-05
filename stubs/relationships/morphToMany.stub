@@ -1,5 +1,5 @@
     /**
-     * A polymorphic many to many "{handle}" relationship.
+     * A polymorphic many to many "{studly_handle}" relationship.
      *
      * @return MorphToMany
      */

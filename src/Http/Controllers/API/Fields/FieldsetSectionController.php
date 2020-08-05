@@ -79,13 +79,13 @@ class FieldsetSectionController extends Controller
     protected function createSections(Fieldset $fieldset, Collection $sections)
     {
         if ($sections->isNotEmpty()) {
-            $sections->each(function ($data) use ($fieldset) {
+            $sections->each(function ($data, $index) use ($fieldset) {
                 $section = $fieldset->sections()->create([
                     'name'        => $data['name'],
                     'handle'      => $data['handle'],
                     'description' => $data['description'],
                     'placement'   => $data['placement'],
-                    'order'       => $data['order'],
+                    'order'       => ($index + 1),
                 ]);
 
                 if (isset($data['fields'])) {
@@ -108,9 +108,11 @@ class FieldsetSectionController extends Controller
     protected function updateSections(Fieldset $fieldset, Collection $sections)
     {
         if ($sections->isNotEmpty()) {
-            $sections->each(function ($data) use ($fieldset) {
-                $id = $data['id'];
-                $fields = collect($data['fields']);
+            $sections->each(function ($data, $index) use ($fieldset) {
+                $id      = $data['id'];
+                $fields  = collect($data['fields']);
+
+                $data['order'] = $index + 1;
 
                 unset($data['id']);
                 unset($data['fields']);
@@ -200,15 +202,15 @@ class FieldsetSectionController extends Controller
      */
     protected function createFields(Section $section, Collection $fields)
     {
-        if ($fields->isNotEmpty()) {
-            $fields->each(function ($field) use ($section) {
+        if ($fields->isNotEmpty()){
+            $fields->each(function($field, $index) use ($section) {
                 $section->fields()->create([
                     'name'     => $field['name'],
                     'handle'   => $field['handle'],
                     'help'     => $field['help'],
                     'settings' => $field['settings'],
                     'type'     => $field['type']['handle'],
-                    'order'    => $field['order'],
+                    'order'    => ($index + 1),
                 ]);
             });
         }
@@ -224,13 +226,16 @@ class FieldsetSectionController extends Controller
      */
     protected function updateFields(Section $section, Collection $fields)
     {
-        $fields->each(function ($field) use ($section) {
-            $id = $field['id'];
-            $field['type'] = $field['type']['handle'];
+        $fields->each(function ($data, $index) use ($section) {
+            $id           = $data['id'];
+            $data['type'] = $data['type']['handle'];
 
-            unset($field['id']);
+            $data['order'] = $index + 1;
 
-            $section->fields()->find($id)->update($field);
+            unset($data['id']);
+
+            $field = $section->fields()->find($id);
+            $field->update($data);
         });
     }
 
