@@ -7,8 +7,13 @@ export default {
     },
 
     computed: {
-        settings() {
-            return this.value.settings || {}
+        settings: {
+            get() {
+                return this.value.settings || {}
+            },
+            set(value) {
+                this.$set(this.value.settings, value)
+            }
         },
 
         errors() {

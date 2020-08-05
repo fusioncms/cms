@@ -193,6 +193,16 @@ abstract class Fieldtype
     }
 
     /**
+     * Determine if the fieldtype can generate a column.
+     *
+     * @return bool
+     */
+    public function hasColumn()
+    {
+        return !is_null($this->column);
+    }
+
+    /**
      * Determine if the fieldtype has a relationship.
      *
      * @return bool
@@ -237,7 +247,7 @@ abstract class Fieldtype
     }
 
     /**
-     * Update Field model after saved.
+     * Create/update Field post-save.
      *
      * @param Field $field
      *
@@ -248,13 +258,13 @@ abstract class Fieldtype
     }
 
     /**
-     * Delete Field model after saved.
+     * Handle Field before removal.
      *
      * @param Field $field
      *
      * @return void
      */
-    public function onDeleted(Field $field)
+    public function onBeforeDelete(Field $field)
     {
     }
 
