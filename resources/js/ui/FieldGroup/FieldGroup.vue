@@ -8,6 +8,9 @@
             <p-help-success v-if="successMessage">{{ successMessage }}</p-help-success>
             <p-help v-if="help">{{ help }}</p-help>
         </div>
+
+        <slot name="bottom">
+        </slot>
     </div>
 </template>
 

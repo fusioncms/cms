@@ -35,8 +35,18 @@
     &--icon {
         @apply justify-center items-center flex;
 
-        width: 39px;
-        height: 39px;
+        width: rem(42px);
+        height: rem(42px);
+
+        &.button--small {
+            width: rem(35px);
+            height: rem(35px);
+        }
+
+        &.button--large {
+            width: rem(45px);
+            height: rem(45px);
+        }
 
         > .icon { @apply m-0; }
     }

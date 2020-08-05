@@ -397,6 +397,24 @@
 
                     <hr>
 
+                    <!-- Upload Field -->
+                    <div class="row">
+                        <div class="col w-full">
+                            <h3>Upload Field</h3>
+                        </div>
+
+                        <div class="col w-full lg:w-1/2">
+                            <p-upload
+                                name="upload"
+                                label="Upload"
+                                required
+                                help="Upload an image."
+                                :multiple="true">
+                            </p-upload>
+                        </div>
+                    </div>
+                    <hr>
+
                     <!-- Checkbox & Radio -->
                     <div class="row">
                         <div class="col w-full">

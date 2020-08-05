@@ -135,6 +135,49 @@
     }
 }
 
+.field-upload {
+    &__label {
+        cursor: pointer;
+
+        &:hover {
+            @apply bg-primary-700 border-primary-700; 
+        }
+
+        * { pointer-events: none; }
+    }
+
+    &__input {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+
+        &:focus + label {
+            @apply outline-none shadow-focus;
+        }
+
+        &:active + label {
+            @apply bg-primary-900 border-primary-900; 
+        }
+    }
+}
+
+.field-upload-list {
+    @apply list-none p-0 m-0 mt-3 w-full;
+
+    &__item {
+        @apply flex items-center mb-4 w-full;
+
+        &:last-child { @apply mb-0; }
+
+        .button { @apply flex-shrink-0 mr-3; }
+    }
+
+    &__file { @apply inline-block; }
+}
+
 .field-check {
     @apply flex relative leading-normal mb-4;
 
