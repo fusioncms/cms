@@ -55,10 +55,9 @@ class ReplicatorFieldtype extends Fieldtype
     public $relationship = 'morphToMany';
 
     /**
-     * Update Field Upon Save.
+     * Create/update Field post-save.
      *
-     * @param Field $field
-     *
+     * @param  Field $field
      * @return void
      */
     public function onSaved(Field $field)
@@ -88,13 +87,12 @@ class ReplicatorFieldtype extends Fieldtype
     }
 
     /**
-     * Delete Field model after saved.
+     * Handle Field before removal.
      *
-     * @param Field $field
-     *
+     * @param  Field $field
      * @return void
      */
-    public function onDeleted(Field $field)
+    public function onBeforeDelete(Field $field)
     {
         Replicator::where([
             'id'       => $field->settings['replicator'],
@@ -171,8 +169,15 @@ class ReplicatorFieldtype extends Fieldtype
                 }
 
                 // persist relationships..
-                $section->fields->each(function($field) use ($replicant) {
+                $section->fields->each(function($field) use ($replicant, $input) {
                     if ($field->type()->hasRelationship()) {
+                        /**
+                         * Merge replicator field into Request object.
+                         */
+                        request()->merge([
+                            $field->handle => $input['fields'][$field->handle]
+                        ]);
+
                         $field->type()->persistRelationship($replicant, $field);
                     }
                 });

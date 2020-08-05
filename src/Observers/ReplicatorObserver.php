@@ -219,7 +219,9 @@ class ReplicatorObserver
                 'order'    => ($index + 1),
             ]);
 
-            $this->createReplicantColumn($section, $field);
+            if ($field->type()->hasColumn()) {
+                $this->createReplicantColumn($section, $field);
+            }
         });
     }
 
@@ -245,7 +247,9 @@ class ReplicatorObserver
                 'order'    => ($index + 1),
             ]);
 
-            $this->updateReplicantColumn($section, $oldField, $newField);
+            if ($field->type()->hasColumn()) {
+                $this->updateReplicantColumn($section, $oldField, $newField);
+            }
         });
     }
 
@@ -261,8 +265,10 @@ class ReplicatorObserver
     {
         $fields = $section->fields()->whereIn('id', $toDelete);
         $fields->each(function ($field) use ($section) {
-            $this->deleteReplicantColumn($section, $field);
-
+            if ($field->type()->hasColumn()) {
+                $this->deleteReplicantColumn($section, $field);
+            }
+            
             $field->delete();
         });
     }

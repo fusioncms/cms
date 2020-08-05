@@ -96,6 +96,18 @@ class FieldObserver
     }
 
     /**
+     * Handle the field "deleting" event.
+     *
+     * @param \Fusion\Models\Field $field
+     *
+     * @return void
+     */
+    public function deleting(Field $field)
+    {
+        fieldtypes()->get($field->type)->onBeforeDelete($field);
+    }
+
+    /**
      * Handle the field "deleted" event.
      *
      * @param \Fusion\Models\Field $field
@@ -104,13 +116,12 @@ class FieldObserver
      */
     public function deleted(Field $field)
     {
-        $fieldtype = fieldtypes()->get($field->type);
-        $fieldtype->onDeleted($field);
-
         $fieldset   = $field->section->fieldset;
         $containers = $this->getFieldsettables($fieldset);
-        $column     = $fieldtype->getColumn('type');
-        $settings   = $fieldtype->getColumn('settings') ?? [];
+
+        $fieldtype = fieldtypes()->get($field->type);
+        $column    = $fieldtype->getColumn('type');
+        $settings  = $fieldtype->getColumn('settings') ?? [];
 
         array_unshift($settings, $field->handle);
 
