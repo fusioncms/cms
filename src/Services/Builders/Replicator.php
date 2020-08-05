@@ -21,16 +21,16 @@ class Replicator extends Builder implements BuilderContract
 
     /**
      * Constructor.
-     * 
-     * @param string                  $uniqid
-     * @param \Fusion\Models\Section  $section
+     *
+     * @param string                 $uniqid
+     * @param \Fusion\Models\Section $section
      */
     public function __construct($uniqid, Section $section)
     {
         parent::__construct();
 
         $this->replicator = \Fusion\Models\Replicator::where('uniqid', $uniqid)->firstOrFail();
-        $this->section    = $section;
+        $this->section = $section;
     }
 
     /**
@@ -43,9 +43,9 @@ class Replicator extends Builder implements BuilderContract
         $handle = "{$prefix}_{$this->section->handle}_{$suffix}";
 
         $className = Str::studly($handle);
-        $fillable  = [ 'replicator_id', 'section_id' ];
-        $casts     = [];
-        $fields    = $this->section->fields ?? collect();
+        $fillable = ['replicator_id', 'section_id'];
+        $casts = [];
+        $fields = $this->section->fields ?? collect();
 
         $fields = $fields->reject(function ($field) {
             $fieldtype = fieldtypes()->get($field->type);
@@ -82,10 +82,11 @@ class Replicator extends Builder implements BuilderContract
 
     /**
      * Static make method.
-     * 
-     * @param  string                  $uniqid
-     * @param  \Fusion\Models\Section  $section
-     * @return Builder       
+     *
+     * @param string                 $uniqid
+     * @param \Fusion\Models\Section $section
+     *
+     * @return Builder
      */
     public static function resolve($uniqid, $section)
     {

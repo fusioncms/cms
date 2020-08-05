@@ -48,7 +48,7 @@ Route::prefix('fieldtypes')->group(function () {
 });
 
 /**
- * API - Replicator Field Routes
+ * API - Replicator Field Routes.
  */
 Route::get('replicators/{replicator}', 'Fields\ReplicatorController@show');
 

@@ -20,10 +20,10 @@ class FieldObserver
         $fieldtype = fieldtypes()->get($field->type);
         $fieldtype->onSaved($field);
 
-        $fieldset   = $field->section->fieldset;
+        $fieldset = $field->section->fieldset;
         $containers = $this->getFieldsettables($fieldset);
-        $column     = $fieldtype->getColumn('type');
-        $settings   = $fieldtype->getColumn('settings') ?? [];
+        $column = $fieldtype->getColumn('type');
+        $settings = $fieldtype->getColumn('settings') ?? [];
 
         array_unshift($settings, $field->handle);
 
@@ -70,7 +70,7 @@ class FieldObserver
 
             if ($old['handle'] !== $new['handle']) {
                 $fieldtype = fieldtypes()->get($new['type']);
-                $column    = $fieldtype->getColumn('type');
+                $column = $fieldtype->getColumn('type');
 
                 if (!is_null($column)) {
                     Schema::table($table, function ($table) use ($old, $new) {
@@ -116,12 +116,12 @@ class FieldObserver
      */
     public function deleted(Field $field)
     {
-        $fieldset   = $field->section->fieldset;
+        $fieldset = $field->section->fieldset;
         $containers = $this->getFieldsettables($fieldset);
 
         $fieldtype = fieldtypes()->get($field->type);
-        $column    = $fieldtype->getColumn('type');
-        $settings  = $fieldtype->getColumn('settings') ?? [];
+        $column = $fieldtype->getColumn('type');
+        $settings = $fieldtype->getColumn('settings') ?? [];
 
         array_unshift($settings, $field->handle);
 
