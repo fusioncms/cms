@@ -249,7 +249,8 @@ abstract class Fieldtype
     /**
      * Create/update Field post-save.
      *
-     * @param  Field $field
+     * @param Field $field
+     *
      * @return void
      */
     public function onSaved(Field $field)
@@ -259,7 +260,8 @@ abstract class Fieldtype
     /**
      * Handle Field before removal.
      *
-     * @param  Field $field
+     * @param Field $field
+     *
      * @return void
      */
     public function onBeforeDelete(Field $field)

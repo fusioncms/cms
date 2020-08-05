@@ -76,7 +76,7 @@ class ReplicatorObserver
         $fieldset = $replicator->fieldsets()->create([
             'name'   => ($name = "Replicator: {$replicator->name}"),
             'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
-            'hidden' => true
+            'hidden' => true,
         ]);
 
         $this->createSections(
@@ -209,7 +209,7 @@ class ReplicatorObserver
      */
     private function createFields(Section $section, Collection $toCreate)
     {
-        $toCreate->each(function($data, $index) use ($section) {
+        $toCreate->each(function ($data, $index) use ($section) {
             $field = $section->fields()->create([
                 'name'     => $data['name'],
                 'handle'   => $data['handle'],
@@ -268,7 +268,7 @@ class ReplicatorObserver
             if ($field->type()->hasColumn()) {
                 $this->deleteReplicantColumn($section, $field);
             }
-            
+
             $field->delete();
         });
     }

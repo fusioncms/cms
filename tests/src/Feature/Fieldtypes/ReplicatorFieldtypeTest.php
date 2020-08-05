@@ -3,17 +3,18 @@
 namespace Fusion\Tests\Feature;
 
 use Fusion\Models\Field;
-use Fusion\Models\Section;
 use Fusion\Models\Fieldset;
 use Fusion\Models\Replicator;
+use Fusion\Models\Section;
 use Fusion\Tests\TestCase;
-use Illuminate\Support\Str;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 
 class ReplicatorFieldtypeTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
@@ -22,8 +23,8 @@ class ReplicatorFieldtypeTest extends TestCase
 
         // --
         $this->fieldset = factory(Fieldset::class)->create(['name' => 'RP Fieldset', 'handle' => 'rp_fieldset']);
-        $this->section  = factory(Section::class)->make(['name' => 'RS', 'handle' => 'rs_section']);
-        $this->field    = factory(Field::class)->make(['name' => 'RF', 'handle' => 'rf', 'type' => ['handle' => 'replicator']]);
+        $this->section = factory(Section::class)->make(['name' => 'RS', 'handle' => 'rs_section']);
+        $this->field = factory(Field::class)->make(['name' => 'RF', 'handle' => 'rf', 'type' => ['handle' => 'replicator']]);
 
         // some sections to test with..
         $this->sectionA = factory(Section::class)->make(['name' => 'RSA', 'handle' => 'rsa', 'fields' => [
@@ -56,14 +57,14 @@ class ReplicatorFieldtypeTest extends TestCase
 
         // fieldset
         $this->assertDatabaseHas('fieldsets', [
-            'name'   => ($name = 'Replicator: ' . $replicator->name),
+            'name'   => ($name = 'Replicator: '.$replicator->name),
             'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
         ]);
 
         // associated field..
         $this->assertDatabaseHas('fields', [
             'id'       => $replicator->field->id,
-            'settings' => json_encode([ 'replicator' => $replicator->id ])
+            'settings' => json_encode(['replicator' => $replicator->id]),
         ]);
 
         // fieldsettables (not necessary)
@@ -128,7 +129,7 @@ class ReplicatorFieldtypeTest extends TestCase
         // associated field..
         $this->assertDatabaseHas('fields', [
             'id'       => $replicator->field->id,
-            'settings' => json_encode([ 'replicator' => $replicator->id ])
+            'settings' => json_encode(['replicator' => $replicator->id]),
         ]);
 
         // --
@@ -226,7 +227,7 @@ class ReplicatorFieldtypeTest extends TestCase
                 // replicant fields..
                 foreach ($section->fields as $field) {
                     $this->assertDatabaseHas($builder->getTable(), [
-                        $field->handle => $replicant[$field->handle]
+                        $field->handle => $replicant[$field->handle],
                     ]);
                 }
             }
@@ -243,13 +244,13 @@ class ReplicatorFieldtypeTest extends TestCase
     public function updating_replicants_for_replicator_field_will_persist_to_database()
     {
         // new entry..
-        $replicator               = $this->createReplicator([$this->sectionA, $this->sectionB]);
+        $replicator = $this->createReplicator([$this->sectionA, $this->sectionB]);
         list($entry, $replicants) = $this->createEntryWithReplicant($replicator);
-        list($entry, $upd, $del)  = $this->updateEntryWithReplicant($entry, $replicator);
+        list($entry, $upd, $del) = $this->updateEntryWithReplicant($entry, $replicator);
 
         // --
         // make assertions..
-        $del->each(function($removed) use ($replicator, $entry) {
+        $del->each(function ($removed) use ($replicator, $entry) {
             $section = $removed->section;
             $builder = $replicator->getBuilder($section);
 
@@ -264,7 +265,7 @@ class ReplicatorFieldtypeTest extends TestCase
         });
 
         // check for existing records..
-        $upd->each(function($updated) use ($replicator, $entry) {
+        $upd->each(function ($updated) use ($replicator, $entry) {
             $section = $updated['section'];
             $builder = $replicator->getBuilder($section);
 
@@ -344,23 +345,24 @@ class ReplicatorFieldtypeTest extends TestCase
 
     /**
      * POST Entry w/ Replicator Field.
-     * [helper]
-     * 
-     * @param  Replicator $replicator
+     * [helper].
+     *
+     * @param Replicator $replicator
+     *
      * @return array
      */
     private function createEntryWithReplicant(Replicator $replicator)
     {
-        $matrix     = \Facades\MatrixFactory::withName($this->faker->word)->asCollection()->withFieldset($this->fieldset)->create();
-        $model      = (new \Fusion\Services\Builders\Collection($matrix->handle))->make();
+        $matrix = \Facades\MatrixFactory::withName($this->faker->word)->asCollection()->withFieldset($this->fieldset)->create();
+        $model = (new \Fusion\Services\Builders\Collection($matrix->handle))->make();
         $replicants = [];
 
         // generate replicants..
         foreach ($replicator->sections as $section) {
-            for ($i = 0; $i < 2; ++$i) {
+            for ($i = 0; $i < 2; $i++) {
                 $replicant = [
                     'section' => $section,
-                    'fields'  => []
+                    'fields'  => [],
                 ];
 
                 foreach ($section->fields as $field) {
@@ -378,20 +380,20 @@ class ReplicatorFieldtypeTest extends TestCase
                 'name'              => ($name = $this->faker->word),
                 'slug'              => Str::slug($name),
                 'status'            => true,
-                $replicator->handle => $replicants
+                $replicator->handle => $replicants,
             ])
             ->assertStatus(201);
-        
+
         return [$model->first(), $replicants];
     }
 
     /**
      * PATCH Entry w/ Replicator Field.
-     * [helper]
+     * [helper].
      *
-     * @param  Model      $entry
-     * @param  Replicator $replicator
-     * @param  array      $replicants = []
+     * @param Model      $entry
+     * @param Replicator $replicator
+     * @param array      $replicants = []
      *
      * @return array
      */
@@ -408,7 +410,7 @@ class ReplicatorFieldtypeTest extends TestCase
                     $replicant = [
                         'id'      => $replicant->id,
                         'section' => $section,
-                        'fields'  => []
+                        'fields'  => [],
                     ];
 
                     foreach ($section->fields as $field) {
@@ -426,7 +428,7 @@ class ReplicatorFieldtypeTest extends TestCase
                 'name'              => $entry->name,
                 'slug'              => $entry->slug,
                 'status'            => $entry->status,
-                $replicator->handle => $updated
+                $replicator->handle => $updated,
             ])
             ->assertStatus(200);
 

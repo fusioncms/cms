@@ -2,12 +2,12 @@
 
 namespace Fusion\Fieldtypes;
 
-use Fusion\Models\Field;
-use Fusion\Models\Section;
-use Fusion\Models\Replicator;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
 use Fusion\Http\Resources\ReplicantResource;
+use Fusion\Models\Field;
+use Fusion\Models\Replicator;
+use Fusion\Models\Section;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class ReplicatorFieldtype extends Fieldtype
 {
@@ -38,7 +38,7 @@ class ReplicatorFieldtype extends Fieldtype
      */
     public $rules = [
         'settings.replicator' => 'sometimes',
-        'settings.sections'   => 'required|array'
+        'settings.sections'   => 'required|array',
     ];
 
     /**
@@ -57,7 +57,8 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Create/update Field post-save.
      *
-     * @param  Field $field
+     * @param Field $field
+     *
      * @return void
      */
     public function onSaved(Field $field)
@@ -77,11 +78,11 @@ class ReplicatorFieldtype extends Fieldtype
 
             $replicator->touch();
         }
-       
+
         // update field w/o events..
         $field = Field::find($field->id);
-        $field->withoutEvents(function() use ($field, $replicator) {
-            $field->settings = [ 'replicator' => $replicator->id ];
+        $field->withoutEvents(function () use ($field, $replicator) {
+            $field->settings = ['replicator' => $replicator->id];
             $field->save();
         });
     }
@@ -89,14 +90,15 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Handle Field before removal.
      *
-     * @param  Field $field
+     * @param Field $field
+     *
      * @return void
      */
     public function onBeforeDelete(Field $field)
     {
         Replicator::where([
             'id'       => $field->settings['replicator'],
-            'field_id' => $field->id
+            'field_id' => $field->id,
         ])
         ->firstOrFail()
         ->delete();
@@ -113,10 +115,10 @@ class ReplicatorFieldtype extends Fieldtype
     {
         $replicator = Replicator::find($field->settings['replicator']);
 
-        return $replicator->sections->map(function($section) use ($replicator) {
+        return $replicator->sections->map(function ($section) use ($replicator) {
             $replicant = $replicator->getBuilder($section);
             $namespace = get_class($replicant);
-            $stub      = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
+            $stub = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
 
             return strtr($stub, [
                 '{handle}'            => "rp_{$section->handle}",
@@ -141,19 +143,19 @@ class ReplicatorFieldtype extends Fieldtype
     public function persistRelationship($model, Field $field)
     {
         $replicator = Replicator::find($field->settings['replicator']);
-        
+
         /**
          * Retrieve existing replicants/section.
          */
-        $existing = $replicator->sections->mapWithKeys(function($section) use ($model) {
-                return [$section->id => $model->{"rp_{$section->handle}"}->pluck('id')];
-            });
+        $existing = $replicator->sections->mapWithKeys(function ($section) use ($model) {
+            return [$section->id => $model->{"rp_{$section->handle}"}->pluck('id')];
+        });
 
         /**
          * Persist replicants.
          */
         $replicants = collect(request()->input($field->handle, []))
-            ->map(function($input) use ($replicator) {
+            ->map(function ($input) use ($replicator) {
                 $section = Section::findOrFail($input['section']['id']);
                 $builder = $replicator->getBuilder($section);
 
@@ -164,18 +166,18 @@ class ReplicatorFieldtype extends Fieldtype
                 } else {
                     $replicant = $builder->create(array_merge([
                         'replicator_id' => $replicator->id,
-                        'section_id'    => $section->id
+                        'section_id'    => $section->id,
                     ], $input['fields']));
                 }
 
                 // persist relationships..
-                $section->fields->each(function($field) use ($replicant, $input) {
+                $section->fields->each(function ($field) use ($replicant, $input) {
                     if ($field->type()->hasRelationship()) {
                         /**
                          * Merge replicator field into Request object.
                          */
                         request()->merge([
-                            $field->handle => $input['fields'][$field->handle]
+                            $field->handle => $input['fields'][$field->handle],
                         ]);
 
                         $field->type()->persistRelationship($replicant, $field);
@@ -189,16 +191,16 @@ class ReplicatorFieldtype extends Fieldtype
          * Update `replicators_pivot` table..
          */
         $replicator->sections
-            ->each(function($section) use ($replicator, $model, $replicants, $existing) {
+            ->each(function ($section) use ($replicator, $model, $replicants, $existing) {
                 $attached = $replicants->where('section_id', $section->id)
-                    ->mapWithKeys(function($replicant, $index) use ($section) {
-                        return [$replicant->id => ['section_id' => $section->id,'order' => ($index + 1)]];
+                    ->mapWithKeys(function ($replicant, $index) use ($section) {
+                        return [$replicant->id => ['section_id' => $section->id, 'order' => ($index + 1)]];
                     });
 
                 // removal..
                 $existing[$section->id]
                     ->diff($attached->keys())
-                    ->each(function($id) use ($model, $replicator, $section) {
+                    ->each(function ($id) use ($replicator, $section) {
                         $replicator
                             ->getBuilder($section)
                             ->findOrFail($id)
@@ -220,7 +222,7 @@ class ReplicatorFieldtype extends Fieldtype
     {
         $replicator = Replicator::find($field->settings['replicator']);
 
-        return $replicator->sections->flatMap(function($section) use ($model) {
+        return $replicator->sections->flatMap(function ($section) use ($model) {
             return $model->{"rp_{$section->handle}"};
         });
     }
@@ -235,7 +237,7 @@ class ReplicatorFieldtype extends Fieldtype
      */
     public function getResource($model, Field $field)
     {
-        return $this->getValue($model, $field)->map(function($replicant) {
+        return $this->getValue($model, $field)->map(function ($replicant) {
             return new ReplicantResource($replicant);
         });
     }

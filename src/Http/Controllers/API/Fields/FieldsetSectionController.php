@@ -109,8 +109,8 @@ class FieldsetSectionController extends Controller
     {
         if ($sections->isNotEmpty()) {
             $sections->each(function ($data, $index) use ($fieldset) {
-                $id      = $data['id'];
-                $fields  = collect($data['fields']);
+                $id = $data['id'];
+                $fields = collect($data['fields']);
 
                 $data['order'] = $index + 1;
 
@@ -202,8 +202,8 @@ class FieldsetSectionController extends Controller
      */
     protected function createFields(Section $section, Collection $fields)
     {
-        if ($fields->isNotEmpty()){
-            $fields->each(function($field, $index) use ($section) {
+        if ($fields->isNotEmpty()) {
+            $fields->each(function ($field, $index) use ($section) {
                 $section->fields()->create([
                     'name'     => $field['name'],
                     'handle'   => $field['handle'],
@@ -227,7 +227,7 @@ class FieldsetSectionController extends Controller
     protected function updateFields(Section $section, Collection $fields)
     {
         $fields->each(function ($data, $index) use ($section) {
-            $id           = $data['id'];
+            $id = $data['id'];
             $data['type'] = $data['type']['handle'];
 
             $data['order'] = $index + 1;
