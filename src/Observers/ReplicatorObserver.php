@@ -247,7 +247,7 @@ class ReplicatorObserver
                 'order'    => ($index + 1),
             ]);
 
-            if ($field->type()->hasColumn()) {
+            if ($newField->type()->hasColumn()) {
                 $this->updateReplicantColumn($section, $oldField, $newField);
             }
         });
