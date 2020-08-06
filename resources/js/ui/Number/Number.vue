@@ -1,49 +1,48 @@
 <template>
-    <div class="form__group">
-        <label
-            class="form__label"
-            :for="name"
-            v-if="label"
-            v-html="label">
-        </label>
-        <div class="form__number">
-            <button class="form__number-decrease" @click.prevent="decrease">
+    <p-field-group
+        :name="name"
+        :fieldId="formattedId"
+        :label="label"
+        :required="required"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess"
+        :successMessage="successMessage"
+        :help="help">
+        <div class="field-number">
+            <button class="field-number__button button button--icon" @click.prevent="decrease" :disabled="disabled">
                 <slot name="decrease">
-                    -
+                    <fa-icon icon="minus" class="fa-fw"></fa-icon>
+                    <span class="sr-only">Decrease</span>
                 </slot>
             </button>
             <input
-                class="form__control"
-                :class="{'font-mono': monospaced, 'form__error': hasError}"
-                :id="name"
-                :name="name"
-                type="number"
-                :steps="steps"
-                :placeholder="placeholder"
-                :readonly="readonly"
-                :disabled="disabled"
-                v-model="inputValue"
-                @blur="emitValue($event.target.value)"
-                :autocomplete="autocomplete"
-                :autofocus="autofocus"
-                :min="min"
-                :max="max"
-            >
-            <button class="form__number-increase" @click.prevent="increase">
+            class="field-number__input field"
+            :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
+            :id="formattedId"
+            :name="name"
+            type="number"
+            :placeholder="placeholder"
+            :readonly="readonly"
+            :disabled="disabled"
+            :autocomplete="autocomplete"
+            :autofocus="autofocus"
+            :required="required"
+            :steps="steps"
+            :min="min"
+            :max="max"
+            :aria-required="required" 
+            :aria-describedby="hasMessage ? formattedId + '_message' : null"
+            v-model="inputValue"
+            @blur="emitValue($event.target.value)">
+            <button class="field-number__button button button--icon" @click.prevent="increase" :disabled="disabled">
                 <slot name="increase">
-                    +
+                    <fa-icon icon="plus" class="fa-fw"></fa-icon>
+                    <span class="sr-only">Increase</span>
                 </slot>
             </button>
         </div>
-            
-
-        <div class="form__control--meta" v-if="help || errorMessage">
-            <div class="form__help">
-                <span v-if="help" v-html="help"></span>
-                <span v-if="errorMessage" class="form__error--message" v-html="errorMessage"></span>
-            </div>
-        </div>
-    </div>
+    </p-field-group>
 </template>
 
 <script>
@@ -51,7 +50,11 @@
         name: 'p-number',
 
         props: {
-            name: String,
+            name:  {
+                required: true,
+                type: String
+            },
+            id: String,
             placeholder: String,
             label: String,
             help: String,
@@ -75,12 +78,22 @@
                 type: Boolean,
                 default: false,
             },
-            hasError: {
+             hasError: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
             errorMessage: {
+                required: false,
+                type: String,
+                default: '',
+            },
+            hasSuccess: {
+                required: false,
+                type: Boolean,
+                default: false,
+            },
+            successMessage: {
                 required: false,
                 type: String,
                 default: '',
@@ -120,6 +133,16 @@
         data() {
             return {
                 inputValue: null
+            }
+        },
+
+        computed: {
+            hasMessage() {
+                return this.help || this.errorMessage || this.successMessage
+            },
+
+            formattedId() {
+                return this.id ? this.id : this.name + '_field'
             }
         },
 

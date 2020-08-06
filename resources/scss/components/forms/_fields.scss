@@ -1,0 +1,334 @@
+.field {
+    @apply appearance-none bg-white border border-gray-300 rounded text-gray-700 leading-normal outline-none w-full px-3 py-2;
+    transition: all 0.3s $transition-effect;
+
+    @include input-placeholder {
+        @apply text-gray-500;
+        opacity: 1;
+    }
+
+    &:focus:not([disabled]) { 
+        @apply outline-none shadow-focus; 
+    }
+
+    &[readonly] { @apply bg-gray-200; }
+
+    &:disabled { opacity: 0.5; }
+
+    &--title {
+        @apply font-bold text-xl px-6 py-3;
+
+        &:hover { @apply bg-gray-200; }
+
+        &.field--success {
+            @apply bg-success-100;
+
+            &:focus:not([disabled]) { @apply bg-success-100; }
+        }
+
+        &.field--danger {
+            @apply bg-danger-100;
+
+            &:focus:not([disabled]) { @apply bg-danger-100; }
+        }
+    }
+
+    &--input {}
+
+    &--textarea {}
+
+    &--sm {
+        @apply text-sm px-2 py-1;
+    }
+
+    &--lg {
+        @apply text-lg px-6 py-3;
+    }
+
+    &--success {
+        @apply border-success-500;
+
+        &:focus:not([disabled]) { 
+            @apply border-success-300 shadow-focus-success;
+        }
+    }
+
+    &--danger {
+        @apply border-danger-500;
+
+        &:focus:not([disabled]) { 
+            @apply border-danger-300 shadow-focus-danger; 
+        }
+    }
+}
+
+.field-number {
+    @apply flex items-center text-center w-full;
+
+    &__button {}
+
+    &__input {
+        @apply flex-auto text-center mx-2;
+    }
+}
+
+.field-select {
+    @apply flex justify-between items-center w-full px-3 py-2;
+
+    &__placeholder {
+        @apply text-gray-500;
+    }
+
+    &__selected {
+        &--multiple { @apply -my-1; }
+    }
+
+    &__list {
+        @apply flex flex-wrap list-none p-0 m-0 -mb-1;
+    }
+
+    &__item { 
+        @apply mb-1 mr-1; 
+    }
+
+    &__arrow { @apply text-xs; }
+}
+
+.field-dropdown {
+    @apply bg-gray-100 border border-gray-300 rounded shadow-md text-gray-700 leading-normal w-full py-3 z-10;
+    margin: rem(3px) 0;
+
+    &__search {
+        @apply px-3 mb-2;
+    }
+
+    &__controls {
+        @apply mb-2 px-3 text-gray-600 text-sm;
+    }
+
+    &__group {
+        @extend %no-bottom;
+    }
+
+    &__options {
+        max-height: rem(385px);
+        overflow-y: auto;
+        
+        &--list {
+            @apply list-none p-0 m-0;
+        }
+
+        &--check { @apply px-3; }
+    }
+
+    &__option {
+        &:not(.field-check) { @apply p-3; }
+
+        &:hover:not(.field-check),
+        &--highlighted:not(.field-check)  { @apply bg-gray-200; }
+
+        &--selected:not(.field-check) { @apply bg-gray-300; }
+    }
+
+    &__empty {
+        @apply text-center px-3;
+    }
+}
+
+.field-upload {
+    &__label {
+        cursor: pointer;
+
+        &:hover {
+            @apply bg-primary-700 border-primary-700; 
+        }
+
+        * { pointer-events: none; }
+    }
+
+    &__input {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+
+        &:focus + label {
+            @apply outline-none shadow-focus;
+        }
+
+        &:active + label {
+            @apply bg-primary-900 border-primary-900; 
+        }
+    }
+}
+
+.field-upload-list {
+    @apply list-none p-0 m-0 mt-3 w-full;
+
+    &__item {
+        @apply flex items-center mb-4 w-full;
+
+        &:last-child { @apply mb-0; }
+
+        .button { @apply flex-shrink-0 mr-3; }
+    }
+
+    &__file { @apply inline-block; }
+}
+
+.field-check {
+    @apply flex relative leading-normal mb-4;
+
+    &--inline {
+        @apply inline-flex items-center mr-2;
+    }
+
+    &__input {
+        @apply inline-block flex-shrink-0 opacity-0 mr-2;
+        width: rem(20px);
+        
+        & + .field-check__label::after { content: none; }
+
+        &:checked + .field-check__label {
+            &:before {
+                @apply bg-primary-500 border-primary-500;
+            }
+
+            &:after { 
+                content: ''; 
+
+                .field-check--checkbox & { @apply border-white; }
+
+                .field-check--radio & { @apply bg-white; } 
+            }
+        }
+
+        &:focus + .field-check__label::before { @apply shadow-focus; }
+    }
+
+    &__label { 
+        display: inline-block; 
+        @extend %no-bottom;
+
+        &:before,
+        &:after { @apply absolute inline-block; }
+
+        &:before{
+            @apply bg-white border border-gray-500;
+            content: '';
+            left: 0;
+            top: rem(3px);
+            height: rem(20px);
+            width: rem(20px);
+            
+            .field-check--checkbox & { @apply rounded; }
+
+            .field-check--radio & { @apply rounded-full; }
+        }
+
+        &:after {
+            @apply border-gray-500 border-0;
+            content: '';
+
+            .field-check--checkbox & {
+                left: rem(6px);
+                top: rem(9px);
+                height: rem(6px);
+                width: rem(9px);
+                border-left: 2px solid;
+                border-bottom: 2px solid;
+                transform: rotate(-45deg);
+            }
+
+            .field-check--radio & {
+                @apply bg-white rounded-full;
+                left: rem(5px);
+                top: rem(8px);
+                height: rem(10px);
+                width: rem(10px);
+            }
+        }
+    }
+}
+
+.field__toggle {
+    @apply
+        cursor-pointer
+        opacity-0
+        absolute
+        w-full
+        h-full
+        z-10
+    ;
+}
+.toggle {
+    &__wrap {
+        @apply
+            border-gray-300
+            cursor-pointer
+            flex-shrink-0
+            rounded-full
+            inline-flex
+            relative
+            border-2
+            w-10
+            h-6
+        ;
+
+        &.toggle__wrap--checked {
+            @apply
+                border-success-500
+            ;
+        }
+
+        &:focus-within {
+            @apply
+                outline-none
+                shadow-focus
+            ;
+        }
+
+        &:before {
+            @apply
+                inline-block
+                rounded-full
+                bg-gray-300
+                h-full
+                w-full
+            ;
+
+            content: "";
+            transition: background-color 0.2s ease;
+        }
+
+        &:after {
+            @apply
+                rounded-full
+                absolute
+                bg-white
+                left-0
+                top-0
+                h-5
+                w-5
+            ;
+
+            content: "";
+            transform: translateX(0);
+            transition: transform 0.2s ease;
+        }
+
+        &--checked:before {
+            @apply
+                bg-success-500
+            ;
+
+            transition: border-color 0.2s ease;
+        }
+
+        &--checked:after {
+            transform: translateX(rem(15px));
+        }
+    }
+}

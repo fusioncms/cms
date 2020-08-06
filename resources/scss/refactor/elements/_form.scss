@@ -156,14 +156,6 @@ select {
     }
 }
 
-.form__label {
-    @apply .block .uppercase .tracking-wide .text-gray-700 .text-xs .font-bold .mb-2;
-}
-
-.form__help {
-    @apply .text-sm .text-gray-700 .italic;
-}
-
 .form__control--meta {
     @apply .text-sm .mt-1 .flex .justify-between;
 

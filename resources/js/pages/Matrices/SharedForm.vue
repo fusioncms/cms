@@ -52,11 +52,11 @@
                             v-model="form.type">
                         </p-select>
 
-                        <p-fieldset
+                        <field-set
                             :has-error="form.errors.has('fieldset')"
                             :error-message="form.errors.get('fieldset')"
                             v-model="form.fieldset">
-                        </p-fieldset>
+                        </field-set>
                     </p-tab>
 
                     <p-tab name="Customize">

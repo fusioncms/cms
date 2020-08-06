@@ -1,55 +1,51 @@
 <template>
-    <div class="form__group">
-        <label
-            class="form__label"
-            :for="name"
-            v-if="label"
-            v-html="label">
-        </label>
+    <p-field-group
+        :name="name"
+        :fieldId="formattedId"
+        :required="required"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess"
+        :successMessage="successMessage"
+        :help="help">
 
-        <div
-            @dragover.prevent="enter"
-            @dragenter.prevent="enter"
-            @dragleave.prevent="leave"
-            @dragend.prevent="leave"
-            @drop.prevent="onFileChange"
-            class="upload__container"
-            :class="{'upload__container--dragged': isDraggedOver}"
-        >
+        <span class="label" :class="{'label--required': required}">{{ label }}</span>
+        
+        <div class="field-upload">
             <input
-                class="upload__control"
+                class="field-upload__input"
+                :class="{'field--danger': hasError, 'field--success': hasSuccess}"
+                :id="formattedId"
+                :name="name"
                 type="file"
                 ref="input"
-                :name="name"
-                :id="name"
-                :multiple="multiple"
+                :placeholder="placeholder"
+                :readonly="readonly"
+                :disabled="disabled"
                 :required="required"
-                @change="onFileChange"
-            >
-            
-            <label :for="name" class="upload__label">
-                <strong>Drag files here</strong> or click to select
+                :multiple="multiple"
+                :accept="accept"
+                :aria-required="required" 
+                :aria-describedby="hasMessage ? formattedId + '_message' : null"
+                @change="onFileChange">
+            <label class="field-upload__label button button--primary button--large" :for="formattedId">
+                <fa-icon icon="upload" class="mr-2"></fa-icon>
+                <span>{{ buttonText }}</span>
             </label>
         </div>
-        
-        <table v-if="files.length" class="upload__files">
-            <tbody>
-                <tr v-for="(file, index) in files" :key="file.name" class="upload__file">
-                    <td class="upload__file--name">{{ file.name }}</td>
-                    <td class="upload__file--size">{{ file.size | bytes }}</td>
-                    <td class="upload__file--actions"><p-button @click.prevent="remove(index)">Remove</p-button></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="form__control--meta" v-if="help || errorMessage || error">
-            <div class="form__help">
-                <span v-if="help" v-html="help"></span>
-                <span v-if="errorMessage" class="form__error--message" v-html="errorMessage"></span>
-                <span v-if="error" class="form__error--message" v-html="error"></span>
-            </div>
-        </div>
-    </div>
+            
+        <template v-slot:bottom>
+            <ul v-if="files.length" class="field-upload-list">
+                <li v-for="(file, index) in files" :key="file.name" class="field-upload-list__item">
+                    <p-button @click.prevent="remove(index)" class="button--small button--icon">
+                        <fa-icon icon="trash-alt"></fa-icon>
+                        <span class="sr-only">Remove File</span>
+                    </p-button>
+                    <span class="field-upload-list__file">{{ file.name }} - {{ file.size | bytes }}</span>
+                </li>
+            </ul>
+        </template>
+    </p-field-group>
 </template>
 
 <script>
@@ -69,41 +65,63 @@
         },
 
         props: {
-            name: String,
+            name:  {
+                required: true,
+                type: String
+            },
+            id: String,
             placeholder: String,
             label: String,
             help: String,
             multiple: Boolean,
             accept: String,
-            required: Boolean,
+            required: {
+                type: Boolean,
+                default: false,
+            },
+            readonly: {
+                type: Boolean,
+                default: false,
+            },
+            disabled: {
+                type: Boolean,
+                default: false,
+            },
             errorMessage: {
                 required: false,
                 type: String,
                 default: '',
             },
+            hasError: {
+                required: false,
+                type: Boolean,
+                default: false,
+            },
+            errorMessage: {
+                required: false,
+                type: String,
+                default: '',
+            },
+            hasSuccess: {
+                required: false,
+                type: Boolean,
+                default: false,
+            },
+            successMessage: {
+                required: false,
+                type: String,
+                default: '',
+            }
         },
 
         methods: {
-            enter() {
-                this.isDraggedOver = true
-            },
-
-            leave() {
-                this.isDraggedOver = false
-            },
-
-            drop(event) {
-                this.leave()
-
-                this.onFileChange(event)
-            },
-
             resetError() {
                 this.error = ''
             },
 
             setError(message) {
-                this.error = message
+                this.hasError = true
+                this.errorMessage = message
             },
 
             onFileChange(event) {
@@ -135,6 +153,30 @@
                     this.$emit('input', this.files[0])
                 }
             }
+        },
+        
+        computed: {
+            hasMessage() {
+                return this.help || this.errorMessage || this.successMessage
+            },
+
+            formattedId() {
+                return this.id ? this.id : this.name + '_field'
+            },
+
+            buttonText() {
+                let text = this.multiple ? 'Select files' : 'Select a file'
+
+                if (this.placeholder) {
+                    text = this.placeholder
+                }
+
+                if (this.files.length) {
+                    text = this.files.length > 1 ? this.files.length + ' files selected' : '1 file selected'
+                }
+
+                return text
+            } 
         }
     }
 </script>

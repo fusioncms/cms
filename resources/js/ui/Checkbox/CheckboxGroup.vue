@@ -1,22 +1,12 @@
 <template>
-    <fieldset class="form__checkbox-group">
-        <label
-            class="form__label"
-            v-if="label"
-            v-html="label">
-        </label>
-
-        <div class="form__checkbox-group--block" :class="{'form__checkbox-group--inline': inline}">
-            <slot></slot>
-        </div>
-
-        <div class="form__control--meta">
-            <div class="form__help">
-                <span v-if="help" v-html="help"></span>
-                <span v-if="errorMessage" class="form__error--message" v-html="errorMessage"></span>
-            </div>
-        </div>
-    </fieldset>
+    <p-fieldset
+        :label="label"
+        :help="help"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess">
+        <slot></slot>
+    </p-fieldset>
 </template>
 
 <script>
@@ -25,26 +15,27 @@
 
         props: {
             label: String,
-
             help: String,
-
             hasError: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-
             errorMessage: {
                 required: false,
                 type: String,
                 default: '',
             },
-
-            inline: {
+            hasSuccess: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
+            successMessage: {
+                required: false,
+                type: String,
+                default: '',
+            }
         }
     }
 </script>

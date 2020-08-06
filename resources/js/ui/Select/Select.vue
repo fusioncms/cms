@@ -1,101 +1,116 @@
 <template>
-	<div class="field">
-        <label
-            class="field__label"
-            :for="name"
-            v-if="label"
-            v-html="label">
-        </label>
+	<p-field-group
+        :name="name"
+        :fieldId="formattedId"
+        :label="label"
+        :required="required"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess"
+        :successMessage="successMessage"
+        :help="help">
+        <div v-click-outside="close">
+            <!-- Select Button -->
+            <button
+                class="field field-select"
+                :class="{ 'field-select--open': isOpen, 'field--danger': hasError, 'field--success': hasSuccess}" 
+                type="button"
+                ref="button"
+                :disabled="disabled"
+                @click="toggle"
+                @keydown.down.prevent="highlightNext"
+                @keydown.up.prevent="highlightPrevious"
+                @keydown.enter="selectHighlighted"
+                @keydown.esc="close">
+                
+                <!-- Selected Item/Items -->
+                <div v-if="selectedOptions.length > 0" class="field-select__selected" :class="{'field-select__selected--multiple': multiple}">
+                    <ul v-if="multiple" class="field-select__list">
+                        <li v-for="(option, index) in selectedOptions" :key="index" class="field-select__item tag">
+                            {{ option.label || option }}
+                            
+                            <button @click.stop="removeSelection(index)">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="sr-only">Unselect {{ option.label || option }}</span>
+                            </button>
+                        </li>
+                    </ul>
 
-        <div class="field__control">
-            <div class="form__select" :class="{ 'form__select--open': isOpen }" v-click-outside="close">
-                <button
-                    type="button"
-                    ref="button"
-                    class="form__select-button"
-                    :disabled="disabled"
-                    @click="toggle">
+                    <span v-else v-html="selectedOptions[0].label || selectedOptions[0]"></span>
+                </div>
 
-                    <div v-if="selectedOptions.length > 0">
-                        <div v-if="multiple">
-                            <div  v-for="(option, index) in selectedOptions" :key="index" class="badge">
-                                {{ option.label || option }}
-                                <button @click.stop="removeSelection(index)" class="w-6 h-6 inline-block align-middle text-gray-500 hover:text-gray-600 focus:outline-none">
-                                    <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg>
-                                </button>
-                            </div>
-                        </div>
+                <span v-else class="field-select__placeholder" v-html="placeholder"></span>
 
-                        <span v-else v-html="selectedOptions[0].label || selectedOptions[0]"></span>
-                    </div>
+                <div class="field-select__arrow">
+                    <fa-icon icon="chevron-down" class="fa-fw"></fa-icon>
+                </div>
+            </button>
 
-                    <span v-else class="form__select-placeholder" v-html="placeholder"></span>
+            <input :id="formattedId" type="hidden" :value="selectedOptions">
 
-                    <div class="form__select-arrow">
-                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                    </div>
-                </button>
-
-                <div
-                    v-show="isOpen"
-                    class="form__select-dropdown"
-                    ref="dropdown"
-                    @keydown.down="highlightNext"
-                    @keydown.up="highlightPrevious"
-                    @keydown.enter.prevent="selectHighlighted"
-                    @keydown.esc="close">
+            <!-- Select Dropdown -->
+            <div
+                v-show="isOpen"
+                class="field-dropdown"
+                ref="dropdown">
+                <!-- Search -->
+                <div class="field-dropdown__search">
+                    <p-label text="Search Options" :field_name="'search_options_' + name" v-if="filterable"></p-label>
                     <input
                         v-if="filterable"
+                        :name="'search_options_' + name"
                         type="search"
                         ref="search"
-                        class="form__select-search"
+                        class="field"
                         v-model="search"
                         placeholder="Search for option..."/>
-
-                    <div class="form__select-controls" v-if="showControls">
-                        <span>Press enter to select</span>
-                        <span>↑ ↓ to navigate</span>
-                        <span>esc to dismiss</span>
-                    </div>
-
-                    <div v-if="filteredOptions.length > 0">
-                        <p-checkbox-group ref="options" v-if="multiple" class="form__select-options">
-                            <p-checkbox
-                                v-for="(option, index) in filteredOptions"
-                                :id="index"
-                                :key="index"
-                                :native-value="option.value"
-                                :class="{ 'form__select-option--highlighted': isHighlighted(index) }"
-                                name="selection"
-                                v-model="selection">
-                                {{ option.label }}
-                            </p-checkbox>
-                        </p-checkbox-group>
-
-                        <ul ref="options" v-else v-show="filteredOptions.length > 0" class="form__select-options">
-                            <li v-for="(option, index) in filteredOptions"
-                                :key="index"
-                                class="form__select-option"
-                                :class="{
-                                    'form__select-option--selected': inSelection(option),
-                                    'form__select-option--highlighted': isHighlighted(index)
-                                }"
-                                @click="addSelection(option)">
-                                {{ option.label }}
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div v-else class="form__select-search-empty">
-                        No results found for "{{ search }}"
-                    </div>
                 </div>
-            </div>
 
-            <p class="field__help" v-if="help" v-html="help"></p>
-            <p class="field__help field__help--danger" v-if="errorMessage" v-html="errorMessage"></p>
+                <p :id="formattedId + '_controls'" class="field-dropdown__controls" v-if="showControls">
+                    <span>Press enter to select,</span>
+                    <span>↑ ↓ to navigate,</span>
+                    <span>esc to dismiss</span>
+                </p>
+
+                <div class="field-dropdown__group" v-if="filteredOptions.length > 0">
+                    <!-- Multi-select -->
+                    <p-checkbox-group 
+                        ref="options" 
+                        class="field-dropdown__options field-dropdown__options--check" 
+                        :aria-describedby="formattedId + '_controls'" 
+                        v-if="multiple">
+                        <p-checkbox
+                            v-for="(option, index) in filteredOptions"
+                            class="field-dropdown__option"
+                            :id="formattedId + '_' + index"
+                            :key="index"
+                            :native-value="option.value"
+                            :name="formattedId + '_option'"
+                            v-model="selection">
+                            {{ option.label }}
+                        </p-checkbox>
+                    </p-checkbox-group>
+
+                    <!-- Single Select -->
+                    <ul ref="options" v-else v-show="filteredOptions.length > 0" class="field-dropdown__options field-dropdown__options--list">
+                        <li v-for="(option, index) in filteredOptions"
+                            tab-index="0"
+                            :key="index"
+                            class="field-dropdown__option"
+                            :class="{'field-dropdown__option--selected': inSelection(option), 'field-dropdown__option--highlighted': isHighlighted(index)}"
+                            @click="addSelection(option)">
+                            {{ option.label }}
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- No Results -->
+                <p v-else class="field-dropdown__empty">
+                    No results found for "{{ search }}"
+                </p>
+            </div>
         </div>
-	</div>
+	</p-field-group>
 </template>
 
 <script>
@@ -116,47 +131,50 @@
         props: {
         	name: {
                 required: true,
-                type: String,
+                type: String
             },
-
             value: {
                 required: false,
                 default: null,
             },
-
+            id: String,
             label: {
                 required: false,
                 type: String,
             },
-
             help: {
                 required: false,
                 type: String,
             },
-
             placeholder: {
                 required: false,
                 type: String,
                 default: 'Please select an option...',
             },
-
             disabled: {
                 type: Boolean,
                 default: false,
             },
-
             hasError: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-
             errorMessage: {
                 required: false,
                 type: String,
                 default: '',
             },
-
+            hasSuccess: {
+                required: false,
+                type: Boolean,
+                default: false,
+            },
+            successMessage: {
+                required: false,
+                type: String,
+                default: '',
+            },
             options: {
                 required: false,
                 type: Array,
@@ -164,26 +182,27 @@
                     return []
                 },
             },
-
             filterable: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-
             dark: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-
             showControls: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-
             multiple: {
+                required: false,
+                type: Boolean,
+                default: false
+            },
+            required: {
                 required: false,
                 type: Boolean,
                 default: false
@@ -228,6 +247,14 @@
                 } else {
                     return this.$refs.options.children[this.highlighted]
                 }
+            },
+
+            hasMessage() {
+                return this.help || this.errorMessage || this.successMessage
+            },
+
+            formattedId() {
+                return this.id ? this.id : this.name + '_field'
             }
         },
 
