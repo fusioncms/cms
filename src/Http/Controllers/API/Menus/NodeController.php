@@ -31,9 +31,9 @@ class NodeController extends Controller
     {
         $this->authorize('nodes.view');
 
-        $menu = Menu::find($menu);
+        $menu  = Menu::find($menu);
         $model = (new Builder($menu->handle))->make();
-        $node = $model->find($id);
+        $node  = $model->find($id);
 
         return new NodeResource($node);
     }
@@ -42,8 +42,8 @@ class NodeController extends Controller
     {
         $this->authorize('nodes.create');
 
-        $menu = Menu::find($menu);
-        $model = (new Builder($menu->handle))->make();
+        $menu          = Menu::find($menu);
+        $model         = (new Builder($menu->handle))->make();
         $relationships = [];
 
         $rules = [
@@ -55,7 +55,7 @@ class NodeController extends Controller
         ];
 
         if (isset($menu->fieldset)) {
-            $fields = $menu->fieldset->database();
+            $fields        = $menu->fieldset->database();
             $relationships = $menu->fieldset->relationships();
 
             foreach ($fields as $field) {
@@ -63,9 +63,9 @@ class NodeController extends Controller
             }
         }
 
-        $attributes = $request->validate($rules);
+        $attributes            = $request->validate($rules);
         $attributes['menu_id'] = $menu->id;
-        $attributes['order'] = $model->orderLast();
+        $attributes['order']   = $model->orderLast();
 
         $node = $model->create($attributes);
 
@@ -88,10 +88,10 @@ class NodeController extends Controller
     {
         $this->authorize('nodes.update');
 
-        $menu = Menu::findOrFail($menu);
-        $node = (new Builder($menu->handle))->make()->findOrFail($id);
+        $menu          = Menu::findOrFail($menu);
+        $node          = (new Builder($menu->handle))->make()->findOrFail($id);
         $relationships = [];
-        $rules = [
+        $rules         = [
             'name'       => 'required',
             'url'        => 'sometimes',
             'new_window' => 'sometimes',
@@ -100,7 +100,7 @@ class NodeController extends Controller
         ];
 
         if (isset($menu->fieldset)) {
-            $fields = $menu->fieldset->database();
+            $fields        = $menu->fieldset->database();
             $relationships = $menu->fieldset->relationships();
 
             foreach ($fields as $field) {
@@ -127,9 +127,9 @@ class NodeController extends Controller
     {
         $this->authorize('nodes.delete');
 
-        $menu = Menu::findOrFail($menu);
+        $menu  = Menu::findOrFail($menu);
         $model = (new Builder($menu->handle))->make();
-        $node = $model->findOrFail($id);
+        $node  = $model->findOrFail($id);
 
         $node->delete();
     }

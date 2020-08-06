@@ -12,9 +12,9 @@ class OverviewController extends Controller
 {
     public function index()
     {
-        $stats = Analytics::performQuery(Period::days(30), 'ga:users,ga:pageviews,ga:avgSessionDuration,ga:bounceRate');
+        $stats         = Analytics::performQuery(Period::days(30), 'ga:users,ga:pageviews,ga:avgSessionDuration,ga:bounceRate');
         $dailyResponse = Analytics::performQuery(Period::days(30), 'ga:users,ga:pageviews,ga:bouncerate', ['dimensions' => 'ga:date']);
-        $daily = collect($dailyResponse['rows'] ?? [])->map(function (array $row) {
+        $daily         = collect($dailyResponse['rows'] ?? [])->map(function (array $row) {
             return [
                 'date'       => Carbon::createFromFormat('Ymd', $row[0]),
                 'visitors'   => (int) $row[1],

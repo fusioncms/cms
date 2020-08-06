@@ -167,7 +167,7 @@ class MenuTest extends TestCase
 
         $menu = MenuFactory::create();
 
-        $data = $menu->toArray();
+        $data                = $menu->toArray();
         $data['description'] = 'This is the new menu description';
 
         $this
@@ -337,7 +337,7 @@ class MenuTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $menu = factory(Menu::class)->create()->toArray();
+        $menu       = factory(Menu::class)->create()->toArray();
         $menu['id'] = null;
 
         $this

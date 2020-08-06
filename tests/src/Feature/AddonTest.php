@@ -283,9 +283,9 @@ class AddonTest extends TestCase
     {
         Storage::fake();
 
-        $zipArchive = new ZipArchive();
+        $zipArchive     = new ZipArchive();
         $addonNamespace = $addonNamespace ?? $this->faker->word;
-        $addonPath = Storage::path($addonNamespace.'.zip');
+        $addonPath      = Storage::path($addonNamespace.'.zip');
 
         $settings = [
             'name'        => $addonNamespace,

@@ -128,14 +128,14 @@ class Fieldset extends Model
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $subject = $activity->subject;
-        $action = ucfirst($eventName);
+        $subject    = $activity->subject;
+        $action     = ucfirst($eventName);
         $properties = [
             'link' => "fieldsets/{$subject->id}/edit",
             'icon' => 'list',
         ];
 
         $activity->description = "{$action} fieldset ({$subject->name})";
-        $activity->properties = $properties;
+        $activity->properties  = $properties;
     }
 }

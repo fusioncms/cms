@@ -33,7 +33,7 @@ class TaxonomyImport extends BaseImport
         parent::__construct($import, $log);
 
         $this->taxonomy = Taxonomy::findOrFail($import->group);
-        $this->terms = (new Builder($this->taxonomy->handle))->make();
+        $this->terms    = (new Builder($this->taxonomy->handle))->make();
     }
 
     /**

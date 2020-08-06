@@ -380,7 +380,7 @@ class ExcelTest extends TestCase
 
         $this->actingAs($this->owner, 'api');
 
-        $import = factory(Import::class)->states('users')->create($overrides);
+        $import   = factory(Import::class)->states('users')->create($overrides);
         $filepath = "imports/{$import->handle}.csv";
 
         $log = ImportLog::create([

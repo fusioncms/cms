@@ -15,11 +15,11 @@ class NodeResource extends JsonResource
      */
     public function toArray($request)
     {
-        $resource['id'] = $this->id;
-        $resource['name'] = $this->name;
-        $resource['url'] = $this->url;
+        $resource['id']         = $this->id;
+        $resource['name']       = $this->name;
+        $resource['url']        = $this->url;
         $resource['new_window'] = $this->new_window;
-        $resource['order'] = $this->order;
+        $resource['order']      = $this->order;
 
         if ($this->fields) {
             foreach ($this->fields as $field) {
@@ -27,12 +27,12 @@ class NodeResource extends JsonResource
             }
         }
 
-        $resource['parent'] = new NodeResource($this->parent);
+        $resource['parent']   = new NodeResource($this->parent);
         $resource['children'] = NodeResource::collection($this->children);
 
         $resource['created_at'] = $this->created_at;
         $resource['updated_at'] = $this->updated_at;
-        $resource['status'] = $this->status;
+        $resource['status']     = $this->status;
 
         return $resource;
     }

@@ -32,7 +32,7 @@ trait HasCustomLogger
         $stream->setFormatter(new JsonFormatter());
 
         $this->logPath = $logPath;
-        $this->logger = new Logger(basename($logPath), [$stream]);
+        $this->logger  = new Logger(basename($logPath), [$stream]);
     }
 
     /**

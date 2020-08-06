@@ -10,10 +10,10 @@ class CollectionRequest extends FormRequest
 {
     public function __construct()
     {
-        $this->matrix = Matrix::where('slug', request()->route('slug'))->firstOrFail();
-        $this->model = (new Collection($this->matrix->handle))->make();
-        $this->fieldset = $this->matrix->fieldset;
-        $this->fields = $this->fieldset->fields ?? [];
+        $this->matrix        = Matrix::where('slug', request()->route('slug'))->firstOrFail();
+        $this->model         = (new Collection($this->matrix->handle))->make();
+        $this->fieldset      = $this->matrix->fieldset;
+        $this->fields        = $this->fieldset->fields ?? [];
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
     }
 

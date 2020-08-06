@@ -196,8 +196,8 @@ class ImporterTest extends TestCase
 
         $import = factory(Import::class)->create();
 
-        $attributes = $import->toArray();
-        $attributes['name'] = 'Updated Name';
+        $attributes           = $import->toArray();
+        $attributes['name']   = 'Updated Name';
         $attributes['handle'] = str_handle($attributes['name']);
 
         // ..when PATCH request submitted

@@ -17,7 +17,7 @@ class ReplicatorResource extends JsonResource
     {
         $resource = parent::toArray($request);
 
-        $resource['field'] = new FieldResource($this->field);
+        $resource['field']    = new FieldResource($this->field);
         $resource['sections'] = SectionResource::collection($this->sections);
 
         return $resource;

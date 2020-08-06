@@ -6,7 +6,7 @@ use Fusion\Models\Section;
 
 class SectionFactory implements Factory
 {
-    protected $times = 3;
+    protected $times         = 3;
     protected $withoutFields = false;
     protected $fields;
 

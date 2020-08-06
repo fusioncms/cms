@@ -37,7 +37,7 @@ class FieldFactory implements Factory
         $overrides = [];
 
         if ($this->name) {
-            $overrides['name'] = $this->name;
+            $overrides['name']   = $this->name;
             $overrides['handle'] = str_handle($this->name);
         }
 

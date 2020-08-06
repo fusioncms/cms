@@ -32,7 +32,7 @@ class MatrixImport extends BaseImport
     {
         parent::__construct($import, $log);
 
-        $this->matrix = Matrix::findOrFail($import->group);
+        $this->matrix     = Matrix::findOrFail($import->group);
         $this->collection = (new Builder($this->matrix->handle))->make();
     }
 

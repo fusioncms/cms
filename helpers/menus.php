@@ -10,7 +10,7 @@ if (!function_exists('menu')) {
      */
     function menu($handle)
     {
-        $menu = Menu::make($handle, function () {});
+        $menu  = Menu::make($handle, function () {});
         $model = MenuModel::where('handle', $handle)->first();
 
         $add = function ($node, $parent = null) use ($menu) {

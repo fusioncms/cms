@@ -13,7 +13,7 @@ class CustomizeController extends Controller
 
         array_pop($segments);
 
-        $url = '/'.implode('/', $segments);
+        $url        = '/'.implode('/', $segments);
         $subRequest = $this->createNewRequest($request, $url);
 
         $subRequest->session()->flash('customizing', true);

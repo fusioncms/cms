@@ -38,7 +38,7 @@ class BeforeImport implements ShouldQueue
     public function __construct(Import $import)
     {
         $this->import = $import;
-        $this->log = ImportLog::create([
+        $this->log    = ImportLog::create([
             'import_id' => $import->id,
             'status'    => 'setup',
         ]);
@@ -82,8 +82,8 @@ class BeforeImport implements ShouldQueue
      */
     private function runImport()
     {
-        $name = Str::singular($this->import->module);
-        $name = ucwords($name);
+        $name   = Str::singular($this->import->module);
+        $name   = ucwords($name);
         $module = "Fusion\\Services\\Imports\\{$name}Import";
 
         (new $module($this->import, $this->log))

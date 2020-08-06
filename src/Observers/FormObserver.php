@@ -128,7 +128,7 @@ class FormObserver
     {
         if ($old->name !== $new->name) {
             $fieldset = $old->fieldset;
-            $newName = $new->name;
+            $newName  = $new->name;
 
             $fieldset->withoutEvents(function () use ($fieldset, $newName) {
                 $fieldset->name = ($name = 'Form: '.$newName);

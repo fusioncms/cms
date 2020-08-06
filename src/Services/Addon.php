@@ -166,9 +166,9 @@ class Addon extends Collection
      */
     protected function createSymlink($addon)
     {
-        $folder = $addon['namespace'];
+        $folder     = $addon['namespace'];
         $publicPath = public_path("addons/{$folder}");
-        $addonPath = addon_path("{$folder}/public");
+        $addonPath  = addon_path("{$folder}/public");
 
         if (!File::exists(public_path('addons'))) {
             File::makeDirectory(public_path('addons'));
@@ -208,7 +208,7 @@ class Addon extends Collection
     protected function registerClassLoader($addon)
     {
         $namespace = $addon['namespace'];
-        $loader = new ClassLoader();
+        $loader    = new ClassLoader();
 
         $loader->addPsr4("Addons\\{$namespace}\\", addon_path("{$namespace}/src"));
         $loader->register();
@@ -232,7 +232,7 @@ class Addon extends Collection
 
     protected function setProperty($namespace, $key, $value)
     {
-        $addon = $this->get($namespace);
+        $addon       = $this->get($namespace);
         $addon[$key] = $value;
 
         $this->put($namespace, $addon);
@@ -267,7 +267,7 @@ class Addon extends Collection
             $directories = File::directories(addon_path());
 
             foreach ($directories as $directory) {
-                $addon = new Manifest($directory.'/addon.json');
+                $addon     = new Manifest($directory.'/addon.json');
                 $namespace = $addon->get('namespace');
 
                 $addons->put($namespace, collect($addon->all()));

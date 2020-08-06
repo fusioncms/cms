@@ -77,7 +77,7 @@ abstract class DatabaseMailable extends BaseMailable
     {
         // Setup
         $mailable = $this->getMailableModel();
-        $path = Storage::disk('temp')->path('views/emails');
+        $path     = Storage::disk('temp')->path('views/emails');
         $template = "views/emails/{$mailable->handle}.blade.php";
 
         // Register temporary template path..

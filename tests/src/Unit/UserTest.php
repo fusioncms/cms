@@ -23,7 +23,7 @@ class UserTest extends TestCase
         $this->expectException(QueryException::class);
         $this->expectExceptionMessage('UNIQUE constraint failed: users.email');
 
-        $attributes = collect(DB::table('users')->first())->toArray();
+        $attributes       = collect(DB::table('users')->first())->toArray();
         $attributes['id'] = null;
 
         DB::table('users')->insert($attributes);

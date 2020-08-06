@@ -42,7 +42,7 @@ class GoogleExport implements FromArray
      */
     public function __construct($source, $isPreview = false)
     {
-        $this->source = $source;
+        $this->source    = $source;
         $this->isPreview = $isPreview;
     }
 
@@ -56,7 +56,7 @@ class GoogleExport implements FromArray
     protected function getFromSource(string $regex)
     {
         $matches = [];
-        $match = preg_match($regex, $this->source, $matches);
+        $match   = preg_match($regex, $this->source, $matches);
 
         if ($match and @$matches[1]) {
             return $matches[1];
@@ -86,7 +86,7 @@ class GoogleExport implements FromArray
     {
         $queryString = parse_url($this->source, PHP_URL_QUERY);
         $queryParams = explode('&', $queryString);
-        $params = [];
+        $params      = [];
 
         foreach ($queryParams as $queryParam) {
             @list($name, $value) = explode('=', $queryParam, 2);
@@ -182,19 +182,19 @@ class GoogleExport implements FromArray
 
             if ($this->isPreview) {
                 $sheetName = $this->getRangeSheetName();
-                $response = $service->spreadsheets_values->get($this->getSheetId(), "{$sheetName}!1:2");
-                $values = $response->getValues();
+                $response  = $service->spreadsheets_values->get($this->getSheetId(), "{$sheetName}!1:2");
+                $values    = $response->getValues();
             } else {
                 if ($this->isBatchRequest()) {
                     $response = $service->spreadsheets_values->batchGet($this->getSheetId(), ['ranges' => $this->getRange()]);
-                    $values = [];
+                    $values   = [];
 
                     foreach ($response->getValueRanges() as $valueRange) {
                         $values = array_merge($values, $valueRange->getValues());
                     }
                 } else {
                     $response = $service->spreadsheets_values->get($this->getSheetId(), $this->getRange());
-                    $values = $response->getValues();
+                    $values   = $response->getValues();
                 }
             }
 

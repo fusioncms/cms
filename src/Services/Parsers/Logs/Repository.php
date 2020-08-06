@@ -31,7 +31,7 @@ class Repository
      */
     public function all()
     {
-        $log = [];
+        $log       = [];
         $logLevels = $this->getLogLevels();
 
         $pattern = '/(\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\].*?\} \n)/s';
@@ -75,10 +75,10 @@ class Repository
             array_shift($logData);
         }
         foreach ($headings[0] as $heading) {
-            $timestampPattern = '^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\]';
-            $logLevelPattern = '(^'.implode('|', array_keys($logLevels)).'$): ';
-            $textPattern = '(.*?)\{';
-            $filePattern = '.*?(at .*?)';
+            $timestampPattern  = '^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\]';
+            $logLevelPattern   = '(^'.implode('|', array_keys($logLevels)).'$): ';
+            $textPattern       = '(.*?)\{';
+            $filePattern       = '.*?(at .*?)';
             $stackTracePattern = '\[stacktrace\]\n(.*?)"\} ';
 
             $regexPattern = '/'.$timestampPattern.'.*?\.'.$logLevelPattern.$textPattern.$filePattern.$stackTracePattern.'/s';
@@ -154,42 +154,42 @@ class Repository
      */
     public function getLogLevels()
     {
-        $class = new ReflectionClass(new LogLevel());
+        $class     = new ReflectionClass(new LogLevel());
         $constants = $class->getConstants();
-        $levels = [];
+        $levels    = [];
 
         foreach ($constants as $key => $level) {
             switch ($key) {
                 case 'EMERGENCY':
-                    $icon = 'bug';
+                    $icon   = 'bug';
                     $status = 'danger';
                     break;
                 case 'ALERT':
-                    $icon = 'bullhorn';
+                    $icon   = 'bullhorn';
                     $status = 'danger';
                     break;
                 case 'CRITICAL':
-                    $icon = 'heartbeat';
+                    $icon   = 'heartbeat';
                     $status = 'danger';
                     break;
                 case 'ERROR':
-                    $icon = 'times-circle';
+                    $icon   = 'times-circle';
                     $status = 'danger';
                     break;
                 case 'WARNING':
-                    $icon = 'exclamation-triangle';
+                    $icon   = 'exclamation-triangle';
                     $status = 'warning';
                     break;
                 case 'NOTICE':
-                    $icon = 'exclamation-circle';
+                    $icon   = 'exclamation-circle';
                     $status = 'warning';
                     break;
                 case 'INFO':
-                    $icon = 'info-circle';
+                    $icon   = 'info-circle';
                     $status = 'info';
                     break;
                 case 'DEBUG':
-                    $icon = 'life-ring';
+                    $icon   = 'life-ring';
                     $status = 'info';
                     break;
             }

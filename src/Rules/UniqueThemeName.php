@@ -28,7 +28,7 @@ class UniqueThemeName implements Rule
     public function __construct()
     {
         $this->zipArchive = new ZipArchive();
-        $this->themes = collect(Theme::all());
+        $this->themes     = collect(Theme::all());
     }
 
     /**
@@ -41,14 +41,14 @@ class UniqueThemeName implements Rule
      */
     public function passes($attribute, $value)
     {
-        $canUnzip = $this->zipArchive->open($value);
+        $canUnzip   = $this->zipArchive->open($value);
         $validTheme = $canUnzip === true;
 
         if ($canUnzip) {
-            $index = $this->zipArchive->locateName('theme.json', ZipArchive::FL_NODIR);
-            $filename = $this->zipArchive->getNameIndex($index);
+            $index      = $this->zipArchive->locateName('theme.json', ZipArchive::FL_NODIR);
+            $filename   = $this->zipArchive->getNameIndex($index);
             $fileHandle = $this->zipArchive->getStream($filename);
-            $settings = $this->parseStream($fileHandle);
+            $settings   = $this->parseStream($fileHandle);
 
             $validTheme = $this->themes->every(function ($theme) use ($settings) {
                 return $theme->pull('name') != ($settings['name'] ?? null) and

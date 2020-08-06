@@ -37,7 +37,7 @@ class RestoreDatabase
     public function __construct(TemporaryDirectory $tempDirectory)
     {
         $this->tempDirectory = $tempDirectory;
-        $this->manifest = new Manifest($tempDirectory->path('manifest.txt'));
+        $this->manifest      = new Manifest($tempDirectory->path('manifest.txt'));
     }
 
     /**
@@ -144,7 +144,7 @@ class RestoreDatabase
      */
     private function restoreFromSqliteFile($dbDumpPath)
     {
-        $dbName = config('database.connections.'.$default.'.database');
+        $dbName  = config('database.connections.'.$default.'.database');
         $command = "sqlite3 {$dbName} < {$dbDumpPath}";
 
         $process = new Process($command);

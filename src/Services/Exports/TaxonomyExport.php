@@ -55,7 +55,7 @@ class TaxonomyExport implements FromQuery, WithHeadings, WithMapping, ShouldQueu
     {
         $this->taxonomy = $taxonomy;
         $this->fieldset = $taxonomy->fieldset;
-        $this->term = (new Builder($taxonomy->handle))->make();
+        $this->term     = (new Builder($taxonomy->handle))->make();
     }
 
     /**

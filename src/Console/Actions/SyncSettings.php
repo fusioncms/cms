@@ -97,9 +97,9 @@ class SyncSettings
      */
     public function syncSettingSection(SettingGroup $group, $fields = null)
     {
-        $fields = $fields ?? SettingService::fields($group->handle);
+        $fields   = $fields ?? SettingService::fields($group->handle);
         $existing = $group->fieldset->sections->pluck('id', 'id');
-        $order = 0;
+        $order    = 0;
 
         collect($fields)
             ->each(function ($fields, $name) use ($group, $existing, &$order) {
@@ -136,7 +136,7 @@ class SyncSettings
     public function syncSettingFields(Section $section, $fields = [])
     {
         $existing = $section->fields->pluck('id', 'id');
-        $order = 0;
+        $order    = 0;
 
         collect($fields)
             ->each(function ($item) use ($section, $existing, &$order) {

@@ -81,7 +81,7 @@ class BaseImport implements ToCollection, WithChunkReading, WithHeadingRow, With
     public function __construct(Import $import, ImportLog $log)
     {
         $this->import = $import;
-        $this->log = $log;
+        $this->log    = $log;
     }
 
     /**
@@ -95,8 +95,8 @@ class BaseImport implements ToCollection, WithChunkReading, WithHeadingRow, With
     public function collection(Collection $rows)
     {
         // Pick up where we left off..
-        $importLog = $this->log->fresh();
-        $this->rowIndex = $importLog->next_row;
+        $importLog       = $this->log->fresh();
+        $this->rowIndex  = $importLog->next_row;
         $this->processed = $importLog->processed->toArray();
 
         foreach ($rows as $row) {
@@ -107,8 +107,8 @@ class BaseImport implements ToCollection, WithChunkReading, WithHeadingRow, With
         }
 
         // Persist import log data..
-        $importLog->next_row = $this->rowIndex;
-        $importLog->progress = floor($this->rowIndex / $this->totalRows * 100);
+        $importLog->next_row  = $this->rowIndex;
+        $importLog->progress  = floor($this->rowIndex / $this->totalRows * 100);
         $importLog->processed = $this->processed;
         $importLog->save();
     }
@@ -287,8 +287,8 @@ class BaseImport implements ToCollection, WithChunkReading, WithHeadingRow, With
     {
         // Get instance data..
         $importable = $event->getConcernable();
-        $import = $importable->import;
-        $reader = $event->getReader();
+        $import     = $importable->import;
+        $reader     = $event->getReader();
 
         // Set field casts..
         $importable->setCasts();
@@ -317,8 +317,8 @@ class BaseImport implements ToCollection, WithChunkReading, WithHeadingRow, With
     {
         // Get instance data..
         $importable = $event->getConcernable();
-        $import = $importable->import;
-        $importLog = $importable->log->fresh();
+        $import     = $importable->import;
+        $importLog  = $importable->log->fresh();
 
         $importable->info("Finalizing import process for Import #{$import->id}");
 
@@ -327,9 +327,9 @@ class BaseImport implements ToCollection, WithChunkReading, WithHeadingRow, With
          */
 
         // Handle unprocessed records in storage.
-        $unprocessed = array_diff($importable->existingIds, $importLog->processed->toArray());
+        $unprocessed   = array_diff($importable->existingIds, $importLog->processed->toArray());
         $shouldDisable = $importable->containsStrategies('disable');
-        $shouldDelete = $importable->containsStrategies('delete');
+        $shouldDelete  = $importable->containsStrategies('delete');
 
         if ($unprocessed and ($shouldDisable or $shouldDelete)) {
             if ($shouldDisable) {

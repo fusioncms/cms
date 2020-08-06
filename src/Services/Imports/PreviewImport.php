@@ -26,7 +26,7 @@ class PreviewImport implements WithStartRow, WithLimit, WithMapping
     public function __construct(int $startRow = 1, int $limit = 5)
     {
         $this->startRow = $startRow;
-        $this->limit = $limit;
+        $this->limit    = $limit;
         $this->rowIndex = 0;
     }
 

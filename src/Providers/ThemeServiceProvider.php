@@ -78,12 +78,12 @@ class ThemeServiceProvider extends ServiceProvider
             File::put($optionsPath, json_encode($defaults, JSON_PRETTY_PRINT));
         }
 
-        $optionsModified = File::lastModified($optionsPath);
+        $optionsModified  = File::lastModified($optionsPath);
         $manifestModified = File::lastModified($manifest->getPath());
 
         if ($manifestModified > $optionsModified) {
             $defaults = $this->getDefaultOptions($manifest);
-            $options = collect(json_decode(File::get($optionsPath), true));
+            $options  = collect(json_decode(File::get($optionsPath), true));
 
             $merged = $defaults->map(function ($items, $section) use ($options) {
                 return $items->merge($options->get($section));

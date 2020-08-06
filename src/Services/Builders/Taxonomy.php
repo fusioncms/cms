@@ -34,7 +34,7 @@ class Taxonomy extends Builder implements BuilderContract
         parent::__construct();
 
         $this->taxonomy = TaxonomyModel::where('handle', $taxonomy)->firstOrFail();
-        $this->model = $this->make();
+        $this->model    = $this->make();
     }
 
     /**
@@ -43,9 +43,9 @@ class Taxonomy extends Builder implements BuilderContract
     public function make()
     {
         $className = Str::studly($this->taxonomy->handle);
-        $traits = [];
-        $fillable = ['taxonomy_id', 'parent_id', 'name', 'slug', 'status'];
-        $casts = [];
+        $traits    = [];
+        $fillable  = ['taxonomy_id', 'parent_id', 'name', 'slug', 'status'];
+        $casts     = [];
 
         if ($this->taxonomy->fieldset) {
             $fields = $this->taxonomy->fieldset->fields->reject(function ($field) {
@@ -59,9 +59,9 @@ class Taxonomy extends Builder implements BuilderContract
             });
 
             foreach ($fields as $field) {
-                $fieldtype = fieldtypes()->get($field->type);
+                $fieldtype  = fieldtypes()->get($field->type);
                 $fillable[] = $field->handle;
-                $casts[] = $field->handle.'\' => \''.$fieldtype->cast;
+                $casts[]    = $field->handle.'\' => \''.$fieldtype->cast;
             }
         }
 

@@ -21,7 +21,7 @@ class SingleRouter extends Router
             }
 
             $model = (new Single($matrix->handle))->make();
-            $page = $model->firstOrFail();
+            $page  = $model->firstOrFail();
 
             if (!$page->status) {
                 if (Gate::denies('access.controlPanel') || !request()->has('preview')) {

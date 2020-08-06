@@ -16,7 +16,7 @@ class FieldsetSectionController extends Controller
         $sections = collect($request->sections);
 
         $attached = $this->getAttachedSections($sections);
-        $updated = $this->getUpdatedSections($sections);
+        $updated  = $this->getUpdatedSections($sections);
         $detached = $this->getDetachedSections($fieldset, $sections);
 
         $fieldset = $this->deleteSections($fieldset, $detached);
@@ -63,7 +63,7 @@ class FieldsetSectionController extends Controller
         }
 
         $existing = $fieldset->sections->pluck('id');
-        $saving = $this->getUpdatedSections($sections)->pluck('id');
+        $saving   = $this->getUpdatedSections($sections)->pluck('id');
 
         return $existing->diff($saving);
     }
@@ -187,7 +187,7 @@ class FieldsetSectionController extends Controller
     protected function getDetachedFields(Section $section, Collection $fields)
     {
         $existing = $section->fields->pluck('id');
-        $saving = $this->getUpdatedFields($fields)->pluck('id');
+        $saving   = $this->getUpdatedFields($fields)->pluck('id');
 
         return $existing->diff($saving);
     }

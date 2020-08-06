@@ -23,8 +23,8 @@ class PwnedPassword implements Rule
     public function passes($attribute, $value)
     {
         $client = new Client();
-        $hash = strtoupper(sha1($value));
-        $range = substr($hash, 0, 5);
+        $hash   = strtoupper(sha1($value));
+        $range  = substr($hash, 0, 5);
         $suffix = substr($hash, 5);
 
         $response = $client->request('GET', "https://api.pwnedpasswords.com/range/{$range}", [

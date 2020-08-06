@@ -113,8 +113,8 @@ class ReplicatorFieldtype extends Fieldtype
      */
     public function generateRelationship(Field $field)
     {
-        $replicator = Replicator::find($field->settings['replicator']);
-        $stub = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
+        $replicator    = Replicator::find($field->settings['replicator']);
+        $stub          = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
         $relationships = collect([]);
 
         $relationships->push(strtr($stub, [
@@ -155,7 +155,7 @@ class ReplicatorFieldtype extends Fieldtype
     {
         $replicator = Replicator::find($field->settings['replicator']);
         $replicants = $this->persistReplicants($replicator, $field);
-        $sections = $replicator->sections;
+        $sections   = $replicator->sections;
 
         $sections->each(function ($section) use ($model, $replicator, $replicants) {
             $handle = "rp_{$section->handle}_{$replicator->uniqid}";
@@ -198,11 +198,11 @@ class ReplicatorFieldtype extends Fieldtype
 
         foreach ($value as $key => $input) {
             $section = Section::find($input['section']['id']);
-            $prefix = "{$field->handle}.{$key}.fields.";
+            $prefix  = "{$field->handle}.{$key}.fields.";
 
             foreach ($section->fields as $sub) {
-                $rule = $sub->type()->rules($sub, $value[$key]['fields'][$sub->handle]);
-                $handle = key($rule);
+                $rule       = $sub->type()->rules($sub, $value[$key]['fields'][$sub->handle]);
+                $handle     = key($rule);
                 $validation = current($rule);
 
                 $rules[$prefix.$handle] = $validation;
@@ -226,7 +226,7 @@ class ReplicatorFieldtype extends Fieldtype
 
         foreach ($value as $key => $input) {
             $section = Section::find($input['section']['id']);
-            $prefix = "{$field->handle}.{$key}.fields.";
+            $prefix  = "{$field->handle}.{$key}.fields.";
 
             foreach ($section->fields as $sub) {
                 $attributes[$prefix.$sub->handle] = $sub->name;

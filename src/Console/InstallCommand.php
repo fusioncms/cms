@@ -130,19 +130,19 @@ class InstallCommand extends Command
     {
         // application
         $this->container['app_name'] = $this->ask('Please enter your application name:', $this->get('app_name'));
-        $this->container['app_url'] = $this->ask('Please enter your website url:', $this->get('app_url'));
+        $this->container['app_url']  = $this->ask('Please enter your website url:', $this->get('app_url'));
 
         // database
-        $this->container['db_host'] = $this->ask('Please enter the database host:', $this->get('db_host'));
-        $this->container['db_database'] = $this->ask('Please enter the database name:', $this->get('db_database'));
-        $this->container['db_username'] = $this->ask('Please enter the database username:', $this->get('db_username'));
-        $this->container['db_password'] = $this->ask('Please enter the database password:', $this->get('db_password'));
-        $this->container['db_charset'] = $this->ask('Please enter the database charset:', $this->get('db_charset'));
+        $this->container['db_host']      = $this->ask('Please enter the database host:', $this->get('db_host'));
+        $this->container['db_database']  = $this->ask('Please enter the database name:', $this->get('db_database'));
+        $this->container['db_username']  = $this->ask('Please enter the database username:', $this->get('db_username'));
+        $this->container['db_password']  = $this->ask('Please enter the database password:', $this->get('db_password'));
+        $this->container['db_charset']   = $this->ask('Please enter the database charset:', $this->get('db_charset'));
         $this->container['db_collation'] = $this->ask('Please enter the database collation:', $this->get('db_collation'));
 
         // default user
-        $this->container['user_name'] = $this->ask('Please enter a default user name:', $this->get('user_name'));
-        $this->container['user_email'] = $this->ask('Please enter a default user email:', $this->get('user_email'));
+        $this->container['user_name']     = $this->ask('Please enter a default user name:', $this->get('user_name'));
+        $this->container['user_email']    = $this->ask('Please enter a default user email:', $this->get('user_email'));
         $this->container['user_password'] = $this->ask('Please enter a default user password:', $this->get('user_password'));
 
         $this->confirmation();

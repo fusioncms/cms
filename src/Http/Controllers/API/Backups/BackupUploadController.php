@@ -27,7 +27,7 @@ class BackupUploadController extends Controller
             'file-upload' => 'required|file|mimes:'.implode(',', $acceptedMimes),
         ]);
 
-        $file = $attributes['file-upload'];
+        $file     = $attributes['file-upload'];
         $filename = Carbon::now()->format('Y-m-d-H-i-s').'.zip';
 
         // Save to backup destination disks..

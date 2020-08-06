@@ -27,7 +27,7 @@ class FieldsetAttached
      */
     public function __construct($model)
     {
-        $this->model = $model->getBuilder();
+        $this->model    = $model->getBuilder();
         $this->fieldset = $model->fieldset;
     }
 }

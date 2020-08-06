@@ -31,7 +31,7 @@ class DiscoverCommand extends Command
         Addon::discover();
 
         $count = Addon::count();
-        $term = ($count == 1) ? 'addon' : 'addons';
+        $term  = ($count == 1) ? 'addon' : 'addons';
 
         $this->info("Discovered {$count} {$term}!");
     }

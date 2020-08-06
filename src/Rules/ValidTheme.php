@@ -24,7 +24,7 @@ class ValidTheme implements Rule
      */
     public function __construct()
     {
-        $this->zipArchive = new ZipArchive();
+        $this->zipArchive    = new ZipArchive();
         $this->requiredFiles = ['theme.json', 'preview.png'];
     }
 
@@ -38,7 +38,7 @@ class ValidTheme implements Rule
      */
     public function passes($attribute, $value)
     {
-        $canUnzip = $this->zipArchive->open($value);
+        $canUnzip   = $this->zipArchive->open($value);
         $validTheme = $canUnzip === true;
 
         if ($canUnzip) {
