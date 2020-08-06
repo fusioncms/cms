@@ -43,7 +43,7 @@ class SingleController extends Controller
     public function update(SingleRequest $request, $id)
     {
         $single = $request->model->updateOrCreate([
-            'matrix_id' => $id
+            'matrix_id' => $id,
         ], $request->validated());
 
         // persist relationships..

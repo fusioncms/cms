@@ -57,7 +57,7 @@ class TermRequest extends FormRequest
             'status'      => 'required|boolean',
         ];
 
-        $rules += $this->fields->flatMap(function($field) {
+        $rules += $this->fields->flatMap(function ($field) {
             return $field->type()->rules($field, $this->{$field->handle});
         })->toArray();
 
@@ -71,7 +71,7 @@ class TermRequest extends FormRequest
      */
     public function attributes()
     {
-        return $this->fields->flatMap(function($field) {
+        return $this->fields->flatMap(function ($field) {
             return $field->type()->attributes($field, $this->{$field->handle});
         })->toArray();
     }

@@ -26,7 +26,7 @@ class SettingRequest extends FormRequest
         $rules = [];
 
         if ($fieldset = $this->route('group')->fieldset) {
-            $rules += $fieldset->fields->flatMap(function($field) {
+            $rules += $fieldset->fields->flatMap(function ($field) {
                 return $field->type()->rules($field, $this->{$field->handle});
             })->toArray();
         }
@@ -42,7 +42,7 @@ class SettingRequest extends FormRequest
     public function attributes()
     {
         if ($fieldset = $this->route('group')->fieldset) {
-            return $fieldset->fields->flatMap(function($field) {
+            return $fieldset->fields->flatMap(function ($field) {
                 return $field->type()->attributes($field, $this->{$field->handle});
             })->toArray();
         }
