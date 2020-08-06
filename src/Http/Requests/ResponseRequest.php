@@ -50,10 +50,9 @@ class ResponseRequest extends FormRequest
             'identifiable_ip_address' => 'sometimes',
         ];
 
-        foreach ($this->fields as $field) {
-            $rules = array_merge($rules,
-                $field->type()->rules($field, $this->{$field->handle}));
-        }
+        $rules += $this->fields->flatMap(function($field) {
+            return $field->type()->rules($field, $this->{$field->handle});
+        })->toArray();
 
         return $rules;
     }

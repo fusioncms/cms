@@ -213,7 +213,7 @@ abstract class Fieldtype
     }
 
     /**
-     * Set custom rules when saving field.
+     * Get custom rules when saving field.
      *
      * @param  Field $field
      * @param  mixed $value
@@ -227,25 +227,29 @@ abstract class Fieldtype
     }
 
     /**
-     * Set custom messages when saving field.
+     * Get custom messages when saving field.
      *
      * @param  Field $field
+     * @param  mixed $value
      * @return array
      */
-    public function messages(Field $field)
+    public function messages(Field $field, $value = null)
     {
         return [];
     }
 
     /**
-     * Set custom attributes for validator errors.
+     * Get custom attributes for validator errors.
      *
      * @param  Field $field
+     * @param  mixed $value
      * @return array
      */
-    public function attributes(Field $field)
+    public function attributes(Field $field, $value = null)
     {
-        return [];
+        return [
+            $field->handle => $field->name
+        ];
     }
 
     /**

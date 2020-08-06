@@ -184,7 +184,7 @@ class ReplicatorFieldtype extends Fieldtype
     }
 
     /**
-     * Set custom rules when saving field.
+     * Get custom rules when saving field.
      *
      * @param  Field $field
      * @param  mixed $value
@@ -208,6 +208,29 @@ class ReplicatorFieldtype extends Fieldtype
         }
 
         return $rules;
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @param  Field $field
+     * @param  mixed $value
+     * @return array
+     */
+    public function attributes(Field $field, $value = null)
+    {
+        $attributes = [];
+
+        foreach ($value as $key => $input) {
+            $section = Section::find($input['section']['id']);
+            $prefix  = "{$field->handle}.{$key}.fields.";
+
+            foreach ($section->fields as $sub) {
+                $attributes[$prefix . $sub->handle] = $sub->name;
+            }
+        }
+
+        return $attributes;
     }
 
     /**

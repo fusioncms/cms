@@ -26,10 +26,9 @@ class SettingRequest extends FormRequest
         $rules = [];
 
         if ($fieldset = $this->route('group')->fieldset) {
-            foreach ($fieldset->fields as $field) {
-                $rules = array_merge($rules,
-                    $field->type()->rules($field, $this->{$field->handle}));
-            }
+            $rules += $fieldset->fields->flatMap(function($field) {
+                return $field->type()->rules($field, $this->{$field->handle});
+            })->toArray();
         }
 
         return $rules;
