@@ -13,7 +13,7 @@ class TermRequest extends FormRequest
         $this->taxonomy = request()->route('taxonomy');
         $this->model = (new Builder($this->taxonomy->handle))->make();
         $this->fieldset = $this->taxonomy->fieldset;
-        $this->fields = $this->fieldset ? $this->fieldset->database() : [];
+        $this->fields = $this->fieldset ? $this->fieldset->fields : [];
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
     }
 

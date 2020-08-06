@@ -14,8 +14,7 @@
 							v-else
 							:is="field.type.id + '-fieldtype'"
 							:field="field"
-							:has-error="form.errors.has(field.handle)"
-							:error-message="form.errors.get(field.handle)"
+							:errors="form.errors"
 							v-model="form[field.handle]">
 						</component>
 					</div>

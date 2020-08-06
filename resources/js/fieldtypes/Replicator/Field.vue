@@ -94,7 +94,8 @@
 
         methods: {
             fieldErrors(handle) {
-                let errors = _.pickBy(this.errors.errors, (value, key) => _.startsWith(key, handle))
+                let errors = _.has(this.errors, 'errors') ? this.errors.errors : {}
+                    errors = _.pickBy(errors, (value, key) => _.startsWith(key, handle))
                     errors = _.mapKeys(errors, (value, key) => _.replace(key, handle, ''))
 
                 return new Errors(errors)
