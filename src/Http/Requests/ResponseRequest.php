@@ -50,10 +50,22 @@ class ResponseRequest extends FormRequest
             'identifiable_ip_address' => 'sometimes',
         ];
 
-        foreach ($this->fields as $field) {
-            $rules[$field->handle] = $field->validation ?: 'sometimes';
-        }
+        $rules += $this->fields->flatMap(function($field) {
+            return $field->type()->rules($field, $this->{$field->handle});
+        })->toArray();
 
         return $rules;
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return $this->fields->flatMap(function($field) {
+            return $field->type()->attributes($field, $this->{$field->handle});
+        })->toArray();
     }
 }

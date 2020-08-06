@@ -1,5 +1,5 @@
 <template>
-    <div class="form__group">
+    <div>
         <label
             class="form__label"
             :for="field.handle"
@@ -40,12 +40,13 @@
             <template v-for="(replicant, index) in replicants">
                 <div v-show="index == active" :key="`replicant-${index}-panel`" class="tab__panel">
                     <component
-                        v-for="field in fields(replicant.section)"
-                        :key="field.handle"
+                        v-for="sub in fields(replicant.section)"
+                        :key="sub.handle"
                         class="form__group"
-                        :is="field.type.id + '-fieldtype'"
-                        :field="field"
-                        v-model="replicant.fields[field.handle]">
+                        :is="sub.type.id + '-fieldtype'"
+                        :field="sub"
+                        :errors="fieldErrors(`${field.handle}.${index}.fields.`)"
+                        v-model="replicant.fields[sub.handle]">
                     </component>
                 </div>
             </template>
@@ -54,6 +55,8 @@
 </template>
 
 <script>
+    import Errors from '../../services/Errors'
+
     export default {
         name: 'replicator-fieldtype',
 
@@ -72,10 +75,15 @@
             },
 
             value: {
-                type: Array,
                 required: false,
-                default: () => [],
+                default: null
             },
+
+            errors: {
+                type: Object,
+                required: false,
+                default: () => {}
+            }
         },
 
         watch: {
@@ -85,6 +93,18 @@
         },
 
         methods: {
+            fieldErrors(handle) {
+                let errors = _.has(this.errors, 'errors') ? this.errors.errors : {}
+                    errors = _.pickBy(errors, (value, key) => _.startsWith(key, handle))
+                    errors = _.mapKeys(errors, (value, key) => _.replace(key, handle, ''))
+
+                return new Errors(errors)
+            },
+
+            _errorMessage(handle) {
+                return this.errors ? this.errors.get(handle) : ''
+            },
+
             fields(section) {
                 let index = _.findIndex(this.sections,
                     (item) => item.id == section.id)

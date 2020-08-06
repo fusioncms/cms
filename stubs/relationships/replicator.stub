@@ -1,0 +1,16 @@
+    /**
+     * Get '{handle}' attribute.
+     *
+     * @return Collection
+     */
+    public function get{studly_handle}Attribute()
+    {
+    	$replicator = \Fusion\Models\Replicator::findOrFail({id});
+    	$sections   = $replicator->sections;
+
+        return $sections->flatMap(function($section) use ($replicator) {
+            return $this->{"rp_{$section->handle}_{$replicator->uniqid}"};
+        })
+        ->sortBy('pivot.order')
+        ->values();
+    }

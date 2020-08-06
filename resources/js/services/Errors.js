@@ -1,6 +1,6 @@
 export default class Errors {
-    constructor() {
-        this.errors = {}
+    constructor(errors = {}) {
+        this.errors = errors
     }
 
     has(field) {

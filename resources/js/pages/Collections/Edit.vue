@@ -47,7 +47,7 @@
 
                     this.$router.push('/collection/' + this.collection.slug)
                 }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
+                    toast(response.message, 'failed')
                 })
             },
         },

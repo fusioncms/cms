@@ -42,10 +42,9 @@ class SingleController extends Controller
      */
     public function update(SingleRequest $request, $id)
     {
-        $matrix = $request->matrix;
-        $attributes = $request->validated();
-
-        $single = $request->model->updateOrCreate(['matrix_id' => $id], $attributes);
+        $single = $request->model->updateOrCreate([
+            'matrix_id' => $id
+        ], $request->validated());
 
         // persist relationships..
         foreach ($request->relationships as $relationship) {

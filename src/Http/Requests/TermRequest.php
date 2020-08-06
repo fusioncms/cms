@@ -13,7 +13,7 @@ class TermRequest extends FormRequest
         $this->taxonomy = request()->route('taxonomy');
         $this->model = (new Builder($this->taxonomy->handle))->make();
         $this->fieldset = $this->taxonomy->fieldset;
-        $this->fields = $this->fieldset ? $this->fieldset->database() : [];
+        $this->fields = $this->fieldset ? $this->fieldset->fields : [];
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
     }
 
@@ -57,11 +57,23 @@ class TermRequest extends FormRequest
             'status'      => 'required|boolean',
         ];
 
-        foreach ($this->fields as $field) {
-            $rules[$field->handle] = $field->validation ?: 'sometimes';
-        }
+        $rules += $this->fields->flatMap(function($field) {
+            return $field->type()->rules($field, $this->{$field->handle});
+        })->toArray();
 
         return $rules;
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return $this->fields->flatMap(function($field) {
+            return $field->type()->attributes($field, $this->{$field->handle});
+        })->toArray();
     }
 
     /**

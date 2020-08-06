@@ -21,14 +21,15 @@
 
 				<p-tabs v-if="sections.body.length > 0">
                     <p-tab v-for="section in sections.body" :key="section.handle" :name="section.name">
-                        <div v-for="field in section.fields" :key="field.handle" class="form__group">
-                            <component
-                                :is="field.type.id + '-fieldtype'"
-                                :field="field"
-                                v-model="form[field.handle]"
-                            >
-                            </component>
-                        </div>
+                        <component
+                            class="form__group"
+                            v-for="field in section.fields"
+                            :key="field.handle"
+                            :is="field.type.id + '-fieldtype'"
+                            :field="field"
+                            :errors="form.errors"
+                            v-model="form[field.handle]">
+                        </component>
                     </p-tab>
                 </p-tabs>
 
@@ -71,12 +72,14 @@
                 </div>
 
                 <div class="card__body">
-                    <!-- Loop through each section field -->
                     <component
+                        class="form__group"
+                        v-for="field in section.fields"
+                        :key="field.handle"
                         :is="field.type.id + '-fieldtype'"
                         :field="field"
-                        v-model="form[field.handle]"
-                        v-for="field in section.fields" :key="field.handle">
+                        :errors="form.errors"
+                        v-model="form[field.handle]">
                     </component>
                 </div>
             </div>
