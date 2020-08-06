@@ -23,6 +23,17 @@
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum luctus sagittis erat, imperdiet luctus arcu pellentesque vitae.</p>
                             
                             <p><a href="#">Inline Link</a></p>
+
+                            <h3>Badges</h3>
+                            <p>
+                                <p-badge>Default</p-badge>
+                                <p-badge class="badge--primary">Primary</p-badge>
+                                <p-badge class="badge--secondary">Secondary</p-badge>
+                                <p-badge class="badge--info">Info</p-badge>
+                                <p-badge class="badge--success">Success</p-badge>
+                                <p-badge class="badge--warning">Warning</p-badge>
+                                <p-badge class="badge--danger">Danger</p-badge>
+                            </p>
                             <!-- <div class="flex">
                                 <ul class="w-1/2">
                                     <li>List item</li>

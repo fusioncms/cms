@@ -6,10 +6,9 @@
             :class="classes"
             v-bind="$attrs"
             class="button"
-            :disabled="props.isLoading"
-        >
+            :disabled="props.isLoading">
             <slot></slot>
-
+            
             <fa-icon v-if="props.isLoading" icon="circle-notch" class="ml-3 fa-fw fa-spin"></fa-icon>
         </button>
     </renderless-button>

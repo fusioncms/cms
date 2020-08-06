@@ -15,6 +15,8 @@
         <file-uploader ref="uploader"></file-uploader>
             <div class="card">
                 <div class="card__body">
+                    <breadcrumb-action></breadcrumb-action>
+                    
                     <div class="toolbar">
                         <div class="toolbar__group toolbar__group--grow">
                             <search-action></search-action>
@@ -27,18 +29,6 @@
                             <view-action></view-action>
                         </div>
                     </div>
-
-                    <breadcrumb-action></breadcrumb-action>
-
-                    <!-- <p-breadcrumbs>
-                        <p-breadcrumb></p-breadcrumb>
-                        <p-breadcrumb></p-breadcrumb>
-                        <p-breadcrumb></p-breadcrumb>
-                    </p-breadcrumbs> -->
-
-                    <!-- <div class="flex items-center border-b border-gray-200 p-3">
-                        <breadcrumb-action></breadcrumb-action>
-                    </div> -->
 
                     <file-browser></file-browser>
                     <file-paginator></file-paginator>
