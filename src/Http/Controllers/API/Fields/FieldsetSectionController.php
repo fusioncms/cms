@@ -205,12 +205,13 @@ class FieldsetSectionController extends Controller
         if ($fields->isNotEmpty()) {
             $fields->each(function ($field, $index) use ($section) {
                 $section->fields()->create([
-                    'name'     => $field['name'],
-                    'handle'   => $field['handle'],
-                    'help'     => $field['help'],
-                    'settings' => $field['settings'],
-                    'type'     => $field['type']['handle'],
-                    'order'    => ($index + 1),
+                    'name'       => $field['name'],
+                    'handle'     => $field['handle'],
+                    'help'       => $field['help'],
+                    'settings'   => $field['settings'],
+                    'validation' => $field['validation'],
+                    'type'       => $field['type']['handle'],
+                    'order'      => ($index + 1),
                 ]);
             });
         }
