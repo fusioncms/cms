@@ -22,7 +22,7 @@
             :autocomplete="autocomplete"
             :autofocus="autofocus"
             :required="required"
-            :aria-required="required" 
+            :aria-required="required"
             :aria-describedby="hasMessage ? formattedId + '_message' : null"
             @input="$emit('input', $event.target.value)">
     </p-field-group>

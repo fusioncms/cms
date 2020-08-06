@@ -23,6 +23,7 @@ Vue.component('p-frame', require('../components/Frame').default)
 Vue.component('p-autocomplete', require('../components/Autocomplete').default)
 Vue.component('cron-scheduler', require('../components/CronScheduler').default)
 Vue.component('form-container', require('../components/FormContainer').default)
+Vue.component('field-set', require('../components/Fieldset').default)
 
 // File Manager
 Vue.component('file-manager', require('../components/FileManager/FileManager').default)
