@@ -59,4 +59,16 @@ class SingleRequest extends FormRequest
 
         return $rules;
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return $this->fields->flatMap(function($field) {
+            return $field->type()->attributes($field, $this->{$field->handle});
+        })->toArray();
+    }
 }

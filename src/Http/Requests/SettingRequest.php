@@ -33,4 +33,20 @@ class SettingRequest extends FormRequest
 
         return $rules;
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        if ($fieldset = $this->route('group')->fieldset) {
+            return $fieldset->fields->flatMap(function($field) {
+                return $field->type()->attributes($field, $this->{$field->handle});
+            })->toArray();
+        }
+
+        return [];
+    }
 }
