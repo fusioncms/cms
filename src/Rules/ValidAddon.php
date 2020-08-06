@@ -24,7 +24,7 @@ class ValidAddon implements Rule
      */
     public function __construct(ZipArchive $zipArchive)
     {
-        $this->zipArchive = $zipArchive;
+        $this->zipArchive    = $zipArchive;
         $this->requiredFiles = ['addon.json'];
     }
 
@@ -39,7 +39,7 @@ class ValidAddon implements Rule
     public function passes($attribute, $value)
     {
         $canUnzip = $this->zipArchive->open($value);
-        $isValid = $canUnzip === true;
+        $isValid  = $canUnzip === true;
 
         if ($canUnzip) {
             foreach ($this->requiredFiles as $requiredFile) {

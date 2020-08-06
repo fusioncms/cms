@@ -17,11 +17,11 @@ class FormFieldtypeTest extends TestCase
         $this->handleValidationExceptions();
 
         // --
-        $this->section = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $this->section   = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $this->fieldForm = \Facades\FieldFactory::withName('Form')->withType('form')->withSection($this->section)->create();
-        $this->fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->matrix = \Facades\MatrixFactory::withName('FooBar')->asCollection()->withFieldset($this->fieldset)->create();
-        $this->model = (new Collection($this->matrix->handle))->make();
+        $this->fieldset  = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
+        $this->matrix    = \Facades\MatrixFactory::withName('FooBar')->asCollection()->withFieldset($this->fieldset)->create();
+        $this->model     = (new Collection($this->matrix->handle))->make();
 
         // --
         $this->forms = factory(Form::class, 3)->create();

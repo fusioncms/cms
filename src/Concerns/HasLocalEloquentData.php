@@ -51,10 +51,10 @@ trait HasLocalEloquentData
     {
         $instance = (new static());
 
-        $cacheFileName = config('sushi.cache-prefix', 'sushi').'-'.Str::kebab(str_replace('\\', '', static::class)).'.sqlite';
+        $cacheFileName  = config('sushi.cache-prefix', 'sushi').'-'.Str::kebab(str_replace('\\', '', static::class)).'.sqlite';
         $cacheDirectory = realpath(config('sushi.cache-path', storage_path('framework/cache')));
-        $cachePath = $cacheDirectory.'/'.$cacheFileName;
-        $modelPath = (new \ReflectionClass(static::class))->getFileName();
+        $cachePath      = $cacheDirectory.'/'.$cacheFileName;
+        $modelPath      = (new \ReflectionClass(static::class))->getFileName();
 
         $states = [
             'cache-file-found-and-up-to-date' => function () use ($cachePath) {
@@ -111,7 +111,7 @@ trait HasLocalEloquentData
             return false;
         }
 
-        $firstRow = $rows[0];
+        $firstRow  = $rows[0];
         $tableName = $this->getTable();
 
         static::resolveConnection()->getSchemaBuilder()->create($tableName, function ($table) use ($firstRow) {

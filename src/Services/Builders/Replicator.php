@@ -30,7 +30,7 @@ class Replicator extends Builder implements BuilderContract
         parent::__construct();
 
         $this->replicator = \Fusion\Models\Replicator::where('uniqid', $uniqid)->firstOrFail();
-        $this->section = $section;
+        $this->section    = $section;
     }
 
     /**
@@ -43,9 +43,9 @@ class Replicator extends Builder implements BuilderContract
         $handle = "{$prefix}_{$this->section->handle}_{$suffix}";
 
         $className = Str::studly($handle);
-        $fillable = ['replicator_id', 'section_id'];
-        $casts = [];
-        $fields = $this->section->fields ?? collect();
+        $fillable  = ['replicator_id', 'section_id'];
+        $casts     = [];
+        $fields    = $this->section->fields ?? collect();
 
         $fields = $fields->reject(function ($field) {
             $fieldtype = fieldtypes()->get($field->type);
@@ -58,9 +58,9 @@ class Replicator extends Builder implements BuilderContract
         });
 
         foreach ($fields as $field) {
-            $fieldtype = fieldtypes()->get($field->type);
+            $fieldtype  = fieldtypes()->get($field->type);
             $fillable[] = $field->handle;
-            $casts[] = $field->handle.'\' => \''.$fieldtype->cast;
+            $casts[]    = $field->handle.'\' => \''.$fieldtype->cast;
         }
 
         $path = fusion_path("/src/Models/Replicators/{$className}.php");

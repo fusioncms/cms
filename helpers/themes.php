@@ -65,7 +65,7 @@ if (!function_exists('theme_option')) {
      */
     function theme_option($key, $default = '')
     {
-        $theme = Theme::active();
+        $theme  = Theme::active();
         $values = collect();
 
         if (theme_preview()) {
@@ -74,7 +74,7 @@ if (!function_exists('theme_option')) {
             $optionsFilePath = storage_path('app/themes/'.$theme->get('namespace').'.json');
 
             $options = collect(json_decode(File::get($optionsFilePath), true));
-            $values = $values->merge($options);
+            $values  = $values->merge($options);
         }
 
         $dotNotation = $values->mapWithKeys(function ($value, $handle) {
@@ -98,8 +98,8 @@ if (!function_exists('theme_mix')) {
      */
     function theme_mix($path)
     {
-        $theme = Theme::active();
-        $namespace = $theme->get('namespace');
+        $theme        = Theme::active();
+        $namespace    = $theme->get('namespace');
         $manifestPath = public_path('theme/mix-manifest.json');
 
         if (!File::exists($manifestPath)) {

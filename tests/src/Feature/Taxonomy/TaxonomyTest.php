@@ -160,10 +160,10 @@ class TaxonomyTest extends TestCase
         $taxonomy = factory(Taxonomy::class)->create();
 
         // update ----
-        $attributes = $taxonomy->toArray();
-        $attributes['name'] = 'New Name';
+        $attributes           = $taxonomy->toArray();
+        $attributes['name']   = 'New Name';
         $attributes['handle'] = 'new_name';
-        $attributes['slug'] = 'new-name';
+        $attributes['slug']   = 'new-name';
 
         unset($attributes['created_at'], $attributes['updated_at']);
 
@@ -207,7 +207,7 @@ class TaxonomyTest extends TestCase
      */
     public function each_taxonomy_must_have_a_unique_slug_and_handle()
     {
-        $taxonomy = factory(Taxonomy::class)->create()->toArray();
+        $taxonomy       = factory(Taxonomy::class)->create()->toArray();
         $taxonomy['id'] = null;
 
         $this

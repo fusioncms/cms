@@ -18,7 +18,7 @@ class FieldsetTest extends TestCase
         $this->handleValidationExceptions();
 
         // --
-        $this->section = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $this->section  = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $this->fieldFoo = \Facades\FieldFactory::withName('Foo')->withType('asset')->withSection($this->section)->create();
         $this->fieldBar = \Facades\FieldFactory::withName('Bar')->withType('textarea')->withSection($this->section)->create();
         $this->fieldBaz = \Facades\FieldFactory::withName('Baz')->withType('divider')->withSection($this->section)->create();

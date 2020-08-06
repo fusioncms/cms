@@ -22,12 +22,12 @@ class NodeReorderController extends Controller
     {
         $this->authorize('nodes.update');
 
-        $menu = Menu::find($menu)->firstOrFail();
+        $menu  = Menu::find($menu)->firstOrFail();
         $model = (new Builder($menu->handle))->make();
         $nodes = $request->nodes;
 
         foreach ($nodes as $id => $node) {
-            $record = $model->find($id);
+            $record        = $model->find($id);
             $record->order = $node['order'];
 
             $record->save();

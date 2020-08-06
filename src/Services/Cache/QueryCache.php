@@ -25,7 +25,7 @@ class QueryCache
      */
     public function __construct($store, $length)
     {
-        $this->store = $store;
+        $this->store  = $store;
         $this->length = $length;
     }
 
@@ -36,7 +36,7 @@ class QueryCache
      */
     public function enabled()
     {
-        $length = $this->length === 0 ? false : true;
+        $length  = $this->length === 0 ? false : true;
         $setting = env('CACHE_ENABLED', true);
 
         return ($length === true) and ($setting === true);
@@ -84,7 +84,7 @@ class QueryCache
             return $this->performQuery($builder, $columns);
         }
 
-        $key = $this->generateKey($builder, $columns);
+        $key   = $this->generateKey($builder, $columns);
         $cache = $this->getCache($builder);
 
         return $cache->remember($key, $this->length, function () use ($builder, $columns) {
@@ -140,7 +140,7 @@ class QueryCache
     protected function generateKey(QueryCacheBuilder $builder, array $columns)
     {
         $query = json_encode([$builder->toSql() => $builder->getBindings()]);
-        $key = sha1($query);
+        $key   = sha1($query);
 
         return $key;
     }

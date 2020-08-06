@@ -79,7 +79,7 @@ class FileFieldtype extends Fieldtype
     public function persistRelationship($model, Field $field)
     {
         if (request()->hasFile($field->handle)) {
-            $files = request()->file($field->handle);
+            $files     = request()->file($field->handle);
             $directory = Directory::firstOrCreate([
                 'name' => ($name = $field->settings['directory'] ?? 'uploads'),
                 'slug' => Str::slug($name),

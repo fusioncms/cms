@@ -47,7 +47,7 @@ class SettingController extends Controller
     {
         // Filter out relationships
         $relationships = $setting->fieldset->relationships();
-        $validated = collect($request->validated())->reject(function ($value, $handle) use ($relationships) {
+        $validated     = collect($request->validated())->reject(function ($value, $handle) use ($relationships) {
             return $relationships->contains('handle', $handle);
         })->toArray();
 

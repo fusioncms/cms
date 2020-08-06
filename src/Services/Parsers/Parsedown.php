@@ -1201,7 +1201,7 @@ class Parsedown
 
             $Definition = $this->DefinitionData['Reference'][$definition];
 
-            $Element['attributes']['href'] = $Definition['url'];
+            $Element['attributes']['href']  = $Definition['url'];
             $Element['attributes']['title'] = $Definition['title'];
         }
 
@@ -1363,9 +1363,9 @@ class Parsedown
         // very strongly consider an alternative if you're writing an
         // extension
         elseif (isset($Element['rawHtml'])) {
-            $text = $Element['rawHtml'];
+            $text                   = $Element['rawHtml'];
             $allowRawHtmlInSafeMode = isset($Element['allowRawHtmlInSafeMode']) && $Element['allowRawHtmlInSafeMode'];
-            $permitRawHtml = !$this->safeMode || $allowRawHtmlInSafeMode;
+            $permitRawHtml          = !$this->safeMode || $allowRawHtmlInSafeMode;
         }
 
         if (isset($text)) {
@@ -1437,7 +1437,7 @@ class Parsedown
 
     protected function sanitiseElement(array $Element)
     {
-        static $goodAttribute = '/^[a-zA-Z0-9][a-zA-Z0-9-_]*+$/';
+        static $goodAttribute    = '/^[a-zA-Z0-9][a-zA-Z0-9-_]*+$/';
         static $safeUrlNameToAtt = [
             'a'   => 'href',
             'img' => 'src',

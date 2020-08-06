@@ -19,7 +19,7 @@ class LoadNavigation
      */
     public function handle()
     {
-        $matrices = Matrix::where('sidebar', true)->where('parent_id', 0)->orderBy('name')->get();
+        $matrices   = Matrix::where('sidebar', true)->where('parent_id', 0)->orderBy('name')->get();
         $taxonomies = Taxonomy::where('sidebar', true)->orderBy('name')->get();
 
         Menu::make('admin', function ($menu) use ($matrices, $taxonomies) {

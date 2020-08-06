@@ -44,7 +44,7 @@ if (!function_exists('validationRules')) {
             * Rule: 'dimensions'
             */
             } elseif ($field == 'dimensions') {
-                $dimensions = [];
+                $dimensions   = [];
                 $dimensions[] = isset($value['min_width']) ? 'min_width='.$value['min_width'] : '';
                 $dimensions[] = isset($value['min_height']) ? 'min_height='.$value['min_height'] : '';
 
@@ -57,18 +57,18 @@ if (!function_exists('validationRules')) {
                 * File size requirements
                 */
             } elseif ($field == 'file_min') {
-                $bytes = convert_to_bytes($value);
+                $bytes     = convert_to_bytes($value);
                 $kilobytes = byte_converter($bytes, 'B', 'KB');
-                $rules[] = 'min:'.$kilobytes;
+                $rules[]   = 'min:'.$kilobytes;
 
             /*
             * Rule: 'file_max'
             * File size requirements
             */
             } elseif ($field == 'file_max') {
-                $bytes = convert_to_bytes($value);
+                $bytes     = convert_to_bytes($value);
                 $kilobytes = byte_converter($bytes, 'B', 'KB');
-                $rules[] = 'max:'.$kilobytes;
+                $rules[]   = 'max:'.$kilobytes;
             } else {
                 $rules[] = $field.':'.$value;
             }

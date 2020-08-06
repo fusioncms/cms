@@ -126,7 +126,7 @@ class PasswordTest extends TestCase
      */
     public function new_passwords_must_be_at_least_6_characters_long()
     {
-        $this->attributes['password'] = ($password = 'abc');
+        $this->attributes['password']              = ($password = 'abc');
         $this->attributes['password_confirmation'] = $password;
 
         $this

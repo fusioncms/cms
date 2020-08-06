@@ -19,9 +19,9 @@ class ImportLogResource extends JsonResource
      */
     public function toArray($request)
     {
-        $response = parent::toArray($request);
+        $response             = parent::toArray($request);
         $response['happened'] = Carbon::parse($response['created_at'])->diffForHumans();
-        $response['logs'] = [];
+        $response['logs']     = [];
 
         if ($this->status !== 'setup') {
             $response['logs'] = $this->packageLogs();
@@ -43,7 +43,7 @@ class ImportLogResource extends JsonResource
 
         // Settings..
         $total = $logFile->key();
-        $page = (int) Arr::get(request()->query(), 'page', 1);
+        $page  = (int) Arr::get(request()->query(), 'page', 1);
         $limit = (int) Arr::get(request()->query(), 'limit', 25);
         $pages = ceil($total / $limit);
 
@@ -62,7 +62,7 @@ class ImportLogResource extends JsonResource
         ];
 
         foreach ($lines as $line) {
-            $log = json_decode($line, true);
+            $log             = json_decode($line, true);
             $log['happened'] = Carbon::parse($log['datetime'])->diffForHumans();
 
             $logs['data'][] = $log;

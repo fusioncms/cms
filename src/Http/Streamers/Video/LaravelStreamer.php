@@ -12,7 +12,7 @@ class LaravelStreamer
 
     public function __construct($source, $mimetype)
     {
-        $this->source = $source;
+        $this->source   = $source;
         $this->mimetype = $mimetype;
     }
 

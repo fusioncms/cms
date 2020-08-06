@@ -138,7 +138,7 @@ class Dispatcher
     {
         $this->disableMiddleware();
 
-        $uri = url($this->baseUrl.'/'.$endpoint);
+        $uri     = url($this->baseUrl.'/'.$endpoint);
         $current = request();
         $request = Request::create($uri, $method, $parameters);
 
@@ -167,7 +167,7 @@ class Dispatcher
     protected function validApiRoute(Request $request)
     {
         $routes = Route::getRoutes();
-        $route = $routes->match($request);
+        $route  = $routes->match($request);
 
         if (Str::startsWith($route->uri(), 'api/')) {
             return true;

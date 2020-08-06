@@ -27,7 +27,7 @@ class FieldsetFactory implements Factory
         $fieldset = factory(Fieldset::class)->create();
 
         if ($this->name) {
-            $overrides['name'] = $this->name;
+            $overrides['name']   = $this->name;
             $overrides['handle'] = Str::slug($this->name, '_');
         }
 

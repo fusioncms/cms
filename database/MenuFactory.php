@@ -27,7 +27,7 @@ class MenuFactory implements Factory
         $overrides = [];
 
         if ($this->name) {
-            $overrides['name'] = $this->name;
+            $overrides['name']   = $this->name;
             $overrides['handle'] = Str::snake($this->name);
         }
 

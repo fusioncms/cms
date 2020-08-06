@@ -119,14 +119,14 @@ class Form extends Model
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $subject = $activity->subject;
-        $action = ucfirst($eventName);
+        $subject    = $activity->subject;
+        $action     = ucfirst($eventName);
         $properties = [
             'link' => "forms/{$subject->id}/edit",
             'icon' => 'paper-plane',
         ];
 
         $activity->description = "{$action} form ({$subject->name})";
-        $activity->properties = $properties;
+        $activity->properties  = $properties;
     }
 }

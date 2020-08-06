@@ -47,8 +47,8 @@ class MatrixFactory implements Factory
         $overrides = [];
 
         if ($this->name) {
-            $overrides['name'] = $this->name;
-            $overrides['slug'] = Str::slug($this->name, '-');
+            $overrides['name']   = $this->name;
+            $overrides['slug']   = Str::slug($this->name, '-');
             $overrides['handle'] = Str::slug($this->name, '_');
         }
 

@@ -10,10 +10,10 @@ class TermRequest extends FormRequest
 {
     public function __construct()
     {
-        $this->taxonomy = request()->route('taxonomy');
-        $this->model = (new Builder($this->taxonomy->handle))->make();
-        $this->fieldset = $this->taxonomy->fieldset;
-        $this->fields = $this->fieldset ? $this->fieldset->fields : [];
+        $this->taxonomy      = request()->route('taxonomy');
+        $this->model         = (new Builder($this->taxonomy->handle))->make();
+        $this->fieldset      = $this->taxonomy->fieldset;
+        $this->fields        = $this->fieldset ? $this->fieldset->fields : [];
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
     }
 
