@@ -58,7 +58,7 @@ class CollectionRequest extends FormRequest
             $rules['slug'] .= '|required';
         }
 
-        $rules += $this->fields->flatMap(function($field) {
+        $rules += $this->fields->flatMap(function ($field) {
             return $field->type()->rules($field, $this->{$field->handle});
         })->toArray();
 
@@ -72,7 +72,7 @@ class CollectionRequest extends FormRequest
      */
     public function attributes()
     {
-        return $this->fields->flatMap(function($field) {
+        return $this->fields->flatMap(function ($field) {
             return $field->type()->attributes($field, $this->{$field->handle});
         })->toArray();
     }

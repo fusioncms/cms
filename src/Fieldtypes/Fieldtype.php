@@ -215,22 +215,24 @@ abstract class Fieldtype
     /**
      * Get custom rules when saving field.
      *
-     * @param  Field $field
-     * @param  mixed $value
+     * @param Field $field
+     * @param mixed $value
+     *
      * @return array
      */
     public function rules(Field $field, $value = null)
     {
         return [
-            $field->handle => $field->validation ?: 'sometimes'
+            $field->handle => $field->validation ?: 'sometimes',
         ];
     }
 
     /**
      * Get custom messages when saving field.
      *
-     * @param  Field $field
-     * @param  mixed $value
+     * @param Field $field
+     * @param mixed $value
+     *
      * @return array
      */
     public function messages(Field $field, $value = null)
@@ -241,14 +243,15 @@ abstract class Fieldtype
     /**
      * Get custom attributes for validator errors.
      *
-     * @param  Field $field
-     * @param  mixed $value
+     * @param Field $field
+     * @param mixed $value
+     *
      * @return array
      */
     public function attributes(Field $field, $value = null)
     {
         return [
-            $field->handle => $field->name
+            $field->handle => $field->name,
         ];
     }
 

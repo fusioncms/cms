@@ -113,8 +113,8 @@ class ReplicatorFieldtype extends Fieldtype
      */
     public function generateRelationship(Field $field)
     {
-        $replicator    = Replicator::find($field->settings['replicator']);
-        $stub          = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
+        $replicator = Replicator::find($field->settings['replicator']);
+        $stub = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
         $relationships = collect([]);
 
         $relationships->push(strtr($stub, [
@@ -122,12 +122,12 @@ class ReplicatorFieldtype extends Fieldtype
             '{handle}'        => $replicator->handle,
             '{studly_handle}' => Str::studly($replicator->handle),
         ]));
-        
+
         $replicator->sections->each(function ($section) use ($replicator, $relationships) {
             $replicant = $replicator->getBuilder($section);
             $namespace = get_class($replicant);
-            $handle    = "rp_{$section->handle}_{$replicator->uniqid}";
-            $stub      = File::get(fusion_path("/stubs/relationships/morphToMany.stub"));
+            $handle = "rp_{$section->handle}_{$replicator->uniqid}";
+            $stub = File::get(fusion_path('/stubs/relationships/morphToMany.stub'));
 
             $relationships->push(strtr($stub, [
                 '{handle}'            => $handle,
@@ -136,7 +136,7 @@ class ReplicatorFieldtype extends Fieldtype
                 '{related_namespace}' => $namespace,
                 '{related_table}'     => 'replicators_pivot',
                 '{where_clause}'      => "->where('replicators_pivot.section_id', {$section->id})",
-                '{order_clause}'      => "->withPivot('order')"
+                '{order_clause}'      => "->withPivot('order')",
             ]));
         });
 
@@ -146,24 +146,25 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Update relationship data in storage.
      *
-     * @param  \Illuminate\Eloquent\Model $model
-     * @param  \Fusion\Models\Field       $field
+     * @param \Illuminate\Eloquent\Model $model
+     * @param \Fusion\Models\Field       $field
+     *
      * @return void
      */
     public function persistRelationship($model, Field $field)
     {
         $replicator = Replicator::find($field->settings['replicator']);
         $replicants = $this->persistReplicants($replicator, $field);
-        $sections   = $replicator->sections;
+        $sections = $replicator->sections;
 
         $sections->each(function ($section) use ($model, $replicator, $replicants) {
-            $handle   = "rp_{$section->handle}_{$replicator->uniqid}";
+            $handle = "rp_{$section->handle}_{$replicator->uniqid}";
             $existing = $model->{$handle}->pluck('id');
             $attached = $replicants->where('section_id', $section->id)
                 ->mapWithKeys(function ($replicant, $index) use ($section) {
-                    return [ $replicant->id => [
+                    return [$replicant->id => [
                         'section_id' => $section->id,
-                        'order'      => ($index + 1)]
+                        'order'      => ($index + 1), ],
                     ];
                 });
 
@@ -186,8 +187,9 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Get custom rules when saving field.
      *
-     * @param  Field $field
-     * @param  mixed $value
+     * @param Field $field
+     * @param mixed $value
+     *
      * @return array
      */
     public function rules(Field $field, $value = null)
@@ -196,14 +198,14 @@ class ReplicatorFieldtype extends Fieldtype
 
         foreach ($value as $key => $input) {
             $section = Section::find($input['section']['id']);
-            $prefix  = "{$field->handle}.{$key}.fields.";
+            $prefix = "{$field->handle}.{$key}.fields.";
 
             foreach ($section->fields as $sub) {
-                $rule       = $sub->type()->rules($sub, $value[$key]['fields'][$sub->handle]);
-                $handle     = key($rule);
+                $rule = $sub->type()->rules($sub, $value[$key]['fields'][$sub->handle]);
+                $handle = key($rule);
                 $validation = current($rule);
 
-                $rules[$prefix . $handle] = $validation;
+                $rules[$prefix.$handle] = $validation;
             }
         }
 
@@ -213,8 +215,9 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Get custom attributes for validator errors.
      *
-     * @param  Field $field
-     * @param  mixed $value
+     * @param Field $field
+     * @param mixed $value
+     *
      * @return array
      */
     public function attributes(Field $field, $value = null)
@@ -223,10 +226,10 @@ class ReplicatorFieldtype extends Fieldtype
 
         foreach ($value as $key => $input) {
             $section = Section::find($input['section']['id']);
-            $prefix  = "{$field->handle}.{$key}.fields.";
+            $prefix = "{$field->handle}.{$key}.fields.";
 
             foreach ($section->fields as $sub) {
-                $attributes[$prefix . $sub->handle] = $sub->name;
+                $attributes[$prefix.$sub->handle] = $sub->name;
             }
         }
 
@@ -236,8 +239,9 @@ class ReplicatorFieldtype extends Fieldtype
     /**
      * Returns resource object of field.
      *
-     * @param  \Illuminate\Eloquent\Model $model
-     * @param  \Fusion\Models\Field       $field
+     * @param \Illuminate\Eloquent\Model $model
+     * @param \Fusion\Models\Field       $field
+     *
      * @return \Fusion\Http\Resources\ReplicantResource
      */
     public function getResource($model, Field $field)
@@ -248,10 +252,11 @@ class ReplicatorFieldtype extends Fieldtype
     }
 
     /**
-     * Persist replicator's replicants. 
+     * Persist replicator's replicants.
      *
-     * @param  \Fusion\Models\Replicator  $replicator
-     * @param  \Fusion\Models\Field       $field
+     * @param \Fusion\Models\Replicator $replicator
+     * @param \Fusion\Models\Field      $field
+     *
      * @return \Illuminate\Support\Collection
      */
     private function persistReplicants(Replicator $replicator, Field $field)
