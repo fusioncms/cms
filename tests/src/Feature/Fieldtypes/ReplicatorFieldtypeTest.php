@@ -215,8 +215,9 @@ class ReplicatorFieldtypeTest extends TestCase
         // make assertions..
         foreach ($replicator->sections as $section) {
             $builder = $replicator->getBuilder($section);
+            $handle  = "rp_{$section->handle}_{$replicator->uniqid}";
 
-            foreach ($entry->{"rp_{$section->handle}"} as $replicant) {
+            foreach ($entry->{$handle} as $replicant) {
                 $this->assertDatabaseHas('replicators_pivot', [
                     'replicant_id' => $replicant->id,
                     'section_id'   => $section->id,
@@ -403,7 +404,7 @@ class ReplicatorFieldtypeTest extends TestCase
         $updated = collect([]);
 
         foreach ($replicator->sections as $section) {
-            foreach ($entry->{"rp_{$section->handle}"} as $key => $replicant) {
+            foreach ($entry->{"rp_{$section->handle}_{$replicator->uniqid}"} as $key => $replicant) {
                 if ($key == 0) {
                     $removed->push($replicant);
                 } else {

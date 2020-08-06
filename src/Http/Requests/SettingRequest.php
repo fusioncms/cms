@@ -27,7 +27,8 @@ class SettingRequest extends FormRequest
 
         if ($fieldset = $this->route('group')->fieldset) {
             foreach ($fieldset->fields as $field) {
-                $rules[$field->handle] = $field->validation ?: 'sometimes';
+                $rules = array_merge($rules,
+                    $field->type()->rules($field, $this->{$field->handle}));
             }
         }
 

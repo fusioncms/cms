@@ -58,7 +58,8 @@ class TermRequest extends FormRequest
         ];
 
         foreach ($this->fields as $field) {
-            $rules[$field->handle] = $field->validation ?: 'sometimes';
+            $rules = array_merge($rules,
+                $field->type()->rules($field, $this->{$field->handle}));
         }
 
         return $rules;

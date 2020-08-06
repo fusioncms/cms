@@ -213,35 +213,37 @@ abstract class Fieldtype
     }
 
     /**
-     * Set custom rules for form request validator.
+     * Set custom rules when saving field.
      *
-     * @param mixed $value
-     * @param  $field
-     *
+     * @param  Field $field
+     * @param  mixed $value
      * @return array
      */
-    public function rules($value = null, $field = null)
+    public function rules(Field $field, $value = null)
     {
-        if (is_null($field)) {
-            return [];
-        }
+        return [
+            $field->handle => $field->validation ?: 'sometimes'
+        ];
+    }
 
-        $validation = $field->validation;
-        $validation = validationRules($validation);
-        $validation = implode('|', $validation);
-
-        return [$field->handle => $validation];
+    /**
+     * Set custom messages when saving field.
+     *
+     * @param  Field $field
+     * @return array
+     */
+    public function messages(Field $field)
+    {
+        return [];
     }
 
     /**
      * Set custom attributes for validator errors.
      *
-     * @param mixed $value
-     * @param  $field
-     *
+     * @param  Field $field
      * @return array
      */
-    public function attributes($value = null, $field = null)
+    public function attributes(Field $field)
     {
         return [];
     }
