@@ -19,7 +19,6 @@ Vue.component('recent-news', require('../components/RecentNews').default)
 Vue.component('quicklinks', require('../components/Quicklinks').default)
 Vue.component('icon-picker', require('../components/IconPicker').default)
 
-Vue.component('p-frame', require('../components/Frame').default)
 Vue.component('form-container', require('../components/FormContainer').default)
 Vue.component('field-set', require('../components/Fieldset').default)
 

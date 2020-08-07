@@ -1,10 +1,10 @@
 <template>
-    <h1 class="app-title">
-        <div v-if="icon" class="app-title__icon">
+    <h1 class="page-title">
+        <div v-if="icon" class="page-title__icon">
             <fa-icon :icon="['fas', icon]" class="fa-fw"></fa-icon>
         </div>
 
-        <span class="app-title__text">
+        <span class="page-title__text">
             <slot></slot>
         </span>
     </h1>
@@ -12,6 +12,8 @@
 
 <script>
     export default {
+        name: 'page-title',
+
         props: ['icon'],
     }
 </script>

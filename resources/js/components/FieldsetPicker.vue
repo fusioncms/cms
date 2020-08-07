@@ -12,7 +12,7 @@
 
 <script>
     export default {
-        name: 'field-set',
+        name: 'fieldset-picker',
 
         data() {
             return {
