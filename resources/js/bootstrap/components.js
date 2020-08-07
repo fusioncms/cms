@@ -9,7 +9,6 @@ Vue.component('blank-layout', require('../layouts/Blank').default)
 // App
 Vue.component('app', require('../components/App').default)
 Vue.component('app-title', require('../components/AppTitle').default)
-Vue.component('redactor', require('../components/Redactor').default)
 Vue.component('tos-modal', require('../components/Modals/TOSModal').default)
 Vue.component('privacy-modal', require('../components/Modals/PrivacyModal').default)
 Vue.component('confirm-modal', require('../components/Modals/ConfirmModal').default)
@@ -19,9 +18,8 @@ Vue.component('recent-activity', require('../components/RecentActivity').default
 Vue.component('recent-news', require('../components/RecentNews').default)
 Vue.component('quicklinks', require('../components/Quicklinks').default)
 Vue.component('icon-picker', require('../components/IconPicker').default)
+
 Vue.component('p-frame', require('../components/Frame').default)
-Vue.component('p-autocomplete', require('../components/Autocomplete').default)
-Vue.component('cron-scheduler', require('../components/CronScheduler').default)
 Vue.component('form-container', require('../components/FormContainer').default)
 Vue.component('field-set', require('../components/Fieldset').default)
 

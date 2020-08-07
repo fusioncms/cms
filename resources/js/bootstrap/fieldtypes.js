@@ -53,6 +53,7 @@ Vue.component('radio-fieldtype-settings', () => import('../fieldtypes/Radio/Sett
 
 Vue.component('redactor-fieldtype', () => import('../fieldtypes/Redactor/Field'))
 Vue.component('redactor-fieldtype-settings', () => import('../fieldtypes/Redactor/Settings'))
+Vue.component('redactor', require('../fieldtypes/Redactor/Redactor').default)
 
 Vue.component('replicator-fieldtype', () => import('../fieldtypes/Replicator/Field'))
 Vue.component('replicator-fieldtype-settings', () => import('../fieldtypes/Replicator/Settings'))

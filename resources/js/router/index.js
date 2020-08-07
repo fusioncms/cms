@@ -419,56 +419,6 @@ const router = new Router({
         },
 
         {
-            path: '/importer',
-            component: () => import('../pages/Importer/Index'),
-            name: 'importer',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-
-        {
-            path: '/importer/create',
-            component: () => import('../pages/Importer/Create'),
-            name: 'importer.create',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-
-        {
-            path: '/importer/:importer/edit',
-            component: () => import('../pages/Importer/Edit'),
-            name: 'importer.edit',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-
-        {
-            path: '/importer/:importer/view',
-            component: () => import('../pages/Importer/View'),
-            name: 'importer.view',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-
-        {
-            path: '/importer/:importer/mapping',
-            component: () => import('../pages/Importer/Mapping'),
-            name: 'importer.mapping',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-
-        {
             path: '/backups',
             component: () => import('../pages/Backups/Index'),
             name: 'backups',
