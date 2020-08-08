@@ -62,7 +62,7 @@
 
         data() {
             return {
-                replicants: this.value || [],
+                replicants: this.value,
                 sections: [],
                 active: 0
             }
@@ -75,8 +75,9 @@
             },
 
             value: {
+                type: Array,
                 required: false,
-                default: null
+                default: () => []
             },
 
             errors: {

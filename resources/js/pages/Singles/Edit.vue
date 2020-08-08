@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import Form from '../../services/Form'
+    import Form from '../../services/Form2'
     import SharedForm from './SharedForm'
     import _ from 'lodash'
 
@@ -85,10 +85,6 @@
                     vm.form   = new Form(fields, true)
 
                     vm.$emit('updateHead')
-
-                    vm.$nextTick(() => {
-                        vm.form.resetChangeListener()
-                    })
                 })
             })
         },
@@ -100,10 +96,6 @@
                 this.form   = new Form(fields, true)
 
                 this.$emit('updateHead')
-
-                this.$nextTick(() => {
-                    this.form.resetChangeListener()
-                })
             })
 
             next()
