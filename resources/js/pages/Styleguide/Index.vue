@@ -6,23 +6,15 @@
 
         <sg-color-pallet></sg-color-pallet>
 
-        <hr>
-
         <sg-typography></sg-typography>
-
-        <hr>
 
         <sg-buttons></sg-buttons>
 
-        <hr>
-
         <sg-alerts></sg-alerts>
 
-        <hr>
+        <sg-accordions></sg-accordions>
 
         <sg-fields></sg-fields>     
-
-        <hr>
 
         <!-- Old code needing refactor -->
         <!-- <div class="row">
@@ -237,6 +229,7 @@
 </template>
 
 <script>
+    import Accordions from './Accordions'
     import Alerts from './Alerts'
     import Buttons from './Buttons'
     import ColorPallet from './ColorPallet'
@@ -259,6 +252,7 @@
         },
 
         components: {
+            'sg-accordions': Accordions,
             'sg-alerts': Alerts,
             'sg-buttons': Buttons,
             'sg-color-pallet': ColorPallet,

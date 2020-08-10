@@ -10,18 +10,22 @@
     @apply appearance-none bg-white border border-gray-300 rounded leading-normal text-gray-700 no-underline cursor-pointer px-3 py-2;
     transition: all 0.2s $transition-effect;
 
-    &:hover:not([disabled]) { 
+    &:hover:not([disabled]),
+    &:hover:not(.disabled) { 
         @apply bg-gray-200 border-gray-300; 
     }
 
-    &:active:not([disabled]) { @apply bg-gray-300; }
+    &:active:not([disabled]),
+    &:active:not(.disabled) { @apply bg-gray-300; }
 
     &:focus {
         @apply outline-none shadow-focus;
     }
 
-    &[disabled] {
+    &[disabled],
+    &.disabled {
         @apply cursor-not-allowed opacity-50;
+        pointer-events: none;
     }
 
     > .icon { @apply mr-3; }
@@ -74,11 +78,13 @@
     &--brand {
         @apply bg-primary-500 border-primary-500;
 
-        &:hover:not([disabled]) { 
+        &:hover:not([disabled]),
+        &:hover:not(.disabled) { 
             @apply bg-primary-700 border-primary-700; 
         }
 
-        &:active:not([disabled]) { 
+        &:active:not([disabled]),
+        &:active:not(.disabled) { 
             @apply bg-primary-900 border-primary-900; 
         }
     }
@@ -86,11 +92,13 @@
     &--secondary {
         @apply bg-secondary-500 border-secondary-500;
 
-        &:hover:not([disabled]) { 
+        &:hover:not([disabled]),
+        &:hover:not(.disabled) { 
             @apply bg-secondary-700 border-secondary-700; 
         }
         
-        &:active:not([disabled]) { 
+        &:active:not([disabled]),
+        &:active:not(.disabled) { 
             @apply bg-secondary-900 border-secondary-900; 
         }
     }
@@ -98,11 +106,13 @@
     &--success {
         @apply bg-success-500 border-success-500;
 
-        &:hover:not([disabled]) {
+        &:hover:not([disabled]),
+        &:hover:not(.disabled) {
             @apply bg-success-600 border-success-600;
         }
 
-        &:active:not([disabled]) { 
+        &:active:not([disabled]),
+        &:active:not(.disabled) { 
             @apply bg-success-900 border-success-900; 
         }
 
@@ -112,11 +122,13 @@
     &--info {
         @apply bg-info-500 border-info-500;
 
-        &:hover:not([disabled]) { 
+        &:hover:not([disabled]),
+        &:hover:not(.disabled) { 
             @apply bg-info-600 border-info-600; 
         }
 
-        &:active:not([disabled]) { 
+        &:active:not([disabled]),
+        &:active:not(.disabled) { 
             @apply bg-info-900 border-info-900; 
         }
     }
@@ -124,11 +136,13 @@
     &--warning {
         @apply bg-warning-500 border-warning-500;
 
-        &:hover:not([disabled]) {
+        &:hover:not([disabled]),
+        &:hover:not(.disabled) {
             @apply bg-warning-600 border-warning-600;
         }
 
-        &:active:not([disabled]) { 
+        &:active:not([disabled]),
+        &:active:not(.disabled) { 
             @apply bg-warning-900 border-warning-900; 
         }
     }
@@ -136,11 +150,13 @@
     &--danger {
         @apply bg-danger-500 border-danger-500;
 
-        &:hover:not([disabled]) {
+        &:hover:not([disabled]),
+        &:hover:not(.disabled) {
             @apply bg-danger-600 border-danger-600;
         }
 
-        &:active:not([disabled]) { 
+        &:active:not([disabled]),
+        &:active:not(.disabled) { 
             @apply bg-danger-900 border-danger-900; 
         }
 

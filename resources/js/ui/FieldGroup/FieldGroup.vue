@@ -4,9 +4,9 @@
         <slot></slot>
 
         <div :id="fieldId + '_message'" class="form-group__messages" v-if="hasMessage">
-            <p-help-danger v-if="errorMessage">{{ errorMessage }}</p-help-danger>
-            <p-help-success v-if="successMessage">{{ successMessage }}</p-help-success>
-            <p-help v-if="help">{{ help }}</p-help>
+            <p-help-danger v-if="errorMessage" v-html="errorMessage"></p-help-danger>
+            <p-help-success v-if="successMessage" v-html="successMessage"></p-help-success>
+            <p-help v-if="help" v-html="help"></p-help>
         </div>
 
         <slot name="bottom">

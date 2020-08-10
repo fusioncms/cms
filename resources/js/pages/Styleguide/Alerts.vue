@@ -1,65 +1,37 @@
 <template>
-    <div class="sg-alerts row">
-        <div class="col w-full">
-            <div class="card">
-                <div class="card__header">
-                    <h2 class="card__title">Alerts</h2>
-                </div>
+    <p-card class="sg-alerts">
+        <p-card-header title="Alerts"></p-card-header>
 
-                <div class="card__body">
-                    <div class="alert">
-                        <div class="alert__container container">
-                            <div class="alert__icon">
-                                <fa-icon icon="info-circle" class="fa-fw"></fa-icon> 
-                            </div>
+        <p-card-body>
+            <p-alert>
+                <p>Lorum Ipsum dolor sit amet.</p>
+            </p-alert>
 
-                            <p>Lorum Ipsum dolor sit amet.</p>
-                        </div>
-                    </div>
+            <p-alert variant="primary">
+                <p>Lorum Ipsum dolor sit amet.</p>
+            </p-alert>
 
-                    <div class="alert alert--info">
-                        <div class="alert__container container">
-                            <div class="alert__icon">
-                                <fa-icon icon="info-circle" class="fa-fw"></fa-icon> 
-                            </div>
+            <p-alert variant="secondary">
+                <p>Lorum Ipsum dolor sit amet.</p>
+            </p-alert>
 
-                            <p>Lorum Ipsum dolor sit amet.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="alert alert--success">
-                        <div class="alert__container container">
-                            <div class="alert__icon">
-                                <fa-icon icon="check-circle" class="fa-fw"></fa-icon> 
-                            </div>
+            <p-alert icon="info-circle" variant="info">
+                <p>Lorum Ipsum dolor sit amet.</p>
+            </p-alert>
 
-                            <p>Lorum Ipsum dolor sit amet.</p>
-                        </div>
-                    </div>
+            <p-alert icon="check-circle" variant="success">
+                <p>Lorum Ipsum dolor sit amet.</p>
+            </p-alert>
 
-                    <div class="alert alert--warning">
-                        <div class="alert__container container">
-                            <div class="alert__icon">
-                                <fa-icon icon="exclamation-circle" class="fa-fw"></fa-icon> 
-                            </div>
+            <p-alert icon="exclamation-circle" variant="warning">
+                <p>Lorum Ipsum dolor sit amet.</p>
+            </p-alert>
 
-                            <p>Lorum Ipsum dolor sit amet.</p>
-                        </div>
-                    </div>
-
-                    <div class="alert alert--danger">
-                        <div class="alert__container container">
-                            <div class="alert__icon">
-                                <fa-icon icon="exclamation-triangle" class="fa-fw"></fa-icon> 
-                            </div>
-
-                            <p>Lorum Ipsum dolor sit amet.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+            <p-alert icon="exclamation-triangle" variant="danger">
+                <p>Lorum Ipsum dolor sit amet.</p>
+            </p-alert>
+        </p-card-body>
+    </p-card>
 </template>
 
 <script>

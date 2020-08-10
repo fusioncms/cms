@@ -1,7 +1,7 @@
 <template>
-    <dl class="accordion" role="presentation">
+    <div class="accordion" role="presentation">
         <slot></slot>
-    </dl>
+    </div>
 </template>
 
 <script>
