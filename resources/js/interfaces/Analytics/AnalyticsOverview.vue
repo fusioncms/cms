@@ -81,6 +81,8 @@
     import moment from 'moment-timezone'
 
     export default {
+        name: 'analytics-overview',
+
         data() {
             return {
                 isValid: null,

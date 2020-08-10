@@ -1,0 +1,7 @@
+export { default as Analytics } from './Analytics'
+export { default as Dashboard } from './Dashboard'
+export { default as Fieldsets } from './Fieldsets'
+export { default as FileManager } from './FileManager'
+export { default as FormManager } from './FormManager'
+export { default as Settings } from './Settings'
+export { default as UserManager } from './UserManager'

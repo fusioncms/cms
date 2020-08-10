@@ -3,7 +3,7 @@
  * includes Vue and other libraries.
  */
 
-import './bootstrap/'
+// TODO: Import plugins
 
 import Fusion from './Fusion'
 
@@ -16,3 +16,14 @@ window.Fusion = new Fusion(window.config)
 window.addEventListener('DOMContentLoaded', function () {
     window.Fusion.boot()
 })
+
+if (window.environment === 'production') {
+    console.log('/*')
+    console.log(' * FusionCMS')
+    console.log(' * Oh, hello there!')
+    console.log(' *')
+    console.log(' * Author:    efelle creative')
+    console.log(' * Website:   https://beta.getfusioncms.com')
+    console.log(' * Copyright: 2020')
+    console.log(' */')
+}
