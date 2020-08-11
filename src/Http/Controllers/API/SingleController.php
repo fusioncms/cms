@@ -23,9 +23,11 @@ class SingleController extends Controller
 
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
         $single = (new Single($matrix->handle))->make();
-
+        
         return new SingleResource($single->firstOrCreate([
-            'matrix_id' => $matrix->id,
+            'matrix_id' => $matrix->id
+        ],
+        [
             'name'      => $matrix->name,
             'slug'      => $matrix->slug,
             'status'    => true,

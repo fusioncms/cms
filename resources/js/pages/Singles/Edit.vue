@@ -16,11 +16,13 @@
 </template>
 
 <script>
-    import Form from '../../services/Form2'
+    import Form from '../../services/Form'
     import SharedForm from './SharedForm'
     import _ from 'lodash'
 
     export default {
+        name: 'edit-single',
+
         head: {
             title() {
                 return {
