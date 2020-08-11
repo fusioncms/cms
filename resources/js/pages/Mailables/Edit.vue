@@ -180,10 +180,6 @@
                     vm.form.markdown = mailable.data.data.markdown
 
                     vm.$emit('updateHead')
-
-                    vm.$nextTick(() => {
-                        vm.form.resetChangeListener()
-                    })
                 })
            	})).catch(function(error) {
                 next('/mailables')

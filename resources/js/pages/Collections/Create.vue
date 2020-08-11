@@ -64,7 +64,6 @@
                         vm.form = new Form(fields, true)
 
                         vm.$emit('updateHead')
-                        vm.form.resetChangeListener()
                     })
                 }
             })
@@ -81,7 +80,6 @@
                     this.form = new Form(fields, true)
 
                     this.$emit('updateHead')
-                    this.form.resetChangeListener()
                 }
             })
 

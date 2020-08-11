@@ -126,16 +126,4 @@ export default class Form {
     onFailure(errors) {
         this.errors.record(errors)
     }
-
-    onFirstChange() {
-    	// DEPRECATED
-        // if (this.blockNav)
-        //     store.commit('form/setPreventNavigation', true)
-    }
-
-    resetChangeListener() {
-    	// DEPRECATED
-        // if (this.blockNav)
-        //     store.commit('form/setPreventNavigation', false)
-    }
 }

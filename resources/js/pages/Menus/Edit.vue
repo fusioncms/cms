@@ -33,17 +33,6 @@
             'shared-form': SharedForm
         },
 
-        watch: {
-            sections: {
-                deep: true,
-                handler(value) {
-                    if (! this.hasChanges) {
-                        this.form.onFirstChange()
-                    }
-                }
-            }
-        },
-
         methods: {
             submit() {
                 this.form.patch(`/api/menus/${this.id}`)
@@ -84,7 +73,6 @@
 
                         vm.$nextTick(() => {
                             vm.$emit('updateHead')
-                            vm.form.resetChangeListener()
                         })
                     })
                 }

@@ -62,7 +62,7 @@
 
         data() {
             return {
-                replicants: this.value,
+                replicants: _.defaultTo(this.value, []),
                 sections: [],
                 active: 0
             }
