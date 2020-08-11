@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="user-shield">Edit Role</app-title>
+            <page-title icon="user-shield">Edit Role</page-title>
         </portal>
 
         <shared-form :form="form" :role="role" :submit="submit"></shared-form>

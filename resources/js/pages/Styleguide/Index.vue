@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="swatchbook">Styleguide</app-title>
+            <page-title icon="swatchbook">Styleguide</page-title>
         </portal>
 
         <sg-color-pallet></sg-color-pallet>
@@ -20,7 +20,7 @@
 
         <hr>
 
-        <sg-fields></sg-fields>     
+        <sg-fields></sg-fields>
 
         <hr>
 

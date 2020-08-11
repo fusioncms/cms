@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-			<app-title icon="anchor">Edit Menu</app-title>
+			<page-title icon="anchor">Edit Menu</page-title>
 		</portal>
 
         <shared-form v-if="form" :form="form"></shared-form>

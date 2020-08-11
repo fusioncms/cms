@@ -26,8 +26,8 @@
 </template>
 
 <script>
-    import fieldtype from '../../mixins/fieldtype'
-    import OptionBuilder from '../../components/OptionBuilder'
+    import fieldtype from '@/mixins/fieldtype'
+    import OptionBuilder from '@/components/OptionBuilder'
 
     export default {
         name: 'radio-fieldtype-settings',
@@ -39,4 +39,3 @@
         }
     }
 </script>
-

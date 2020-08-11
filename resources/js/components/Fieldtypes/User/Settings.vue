@@ -14,7 +14,7 @@
 </template>
 
 <script>
-    import fieldtype from '../../mixins/fieldtype'
+    import fieldtype from '@/mixins/fieldtype'
 
     export default {
         name: 'user-fieldtype-settings',
@@ -22,4 +22,3 @@
         mixins: [fieldtype],
     }
 </script>
-

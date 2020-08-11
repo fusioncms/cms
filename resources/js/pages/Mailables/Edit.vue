@@ -1,7 +1,7 @@
 <template>
     <form-container>
         <portal to="title">
-            <app-title icon="mail-bulk">Edit Mailable</app-title>
+            <page-title icon="mail-bulk">Edit Mailable</page-title>
         </portal>
 
         <portal to="actions">
@@ -23,7 +23,7 @@
                     v-model="form.name">
                 </p-title>
 
-                <markdown-field
+                <markdown-fieldtype
                     v-if="ready"
                     ref="markdown"
                     v-on:input="updateMarkdown"
@@ -32,7 +32,7 @@
                         'handle': 'markdown'
                     }"
                     :value="form.markdown">
-                </markdown-field>
+                </markdown-fieldtype>
             </div>
         </div>
 
@@ -91,8 +91,7 @@
 
 <script>
     import _ from 'lodash'
-    import Form from '../../services/Form'
-    import MarkdownField from '../../fieldtypes/Markdown/Field'
+    import Form from '@/services/Form'
 
 	export default {
 		head: {
@@ -101,10 +100,6 @@
                     inner: this.form.name || 'Loading...'
                 }
             }
-        },
-
-        components: {
-            'markdown-field': MarkdownField
         },
 
 		data() {

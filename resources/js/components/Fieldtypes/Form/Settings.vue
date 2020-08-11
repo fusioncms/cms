@@ -13,17 +13,16 @@
 		</div>
 
     	<div class="col w-1/2">
-			
+
 	    </div>
     </div>
 </template>
 
 <script>
-	import fieldtype from '../../mixins/fieldtype'
+	import fieldtype from '@/mixins/fieldtype'
 
     export default {
         name: 'form-fieldtype-settings',
         mixins: [fieldtype],
     }
 </script>
-

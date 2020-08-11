@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import Vue from 'vue'
 
 window.bus = function() {
     return Vue.prototype.$bus

@@ -1,7 +1,7 @@
 <template>
     <div class="h-full max-h-full">
         <portal to="title">
-            <app-title icon="inbox">Inbox</app-title>
+            <page-title icon="inbox">Inbox</page-title>
         </portal>
 
         <portal to="actions">

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import FieldMixin from '../../mixins/fieldtypes/field'
+    import FieldMixin from '@/mixins/fieldtypes/field'
 
     export default {
         name: 'input-fieldtype',

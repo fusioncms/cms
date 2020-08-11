@@ -85,14 +85,18 @@ Vue.component('select-fieldtype-settings', () => import('./components/Fieldtypes
 Vue.component('taxonomy-fieldtype', () => import('./components/Fieldtypes/Taxonomy/Field'))
 Vue.component('taxonomy-fieldtype-settings', () => import('./components/Fieldtypes/Taxonomy/Settings'))
 
+// Textarea
 Vue.component('textarea-fieldtype', () => import('./components/Fieldtypes/Textarea/Field'))
 Vue.component('textarea-fieldtype-settings', () => import('./components/Fieldtypes/Textarea/Settings'))
 
+// Toggle
 Vue.component('toggle-fieldtype', () => import('./components/Fieldtypes/Toggle/Field'))
 Vue.component('toggle-fieldtype-settings', () => import('./components/Fieldtypes/Toggle/Settings'))
 
+// US State
 Vue.component('us-state-fieldtype', () => import('./components/Fieldtypes/USState/Field'))
 Vue.component('us-state-fieldtype-settings', () => import('./components/Fieldtypes/USState/Settings'))
 
+// User
 Vue.component('user-fieldtype', () => import('./components/Fieldtypes/User/Field'))
 Vue.component('user-fieldtype-settings', () => import('./components/Fieldtypes/User/Settings'))

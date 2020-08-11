@@ -19,7 +19,7 @@
             :has-error="errors.has('settings.multiple')"
             :error-message="errors.get('settings.multiple')">
         </p-select>
-        
+
         <div class="col w-full">
             <option-builder v-model="settings.options"></option-builder>
         </div>
@@ -27,8 +27,8 @@
 </template>
 
 <script>
-    import fieldtype from '../../mixins/fieldtype'
-    import OptionBuilder from '../../components/OptionBuilder'
+    import fieldtype from '@/mixins/fieldtype'
+    import OptionBuilder from '@/components/OptionBuilder'
 
     export default {
         name: 'select-fieldtype-settings',
@@ -40,4 +40,3 @@
         },
     }
 </script>
-

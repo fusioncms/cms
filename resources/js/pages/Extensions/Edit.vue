@@ -1,7 +1,7 @@
 <template>
     <form-container v-if="form">
         <portal to="title">
-            <app-title icon="seedling">Edit Extension</app-title>
+            <page-title icon="seedling">Edit Extension</page-title>
         </portal>
 
         <portal to="actions">

@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title :icon="collection.icon || 'pencil-alt'">Edit {{ collection.reference_singular }}</app-title>
+            <page-title :icon="collection.icon || 'pencil-alt'">Edit {{ collection.reference_singular }}</page-title>
         </portal>
 
         <portal to="subtitle">{{ collection.description }}</portal>

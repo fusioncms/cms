@@ -40,7 +40,7 @@
 
 <script>
     import pluralize from 'pluralize'
-    import Form from '../../services/Form'
+    import Form from '@/services/Form'
 
     export default {
         name: 'taxonomy-fieldtype',

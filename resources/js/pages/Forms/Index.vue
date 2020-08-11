@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="paper-plane">Forms</app-title>
+            <page-title icon="paper-plane">Forms</page-title>
         </portal>
 
         <portal to="actions">

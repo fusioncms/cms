@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="sliders-h">Settings</app-title>
+            <page-title icon="sliders-h">Settings</page-title>
         </portal>
 
         <div class="row flex-1 flex-wrap" v-for="(groups, section) in sections" :key="section">

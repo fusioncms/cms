@@ -6,7 +6,7 @@
 	            :for="field.handle"
 	            v-html="field.name">
 	        </label>
-			
+
 			<input
 				type="file"
 				:id="field.handle"
@@ -64,7 +64,7 @@
 		name: 'file-fieldtype',
 
 		mixins: [
-			require ('../../mixins/filehelper').default
+			require ('@/mixins/filehelper').default
 		],
 
 		data() {

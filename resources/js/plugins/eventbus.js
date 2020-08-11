@@ -1,6 +1,8 @@
-let EventBusPlugin = {}
+import Vue from 'vue'
 
-EventBusPlugin.install = function(Vue) {
+let EventBus = {}
+
+EventBus.install = function (Vue) {
     let EventBus = new Vue
 
     Object.defineProperty(Vue.prototype, '$bus', {
@@ -10,4 +12,4 @@ EventBusPlugin.install = function(Vue) {
     })
 }
 
-export default EventBusPlugin
+Vue.use(EventBus)

@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-			<app-title icon="paper-plane">Create Form</app-title>
+			<page-title icon="paper-plane">Create Form</page-title>
 		</portal>
 
         <shared-form :form="form"></shared-form>

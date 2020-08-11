@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="sitemap">Taxonomy</app-title>
+            <page-title icon="sitemap">Taxonomy</page-title>
         </portal>
 
         <portal to="actions">

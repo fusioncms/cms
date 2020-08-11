@@ -71,13 +71,13 @@
 <script>
 	import { mapGetters, mapActions } from 'vuex'
 
-	import UserCard      from '../../components/UserManager/Browse/User.vue'
-	import UserSelection from '../../components/UserManager/Selection.vue'
+	import UserCard      from '@/interfaces/UserManager/Browse/User.vue'
+	import UserSelection from '@/interfaces/UserManager/Selection.vue'
 
-	import RoleAction    from '../../components/UserManager/Actions/Role.vue'
-	import SearchAction  from '../../components/UserManager/Actions/Search.vue'
-	import SortAction    from '../../components/UserManager/Actions/Sort.vue'
-	import ViewAction    from '../../components/UserManager/Actions/View.vue'
+	import RoleAction    from '@/interfaces/UserManager/Actions/Role.vue'
+	import SearchAction  from '@/interfaces/UserManager/Actions/Search.vue'
+	import SortAction    from '@/interfaces/UserManager/Actions/Sort.vue'
+	import ViewAction    from '@/interfaces/UserManager/Actions/View.vue'
 
 	export default {
 		name: 'user-fieldtype',
@@ -92,7 +92,7 @@
 		},
 
 		mixins: [
-			require('../../mixins/userselector').default,
+			require('@/mixins/userselector').default,
         ],
 
 		data() {

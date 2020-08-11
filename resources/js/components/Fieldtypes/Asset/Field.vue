@@ -106,17 +106,17 @@
 <script>
 	import { mapActions } from 'vuex'
 
-	import FileUploader  from '../../components/FileManager/FileUploader.vue'
-	import FileSelection from '../../components/FileManager/FileSelection.vue'
+	import FileUploader  from '@/interfaces/FileManager/FileUploader.vue'
+	import FileSelection from '@/interfaces/FileManager/FileSelection.vue'
 
-	import BreadcrumbAction from '../../components/FileManager/Actions/Breadcrumb.vue'
-	import DisplayAction    from '../../components/FileManager/Actions/Display.vue'
-	import SearchAction     from '../../components/FileManager/Actions/Search.vue'
-	import SortAction       from '../../components/FileManager/Actions/Sort.vue'
-	import ViewAction       from '../../components/FileManager/Actions/View.vue'
+	import BreadcrumbAction from '@/interfaces/FileManager/Actions/Breadcrumb.vue'
+	import DisplayAction    from '@/interfaces/FileManager/Actions/Display.vue'
+	import SearchAction     from '@/interfaces/FileManager/Actions/Search.vue'
+	import SortAction       from '@/interfaces/FileManager/Actions/Sort.vue'
+	import ViewAction       from '@/interfaces/FileManager/Actions/View.vue'
 
-	import Directory from '../../components/FileManager/Browse/Directory.vue'
-	import File      from '../../components/FileManager/Browse/File.vue'
+	import Directory from '@/interfaces/FileManager/Browse/Directory.vue'
+	import File      from '@/interfaces/FileManager/Browse/File.vue'
 
 	export default {
 		name: 'asset-fieldtype',
@@ -136,9 +136,9 @@
 		},
 
 		mixins: [
-			require('../../mixins/fileselector').default,
-			require('../../mixins/filedragdrop').default,
-            require('../../mixins/filebrowser').default,
+			require('@/mixins/fileselector').default,
+			require('@/mixins/filedragdrop').default,
+            require('@/mixins/filebrowser').default,
         ],
 
 		data() {

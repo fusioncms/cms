@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import '../../../vendor/redactor/_plugins/table/table.js'
+    import '@/../vendor/redactor/_plugins/table/table.js'
 
     export default {
         name: 'redactor-fieldtype',

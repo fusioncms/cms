@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="seedling">Extensions</app-title>
+            <page-title icon="seedling">Extensions</page-title>
         </portal>
 
         <div class="row">

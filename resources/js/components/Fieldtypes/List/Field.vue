@@ -64,7 +64,7 @@
 
 <script>
     import uniqid from 'uniqid'
-    import fieldtype from '../../mixins/fieldtype'
+    import fieldtype from '@/mixins/fieldtype'
     import {XIcon, MenuIcon, ListIcon, PlusIcon} from 'vue-feather-icons'
 
     export default {

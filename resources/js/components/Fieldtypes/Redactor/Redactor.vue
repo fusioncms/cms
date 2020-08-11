@@ -28,8 +28,8 @@
 </template>
 
 <script>
-    import '../../vendor/redactor/redactor'
-    import '../../vendor/redactor/vue-redactor'
+    import '@/../vendor/redactor/redactor'
+    import '@/../vendor/redactor/vue-redactor'
 
     export default {
         name: 'redactor',
@@ -103,7 +103,7 @@
                 default: 3,
             },
         },
-        
+
         mounted() {
             if (this.readonly || this.disabled) {
                 $R(`#redactor-${this.name}`, 'enableReadOnly');

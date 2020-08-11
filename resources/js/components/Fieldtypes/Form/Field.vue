@@ -63,9 +63,9 @@
 
 <script>
 	import { mapActions, mapGetters } from 'vuex'
-	import FormCard      from '../../components/FormManager/Browse/Form.vue'
-	import FormSelection from '../../components/FormManager/Selection.vue'
-	import SearchAction  from '../../components/FormManager/Actions/Search.vue'
+	import FormCard      from '@/interfaces/FormManager/Browse/Form.vue'
+	import FormSelection from '@/interfaces/FormManager/Selection.vue'
+	import SearchAction  from '@/interfaces/FormManager/Actions/Search.vue'
 
 	export default {
 		name: 'form-fieldtype',
@@ -77,9 +77,9 @@
 		},
 
 		mixins: [
-			require('../../mixins/fileselector').default,
-			require('../../mixins/filedragdrop').default,
-            require('../../mixins/filebrowser').default,
+			require('@/mixins/fileselector').default,
+			require('@/mixins/filedragdrop').default,
+            require('@/mixins/filebrowser').default,
         ],
 
 		data() {

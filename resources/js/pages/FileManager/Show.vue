@@ -1,7 +1,7 @@
 <template>
     <form-container>
         <portal to="title">
-            <app-title icon="image" v-text="form.name"></app-title>
+            <page-title icon="image" v-text="form.name"></page-title>
         </portal>
 
         <portal to="actions">

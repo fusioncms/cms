@@ -11,7 +11,7 @@
             :key="section.handle"
             class="button--secondary mr-2"
             @click="add(index)">
-            
+
             {{ section.name }}
             <fa-icon icon="plus" class="fa-xs"></fa-icon>
         </p-button>
@@ -23,7 +23,7 @@
                     :key="`replicant-${index}-tab`"
                     class="tab flex-shrink-0 flex-1 border-r border-gray-200"
                     :class="{ 'tab--active': index == active }">
-                    
+
                     <a href="#"
                         class="tab__link flex justify-between items-center"
                         @click.prevent="select(index)">
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import Errors from '../../services/Errors'
+    import Errors from '@/services/Errors'
 
     export default {
         name: 'replicator-fieldtype',
@@ -118,7 +118,7 @@
             add(index) {
                 let section = this.sections[index]
                 let fields  = {}
-                
+
                 _.each(section.fields, (field) =>
                     fields[field.handle] = field.default)
 
