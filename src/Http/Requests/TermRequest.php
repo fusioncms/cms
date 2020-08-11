@@ -36,7 +36,7 @@ class TermRequest extends FormRequest
     {
         $this->merge([
             'taxonomy_id' => $this->taxonomy->id,
-            'slug'        => $this->slug ?? Str::slug($this->name),
+            'slug'        => $this->slug ? $this->slug : Str::slug($this->name),
         ]);
     }
 
