@@ -34,7 +34,7 @@
                     </p-tab>
 
                     <p-tab name="Fields">
-                        <section-builder v-model="$parent.sections"></section-builder>
+                        <section-builder v-model="form.sections"></section-builder>
                     </p-tab>
                 </p-tabs>
             </div>

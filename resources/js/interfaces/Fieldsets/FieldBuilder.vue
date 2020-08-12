@@ -141,11 +141,11 @@
 
         methods: {
             add(type, data = {}, prototype = true) {
-                let name   = this.uniqName(data.name || type.name)
+                let name   = data.name || this.uniqName(data.name || type.name)
                 let field  = {
                     type,
                     name,
-                    handle:     _.snakeCase(name),
+                    handle:     data.handle || _.snakeCase(name),
                     help:       data.help || '',
                     settings:   data.settings ? _.cloneDeep(data.settings, true) : _.cloneDeep(type.settings, true),
                     validation: data.validation || '',
@@ -169,9 +169,10 @@
             },
 
             move() {
-                if (this.section) {
+                if (this.section && this.section != this.sectionHandle) {
                     bus().$emit(`add-field-${this.section}`, this.field.move)
-                    bus().$emit(`remove-field-${this.sectionHandle}`, this.field.move)
+                    bus().$emit(`remove-field-${this.sectionHandle}`,
+                        'handle', this.field.move.handle)
 
                     this.section    = false
                     this.field.move = false
@@ -193,8 +194,9 @@
                 this.field.edit = false
             },
 
-            findBy(key, value) {
-                return _.findIndex(this.fields, (field) => field[key] == value)
+            findBy(path, value) {
+                return _.findIndex(this.fields, (field) =>
+                    _.get(field, path) && _.get(field, path) == value)
             },
 
             uniqName(original, name, count = 0) {
@@ -215,8 +217,8 @@
                 }
             })
 
-            bus().$on(`remove-field-${this.sectionHandle}`, (field) => {
-                let index = this.findBy('handle', field.handle)
+            bus().$on(`remove-field-${this.sectionHandle}`, (path, value) => {
+                let index = this.findBy(path, value)
 
                 if (index != -1) {
                     this.remove(index)

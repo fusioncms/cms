@@ -137,7 +137,7 @@
                     </p-tab>
 
                     <p-tab key="fields" name="Fields">
-                        <section-builder v-model="$parent.sections"></section-builder>
+                        <section-builder v-model="form.sections"></section-builder>
                     </p-tab>
                 </p-tabs>
             </div>
@@ -197,6 +197,7 @@
 
         props: {
             form: {
+                type: Object,
                 required: true,
             },
 
@@ -223,22 +224,15 @@
 
         methods: {
             addIdentifiableEmailField() {
-                let section = this.form.fieldset.sections[0].handle
-
-                this.$bus.$emit('add-field-' + section, {
-                    fieldtype: this.fieldtype,
-                    name: 'E-mail',
-                    handle: 'identifiable_email_address',
-                    settings: {
-                        type: 'email',
-                    }
+                bus().$emit(`add-field-${this.form.sections[0].handle}`, {
+                    type: this.fieldtype,
+                    settings: { type: 'email', identifiable: true }
                 })
             },
 
             removeIdentifiableEmailField() {
-                let section = this.form.fieldset.sections[0].handle
-
-                this.$bus.$emit('remove-field-' + section, 'identifiable_email_address')
+                bus().$emit(`remove-field-${this.form.sections[0].handle}`,
+                    'settings.identifiable', true)
             },
         },
 

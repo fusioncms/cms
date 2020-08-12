@@ -23,10 +23,10 @@
 
         data() {
             return {
-                sections: [],
                 form: new Form({
                     name: '',
                     handle: '',
+                    sections: []
                 }, true)
             }
         },
@@ -39,7 +39,7 @@
             submit() {
                 this.form.post('/api/fieldsets')
                     .then((response) => {
-                        axios.post(`/api/fieldsets/${response.data.id}/sections`, { sections: this.sections })
+                        axios.post(`/api/fieldsets/${response.data.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Fieldset successfully created', 'success')
 
