@@ -24,10 +24,8 @@ Vue.component('nav-item', require('@/components/Navigation/NavigationItem').defa
 Vue.component('nav-toggle', require('@/components/Navigation/NavigationToggle').default)
 Vue.component('option-builder', require('@/components/OptionBuilder').default)
 Vue.component('page-title', require('@/components/PageTitle').default)
-Vue.component('privacy-modal', require('@/components/Modals/PrivacyModal').default)
 Vue.component('select-directory-modal', require('@/components/Modals/SelectDirectoryModal').default)
 Vue.component('settings-modal', require('@/components/Modals/SettingsModal').default)
-Vue.component('tos-modal', require('@/components/Modals/TOSModal').default)
 
 // Interfaces
 Vue.component('analytics-overview', require('@/interfaces/Analytics/AnalyticsOverview').default)
