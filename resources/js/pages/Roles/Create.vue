@@ -45,12 +45,6 @@
                     toast(response.response.data.message, 'failed')
                 })
             },
-        },
-
-        mounted() {
-            this.$nextTick(function(){
-                this.form.resetChangeListener()
-            })
         }
     }
 </script>
