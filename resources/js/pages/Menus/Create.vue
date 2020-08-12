@@ -23,12 +23,11 @@
 
         data() {
             return {
-                sections: [],
                 form: new Form({
                     name: '',
                     handle: '',
                     description: '',
-                    fieldset: {},
+                    sections: []
                 }, true)
             }
         },
@@ -41,7 +40,7 @@
             submit() {
                 this.form.post('/api/menus')
                     .then((response) => {
-                        axios.post(`/api/fieldsets/${response.data.fieldset.id}/sections`, { sections: this.sections })
+                        axios.post(`/api/fieldsets/${response.data.fieldset.id}/sections`, { sections: this.form.sections })
                             .then((response) => {
                                 toast('Menu successfully saved', 'success')
 
@@ -53,6 +52,13 @@
                         toast(response.message, 'failed')
                     })
             }
+        },
+
+        created() {
+            let unwatch = this.$watch('form.sections', (value) => {
+                this.form.orig.sections = _.cloneDeep(value)
+                unwatch()
+            })
         }
     }
 </script>

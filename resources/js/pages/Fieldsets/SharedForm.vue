@@ -19,7 +19,7 @@
                     v-model="form.name">
                 </p-title>
 
-				<section-builder class="mt-6" v-model="$parent.sections"></section-builder>
+				<section-builder class="mt-6" v-model="form.sections"></section-builder>
 			</div>
 		</div>
 

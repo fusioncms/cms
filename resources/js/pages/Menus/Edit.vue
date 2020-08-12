@@ -24,7 +24,6 @@
         data() {
             return {
                 id: null,
-                sections: [],
                 form: null
             }
         },
@@ -37,7 +36,7 @@
             submit() {
                 this.form.patch(`/api/menus/${this.id}`)
                     .then(() => {
-                        axios.post(`/api/fieldsets/${this.form.fieldset.id}/sections`, { sections: this.sections })
+                        axios.post(`/api/fieldsets/${this.form.fieldset.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Menu successfully saved', 'success')
 
@@ -61,14 +60,12 @@
                     })
                 } else {
                     next((vm) => {
-                        vm.id       = menu.id
-                        vm.sections = menu.fieldset.sections
-
+                        vm.id   = menu.id
                         vm.form = new Form({
                             name:        menu.name,
                             handle:      menu.handle,
                             description: menu.description,
-                            fieldset:    menu.fieldset
+                            sections:    menu.fieldset.sections,
                         }, true)
 
                         vm.$nextTick(() => {

@@ -29,7 +29,6 @@
             return {
                 id: null,
                 resource: null,
-                sections: [],
                 form: null
             }
         },
@@ -42,7 +41,7 @@
             submit() {
                 this.form.patch(`/api/forms/${this.id}`)
                     .then(() => {
-                        axios.post(`/api/fieldsets/${this.resource.fieldset.id}/sections`, { sections: this.sections })
+                        axios.post(`/api/fieldsets/${this.resource.fieldset.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Form successfully saved', 'success')
                             })
@@ -64,13 +63,11 @@
                     next((vm) => {
                         vm.id       = form.id
                         vm.resource = form
-                        vm.sections = form.fieldset.sections
-
-                        vm.form = new Form({
+                        vm.form     = new Form({
                             name:                    form.name,
                             handle:                  form.handle,
                             description:             form.description,
-                            fieldset:                form.fieldset,
+                            sections:                form.fieldset.sections,
                             collect_email_addresses: form.collect_email_addresses,
                             collect_ip_addresses:    form.collect_ip_addresses,
                             response_receipt:        form.response_receipt,
