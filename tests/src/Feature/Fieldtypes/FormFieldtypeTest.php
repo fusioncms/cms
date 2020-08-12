@@ -96,7 +96,7 @@ class FormFieldtypeTest extends TestCase
             ->be($this->owner, 'api')
             ->json('POST', '/api/collections/foobar', $attributes)
             ->assertStatus(422)
-            ->assertJsonValidationErrors(['form' => 'The form must contain 2 items.']);
+            ->assertJsonValidationErrors(['form' => 'The Form must contain 2 items.']);
     }
 
     /**
