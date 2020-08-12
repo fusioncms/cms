@@ -4,7 +4,6 @@ namespace Fusion\Http\Controllers\API;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\SingleRequest;
-use Fusion\Http\Resources\MatrixResource;
 use Fusion\Http\Resources\SingleResource;
 use Fusion\Models\Matrix;
 use Fusion\Services\Builders\Single;
@@ -25,11 +24,16 @@ class SingleController extends Controller
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
         $single = (new Single($matrix->handle))->make();
 
-        try {
-            return new SingleResource($single->firstOrFail());
-        } catch (\Exception $exception) {
-            return new MatrixResource($matrix);
-        }
+        return new SingleResource($single->firstOrCreate(
+            [
+                'matrix_id' => $matrix->id,
+            ],
+            [
+                'name'      => $matrix->name,
+                'slug'      => $matrix->slug,
+                'status'    => true,
+            ]
+        ));
     }
 
     /**

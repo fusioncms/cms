@@ -37,17 +37,6 @@
             'shared-form': SharedForm
         },
 
-        watch: {
-            sections: {
-                deep: true,
-                handler(value) {
-                    if (! this.hasChanges) {
-                        this.form.onFirstChange()
-                    }
-                }
-            }
-        },
-
         methods: {
             submit() {
                 this.form.post('/api/menus')
@@ -64,12 +53,6 @@
                         toast(response.message, 'failed')
                     })
             }
-        },
-
-        mounted() {
-            this.$nextTick(() => {
-                this.form.resetChangeListener()
-            })
         }
     }
 </script>

@@ -86,10 +86,6 @@
                     })
 
                     vm.$emit('updateHead')
-
-                    vm.$nextTick(() => {
-                        vm.form.resetChangeListener()
-                    })
                 })
             })).catch(function(error) {
                 next('/extensions')

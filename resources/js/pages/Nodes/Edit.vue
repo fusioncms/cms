@@ -79,10 +79,6 @@
                         })
 
                         vm.$emit('updateHead')
-
-                        vm.$nextTick(() => {
-                            vm.form.resetChangeListener()
-                        })
                     })
                 }
             })
