@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="sitemap">Edit Taxonomy</app-title>
+            <page-title icon="sitemap">Edit Taxonomy</page-title>
         </portal>
 
         <shared-form

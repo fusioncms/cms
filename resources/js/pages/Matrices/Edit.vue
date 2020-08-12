@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="layer-group">Edit Matrix</app-title>
+            <page-title icon="layer-group">Edit Matrix</page-title>
         </portal>
 
         <shared-form

@@ -1,7 +1,7 @@
 <template>
     <form-container>
         <portal to="title">
-            <app-title icon="anchor">{{ menu.name }}</app-title>
+            <page-title icon="anchor">{{ menu.name }}</page-title>
         </portal>
 
         <portal to="actions">

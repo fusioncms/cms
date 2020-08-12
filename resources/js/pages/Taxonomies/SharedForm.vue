@@ -32,11 +32,11 @@
 
                 <p-tabs>
                     <p-tab name="General">
-                        <field-set
+                        <fieldset-picker
                             :has-error="form.errors.has('fieldset')"
                             :error-message="form.errors.get('fieldset')"
                             v-model="form.fieldset">
-                        </field-set>
+                        </fieldset-picker>
                     </p-tab>
 
                     <p-tab name="Route">

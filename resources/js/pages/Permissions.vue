@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="key">Permissions</app-title>
+            <page-title icon="key">Permissions</page-title>
         </portal>
 
         <div class="row">

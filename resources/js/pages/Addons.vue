@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="box-open">Addons</app-title>
+            <page-title icon="box-open">Addons</page-title>
         </portal>
 
         <portal to="actions">

@@ -1,5 +1,5 @@
-import Errors from './Errors'
-import store from '../store'
+import Errors from '@/services/Errors'
+import store from '@/store'
 
 /**
  * [Event]

@@ -102,9 +102,9 @@
 
 <script>
     import { mapGetters }    from 'vuex'
-    import Navigation        from '../components/Navigation'
-    import NavigationItem    from '../components/NavigationItem'
-    import NavigationToggle  from '../components/NavigationToggle'
+    import Navigation        from '@/components/Navigation/Navigation'
+    import NavigationItem    from '@/components/Navigation/NavigationItem'
+    import NavigationToggle  from '@/components/Navigation/NavigationToggle'
 
     export default {
         name: 'admin-layout',

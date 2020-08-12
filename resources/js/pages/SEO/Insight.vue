@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="chart-bar">Insight</app-title>
+            <page-title icon="chart-bar">Insight</page-title>
         </portal>
 
         <div class="row" v-if="isValid === null">

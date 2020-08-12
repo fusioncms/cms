@@ -10,7 +10,6 @@ return [
     'files'       => ['viewAny', 'view', 'create', 'update', 'delete', 'download'],
     'fieldset'    => ['viewAny', 'view', 'create', 'update', 'delete'],
     'forms'       => ['viewAny', 'view', 'create', 'update', 'delete'],
-    'imports'     => ['viewAny', 'view', 'create', 'update', 'delete'],
     'mailables'   => ['view', 'update'],
     'matrices'    => ['viewAny', 'view', 'create', 'update', 'delete'],
     'menus'       => ['viewAny', 'view', 'create', 'update', 'delete'],

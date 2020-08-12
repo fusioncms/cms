@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title :icon="matrix.icon || 'pencil-alt'">Edit {{ matrix.reference_singular }}</app-title>
+            <page-title :icon="matrix.icon || 'pencil-alt'">Edit {{ matrix.reference_singular }}</page-title>
         </portal>
 
         <portal to="subtitle">{{ matrix.description }}</portal>

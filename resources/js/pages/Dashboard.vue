@@ -1,10 +1,10 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="grip-horizontal">Dashboard</app-title>
+            <page-title icon="grip-horizontal">Dashboard</page-title>
         </portal>
 
-        <quicklinks :links="quicklinks"></quicklinks>
+        <quick-links :links="quicklinks"></quick-links>
 
         <analytics-overview></analytics-overview>
 

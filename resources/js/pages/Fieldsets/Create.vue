@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="list">Create Fieldset</app-title>
+            <page-title icon="list">Create Fieldset</page-title>
         </portal>
 
         <shared-form :form="form"></shared-form>

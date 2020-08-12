@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="list">Fieldsets</app-title>
+            <page-title icon="list">Fieldsets</page-title>
         </portal>
 
         <portal to="actions">
