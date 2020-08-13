@@ -44,8 +44,8 @@
             <div class="col mt-6 w-full">
                 <field-builder
                     v-model="section.fields"
-                    :fieldtypes="$parent.fieldtypes"
-                    :sections="$parent.sections"
+                    :fieldtypes="fieldtypes"
+                    :sections="sections"
                     :sectionHandle="section.handle">
                 </field-builder>
             </div>
@@ -71,7 +71,17 @@
         },
 
 		props: {
+            sections: {
+                type: Array,
+                required: true
+            },
+
             section: {
+                type: Object,
+                required: true
+            },
+
+            fieldtypes: {
                 type: Object,
                 required: true
             }
