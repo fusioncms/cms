@@ -61,7 +61,7 @@
 
         data() {
             return {
-                tabs: [],
+                tabs: this.$children,
                 dragIndex: false
             }
         },
@@ -142,18 +142,13 @@
             },
 
             onDrop(index) {
-                if (this.dragTab != this.tabs[index]) {
-                    this.tabs.splice(index, 0,
-                        this.tabs.splice(this.dragIndex, 1)[0])
+                if (this.dragIndex != index) {
+                    this.$emit('move', this.dragIndex, index)
 
                     this.reset()
                     this.tabs[index].activate()
                 }
             }
-        },
-
-        created() {
-            this.tabs = this.$children
         }
     }
 </script>

@@ -78,10 +78,6 @@
     export default {
         name: 'field-builder',
 
-        components: {
-            'field-editor': require('./FieldEditor').default
-        },
-
         data() {
             return {
                 section: false,

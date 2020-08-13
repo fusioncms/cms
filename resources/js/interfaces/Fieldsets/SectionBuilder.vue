@@ -1,5 +1,8 @@
 <template>
-    <p-tabs :add="add">
+    <p-tabs
+        :add="add"
+        @move="move">
+
         <p-tab
             v-for="(section, index) in sections"
             :key="index"
@@ -26,10 +29,6 @@
             }
         },
 
-        components: {
-            'section-editor': require('./SectionEditor').default
-        },
-
         props: {
             value: {
                 type: Array,
@@ -47,7 +46,6 @@
             sections: {
                 deep: true,
                 handler(value) {
-console.log(value)
                     this.$emit('input', value)
                 }
             }
@@ -75,6 +73,11 @@ console.log(value)
                 }
 
                 return name
+            },
+
+            move(fromIndex, toIndex) {
+                this.sections.splice(toIndex, 0,
+                    this.sections.splice(fromIndex, 1)[0])
             },
 
             remove(index) {
