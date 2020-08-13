@@ -23,13 +23,11 @@
 
         data() {
             return {
-                sections: [],
                 form: new Form({
                     name: '',
                     handle: '',
                     description: '',
-
-                    fieldset: {},
+                    sections: [],
 
                     collect_email_addresses: false,
                     collect_ip_addresses: false,
@@ -61,7 +59,7 @@
             submit() {
                 this.form.post('/api/forms')
                     .then((response) => {
-                        axios.post(`/api/fieldsets/${response.data.fieldset.id}/sections`, { sections: this.sections })
+                        axios.post(`/api/fieldsets/${response.data.fieldset.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Form successfully saved', 'success')
 
@@ -73,6 +71,13 @@
                         toast(response.message, 'failed')
                     })
             }
+        },
+
+        created() {
+            let unwatch = this.$watch('form.sections', (value) => {
+                this.form.orig.sections = _.cloneDeep(value)
+                unwatch()
+            })
         }
     }
 </script>

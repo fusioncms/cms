@@ -36,9 +36,9 @@ export default class Form {
             }
         }
 
-        _.each(data, (v, k) =>
-            this[k] = this.proxify(v, handler))
-
+        _.each(data, (v, k) => {
+            this[k] = this.proxify(v, handler)
+        })
 
 		return new Proxy(this, handler)
 	}
