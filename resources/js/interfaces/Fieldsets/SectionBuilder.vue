@@ -9,7 +9,8 @@
 
             <section-editor
                 :section="section"
-                :fieldtypes="fieldtypes">
+                :fieldtypes="fieldtypes"
+                :sections="sections">
             </section-editor>
         </p-tab>
     </p-tabs>
@@ -46,6 +47,7 @@
             sections: {
                 deep: true,
                 handler(value) {
+console.log(value)
                     this.$emit('input', value)
                 }
             }

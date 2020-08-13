@@ -45,7 +45,7 @@
                 <field-builder
                     v-model="section.fields"
                     :fieldtypes="fieldtypes"
-                    :sections="$parent.sections"
+                    :sections="sections"
                     :sectionHandle="section.handle">
                 </field-builder>
             </div>
@@ -71,6 +71,11 @@
         },
 
 		props: {
+            sections: {
+                type: Array,
+                required: true
+            },
+
             section: {
                 type: Object,
                 required: true

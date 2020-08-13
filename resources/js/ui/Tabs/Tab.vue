@@ -10,7 +10,9 @@
 
         data() {
             return {
-                isActive: false,
+                isActive: this.active,
+                isDragging: false,
+                isDropzone: false,
             }
         },
 
@@ -51,10 +53,12 @@
             deactivate() {
                 this.isActive = false
             },
-        },
 
-        mounted() {
-            this.isActive = this.active
+            reset() {
+                this.isActive   = false
+                this.isDragging = false
+                this.isDropzone = false
+            }
         }
     }
 </script>

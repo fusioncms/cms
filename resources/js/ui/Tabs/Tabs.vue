@@ -1,14 +1,27 @@
 <template>
     <div class="tabs">
-        <ul class="tab__list">
+        <ul class="tab__list"
+            @dragover.prevent
+            @dragenter.prevent>
+
             <li v-for="(tab, index) in tabs"
                 :key="tab.name"
                 class="tab w-1/4"
-                :class="{'tab--active': tab.isActive}">
+                :class="{
+                    'tab--active': tab.isActive,
+                    'bg-primary-100': tab.isDropzone
+                }"
+                draggable
+                @dragstart="onDragStart(index)"
+                @dragend="onDragEnd(index)"
+                @dragenter="onDragEnter(index)"
+                @dragleave="onDragLeave(index)"
+                @drop="onDrop(index)">
 
                 <a
                     class="tab__link cursor-pointer flex justify-between items-center"
-                    @click.prevent="select(tab.hash)"
+                    :class="{ 'no-pointer-events': tab.isDropzone }"
+                    @mousedown="select(tab.hash)"
                     @focus="select(tab.hash)">
 
                     <span>
@@ -21,7 +34,8 @@
                     <span
                         v-if="tab.remove && tab.isActive"
                         @click.prevent="tab.remove(index)"
-                        class="flex items-center justify-center w-6 h-6 rounded hover:bg-gray-200 hover:text-gray-600">
+                        class="flex items-center justify-center w-6 h-6 rounded"
+                        :class="{ 'hover:bg-gray-200 hover:text-gray-600': ! tab.isDropzone }">
                         
                         <fa-icon icon="times" class="fa-xs"></fa-icon>
                     </span>
@@ -47,7 +61,8 @@
 
         data() {
             return {
-                tabs: null
+                tabs: [],
+                dragIndex: false
             }
         },
 
@@ -66,6 +81,10 @@
         computed: {
             tab() {
                 return this.tabs.find((tab) => tab.isActive)
+            },
+
+            dragTab() {
+                return this.tabs.find((tab) => tab.isDragging)
             }
         },
 
@@ -87,20 +106,49 @@
             },
 
             select(hash) {
-                const selected = this.findBy('hash', hash) || false
+                const tab = this.findBy('hash', hash) || false
 
-                if (selected) {
-                    this.reset()
+                this.reset()
 
-                    selected.activate()
+                tab.activate()
 
-                    if (this.replace)
-                        this.$router.replace({ hash }).catch(err => {})
-                }
+                if (this.replace)
+                    this.$router
+                        .replace({ hash: tab.hash })
+                        .catch(err => {})
             },
 
             reset() {
-                this.tabs.forEach(tab => tab.isActive = false)
+                this.tabs.forEach(tab => tab.reset())
+            },
+
+            onDragStart(index) {
+                this.dragIndex = index
+                this.tabs[index].isDragging = true
+            },
+
+            onDragEnd(index) {
+                this.dragIndex = false
+                this.tabs[index].isDragging = false
+            },
+
+            onDragEnter(index) {
+                this.tabs[index].isDropzone =
+                    ! this.tabs[index].isDragging
+            },
+
+            onDragLeave(index) {
+                this.tabs[index].isDropzone = false
+            },
+
+            onDrop(index) {
+                if (this.dragTab != this.tabs[index]) {
+                    this.tabs.splice(index, 0,
+                        this.tabs.splice(this.dragIndex, 1)[0])
+
+                    this.reset()
+                    this.tabs[index].activate()
+                }
             }
         },
 
@@ -109,3 +157,9 @@
         }
     }
 </script>
+
+<style>
+    .no-pointer-events * {
+        pointer-events: none;
+    }
+</style>
