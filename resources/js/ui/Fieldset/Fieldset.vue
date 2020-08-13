@@ -14,6 +14,10 @@
     export default {
         name: 'p-fieldset',
 
+        mixins: [
+            require('../../mixins/fields').default
+        ],
+
         props: {
             label: String,
             help: String,
@@ -41,12 +45,6 @@
                 required: false,
                 type: Boolean,
                 default: false,
-            }
-        },
-
-        computed: {
-            hasMessage() {
-                return this.help || this.errorMessage || this.successMessage
             }
         }
     }

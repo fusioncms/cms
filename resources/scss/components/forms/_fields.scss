@@ -62,18 +62,40 @@
     }
 }
 
+.field-password {
+    @apply relative;
+
+    &__button {
+        @apply absolute;
+        top: 50%;
+        right: rem(4px);
+        transform: translateY(-50%);
+    }
+}
+
 .field-number {
     @apply flex items-center text-center w-full;
 
-    &__button {}
+    &__button { @apply flex-shrink-0; }
 
     &__input {
-        @apply flex-auto text-center mx-2;
+        @apply flex-auto flex-shrink text-center;
+        -moz-appearance: textfield;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     }
 }
 
 .field-select {
     @apply flex justify-between items-center w-full px-3 py-2;
+
+    &--readonly {
+        opacity: 1!important;
+    }
 
     &__placeholder {
         @apply text-gray-500;

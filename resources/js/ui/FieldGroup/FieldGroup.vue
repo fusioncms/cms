@@ -1,6 +1,6 @@
 <template>
     <div class="form-group" :class="{'form-group--danger': hasError, 'form-group--success': hasSuccess}">
-        <p-label :fieldId="fieldId" :required="required" v-if="label">{{ label }}</p-label>
+        <p-label :fieldId="fieldId" :required="required" :hideLabel="hideLabel" v-if="label">{{ label }}</p-label>
         <slot></slot>
 
         <div :id="fieldId + '_message'" class="form-group__messages" v-if="hasMessage">
@@ -18,9 +18,18 @@
     export default {
         name: 'p-field-group',
 
+        mixins: [
+            require('../../mixins/fields').default
+        ],
+
         props: {
             name: String,
             label: String,
+            hideLabel: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
             fieldId: {
                 required: true,
                 type: String
@@ -49,12 +58,6 @@
                 required: false,
                 type: String,
                 default: '',
-            }
-        },
-
-        computed: {
-            hasMessage() {
-                return this.help || this.errorMessage || this.successMessage
             }
         }
     }

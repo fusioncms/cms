@@ -1,38 +1,60 @@
 <template>
-    <input
-        class="field field--input"
-        :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
-        :id="formattedId"
+    <p-field-group
         :name="name"
-        :type="type"
-        :placeholder="placeholder"
-        :readonly="readonly"
-        :disabled="disabled"
-        :value="value"
-        :autocomplete="autocomplete"
-        :autofocus="autofocus"
+        :fieldId="formattedId"
+        :label="label"
+        :hideLabel="hideLabel"
         :required="required"
-        :aria-required="required" 
-        :aria-describedby="message ? formattedId + '_message' : null"
-        @input="$emit('input', $event.target.value)"
-        v-model="value"/>
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess"
+        :successMessage="successMessage"
+        :help="help">
+        <p-title
+            :id="formattedId"
+            :name="name"
+            :placeholder="placeholder"
+            :readonly="readonly"
+            :disabled="disabled"
+            :value="value"
+            :autocomplete="autocomplete"
+            :autofocus="autofocus"
+            :required="required"
+            :hasError="hasError"
+            :hasSuccess="hasSuccess"
+            :message="hasMessage">
+        </p-title>
+    </p-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-input',
+        name: 'p-title-group',
 
         mixins: [
             require('../../mixins/fields').default
         ],
 
         props: {
-            name:  {
+            name: {
                 required: true,
                 type: String
             },
             id: String,
-            placeholder: String,
+            placeholder: {
+                type: String,
+                default: 'Name',
+            },
+            label: {
+                type: String,
+                default: 'Name',
+            },
+            hideLabel: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
+            help: String,
             value: {
                 type: [String, Number],
                 default: '',
@@ -53,24 +75,25 @@
                 type: Boolean,
                 default: false,
             },
-            monospaced: {
-                type: Boolean,
-                default: false,
-            },
             hasError: {
                 required: false,
                 type: Boolean,
                 default: false,
+            },
+            errorMessage: {
+                required: false,
+                type: String,
+                default: '',
             },
             hasSuccess: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-            message: {
+            successMessage: {
                 required: false,
-                type: Boolean,
-                defaut: false
+                type: String,
+                default: '',
             },
             autocomplete: {
                 required: false,
@@ -81,7 +104,7 @@
                 required: false,
                 type: Boolean,
                 default: false,
-            }
+            },
         }
     }
 </script>

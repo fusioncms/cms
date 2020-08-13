@@ -2,25 +2,31 @@
     <p-field-group
         :name="name"
         :fieldId="formattedId"
+        :label="label"
+        :hideLabel="hideLabel"
         :required="required"
         :hasError="hasError"
         :errorMessage="errorMessage"
         :hasSuccess="hasSuccess"
         :successMessage="successMessage"
         :help="help">
-        <p-checkbox
+        <p-textarea
+            :id="formattedId"
             :name="name"
-            :id="id + '_field'"
+            :placeholder="placeholder"
+            :readonly="readonly"
             :disabled="disabled"
-            :required="required">
-            <slot></slot>
-        </p-checkbox>
+            :value="value"
+            :rows="rows"
+            :required="required"
+            :message="hasMessage">
+        </p-textarea>
     </p-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-checkbox-single',
+        name: 'p-textarea-group',
 
         mixins: [
             require('../../mixins/fields').default
@@ -29,18 +35,34 @@
         props: {
             name: {
                 required: true,
-                type: String,
+                type: String
             },
+            id: String,
+            placeholder: String,
             label: String,
+            hideLabel: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
             help: String,
-            id: {
-                required: false
+            value: {
+                type: [String, Number],
+                default: '',
             },
             required: {
                 type: Boolean,
                 default: false,
             },
+            readonly: {
+                type: Boolean,
+                default: false,
+            },
             disabled: {
+                type: Boolean,
+                default: false,
+            },
+            monospaced: {
                 type: Boolean,
                 default: false,
             },
@@ -63,7 +85,12 @@
                 required: false,
                 type: String,
                 default: '',
-            }
+            },
+            rows: {
+                required: false,
+                type: Number,
+                default: 2,
+            },
         }
     }
 </script>

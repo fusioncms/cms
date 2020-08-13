@@ -9,17 +9,17 @@
                     <h3>Title Field</h3>
                 </div>
                 <div class="col w-full xl:w-1/3">
-                    <p-title
+                    <p-title-group
                         name="title"
                         label="Title"
                         help="What is your name?"
                         autocomplete="off"
                         placeholder="Name">
-                    </p-title>
+                    </p-title-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-title
+                    <p-title-group
                         name="title_success"
                         label="Title Success"
                         help="What is your name?"
@@ -27,13 +27,13 @@
                         required
                         placeholder="Name" 
                         value="Jean-Luc Picard"
-                        :hasSuccess="true"
+                        hasSuccess
                         successMessage="That looks like a good name!">
-                    </p-title>
+                    </p-title-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-title
+                    <p-title-group
                         name="title_error"
                         label="Title Error"
                         help="What is your name?"
@@ -41,9 +41,9 @@
                         required
                         placeholder="Name" 
                         value="Tea, Earl Gray, Hot"
-                        :hasError="true"
+                        hasError
                         errorMessage="That is not a valid name.">
-                    </p-title>
+                    </p-title-group>
                 </div>
             </div>
 
@@ -56,40 +56,40 @@
                 </div>
                 
                 <div class="col w-full xl:w-1/3">
-                    <p-input
+                    <p-input-group
                         name="input"
                         label="Input"
                         help="Help text for input."
                         autocomplete="off">
-                    </p-input>
+                    </p-input-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-input
+                    <p-input-group
                         name="input_success"
                         label="Input Success"
                         help="What shall we call you?"
                         autocomplete="off"
                         required 
                         value="Jean-Luc Picard"
-                        :hasSuccess="true"
+                        hasSuccess
                         successMessage="This name is valid!">
-                    </p-input>
+                    </p-input-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-input
+                    <p-input-group
                         name="input_error"
-                        type="email"
                         label="Input Error"
+                        type="email"
                         help="What is your email address?"
                         autocomplete="off"
                         required
                         placeholder="Name" 
                         value="make.it.so@"
-                        :hasError="true"
+                        hasError
                         errorMessage="This email is invalid.">
-                    </p-input>
+                    </p-input-group>
                 </div>
             </div>
 
@@ -102,36 +102,36 @@
                 </div>
 
                 <div class="col w-full md:w-1/3">
-                    <p-password
+                    <p-password-group
                         name="password"
                         label="password"
                         required
                         help="Please enter a password.">
-                    </p-password>
+                    </p-password-group>
                 </div>
 
                 <div class="col w-full md:w-1/3">
-                    <p-password
+                    <p-password-group
                         name="password_error"
                         label="Password Error"
                         required
                         help="Please enter a password."
                         value="Password"
-                        :hasSuccess="true"
+                        hasSuccess
                         successMessage="Thank you!">
-                    </p-password>
+                    </p-password-group>
                 </div>
 
                 <div class="col w-full md:w-1/3">
-                    <p-password
+                    <p-password-group
                         name="password_success"
                         label="Password Success"
                         required
                         help="Please enter a password."
                         value="Password"
-                        :hasError="true"
+                        hasError
                         errorMessage="This password is incorrect.">
-                    </p-password>
+                    </p-password-group>
                 </div>
             </div>
 
@@ -144,45 +144,40 @@
                 </div>
 
                 <div class="col w-full sm:w-1/2 lg:w-1/4">
-                    <p-number
+                    <p-number-group
                         name="number"
                         label="Number"
-                        :value="0"
-                        :min="1"
-                        :max="200"
-                        :steps="5"
-                        help="Choose an integer divisible by 5.">
-                    </p-number>
+                        :value="1.0"
+                        :step="0.1"
+                        :decimals="1"
+                        help="Choose an number.">
+                    </p-number-group>
                 </div>
                 
                 <div class="col w-full sm:w-1/2 lg:w-1/4">
-                    <p-number
+                    <p-number-group
                         name="number_success"
                         label="Number Success"
                         :required="true"
                         :value="5"
-                        :min="1"
-                        :max="200"
-                        :steps="5"
+                        :step="5"
                         help="Choose an integer divisible by 5."
-                        :hasSuccess="true"
+                        hasSuccess
                         successMessage="This value is valid!">
-                    </p-number>
+                    </p-number-group>
                 </div>
 
                 <div class="col w-full sm:w-1/2 lg:w-1/4">
-                    <p-number
+                    <p-number-group
                         name="number_error"
                         label="Number Error"
                         :required="true"
                         :value="7"
-                        :min="1"
-                        :max="200"
-                        :steps="5"
+                        :step="5"
                         help="Choose an integer divisible by 5."
-                        :hasError="true"
+                        hasError
                         errorMessage="This is not a valid integer.">
-                    </p-number>
+                    </p-number-group>
                 </div>
             </div>
             
@@ -195,31 +190,31 @@
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-textarea
+                    <p-textarea-group
                         name="textarea"
                         label="Textarea"
                         help="Help text for textarea."
                         autocomplete="off"
                         :rows="5">
-                    </p-textarea>
+                    </p-textarea-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-textarea
+                    <p-textarea-group
                         name="textarea_success"
                         label="Textarea Success"
                         help="Enter a message."
                         autocomplete="off"
                         required 
                         value="You cannot explain away a wantonly immoral act because you think that it is connected to some higher purpose."
-                        :hasSuccess="true"
+                        hasSuccess
                         successMessage="This value is valid!"
                         :rows="5">
-                    </p-textarea>
+                    </p-textarea-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-textarea
+                    <p-textarea-group
                         name="textarea_error"
                         label="Textarea Error"
                         help="Enter a message."
@@ -227,10 +222,10 @@
                         required
                         placeholder="Name" 
                         value="bIHeghvIpchughbIHeghpu'."
-                        :hasError="true"
+                        hasError
                         errorMessage="This value is invalid."
                         :rows="5">
-                    </p-textarea>
+                    </p-textarea-group>
                 </div>
             </div>
 
@@ -243,7 +238,7 @@
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-select
+                    <p-select-group
                         name="select"
                         label="Select"
                         help="Help text for select dropdown."
@@ -269,16 +264,16 @@
                                 'value': 'option-5',
                             }
                         ]">
-                    </p-select>
+                    </p-select-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-select
+                    <p-select-group
                         name="select_success"
                         label="Select Success"
                         value="option-1"
                         help="Help text for select dropdown."
-                        :hasSuccess="true"
+                        hasSuccess
                         successMessage="This value is valid!"
                         :options="[
                             {
@@ -302,15 +297,15 @@
                                 'value': 'option-5',
                             }
                         ]">
-                    </p-select>
+                    </p-select-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-select
+                    <p-select-group
                         name="select_error"
                         label="Select Error"
                         help="Help text for select dropdown."
-                        :hasError="true"
+                        hasError
                         errorMessage="A selected option is required."
                         :options="[
                             {
@@ -334,17 +329,17 @@
                                 'value': 'option-5',
                             }
                         ]">
-                    </p-select>
+                    </p-select-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-select
+                    <p-select-group
                         name="select_multiple"
                         label="Select Multiple"
                         help="Help text for select dropdown."
-                        :multiple="true"
-                        :showControls="true"
-                        :filterable="true"
+                        multiple
+                        showControls
+                        filterable
                         :options="[
                             {
                                 'label': 'Option 1',
@@ -387,7 +382,7 @@
                                 'value': 'option-10',
                             }
                         ]">
-                    </p-select>
+                    </p-select-group>
                 </div>
             </div>
 
@@ -405,7 +400,7 @@
                         label="Upload"
                         required
                         help="Upload an image."
-                        :multiple="true">
+                        multiple>
                     </p-upload>
                 </div>
             </div>
@@ -506,40 +501,40 @@
                         <p-checkbox
                             id="checkbox_inline_0"
                             key="0"
-                            name="checkbox"
-                            :inline="true">
+                            name="checkbox_inline"
+                            inline>
                             Checkbox 1
                         </p-checkbox>
 
                         <p-checkbox
                             id="checkbox_inline_1"
                             key="1"
-                            name="checkbox"
-                            :inline="true">
+                            name="checkbox_inline"
+                            inline>
                             Checkbox 2
                         </p-checkbox>
 
                         <p-checkbox
                             id="checkbox_inline_2"
                             key="2"
-                            name="checkbox"
-                            :inline="true">
+                            name="checkbox_inline"
+                            inline>
                             Checkbox 3
                         </p-checkbox>
 
                         <p-checkbox
                             id="checkbox_inline_3"
                             key="3"
-                            name="checkbox"
-                            :inline="true">
+                            name="checkbox_inline"
+                            inline>
                             Checkbox 4
                         </p-checkbox>
 
                         <p-checkbox
                             id="checkbox_inline_4"
                             key="4"
-                            name="checkbox"
-                            :inline="true">
+                            name="checkbox_inline"
+                            inline>
                             Checkbox 5
                         </p-checkbox>
                     </p-fieldset>
@@ -547,45 +542,45 @@
 
                 <div class="col w-full md:w-1/2">
                     <p-fieldset 
-                        label="Radios" 
+                        label="Radios Inline" 
                         help="Select an option.">
                         <p-radio
                             id="radio_inline_0"
                             key="0"
-                            name="radio"
-                            :inline="true">
+                            name="radio_inline"
+                            inline>
                             Radio 1
                         </p-radio>
 
                         <p-radio
                             id="radio_inline_1"
                             key="1"
-                            name="radio"
-                            :inline="true">
+                            name="radio_inline"
+                            inline>
                             Radio 2
                         </p-radio>
 
                         <p-radio
                             id="radio_inline_2"
                             key="2"
-                            name="radio"
-                            :inline="true">
+                            name="radio_inline"
+                            inline>
                             Radio 3
                         </p-radio>
 
                         <p-radio
                             id="radio_inline_3"
                             key="3"
-                            name="radio"
-                            :inline="true">
+                            name="radio_inline"
+                            inline>
                             Radio 4
                         </p-radio>
 
                         <p-radio
                             id="radio_inline_4"
                             key="4"
-                            name="radio"
-                            :inline="true">
+                            name="radio_inline"
+                            inline>
                             Radio 5
                         </p-radio>
                     </p-fieldset>
@@ -599,7 +594,7 @@
                     <p-checkbox-single
                         id="checkbox_single"
                         name="checkbox_single"
-                        :required="true">
+                        required>
                         <p>I have read and understand this website's <a href="#">Terms of Service</a> and agree with all policies.</p>
                     </p-checkbox-single>
                 </div>
@@ -608,9 +603,9 @@
                     <p-checkbox-single
                         id="checkbox_single_error"
                         name="checkbox_single_error"
-                        :hasError="true"
+                        hasError
                         errorMessage="This field is required to proceed"
-                        :required="true">
+                        required>
                         <p>I have read and understand this website's <a href="#">Terms of Service</a> and agree with all policies.</p>
                     </p-checkbox-single>
                 </div>

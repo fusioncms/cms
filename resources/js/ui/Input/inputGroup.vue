@@ -1,8 +1,16 @@
 <template>
-    <div class="field-password">
-        <input
-            class="field field--input"
-            :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
+    <p-field-group
+        :name="name"
+        :fieldId="formattedId"
+        :label="label"
+        :hideLabel="hideLabel"
+        :required="required"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess"
+        :successMessage="successMessage"
+        :help="help">
+        <p-input
             :id="formattedId"
             :name="name"
             :type="type"
@@ -13,35 +21,21 @@
             :autocomplete="autocomplete"
             :autofocus="autofocus"
             :required="required"
-            :aria-required="required" 
-            :aria-describedby="message ? formattedId + '_message' : null"
-            @input="$emit('input', $event.target.value)"
-            v-model="value"/>
-
-        <p-button icon size="small" class="field-password__button" @click="toggleVisibility()">
-            <fa-icon v-if="revealed" icon="eye-slash"></fa-icon>
-            <fa-icon v-else icon="eye"></fa-icon>
-
-            <span v-if="revealed" class="sr-only">{{ hideText }}</span>
-            <span v-else class="sr-only">{{ showText }}</span>
-        </p-button>
-    </div>
+            :monospaced="monospaced"
+            :hasError="hasError"
+            :hasSuccess="hasSuccess"
+            :message="hasMessage">
+        </p-input>
+    </p-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-password',
+        name: 'p-input-group',
 
         mixins: [
             require('../../mixins/fields').default
         ],
-
-        data() {
-            return {
-                revealed: false,
-                type: 'password'
-            }
-        },
 
         props: {
             name:  {
@@ -51,10 +45,18 @@
             id: String,
             placeholder: String,
             label: String,
-            help: String,
+            hideLabel: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
             value: {
-                type: String,
+                type: [String, Number],
                 default: '',
+            },
+            type: {
+                type: String,
+                default: 'text',
             },
             required: {
                 type: Boolean,
@@ -72,35 +74,26 @@
                 type: Boolean,
                 default: false,
             },
-            neverShow: {
-                required: false,
-                type: Boolean,
-                default: false,
-            },
-            showText: {
-                required: false,
-                type: String,
-                default: 'Show Password',
-            },
-            hideText: {
-                required: false,
-                type: String,
-                default: 'Hide Password',
-            },
+            help: String,
             hasError: {
                 required: false,
                 type: Boolean,
                 default: false,
+            },
+            errorMessage: {
+                required: false,
+                type: String,
+                default: '',
             },
             hasSuccess: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-            message: {
+            successMessage: {
                 required: false,
-                type: Boolean,
-                defaut: false
+                type: String,
+                default: '',
             },
             autocomplete: {
                 required: false,
@@ -112,13 +105,6 @@
                 type: Boolean,
                 default: false,
             },
-        },
-
-        methods: {
-            toggleVisibility() {
-                this.type = this.type === 'password' ? 'text' : 'password'
-                this.revealed = ! this.revealed
-            }
         }
     }
 </script>

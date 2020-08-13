@@ -1,11 +1,18 @@
 <template>
-    <div class="field-password">
-        <input
-            class="field field--input"
-            :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
+    <p-field-group
+        :name="name"
+        :fieldId="formattedId"
+        :label="label"
+        :hideLabel="hideLabel"
+        :required="required"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess"
+        :successMessage="successMessage"
+        :help="help">
+        <p-number
             :id="formattedId"
             :name="name"
-            :type="type"
             :placeholder="placeholder"
             :readonly="readonly"
             :disabled="disabled"
@@ -13,35 +20,24 @@
             :autocomplete="autocomplete"
             :autofocus="autofocus"
             :required="required"
-            :aria-required="required" 
-            :aria-describedby="message ? formattedId + '_message' : null"
-            @input="$emit('input', $event.target.value)"
-            v-model="value"/>
-
-        <p-button icon size="small" class="field-password__button" @click="toggleVisibility()">
-            <fa-icon v-if="revealed" icon="eye-slash"></fa-icon>
-            <fa-icon v-else icon="eye"></fa-icon>
-
-            <span v-if="revealed" class="sr-only">{{ hideText }}</span>
-            <span v-else class="sr-only">{{ showText }}</span>
-        </p-button>
-    </div>
+            :step="step"
+            :min="min"
+            :max="max"
+            :decimals="decimals"
+            :hasError="hasError"
+            :hasSuccess="hasSuccess"
+            :message="hasMessage">
+        </p-number>
+    </p-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-password',
+        name: 'p-number-group',
 
         mixins: [
             require('../../mixins/fields').default
         ],
-
-        data() {
-            return {
-                revealed: false,
-                type: 'password'
-            }
-        },
 
         props: {
             name:  {
@@ -51,10 +47,15 @@
             id: String,
             placeholder: String,
             label: String,
+            hideLabel: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
             help: String,
             value: {
-                type: String,
-                default: '',
+                type: [String, Number],
+                default: null,
             },
             required: {
                 type: Boolean,
@@ -72,35 +73,25 @@
                 type: Boolean,
                 default: false,
             },
-            neverShow: {
+             hasError: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-            showText: {
+            errorMessage: {
                 required: false,
                 type: String,
-                default: 'Show Password',
-            },
-            hideText: {
-                required: false,
-                type: String,
-                default: 'Hide Password',
-            },
-            hasError: {
-                required: false,
-                type: Boolean,
-                default: false,
+                default: '',
             },
             hasSuccess: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-            message: {
+            successMessage: {
                 required: false,
-                type: Boolean,
-                defaut: false
+                type: String,
+                default: '',
             },
             autocomplete: {
                 required: false,
@@ -112,12 +103,21 @@
                 type: Boolean,
                 default: false,
             },
-        },
-
-        methods: {
-            toggleVisibility() {
-                this.type = this.type === 'password' ? 'text' : 'password'
-                this.revealed = ! this.revealed
+            step: {
+                type: Number,
+                default: 1
+            },
+            decimals: {
+                type: Number,
+                default: 0
+            },
+            min: {
+                type: [String, Number],
+                default: -Infinity
+            },
+            max: {
+                type: [String, Number],
+                default: Infinity
             }
         }
     }

@@ -1,6 +1,7 @@
 <template>
     <p-fieldset
         :label="label"
+        :inline="inline"
         :help="help"
         :hasError="hasError"
         :errorMessage="errorMessage"
@@ -35,6 +36,11 @@
                 required: false,
                 type: String,
                 default: '',
+            },
+            inline: {
+                required: false,
+                type: Boolean,
+                default: false,
             }
         }
     }
