@@ -31,7 +31,7 @@ class Collection extends Builder implements BuilderContract
         parent::__construct();
 
         $this->matrix = Matrix::where('handle', $matrix)->firstOrFail();
-        $this->model = $this->make();
+        $this->model  = $this->make();
     }
 
     /**
@@ -40,10 +40,10 @@ class Collection extends Builder implements BuilderContract
     public function make()
     {
         $className = Str::studly($this->matrix->handle);
-        $traits = [];
-        $fillable = ['matrix_id', 'parent_id', 'name', 'slug', 'status'];
-        $casts = ['status' => 'boolean'];
-        $fields = [];
+        $traits    = [];
+        $fillable  = ['matrix_id', 'parent_id', 'name', 'slug', 'status'];
+        $casts     = ['status' => 'boolean'];
+        $fields    = [];
 
         if ($this->matrix->fieldset) {
             $fields = $this->matrix->fieldset->fields->reject(function ($field) {
@@ -57,9 +57,9 @@ class Collection extends Builder implements BuilderContract
             });
 
             foreach ($fields as $field) {
-                $fieldtype = fieldtypes()->get($field->type);
+                $fieldtype  = fieldtypes()->get($field->type);
                 $fillable[] = $field->handle;
-                $casts[] = $field->handle.'\' => \''.$fieldtype->cast;
+                $casts[]    = $field->handle.'\' => \''.$fieldtype->cast;
             }
         }
 

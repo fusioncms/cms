@@ -73,9 +73,9 @@ class SyncSettingsTest extends TestCase
      */
     public function console_command_will_sync_setting_section_records()
     {
-        $group = SettingGroup::where('handle', 'api')->firstOrFail();
+        $group    = SettingGroup::where('handle', 'api')->firstOrFail();
         $fieldset = $group->fieldset();
-        $fields = SettingService::fields($group->handle);
+        $fields   = SettingService::fields($group->handle);
 
         // add group..
         $fields['FooBar'] = [];
@@ -107,10 +107,10 @@ class SyncSettingsTest extends TestCase
      */
     public function console_command_will_sync_setting_field_records()
     {
-        $group = SettingGroup::where('handle', 'files')->firstOrFail();
+        $group   = SettingGroup::where('handle', 'files')->firstOrFail();
         $section = $group->fieldset()->sections->first();
-        $fields = SettingService::fields($group->handle);
-        $fields = $fields->get('General');
+        $fields  = SettingService::fields($group->handle);
+        $fields  = $fields->get('General');
 
         // remove existing field..
         array_shift($fields);

@@ -261,7 +261,7 @@ class UserTest extends TestCase
      */
     public function each_user_must_have_a_unique_email()
     {
-        $user = factory(User::class)->create()->toArray();
+        $user       = factory(User::class)->create()->toArray();
         $user['id'] = null;
 
         $this

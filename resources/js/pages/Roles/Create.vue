@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="user-shield">Create Role</app-title>
+            <page-title icon="user-shield">Create Role</page-title>
         </portal>
 
         <shared-form :form="form" :submit="submit"></shared-form>
@@ -45,12 +45,6 @@
                     toast(response.response.data.message, 'failed')
                 })
             },
-        },
-
-        mounted() {
-            this.$nextTick(function(){
-                this.form.resetChangeListener()
-            })
         }
     }
 </script>

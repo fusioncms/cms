@@ -132,7 +132,7 @@ class Theme extends Collection
     protected function registerClassLoader()
     {
         $namespace = $this->active()->get('namespace');
-        $loader = new ClassLoader();
+        $loader    = new ClassLoader();
 
         $loader->addPsr4("Themes\\{$namespace}\\", theme_path("{$namespace}/src"));
         $loader->register();

@@ -98,14 +98,14 @@ class Taxonomy extends Model
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $subject = $activity->subject;
-        $action = ucfirst($eventName);
+        $subject    = $activity->subject;
+        $action     = ucfirst($eventName);
         $properties = [
             'link' => "taxonomies/{$subject->id}/edit",
             'icon' => 'sitemap',
         ];
 
         $activity->description = "{$action} taxonomy ({$subject->name})";
-        $activity->properties = $properties;
+        $activity->properties  = $properties;
     }
 }

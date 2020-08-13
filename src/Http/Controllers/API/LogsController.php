@@ -24,8 +24,8 @@ class LogsController extends Controller
             $log->setFile($request->input('l'));
         }
 
-        $logs = $log->all();
-        $files = $log->getFiles(true);
+        $logs        = $log->all();
+        $files       = $log->getFiles(true);
         $currentFile = $log->getFileName();
 
         return json_encode(['logs' => $logs, 'files' => $files, 'currentFile' => $currentFile]);

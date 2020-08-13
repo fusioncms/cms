@@ -36,7 +36,7 @@ class RestoreFiles
     public function __construct(TemporaryDirectory $tempDirectory)
     {
         $this->tempDirectory = $tempDirectory;
-        $this->manifest = new Manifest($tempDirectory->path('manifest.txt'));
+        $this->manifest      = new Manifest($tempDirectory->path('manifest.txt'));
     }
 
     /**
@@ -46,7 +46,7 @@ class RestoreFiles
      */
     public function handle()
     {
-        $includes = config('backup.backup.source.files.include');
+        $includes    = config('backup.backup.source.files.include');
         $filesToCopy = $this->fetchFileToRestore();
 
         try {

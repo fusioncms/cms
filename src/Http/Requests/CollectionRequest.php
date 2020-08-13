@@ -10,10 +10,10 @@ class CollectionRequest extends FormRequest
 {
     public function __construct()
     {
-        $this->matrix = Matrix::where('slug', request()->route('slug'))->firstOrFail();
-        $this->model = (new Collection($this->matrix->handle))->make();
-        $this->fieldset = $this->matrix->fieldset;
-        $this->fields = $this->fieldset->fields ?? [];
+        $this->matrix        = Matrix::where('slug', request()->route('slug'))->firstOrFail();
+        $this->model         = (new Collection($this->matrix->handle))->make();
+        $this->fieldset      = $this->matrix->fieldset;
+        $this->fields        = $this->fieldset->fields ?? [];
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
     }
 
@@ -58,10 +58,22 @@ class CollectionRequest extends FormRequest
             $rules['slug'] .= '|required';
         }
 
-        foreach ($this->fields as $field) {
-            $rules[$field->handle] = $field->validation ?: 'sometimes';
-        }
+        $rules += $this->fields->flatMap(function ($field) {
+            return $field->type()->rules($field, $this->{$field->handle});
+        })->toArray();
 
         return $rules;
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return $this->fields->flatMap(function ($field) {
+            return $field->type()->attributes($field, $this->{$field->handle});
+        })->toArray();
     }
 }

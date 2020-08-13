@@ -19,7 +19,7 @@ class BackupResource extends JsonResource
     public function toArray($request)
     {
         $backupConfig = config('backup.monitor_backups');
-        $statuses = BackupDestinationStatusFactory::createForMonitorConfig($backupConfig);
+        $statuses     = BackupDestinationStatusFactory::createForMonitorConfig($backupConfig);
         $destinations = [];
 
         $destinations = $statuses->map(function (BackupDestinationStatus $status) {

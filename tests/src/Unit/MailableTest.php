@@ -78,9 +78,9 @@ class MailableTest extends TestCase
      */
     public function a_request_can_be_made_to_generate_a_set_of_placeholders_for_the_mailable_class()
     {
-        $model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
+        $model        = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
         $placeholders = $model->placeholders;
-        $attributes = app()->make(\Fusion\Models\User::class)->getFillable();
+        $attributes   = app()->make(\Fusion\Models\User::class)->getFillable();
 
         $this->assertTrue($placeholders->get('user') == $attributes);
     }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="list">Edit Fieldset</app-title>
+            <page-title icon="list">Edit Fieldset</page-title>
         </portal>
 
         <shared-form
@@ -29,7 +29,6 @@
             return {
                 id: null,
                 resource: null,
-                sections: [],
                 form: null
             }
         },
@@ -38,22 +37,11 @@
             'shared-form': SharedForm
         },
 
-        watch: {
-            sections: {
-                deep: true,
-                handler(value) {
-                    if (! this.hasChanges) {
-                        this.form.onFirstChange()
-                    }
-                }
-            }
-        },
-
         methods: {
             submit() {
                 this.form.patch(`/api/fieldsets/${this.resource.id}`)
                     .then(() => {
-                        axios.post(`/api/fieldsets/${this.resource.id}/sections`, { sections: this.sections })
+                        axios.post(`/api/fieldsets/${this.resource.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Fieldset successfully updated', 'success')
 
@@ -78,15 +66,14 @@
                 } else {
                     next((vm) => {
                         vm.resource = fieldset
-                        vm.sections = fieldset.sections
                         vm.form = new Form({
                             name: fieldset.name,
                             handle: fieldset.handle,
+                            sections: fieldset.sections
                         }, true)
 
                         vm.$nextTick(() => {
                             vm.$emit('updateHead')
-                            vm.form.resetChangeListener()
                         })
                     })
                 }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-			<app-title icon="paper-plane">Create Form</app-title>
+			<page-title icon="paper-plane">Create Form</page-title>
 		</portal>
 
         <shared-form :form="form"></shared-form>
@@ -23,13 +23,11 @@
 
         data() {
             return {
-                sections: [],
                 form: new Form({
                     name: '',
                     handle: '',
                     description: '',
-
-                    fieldset: {},
+                    sections: [],
 
                     collect_email_addresses: false,
                     collect_ip_addresses: false,
@@ -57,22 +55,11 @@
             'shared-form': SharedForm
         },
 
-        watch: {
-            sections: {
-                deep: true,
-                handler(value) {
-                    if (! this.hasChanges) {
-                        this.form.onFirstChange()
-                    }
-                }
-            }
-        },
-
         methods: {
             submit() {
                 this.form.post('/api/forms')
                     .then((response) => {
-                        axios.post(`/api/fieldsets/${response.data.fieldset.id}/sections`, { sections: this.sections })
+                        axios.post(`/api/fieldsets/${response.data.fieldset.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Form successfully saved', 'success')
 
@@ -86,9 +73,10 @@
             }
         },
 
-        mounted() {
-            this.$nextTick(() => {
-                this.form.resetChangeListener()
+        created() {
+            let unwatch = this.$watch('form.sections', (value) => {
+                this.form.orig.sections = _.cloneDeep(value)
+                unwatch()
             })
         }
     }

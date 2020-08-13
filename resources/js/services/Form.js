@@ -1,86 +1,78 @@
-import Errors from './Errors'
-import store from '../store'
+import Errors from '@/services/Errors'
+import store from '@/store'
 
+/**
+ * [Event]
+ * Checks for updates to form.
+ * 
+ */
+let onUpdate = _.debounce((obj) => {
+	const hasChanges = ! _.isEqual(obj.orig, obj.data())
+
+	if (obj.blockNav && obj.hasChanges != hasChanges)
+		store.commit('form/setPreventNavigation', hasChanges)
+
+	obj.hasChanges = hasChanges
+}, 250)
+
+/**
+ * Form object.
+ * 
+ */
 export default class Form {
-    /**
-     * Create a new Form instance.
-     *
-     * @param {object} data
-     */
-    constructor(data, preventNavigation = false) {
-        this.errors = new Errors
-        this.originalData = data
+	constructor(data, blockNav = false) {
+		this.blockNav = blockNav
+		this.orig     = data
+        this.errors   = new Errors()
         this.hasChanges = false
-        this.preventNavigation = preventNavigation
 
+        // --
         let form = this
-
-        this.__data = {};
-
-        for (let field in data) {
-            this[field] = data[field]
-
-            form.__data[field] = form[field];
-            (function(field_name) {
-                Object.defineProperty (form, field_name, {
-                    get: function () {
-                        return form.__data[field_name];
-                    },
-                    set: function (new_value) {
-                        form.__data[field_name] = new_value;
-
-                        if (!form.hasChanges) {
-                            form.onFirstChange()
-                        }
-                    }
-                });
-            })(field);
+        let handler = {
+            set(obj, key, val, rcvr) {
+                Reflect.set(...arguments)
+                onUpdate(form)
+                return true
+            }
         }
 
-    }
+        _.each(data, (v, k) => {
+            this[k] = this.proxify(v, handler)
+        })
 
-    set(field, value) {
-        this.data[field] = value
-    }
+		return new Proxy(this, handler)
+	}
 
-    get(field) {
-        return this.data[field]
-    }
-
-    /**
-     * Reset the form fields.
-     */
-    reset() {
-        for (let field in this.originalData) {
-            this[field] = this.originalData[field]
-        }
-
-        this.errors.clear()
-    }
-
-    data() {
-        let data = {}
-
-        for (let property in this.originalData)
-            data[property] = this[property]
-
+    proxify(data, handler = {}) {
+        if (_.isArray(data))
+            return _.map(data, (v, k) => this.proxify(v, handler))
+        
+        else if (_.isObject(data))
+            return new Proxy(_.mapValues(data, (v, k) => {
+                return this.proxify(v, handler)
+            }), handler)
+            
         return data
     }
 
-    formdata(additional = {}) {
+	data() {
+		return _.mapValues(this.orig, (v, k) => this[k])
+	}
+
+	formdata(additional = {}) {
         let data = new FormData()
         let json = {}
 
-        // add form data..
-        for (let key in this.originalData)
-            if (this[key] instanceof FileList)
-                _.each(this[key], (val) => data.append(`${key}[]`, val))
-            else if (this[key] instanceof File)
-                data.append(key, val)
+		_.each(this.data(), (v, k) => {
+			if (v instanceof FileList)
+				_.each(v, (val) => data.append(`${k}[]`, val))
+			else if (v instanceof File)
+                data.append(k, v)
             else
-                json[key] = this[key]
+                json[k] = v
+		})
 
-        // non-file data will be decoded on back-end..
+		// non-file data will be decoded on back-end..
         if (! _.isEmpty(json))
             data.append('_json', JSON.stringify(json))
 
@@ -90,54 +82,28 @@ export default class Form {
         return data
     }
 
-    /**
-    * Submit a POST request.
-    *
-    * @param {string} url
-    */
-    post(url) {
+	post(url) {
         return this.submit('post', url, this.formdata())
     }
 
-    /**
-     * Submit a PATCH request.
-     *
-     * @param {string} url
-     */
     patch(url) {
         return this.submit('post', url, this.formdata({'_method': 'PATCH'}))
     }
 
-    /**
-     * Submit a PUT request.
-     *
-     * @param {string} url
-     */
     put(url) {
         return this.submit('post', url, this.formdata({'_method': 'PUT'}))
     }
 
-    /**
-     * Submit a DELETE request.
-     *
-     * @param {string} url
-     */
     delete(url) {
         return this.submit('post', url, this.formdata({'_method': 'DELETE'}))
     }
 
-    /**
-     * Submit the form by the given request type and url.
-     *
-     * @param {string} requestType
-     * @param {string} url
-     */
-    submit(requestType, url, data) {
+    submit(rType, url, data) {
         return new Promise((resolve, reject) => {
-            axios[requestType](url, data)
+            axios[rType](url, data)
                 .then(response => {
                     this.onSuccess(response.data)
-                    store.commit('form/setPreventNavigation', false)
+                    
                     resolve(response.data)
                 })
                 .catch(errors => {
@@ -148,47 +114,16 @@ export default class Form {
         })
     }
 
-    /**
-     * Handle the on success promise event.
-     *
-     * @param {object} data
-     */
     onSuccess(data) {
-        // We'll leave it up to the implementation on
-        // if they want the form reset afterwards.
-        //
-        // this.reset()
+    	this.orig = _.cloneDeep(this.data())
+    	this.hasChanges = false
+    	this.errors.clear()
+
+		if (this.blockNav)
+			store.commit('form/setPreventNavigation', false)
     }
 
-    /**
-     * Handle the on failure promise event.
-     *
-     * @param {object} errors
-     */
     onFailure(errors) {
         this.errors.record(errors)
-    }
-
-    /**
-     * Handle the first input event. Prevents navigating
-     * away from the form if the preventNavigation
-     * setting has been enabled.
-     */
-    onFirstChange() {
-        this.hasChanges = true
-        if (this.preventNavigation) {
-            store.commit('form/setPreventNavigation', true)
-        }
-    }
-
-     /**
-     * Helper method to reset the form to appear as if
-     * it had no changes.
-     */
-    resetChangeListener() {
-        this.hasChanges = false
-        if (this.preventNavigation) {
-            store.commit('form/setPreventNavigation', false)
-        }
     }
 }

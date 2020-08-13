@@ -12,6 +12,7 @@
         :autocomplete="autocomplete"
         :autofocus="autofocus"
         :required="required"
+
         :aria-required="required" 
         :aria-describedby="message ? formattedId + '_message' : null"
         @input="$emit('input', $event.target.value)"

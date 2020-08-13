@@ -22,8 +22,8 @@ class FileTest extends TestCase
         $this->expectException(QueryException::class);
         $this->expectExceptionMessage('UNIQUE constraint failed: files.uuid');
 
-        $file = factory(File::class)->create();
-        $file = $file->toArray();
+        $file       = factory(File::class)->create();
+        $file       = $file->toArray();
         $file['id'] = null;
 
         unset($file['isFile'], $file['type'], $file['url']);

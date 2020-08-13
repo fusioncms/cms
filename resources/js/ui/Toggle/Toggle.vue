@@ -1,6 +1,7 @@
 <template>
     <p-field-group
         :name="name"
+        :fieldId="formattedId"
         :required="required"
         :hasError="hasError"
         :errorMessage="errorMessage"
@@ -14,13 +15,14 @@
                 class="field__toggle"
                 type="checkbox"
                 :name="name"
-                :id="id"
+                :id="formattedId"
                 :disabled="disabled"
                 :required="required"
                 :indeterminate.prop="indeterminate"
                 :value="nativeValue"
                 :true-value="trueValue"
                 :false-value="falseValue"
+                :aria-describedby="hasMessage ? formattedId + '_message' : null"
                 v-model="computedValue"
             >
         </span>
@@ -115,6 +117,11 @@
                 type: [String, Number, Boolean, Function, Object, Array],
                 default: false
             },
+
+            hasError: Boolean,
+            hasSuccess: Boolean,
+            errorMessage: String,
+            successMessage: String,
         },
 
         computed: {
@@ -128,6 +135,14 @@
                     this.$emit('input', value)
                 }
             },
+
+            hasMessage() {
+                return this.help || this.errorMessage || this.successMessage
+            },
+
+            formattedId() {
+                return this.id ? this.id : this.name + '_field'
+            }
         },
 
         watch: {

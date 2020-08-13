@@ -23,9 +23,9 @@ class RestoreEnvVariables
     {
         if (Storage::disk('temp')->exists('env.json')) {
             // Setup..
-            $envContents = File::get(app()->environmentFilePath());
+            $envContents  = File::get(app()->environmentFilePath());
             $varsContents = Storage::disk('temp')->get('env.json');
-            $variables = collect(json_decode($varsContents));
+            $variables    = collect(json_decode($varsContents));
 
             // Perform surgery..
             $variables->each(function ($value, $key) use (&$envContents) {

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<portal to="title">
-			<app-title icon="mail-bulk">Mailables</app-title>
+			<page-title icon="mail-bulk">Mailables</page-title>
 		</portal>
 
 		<portal to="actions">

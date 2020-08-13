@@ -33,7 +33,7 @@ class Form extends Builder implements BuilderContract
     {
         parent::__construct();
 
-        $this->form = FormModel::where('handle', $form)->firstOrFail();
+        $this->form  = FormModel::where('handle', $form)->firstOrFail();
         $this->model = $this->make();
     }
 
@@ -43,9 +43,9 @@ class Form extends Builder implements BuilderContract
     public function make()
     {
         $className = Str::studly($this->form->handle);
-        $traits = [];
-        $fillable = ['form_id', 'identifiable_ip_address'];
-        $casts = [];
+        $traits    = [];
+        $fillable  = ['form_id', 'identifiable_ip_address'];
+        $casts     = [];
 
         if ($this->form->fieldset) {
             $fields = $this->form->fieldset->fields->reject(function ($field) {
@@ -59,9 +59,9 @@ class Form extends Builder implements BuilderContract
             });
 
             foreach ($fields as $field) {
-                $fieldtype = fieldtypes()->get($field->type);
+                $fieldtype  = fieldtypes()->get($field->type);
                 $fillable[] = $field->handle;
-                $casts[] = $field->handle.'\' => \''.$fieldtype->cast;
+                $casts[]    = $field->handle.'\' => \''.$fieldtype->cast;
             }
         }
 

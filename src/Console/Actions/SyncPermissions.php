@@ -43,7 +43,7 @@ class SyncPermissions
                 $matches = [];
 
                 if (preg_match('/([a-z]+)\.(\d+)/i', $name, $matches)) {
-                    $name = str_replace($matches[2], $value, $name);
+                    $name  = str_replace($matches[2], $value, $name);
                     $value = ucfirst($value).' a '.Str::of($matches[1])->singular()->ucfirst();
                 }
 
@@ -79,7 +79,7 @@ class SyncPermissions
     protected function fetchPermissions($directory)
     {
         $files = Finder::create()->files()->name('*.php')->in($directory);
-        $data = [];
+        $data  = [];
 
         foreach ($files as $file) {
             $name = basename($file->getRealPath(), '.php');

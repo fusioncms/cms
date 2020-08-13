@@ -125,7 +125,7 @@ class MatrixTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $matrix = factory(Matrix::class)->make()->toArray();
+        $matrix   = factory(Matrix::class)->make()->toArray();
         $fieldset = factory(Fieldset::class)->create();
 
         $matrix['fieldset'] = $fieldset->id;
@@ -149,7 +149,7 @@ class MatrixTest extends TestCase
 
         $matrix = factory(Matrix::class)->create();
 
-        $data = $matrix->toArray();
+        $data              = $matrix->toArray();
         $data['parent_id'] = $matrix->id;
 
         $response = $this->json('PATCH', '/api/matrices/'.$matrix->id, $data);
@@ -166,7 +166,7 @@ class MatrixTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $matrix = MatrixFactory::create();
+        $matrix              = MatrixFactory::create();
         $matrix->description = 'This is the new matrix description';
 
         $this
@@ -183,7 +183,7 @@ class MatrixTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $matrix = MatrixFactory::create();
+        $matrix             = MatrixFactory::create();
         $matrix->name_label = 'Custom Title';
 
         $this
@@ -205,9 +205,9 @@ class MatrixTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $matrix = MatrixFactory::create();
+        $matrix                  = MatrixFactory::create();
         $matrix->show_name_field = false;
-        $matrix->name_format = '{id}-{name}';
+        $matrix->name_format     = '{id}-{name}';
 
         $this
             ->json('PATCH', '/api/matrices/'.$matrix->id, $matrix->toArray())
@@ -233,9 +233,9 @@ class MatrixTest extends TestCase
 
         $matrix = MatrixFactory::asCollection()->create();
 
-        $data = $matrix->toArray();
+        $data                    = $matrix->toArray();
         $data['show_name_field'] = false;
-        $data['name_format'] = "{id} {created_at->format('Y')}";
+        $data['name_format']     = "{id} {created_at->format('Y')}";
 
         $this->json('PATCH', '/api/matrices/'.$matrix->id, $data);
 
@@ -245,7 +245,7 @@ class MatrixTest extends TestCase
 
         $response->assertStatus(201);
 
-        $id = $response->getData()->data->entry->id;
+        $id    = $response->getData()->data->entry->id;
         $entry = matrix_entries($matrix->handle)->find($id);
 
         $name = $entry->id.' '.$entry->created_at->format('Y');
@@ -267,7 +267,7 @@ class MatrixTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         // mimic an insert w/ duplicate data..
-        $matrix = factory(Matrix::class)->create();
+        $matrix       = factory(Matrix::class)->create();
         $matrix['id'] = null;
 
         $this

@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="anchor">Menus</app-title>
+            <page-title icon="anchor">Menus</page-title>
         </portal>
 
         <portal to="actions">

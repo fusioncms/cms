@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="cog">{{ group.name }} Settings</app-title>
+            <page-title icon="cog">{{ group.name }} Settings</page-title>
         </portal>
 
         <portal to="actions">

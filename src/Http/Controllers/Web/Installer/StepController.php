@@ -86,9 +86,9 @@ class StepController extends Controller
      */
     private function set($step, array $value = [])
     {
-        $key = config('installer.wizard.storage.key');
-        $expires = now()->addMinutes(config('installer.wizard.storage.expires'));
-        $cache = $this->all();
+        $key          = config('installer.wizard.storage.key');
+        $expires      = now()->addMinutes(config('installer.wizard.storage.expires'));
+        $cache        = $this->all();
         $cache[$step] = array_merge($this->get($step), $value);
 
         cache([$key => $cache], $expires);
@@ -165,7 +165,7 @@ class StepController extends Controller
      */
     private function getPrevStepLink($step)
     {
-        $keys = $this->getStepKeys();
+        $keys  = $this->getStepKeys();
         $index = $this->getStepIndex($step);
 
         if (array_key_exists($index - 1, $keys)) {
@@ -184,7 +184,7 @@ class StepController extends Controller
      */
     private function getNextStepLink($step)
     {
-        $keys = $this->getStepKeys();
+        $keys  = $this->getStepKeys();
         $index = $this->getStepIndex($step);
 
         if (array_key_exists($index + 1, $keys)) {

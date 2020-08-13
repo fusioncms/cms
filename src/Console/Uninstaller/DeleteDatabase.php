@@ -14,8 +14,8 @@ class DeleteDatabase
      */
     public function handle()
     {
-        $driver = 'mysql';
-        $host = config('database.connections.mysql.host');
+        $driver   = 'mysql';
+        $host     = config('database.connections.mysql.host');
         $database = config('database.connections.mysql.database');
         $username = config('database.connections.mysql.username');
         $password = config('database.connections.mysql.password');

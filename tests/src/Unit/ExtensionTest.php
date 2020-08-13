@@ -19,7 +19,7 @@ class ExtensionTest extends TestCase
     public function an_extension_can_have_a_fieldset()
     {
         $extension = factory(Extension::class)->create();
-        $fieldset = factory(Fieldset::class)->create();
+        $fieldset  = factory(Fieldset::class)->create();
 
         $extension->attachFieldset($fieldset);
 

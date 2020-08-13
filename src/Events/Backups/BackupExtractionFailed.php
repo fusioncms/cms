@@ -18,7 +18,7 @@ class BackupExtractionFailed
 
     public function __construct(Exception $exception, string $extractionPath)
     {
-        $this->exception = $exception;
+        $this->exception      = $exception;
         $this->extractionPath = $extractionPath;
     }
 }

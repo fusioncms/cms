@@ -65,9 +65,9 @@ class TaxonomyFieldtype extends Fieldtype
      */
     public function generateRelationship($field)
     {
-        $model = Taxonomy::find($field->settings['taxonomy']);
+        $model     = Taxonomy::find($field->settings['taxonomy']);
         $namespace = $this->namespace.'\\'.Str::studly($model->handle);
-        $stub = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
+        $stub      = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
 
         return strtr($stub, [
             '{handle}'            => $field->handle,

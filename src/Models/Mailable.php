@@ -128,7 +128,7 @@ class Mailable extends Model
         $namespace = Theme::active()->get('namespace');
 
         $fusionMailFiles = File::files(__DIR__.'/../Mail');
-        $themeMailFiles = File::files(theme_path("{$namespace}/src/Mail"));
+        $themeMailFiles  = File::files(theme_path("{$namespace}/src/Mail"));
 
         // Resolve fusion mailables..
         foreach ($fusionMailFiles as $file) {

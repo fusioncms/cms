@@ -34,8 +34,8 @@ class ResponseController extends Controller
     {
         $this->authorize('responses.view');
 
-        $form = Form::where('slug', $slug)->firstOrFail();
-        $model = (new Builder($form->handle))->make();
+        $form     = Form::where('slug', $slug)->firstOrFail();
+        $model    = (new Builder($form->handle))->make();
         $response = $model->find($id);
 
         return new ResponseResource($response);
@@ -45,8 +45,8 @@ class ResponseController extends Controller
     {
         $this->authorize('responses.create');
 
-        $form = Form::where('slug', $slug)->firstOrFail();
-        $collection = (new Builder($form->handle))->make();
+        $form          = Form::where('slug', $slug)->firstOrFail();
+        $collection    = (new Builder($form->handle))->make();
         $relationships = [];
 
         $rules = [
@@ -55,7 +55,7 @@ class ResponseController extends Controller
         ];
 
         if (isset($form->fieldset)) {
-            $fields = $form->fieldset->database();
+            $fields        = $form->fieldset->database();
             $relationships = $form->fieldset->relationships();
 
             foreach ($fields as $field) {
@@ -63,7 +63,7 @@ class ResponseController extends Controller
             }
         }
 
-        $attributes = $request->validate($rules);
+        $attributes            = $request->validate($rules);
         $attributes['form_id'] = $form->id;
 
         $response = $collection->create($attributes);
@@ -87,16 +87,16 @@ class ResponseController extends Controller
     {
         $this->authorize('responses.update');
 
-        $form = Form::where('slug', $slug)->firstOrFail();
-        $response = (new Builder($form->handle))->make()->find($id);
+        $form          = Form::where('slug', $slug)->firstOrFail();
+        $response      = (new Builder($form->handle))->make()->find($id);
         $relationships = [];
-        $rules = [
+        $rules         = [
             'name'   => 'required',
             'handle' => 'sometimes',
         ];
 
         if (isset($form->fieldset)) {
-            $fields = $form->fieldset->database();
+            $fields        = $form->fieldset->database();
             $relationships = $form->fieldset->relationships();
 
             foreach ($fields as $field) {
@@ -123,8 +123,8 @@ class ResponseController extends Controller
     {
         $this->authorize('responses.delete');
 
-        $form = Form::where('slug', $slug)->firstOrFail();
-        $model = (new Builder($form->handle))->make();
+        $form     = Form::where('slug', $slug)->firstOrFail();
+        $model    = (new Builder($form->handle))->make();
         $response = $model->findOrFail($id);
 
         $response->delete();

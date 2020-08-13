@@ -39,8 +39,8 @@ class RestoreFromBackup
      */
     public function handle()
     {
-        $backupPath = Storage::disk('public')->path($this->backup->path());
-        $extractionPath = Storage::disk('temp')->path('restore-temp');
+        $backupPath       = Storage::disk('public')->path($this->backup->path());
+        $extractionPath   = Storage::disk('temp')->path('restore-temp');
         $restoreDirectory = (new TemporaryDirectory($extractionPath))
                 ->name('temp')
                 ->force()

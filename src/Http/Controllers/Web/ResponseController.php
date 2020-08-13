@@ -16,7 +16,7 @@ class ResponseController extends Controller
      */
     public function store(ResponseRequest $request)
     {
-        $form = $request->form->fresh();
+        $form     = $request->form->fresh();
         $response = $form->responses()->create($request->validated());
 
         foreach ($request->relationships as $relationship) {

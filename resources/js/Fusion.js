@@ -1,72 +1,56 @@
-import router from './router'
-import store from './store'
 import Vue from 'vue'
-import VueMq from 'vue-mq'
-import VueHead from 'vue-head'
 
-import * as Directives from './directives'
-import * as Plugins from './plugins'
+import router from '@/router'
+import store from '@/store'
+import forms from '@/mixins/forms'
+import setting from '@/mixins/setting'
 
-import forms from './mixins/forms'
-import setting from './mixins/setting'
+import * as Directives from '@/directives'
 
 export default class Fusion {
-  constructor (config) {
-    this.config = config
-    this.router = router
-    this.store = store
-    this.vue = null
+    constructor (config) {
+        this.config = config
+        this.router = router
+        this.store = store
+        this.vue = null
 
-    Vue.use(require('vue-moment'))
-    Vue.use(VueHead)
-    Vue.use(VueMq, {
-      breakpoints: {
-        sm: 576,
-        md: 768,
-        lg: 992,
-        xl: 1200,
-        xxl: Infinity
-      }
-    })
+        // Mixins
+        Vue.mixin(forms)
+        Vue.mixin(setting)
 
-    Vue.mixin(forms)
-    Vue.mixin(setting)
+        // Directives
+        Object.values(Directives).forEach((Directive) => {
+            Vue.use(Directive)
+        })
 
-    Object.values(Directives).forEach((Directive) => {
-      Vue.use(Directive)
-    })
+        // Callbacks
+        this.bootingCallbacks = []
+        this.bootedCallbacks = []
+    }
 
-    Object.values(Plugins).forEach((Plugin) => {
-      Vue.use(Plugin)
-    })
+    booting (callback) {
+        this.bootingCallbacks.push(callback)
+    }
 
-    this.bootingCallbacks = []
-    this.bootedCallbacks = []
-  }
+    boot () {
+        this.bootingCallbacks.forEach((callback) => {
+            callback(this.router, this.store)
+        })
 
-  booting (callback) {
-    this.bootingCallbacks.push(callback)
-  }
+        this.vue = new Vue({
+            el: '#gravity',
 
-  boot () {
-    this.bootingCallbacks.forEach((callback) => {
-      callback(this.router, this.store)
-    })
+            router: this.router,
 
-    this.vue = new Vue({
-      el: '#gravity',
+            store: this.store
+        })
 
-      router: this.router,
+        this.bootedCallbacks.forEach((callback) => {
+            callback(this.vue)
+        })
+    }
 
-      store: this.store
-    })
-
-    this.bootedCallbacks.forEach((callback) => {
-      callback(this.vue)
-    })
-  }
-
-  booted (callback) {
-    this.bootedCallbacks.push(callback)
-  }
+    booted (callback) {
+        this.bootedCallbacks.push(callback)
+    }
 }

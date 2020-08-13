@@ -23,8 +23,8 @@ class ReplicatorFieldtypeTest extends TestCase
 
         // --
         $this->fieldset = factory(Fieldset::class)->create(['name' => 'RP Fieldset', 'handle' => 'rp_fieldset']);
-        $this->section = factory(Section::class)->make(['name' => 'RS', 'handle' => 'rs_section']);
-        $this->field = factory(Field::class)->make(['name' => 'RF', 'handle' => 'rf', 'type' => ['handle' => 'replicator']]);
+        $this->section  = factory(Section::class)->make(['name' => 'RS', 'handle' => 'rs_section']);
+        $this->field    = factory(Field::class)->make(['name' => 'RF', 'handle' => 'rf', 'type' => ['handle' => 'replicator']]);
 
         // some sections to test with..
         $this->sectionA = factory(Section::class)->make(['name' => 'RSA', 'handle' => 'rsa', 'fields' => [
@@ -106,16 +106,16 @@ class ReplicatorFieldtypeTest extends TestCase
         $delSection = $replicator->sections->get(1);
         $newSection = $this->sectionC;
 
-        $updSection->name = 'RSA_UPD';
+        $updSection->name   = 'RSA_UPD';
         $updSection->handle = 'rsa_upd';
 
         // update field..
-        $updField = $updSection->fields->first();
-        $updField->name = 'RFA_UPD';
+        $updField         = $updSection->fields->first();
+        $updField->name   = 'RFA_UPD';
         $updField->handle = 'rfa_upd';
 
         // update section..
-        $updSection->name = 'RSA_UPD';
+        $updSection->name   = 'RSA_UPD';
         $updSection->handle = 'rsa_UPD';
         $updSection->fields = [
             $updField,
@@ -163,11 +163,11 @@ class ReplicatorFieldtypeTest extends TestCase
     {
         // create replicator..
         $replicator = $this->createReplicator([$this->sectionA, $this->sectionB]);
-        $fieldset = $replicator->fieldset;
-        $sections = $replicator->sections;
+        $fieldset   = $replicator->fieldset;
+        $sections   = $replicator->sections;
 
         // update existing section..
-        $section = $this->fieldset->sections()->first();
+        $section         = $this->fieldset->sections()->first();
         $section->fields = [];
 
         // update request..
@@ -208,15 +208,16 @@ class ReplicatorFieldtypeTest extends TestCase
     public function persisting_entry_with_replicator_field_will_persist_to_database()
     {
         // new entry..
-        $replicator = $this->createReplicator([$this->sectionA, $this->sectionB]);
+        $replicator               = $this->createReplicator([$this->sectionA, $this->sectionB]);
         list($entry, $replicants) = $this->createEntryWithReplicant($replicator);
 
         // --
         // make assertions..
         foreach ($replicator->sections as $section) {
             $builder = $replicator->getBuilder($section);
+            $handle  = "rp_{$section->handle}_{$replicator->uniqid}";
 
-            foreach ($entry->{"rp_{$section->handle}"} as $replicant) {
+            foreach ($entry->{$handle} as $replicant) {
                 $this->assertDatabaseHas('replicators_pivot', [
                     'replicant_id' => $replicant->id,
                     'section_id'   => $section->id,
@@ -244,9 +245,9 @@ class ReplicatorFieldtypeTest extends TestCase
     public function updating_replicants_for_replicator_field_will_persist_to_database()
     {
         // new entry..
-        $replicator = $this->createReplicator([$this->sectionA, $this->sectionB]);
+        $replicator               = $this->createReplicator([$this->sectionA, $this->sectionB]);
         list($entry, $replicants) = $this->createEntryWithReplicant($replicator);
-        list($entry, $upd, $del) = $this->updateEntryWithReplicant($entry, $replicator);
+        list($entry, $upd, $del)  = $this->updateEntryWithReplicant($entry, $replicator);
 
         // --
         // make assertions..
@@ -325,12 +326,12 @@ class ReplicatorFieldtypeTest extends TestCase
     private function updateReplicator(Replicator $replicator, $sections)
     {
         // update existing field..
-        $field = $replicator->field->toArray();
-        $field['type'] = ['handle' => 'replicator'];
+        $field                         = $replicator->field->toArray();
+        $field['type']                 = ['handle' => 'replicator'];
         $field['settings']['sections'] = $sections;
 
         // update existing section..
-        $section = $this->fieldset->sections()->first();
+        $section         = $this->fieldset->sections()->first();
         $section->fields = [$field];
 
         // update request..
@@ -353,8 +354,8 @@ class ReplicatorFieldtypeTest extends TestCase
      */
     private function createEntryWithReplicant(Replicator $replicator)
     {
-        $matrix = \Facades\MatrixFactory::withName($this->faker->word)->asCollection()->withFieldset($this->fieldset)->create();
-        $model = (new \Fusion\Services\Builders\Collection($matrix->handle))->make();
+        $matrix     = \Facades\MatrixFactory::withName($this->faker->word)->asCollection()->withFieldset($this->fieldset)->create();
+        $model      = (new \Fusion\Services\Builders\Collection($matrix->handle))->make();
         $replicants = [];
 
         // generate replicants..
@@ -403,7 +404,7 @@ class ReplicatorFieldtypeTest extends TestCase
         $updated = collect([]);
 
         foreach ($replicator->sections as $section) {
-            foreach ($entry->{"rp_{$section->handle}"} as $key => $replicant) {
+            foreach ($entry->{"rp_{$section->handle}_{$replicator->uniqid}"} as $key => $replicant) {
                 if ($key == 0) {
                     $removed->push($replicant);
                 } else {

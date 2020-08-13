@@ -15,10 +15,10 @@ class ResponseResource extends JsonResource
      */
     public function toArray($request)
     {
-        $resource['id'] = $this->id;
+        $resource['id']                         = $this->id;
         $resource['identifiable_email_address'] = $this->identifiable_email_address;
-        $resource['identifiable_ip_address'] = $this->identifiable_ip_address;
-        $resource['form'] = new FormResource($this->form);
+        $resource['identifiable_ip_address']    = $this->identifiable_ip_address;
+        $resource['form']                       = new FormResource($this->form);
 
         if ($this->fields) {
             foreach ($this->fields as $field) {

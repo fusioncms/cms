@@ -182,7 +182,7 @@ class FormTest extends TestCase
         $form = FormFactory::create();
 
         // Update ----
-        $attributes = $form->toArray();
+        $attributes                = $form->toArray();
         $attributes['description'] = 'This is the new form description';
 
         $this
@@ -209,7 +209,7 @@ class FormTest extends TestCase
         $oldName = $form->name;
 
         // Update ----
-        $attributes = $form->toArray();
+        $attributes         = $form->toArray();
         $attributes['name'] = 'New Name';
 
         $this
@@ -256,7 +256,7 @@ class FormTest extends TestCase
     public function a_deleted_form_request_will_also_delete_associated_tables()
     {
         $this->actingAs($this->owner, 'api');
-        $form = FormFactory::create();
+        $form     = FormFactory::create();
         $fieldset = $form->fieldset;
 
         $this
@@ -430,8 +430,8 @@ class FormTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $form = factory(Form::class)->create()->toArray();
-        $form['id'] = null;
+        $form           = factory(Form::class)->create()->toArray();
+        $form['id']     = null;
         $form['handle'] = 'new_handle';
 
         $this
@@ -450,8 +450,8 @@ class FormTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $form = factory(Form::class)->create()->toArray();
-        $form['id'] = null;
+        $form         = factory(Form::class)->create()->toArray();
+        $form['id']   = null;
         $form['slug'] = 'new-slug';
 
         $this
@@ -523,7 +523,7 @@ class FormTest extends TestCase
         $form = FormFactory::create();
 
         // Update ----
-        $attributes = $form->toArray();
+        $attributes         = $form->toArray();
         $attributes['name'] = 'New Name';
 
         $this->json('PATCH', '/api/forms/'.$form->id, $attributes);

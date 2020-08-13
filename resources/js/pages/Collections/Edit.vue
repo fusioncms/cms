@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title :icon="collection.icon || 'pencil-alt'">Edit {{ collection.reference_singular }}</app-title>
+            <page-title :icon="collection.icon || 'pencil-alt'">Edit {{ collection.reference_singular }}</page-title>
         </portal>
 
         <portal to="subtitle">{{ collection.description }}</portal>
@@ -47,7 +47,7 @@
 
                     this.$router.push('/collection/' + this.collection.slug)
                 }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
+                    toast(response.message, 'failed')
                 })
             },
         },
@@ -67,7 +67,6 @@
                         vm.form = new Form(fields, true)
 
                         vm.$emit('updateHead')
-                        vm.form.resetChangeListener()
                     })
                 }
             })
@@ -85,7 +84,6 @@
                     this.form = new Form(fields, true)
 
                     this.$emit('updateHead')
-                    this.form.resetChangeListener()
                 }
             })
 

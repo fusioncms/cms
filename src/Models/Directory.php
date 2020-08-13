@@ -101,9 +101,9 @@ class Directory extends Model
     public function tapActivity(Activity $activity, string $eventName)
     {
         $subject = $activity->subject;
-        $action = ucfirst($eventName);
+        $action  = ucfirst($eventName);
 
         $activity->description = "{$action} folder ({$subject->name})";
-        $activity->properties = ['icon' => 'folder'];
+        $activity->properties  = ['icon' => 'folder'];
     }
 }

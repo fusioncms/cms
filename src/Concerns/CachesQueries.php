@@ -68,7 +68,7 @@ trait CachesQueries
     protected function newBaseQueryBuilder()
     {
         $connection = $this->getConnection();
-        $grammar = $connection->getQueryGrammar();
+        $grammar    = $connection->getQueryGrammar();
 
         return new QueryCacheBuilder(
             $this->queryCache(),

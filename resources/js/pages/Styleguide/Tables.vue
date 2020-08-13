@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="swatchbook">Table Styleguide</app-title>
+            <page-title icon="swatchbook">Table Styleguide</page-title>
         </portal>
 
         <div class="row">

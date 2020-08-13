@@ -22,10 +22,10 @@ class NodeMoveAfterController extends Controller
     {
         $this->authorize('nodes.update');
 
-        $menu = Menu::find($menu)->firstOrFail();
+        $menu  = Menu::find($menu)->firstOrFail();
         $model = (new Builder($menu->handle))->make();
 
-        $move = $model->find($request->move);
+        $move  = $model->find($request->move);
         $after = $model->find($request->after);
 
         $order = $after->orderAfter();

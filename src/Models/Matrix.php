@@ -107,14 +107,14 @@ class Matrix extends Model
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $matrix = $activity->subject;
-        $action = Str::ucfirst($eventName);
+        $matrix     = $activity->subject;
+        $action     = Str::ucfirst($eventName);
         $properties = [
             'icon' => 'hashtag',
             'link' => "matrices/{$matrix->id}/edit",
         ];
 
         $activity->description = "{$action} matrix ({$matrix->name})";
-        $activity->properties = $properties;
+        $activity->properties  = $properties;
     }
 }

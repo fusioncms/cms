@@ -18,13 +18,13 @@ class WhenFieldsetIsDetached
     {
         if ($event->fieldset) {
             $fields = $event->fieldset->fields;
-            $table = $event->model->getTable();
+            $table  = $event->model->getTable();
 
             foreach ($fields as $field) {
                 $fieldtype = fieldtypes()->get($field->type);
-                $column = $fieldtype->getColumn('type');
-                $settings = $fieldtype->getColumn('settings') ?? [];
-                $name = $field->handle;
+                $column    = $fieldtype->getColumn('type');
+                $settings  = $fieldtype->getColumn('settings') ?? [];
+                $name      = $field->handle;
 
                 array_unshift($settings, $field->handle);
 

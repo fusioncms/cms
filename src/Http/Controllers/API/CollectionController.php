@@ -24,8 +24,8 @@ class CollectionController extends Controller
     {
         $this->authorize('entries.viewAny');
 
-        $matrix = Matrix::where('slug', $matrix)->firstOrFail();
-        $model = (new Collection($matrix->handle))->make();
+        $matrix  = Matrix::where('slug', $matrix)->firstOrFail();
+        $model   = (new Collection($matrix->handle))->make();
         $entries = $model->get()->paginate(25);
 
         return EntryResource::collection($entries);
@@ -43,8 +43,8 @@ class CollectionController extends Controller
         $this->authorize('entries.view');
 
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
-        $model = (new Collection($matrix->handle))->make();
-        $entry = $model->findOrFail($id);
+        $model  = (new Collection($matrix->handle))->make();
+        $entry  = $model->findOrFail($id);
 
         return new EntryResource($entry);
     }
@@ -59,7 +59,7 @@ class CollectionController extends Controller
      */
     public function store(CollectionRequest $request, $matrixSlug)
     {
-        $entry = $request->model->create($request->validated());
+        $entry  = $request->model->create($request->validated());
         $matrix = $request->matrix;
 
         // persist relationships..
@@ -90,7 +90,7 @@ class CollectionController extends Controller
     public function update(CollectionRequest $request, $matrixSlug, $id)
     {
         $matrix = $request->matrix;
-        $entry = $request->model->findOrFail($id);
+        $entry  = $request->model->findOrFail($id);
         $entry->update($request->validated());
 
         // persist relationships..
@@ -122,8 +122,8 @@ class CollectionController extends Controller
         $this->authorize('entries.destroy');
 
         $matrix = Matrix::where('slug', $matrixSlug)->firstOrFail();
-        $model = (new Collection($matrix->handle))->make();
-        $entry = $model->findOrFail($id);
+        $model  = (new Collection($matrix->handle))->make();
+        $entry  = $model->findOrFail($id);
 
         if (isset($matrix->fieldset)) {
             foreach ($matrix->fieldset->relationships() as $relationship) {

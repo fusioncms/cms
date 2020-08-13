@@ -52,9 +52,9 @@ class FormFactory implements Factory
         ];
 
         if ($this->name) {
-            $overrides['name'] = $this->name;
+            $overrides['name']   = $this->name;
             $overrides['handle'] = Str::snake($this->name);
-            $overrides['slug'] = Str::slug($this->name);
+            $overrides['slug']   = Str::slug($this->name);
         }
 
         $form = factory(Form::class)->create($overrides);
@@ -86,7 +86,7 @@ class FormFactory implements Factory
     public function withCustomRedirect($uri)
     {
         $this->redirectOnSubmission = true;
-        $this->redirectUrl = $uri;
+        $this->redirectUrl          = $uri;
 
         return $this;
     }

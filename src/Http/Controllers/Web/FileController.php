@@ -15,7 +15,7 @@ class FileController extends Controller
         $file = File::where('uuid', $uuid)->firstOrFail();
 
         // Append last modified date
-        $params = request()->all();
+        $params      = request()->all();
         $params['t'] = $file->updated_at->format('U');
 
         if ($name !== $file->name) {

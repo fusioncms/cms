@@ -19,13 +19,13 @@ class UploadTempFile extends Controller
         // Validation parameters..
         $maxFileUpload = setting('files.file_size_upload_limit');
         $maxFileUpload = byte_converter($maxFileUpload, 'MB', 'KB');
-        $mimetypes = $request->input('mimetypes');
+        $mimetypes     = $request->input('mimetypes');
 
         $attributes = $request->validate([
             'file' => 'required|file|mimetypes:'.$mimetypes.'|max:'.$maxFileSize,
         ]);
 
-        $file = $attributes['file'];
+        $file     = $attributes['file'];
         $fileExtn = $file->guessClientExtension();
         $fileName = time().'.'.$fileExtn;
         $filePath = sys_get_temp_dir().'/'.$fileName;

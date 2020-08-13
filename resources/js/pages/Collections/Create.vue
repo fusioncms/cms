@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title :icon="collection.icon">Create {{ collection.reference_singular }}</app-title>
+            <page-title :icon="collection.icon">Create {{ collection.reference_singular }}</page-title>
         </portal>
 
         <portal to="subtitle">{{ collection.description }}</portal>
@@ -64,7 +64,6 @@
                         vm.form = new Form(fields, true)
 
                         vm.$emit('updateHead')
-                        vm.form.resetChangeListener()
                     })
                 }
             })
@@ -81,7 +80,6 @@
                     this.form = new Form(fields, true)
 
                     this.$emit('updateHead')
-                    this.form.resetChangeListener()
                 }
             })
 
