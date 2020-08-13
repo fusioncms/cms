@@ -1,18 +1,37 @@
 <template>
     <div class="tabs">
         <ul class="tab__list">
-            <li
-                v-for="tab in tabs"
+            <li v-for="(tab, index) in tabs"
                 :key="tab.name"
-                class="tab"
-                :class="{ 'tab--active': tab.isActive, 'tab--hovering': isHovering(tab.hash) }"
-                @dragover.prevent="dragOver(tab.hash)"
-                @dragenter.prevent="dragEnter"
-                @dragleave.prevent="dragLeave"
-                @dragend.prevent="dragLeave"
-                @drop.prevent
-            >
-                <a :href="tab.hash" class="tab__link" @click.prevent="selectTab(tab.hash, true)" @focus="selectTab(tab.hash, true)">{{ tab.name }}</a>
+                class="tab w-1/4"
+                :class="{'tab--active': tab.isActive}">
+
+                <a
+                    class="tab__link cursor-pointer flex justify-between items-center"
+                    @click.prevent="select(tab.hash)"
+                    @focus="select(tab.hash)">
+
+                    <span>
+                        {{ tab.name }}
+                        <span class="text-gray-600 text-xs">
+                            {{ tab.subtitle }}
+                        </span>
+                    </span>
+
+                    <span
+                        v-if="tab.remove && tab.isActive"
+                        @click.prevent="tab.remove(index)"
+                        class="flex items-center justify-center w-6 h-6 rounded hover:bg-gray-200 hover:text-gray-600">
+                        
+                        <fa-icon icon="times" class="fa-xs"></fa-icon>
+                    </span>
+                </a>
+            </li>
+
+             <li v-if="add" class="tab">
+                <a class="tab__link cursor-pointer" @click.prevent="add()">
+                    <fa-icon icon="plus" class="fa-fw text-xs text-gray-800"></fa-icon>
+                </a>
             </li>
         </ul>
 
@@ -26,131 +45,67 @@
     export default {
         name: 'p-tabs',
 
+        data() {
+            return {
+                tabs: null
+            }
+        },
+
         props: {
             replace: {
                 type: Boolean,
-                default: false,
+                default: false
             },
-        },
 
-        data() {
-            return {
-                tabs: null,
-                foundActiveTab: false,
-                hoveringOver: null,
-                dragOverAt: false,
-                dragEnterAt: false,
-                dragLeaveAt: false,
-                dragEndAt: false,
-                enteredTab: false,
-                hoveringOverFor: false,
+            add: {
+                type: Function,
+                default: false
             }
         },
 
         computed: {
-            count() {
-                return this.tabs.length
+            tab() {
+                return this.tabs.find((tab) => tab.isActive)
             }
         },
 
         watch: {
-            tabs() {
-                this.findAndSelectTab()
-            },
-
-            dragOverAt() {
-                let start = this.dragEnterAt
-                let end = this.dragOverAt
-                let duration = end - start
-
-                if (duration > 400 && this.enteredTab == false) {
-                    console.log('selecting tab')
-
-                    this.selectTab(this.hoveringOver, true)
-                    
-                    this.enteredTab = true
+            tabs(value) {
+                if (! this.tab && value.length > 0) {
+                    if (this.$route.hash)
+                        this.select(this.$route.hash)
+                    else
+                        this.select(value[0].hash)
                 }
-
-                this.hoveringOverFor = duration
             }
         },
 
         methods: {
-            isHovering(hash) {
-                return this.hoveringOver == hash
+            findBy(path, value) {
+                return this.tabs.find((tab) =>
+                    _.get(tab, path) && _.get(tab, path) == value)
             },
 
-            findTab(hash) {
-                return this.tabs.find((tab) => {
-                    return tab.hash == hash
-                })
-            },
+            select(hash) {
+                const selected = this.findBy('hash', hash) || false
 
-            selectTab(hash) {
-                const selected = this.findTab(hash)
+                if (selected) {
+                    this.reset()
 
-                if (typeof selected === 'undefined') {
-                    return
-                }
+                    selected.activate()
 
-                _.each(this.tabs, (tab, index) => {
-                    if (tab.hash == selected.hash) {
-                        tab.activate()
-
-                        this.active = index
-                    } else {
-                        tab.deactivate()
-                    }
-                })
-
-                if (this.replace) {
-                    this.$router.replace({
-                        hash: selected.hash
-                    }).catch((err) => {})
+                    if (this.replace)
+                        this.$router.replace({ hash }).catch(err => {})
                 }
             },
 
-            findAndSelectTab() {
-                _.each(this.tabs, (tab) => {
-                    if (tab.isActive) {
-                        this.selectTab(tab.hash)
-
-                        this.foundActiveTab = true
-
-                        return false
-                    }
-                })
-
-                if (! this.foundActiveTab && this.tabs[0]) {
-                    this.selectTab(this.tabs[0].hash)
-                }
-
-                if (this.$route.hash) {
-                    this.selectTab(this.$route.hash)
-                }
-            },
-
-            dragEnter() {
-                this.dragEnterAt = Date.now()
-                this.enteredTab = false
-            },
-
-            dragOver(hash) {
-                this.dragOverAt = Date.now()
-                this.hoveringOver = hash
-            },
-
-            dragLeave() {
-                this.hoveringOver = null
+            reset() {
+                this.tabs.forEach(tab => tab.isActive = false)
             }
         },
 
         created() {
             this.tabs = this.$children
-        },
-
-        mounted() {
-            this.findAndSelectTab()
         }
     }
 </script>

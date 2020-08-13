@@ -16,7 +16,18 @@
 
         props: {
             name: {
+                type: String,
                 required: true,
+            },
+
+            subtitle: {
+                type: String,
+                default: '',
+            },
+
+            remove: {
+                type: Function,
+                default: false,
             },
 
             active: {

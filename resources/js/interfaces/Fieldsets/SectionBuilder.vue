@@ -1,34 +1,18 @@
 <template>
-    <div class="tabs">
-        <ul class="tab__list overflow-x-scroll">
-            <li v-for="(section, index) in sections" :key="index" class="tab flex-shrink-0 flex-1 border-r border-gray-200" :class="{ 'tab--active': index == active }">
-                <a href="#" class="tab__link flex justify-between items-center" @click.prevent="select(index)">
-                    <span>
-                        {{ section.name }}
-                        <span class="text-xs">
-                            ({{ section.placement }}, {{ fieldCount(section.fields.length) }})
-                        </span>
-                    </span>
-
-                    <span @click.prevent="remove(index)" v-if="sections.length > 1" class="flex items-center justify-center w-6 h-6 rounded hover:bg-black hover:text-white">
-                        <fa-icon icon="times" class="fa-xs"></fa-icon>
-                    </span>
-                </a>
-            </li>
-
-            <li class="tab">
-                <a href="#" class="tab__link" @click.prevent="add()"><fa-icon icon="plus" class="fa-fw text-xs"></fa-icon></a>
-            </li>
-        </ul>
-
-        <section-editor
+    <p-tabs :add="add">
+        <p-tab
             v-for="(section, index) in sections"
-            v-show="index == active"
             :key="index"
-            :section="section"
-            class="tab__panel">
-        </section-editor>
-    </div>
+            :name="section.name"
+            :subtitle="`${section.placement}, ${ fieldCount(section.fields.length)}`"
+            :remove="sections.length > 1 ? remove : null">
+
+            <section-editor
+                :section="section"
+                :fieldtypes="fieldtypes">
+            </section-editor>
+        </p-tab>
+    </p-tabs>
 </template>
 
 <script>
@@ -38,7 +22,6 @@
         data() {
             return {
                 fieldtypes: {},
-                active: 0
             }
         },
 
@@ -69,13 +52,12 @@
         },
 
         methods: {
-            add(newName = 'Section') {
-                let name   = this.uniqName(newName)
-                let handle = _.snakeCase(name)
+            add(name = 'Section') {
+                name = this.uniqName(name)
 
                 this.sections.push({
                     name: name,
-                    handle: handle,
+                    handle: _.snakeCase(name),
                     description: '',
                     placement: 'body',
                     fields: [],
@@ -94,14 +76,8 @@
             },
 
             remove(index) {
-                if (this.sections.length > 0) {
+                if (this.sections.length > 0)
                     this.sections.splice(index, 1)
-                    this.active = index === 0 ? 1 : 0
-                }
-            },
-
-            select(index) {
-                this.active = this.sections[index] ? index : 0
             },
 
             fieldCount(count) {
@@ -110,14 +86,12 @@
         },
 
         mounted() {
-            if (this.value.length == 0) {
+            if (this.value.length == 0)
                 this.add('General')
-            }
 
-            axios.get('/api/fieldtypes')
-                .then((response) => {
-                    this.fieldtypes = response.data.data
-                })
+            axios.get('/api/fieldtypes').then((response) => {
+                this.fieldtypes = response.data.data
+            })
         }
     }
 </script>
