@@ -1,17 +1,17 @@
 <template>
     <div class="tabs">
-        <ul class="tab__list"
+        <ul class="tab__list overflow-x-scroll"
             @dragover.prevent
             @dragenter.prevent>
 
             <li v-for="(tab, index) in tabs"
                 :key="tab.name"
-                class="tab w-1/4"
+                class="tab flex-shrink-0 flex-1 border-r border-gray-200"
                 :class="{
                     'tab--active': tab.isActive,
                     'bg-primary-100': tab.isDropzone
                 }"
-                draggable
+                :draggable="!! move"
                 @dragstart="onDragStart(index)"
                 @dragend="onDragEnd(index)"
                 @dragenter="onDragEnter(index)"
@@ -73,7 +73,12 @@
             },
 
             add: {
-                type: Function,
+                type: [Function,Boolean],
+                default: false
+            },
+
+            move: {
+                type: [Function,Boolean],
                 default: false
             }
         },
@@ -142,8 +147,8 @@
             },
 
             onDrop(index) {
-                if (this.dragIndex != index) {
-                    this.$emit('move', this.dragIndex, index)
+                if (this.move && this.dragIndex != index) {
+                    this.move(this.dragIndex, index)
 
                     this.reset()
                     this.tabs[index].activate()

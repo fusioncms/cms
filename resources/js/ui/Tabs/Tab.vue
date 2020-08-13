@@ -28,7 +28,7 @@
             },
 
             remove: {
-                type: Function,
+                type: [Function,Boolean],
                 default: false,
             },
 

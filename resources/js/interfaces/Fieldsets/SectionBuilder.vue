@@ -1,7 +1,7 @@
 <template>
     <p-tabs
         :add="add"
-        @move="move">
+        :move="move">
 
         <p-tab
             v-for="(section, index) in sections"
