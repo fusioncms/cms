@@ -4,9 +4,8 @@
             class="dropdown"
             slot-scope="props"
             :class="{'dropdown--open': props.isOpen, 'dropdown--right': right, 'dropdown--up': up}"
-            v-click-outside="props.close"
-        >
-            <button :id="id" class="button z-0" @click="props.toggle" :class="{'button--icon': icon}" aria-haspopup="true" :aria-expanded="props.isOpen">
+            v-click-outside="props.close">
+            <button :id="id" class="button z-0" @click="props.toggle" :class="{'button--icon': icon}" aria-haspopup="true" :aria-expanded="props.isOpen ? 'true' : 'false'">
                 <slot></slot>
                 <fa-icon v-if="! noArrow" icon="angle-down" class="dropdown__arrow"></fa-icon>
             </button>

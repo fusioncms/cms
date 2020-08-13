@@ -1,5 +1,5 @@
 <template>
-    <div class="alert" :class="variantClass">
+    <div class="alert" :class="variantClass" role="alert">
         <div class="alert__container container">
             <div class="alert__icon" v-if="icon">
                 <fa-icon :icon="icon" class="fa-fw"></fa-icon> 
