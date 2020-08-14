@@ -43,13 +43,7 @@
 
         <portal to="modals">
             <p-modal name="add-field" title="Add Field" v-model="field.add" extra-large>
-                <div class="row -mb-6">
-                    <div class="col w-1/2 lg:w-1/6" v-for="fieldtype in fieldtypes" :key="'add-' + fieldtype.handle">
-                        <p-button class="w-full items-center justify-start" @click.prevent="add(fieldtype)">
-                            <fa-icon :icon="fieldtype.icon" class="icon"></fa-icon> {{ fieldtype.name }}
-                        </p-button>
-                    </div>
-                </div>
+                <fieldtype-picker @click="add"></fieldtype-picker>
 
                 <template slot="footer">
                     <p-button @click.prevent="field.add = false">Close</p-button>
@@ -94,11 +88,6 @@
                 type: Array,
                 required: false,
                 default: () => []
-            },
-
-            fieldtypes: {
-                type: Object,
-                required: true
             },
 
             sectionHandle: {

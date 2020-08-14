@@ -1,7 +1,9 @@
 <template>
-    <section-builder
-        v-model="settings.sections">
-    </section-builder>
+    <div>
+        <section-builder
+            v-model="settings.sections">
+        </section-builder>
+    </div>
 </template>
 
 <script>
@@ -23,6 +25,14 @@
                     this.settings.sections = []
                 }
             }
+        },
+
+        created() {
+            this.$store.commit('fieldtypes/setExcluded', ['replicator'])
+        },
+
+        destroyed() {
+            this.$store.commit('fieldtypes/setExcluded', [])
         }
     }
 </script>
