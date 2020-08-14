@@ -16,6 +16,7 @@
                     label="Section Handle"
                     autocomplete="off"
                     delimiter="-"
+                    :force-watch="section.prototype"
                     :watch="section.name"
                     v-model="section.handle"
                     required>
