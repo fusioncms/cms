@@ -8,8 +8,10 @@ export default {
 
     getters: {
         get(state) {
-            return _.reject(state.fieldtypes, (type, name) =>
-                state.excluded.includes(name))
+            return _.mapValues(state.fieldtypes, (type, name) => {
+                type.disabled = state.excluded.includes(name)
+                return type
+            })
         }
     },
 

@@ -3,7 +3,9 @@
         <p-button
             v-for="(type, index) in types"
             :key="`add-${type.handle}`"
+            :disabled="type.disabled"
             class="flex items-center justify-center"
+            :class="{'text-gray-500':type.disabled}"
             @click.prevent="$emit('click', type)">
 
             <fa-icon :icon="type.icon" class="icon"></fa-icon>
