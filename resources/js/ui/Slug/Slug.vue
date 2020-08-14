@@ -35,7 +35,8 @@
         data() {
             return {
                 inSync: true,
-                isLocked: _.endsWith(this.$route.name, '.edit')
+                isLocked: !this.forceWatch &&
+                          _.endsWith(this.$route.name, '.edit')
             }
         },
 
@@ -110,6 +111,11 @@
                 required: false,
                 type: String,
                 default: '',
+            },
+            forceWatch: {
+                required: false,
+                type: Boolean,
+                default: false,
             }
         },
 
