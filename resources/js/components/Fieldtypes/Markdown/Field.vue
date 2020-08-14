@@ -31,7 +31,6 @@
 
     import CodeMirror from 'codemirror'
     import marked     from 'marked'
-    import moment     from 'moment'
 
     export default {
         name: 'markdown-fieldtype',

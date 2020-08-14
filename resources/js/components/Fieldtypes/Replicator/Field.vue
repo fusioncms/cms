@@ -16,7 +16,7 @@
             <fa-icon icon="plus" class="fa-xs"></fa-icon>
         </p-button>
 
-        <p-tabs ref="tabs" :move="move">
+        <p-tabs :move="move">
             <p-tab
                 v-for="(replicant, index) in replicants"
                 :key="`replicant-${index}-tab`"
