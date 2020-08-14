@@ -6,6 +6,7 @@ import inbox from './inbox'
 import fusion from './fusion'
 import settings from './settings'
 import navigation from './navigation'
+import fieldtypes from './fieldtypes'
 import filemanager from './filemanager'
 import formmanager from './form-manager'
 import usermanager from './usermanager'
@@ -20,6 +21,7 @@ export default new Vuex.Store({
         fusion,
         settings,
         navigation,
+        fieldtypes,
         filemanager,
         formmanager,
         usermanager,

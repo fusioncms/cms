@@ -12,7 +12,6 @@
 
             <section-editor
                 :section="section"
-                :fieldtypes="fieldtypes"
                 :sections="sections">
             </section-editor>
         </p-tab>
@@ -22,12 +21,6 @@
 <script>
     export default {
         name: 'section-builder',
-
-        data() {
-            return {
-                fieldtypes: {},
-            }
-        },
 
         props: {
             value: {
@@ -94,10 +87,6 @@
         mounted() {
             if (this.value.length == 0)
                 this.add('General')
-
-            axios.get('/api/fieldtypes').then((response) => {
-                this.fieldtypes = response.data.data
-            })
         }
     }
 </script>
