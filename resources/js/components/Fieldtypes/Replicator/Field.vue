@@ -16,11 +16,11 @@
             <fa-icon icon="plus" class="fa-xs"></fa-icon>
         </p-button>
 
-        <p-tabs :move="move">
+        <p-tabs ref="tabs" :move="move">
             <p-tab
                 v-for="(replicant, index) in replicants"
                 :key="`replicant-${index}-tab`"
-                :name="replicant.section.name"
+                :name="`[${index + 1}] ${replicant.section.name}`"
                 :remove="remove">
 
                 <component
