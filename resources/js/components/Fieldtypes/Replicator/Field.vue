@@ -20,7 +20,7 @@
             <p-tab
                 v-for="(replicant, index) in replicants"
                 :key="`replicant-${index}-tab`"
-                :name="replicant.section.name"
+                :name="`[${index + 1}] ${replicant.section.name}`"
                 :remove="remove">
 
                 <component

@@ -9,8 +9,8 @@
         <p-tabs>
             <p-tab name="Markdown">
                 <textarea
+                    :ref="field.handle"
                     :name="field.handle"
-                    :id="field.handle"
                     cols="30"
                     rows="12"
                     v-model="value"
@@ -59,11 +59,15 @@
                 const html   = marked.parser(tokens)
                 
                 return html
-            }
+            },
+
+            el() {
+                return this.$refs[this.field.handle]
+            },
         },
 
         mounted() {
-            this.codemirror = CodeMirror.fromTextArea(document.getElementById(this.field.handle), {
+            this.codemirror = CodeMirror.fromTextArea(this.el, {
                 theme: 'fusion',
                 mode: {
                     name: 'gfm',
