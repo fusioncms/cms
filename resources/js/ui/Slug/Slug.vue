@@ -34,9 +34,7 @@
 
         data() {
             return {
-                inSync: true,
-                isLocked: !this.forceWatch &&
-                          _.endsWith(this.$route.name, '.edit')
+                inSync: true
             }
         },
 
@@ -49,6 +47,11 @@
                 set(value) {
                     this.$emit('input', this.slugify(value))
                 }
+            },
+
+            isLocked() {
+                return !this.forceWatch &&
+                       _.endsWith(this.$route.name, '.edit')
             }
         },
 

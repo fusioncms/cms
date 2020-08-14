@@ -52,7 +52,7 @@
         },
 
         methods: {
-            add(name = 'Section') {
+            add(name = 'Section', prototype = true) {
                 name = this.uniqName(name)
 
                 this.sections.push({
@@ -61,6 +61,7 @@
                     description: '',
                     placement: 'body',
                     fields: [],
+                    prototype: prototype
                 })
             },
 
