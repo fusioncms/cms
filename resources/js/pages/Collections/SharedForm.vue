@@ -10,6 +10,7 @@
         <div class="card">
             <div class="card__body">
                 <p-title
+                    v-if="nameFieldHidden"
                     name="name"
                     :label="collection.name_label || 'Name'"
                     autocomplete="off"
@@ -18,8 +19,7 @@
                     :placeholder="collection.name_label || 'Name'" 
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
-                    v-model="form.name"
-                    v-if="collection.show_name_field">
+                    v-model="form.name">
                 </p-title>
 
                 <p-tabs v-if="sections.body.length > 0">
@@ -53,6 +53,7 @@
                         autocomplete="off"
                         required
                         :watch="form.name"
+                        :readonly="nameFieldHidden"
                         :has-error="form.errors.has('slug')"
                         :error-message="form.errors.get('slug')"
                         v-model="form.slug">
@@ -129,20 +130,19 @@
                 let sidebar = []
 
                 if (this.collection.fieldset) {
-                    body = _.filter(this.collection.fieldset.sections, function(section) {
-                        return section.placement == 'body'
-                    })
+                    body = _.filter(this.collection.fieldset.sections, (section) =>
+                        section.placement == 'body')
 
-                    sidebar = _.filter(this.collection.fieldset.sections, function(section) {
-                        return section.placement == 'sidebar'
-                    })
+                    sidebar = _.filter(this.collection.fieldset.sections, (section) =>
+                        section.placement == 'sidebar')
                 }
 
-                return {
-                    body: body,
-                    sidebar: sidebar
-                }
+                return { body, sidebar }
             },
-        },
+
+            nameFieldHidden() {
+                return this.collection.show_name_field
+            }
+        }
     }
 </script>
