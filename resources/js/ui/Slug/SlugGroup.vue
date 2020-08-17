@@ -1,6 +1,16 @@
 <template>
-        <p-input
-            monospaced
+    <p-field-group
+        :name="name"
+        :fieldId="formattedId"
+        :label="label"
+        :hideLabel="hideLabel"
+        :required="required"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess"
+        :successMessage="successMessage"
+        :help="help">
+        <p-slug
             :id="formattedId"
             :name="name"
             :type="type"
@@ -11,17 +21,18 @@
             :autocomplete="autocomplete"
             :autofocus="autofocus"
             :required="required"
+            :watch="watch"
+            :delimiter="delimiter"
             :hasError="hasError"
             :hasSuccess="hasSuccess"
-            :message="message"
-            v-model.lazy="model"
-            ref="input">
-        </p-input>
+            :message="hasMessage">
+        </p-slug>
+    </p-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-slug',
+        name: 'p-slug-group',
 
         mixins: [
             require('../../mixins/fields').default
@@ -35,6 +46,11 @@
             id: String,
             placeholder: String,
             label: String,
+            hideLabel: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
             help: String,
             value: {
                 type: [String, Number],
@@ -65,15 +81,20 @@
                 type: Boolean,
                 default: false,
             },
+            errorMessage: {
+                required: false,
+                type: String,
+                default: '',
+            },
             hasSuccess: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-            message: {
+            successMessage: {
                 required: false,
-                type: Boolean,
-                defaut: false
+                type: String,
+                default: '',
             },
             autocomplete: {
                 required: false,
@@ -94,56 +115,6 @@
                 required: false,
                 type: String,
                 default: '',
-            }
-        },
-
-        data() {
-            return {
-                inSync: true,
-                isLocked: _.endsWith(this.$route.name, '.edit')
-            }
-        },
-
-        watch: {
-            watch(value) {
-                if (this.inSync && ! this.isLocked) {
-                    this.model = value
-                }
-            },
-
-            model(value) {
-                this.inSync = ! this.isLocked && (value === '' || value === this.slugify(this.watch))
-            }
-        },
-
-        computed: {
-            model: {
-                get() {
-                    return this.value
-                },
-
-                set(value) {
-                    this.$emit('input', this.slugify(value))
-                }
-            }
-        },
-
-        methods: {
-            slugify(value) {
-                const a = 'àáäâèéëêìíïîòóöôùúüûñçßÿỳýœæŕśńṕẃǵǹḿǘẍźḧ'
-                const b = 'aaaaeeeeiiiioooouuuuncsyyyoarsnpwgnmuxzh'
-                const p = new RegExp(a.split('').join('|'), 'g')
-                const d = new RegExp(this.delimiter + '{2,}', 'g')
-
-                return value
-                    .toString()
-                    .toLowerCase()
-                    .trim()
-                    .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
-                    .replace(/&+/gi, 'and')                  // Replace 1 or more & characters with the word 'and'
-                    .replace(/([^\w\s]|_)+/g, ' ')           // Remove all non-word chars
-                    .replace(/\s+/g, this.delimiter)         // Convert spaces with delimiter
-                    .replace(d, this.delimiter)              // Replace multiple delimiters with a single one
             }
         }
     }

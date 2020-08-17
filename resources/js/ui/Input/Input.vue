@@ -12,7 +12,6 @@
         :autocomplete="autocomplete"
         :autofocus="autofocus"
         :required="required"
-
         :aria-required="required" 
         :aria-describedby="message ? formattedId + '_message' : null"
         @input="$emit('input', $event.target.value)"
@@ -22,6 +21,16 @@
 <script>
     export default {
         name: 'p-input',
+
+        methods: {
+            focus() {
+                this.$el.focus()
+            },
+            
+            blur() {
+                this.$el.blur()
+            }
+        },
 
         mixins: [
             require('../../mixins/fields').default

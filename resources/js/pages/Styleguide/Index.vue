@@ -20,6 +20,8 @@
 
         <sg-toolbars></sg-toolbars>  
 
+        <sg-modals></sg-modals>
+
         <!-- Old code needing refactor -->
         <!-- <div class="row">
             <div class="col w-1/2">
@@ -78,6 +80,7 @@
     import ColorPallet from './ColorPallet'
     import Dropdowns from './Dropdowns'
     import Fields from './Fields'
+    import Modals from './Modals'
     import Toolbars from './Toolbars'
     import Typography from './Typography'
 
@@ -97,6 +100,7 @@
             'sg-color-pallet': ColorPallet,
             'sg-dropdowns': Dropdowns,
             'sg-fields': Fields,
+            'sg-modals': Modals,
             'sg-toolbars': Toolbars,
             'sg-typography': Typography
         }

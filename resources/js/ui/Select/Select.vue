@@ -16,13 +16,12 @@
             <!-- Selected Item/Items -->
             <div v-if="selectedOptions.length > 0" class="field-select__selected" :class="{'field-select__selected--multiple': multiple}">
                 <ul v-if="multiple" class="field-select__list">
-                    <li v-for="(option, index) in selectedOptions" :key="index" class="field-select__item tag">
-                        {{ option.label || option }}
-                        
-                        <button @click.stop="removeSelection(index)">
-                            <fa-icon icon="times"></fa-icon>
-                            <span class="sr-only">Unselect {{ option.label || option }}</span>
-                        </button>
+                    <li v-for="(option, index) in selectedOptions" :key="index" class="field-select__item">
+                        <p-tag 
+                            :value="option.label || option" 
+                            :label="'Unselect' + option.label || option" 
+                            @click="removeSelection(index)">
+                        </p-tag>
                     </li>
                 </ul>
 
@@ -36,7 +35,12 @@
             </div>
         </button>
 
-        <input :id="formattedId" type="hidden" :value="selectedOptions">
+        <!-- <p-input 
+            :id="formattedId" 
+            type="text" 
+            :required="required"
+            :value="selectedOptions">
+        </p-input> -->
 
         <!-- Select Dropdown -->
         <div
@@ -45,15 +49,15 @@
             ref="dropdown">
             <!-- Search -->
             <div class="field-dropdown__search">
-                <p-label text="Search Options" :field_name="'search_options_' + name" v-if="filterable"></p-label>
-                <input
+                <p-label text="Search Options" :fieldId="'search_options_' + name" v-if="filterable"></p-label>
+                <p-input
                     v-if="filterable"
                     :name="'search_options_' + name"
                     type="search"
                     ref="search"
-                    class="field"
                     v-model="search"
-                    placeholder="Search for option..."/>
+                    placeholder="Search for option...">
+                </p-input>
             </div>
 
             <p :id="formattedId + '_controls'" class="field-dropdown__controls" v-if="showControls">

@@ -10,6 +10,8 @@
     @apply appearance-none bg-white border border-gray-300 rounded leading-normal text-gray-700 no-underline cursor-pointer px-3 py-2;
     transition: all 0.2s $transition-effect;
 
+    * { pointer-events: none; }
+
     &:hover:not([disabled]),
     &:hover:not(.disabled) { 
         @apply bg-gray-200 border-gray-300; 
