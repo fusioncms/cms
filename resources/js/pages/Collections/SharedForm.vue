@@ -10,7 +10,7 @@
         <div class="card">
             <div class="card__body">
                 <p-title
-                    v-if="nameFieldHidden"
+                    v-if="collection.show_name_field"
                     name="name"
                     :label="collection.name_label || 'Name'"
                     autocomplete="off"
@@ -53,7 +53,7 @@
                         autocomplete="off"
                         required
                         :watch="form.name"
-                        :readonly="nameFieldHidden"
+                        :readonly="!collection.show_name_field"
                         :has-error="form.errors.has('slug')"
                         :error-message="form.errors.get('slug')"
                         v-model="form.slug">
@@ -123,7 +123,7 @@
                 required: true,
             }
         },
-
+        
         computed: {
             sections() {
                 let body = []
@@ -138,10 +138,25 @@
                 }
 
                 return { body, sidebar }
-            },
+            }
+        },
 
-            nameFieldHidden() {
-                return this.collection.show_name_field
+        created() {
+            if (this.collection.name_format) {
+                const subject = this.collection.name_format
+                const regexp  = /{(\w+)}/gi
+
+                subject.match(regexp).forEach((mm) => {
+                    let field = _.trim(mm, '{}')
+
+                    if (field != 'name' && field != 'slug' && field in this.form) {
+                        this.$watch(`form.${field}`, () => {
+                            this.form.name = subject.replace(regexp, (p, m) => {
+                                return this.form[m] ?? ''
+                            })
+                        })
+                    }
+                })
             }
         }
     }

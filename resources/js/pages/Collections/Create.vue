@@ -40,10 +40,10 @@
 
         methods: {
             submit() {
-                this.form.post('/api/collections/' + this.collection.slug).then((response) => {
+                this.form.post(`/api/collections/${this.collection.slug}`).then((response) => {
                     toast('Entry saved successfully', 'success')
 
-                    this.$router.push('/collection/' + this.collection.slug)
+                    this.$router.push(`/collection/${this.collection.slug}`)
                 }).catch((response) => {
                     toast(response.message, 'failed')
                 })
@@ -51,62 +51,35 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            getCollection(to.params.collection, (error, collection, fields) => {
-                if (error) {
-                    next((vm) => {
-                        vm.$router.push('/collection/' + vm.$router.currentRoute.params.collection)
+            axios.get(`/api/matrices/slug/${to.params.collection}`)
+                .then(response => {
+                    next(vm => {
+                        let collection = response.data.data
+                        let form     = {
+                            name: '',
+                            slug: '',
+                            status: 1,
+                        }
 
-                        toast(error.toString(), 'danger')
-                    })
-                } else {
-                    next((vm) => {
+                        if (collection.fieldset) {
+                            _.each(collection.fieldset.sections, (section) => {
+                                _.each(section.fields, (field) => {
+                                    form[field.handle] = field.default
+                                })
+                            })
+                        }
+
                         vm.collection = collection
-                        vm.form = new Form(fields, true)
+                        vm.form = new Form(form, true)
 
                         vm.$emit('updateHead')
                     })
-                }
-            })
-        },
-
-        beforeRouteUpdate(to, from, next) {
-            getCollection(to.params.collection, (error, matrix, fields) => {
-                if (error) {
-                    this.$router.push('/collection/' + this.$router.currentRoute.params.collection)
-
-                    toast(error.toString(), 'danger')
-                } else {
-                    this.collection = matrix
-                    this.form = new Form(fields, true)
-
-                    this.$emit('updateHead')
-                }
-            })
-
-            next()
-        }
-    }
-
-    export function getCollection(slug, callback) {
-        axios.get('/api/matrices/slug/' + slug).then((response) => {
-            let collection = response.data.data
-            let fields = {
-                name: '',
-                slug: '',
-                status: 1,
-            }
-
-            if (collection.fieldset) {
-                _.forEach(collection.fieldset.sections, function(section) {
-                    _.forEach(section.fields, function(field) {
-                        fields[field.handle] = field.default
-                    })
                 })
-            }
-
-            callback(null, collection, fields)
-        }).catch(function(error) {
-            callback(new Error('The requested collection could not be found'))
-        })
+                .catch(() => {
+                    vm.$router.push(`/collection/${vm.$router.currentRoute.params.collection}`)
+                    
+                    toast('Requested entry could not be found.', 'danger')
+                })
+        }
     }
 </script>
