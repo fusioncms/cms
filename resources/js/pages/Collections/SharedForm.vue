@@ -10,7 +10,6 @@
         <div class="card">
             <div class="card__body">
                 <p-title
-                    v-if="collection.show_name_field"
                     name="name"
                     :label="collection.name_label || 'Name'"
                     autocomplete="off"
@@ -19,7 +18,8 @@
                     :placeholder="collection.name_label || 'Name'" 
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
-                    v-model="form.name">
+                    v-model="form.name"
+                    v-if="collection.show_name_field">
                 </p-title>
 
                 <p-tabs v-if="sections.body.length > 0">
@@ -140,10 +140,6 @@
                 }
 
                 return { body, sidebar }
-            },
-
-            showSlugOnCreate() {
-                return 
             }
         }
     }
