@@ -47,11 +47,13 @@
             <div class="card">
                 <div class="card__body">
                     <p-slug
+                        v-if="collection.show_name_field || entry.id"
                         name="slug"
                         label="Slug"
                         monospaced
                         autocomplete="off"
                         required
+                        :help="collection.show_name_field ? '' : 'This field is auto-generated based on pattern specified.'"
                         :watch="form.name"
                         :readonly="!collection.show_name_field"
                         :has-error="form.errors.has('slug')"
@@ -138,25 +140,10 @@
                 }
 
                 return { body, sidebar }
-            }
-        },
+            },
 
-        created() {
-            if (this.collection.name_format) {
-                const subject = this.collection.name_format
-                const regexp  = /{(\w+)}/gi
-
-                subject.match(regexp).forEach((mm) => {
-                    let field = _.trim(mm, '{}')
-
-                    if (field != 'name' && field != 'slug' && field in this.form) {
-                        this.$watch(`form.${field}`, () => {
-                            this.form.name = subject.replace(regexp, (p, m) => {
-                                return this.form[m] ?? ''
-                            })
-                        })
-                    }
-                })
+            showSlugOnCreate() {
+                return 
             }
         }
     }
