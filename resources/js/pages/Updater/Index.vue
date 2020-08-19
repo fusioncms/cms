@@ -123,9 +123,11 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            axios.get('https://beta.getfusioncms.com/releases.json')
-                .then((feed) => next(vm => vm.items = feed.data.items))
-                .catch((error) => {})
+            axios.all([
+                axios.get('https://beta.getfusioncms.com/releases.json').catch(() => {})
+            ]).then(axios.spread((feed) => {
+                next((vm) => vm.items = feed ? feed.data.items : [])
+            }))
         }
     }
 </script>
