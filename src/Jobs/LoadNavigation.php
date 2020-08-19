@@ -144,6 +144,11 @@ class LoadNavigation
                 'icon' => 'bug',
             ]);
 
+            $menu->tools->add('Updater')->data([
+                'to'   => '/updater',
+                'icon' => 'update',
+            ]);
+
             $menu->add('Users', '#')->data([
                 'icon'  => 'users',
             ]);

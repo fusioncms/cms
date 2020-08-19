@@ -459,6 +459,16 @@ const router = new Router({
         },
 
         {
+            path: '/updater',
+            component: () => import('@/pages/Updater/Index'),
+            name: 'updater',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+
+        {
             path: '/styleguide',
             component: () => import('@/pages/Styleguide/Index'),
             name: 'styleguide',
