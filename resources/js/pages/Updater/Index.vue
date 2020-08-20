@@ -19,14 +19,8 @@
                 </h3>
 
                 <div class="flex items-center justify-start">
-                    <!--
-                    <p-button v-if="item.id < id" @click="downgrade(item.id)">
-                        Downgrade to {{ item.title }}
-                    </p-button>
-                    -->
-
                     <!-- upgrade -->
-                    <p-button v-if="item.id > id" @click="upgrade(item.id)">
+                    <p-button v-if="item.id > id" @click="upgrade(item.id)" disabled>
                         Upgrade to {{ item.title }}
                     </p-button>
 
