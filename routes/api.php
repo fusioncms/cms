@@ -160,3 +160,4 @@ Route::apiResource('tokens', 'Users\TokenController')->except(['show', 'update']
  * Updater
  */
 Route::get('updater', 'UpdaterController@index');
+Route::post('updater', 'UpdaterController@store');

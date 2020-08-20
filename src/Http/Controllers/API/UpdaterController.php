@@ -2,6 +2,8 @@
 
 namespace Fusion\Http\Controllers\API;
 
+use Fusion\Jobs\BackupRun;
+use Fusion\Jobs\UpdateVersion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Fusion\Http\Controllers\Controller;
@@ -18,6 +20,19 @@ class UpdaterController extends Controller
     public function index(Request $request)
     {
         return new ChangelogResource($this->changelog());
+    }
+
+    /**
+     * Update to version.
+     * 
+     * @param  \Illuminate\Http\Request $request
+     * @return void
+     */
+    public function store(Request $request)
+    {
+        // BackupRun::withChain([
+        //     new UpdateVersion($request->input('version'))
+        // ])->dispatch();
     }
 
     /**

@@ -8,7 +8,7 @@
         <p>Are you sure you want to update to version {{ version.title }}?</p>
         
         <template slot="footer">
-            <p-button @click="update" type="button" class="button button--primary">Update</p-button>
+            <p-button @click="confirm" type="button" class="button button--primary">Confirm</p-button>
             <p-button @click="close" type="button" class="mr-3">Cancel</p-button>
         </template>
     </p-modal>
@@ -21,7 +21,7 @@
         props: {
             value: {
                 type: [Object,Boolean],
-                required: true
+                required: true,
             }
         },
 
@@ -38,10 +38,14 @@
         },
 
         methods: {
-            update() {
-                //
-                
-                this.close()
+            confirm() {
+                axios.post('/api/updater')
+                    .then((response) => {
+                        console.log(response)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
             },
 
             close() {
