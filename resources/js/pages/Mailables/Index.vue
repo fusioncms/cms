@@ -26,9 +26,9 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions :id="'mail_' + table.record.id + '_actions'" :key="'mail_' + table.record.id + '_actions'">
+                        <p-table-actions :id="'mail_' + table.record.id + '_actions'" :key="'mail_' + table.record.id + '_actions'">
                             <p-dropdown-link :to="{ name: 'mailables.edit', params: {mailable: table.record.id} }">Edit</p-dropdown-link>
-                        </p-actions>
+                        </p-table-actions>
                     </template>
 				</p-table>
 			</div>

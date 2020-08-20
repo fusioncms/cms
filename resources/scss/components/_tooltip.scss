@@ -1,0 +1,10 @@
+.tooltip {
+    @apply bg-secondary-500 text-white px-3 rounded text-xs shadow-lg z-20;
+    max-width: rem(200px);
+
+    &-inner {
+        @apply p-1;
+    }
+
+    &-arrow {}
+}

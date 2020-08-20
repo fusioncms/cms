@@ -22,7 +22,7 @@
     }
 
     &__menu {
-        @apply border-gray-300 shadow-lg absolute bg-white right-0 rounded border hidden left-0 z-20 w-56;
+        @apply border-gray-300 shadow-lg absolute bg-white right-0 rounded border hidden left-0 z-10 w-56;
 
         top: 100%;
         margin-top: 4px;

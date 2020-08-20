@@ -26,30 +26,26 @@
                 type: String,
                 required: true
             },
-
             noArrow: {
                 type: Boolean,
                 default: false,
                 required: false,
             },
-
             icon: {
                 type: Boolean,
                 default: false,
                 required: false,
             },
-
             right: {
                 type: Boolean,
                 default: false,
                 required: false,
             },
-
             up: {
                 type: Boolean,
                 default: false,
                 required: false,
-            },
+            }
         }
     }
 </script>

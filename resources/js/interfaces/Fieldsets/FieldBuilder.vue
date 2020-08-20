@@ -23,12 +23,12 @@
                                 <span class="font-mono text-xs uppercase">{{ field.type.name }}</span>
                             </div>
 
-                            <p-actions :id="field.handle + '_actions'">
+                            <p-table-actions :id="field.handle + '_actions'">
                                 <p-dropdown-link @click.prevent="set('edit', index)">Edit</p-dropdown-link>
                                 <p-dropdown-link v-if="sections.length > 1" @click.prevent="set('move', index)">Move to...</p-dropdown-link>
                                 <p-dropdown-divider></p-dropdown-divider>
                                 <p-dropdown-link @click.prevent="remove(index)">Delete</p-dropdown-link>
-                            </p-actions>
+                            </p-table-actions>
                         </div>
                     </p-sortable-item>
                 </div>

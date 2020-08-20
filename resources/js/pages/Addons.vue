@@ -37,20 +37,20 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions v-show="table.record.installed" :id="'addon_' + table.record.slug + '_actions_installed'" :key="'addon_' + table.record.slug + '_actions_installed'">
+                        <p-table-actions v-show="table.record.installed" :id="'addon_' + table.record.slug + '_actions_installed'" :key="'addon_' + table.record.slug + '_actions_installed'">
                             <p-dropdown-link v-if="table.record.enabled" @click="disable(table.record.slug)">Disable</p-dropdown-link>
                             <p-dropdown-link v-else @click="enable(table.record.slug)">Enable</p-dropdown-link>
 
                             <p-dropdown-link @click.prevent v-modal:uninstall-addon="table.record.slug" classes="link--danger">
                                 Uninstall
                             </p-dropdown-link>
-                        </p-actions>
+                        </p-table-actions>
 
-                        <p-actions v-show="!table.record.installed" :id="'addon_' + table.record.slug + '_actions_uninstalled'" :key="'addon_' + table.record.slug + '_actions_uninstalled'">
+                        <p-table-actions v-show="!table.record.installed" :id="'addon_' + table.record.slug + '_actions_uninstalled'" :key="'addon_' + table.record.slug + '_actions_uninstalled'">
                             <p-dropdown-link v-modal:install-addon="table.record.slug">
                                 Install
                             </p-dropdown-link>
-                        </p-actions>
+                        </p-table-actions>
                     </template>
                 </p-table>
             </div>

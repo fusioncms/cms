@@ -24,7 +24,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions :id="'menu_' + table.record.id + '_actions'" :key="'menu_' + table.record.id + '_actions'">
+                        <p-table-actions :id="'menu_' + table.record.id + '_actions'" :key="'menu_' + table.record.id + '_actions'">
                             <p-dropdown-link :to="{ name: 'menu.nodes', params: {menu: table.record.id} }">Manage</p-dropdown-link>
                             <p-dropdown-link :to="{ name: 'menus.edit', params: {menu: table.record.id} }">Edit</p-dropdown-link>
 
@@ -35,7 +35,7 @@
                             >
                                 Delete
                             </p-dropdown-link>
-                        </p-actions>
+                        </p-table-actions>
                     </template>
                 </p-table>
             </div>

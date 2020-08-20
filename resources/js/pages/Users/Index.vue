@@ -40,7 +40,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
+                        <p-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
                             <p-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }">Edit</p-dropdown-link>
 
                             <p-dropdown-link
@@ -51,7 +51,7 @@
                             >
                                 Delete
                             </p-dropdown-link>
-                        </p-actions>
+                        </p-table-actions>
                     </template>
                 </p-table>
             </div>

@@ -1,76 +1,45 @@
 <template>
-    <div class="flex items-center justify-between">
-        <div class="buttons">
-            <div class="buttons__group">
-                <button class="button button--icon" @click="onClickPreviousPage"><fa-icon icon="chevron-left" class="icon"></fa-icon></button>
-                <button class="button button--icon" @click="onClickNextPage"><fa-icon icon="chevron-right" class="icon"></fa-icon></button>
-            </div>
-        </div>
+    <nav aria-label="pagination">
+        <ul class="pagination">
+            <li v-if="showEnds && current != 1" class="pagination__item">
+                <a class="pagination__link" href="#" icon @click.prevent="onClickPage(1)">
+                    <span>First</span>
+                </a>
+            </li>
 
-        <div class="buttons">
-            <div class="buttons__group">
-                <button class="button button--icon" :class="{ 'button--primary': isPageActive(page.name) }" v-for="page in pages" :key="page.name" @click="onClickPage(page.name)">{{ page.name }}</button>
-            </div>
-        </div>
-    </div>
+            <li v-if="showNav && current != 1" class="pagination__item">
+                <a class="pagination__link" href="#" icon @click.prevent="onClickPreviousPage">
+                    <span>Previous</span>
+                </a>
+            </li>
 
-    <!-- <ul class="pagination">
-        <li class="pagination--item">
-            <button
-                type="button"
-                class="button"
-                @click="onClickFirstPage"
-                :disabled="isOnFirstPage"
-            >
-                First
-            </button>
-        </li>
+            <li v-if="this.current > 2"  class="pagination__item">
+                <span>...</span>
+            </li>
 
-        <li class="pagination--item">
-            <button
-                type="button"
-                class="button"
-                @click="onClickPreviousPage"
-                :disabled="isOnFirstPage"
-            >
-                Previous
-            </button>
-        </li>
+            <li v-if="showNumbers" v-for="page in pages" class="pagination__item" :key="page.name">
+                <a class="pagination__link" :class="{ 'current': isPageActive(page.name) }" :aria-current="isPageActive(page.name) ? 'page' : null" :aria-disabled="isPageActive(page.name) ? 'true' : null" href="#" @click.prevent="onClickPage(page.name)">
+                    <span>{{ page.name }}</span>
+                </a>
+            </li>
 
-        <li v-for="page in pages" :key="page.name" class="pagination--item">
-            <button
-                type="button"
-                class="button"
-                @click="onClickPage(page.name)"
-                :disabled="page.isDisabled"
-                :class="{ active: isPageActive(page.name) }"
-            >
-                {{ page.name }}
-            </button>
-        </li>
+            <li v-if="this.current < (total - (maxVisiblePages - 2))"  class="pagination__item">
+                <span>...</span>
+            </li>
+            
+            <li v-if="showNav && current != total" class="pagination__item">
+                <a class="pagination__link" href="#" icon @click.prevent="onClickNextPage">
+                    <span>Next</span>
+                </a>
+            </li>
 
-        <li class="pagination--item">
-            <button
-                type="button"
-                class="button"
-                @click="onClickNextPage"
-                :disabled="isOnLastPage"
-            >
-                Next
-            </button>
-        </li>
-
-        <li class="pagination--item">
-            <button
-                type="button"
-                class="button"
-                @click="onClickLastPage"
-                :disabled="isOnLastPage"
-            >
-                Last
-            </button>
-        </li>
-    </ul> -->
+            <li v-if="showEnds && current != total" class="pagination__item">
+                <a class="pagination__link" href="#" icon @click.prevent="onClickPage(total)">
+                    <span>Last</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </template>
 
 <script>
@@ -79,20 +48,29 @@
 
         props: {
             maxVisiblePages: {
-                required: false,
                 type: Number,
-                default: 3,
+                default: 3
             },
-
+            showNumbers: {
+                type: Boolean,
+                default: true
+            },
+            showNav: {
+                type: Boolean,
+                default: true
+            },
+            showEnds: {
+                type: Boolean,
+                default: true
+            },
             total: {
                 required: true,
                 type: Number,
             },
-
             value: {
                 required: true,
                 type: Number,
-            },
+            }
         },
 
         computed: {
@@ -116,7 +94,11 @@
                 if (this.current === this.total) {
                     startPage = this.total - this.maxVisiblePages + 1
                 } else {
-                    startPage = this.current - 1
+                    if (this.current > (this.total - this.maxVisiblePages + 1)) {
+                        startPage = this.total - this.maxVisiblePages + 1
+                    } else { 
+                        startPage = this.current - 1 
+                    }
                 }
 
                 if (startPage === 0) {
@@ -152,10 +134,27 @@
             },
         },
 
+        watch: {
+            maxVisiblePages(value) {
+                if (value < 3) this.maxVisiblePages = 3
+            }
+        },
+
         methods: {
             onClickFirstPage() {
                 this.$emit('input', 1)
                 this.$emit('first')
+            },
+
+            onClickLastPage() {
+                this.$emit('input', this.total)
+                this.$emit('last')
+            },
+
+            onClickPage(page) {
+                if (this.current != page) {
+                    this.$emit('input', page)
+                }
             },
 
             onClickPreviousPage() {
@@ -164,12 +163,6 @@
                 if (previousPage >= 1) {
                     this.$emit('input', previousPage)
                     this.$emit('next')
-                }
-            },
-
-            onClickPage(page) {
-                if (this.current != page) {
-                    this.$emit('input', page)
                 }
             },
 
@@ -182,14 +175,9 @@
                 }
             },
 
-            onClickLastPage() {
-                this.$emit('input', this.total)
-                this.$emit('last')
-            },
-
             isPageActive(page) {
                 return this.current === page
-            },
+            }
         }
     }
 </script>

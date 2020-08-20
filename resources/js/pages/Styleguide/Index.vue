@@ -18,7 +18,9 @@
 
         <sg-dropdowns></sg-dropdowns>
 
-        <sg-toolbars></sg-toolbars>  
+        <sg-toolbars></sg-toolbars> 
+
+        <sg-tables></sg-tables> 
 
         <sg-modals></sg-modals>
 
@@ -81,6 +83,7 @@
     import Dropdowns from './Dropdowns'
     import Fields from './Fields'
     import Modals from './Modals'
+    import Tables from './Tables'
     import Toolbars from './Toolbars'
     import Typography from './Typography'
 
@@ -101,6 +104,7 @@
             'sg-dropdowns': Dropdowns,
             'sg-fields': Fields,
             'sg-modals': Modals,
+            'sg-tables': Tables,
             'sg-toolbars': Toolbars,
             'sg-typography': Typography
         }

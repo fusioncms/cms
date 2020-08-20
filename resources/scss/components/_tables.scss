@@ -1,199 +1,104 @@
-.table {
-    @apply
-        w-full
-        text-sm
-    ;
 
+.table-wrapper {
+    @screen md {
+        @apply relative border-gray-300 bg-white rounded border p-px;
+    }
+
+    &.loading {
+        &:after {
+            @apply absolute top-0 left-0 right-0 bottom-0 block w-full h-full z-20;
+            content: '';
+            background: rgba(white, 0.5);
+        }
+    }
+}
+
+.table {
+    @apply w-full text-sm;
     table-layout: fixed;
     word-wrap: break-word;
 
-    thead {
-        @apply
-            hidden
-        ;
+    @screen md { @apply text-base; }
 
-        th {
-            @apply
-                border-gray-200
-                tracking-wider
-                text-gray-800
-                font-medium
-                bg-gray-50
-                text-left
-                uppercase
-                leading-4
-                border-b-2
-                text-xs
-                px-6
-                py-3
-            ;
+    &__heading {
+        @apply relative block w-full px-6 py-3;
+
+        &--link {
+            color: inherit;
+            transition: all 0.3s $transition-effect;
+
+            &:hover,
+            &:active,
+            &:focus { 
+                color: inherit;
+                z-index: 1; 
+            }
+        }
+    }
+
+    &__actions {
+        @apply align-middle text-center absolute p-3 right-0 top-0 w-12;
+
+        @screen md {
+            @apply align-middle px-6 text-right relative;
         }
 
-        .sortable {
-            &:hover {
-                @apply
-                    cursor-pointer
-                    border-gray-400
-                ;
+        .dropdown__menu { @apply w-40; }
+    }
+
+    thead {
+        @apply hidden;
+
+        @screen md { display: table-header-group; }
+
+        th {
+            @apply bg-gray-100 border-gray-200 border-b-2 text-xs text-gray-600 font-medium leading-4 tracking-wider text-left uppercase p-0;
+
+            &.sortable {
+                transition: all 0.3s $transition-effect;
+
+                &:hover {
+                    @apply cursor-pointer border-gray-500 bg-gray-200;
+                }
+
+                &.active { @apply text-gray-800; }
             }
         }
     }
 
     tbody {
+        @screen md { @apply border-0; }
+
         tr {
-            @apply
-                flex
-                flex-col
-                bg-white
-                mb-3
-                relative
-                border
-                border-gray-300
-                rounded
-                pr-10
-            ;
+            @apply flex flex-col bg-white mb-3 relative border border-gray-300 rounded pr-10;
+
+            @screen md {
+                @apply rounded-none p-0 border-0;
+                display: table-row;
+
+                &:nth-child(even) { @apply bg-gray-100; }
+            }
         }
 
         td {
-            @apply
-                align-middle
-                px-6
-                py-3
-            ;
+            @apply align-middle px-6 py-3;
+            @extend %no-bottom;
 
             &:first-child {
-                @apply
-                    text-gray-900
-                    font-medium
-                ;
+                @apply text-gray-900 font-medium;
             }
 
-            &.actions {
-                @apply
-                    align-middle
-                    text-center
-                    absolute
-                    p-3
-                    right-0
-                    top-0
-                    w-12
-                ;
-
-                .dropdown__menu {
-                    @apply
-                        w-40
-                    ;
-
-                    margin-top: -2px;
-                }
-            }
-        }
-    }
-
-    .column__label {
-        @apply
-            tracking-wider
-            text-gray-400
-            leading-snug
-            uppercase
-            font-semibold
-            text-xs
-            block
-        ;
-    }
-
-    &__wrapper {
-        .card__header {
-            @apply
-                border
-                rounded
-                border-gray-300
-                mb-3
-                bg-white
-            ;
+            p { @apply text-sm; }
         }
     }
 }
 
-@screen md {
-    .table {
-        @apply
-            text-base
-        ;
+.column-label {
+    @apply block text-xs text-gray-500 tracking-wider leading-snug uppercase font-semibold mb-2;
 
-        thead {
-            display: table-header-group;
-        }
+    @screen md { @apply hidden; }
+}
 
-        tbody {
-            @apply
-                border-0
-            ;
-
-            tr {
-                @apply
-                    rounded-none
-                    p-0
-                    border-0
-                ;
-
-                display: table-row;
-
-                &:not(:last-child) {
-                    @apply
-                        border-b
-                        border-gray-200
-                    ;
-                }
-
-                &:nth-child(even) {
-                    @apply
-                        bg-gray-50
-                    ;
-                }
-            }
-
-            td {
-                &.actions {
-                    @apply
-                        align-middle
-                        px-6
-                        text-right
-                        relative
-                    ;
-                }
-            }
-        }
-
-        &__wrapper {
-            @apply
-                border-gray-300
-                bg-white
-                rounded
-                border
-                p-px
-            ;
-
-            .card__header {
-                @apply
-                    border-0
-                    rounded-none
-                    mb-0
-                    bg-transparent
-                ;
-            }
-        }
-
-        .column__label {
-            @apply
-                hidden
-            ;
-        }
-
-        .column__stat {
-            @apply
-                text-right
-            ;
-        }
-    }
+.column-stat {
+    @screen md { @apply text-right; }
 }

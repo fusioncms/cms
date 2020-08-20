@@ -24,7 +24,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions :id="'term_' + table.record.id + '_actions'" :key="'term_' + table.record.id + '_actions'">
+                        <p-table-actions :id="'term_' + table.record.id + '_actions'" :key="'term_' + table.record.id + '_actions'">
                             <p-dropdown-link @click.prevent :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">Edit</p-dropdown-link>
 
                             <p-dropdown-link
@@ -34,7 +34,7 @@
                             >
                                 Delete
                             </p-dropdown-link>
-                        </p-actions>
+                        </p-table-actions>
                     </template>
                 </p-table>
             </div>

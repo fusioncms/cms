@@ -5,10 +5,11 @@
         <p-card-body>
             <p-toolbar>
                 <p-toolbar-group grow>
-                    <p-label fieldId="toobar_search_input" hideLabel>Search</p-label>
+                    <p-label fieldId="toolbar_search_input" hideLabel>Search</p-label>
                     <div class="input-group">
                         <p-button icon>
                             <fa-icon icon="search"></fa-icon>
+                            <span class="sr-only">Search</span>
                         </p-button>
                         <p-input
                             id="toolbar_search_input"

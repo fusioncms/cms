@@ -14,27 +14,22 @@
         :required="required"
         :aria-required="required" 
         :aria-describedby="message ? formattedId + '_message' : null"
-        @input="$emit('input', $event.target.value)"
-        v-model="value"/>
+        @input="handleInput" />
 </template>
 
 <script>
     export default {
         name: 'p-input',
 
-        methods: {
-            focus() {
-                this.$el.focus()
-            },
-            
-            blur() {
-                this.$el.blur()
-            }
-        },
-
         mixins: [
             require('../../mixins/fields').default
         ],
+
+        data() {
+            return {
+                inputValue: this.value
+            }
+        },
 
         props: {
             name:  {
@@ -91,6 +86,20 @@
                 required: false,
                 type: Boolean,
                 default: false,
+            }
+        },
+
+        methods: {
+            handleInput (event) {
+                this.$emit('input', event.target.value)
+            },
+
+            focus() {
+                this.$el.focus()
+            },
+            
+            blur() {
+                this.$el.blur()
             }
         }
     }

@@ -59,7 +59,7 @@
 
                                 <td class="actions">
                                     <div class="draggable__actions">
-                                        <p-actions right :id="'node_' + node.id + '_actions'" :key="'node_' + node.id + '_actions'">
+                                        <p-table-actions right :id="'node_' + node.id + '_actions'" :key="'node_' + node.id + '_actions'">
                                             <p-dropdown-link @click.prevent :to="{ name: 'menu.nodes.edit', params: {menu: menu.id, node: node.id} }">Edit</p-dropdown-link>
 
                                             <p-dropdown-link
@@ -83,7 +83,7 @@
                                             >
                                                 Delete
                                             </p-dropdown-link>
-                                        </p-actions>
+                                        </p-table-actions>
                                     </div>
                                 </td>
                             </tr>

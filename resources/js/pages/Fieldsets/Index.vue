@@ -20,7 +20,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions :id="'fieldset_' + table.record.id + '_actions'" :key="'fieldset_' + table.record.id + '_actions'">
+                        <p-table-actions :id="'fieldset_' + table.record.id + '_actions'" :key="'fieldset_' + table.record.id + '_actions'">
                             <p-dropdown-link :to="{ name: 'fieldsets.edit', params: {fieldset: table.record.id} }">Edit</p-dropdown-link>
 
                             <p-dropdown-link
@@ -30,7 +30,7 @@
                             >
                                 Delete
                             </p-dropdown-link>
-                        </p-actions>
+                        </p-table-actions>
                     </template>
                 </p-table>
             </div>

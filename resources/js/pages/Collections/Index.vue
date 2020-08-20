@@ -22,7 +22,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions :id="'entry_' + table.record.id + '_actions'" :key="'entry_' + table.record.id + '_actions'">
+                        <p-table-actions :id="'entry_' + table.record.id + '_actions'" :key="'entry_' + table.record.id + '_actions'">
                             <p-dropdown-link :to="{ name: 'collection.edit', params: {collection: collection.slug, id: table.record.id} }">Edit</p-dropdown-link>
 
                             <p-dropdown-link
@@ -32,7 +32,7 @@
                             >
                                 Delete
                             </p-dropdown-link>
-                        </p-actions>
+                        </p-table-actions>
                     </template>
                 </p-table>
             </div>
