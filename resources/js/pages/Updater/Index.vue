@@ -123,11 +123,9 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            axios.all([
-                axios.get('https://beta.getfusioncms.com/releases.json').catch(() => {})
-            ]).then(axios.spread((feed) => {
-                next((vm) => vm.items = feed ? feed.data.items : [])
-            }))
+            axios.get('/api/updater')
+                .then((response) => next((vm) =>
+                    vm.items = response.data.data.items))
         }
     }
 </script>

@@ -51,6 +51,7 @@ class NavigationController extends Controller
                     'title'    => $item->title,
                     'to'       => $item->to ?? '#',
                     'icon'     => $item->icon,
+                    'badge'    => $item->badge,
                     'divider'  => count($item->divider) ? true : false,
                 ]);
             }
