@@ -47,7 +47,7 @@ class FileUploadRequest extends FormRequest
     public function rules()
     {
         $maxKb = byte_converter($this->maxFileSize, 'MB', 'KB');
-        $mimes = implode(',', $this->acceptedMimes);
+        $mimes = implode(',', $this->acceptedMimes->toArray());
 
         return [
             'file'         => "required|file|max:{$maxKb}|mimes:{$mimes}",

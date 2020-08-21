@@ -10,7 +10,7 @@
 function matrix_page($matrix)
 {
     try {
-        return new \Fusion\Services\Builders\Page($matrix);
+        return new \Fusion\Services\Builders\Single($matrix);
     } catch (\Exception $e) {
         return null;
     }
