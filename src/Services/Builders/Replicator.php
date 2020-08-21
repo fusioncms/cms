@@ -22,15 +22,15 @@ class Replicator extends Builder implements BuilderContract
     /**
      * Constructor.
      *
-     * @param string  $handle
-     * @param Section $section
+     * @param string                 $uniqid
+     * @param \Fusion\Models\Section $section
      */
-    public function __construct(string $handle, Section $section)
+    public function __construct($uniqid, Section $section)
     {
         parent::__construct();
 
-        $this->replicator = \Fusion\Models\Replicator::where('handle', $handle)->firstOrFail();
-        $this->section = $section;
+        $this->replicator = \Fusion\Models\Replicator::where('uniqid', $uniqid)->firstOrFail();
+        $this->section    = $section;
     }
 
     /**
@@ -43,9 +43,9 @@ class Replicator extends Builder implements BuilderContract
         $handle = "{$prefix}_{$this->section->handle}_{$suffix}";
 
         $className = Str::studly($handle);
-        $fillable = ['replicator_id'];
-        $casts = [];
-        $fields = $this->section->fields ?? collect();
+        $fillable  = ['replicator_id', 'section_id'];
+        $casts     = [];
+        $fields    = $this->section->fields ?? collect();
 
         $fields = $fields->reject(function ($field) {
             $fieldtype = fieldtypes()->get($field->type);
@@ -58,9 +58,9 @@ class Replicator extends Builder implements BuilderContract
         });
 
         foreach ($fields as $field) {
-            $fieldtype = fieldtypes()->get($field->type);
+            $fieldtype  = fieldtypes()->get($field->type);
             $fillable[] = $field->handle;
-            $casts[] = $field->handle.'\' => \''.$fieldtype->cast;
+            $casts[]    = $field->handle.'\' => \''.$fieldtype->cast;
         }
 
         $path = fusion_path("/src/Models/Replicators/{$className}.php");
@@ -83,13 +83,13 @@ class Replicator extends Builder implements BuilderContract
     /**
      * Static make method.
      *
-     * @param string  $handle
-     * @param Section $section
+     * @param string                 $uniqid
+     * @param \Fusion\Models\Section $section
      *
      * @return Builder
      */
-    public static function resolve(string $handle, Section $section)
+    public static function resolve($uniqid, $section)
     {
-        return (new static($handle, $section))->make();
+        return (new static($uniqid, $section))->make();
     }
 }

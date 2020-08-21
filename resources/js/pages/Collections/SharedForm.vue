@@ -24,14 +24,15 @@
 
                 <p-tabs v-if="sections.body.length > 0">
                     <p-tab v-for="section in sections.body" :key="section.handle" :name="section.name">
-                        <div v-for="field in section.fields" :key="field.handle" class="form__group">
-                            <component
-                                :is="field.type.id + '-fieldtype'"
-                                :field="field"
-                                v-model="form[field.handle]"
-                            >
-                            </component>
-                        </div>
+                        <component
+                            class="form__group"
+                            v-for="field in section.fields"
+                            :key="field.handle"
+                            :is="field.type.id + '-fieldtype'"
+                            :field="field"
+                            :errors="form.errors"
+                            v-model="form[field.handle]">
+                        </component>
                     </p-tab>
                 </p-tabs>
 
@@ -46,12 +47,15 @@
             <div class="card">
                 <div class="card__body">
                     <p-slug
+                        v-if="collection.show_name_field || entry.id"
                         name="slug"
                         label="Slug"
                         monospaced
                         autocomplete="off"
                         required
+                        :help="collection.show_name_field ? '' : 'This field is auto-generated based on pattern specified.'"
                         :watch="form.name"
+                        :readonly="!collection.show_name_field"
                         :has-error="form.errors.has('slug')"
                         :error-message="form.errors.get('slug')"
                         v-model="form.slug">
@@ -74,13 +78,17 @@
                 </div>
 
                 <div class="card__body">
-                    <!-- Loop through each section field -->
-                    <component
-                        :is="field.type.id + '-fieldtype'"
-                        :field="field"
-                        v-model="form[field.handle]"
-                        v-for="field in section.fields" :key="field.handle">
-                    </component>
+                    <div v-for="field in section.fields">
+                        <component
+                            v-for="field in section.fields"
+                            :key="field.handle"
+                            :is="field.type.id + '-fieldtype'"
+                            :field="field"
+                            :has-error="form.errors.has(field.handle)"
+                            :error-message="form.errors.get(field.handle)"
+                            v-model="form[field.handle]">
+                        </component>
+                    </div>
                 </div>
             </div>
 
@@ -117,27 +125,22 @@
                 required: true,
             }
         },
-
+        
         computed: {
             sections() {
                 let body = []
                 let sidebar = []
 
                 if (this.collection.fieldset) {
-                    body = _.filter(this.collection.fieldset.sections, function(section) {
-                        return section.placement == 'body'
-                    })
+                    body = _.filter(this.collection.fieldset.sections, (section) =>
+                        section.placement == 'body')
 
-                    sidebar = _.filter(this.collection.fieldset.sections, function(section) {
-                        return section.placement == 'sidebar'
-                    })
+                    sidebar = _.filter(this.collection.fieldset.sections, (section) =>
+                        section.placement == 'sidebar')
                 }
 
-                return {
-                    body: body,
-                    sidebar: sidebar
-                }
-            },
-        },
+                return { body, sidebar }
+            }
+        }
     }
 </script>

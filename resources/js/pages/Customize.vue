@@ -128,7 +128,6 @@
         watch: {
             'theme.option': {
                 handler: function() {
-                    this.form.onFirstChange()
                     this.update()
                 },
 

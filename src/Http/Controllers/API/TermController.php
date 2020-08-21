@@ -100,7 +100,7 @@ class TermController extends Controller
         $this->authorize('terms.delete');
 
         $model = (new Builder($taxonomy->handle))->make();
-        $term = $model->findOrFail($id);
+        $term  = $model->findOrFail($id);
 
         $term->delete();
     }

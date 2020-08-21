@@ -23,7 +23,7 @@ class ExtensionTest extends TestCase
         $this->handleValidationExceptions();
 
         // --
-        $section = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $section  = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $fieldOne = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($section)->create();
         $fieldTwo = \Facades\FieldFactory::withName('Profiles')->withType('user')->withSection($section)->create();
         $fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$section]))->create();
@@ -171,7 +171,7 @@ class ExtensionTest extends TestCase
         $attributes = factory(Foobar::class)->make()->toArray();
 
         // extending fields..
-        $attributes['content'] = $this->faker->sentence;
+        $attributes['content']  = $this->faker->sentence;
         $attributes['profiles'] = factory('Fusion\Models\User', 2)->create()->toArray();
 
         $this
@@ -214,11 +214,11 @@ class ExtensionTest extends TestCase
         $attributes = $this->model->toArray();
 
         // updates..
-        $attributes['name'] = 'New Name';
+        $attributes['name']   = 'New Name';
         $attributes['handle'] = 'new_handle';
 
         // extending fields..
-        $attributes['content'] = 'New Content';
+        $attributes['content']  = 'New Content';
         $attributes['profiles'] = factory('Fusion\Models\User', 2)->create()->toArray();
 
         $this

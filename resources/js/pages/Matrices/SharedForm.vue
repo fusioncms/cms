@@ -52,11 +52,11 @@
                             v-model="form.type">
                         </p-select>
 
-                        <p-fieldset
+                        <fieldset-picker
                             :has-error="form.errors.has('fieldset')"
                             :error-message="form.errors.get('fieldset')"
                             v-model="form.fieldset">
-                        </p-fieldset>
+                        </fieldset-picker>
                     </p-tab>
 
                     <p-tab name="Customize">
@@ -272,7 +272,7 @@
                 })
 
                 options = _.remove(options, (item) => this.id == item.id)
-                
+
                 options.unshift({ 'label': 'None', 'value': null })
 
                 return options

@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="user-alt">Create User</app-title>
+            <page-title icon="user-alt">Create User</page-title>
         </portal>
 
         <shared-form :form="form" :roles="roles" :submit="submit"></shared-form>
@@ -65,10 +65,6 @@
                         vm.roles = roles
 
                         vm.$emit('updateHead')
-
-                        vm.$nextTick(() => {
-                            vm.form.resetChangeListener()
-                        })
                     })
                 }
             })

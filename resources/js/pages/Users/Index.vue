@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="users">Users</app-title>
+            <page-title icon="users">Users</page-title>
         </portal>
 
         <portal to="actions">

@@ -75,7 +75,7 @@ class ReplicatorObserver
     {
         $fieldset = $replicator->fieldsets()->create([
             'name'   => ($name = "Replicator: {$replicator->name}"),
-            'handle' => str_handle($name),
+            'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
             'hidden' => true,
         ]);
 
@@ -97,7 +97,7 @@ class ReplicatorObserver
         $fieldset = $replicator->fieldset;
         $fieldset->update([
             'name'   => ($name = "Replicator: {$replicator->name}"),
-            'handle' => str_handle($name),
+            'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
         ]);
 
         $sections = collect($replicator->field->settings['sections']);
@@ -134,13 +134,13 @@ class ReplicatorObserver
      */
     private function createSections(Fieldset $fieldset, Collection $toCreate)
     {
-        $toCreate->each(function ($data) use ($fieldset) {
+        $toCreate->each(function ($data, $index) use ($fieldset) {
             $section = $fieldset->sections()->create([
                 'name'        => $data['name'],
                 'handle'      => $data['handle'],
                 'description' => $data['description'],
                 'placement'   => $data['placement'],
-                'order'       => $data['order'],
+                'order'       => ($index + 1),
             ]);
 
             $this->createReplicantTable($section);
@@ -158,7 +158,7 @@ class ReplicatorObserver
      */
     private function updateSections(Fieldset $fieldset, Collection $toUpdate)
     {
-        $toUpdate->each(function ($data) use ($fieldset) {
+        $toUpdate->each(function ($data, $index) use ($fieldset) {
             $newSection = $fieldset->sections()->find($data['id']);
             $oldSection = $newSection->replicate();
             $newSection->update([
@@ -166,7 +166,7 @@ class ReplicatorObserver
                 'handle'      => $data['handle'],
                 'description' => $data['description'],
                 'placement'   => $data['placement'],
-                'order'       => $data['order'],
+                'order'       => ($index + 1),
             ]);
 
             $this->updateReplicantTable($oldSection, $newSection);
@@ -209,17 +209,19 @@ class ReplicatorObserver
      */
     private function createFields(Section $section, Collection $toCreate)
     {
-        $toCreate->each(function ($data) use ($section) {
+        $toCreate->each(function ($data, $index) use ($section) {
             $field = $section->fields()->create([
                 'name'     => $data['name'],
                 'handle'   => $data['handle'],
                 'help'     => $data['help'],
                 'settings' => $data['settings'],
-                'type'     => is_string($data['type']) ? $data['type'] : $data['handle']['type'],
-                'order'    => $data['order'],
+                'type'     => is_string($data['type']) ? $data['type'] : $data['type']['handle'],
+                'order'    => ($index + 1),
             ]);
 
-            $this->createReplicantColumn($section, $field);
+            if ($field->type()->hasColumn()) {
+                $this->createReplicantColumn($section, $field);
+            }
         });
     }
 
@@ -233,7 +235,7 @@ class ReplicatorObserver
      */
     private function updateFields(Section $section, Collection $toUpdate)
     {
-        $toUpdate->each(function ($data) use ($section) {
+        $toUpdate->each(function ($data, $index) use ($section) {
             $newField = $section->fields()->find($data['id']);
             $oldField = $newField->replicate();
             $newField->update([
@@ -241,11 +243,13 @@ class ReplicatorObserver
                 'handle'   => $data['handle'],
                 'help'     => $data['help'],
                 'settings' => $data['settings'],
-                'type'     => is_string($data['type']) ? $data['type'] : $data['handle']['type'],
-                'order'    => $data['order'],
+                'type'     => is_string($data['type']) ? $data['type'] : $data['type']['handle'],
+                'order'    => ($index + 1),
             ]);
 
-            $this->updateReplicantColumn($section, $oldField, $newField);
+            if ($newField->type()->hasColumn()) {
+                $this->updateReplicantColumn($section, $oldField, $newField);
+            }
         });
     }
 
@@ -261,7 +265,9 @@ class ReplicatorObserver
     {
         $fields = $section->fields()->whereIn('id', $toDelete);
         $fields->each(function ($field) use ($section) {
-            $this->deleteReplicantColumn($section, $field);
+            if ($field->type()->hasColumn()) {
+                $this->deleteReplicantColumn($section, $field);
+            }
 
             $field->delete();
         });
@@ -279,6 +285,7 @@ class ReplicatorObserver
         Schema::create($this->getTable($section), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('replicator_id')->index();
+            $table->unsignedBigInteger('section_id')->index();
             $table->timestamps();
         });
     }

@@ -24,7 +24,7 @@ class ServeApplication
     public function __construct($serve, $port)
     {
         $this->serve = $serve;
-        $this->port = $port;
+        $this->port  = $port;
     }
 
     /**

@@ -20,11 +20,11 @@ class FileReplaceController extends Controller
     {
         $this->authorize('files.update');
 
-        $upload = $request->file('file');
+        $upload    = $request->file('file');
         $extension = $upload->extension();
-        $bytes = $upload->getSize();
-        $mimetype = $upload->getClientMimeType();
-        $filetype = strtok($mimetype, '/');
+        $bytes     = $upload->getSize();
+        $mimetype  = $upload->getClientMimeType();
+        $filetype  = strtok($mimetype, '/');
 
         switch ($filetype) {
             case 'image':

@@ -20,12 +20,12 @@ class MenuNodeTest extends TestCase
         // --
         $this->actingAs($this->owner, 'api');
 
-        $this->section = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $this->section      = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $this->fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($this->section)->create();
         $this->fieldContent = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($this->section)->create();
-        $this->fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->menu = \Facades\MenuFactory::withName('Header')->withFieldset($this->fieldset)->create();
-        $this->model = (new \Fusion\Services\Builders\Menu($this->menu->handle))->make();
+        $this->fieldset     = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
+        $this->menu         = \Facades\MenuFactory::withName('Header')->withFieldset($this->fieldset)->create();
+        $this->model        = (new \Fusion\Services\Builders\Menu($this->menu->handle))->make();
     }
 
     /**
@@ -186,7 +186,7 @@ class MenuNodeTest extends TestCase
 
         // Update ----
         $attributes['name'] = 'Updated Name';
-        $attributes['url'] = 'https://updated.com';
+        $attributes['url']  = 'https://updated.com';
 
         $this
             ->be($this->owner, 'api')

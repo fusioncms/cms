@@ -111,7 +111,7 @@ trait RegistersAssets
     public function css()
     {
         $cssCollection = $this->sort($this->assets->get('css'), 'css');
-        $output = '';
+        $output        = '';
 
         foreach ($cssCollection as $key => $value) {
             $output .= '<link rel="stylesheet" href="'.$value.'">'."\n";
@@ -128,7 +128,7 @@ trait RegistersAssets
     public function js()
     {
         $jsCollection = $this->sort($this->assets->get('js'), 'js');
-        $output = '';
+        $output       = '';
 
         foreach ($jsCollection as $key => $value) {
             $output .= '<script type="text/javascript" src="'.$value.'"></script>'."\n";
@@ -190,7 +190,7 @@ trait RegistersAssets
             return $this;
         }
 
-        $type = ($this->isCss($assets)) ? 'css' : 'js';
+        $type       = ($this->isCss($assets)) ? 'css' : 'js';
         $collection = $this->assets->get($type);
 
         if (!in_array($assets, $collection)) {
@@ -201,7 +201,7 @@ trait RegistersAssets
 
             $this->assets->put($type, $collection);
 
-            $this->lastAddedType = $type;
+            $this->lastAddedType  = $type;
             $this->lastAddedAsset = $assets;
         }
 
@@ -228,7 +228,7 @@ trait RegistersAssets
             }
         }
 
-        $dependencies = $this->buildDependencies($list);
+        $dependencies       = $this->buildDependencies($list);
         $sortedDependencies = $this->sortDependencies();
 
         return array_filter($sortedDependencies);
@@ -325,16 +325,16 @@ trait RegistersAssets
      */
     protected function sortDependencies()
     {
-        $nodes = $this->nodes;
+        $nodes     = $this->nodes;
         $rootNodes = array_values($this->getRootNodes($nodes));
-        $sorted = [];
+        $sorted    = [];
 
         while (count($nodes) > 0) {
             if ($rootNodes === []) {
                 return [];
             }
 
-            $node = array_pop($rootNodes);
+            $node     = array_pop($rootNodes);
             $sorted[] = $node['name'];
 
             for ($i = count($node['children']) - 1; $i >= 0; $i--) {

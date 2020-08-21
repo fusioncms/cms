@@ -50,7 +50,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $attributes = $request->validated();
+        $attributes             = $request->validated();
         $attributes['password'] = bcrypt($attributes['password']);
 
         $user = User::create($attributes);

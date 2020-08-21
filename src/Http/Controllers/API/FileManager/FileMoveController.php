@@ -22,8 +22,8 @@ class FileMoveController extends Controller
         $this->authorize('files.update');
 
         $directory = $request->input('directory');
-        $moving = $request->input('moving');
-        $errors = [];
+        $moving    = $request->input('moving');
+        $errors    = [];
 
         // Assign new `directory_id` to files..
         collect($moving['files'])->each(function ($id) use ($directory) {

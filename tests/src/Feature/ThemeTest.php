@@ -164,8 +164,8 @@ class ThemeTest extends TestCase
     private function generateTheme($themeName = null, $includesRequirements = true)
     {
         $zipArchive = new ZipArchive();
-        $themeName = $themeName ?? $this->faker->word;
-        $themePath = Storage::disk('themes')->path($themeName.'.zip');
+        $themeName  = $themeName ?? $this->faker->word;
+        $themePath  = Storage::disk('themes')->path($themeName.'.zip');
 
         $settings = [
             'name'        => $themeName,

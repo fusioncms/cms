@@ -20,12 +20,10 @@ class FieldObserver
         $fieldtype = fieldtypes()->get($field->type);
         $fieldtype->onSaved($field);
 
-        $fieldset = $field->section->fieldset;
+        $fieldset   = $field->section->fieldset;
         $containers = $this->getFieldsettables($fieldset);
-
-        $relationship = $fieldtype->getRelationship();
-        $column = $fieldtype->getColumn('type');
-        $settings = $fieldtype->getColumn('settings') ?? [];
+        $column     = $fieldtype->getColumn('type');
+        $settings   = $fieldtype->getColumn('settings') ?? [];
 
         array_unshift($settings, $field->handle);
 
@@ -52,7 +50,7 @@ class FieldObserver
         $fieldtype = fieldtypes()->get($field->type);
         $fieldtype->onSaved($field);
 
-        $fieldset = $field->section->fieldset;
+        $fieldset   = $field->section->fieldset;
         $containers = $this->getFieldsettables($fieldset);
 
         $old = [
@@ -73,7 +71,6 @@ class FieldObserver
             if ($old['handle'] !== $new['handle']) {
                 $fieldtype = fieldtypes()->get($new['type']);
                 $column = $fieldtype->getColumn('type');
-                $relationship = $fieldtype->getRelationship();
 
                 if (!is_null($column)) {
                     Schema::table($table, function ($table) use ($old, $new) {
@@ -99,6 +96,18 @@ class FieldObserver
     }
 
     /**
+     * Handle the field "deleting" event.
+     *
+     * @param \Fusion\Models\Field $field
+     *
+     * @return void
+     */
+    public function deleting(Field $field)
+    {
+        fieldtypes()->get($field->type)->onBeforeDelete($field);
+    }
+
+    /**
      * Handle the field "deleted" event.
      *
      * @param \Fusion\Models\Field $field
@@ -107,15 +116,12 @@ class FieldObserver
      */
     public function deleted(Field $field)
     {
-        $fieldtype = fieldtypes()->get($field->type);
-        $fieldtype->onDeleted($field);
-
-        $fieldset = $field->section->fieldset;
+        $fieldset   = $field->section->fieldset;
         $containers = $this->getFieldsettables($fieldset);
 
-        $relationship = $fieldtype->getRelationship();
-        $column = $fieldtype->getColumn('type');
-        $settings = $fieldtype->getColumn('settings') ?? [];
+        $fieldtype = fieldtypes()->get($field->type);
+        $column    = $fieldtype->getColumn('type');
+        $settings  = $fieldtype->getColumn('settings') ?? [];
 
         array_unshift($settings, $field->handle);
 

@@ -10,10 +10,10 @@ class SingleRequest extends FormRequest
 {
     public function __construct()
     {
-        $this->matrix = Matrix::findOrFail(request()->route('single'));
-        $this->model = (new Single($this->matrix->handle))->make();
-        $this->fieldset = $this->matrix->fieldset;
-        $this->fields = $this->fieldset ? $this->fieldset->database() : [];
+        $this->matrix        = Matrix::findOrFail(request()->route('single'));
+        $this->model         = (new Single($this->matrix->handle))->make();
+        $this->fieldset      = $this->matrix->fieldset;
+        $this->fields        = $this->fieldset->fields ?? [];
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
     }
 
@@ -53,10 +53,22 @@ class SingleRequest extends FormRequest
             'status'    => 'required|boolean',
         ];
 
-        foreach ($this->fields as $field) {
-            $rules[$field->handle] = $field->validation ?: 'sometimes';
-        }
+        $rules += $this->fields->flatMap(function ($field) {
+            return $field->type()->rules($field, $this->{$field->handle});
+        })->toArray();
 
         return $rules;
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return $this->fields->flatMap(function ($field) {
+            return $field->type()->attributes($field, $this->{$field->handle});
+        })->toArray();
     }
 }

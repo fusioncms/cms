@@ -40,13 +40,13 @@ class UploadController extends Controller
     {
         $this->authorize('addons.create');
 
-        $upload = $request->file('file-upload');
+        $upload   = $request->file('file-upload');
         $origName = pathinfo($upload->getClientOriginalName(), PATHINFO_FILENAME);
 
         try {
             if ($this->zipArchive->open($upload) === true) {
-                $index = $this->zipArchive->locateName('addon.json', ZipArchive::FL_NODIR);
-                $filename = $this->zipArchive->getNameIndex($index);
+                $index      = $this->zipArchive->locateName('addon.json', ZipArchive::FL_NODIR);
+                $filename   = $this->zipArchive->getNameIndex($index);
                 $fileHandle = $this->zipArchive->getStream($filename);
 
                 $settings = stream_get_contents($fileHandle);

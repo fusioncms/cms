@@ -49,7 +49,7 @@ class Fieldset extends Model
      */
     public function sections()
     {
-        return $this->hasMany(Section::class);
+        return $this->hasMany(Section::class)->orderBy('order');
     }
 
     /**
@@ -59,7 +59,7 @@ class Fieldset extends Model
      */
     public function fields()
     {
-        return $this->hasManyThrough(Field::class, Section::class);
+        return $this->hasManyThrough(Field::class, Section::class)->orderBy('order');
     }
 
     /**
@@ -128,14 +128,14 @@ class Fieldset extends Model
      */
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $subject = $activity->subject;
-        $action = ucfirst($eventName);
+        $subject    = $activity->subject;
+        $action     = ucfirst($eventName);
         $properties = [
             'link' => "fieldsets/{$subject->id}/edit",
             'icon' => 'list',
         ];
 
         $activity->description = "{$action} fieldset ({$subject->name})";
-        $activity->properties = $properties;
+        $activity->properties  = $properties;
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="list">Create Fieldset</app-title>
+            <page-title icon="list">Create Fieldset</page-title>
         </portal>
 
         <shared-form :form="form"></shared-form>
@@ -23,10 +23,10 @@
 
         data() {
             return {
-                sections: [],
                 form: new Form({
                     name: '',
                     handle: '',
+                    sections: []
                 }, true)
             }
         },
@@ -35,22 +35,11 @@
             'shared-form': SharedForm
         },
 
-        watch: {
-            sections: {
-                deep: true,
-                handler(value) {
-                    if (! this.hasChanges) {
-                        this.form.onFirstChange()
-                    }
-                }
-            }
-        },
-
         methods: {
             submit() {
                 this.form.post('/api/fieldsets')
                     .then((response) => {
-                        axios.post(`/api/fieldsets/${response.data.id}/sections`, { sections: this.sections })
+                        axios.post(`/api/fieldsets/${response.data.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Fieldset successfully created', 'success')
 
@@ -64,9 +53,10 @@
             },
         },
 
-        mounted() {
-            this.$nextTick(() => {
-                this.form.resetChangeListener()
+        created() {
+            let unwatch = this.$watch('form.sections', (value) => {
+                this.form.orig.sections = _.cloneDeep(value)
+                unwatch()
             })
         }
     }

@@ -193,6 +193,16 @@ abstract class Fieldtype
     }
 
     /**
+     * Determine if the fieldtype can generate a column.
+     *
+     * @return bool
+     */
+    public function hasColumn()
+    {
+        return !is_null($this->column);
+    }
+
+    /**
      * Determine if the fieldtype has a relationship.
      *
      * @return bool
@@ -203,41 +213,50 @@ abstract class Fieldtype
     }
 
     /**
-     * Set custom rules for form request validator.
+     * Get custom rules when saving field.
      *
+     * @param Field $field
      * @param mixed $value
-     * @param  $field
      *
      * @return array
      */
-    public function rules($value = null, $field = null)
+    public function rules(Field $field, $value = null)
     {
-        if (is_null($field)) {
-            return [];
-        }
-
-        $validation = $field->validation;
-        $validation = validationRules($validation);
-        $validation = implode('|', $validation);
-
-        return [$field->handle => $validation];
+        return [
+            $field->handle => $field->validation ?: 'sometimes',
+        ];
     }
 
     /**
-     * Set custom attributes for validator errors.
+     * Get custom messages when saving field.
      *
+     * @param Field $field
      * @param mixed $value
-     * @param  $field
      *
      * @return array
      */
-    public function attributes($value = null, $field = null)
+    public function messages(Field $field, $value = null)
     {
         return [];
     }
 
     /**
-     * Update Field model after saved.
+     * Get custom attributes for validator errors.
+     *
+     * @param Field $field
+     * @param mixed $value
+     *
+     * @return array
+     */
+    public function attributes(Field $field, $value = null)
+    {
+        return [
+            $field->handle => $field->name,
+        ];
+    }
+
+    /**
+     * Create/update Field post-save.
      *
      * @param Field $field
      *
@@ -248,13 +267,13 @@ abstract class Fieldtype
     }
 
     /**
-     * Delete Field model after saved.
+     * Handle Field before removal.
      *
      * @param Field $field
      *
      * @return void
      */
-    public function onDeleted(Field $field)
+    public function onBeforeDelete(Field $field)
     {
     }
 

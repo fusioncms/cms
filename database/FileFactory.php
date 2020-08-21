@@ -48,9 +48,9 @@ class FileFactory implements Factory
         ];
 
         if ($this->name) {
-            $overrides['uuid'] = unique_id();
-            $overrides['name'] = $this->name;
-            $overrides['slug'] = Str::slug("{$overrides['uuid']}-{$overrides['name']}");
+            $overrides['uuid']     = unique_id();
+            $overrides['name']     = $this->name;
+            $overrides['slug']     = Str::slug("{$overrides['uuid']}-{$overrides['name']}");
             $overrides['original'] = $this->name.'.'.$this->extension;
         }
 

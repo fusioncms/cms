@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<portal to="title">
-			<app-title icon="save">Backups</app-title>
+			<page-title icon="save">Backups</page-title>
 		</portal>
 
 		<portal to="actions">
@@ -65,7 +65,7 @@
         		<p-checkbox name="saveBackup" v-model="saveBackup">
         			Create a backup before restoring
         		</p-checkbox>
-                
+
                 <template slot="footer" slot-scope="form">
                     <p-button v-modal:restore-form @click="restore(form.data.name)" theme="primary" class="ml-3">Restore</p-button>
                     <p-button v-modal:restore-form>Cancel</p-button>
@@ -115,7 +115,7 @@
                 }
             }
 		},
-		
+
 		data() {
 			return {
 				destinations: [],

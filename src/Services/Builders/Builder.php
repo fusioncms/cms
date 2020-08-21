@@ -166,7 +166,7 @@ abstract class Builder implements BuilderContract
         }
 
         $relationships = $this->getRelationships();
-        $generated = '';
+        $generated     = '';
 
         foreach ($relationships as $handle => list($field, $fieldtype)) {
             $generated .= $fieldtype->generateRelationship($field)."\n\n";

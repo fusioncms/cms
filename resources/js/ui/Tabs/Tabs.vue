@@ -1,18 +1,51 @@
 <template>
     <div class="tabs">
-        <ul class="tab__list">
-            <li
-                v-for="tab in tabs"
+        <ul class="tab__list overflow-x-scroll"
+            @dragover.prevent
+            @dragenter.prevent>
+
+            <li v-for="(tab, index) in tabs"
                 :key="tab.name"
-                class="tab"
-                :class="{ 'tab--active': tab.isActive, 'tab--hovering': isHovering(tab.hash) }"
-                @dragover.prevent="dragOver(tab.hash)"
-                @dragenter.prevent="dragEnter"
-                @dragleave.prevent="dragLeave"
-                @dragend.prevent="dragLeave"
-                @drop.prevent
-            >
-                <a :href="tab.hash" class="tab__link" @click.prevent="selectTab(tab.hash, true)" @focus="selectTab(tab.hash, true)">{{ tab.name }}</a>
+                class="tab flex-shrink-0 flex-1 border-r border-gray-200"
+                :class="{
+                    'tab--active': tab.isActive,
+                    'bg-primary-100': tab.isDropzone
+                }"
+                :draggable="!! move"
+                @dragstart="onDragStart(index)"
+                @dragend="onDragEnd(index)"
+                @dragenter="onDragEnter(index)"
+                @dragleave="onDragLeave(index)"
+                @drop="onDrop(index)">
+
+                <a
+                    class="tab__link cursor-pointer flex justify-between items-center"
+                    :class="{ 'no-pointer-events': tab.isDropzone }"
+                    @mousedown="select(tab.hash)"
+                    @focus="select(tab.hash)">
+
+                    <span>
+                        {{ tab.name }}
+                        <span class="text-gray-600 text-xs">
+                            {{ tab.subtitle }}
+                        </span>
+                    </span>
+
+                    <span
+                        v-if="tab.remove && tab.isActive"
+                        @click.prevent="tab.remove(index)"
+                        class="flex items-center justify-center w-6 h-6 rounded"
+                        :class="{ 'hover:bg-gray-200 hover:text-gray-600': ! tab.isDropzone }">
+                        
+                        <fa-icon icon="times" class="fa-xs"></fa-icon>
+                    </span>
+                </a>
+            </li>
+
+             <li v-if="add" class="tab">
+                <a class="tab__link cursor-pointer" @click.prevent="add()">
+                    <fa-icon icon="plus" class="fa-fw text-xs text-gray-800"></fa-icon>
+                </a>
             </li>
         </ul>
 
@@ -26,131 +59,107 @@
     export default {
         name: 'p-tabs',
 
+        data() {
+            return {
+                tabs: this.$children,
+                dragIndex: false
+            }
+        },
+
         props: {
             replace: {
                 type: Boolean,
-                default: false,
+                default: false
             },
-        },
 
-        data() {
-            return {
-                tabs: null,
-                foundActiveTab: false,
-                hoveringOver: null,
-                dragOverAt: false,
-                dragEnterAt: false,
-                dragLeaveAt: false,
-                dragEndAt: false,
-                enteredTab: false,
-                hoveringOverFor: false,
+            add: {
+                type: [Function,Boolean],
+                default: false
+            },
+
+            move: {
+                type: [Function,Boolean],
+                default: false
             }
         },
 
         computed: {
-            count() {
-                return this.tabs.length
+            tab() {
+                return this.tabs.find((tab) => tab.isActive)
+            },
+
+            dragTab() {
+                return this.tabs.find((tab) => tab.isDragging)
             }
         },
 
         watch: {
-            tabs() {
-                this.findAndSelectTab()
-            },
-
-            dragOverAt() {
-                let start = this.dragEnterAt
-                let end = this.dragOverAt
-                let duration = end - start
-
-                if (duration > 400 && this.enteredTab == false) {
-                    console.log('selecting tab')
-
-                    this.selectTab(this.hoveringOver, true)
-                    
-                    this.enteredTab = true
+            tabs(value) {
+                if (! this.tab && value.length > 0) {
+                    if (this.$route.hash)
+                        this.select(this.$route.hash)
+                    else
+                        this.select(value[0].hash)
                 }
-
-                this.hoveringOverFor = duration
             }
         },
 
         methods: {
-            isHovering(hash) {
-                return this.hoveringOver == hash
+            findBy(path, value) {
+                return this.tabs.find((tab) =>
+                    _.get(tab, path) && _.get(tab, path) == value)
             },
 
-            findTab(hash) {
-                return this.tabs.find((tab) => {
-                    return tab.hash == hash
-                })
+            select(hash) {
+                const tab = this.findBy('hash', hash) || false
+
+                this.reset()
+
+                tab.activate()
+
+                if (this.replace)
+                    this.$router
+                        .replace({ hash: tab.hash })
+                        .catch(err => {})
             },
 
-            selectTab(hash) {
-                const selected = this.findTab(hash)
+            reset() {
+                this.tabs.forEach(tab => tab.reset())
+            },
 
-                if (typeof selected === 'undefined') {
-                    return
+            onDragStart(index) {
+                this.dragIndex = index
+                this.tabs[index].isDragging = true
+            },
+
+            onDragEnd(index) {
+                this.dragIndex = false
+                this.tabs[index].isDragging = false
+            },
+
+            onDragEnter(index) {
+                this.tabs[index].isDropzone =
+                    ! this.tabs[index].isDragging
+            },
+
+            onDragLeave(index) {
+                this.tabs[index].isDropzone = false
+            },
+
+            onDrop(index) {
+                if (this.move && this.dragIndex != index) {
+                    this.move(this.dragIndex, index)
+
+                    this.reset()
+                    this.tabs[index].activate()
                 }
-
-                _.each(this.tabs, (tab, index) => {
-                    if (tab.hash == selected.hash) {
-                        tab.activate()
-
-                        this.active = index
-                    } else {
-                        tab.deactivate()
-                    }
-                })
-
-                if (this.replace) {
-                    this.$router.replace({
-                        hash: selected.hash
-                    }).catch((err) => {})
-                }
-            },
-
-            findAndSelectTab() {
-                _.each(this.tabs, (tab) => {
-                    if (tab.isActive) {
-                        this.selectTab(tab.hash)
-
-                        this.foundActiveTab = true
-
-                        return false
-                    }
-                })
-
-                if (! this.foundActiveTab && this.tabs[0]) {
-                    this.selectTab(this.tabs[0].hash)
-                }
-
-                if (this.$route.hash) {
-                    this.selectTab(this.$route.hash)
-                }
-            },
-
-            dragEnter() {
-                this.dragEnterAt = Date.now()
-                this.enteredTab = false
-            },
-
-            dragOver(hash) {
-                this.dragOverAt = Date.now()
-                this.hoveringOver = hash
-            },
-
-            dragLeave() {
-                this.hoveringOver = null
             }
-        },
-
-        created() {
-            this.tabs = this.$children
-        },
-
-        mounted() {
-            this.findAndSelectTab()
         }
     }
 </script>
+
+<style>
+    .no-pointer-events * {
+        pointer-events: none;
+    }
+</style>

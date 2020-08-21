@@ -33,7 +33,7 @@ class Menu extends Builder implements BuilderContract
     {
         parent::__construct();
 
-        $this->menu = MenuModel::where('handle', $menu)->firstOrFail();
+        $this->menu  = MenuModel::where('handle', $menu)->firstOrFail();
         $this->model = $this->make();
     }
 
@@ -43,9 +43,9 @@ class Menu extends Builder implements BuilderContract
     public function make()
     {
         $className = Str::studly($this->menu->handle);
-        $traits = [];
-        $fillable = ['menu_id', 'name', 'url', 'new_window', 'order', 'status'];
-        $casts = [
+        $traits    = [];
+        $fillable  = ['menu_id', 'name', 'url', 'new_window', 'order', 'status'];
+        $casts     = [
             'order'      => 'integer',
             'new_window' => 'boolean',
             'status'     => 'boolean',
@@ -63,9 +63,9 @@ class Menu extends Builder implements BuilderContract
             });
 
             foreach ($fields as $field) {
-                $fieldtype = fieldtypes()->get($field->type);
+                $fieldtype  = fieldtypes()->get($field->type);
                 $fillable[] = $field->handle;
-                $casts[] = $field->handle.'\' => \''.$fieldtype->cast;
+                $casts[]    = $field->handle.'\' => \''.$fieldtype->cast;
             }
         }
 

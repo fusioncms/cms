@@ -1,25 +1,24 @@
 <template>
-    <div class="form__radio-container">
-        <label
-            ref="label"
+    <div class="field-check field-check--radio" :class="{'field-check--inline': inline}">
+        <input
+            class="field-check__input field-check__input--radio"
+            type="radio"
+            :name="name"
+            :id="id"
             :disabled="disabled"
-            :tabindex="disabled ? false : 0"
-            @keydown.prevent.enter.space="$refs.label.click()">
-            <input
-                class="form__radio"
-                type="radio"
-                :name="name"
-                :disabled="disabled"
-                :required="required"
-                :indeterminate.prop="indeterminate"
-                :value="nativeValue"
-                v-model="checked"
-                @change="onChange"
-            >
-            <span class="form__radio-label"><slot></slot></span>
+            :required="required"
+            :indeterminate.prop="indeterminate"
+            :value="nativeValue"
+            :true-value="trueValue"
+            :false-value="falseValue"
+            @click.stop
+            v-model="computedValue">
+        <label :for="id" class="field-check__label">
+            <slot></slot>
         </label>
     </div>
 </template>
+
 
 <script>
     export default {
@@ -36,57 +35,59 @@
                 required: true,
                 type: String,
             },
-
+            id: {
+                required: false
+            },
             value: {
                 required: false,
                 type: [String, Number, Boolean, Function, Object, Array, Symbol],
             },
-
             nativeValue: {
                 type: [String, Number, Boolean, Function, Object, Array, Symbol]
             },
-
             disabled: {
                 type: Boolean,
                 default: false,
             },
-
             required: {
                 type: Boolean,
                 default: false,
             },
-
             indeterminate: {
                 type: Boolean,
                 default: false,
             },
-
             trueValue: {
                 type: [String, Number, Boolean, Function, Object, Array, Symbol],
                 default: true
             },
-
             falseValue: {
                 type: [String, Number, Boolean, Function, Object, Array, Symbol],
                 default: false
             },
+            inline: {
+                required: false,
+                type: Boolean,
+                default: false,
+            }
         },
 
         computed: {
-            checked: {
+            computedValue: {
                 get() {
-                    return this.value
+                    return this.newValue
                 },
 
                 set(value) {
-                    this.model = value
+                    this.newValue = value
+                    this.$emit('input', value)
                 }
             }
         },
 
-        methods: {
-            onChange() {
-                this.$emit('input', this.model)
+        watch: {
+            value(value) {
+                this.newValue = value
             }
         }
     }

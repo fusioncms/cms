@@ -26,11 +26,27 @@ class SettingRequest extends FormRequest
         $rules = [];
 
         if ($fieldset = $this->route('group')->fieldset) {
-            foreach ($fieldset->fields as $field) {
-                $rules[$field->handle] = $field->validation ?: 'sometimes';
-            }
+            $rules += $fieldset->fields->flatMap(function ($field) {
+                return $field->type()->rules($field, $this->{$field->handle});
+            })->toArray();
         }
 
         return $rules;
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        if ($fieldset = $this->route('group')->fieldset) {
+            return $fieldset->fields->flatMap(function ($field) {
+                return $field->type()->attributes($field, $this->{$field->handle});
+            })->toArray();
+        }
+
+        return [];
     }
 }

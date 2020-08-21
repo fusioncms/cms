@@ -47,7 +47,7 @@ class RoleTest extends TestCase
      */
     public function roles_can_be_assigned_zero_to_many_permissions()
     {
-        $role = factory(Role::class)->create();
+        $role        = factory(Role::class)->create();
         $permissions = factory(Permission::class, 3)->create();
 
         // update ----

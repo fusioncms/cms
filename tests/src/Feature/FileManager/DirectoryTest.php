@@ -182,14 +182,14 @@ class DirectoryTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         $response = $this->json('GET', '/api/directories?filter[search]=lor');
-        $data = collect($response->getData()->data);
+        $data     = collect($response->getData()->data);
 
         $this->assertCount(2, $data);
         $this->assertCount(1, $data->where('name', 'Lorem'));
         $this->assertCount(1, $data->where('name', 'Dolor'));
 
         $response = $this->json('GET', '/api/directories?filter[search]=lorem');
-        $data = collect($response->getData()->data);
+        $data     = collect($response->getData()->data);
 
         $this->assertCount(1, $data);
         $this->assertCount(1, $data->where('name', 'Lorem'));
@@ -206,14 +206,14 @@ class DirectoryTest extends TestCase
         $this->actingAs($this->owner, 'api');
 
         $response = $this->json('GET', '/api/directories');
-        $data = collect($response->getData()->data);
+        $data     = collect($response->getData()->data);
 
         $this->assertCount(2, $data);
         $this->assertCount(1, $data->where('name', 'Lorem'));
         $this->assertCount(1, $data->where('name', 'Dolor'));
 
         $response = $this->json('GET', '/api/directories?filter[parent_id]=1');
-        $data = collect($response->getData()->data);
+        $data     = collect($response->getData()->data);
 
         $this->assertCount(2, $data);
         $this->assertCount(1, $data->where('name', 'Ipsum'));
@@ -228,7 +228,7 @@ class DirectoryTest extends TestCase
      */
     public function directories_must_have_a_unique_parent_id_and_slug_combination()
     {
-        $directory = $this->directoryA->toArray();
+        $directory       = $this->directoryA->toArray();
         $directory['id'] = null;
 
         $this
@@ -246,8 +246,8 @@ class DirectoryTest extends TestCase
      */
     public function directories_can_have_duplicate_slugs_with_a_different_parent_id()
     {
-        $directory = $this->directoryA->toArray();
-        $directory['id'] = null;
+        $directory              = $this->directoryA->toArray();
+        $directory['id']        = null;
         $directory['parent_id'] = 99;
 
         $this

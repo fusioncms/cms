@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="images">File Manager</app-title>
+            <page-title icon="images">File Manager</page-title>
         </portal>
 
         <file-manager></file-manager>

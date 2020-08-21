@@ -54,7 +54,7 @@ class TaxonomyTest extends TestCase
 
         $this->assertDatabaseHasTable('taxonomy_categories');
 
-        $taxonomy->name = 'Tags';
+        $taxonomy->name   = 'Tags';
         $taxonomy->handle = 'tags';
         $taxonomy->save();
 
@@ -71,9 +71,9 @@ class TaxonomyTest extends TestCase
         $this->expectException(QueryException::class);
         $this->expectExceptionMessage('UNIQUE constraint failed: taxonomies.handle');
 
-        $taxonomy = factory(Taxonomy::class)->create();
-        $taxonomy = $taxonomy->toArray();
-        $taxonomy['id'] = null;
+        $taxonomy         = factory(Taxonomy::class)->create();
+        $taxonomy         = $taxonomy->toArray();
+        $taxonomy['id']   = null;
         $taxonomy['slug'] = 'new-slug';
 
         DB::table('taxonomies')->insert($taxonomy);
@@ -89,9 +89,9 @@ class TaxonomyTest extends TestCase
         $this->expectException(QueryException::class);
         $this->expectExceptionMessage('UNIQUE constraint failed: taxonomies.slug');
 
-        $taxonomy = factory(Taxonomy::class)->create();
-        $taxonomy = $taxonomy->toArray();
-        $taxonomy['id'] = null;
+        $taxonomy           = factory(Taxonomy::class)->create();
+        $taxonomy           = $taxonomy->toArray();
+        $taxonomy['id']     = null;
         $taxonomy['handle'] = 'new-handle';
 
         DB::table('taxonomies')->insert($taxonomy);

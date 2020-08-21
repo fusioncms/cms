@@ -1,4 +1,4 @@
-import store from '../store'
+import store from '@/store'
 import Cookies   from 'js-cookie'
 import NProgress from 'nprogress'
 

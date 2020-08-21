@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title :icon="collection.icon || 'pencil-alt'">{{ collection.name }}</app-title>
+            <page-title :icon="collection.icon || 'pencil-alt'">{{ collection.name }}</page-title>
         </portal>
 
         <portal to="actions">

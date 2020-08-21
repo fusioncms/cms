@@ -48,6 +48,11 @@ Route::prefix('fieldtypes')->group(function () {
 });
 
 /**
+ * API - Replicator Field Routes.
+ */
+Route::get('replicators/{replicator}', 'Fields\ReplicatorController@show');
+
+/**
  * API - Fieldset Routes.
  */
 Route::apiResource('fieldsets/{fieldset}/sections', 'Fields\FieldsetSectionController');
@@ -67,16 +72,6 @@ Route::apiResource('files', 'FileManager\FileController');
  */
 Route::apiResource('forms/{slug}/responses', 'Forms\ResponseController');
 Route::apiResource('forms', 'Forms\FormController');
-
-/**
- * API - Import Routes.
- */
-Route::get('imports/mapping/{import}', 'Imports\ImportMappingController@show');
-Route::patch('imports/mapping/{import}', 'Imports\ImportMappingController@update');
-Route::post('imports/queue/{import}', 'Imports\ImportQueueController@store');
-Route::get('imports/queue', 'Imports\ImportQueueController@index');
-Route::get('imports/logs/{importLog}', 'Imports\ImportLogController@index');
-Route::apiResource('imports', 'Imports\ImportController');
 
 /**
  * API - Insight Routes.

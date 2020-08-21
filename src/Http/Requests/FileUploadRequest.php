@@ -25,7 +25,7 @@ class FileUploadRequest extends FormRequest
      */
     public function __construct()
     {
-        $this->maxFileSize = setting('files.file_size_upload_limit');
+        $this->maxFileSize   = setting('files.file_size_upload_limit');
         $this->acceptedMimes = setting('files.accepted_files');
     }
 

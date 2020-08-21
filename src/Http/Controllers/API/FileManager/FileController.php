@@ -61,15 +61,15 @@ class FileController extends Controller
      */
     public function store(FileUploadRequest $request)
     {
-        $upload = $request->file('file');
+        $upload    = $request->file('file');
         $directory = $request->input('directory_id', 0);
-        $uuid = unique_id();
-        $name = pathinfo($upload->getClientOriginalName(), PATHINFO_FILENAME);
+        $uuid      = unique_id();
+        $name      = pathinfo($upload->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $upload->extension();
-        $bytes = $upload->getSize();
-        $mimetype = $upload->getClientMimeType();
-        $filetype = strtok($mimetype, '/');
-        $location = "files/{$uuid}-{$name}.{$extension}";
+        $bytes     = $upload->getSize();
+        $mimetype  = $upload->getClientMimeType();
+        $filetype  = strtok($mimetype, '/');
+        $location  = "files/{$uuid}-{$name}.{$extension}";
 
         Storage::disk('public')->putFileAs('', $upload, $location);
 

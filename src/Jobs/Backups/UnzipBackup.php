@@ -41,8 +41,8 @@ class UnzipBackup
     public function __construct(TemporaryDirectory $tempDirectory, string $backupPath)
     {
         $this->tempDirectory = $tempDirectory;
-        $this->backupPath = $backupPath;
-        $this->zipFile = new ZipArchive();
+        $this->backupPath    = $backupPath;
+        $this->zipFile       = new ZipArchive();
     }
 
     /**

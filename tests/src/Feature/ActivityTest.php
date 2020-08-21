@@ -66,7 +66,7 @@ class ActivityTest extends TestCase
     {
         $matrix = factory(Matrix::class)->create();
 
-        $attributes = $matrix->toArray();
+        $attributes         = $matrix->toArray();
         $attributes['name'] = 'New Name';
         $attributes['slug'] = 'new-name';
 
@@ -90,7 +90,7 @@ class ActivityTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $matrix = factory(Matrix::class)->create();
+        $matrix   = factory(Matrix::class)->create();
         $activity = Activity::latest('id')->first();
 
         $this->assertDatabaseHas('activity_log', [

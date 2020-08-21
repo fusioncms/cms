@@ -20,11 +20,11 @@ class FilFieldtypeTest extends TestCase
         $this->handleValidationExceptions();
 
         // --
-        $this->section = \Facades\SectionFactory::times(1)->withoutFields()->create();
-        $this->field = \Facades\FieldFactory::withName('File')->withType('file')->withSection($this->section)->create();
+        $this->section  = \Facades\SectionFactory::times(1)->withoutFields()->create();
+        $this->field    = \Facades\FieldFactory::withName('File')->withType('file')->withSection($this->section)->create();
         $this->fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->matrix = \Facades\MatrixFactory::withName('Simple Page')->asSingle()->withFieldset($this->fieldset)->create();
-        $this->model = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
+        $this->matrix   = \Facades\MatrixFactory::withName('Simple Page')->asSingle()->withFieldset($this->fieldset)->create();
+        $this->model    = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
     }
 
     /**
@@ -51,7 +51,7 @@ class FilFieldtypeTest extends TestCase
             ->json('PATCH', '/api/singles/'.$this->matrix->id, $attributes)
                ->assertStatus(201);
 
-        $file = File::latest()->first();
+        $file      = File::latest()->first();
         $directory = Directory::where('slug', 'uploads')->first();
 
         $this->assertDatabaseHas('files', [

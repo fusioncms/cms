@@ -53,7 +53,7 @@ function fusion()
 
 function glide()
 {
-    $request = app('request');
+    $request    = app('request');
     $filesystem = app('filesystem')->getDriver();
 
     return League\Glide\ServerFactory::create([

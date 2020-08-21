@@ -133,7 +133,7 @@ class MenuObserver
         if ($old->name !== $new->name) {
             $fieldsetName = 'Menu: '.$new->name;
 
-            $fieldset->name = $fieldsetName;
+            $fieldset->name   = $fieldsetName;
             $fieldset->handle = Str::slug($fieldsetName, '_');
             $fieldset->save();
         }

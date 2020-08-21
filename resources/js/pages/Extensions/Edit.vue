@@ -1,7 +1,7 @@
 <template>
     <form-container v-if="form">
         <portal to="title">
-            <app-title icon="seedling">Edit Extension</app-title>
+            <page-title icon="seedling">Edit Extension</page-title>
         </portal>
 
         <portal to="actions">
@@ -15,11 +15,11 @@
             <div class="card__body">
                 <p-title name="name" readonly v-model="form.name"></p-title>
 
-                <p-fieldset
+                <fieldset-picker
                     :has-error="form.errors.has('fieldset')"
                     :error-message="form.errors.get('fieldset')"
                     v-model="form.fieldset">
-                </p-fieldset>
+                </fieldset-picker>
             </div>
         </div>
 
@@ -86,10 +86,6 @@
                     })
 
                     vm.$emit('updateHead')
-
-                    vm.$nextTick(() => {
-                        vm.form.resetChangeListener()
-                    })
                 })
             })).catch(function(error) {
                 next('/extensions')

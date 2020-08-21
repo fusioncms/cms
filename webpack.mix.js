@@ -15,6 +15,11 @@ mix.setPublicPath('public')
             publicPath: '/vendor/fusion/',
             chunkFilename: "js/chunks/[name].js?id=[chunkhash]",
         },
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, 'resources/js/'),
+            },
+        },
     })
     .options({
         processCssUrls: false,

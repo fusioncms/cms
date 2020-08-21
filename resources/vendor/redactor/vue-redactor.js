@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 /*
     Redactor Vue Component
     Version 1.1

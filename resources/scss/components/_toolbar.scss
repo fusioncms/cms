@@ -1,0 +1,43 @@
+.toolbar {
+    @apply
+        items-center
+        flex
+    ;
+
+    &:not(:last-child) {
+        @apply
+            mb-3
+        ;
+    }
+
+    &__group {
+        @apply
+            flex
+        ;
+
+        &--grow {
+            @apply
+                flex-1
+            ;
+        }
+
+        &:not(:last-child) {
+            @apply
+                mr-3
+            ;
+        }
+
+        > .button:not(:last-child),
+        > .dropdown:not(:last-child) {
+            @apply
+                mr-1
+            ;
+        }
+
+        >.buttons:last-child {
+            @apply
+                mb-0
+            ;
+        }
+    }
+}

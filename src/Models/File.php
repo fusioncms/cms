@@ -75,7 +75,7 @@ class File extends Model
      */
     public function getTypeAttribute()
     {
-        $type = strtok($this->mimetype, '/');
+        $type  = strtok($this->mimetype, '/');
         $types = ['image', 'audio', 'video'];
 
         return in_array($type, $types) ? $type : 'document';

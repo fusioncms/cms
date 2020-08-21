@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title :icon="matrix.icon || 'pencil-alt'">Edit {{ matrix.reference_singular }}</app-title>
+            <page-title :icon="matrix.icon || 'pencil-alt'">Edit {{ matrix.reference_singular }}</page-title>
         </portal>
 
         <portal to="subtitle">{{ matrix.description }}</portal>
@@ -21,6 +21,8 @@
     import _ from 'lodash'
 
     export default {
+        name: 'edit-single',
+
         head: {
             title() {
                 return {
@@ -85,10 +87,6 @@
                     vm.form   = new Form(fields, true)
 
                     vm.$emit('updateHead')
-
-                    vm.$nextTick(() => {
-                        vm.form.resetChangeListener()
-                    })
                 })
             })
         },
@@ -100,10 +98,6 @@
                 this.form   = new Form(fields, true)
 
                 this.$emit('updateHead')
-
-                this.$nextTick(() => {
-                    this.form.resetChangeListener()
-                })
             })
 
             next()

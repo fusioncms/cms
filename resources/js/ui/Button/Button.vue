@@ -6,10 +6,9 @@
             :class="classes"
             v-bind="$attrs"
             class="button"
-            :disabled="props.isLoading"
-        >
+            :disabled="disabled || props.isLoading">
+            
             <slot></slot>
-
             <fa-icon v-if="props.isLoading" icon="circle-notch" class="ml-3 fa-fw fa-spin"></fa-icon>
         </button>
     </renderless-button>
@@ -27,12 +26,6 @@
             }
         },
 
-        watch: {
-            loading(value) {
-                console.log('loading changed: ' + value)
-            }
-        },
-
         props: {
             classes: {
                 required: false,
@@ -42,13 +35,13 @@
             value: {
                 required: false,
                 default: false,
-            }
-        },
+            },
 
-        // methods: {
-        //     onClick() {
-        //         this.$emit('click')
-        //     }
-        // }
+            disabled: {
+                type: Boolean,
+                required: false,
+                default: false
+            }
+        }
     }
 </script>

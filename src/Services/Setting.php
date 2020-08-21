@@ -138,11 +138,11 @@ class Setting
             /**
              * Load settings from flat files.
              */
-            $files = glob(fusion_path('settings').'/*.php');
+            $files   = glob(fusion_path('settings').'/*.php');
             $results = [];
 
             foreach ($files as $file) {
-                $group = basename($file, '.php');
+                $group    = basename($file, '.php');
                 $contents = require $file;
 
                 foreach ($contents['settings'] as $settings) {
@@ -200,7 +200,7 @@ class Setting
      */
     private static function raw()
     {
-        $path = fusion_path('settings');
+        $path  = fusion_path('settings');
         $files = Finder::create()->files()->name('*.php')->in($path);
 
         return collect($files)->mapWithKeys(function ($file) {

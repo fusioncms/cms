@@ -34,9 +34,9 @@ class TaxonomyFactory implements Factory
         $overrides = [];
 
         if ($this->name) {
-            $overrides['name'] = $this->name;
+            $overrides['name']   = $this->name;
             $overrides['handle'] = str_handle($this->name);
-            $overrides['slug'] = Str::slug($this->name);
+            $overrides['slug']   = Str::slug($this->name);
         }
 
         if (!$this->fieldset) {

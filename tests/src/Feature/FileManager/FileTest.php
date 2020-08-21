@@ -259,9 +259,9 @@ class FileTest extends TestCase
         $attr = $file->toArray();
 
         // updates ----
-        $attr['name'] = 'updated-name';
-        $attr['title'] = 'This is the title field.';
-        $attr['alt'] = 'This is the alt field.';
+        $attr['name']    = 'updated-name';
+        $attr['title']   = 'This is the title field.';
+        $attr['alt']     = 'This is the alt field.';
         $attr['caption'] = 'This is the caption field.';
 
         $this
@@ -330,7 +330,7 @@ class FileTest extends TestCase
      */
     public function a_user_with_permissions_can_get_a_file()
     {
-        $file = factory(File::class)->states('image')->create();
+        $file    = factory(File::class)->states('image')->create();
         $payload = $this
             ->be($this->owner, 'api')
             ->json('GET', '/api/files/'.$file->uuid)
@@ -414,7 +414,7 @@ class FileTest extends TestCase
      */
     public function a_user_with_permissions_can_move_files()
     {
-        $file = factory(File::class)->states('image')->create();
+        $file      = factory(File::class)->states('image')->create();
         $directory = factory(Directory::class)->create();
 
         $this
@@ -451,7 +451,7 @@ class FileTest extends TestCase
         factory(File::class)->create(['name' => 'foo', 'caption' => 'bar']);
 
         $response = $this->json('GET', '/api/files?filter[search]=lor');
-        $data = collect($response->getData()->data);
+        $data     = collect($response->getData()->data);
 
         $this->assertCount(3, $data);
         $this->assertCount(1, $data->where('name', 'lorem'));
@@ -459,13 +459,13 @@ class FileTest extends TestCase
         $this->assertCount(1, $data->where('name', 'dolor'));
 
         $response = $this->json('GET', '/api/files?filter[search]=dolor');
-        $data = collect($response->getData()->data);
+        $data     = collect($response->getData()->data);
 
         $this->assertCount(1, $data);
         $this->assertCount(1, $data->where('name', 'dolor'));
 
         $response = $this->json('GET', '/api/files?filter[search]=foo');
-        $data = collect($response->getData()->data);
+        $data     = collect($response->getData()->data);
 
         $this->assertCount(2, $data);
         $this->assertCount(1, $data->where('name', 'dolor'));
@@ -491,13 +491,13 @@ class FileTest extends TestCase
 
         // forward sort
         $response = $this->json('GET', '/api/files?sort=name');
-        $data = collect($response->getData()->data)->pluck('name')->all();
+        $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['amet', 'do', 'dolor', 'ipsum', 'lorem', 'sit'], $data);
 
         // reverse sort
         $response = $this->json('GET', '/api/files?sort=-name');
-        $data = collect($response->getData()->data)->pluck('name')->all();
+        $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['sit', 'lorem', 'ipsum', 'dolor', 'do', 'amet'], $data);
     }
@@ -521,13 +521,13 @@ class FileTest extends TestCase
 
         // forward sort
         $response = $this->json('GET', '/api/files?sort=bytes');
-        $data = collect($response->getData()->data)->pluck('name')->all();
+        $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['ipsum', 'amet', 'dolor', 'lorem', 'do', 'sit'], $data);
 
         // reverse sort
         $response = $this->json('GET', '/api/files?sort=-bytes');
-        $data = collect($response->getData()->data)->pluck('name')->all();
+        $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['sit', 'do', 'lorem', 'dolor', 'amet', 'ipsum'], $data);
     }
@@ -551,13 +551,13 @@ class FileTest extends TestCase
 
         // forward sort
         $response = $this->json('GET', '/api/files?sort=updated_at');
-        $data = collect($response->getData()->data)->pluck('name')->all();
+        $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['lorem', 'dolor', 'ipsum', 'amet', 'do', 'sit'], $data);
 
         // reverse sort
         $response = $this->json('GET', '/api/files?sort=-updated_at');
-        $data = collect($response->getData()->data)->pluck('name')->all();
+        $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['sit', 'do', 'amet', 'ipsum', 'dolor', 'lorem'], $data);
     }
@@ -579,13 +579,13 @@ class FileTest extends TestCase
 
         // filter by image
         $response = $this->json('GET', '/api/files?filter[display]=images');
-        $data = collect($response->getData()->data)->pluck('name')->all();
+        $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['ipsum', 'lorem'], $data);
 
         // filter by video
         $response = $this->json('GET', '/api/files?filter[display]=videos');
-        $data = collect($response->getData()->data)->pluck('name')->all();
+        $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['sit'], $data);
     }

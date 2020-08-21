@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-			<app-title icon="anchor">Edit Node</app-title>
+			<page-title icon="anchor">Edit Node</page-title>
 		</portal>
 
         <shared-form :form="form" :submit="submit" :menu="menu" :node="node" :nodes="nodes"></shared-form>
@@ -79,10 +79,6 @@
                         })
 
                         vm.$emit('updateHead')
-
-                        vm.$nextTick(() => {
-                            vm.form.resetChangeListener()
-                        })
                     })
                 }
             })
