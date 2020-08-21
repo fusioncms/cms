@@ -16,41 +16,24 @@
             <fa-icon icon="plus" class="fa-xs"></fa-icon>
         </p-button>
 
+        <p-tabs :move="move">
+            <p-tab
+                v-for="(replicant, index) in replicants"
+                :key="`replicant-${index}-tab`"
+                :name="`[${index + 1}] ${replicant.section.name}`"
+                :remove="remove">
 
-        <div class="tabs">
-            <ul class="tab__list overflow-x-scroll">
-                <li v-for="(replicant, index) in replicants"
-                    :key="`replicant-${index}-tab`"
-                    class="tab flex-shrink-0 flex-1 border-r border-gray-200"
-                    :class="{ 'tab--active': index == active }">
-
-                    <a href="#"
-                        class="tab__link flex justify-between items-center"
-                        @click.prevent="select(index)">
-                        <span>{{ replicant.section.name }}</span>
-                        <span
-                            class="flex items-center justify-center w-6 h-6 rounded hover:bg-black hover:text-white"
-                            @click.prevent="remove(index)">
-                            <fa-icon icon="times" class="fa-xs"></fa-icon>
-                        </span>
-                    </a>
-                </li>
-            </ul>
-
-            <template v-for="(replicant, index) in replicants">
-                <div v-show="index == active" :key="`replicant-${index}-panel`" class="tab__panel">
-                    <component
-                        v-for="sub in fields(replicant.section)"
-                        :key="sub.handle"
-                        class="form__group"
-                        :is="sub.type.id + '-fieldtype'"
-                        :field="sub"
-                        :errors="fieldErrors(`${field.handle}.${index}.fields.`)"
-                        v-model="replicant.fields[sub.handle]">
-                    </component>
-                </div>
-            </template>
-        </div>
+                <component
+                    v-for="sub in fields(replicant.section)"
+                    :key="sub.handle"
+                    class="form__group"
+                    :is="sub.type.id + '-fieldtype'"
+                    :field="sub"
+                    :errors="fieldErrors(`${field.handle}.${index}.fields.`)"
+                    v-model="replicant.fields[sub.handle]">
+                </component>
+            </p-tab>
+        </p-tabs>
     </div>
 </template>
 
@@ -126,13 +109,14 @@
                 this.replicants.push({ section, fields })
             },
 
-            remove(index) {
-                this.replicants.splice(index, 1)
-                this.active = index === 0 ? 1 : 0
+            move(fromIndex, toIndex) {
+                this.replicants.splice(toIndex, 0,
+                    this.replicants.splice(fromIndex, 1)[0])
             },
 
-            select(index) {
-                this.active = this.replicants[index] ? index : 0
+            remove(index) {
+                if (this.replicants.length > 0)
+                    this.replicants.splice(index, 1)
             }
         },
 

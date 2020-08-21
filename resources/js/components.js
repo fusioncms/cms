@@ -17,6 +17,7 @@ Vue.component('app', require('@/components/App').default)
 Vue.component('confirm-modal', require('@/components/Modals/ConfirmModal').default)
 Vue.component('edit-directory-modal', require('@/components/Modals/EditDirectoryModal').default) // TODO
 Vue.component('fieldset-picker', require('@/components/FieldsetPicker').default)
+Vue.component('fieldtype-picker', require('@/components/FieldtypePicker').default)
 Vue.component('form-container', require('@/components/FormContainer').default)
 Vue.component('icon-picker', require('@/components/IconPicker').default)
 Vue.component('nav-menu', require('@/components/Navigation/Navigation').default)

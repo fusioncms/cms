@@ -16,6 +16,7 @@
                     label="Section Handle"
                     autocomplete="off"
                     delimiter="-"
+                    :force-watch="section.prototype"
                     :watch="section.name"
                     v-model="section.handle"
                     required>
@@ -44,8 +45,7 @@
             <div class="col mt-6 w-full">
                 <field-builder
                     v-model="section.fields"
-                    :fieldtypes="$parent.fieldtypes"
-                    :sections="$parent.sections"
+                    :sections="sections"
                     :sectionHandle="section.handle">
                 </field-builder>
             </div>
@@ -71,6 +71,11 @@
         },
 
 		props: {
+            sections: {
+                type: Array,
+                required: true
+            },
+
             section: {
                 type: Object,
                 required: true
