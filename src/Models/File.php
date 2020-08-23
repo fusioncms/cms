@@ -94,6 +94,50 @@ class File extends Model
     }
 
     /**
+     * Get the user-friendly full url.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public function getFullUrlAttribute()
+    {
+        return url($this->url);
+    }
+
+    /**
+     * Get the thumbnail url.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public function getThumbnailUrl($width, $height = null)
+    {
+        $params = ['fit' => 'max'];
+        if (isset($width)) {
+            $params['w'] = $width;
+        }
+        if (isset($height)) {
+            $params['w'] = $height;
+        }
+
+        return $this->url.'?'.\Illuminate\Support\Arr::query($params);
+    }
+
+    /**
+     * Get the thumbnail full url.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public function getThumbnailFullUrl($width, $height = null)
+    {
+        return url($this->getThumbnailUrl($width, $height));
+    }
+
+    /**
      * A file belongs to a directory.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
