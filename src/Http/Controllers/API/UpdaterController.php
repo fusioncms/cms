@@ -42,7 +42,7 @@ class UpdaterController extends Controller
      */
     private function changelog()
     {
-        return Cache::rememberForever('changelog', function() {
+        return Cache::remember('changelog', 60*60*24, function() {
             $response = (new \GuzzleHttp\Client)
                 ->get('https://beta.getfusioncms.com/releases.json');
 

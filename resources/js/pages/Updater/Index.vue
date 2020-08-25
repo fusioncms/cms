@@ -19,15 +19,16 @@
                 </h3>
 
                 <div class="flex items-center justify-start">
-                    <!-- upgrade -->
+                    <!-- upgrade --
                     <p-button v-if="item.id > id" @click="upgrade(item.id)" disabled>
                         Upgrade to {{ item.title }}
                     </p-button>
 
-                    <!-- current version -->
+                    -- current version --
                     <p-button v-if="item.id == id" disabled>
                         Current version
                     </p-button>
+                    -->
 
                     <!-- attachments -->
                     <a  v-for="(attachment, i2) in item.attachments"
@@ -74,20 +75,26 @@
         </div>
 
         <portal to="modals">
-            <updater-modal v-model="version"></updater-modal>
+            <p-modal
+                key="updater_modal"
+                name="updater"
+                :title="`Update to ${version.title}`"
+                v-model="isConfirming">
+
+                <p>Are you sure you want to update to version {{ version.title }}?</p>
+                
+                <template slot="footer">
+                    <p-button @click="confirm" type="button" class="button button--primary">Confirm</p-button>
+                    <p-button @click="close" type="button" class="mr-3">Cancel</p-button>
+                </template>
+            </p-modal>
         </portal>
     </div>
 </template>
 
 <script>
-    import UpdaterModal from '@/components/Modals/UpdaterModal'
-
     export default {
         name: 'updater',
-
-        components: {
-            'updater-modal': UpdaterModal
-        },
         
         data() {
             return {
@@ -103,6 +110,10 @@
 
             id() {
                 return this.findBy('title', this.current).id
+            },
+
+            isConfirming() {
+                return !! this.version
             }
         },
 
@@ -113,6 +124,20 @@
 
             upgrade(id) {
                 this.version = this.findBy('id', id)
+            },
+
+            confirm() {
+                axios.post('/api/updater')
+                    .then((response) => {
+                        console.log(response)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            },
+
+            close() {
+                this.version = false
             }
         },
 
