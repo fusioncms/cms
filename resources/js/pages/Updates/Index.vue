@@ -8,30 +8,30 @@
             <a href="https://beta.getfusioncms.com/changelog" title="Changelog" target="_blank">{{ current }}</a>
         </portal>
 
-        <div class="card" v-for="(item, i1) in items">
+        <div class="card" v-for="(version, i1) in versions">
             <div class="card__header flex items-center justify-between">
                 <h3 class="card__title">
-                    {{ item.title }}
+                    {{ version.title }}
 
                     <span class="text-xs block">
-                        Released {{ $moment(item.date_published).format('MMM Do, YYYY') }}
+                        Released {{ $moment(version.date_published).format('MMM Do, YYYY') }}
                     </span>
                 </h3>
 
                 <div class="flex items-center justify-start">
                     <!-- upgrade --
-                    <p-button v-if="item.id > id" @click="upgrade(item.id)" disabled>
-                        Upgrade to {{ item.title }}
+                    <p-button v-if="version.id > id" @click="upgrade(version.id)" disabled>
+                        Upgrade to {{ version.title }}
                     </p-button>
                     -->
 
                     <!-- current version -->
-                    <p-button v-if="item._isCurrent" disabled>
+                    <p-button v-if="version._isCurrent" disabled>
                         Current version
                     </p-button>
 
                     <!-- attachments -->
-                    <a  v-for="(attachment, i2) in item.attachments"
+                    <a  v-for="(attachment, i2) in version.attachments"
                         :key="`attachment-${i1}-${i2}`"
                         class="button button--icon ml-1"
                         :href="attachment.url"
@@ -41,7 +41,7 @@
 
                     <!-- github -->
                     <a  class="button button--icon ml-1"
-                        :href="`https://github.com/fusioncms/fusioncms/releases/tag/${item.title}`"
+                        :href="`https://github.com/fusioncms/fusioncms/releases/tag/${version.title}`"
                         title="View on Github"
                         target="_blank">
                         <fa-icon icon="code" class="icon"></fa-icon>
@@ -50,9 +50,9 @@
             </div>
 
             <div class="card__body">
-                <p>{{ items.content_text }}</p>
+                <p>{{ versions.content_text }}</p>
 
-                <div v-for="changelog, name in item._changelog">
+                <div v-for="changelog, name in version._changelog">
                     <div class="row" v-for="issues, text in changelog"> 
                         <div class="col">
                             <span class="badge">{{ name }}</span>
@@ -72,6 +72,14 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="mt-6" v-if="pagination.total > 1">
+            <p-pagination
+                @input="changePage($event)"
+                :total="pagination.last_page"
+                :value="pagination.current_page"
+            ></p-pagination>
         </div>
 
         <portal to="modals">
@@ -99,7 +107,8 @@
         data() {
             return {
                 version: false,
-                items: []
+                versions: [],
+                pagination: []
             }
         },
 
@@ -119,7 +128,11 @@
 
         methods: {
             findBy(key, value) {
-                return _.find(this.items, (item) => item[key] == value)
+                return _.find(this.versions, (version) => version[key] == value)
+            },
+
+            changePage(page) {
+                this.refresh(page)
             },
 
             upgrade(id) {
@@ -138,13 +151,41 @@
 
             close() {
                 this.version = false
+            },
+
+            refresh(page) {
+                getModels((error, versions, pagination) => {
+                    if (error) {
+                        toast(error.toString(), 'danger')
+                    } else {
+                        this.versions   = versions
+                        this.pagination = pagination
+                    }
+                }, page)
             }
         },
 
         beforeRouteEnter(to, from, next) {
-            axios.get('/api/updates')
-                .then((response) =>
-                    next((vm) => vm.items = response.data.data))
+            getModels((error, versions, pagination) => {
+                if (error) {
+                    next((vm) => toast(error.toString(), 'danger'))
+                } else {
+                    next((vm) => {
+                        vm.versions   = versions
+                        vm.pagination = pagination
+                    })
+                }
+            })
         }
+    }
+
+    export function getModels(callback, page = 1) {
+        axios.all([
+            axios.get(`/api/updates?page=${page}`)
+        ]).then(axios.spread((response) => {
+            callback(null, response.data.data, response.data.meta)
+        })).catch((error) => {
+            callback(new Error('The requested resource could not be found'))
+        })
     }
 </script>

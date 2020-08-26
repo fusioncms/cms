@@ -3,11 +3,10 @@
 namespace Fusion\Services;
 
 use Illuminate\Pagination\Paginator;
-use Illuminate\Database\Concerns\BuildsQueries;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class Version
 {
-	use BuildsQueries;
 	/**
 	 * Versions.
 	 * 
@@ -48,19 +47,27 @@ class Version
 	}
 
 	/**
+	 * Get total number of versions.
+	 * 
+	 * @return integer
+	 */
+	public function total()
+	{
+		return count($this->all());
+	}
+
+	/**
 	 * Get paginated `fusioncms/cms` verions.
 	 * 
 	 * @param  integer $perPage
-	 * @param  integer $currentPage
-	 * @param  array   $options
 	 * @return \Illuminate\Pagination\Paginator          
 	 */
-	public function paginate($perPage = 25, $pageName = 'page', $page = null)
+	public function paginate($perPage = 5, $page = null)
 	{
-		$page    = $page ?: Paginator::resolveCurrentPage($pageName);
-		$options = [];
+		$page  = $page ?: Paginator::resolveCurrentPage();
+		$items = array_slice($this->all(), ($page-1) * $perPage, $perPage);
 
-		return $this->simplePaginator($this->items, $perPage, $page, $options);
+		return new LengthAwarePaginator($items, $this->total(), $perPage, $page);
 	}
 
 	/**
