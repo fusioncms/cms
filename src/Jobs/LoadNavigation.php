@@ -144,11 +144,6 @@ class LoadNavigation
                 'icon' => 'bug',
             ]);
 
-            $menu->tools->add('Updater')->data([
-                'to'   => '/updater',
-                'icon' => 'update',
-            ]);
-
             $menu->add('Users', '#')->data([
                 'icon'  => 'users',
             ]);
@@ -173,6 +168,11 @@ class LoadNavigation
             $menu->add('Addons', '#')->data([
                 'to'    => '/addons',
                 'icon'  => 'box-open',
+            ]);
+
+            $menu->add('Updates')->data([
+                'to'   => '/updates',
+                'icon' => 'download',
             ]);
 
             $menu->add('Settings')->data([

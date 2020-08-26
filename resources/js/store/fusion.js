@@ -28,7 +28,7 @@ export default {
 
     actions: {
         checkForUpdates: ({ state, commit }) => {
-            axios.get('/api/updater')
+            axios.get('/api/updates')
                 .then((response) => {
                     const items   = response.data.data.items
                     const current = _.find(items, (item) => item.title == `v${state.version}`)

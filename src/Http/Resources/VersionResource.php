@@ -4,7 +4,7 @@ namespace Fusion\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ChangelogResource extends JsonResource
+class VersionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

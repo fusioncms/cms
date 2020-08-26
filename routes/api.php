@@ -157,7 +157,10 @@ Route::apiResource('roles', 'Users\RoleController');
 Route::apiResource('tokens', 'Users\TokenController')->except(['show', 'update']);
 
 /**
- * Updater
+ * API - Updates Routes.
  */
-Route::get('updater', 'UpdaterController@index');
-Route::post('updater', 'UpdaterController@store');
+Route::prefix('updates')->group(function () {
+    Route::get('', 'UpdatesController@index');
+    Route::get('{version}', 'UpdatesController@show');
+    Route::post('', 'UpdatesController@store');
+});

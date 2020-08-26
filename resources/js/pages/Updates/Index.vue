@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <page-title icon="upload">Updater</page-title>
+            <page-title icon="download">Updates</page-title>
         </portal>
 
         <portal to="actions">
@@ -94,7 +94,7 @@
 
 <script>
     export default {
-        name: 'updater',
+        name: 'updates',
         
         data() {
             return {
@@ -127,7 +127,7 @@
             },
 
             confirm() {
-                axios.post('/api/updater')
+                axios.post('/api/updates')
                     .then((response) => {
                         console.log(response)
                     })
@@ -142,9 +142,9 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            axios.get('/api/updater')
-                .then((response) => next((vm) =>
-                    vm.items = response.data.data.items))
+            axios.get('/api/updates')
+                .then((response) =>
+                    next((vm) => vm.items = response.data.data))
         }
     }
 </script>
