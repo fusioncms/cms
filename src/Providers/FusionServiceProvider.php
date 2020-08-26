@@ -68,6 +68,7 @@ class FusionServiceProvider extends ServiceProvider
             \Fusion\Console\RefreshCommand::class,
             \Fusion\Console\FlushCommand::class,
             \Fusion\Console\SyncCommand::class,
+            \Fusion\Console\UpdateCommand::class,
         ]);
     }
 
@@ -151,6 +152,10 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(FieldtypeServiceProvider::class);
         $this->app->register(SettingServiceProvider::class);
         $this->app->register(ThemeServiceProvider::class);
+
+        $this->app->singleton('version', function() {
+            return new \Fusion\Services\Version;
+        });
 
         // Not sure why Laravel doesn't register this against
         // the class name as well ¯\_(ツ)_/¯
