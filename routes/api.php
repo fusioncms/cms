@@ -155,3 +155,12 @@ Route::post('users/{user}/password', 'Users\PasswordController@index');
 Route::apiResource('users', 'Users\UserController');
 Route::apiResource('roles', 'Users\RoleController');
 Route::apiResource('tokens', 'Users\TokenController')->except(['show', 'update']);
+
+/**
+ * API - Updates Routes.
+ */
+Route::prefix('updates')->group(function () {
+    Route::get('', 'UpdatesController@index');
+    Route::get('{version}', 'UpdatesController@show');
+    Route::post('', 'UpdatesController@store');
+});

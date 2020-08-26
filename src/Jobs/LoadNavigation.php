@@ -170,6 +170,11 @@ class LoadNavigation
                 'icon'  => 'box-open',
             ]);
 
+            $menu->add('Updates')->data([
+                'to'    => '/updates',
+                'icon'  => 'download',
+            ]);
+
             $menu->add('Settings')->data([
                 'to'   => '/settings',
                 'icon' => 'cog',
