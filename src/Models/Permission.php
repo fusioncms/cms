@@ -2,7 +2,7 @@
 
 namespace Fusion\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Permission\Models\Permission as BasePermission;
 
 class Permission extends BasePermission
@@ -20,7 +20,7 @@ class Permission extends BasePermission
      * A Permission belongs to Users.
      * User Model is set in permissions config file.
      */
-    public function users(): BelongsToMany
+    public function users(): MorphToMany
     {
         return $this->morphedByMany(
             config('permission.models.user'),

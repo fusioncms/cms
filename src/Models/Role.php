@@ -2,7 +2,7 @@
 
 namespace Fusion\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Permission\Models\Role as BaseRole;
 
 class Role extends BaseRole
@@ -20,7 +20,7 @@ class Role extends BaseRole
      * A Role belongs to Users.
      * User Model is set in permissions config file.
      */
-    public function users(): BelongsToMany
+    public function users(): MorphToMany
     {
         return $this->morphedByMany(
             config('permission.models.user'),
