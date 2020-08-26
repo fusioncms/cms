@@ -4,7 +4,6 @@ namespace Fusion\Jobs;
 
 use Fusion\Models\Matrix;
 use Fusion\Models\Taxonomy;
-use Fusion\Facades\Version;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Str;
 use Menu;
