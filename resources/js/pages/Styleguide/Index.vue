@@ -24,54 +24,7 @@
 
         <sg-modals></sg-modals>
 
-        <!-- Old code needing refactor -->
-        <!-- <div class="row">
-            <div class="col w-1/2">
-                <div class="card">
-                    <div class="card__body">
-                        <h2 class="text-2xl"><fa-icon icon="angle-double-right" class="fa-fw"></fa-icon> Table</h2>
-                    </div>
-
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Title</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr v-for="index in 5" :key="index">
-                                <td>Bernard Lane</td>
-                                <td>Director, Human Resources</td>
-                                <td>bernardlane@example.com</td>
-                                <td>Owner</td>
-                                <td class="actions">
-                                    <p-dropdown icon no-arrow right :id="'action-dropdown-for-' + index">
-                                        <fa-icon icon="ellipsis-h" class="icon"></fa-icon>
-
-                                        <template v-slot:menu>
-                                            <p-dropdown-link href="/" target="_blank">
-                                                <fa-icon icon="pencil-alt" class="icon"></fa-icon>
-                                                Edit
-                                            </p-dropdown-link>
-
-                                            <p-dropdown-link href="/" target="_blank">
-                                                <fa-icon icon="trash-alt" class="icon"></fa-icon>
-                                                Delete
-                                            </p-dropdown-link>
-                                        </template>
-                                    </p-dropdown>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div> -->
+        <sg-treeview></sg-treeview>
     </div>
 </template>
 
@@ -85,6 +38,7 @@
     import Modals from './Modals'
     import Tables from './Tables'
     import Toolbars from './Toolbars'
+    import Treeview from './Treeview'
     import Typography from './Typography'
 
     export default {
@@ -106,6 +60,7 @@
             'sg-modals': Modals,
             'sg-tables': Tables,
             'sg-toolbars': Toolbars,
+            'sg-treeview': Treeview,
             'sg-typography': Typography
         }
     }

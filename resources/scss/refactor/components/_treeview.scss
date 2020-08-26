@@ -1,22 +1,22 @@
-.treeview {
+treeview {
     &--node {
-        @apply .flex .items-center .align-middle .py-2;
+        @apply flex items-center align-middle py-2;
 
         :hover {
-            @apply .cursor-pointer;
+            @apply cursor-pointer;
         }
     }
 
     &--toggle {
-        @apply .flex .items-center pr-2;
+        @apply flex items-center pr-2;
     }
 
     &--icon {
-        @apply .pointer-events-none .inline-flex .items-center .text-gray-700 .leading-tight;
+        @apply pointer-events-none inline-flex items-center text-gray-700 leading-tight;
     }
 
     &--label {
-        @apply .flex .items-center .leading-tight .align-middle;
+        @apply flex items-center leading-tight align-middle;
     }
 
     &--node__folder {
@@ -24,10 +24,10 @@
     }
 
     &--node__selected {
-        @apply .font-bold;
+        @apply font-bold;
     }
 
     &--children {
-        @apply .pl-3;
+        @apply pl-3;
     }
 }
