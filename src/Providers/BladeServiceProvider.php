@@ -47,7 +47,7 @@ class BladeServiceProvider extends ServiceProvider
                     break;
 
                 default:
-                    throw new Exception('Invalid asset type declared. Must be either "css" or "js".');
+                    throw new \Exception('Invalid asset type declared. Must be either "css" or "js".');
             }
         });
     }
