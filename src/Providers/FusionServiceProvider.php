@@ -157,6 +157,11 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->singleton(\Illuminate\Database\Migrations\Migrator::class, function ($app) {
             return $app['migrator'];
         });
+
+        // version history
+        $this->app->singleton('version', function() {
+            return new \Fusion\Services\Version;
+        });
     }
 
     /**

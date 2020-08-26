@@ -4,6 +4,7 @@ namespace Fusion\Jobs;
 
 use Fusion\Models\Matrix;
 use Fusion\Models\Taxonomy;
+use Fusion\Facades\Version;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Str;
 use Menu;
@@ -168,6 +169,11 @@ class LoadNavigation
             $menu->add('Addons', '#')->data([
                 'to'    => '/addons',
                 'icon'  => 'box-open',
+            ]);
+
+            $menu->add('Updates')->data([
+                'to'    => '/updates',
+                'icon'  => 'download',
             ]);
 
             $menu->add('Settings')->data([
