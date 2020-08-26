@@ -93,4 +93,14 @@ class Version
 	{
 		return ltrim(current($this->items)['title'], 'v');
 	}
+
+	/**
+	 * User is on latest version of `fusioncms/cms`?
+	 * 
+	 * @return boolean
+	 */
+	public function hasUpdates()
+	{
+		return version_compare($this->current(), $this->latest(), '<');
+	}
 }
