@@ -159,8 +159,8 @@ class FusionServiceProvider extends ServiceProvider
         });
 
         // version history
-        $this->app->singleton('version', function() {
-            return new \Fusion\Services\Version;
+        $this->app->singleton('version', function () {
+            return new \Fusion\Services\Version();
         });
     }
 
