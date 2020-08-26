@@ -71,7 +71,9 @@ class Version
 	 */
 	public function find($version)
 	{
-		return collect($this->items)->where('title', $version);
+		return collect($this->items)
+			->where('title', $version)
+			->first();
 	}
 
 	/**
