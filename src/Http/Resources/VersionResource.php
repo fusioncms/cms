@@ -2,6 +2,7 @@
 
 namespace Fusion\Http\Resources;
 
+use Fusion\Facades\Version;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class VersionResource extends JsonResource
@@ -15,6 +16,14 @@ class VersionResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $resource = parent::toArray($request);
+
+        $resource['_isCurrent'] = version_compare(
+            Version::standardize($resource['title']),
+            Version::current(),
+            '=='
+        );
+
+        return $resource;
     }
 }

@@ -23,12 +23,12 @@
                     <p-button v-if="item.id > id" @click="upgrade(item.id)" disabled>
                         Upgrade to {{ item.title }}
                     </p-button>
+                    -->
 
-                    -- current version --
-                    <p-button v-if="item.id == id" disabled>
+                    <!-- current version -->
+                    <p-button v-if="item._isCurrent" disabled>
                         Current version
                     </p-button>
-                    -->
 
                     <!-- attachments -->
                     <a  v-for="(attachment, i2) in item.attachments"
@@ -127,7 +127,7 @@
             },
 
             confirm() {
-                axios.post('/api/updates')
+                axios.post('/api/updates', { version: this.version })
                     .then((response) => {
                         console.log(response)
                     })

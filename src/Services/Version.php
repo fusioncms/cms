@@ -81,7 +81,7 @@ class Version
 	 */
 	public function current()
 	{
-		return ltrim(FUSION_VERSION, 'v');
+		return self::standardize(FUSION_VERSION);
 	}
 
 	/**
@@ -91,16 +91,38 @@ class Version
 	 */
 	public function latest()
 	{
-		return ltrim(current($this->items)['title'], 'v');
+		return self::standardize(current($this->items)['title']);
 	}
 
 	/**
-	 * User is on latest version of `fusioncms/cms`?
+	 * Is an update available?
 	 * 
 	 * @return boolean
 	 */
-	public function hasUpdates()
+	public function hasUpdate()
 	{
 		return version_compare($this->current(), $this->latest(), '<');
+	}
+
+	/**
+	 * Creates "PHP-standardized" version number
+	 * 	(aka Semantic Versioning).
+	 * 
+	 * Credit:
+	 * https://gist.github.com/jhorsman/62eeea161a13b80e39f5249281e17c39#gistcomment-2918033
+	 * 
+	 * @param  string $input
+	 * @return mixed
+	 */
+	public static function standardize($input)
+	{
+		$pattern = "/(0|(?:[1-9]\d*))(?:\.(0|(?:[1-9]\d*))(?:\.(0|(?:[1-9]\d*)))?(?:\-([\w][\w\.\-_]*))?)?/";
+		$output  = [];
+
+		if (preg_match($pattern, $input, $output)) {
+			return vsprintf('%d.%d.%d-%s', array_slice($output, 1));
+		}
+
+		return $input;
 	}
 }
