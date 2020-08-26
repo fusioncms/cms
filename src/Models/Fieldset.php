@@ -59,7 +59,7 @@ class Fieldset extends Model
      */
     public function fields()
     {
-        return $this->hasManyThrough(Field::class, Section::class);
+        return $this->hasManyThrough(Field::class, Section::class)->orderBy('order');
     }
 
     /**
