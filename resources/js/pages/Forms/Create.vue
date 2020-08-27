@@ -33,7 +33,7 @@
                     collect_ip_addresses: false,
                     response_receipt: false,
 
-                    message: '',
+                    confirmation_message: '',
                     redirect_on_submission: false,
                     redirect_url: '',
 
