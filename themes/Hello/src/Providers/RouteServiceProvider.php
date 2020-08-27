@@ -23,19 +23,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
-    }
+        //
 
-    /**
-     * Register the provided services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        Route::bind('form', function ($slug) {
-            return \Fusion\Models\Form::where('slug', $slug)->firstOrFail();
-        });
+        parent::boot();
     }
 
     /**
