@@ -68,11 +68,11 @@ class Update implements ShouldQueue
         
         try {
             $process->mustRun(function ($type, $buffer) {
-                dump($buffer);
+dump($buffer);
             });
-dd($process->getOutput());
+dd('OUT', $process->getOutput());
         } catch (ProcessFailedException $ex) {
-dd($ex->getMessage());
+dd('ERROR', $ex->getMessage());
             Log::error($ex->getMessage(), (array) $exception->getTrace()[0]);
         }
     }
