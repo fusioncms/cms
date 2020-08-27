@@ -48,7 +48,7 @@ class FormRequest extends BaseFormRequest
             'collect_ip_addresses'    => 'sometimes',
             'response_receipt'        => 'sometimes',
 
-            'message'                 => 'sometimes',
+            'confirmation_message'    => 'sometimes',
             'redirect_on_submission'  => 'sometimes',
             'redirect_url'            => 'sometimes',
 
