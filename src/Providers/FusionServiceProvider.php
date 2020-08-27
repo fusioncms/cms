@@ -6,12 +6,14 @@ use Fusion\Facades\Addon;
 use Fusion\Facades\Theme;
 use Fusion\Models\Role;
 use Fusion\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
 
 class FusionServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,7 @@ class FusionServiceProvider extends ServiceProvider
         $this->bootRoutes();
         $this->bootGates();
         $this->bootCustomRules();
+        $this->bootScheduledTasks(app(Schedule::class));
 
         if (app_installed()) {
             $this->bootAddons();
@@ -124,6 +127,35 @@ class FusionServiceProvider extends ServiceProvider
         Validator::extend('securepassword', 'Fusion\Rules\SecurePassword@passes');
         Validator::extend('serverrequirements', 'Fusion\Rules\ServerRequirements@passes');
         Validator::extend('permissionrequirements', 'Fusion\Rules\PermissionRequirements@passes');
+    }
+
+    /**
+     * Register custom scheduled tasks.
+     *
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @return void
+     */
+    protected function bootScheduledTasks(Schedule $schedule)
+    {
+        /**
+         * Auto-updates - `fusion:update` command
+         *
+        $schedule
+            ->command('fusion:update')
+            ->daily()
+            ->timezone(setting('system.time_zone'))
+            ->withoutOverlapping()
+            ->environments(['production'])
+            ->when(function() {
+                return Version::isAutoUpdateEnabled() &&
+                       Version::hasUpdate();
+            })
+            ->onFailure(function() {
+                Log::error(
+                    sprintf('Failed to update FusionCMS to version: %s', Version::latest())
+                );
+            });
+        */
     }
 
     /**

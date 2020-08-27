@@ -24,6 +24,16 @@ class UpdateCommand extends Command
     protected $description = 'Update FusionCMS to the latest version';
 
     /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->version = Version::latest();
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -35,20 +45,16 @@ class UpdateCommand extends Command
             return;
         }
 
-        $version = Version::latest();
-        
-        if (! $this->confirm("Are you sure you wish to update to version {$version}?")) { 
-            $this->info('Update aborted.');
-            return;
-        }
-
+        /**
+         * BEGIN
+         */
         $this->comment('Backing up...');
 
         BackupRun::withChain([
             /**
              * Update `fusioncms/cms` package
              */
-            ComposerUpdate::dispatchNow(["fusioncms/cms:{$version}"]),
+            ComposerUpdate::dispatchNow(["fusioncms/cms:{$this->version}"]),
             
             /**
              * Housekeeping
@@ -58,7 +64,6 @@ class UpdateCommand extends Command
                 Artisan::call('optimize:clear');
             }
         ])
-        ->dispatch()
-        ->allOnQueue('update');
+        ->dispatch();
     }
 }

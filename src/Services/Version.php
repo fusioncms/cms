@@ -106,13 +106,23 @@ class Version
     }
 
     /**
-     * Is an update available?
+     * Is new update available?
      *
      * @return bool
      */
     public function hasUpdate()
     {
         return version_compare($this->current(), $this->latest(), '<');
+    }
+
+    /**
+     * Is auto-updating enabled?
+     *
+     * @return bool
+     */
+    public function isAutoUpdateEnabled()
+    {
+        return setting('system.auto_update', false);
     }
 
     /**
