@@ -162,6 +162,11 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->singleton('version', function () {
             return new \Fusion\Services\Version();
         });
+
+        // package manager
+        $this->app->singleton('package', function () {
+            return new \Fusion\Services\Package($this->app['files'], base_path());
+        });
     }
 
     /**
