@@ -24,6 +24,7 @@
         data() {
             return {
                 id: null,
+                navigation: null,
                 form: null
             }
         },
@@ -36,7 +37,7 @@
             submit() {
                 this.form.patch(`/api/navigation/${this.id}`)
                     .then(() => {
-                        axios.post(`/api/fieldsets/${this.form.fieldset.id}/sections`, { sections: this.form.sections })
+                        axios.post(`/api/fieldsets/${this.navigation.fieldset.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Navigation successfully saved', 'success')
 
@@ -61,6 +62,7 @@
                 } else {
                     next((vm) => {
                         vm.id   = navigation.id
+                        vm.navigation = navigation
                         vm.form = new Form({
                             name:        navigation.name,
                             handle:      navigation.handle,
