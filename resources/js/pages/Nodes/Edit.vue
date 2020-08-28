@@ -4,7 +4,7 @@
 			<page-title icon="anchor">Edit Node</page-title>
 		</portal>
 
-        <shared-form :form="form" :submit="submit" :menu="menu" :node="node" :nodes="nodes"></shared-form>
+        <shared-form :form="form" :submit="submit" :navigation="navigation" :node="node" :nodes="nodes"></shared-form>
     </div>
 </template>
 
@@ -23,7 +23,7 @@
 
         data() {
             return {
-                menu: {},
+                navigation: {},
                 node: {},
                 nodes: [],
                 form: new Form({
@@ -42,10 +42,10 @@
 
         methods: {
             submit() {
-                this.form.patch('/api/menus/' + this.menu.id + '/nodes/' + this.node.id).then((response) => {
+                this.form.patch('/api/navigation/' + this.navigation.id + '/nodes/' + this.node.id).then((response) => {
                     toast('Node saved successfully', 'success')
 
-                    this.$router.push('/menus/' + this.menu.id + '/nodes')
+                    this.$router.push('/navigation/' + this.navigation.id + '/nodes')
                 }).catch((response) => {
                     toast(response.response.data.message, 'failed')
                 })
@@ -53,20 +53,20 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            getNode(to.params.menu, to.params.node, (error, node, menu, fields) => {
+            getNode(to.params.navigation, to.params.node, (error, node, navigation, fields) => {
                 if (error) {
                     next((vm) => {
-                        vm.$router.push('/menus')
+                        vm.$router.push('/navigation')
 
                         toast(error.toString(), 'danger')
                     })
                 } else {
                     next((vm) => {
-                        vm.menu = menu
+                        vm.navigation = navigation
                         vm.node = node
                         vm.form = new Form(fields, true)
 
-                        vm.nodes = _.map(menu.nodes, function(parent) {
+                        vm.nodes = _.map(navigation.nodes, function(parent) {
                             return {
                                 'label': parent.name,
                                 'value': parent.id
@@ -85,13 +85,13 @@
         },
     }
 
-    export function getNode(menu, id, callback) {
+    export function getNode(navigation, id, callback) {
         axios.all([
-            axios.get('/api/menus/' + menu + '/nodes/' + id),
-            axios.get('/api/menus/' + menu),
-        ]).then(axios.spread(function (node, menu) {
+            axios.get('/api/navigation/' + navigation + '/nodes/' + id),
+            axios.get('/api/navigation/' + navigation),
+        ]).then(axios.spread(function (node, navigation) {
             node = node.data.data
-            menu = menu.data.data
+            navigation = navigation.data.data
 
             let fields = {
                 name: node.name,
@@ -101,15 +101,15 @@
                 status: node.status,
             }
 
-            if (menu.fieldset) {
-                _.forEach(menu.fieldset.sections, function(section) {
+            if (navigation.fieldset) {
+                _.forEach(navigation.fieldset.sections, function(section) {
                     _.forEach(section.fields, function(field) {
                         fields[field.handle] = node[field.handle]
                     })
                 })
             }
 
-            callback(null, node, menu, fields)
+            callback(null, node, navigation, fields)
         }))
     }
 </script>
