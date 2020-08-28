@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Console\Scheduling\Schedule;
 
 class FusionServiceProvider extends ServiceProvider
 {
@@ -30,7 +29,6 @@ class FusionServiceProvider extends ServiceProvider
         $this->bootRoutes();
         $this->bootGates();
         $this->bootCustomRules();
-        $this->bootScheduledTasks(app(Schedule::class));
 
         if (app_installed()) {
             $this->bootAddons();
@@ -130,35 +128,6 @@ class FusionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register custom scheduled tasks.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
-     * @return void
-     */
-    protected function bootScheduledTasks(Schedule $schedule)
-    {
-        /**
-         * Auto-updates - `fusion:update` command
-         *
-        $schedule
-            ->command('fusion:update')
-            ->daily()
-            ->timezone(setting('system.time_zone'))
-            ->withoutOverlapping()
-            ->environments(['production'])
-            ->when(function() {
-                return Version::isAutoUpdateEnabled() &&
-                       Version::hasUpdate();
-            })
-            ->onFailure(function() {
-                Log::error(
-                    sprintf('Failed to update FusionCMS to version: %s', Version::latest())
-                );
-            });
-        */
-    }
-
-    /**
      * Register the primary Fusion class and its
      * binding within the service container.
      *
@@ -183,6 +152,7 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
         $this->app->register(FieldtypeServiceProvider::class);
         $this->app->register(SettingServiceProvider::class);
+        $this->app->register(ScheduleServiceProvider::class);
         $this->app->register(ThemeServiceProvider::class);
 
         $this->app->singleton('version', function() {
