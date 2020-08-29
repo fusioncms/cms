@@ -160,12 +160,12 @@ class FusionServiceProvider extends ServiceProvider
 
         // version history
         $this->app->singleton('version', function () {
-            return new \Fusion\Services\Version();
+            return new \Fusion\Services\Version;
         });
 
         // package manager
         $this->app->singleton('package', function () {
-            return new \Fusion\Services\Package($this->app['files'], base_path());
+            return new \Fusion\Services\Package;
         });
     }
 

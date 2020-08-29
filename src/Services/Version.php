@@ -132,7 +132,12 @@ class Version
         $output  = [];
 
         if (preg_match($pattern, $input, $output)) {
-            return vsprintf('%d.%d.%d-%s', array_slice($output, 1));
+            return vsprintf('%d.%d.%d%s', [
+                isset($output[1]) ? $output[1] : 0,
+                isset($output[2]) ? $output[2] : 0,
+                isset($output[3]) ? $output[3] : 0,
+                isset($output[4]) ? "-{$output[4]}" : ''
+            ]);
         }
 
         return $input;

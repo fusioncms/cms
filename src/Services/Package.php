@@ -3,27 +3,43 @@
 namespace Fusion\Services;
 
 use Fusion\Facades\Version;
-use Illuminate\Support\Composer;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class Package extends Composer
+class Package
 {
     /**
-     * Runs `composer require` command.
+     * Memory limit for composer.
      * 
+     * @var string
+     */
+    private $memory_limit = '2048M';
+
+    /**
+     * Runs `composer require` command.
+     *
+     * @param  mixed $packages
      * @return void
      */
-    public function install($package)
+    public function install($packages)
     {
         $packages = is_array($packages) ? $packages : [ $packages ];
         $command  = sprintf('require %s', implode(' ', $packages));
-        $process  = $this->process($command, ['--ansi']);
 
         try {
-            $process->mustRun();
+            $this
+                ->process($command, [
+                    '--prefer-dist'
+                ])
+                ->mustRun(function($type, $buffer) {
+                    //
+                });
+
+            Cache::forget('packages');
+            Cache::forget('package_paths');
         } catch (ProcessFailedException $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
         }
@@ -31,17 +47,23 @@ class Package extends Composer
 
     /**
      * Runs `composer remove` command.
-     * 
+     *
+     * @param  mixed $packages
      * @return void
      */
-    public function remove($package)
+    public function remove($packages)
     {
         $packages = is_array($packages) ? $packages : [ $packages ];
         $command  = sprintf('remove %s', implode(' ', $packages));
-        $process  = $this->process($command, ['--ansi']);
+        $process  = $this->process($command, [
+            '--optimize-autoloader',
+            '--no-update'
+        ]);
 
         try {
-            $process->mustRun();
+            $process->mustRun(function($type, $buffer) {
+                dump($buffer);
+            });
         } catch (ProcessFailedException $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
         }
@@ -96,6 +118,17 @@ class Package extends Composer
     }
 
     /**
+     * Returns package path.
+     * 
+     * @param  string $package
+     * @return mixed
+     */
+    public function path($package)
+    {
+        return $this->paths()->get($package, null);
+    }
+
+    /**
      * Returns package by name.
      * 
      * @param  string $package
@@ -118,17 +151,6 @@ class Package extends Composer
     }
 
     /**
-     * Get the PHP binary.
-     * [Override]
-     *
-     * @return string
-     */
-    protected function phpBinary()
-    {
-        return (new PhpExecutableFinder)->find(false);
-    }
-
-    /**
      * Returns list of installed packages.
      * [Cached]
      * 
@@ -136,13 +158,44 @@ class Package extends Composer
      */
     private function installed()
     {
+        // Cache::forget('packages');
         return Cache::rememberForever('packages', function() {
             $process = $this->process('show', ['--direct', '--format=json']);
             $process->run();
 
-            return collect(
-                json_decode($process->getOutput())->installed
-            )->keyBy('name');
+            $output = collect(json_decode($process->getOutput()));
+
+            if ($output->has('installed')) {
+                return collect($output->get('installed'))->keyBy('name');
+            }
+            
+            return $output;
+        });
+    }
+
+    /**
+     * Returns list of package paths.
+     * [Cached]
+     * 
+     * @return \Illuminate\Support\Collection
+     */
+    private function paths()
+    {
+        // Cache::forget('package_paths');
+        return Cache::rememberForever('package_paths', function() {
+            $process = $this->process('show', ['--direct', '--path', '--format=json']);
+            $process->run();
+
+            $output = collect(json_decode($process->getOutput()));
+
+            if ($output->has('installed')) {
+                return collect($output->get('installed'))
+                    ->mapWithKeys(function($item) {
+                        return [$item->name => $item->path];
+                    });
+            }
+
+            return $output;
         });
     }
 
@@ -155,12 +208,17 @@ class Package extends Composer
      */
     private function process($command, $flags = [])
     {
-        return $this->getProcess(
-            array_merge(
-                $this->findComposer(),
-                explode(' ', $command),
-                $flags
-            )
+        $command = array_merge(
+            [
+                (new PhpExecutableFinder)->find(),
+                "-d memory_limit={$this->memory_limit}",
+                exec('which composer')
+            ],
+            explode(' ', $command),
+            $flags
         );
+
+        return (new Process($command, base_path()))->setTimeout(null);
+
     }
 }
