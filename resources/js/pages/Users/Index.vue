@@ -1,32 +1,56 @@
 <template>
     <div>
         <portal to="title">
-            <page-title icon="users">Users</page-title>
+            <page-title icon="users">Users - {{ current ? current.label : '' }}</page-title>
         </portal>
 
         <portal to="actions">
-            <router-link :to="{ name: 'users.create' }" class="button">Create User</router-link>
+            <router-link :to="{ name: 'users.create' }" class="button button--primary">Create User</router-link>
         </portal>
 
-        <div class="row">
-            <div class="side-container">
-                <div class="card">
-                    <div class="card__body">
-                        <div class="list">
-                            <router-link :to="{ name: 'users' }" class="list--item" exact>All Users</router-link>
+        <div class="sidebar-layout row">
+            <mq-layout mq="xl+">
+                <div class="sidebar-layout__sidebar col">
+                    <p-card>
+                        <p-card-body>
+                            <h2 class="text-heading--xxs">Roles</h2>
 
-                            <span class="list--separator">Roles</span>
+                            <div class="list">
+                                <router-link class="list__item list__item--action" :to="{ name: 'users' }" exact>All</router-link>
+                            </div>
 
-                            <router-link v-for="role in filteredRoles" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" class="list--item" exact>
-                                {{ role.label }}
-                            </router-link>
-                        </div>
-                    </div>
+                            <span class="list__divider"></span>
+                            
+                            <div class="list">
+                                <router-link v-for="role in filteredRoles" class="list__item list__item--action" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" exact>
+                                    {{ role.label }}
+                                </router-link>
+                            </div>
+                        </p-card-body>
+                    </p-card>
                 </div>
-            </div>
+            </mq-layout>
 
-            <div class="content-container">
+            <div class="sidebar-layout__content col">
                 <p-table id="users" :endpoint="endpoint" sort-by="name" key="users_table">
+                    <template v-slot:toolbarPrepend v-if="$mq === 'sm' || $mq === 'md' || $mq === 'lg'">
+                        <p-toolbar-group>
+                            <p-dropdown id="user-roles">
+                                <span>Roles</span>
+
+                                <template v-slot:menu>
+                                    <p-dropdown-link :to="{ name: 'users' }" exact>All</p-dropdown-link>
+
+                                    <p-dropdown-divider></p-dropdown-divider>
+
+                                    <p-dropdown-link v-for="role in filteredRoles" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" exact>
+                                        {{ role.label }}
+                                    </p-dropdown-link>
+                                </template>
+                            </p-dropdown>
+                        </p-toolbar-group>
+                    </template>
+
                     <template slot="name" slot-scope="table">
                         <router-link :to="{ name: 'users.edit', params: {user: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
@@ -62,8 +86,8 @@
                 <p>Are you sure you want to permenantly delete this user?</p>
 
                 <template slot="footer" slot-scope="user">
-                    <p-button v-modal:delete-user @click="destroy(user.data.id)" theme="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-user>Cancel</p-button>
+                    <p-button v-modal:delete-user @click="destroy(user.data.id)" variant="danger" class="ml-3">Delete</p-button>
+                    <p-button v-modal:delete-user variant="secondary">Cancel</p-button>
                 </template>
             </p-modal>
         </portal>
@@ -104,6 +128,23 @@
                 }
 
                 return '/datatable/users'
+            },
+
+            current() {
+                let vm = this
+                let index = _.findIndex(this.roles, function(item) {
+                    return item.name == vm.role
+                })
+
+                if (index != -1) {
+                    return this.roles[index]
+                }
+
+                return {
+                    name: 'all',
+                    label: 'All'
+                }
+
             }
         },
 

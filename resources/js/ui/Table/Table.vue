@@ -1,6 +1,8 @@
 <template>
     <div>
         <p-toolbar>
+            <slot name="toolbarPrepend"></slot>
+
             <!-- Search -->
             <p-toolbar-group grow v-if="! noSearch">
                 <p-label :fieldId="id + '_table_search'" hideLabel>Search</p-label>
@@ -76,6 +78,8 @@
                     </template>
                 </p-dropdown>
             </p-toolbar-group>
+
+            <slot name="toolbarAppend"></slot>
         </p-toolbar>
 
         <div class="table-wrapper" v-if="records.length" :class="{'loading': loading}">

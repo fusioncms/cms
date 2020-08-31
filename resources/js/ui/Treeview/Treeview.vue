@@ -43,7 +43,6 @@
 </template>
 
 <script>
-    import TreeviewNode from './TreeviewNode'
     import _ from 'lodash'
 
     export default {

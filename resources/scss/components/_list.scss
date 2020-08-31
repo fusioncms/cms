@@ -1,0 +1,34 @@
+.list {
+    @apply flex flex-col;
+
+    &--inline {
+        @apply flex-row;
+    }
+
+    &--flush {
+        @apply -mx-4;
+    }
+
+    &__item {
+        @apply px-2 text-gray-700 rounded;
+
+        &--action {
+            &:hover {
+                @apply bg-gray-200 text-gray-800;
+            }
+    
+            &:focus {
+                @apply outline-none shadow-focus;
+            }
+        }
+
+        &.active,
+        &.router-link-active {
+            @apply bg-primary-500 text-white;
+        }
+    }
+
+    &__divider {
+        @apply block border-t border-gray-400 my-2;
+    }
+}

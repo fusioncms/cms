@@ -59,3 +59,24 @@
         }
     }
 }
+
+.sidebar-layout {
+    @screen lg {
+        @apply flex flex-no-wrap;
+    }
+
+    &__content {
+        @screen lg {  @apply flex-auto; }
+    }
+
+    &__sidebar {
+        @screen lg {
+            @apply flex-shrink-0;
+            width: 250px;
+        }
+
+        @screen xl {
+            width: 300px;
+        }
+    }
+}

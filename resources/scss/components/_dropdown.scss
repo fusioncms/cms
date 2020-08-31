@@ -54,6 +54,11 @@
         &:hover {
             @apply text-gray-800 bg-gray-200;
         }
+
+        &.router-link-exact-active,
+        &.active {
+            @apply bg-primary-500 text-white;
+        }
     }
 
     &__divider {

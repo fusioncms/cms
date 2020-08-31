@@ -21,7 +21,11 @@
     @screen md { @apply text-base; }
 
     &__heading {
-        @apply relative block w-full px-6 py-3;
+        @apply relative block w-full px-3 py-3;
+
+        @screen lg {
+            @apply px-4;
+        }
 
         &--link {
             color: inherit;
@@ -37,10 +41,10 @@
     }
 
     &__actions {
-        @apply align-middle text-center absolute p-3 right-0 top-0 w-12;
+        @apply align-middle text-center absolute p-3 right-0 top-0;
 
         @screen md {
-            @apply align-middle px-6 text-right relative;
+            @apply align-middle px-6 text-right relative  w-12;
         }
 
         .dropdown__menu { @apply w-40; }
@@ -81,8 +85,12 @@
         }
 
         td {
-            @apply align-middle px-6 py-3;
+            @apply align-middle px-3 py-3;
             @extend %no-bottom;
+
+            @screen lg {
+                @apply px-4;
+            }
 
             &:first-child {
                 @apply text-gray-900 font-medium;
