@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-auto flex-col" :class="{'nav-active' : isNavOpen}">
+    <div class="layout-admin" :class="{'nav-active' : isNavOpen}">
         <header class="header">
             <div class="header__container relative">
                 <div class="header__toggle">

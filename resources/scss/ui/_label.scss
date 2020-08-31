@@ -1,0 +1,9 @@
+.label {
+    @apply block uppercase leading-normal tracking-wide text-gray-700 text-sm font-bold mb-3;
+    @extend %no-bottom;
+
+    &--required:after { 
+        @apply inline-block text-danger-500 ml-1; 
+        content: '*';
+    }
+}
