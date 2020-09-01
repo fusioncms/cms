@@ -23,8 +23,8 @@ class NodeReorderController extends Controller
         $this->authorize('nodes.update');
 
         $navigation  = Navigation::find($navigation)->firstOrFail();
-        $model = (new Builder($navigation->handle))->make();
-        $nodes = $request->nodes;
+        $model       = (new Builder($navigation->handle))->make();
+        $nodes       = $request->nodes;
 
         foreach ($nodes as $id => $node) {
             $record        = $model->find($id);

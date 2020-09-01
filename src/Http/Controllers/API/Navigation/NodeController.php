@@ -32,8 +32,8 @@ class NodeController extends Controller
         $this->authorize('nodes.view');
 
         $navigation  = Navigation::find($navigation);
-        $model = (new Builder($navigation->handle))->make();
-        $node  = $model->find($id);
+        $model       = (new Builder($navigation->handle))->make();
+        $node        = $model->find($id);
 
         return new NodeResource($node);
     }
@@ -43,8 +43,8 @@ class NodeController extends Controller
         $this->authorize('nodes.create');
 
         $navigation          = Navigation::find($navigation);
-        $model         = (new Builder($navigation->handle))->make();
-        $relationships = [];
+        $model               = (new Builder($navigation->handle))->make();
+        $relationships       = [];
 
         $rules = [
             'name'       => 'required',
@@ -63,9 +63,9 @@ class NodeController extends Controller
             }
         }
 
-        $attributes            = $request->validate($rules);
+        $attributes                  = $request->validate($rules);
         $attributes['navigation_id'] = $navigation->id;
-        $attributes['order']   = $model->orderLast();
+        $attributes['order']         = $model->orderLast();
 
         $node = $model->create($attributes);
 
@@ -89,9 +89,9 @@ class NodeController extends Controller
         $this->authorize('nodes.update');
 
         $navigation          = Navigation::findOrFail($navigation);
-        $node          = (new Builder($navigation->handle))->make()->findOrFail($id);
-        $relationships = [];
-        $rules         = [
+        $node                = (new Builder($navigation->handle))->make()->findOrFail($id);
+        $relationships       = [];
+        $rules               = [
             'name'       => 'required',
             'url'        => 'sometimes',
             'new_window' => 'sometimes',
@@ -128,8 +128,8 @@ class NodeController extends Controller
         $this->authorize('nodes.delete');
 
         $navigation  = Navigation::findOrFail($navigation);
-        $model = (new Builder($navigation->handle))->make();
-        $node  = $model->findOrFail($id);
+        $model       = (new Builder($navigation->handle))->make();
+        $node        = $model->findOrFail($id);
 
         $node->delete();
     }
