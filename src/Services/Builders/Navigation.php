@@ -73,16 +73,16 @@ class Navigation extends Builder implements BuilderContract
         $stub = File::get(fusion_path('/stubs/matrices/navigation.stub'));
 
         $contents = strtr($stub, [
-            '{class}'         => $className,
-            '{handle}'        => $this->navigation->handle,
-            '{fillable}'      => '[\''.implode('\', \'', $fillable).'\']',
-            '{casts}'         => '[\''.implode('\', \'', $casts).'\']',
-            '{with}'          => '[\''.implode('\', \'', $this->getWith()).'\']',
-            '{dates}'         => '[\''.implode('\', \'', $this->getDates()).'\']',
-            '{trait_classes}' => $this->getTraitImportStatements($traits),
-            '{traits}'        => $this->getTraitUseStatements($traits),
+            '{class}'               => $className,
+            '{handle}'              => $this->navigation->handle,
+            '{fillable}'            => '[\''.implode('\', \'', $fillable).'\']',
+            '{casts}'               => '[\''.implode('\', \'', $casts).'\']',
+            '{with}'                => '[\''.implode('\', \'', $this->getWith()).'\']',
+            '{dates}'               => '[\''.implode('\', \'', $this->getDates()).'\']',
+            '{trait_classes}'       => $this->getTraitImportStatements($traits),
+            '{traits}'              => $this->getTraitUseStatements($traits),
             '{navigation_id}'       => $this->navigation->id,
-            '{relationships}' => $this->generateRelationships(),
+            '{relationships}'       => $this->generateRelationships(),
         ]);
 
         File::put($path, $contents);

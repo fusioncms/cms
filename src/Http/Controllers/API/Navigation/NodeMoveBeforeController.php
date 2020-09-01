@@ -23,7 +23,7 @@ class NodeMoveBeforeController extends Controller
         $this->authorize('nodes.update');
 
         $navigation  = Navigation::find($navigation)->firstOrFail();
-        $model = (new Builder($navigation->handle))->make();
+        $model       = (new Builder($navigation->handle))->make();
 
         $move   = $model->find($request->move);
         $before = $model->find($request->before);
