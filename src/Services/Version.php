@@ -2,6 +2,7 @@
 
 namespace Fusion\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
@@ -28,7 +29,7 @@ class Version
      */
     public function __construct()
     {
-        $this->items = \Cache::remember('versions', $this->cacheLimit, function () {
+        $this->items = Cache::remember('versions', $this->cacheLimit, function () {
             $response = (new \GuzzleHttp\Client())
                 ->get('https://beta.getfusioncms.com/releases.json');
 
@@ -119,25 +120,22 @@ class Version
      * Creates "PHP-standardized" version number
      * 	(aka Semantic Versioning).
      *
-     * Credit:
-     * https://gist.github.com/jhorsman/62eeea161a13b80e39f5249281e17c39#gistcomment-2918033
-     *
      * @param string $input
      *
      * @return mixed
      */
     public static function standardize($input)
     {
-        $pattern = "/(0|(?:[1-9]\d*))(?:\.(0|(?:[1-9]\d*))(?:\.(0|(?:[1-9]\d*)))?(?:\-([\w][\w\.\-_]*))?)?/";
+        $pattern = "/(\d+)(?:\.(\d+))?(?:\.(\d+))?(.*)?/";
         $output  = [];
 
         if (preg_match($pattern, $input, $output)) {
-            return vsprintf('%d.%d.%d%s', [
-                isset($output[1]) ? $output[1] : 0,
-                isset($output[2]) ? $output[2] : 0,
-                isset($output[3]) ? $output[3] : 0,
-                isset($output[4]) ? "-{$output[4]}" : ''
-            ]);
+            return sprintf('%d.%d.%d%s',
+                $output[1] ?? 0,
+                $output[2] ?? 0,
+                $output[3] ?? 0,
+                $output[4] ?? '',
+            );
         }
 
         return $input;

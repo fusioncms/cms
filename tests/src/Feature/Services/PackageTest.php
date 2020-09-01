@@ -4,6 +4,7 @@ namespace Fusion\Tests\Feature\Services;
 
 use Fusion\Tests\TestCase;
 use Fusion\Facades\Package;
+use Fusion\Facades\Version;
 use Illuminate\Support\Facades\File;
 use Fusion\Concerns\CleansDirectories;
 use Symfony\Component\Process\Process;
