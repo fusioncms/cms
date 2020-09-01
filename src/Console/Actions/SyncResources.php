@@ -13,15 +13,13 @@ class SyncResources
      */
     public function handle()
     {
-        // dd($this->links());
-
         foreach ($this->links() as $link => $target) {
             try {
                 if (!file_exists($link) && file_exists($target)) {
                     File::link($target, $link);
                 }
             } catch (\Exception $e) {
-                // dd($e->getMessage(), $target, File::exists($target), $link, File::exists($link));
+                dd($e->getMessage(), $target, File::exists($target), $link, File::exists($link));
             }
         }
     }
