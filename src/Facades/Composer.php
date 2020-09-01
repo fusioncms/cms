@@ -5,9 +5,9 @@ namespace Fusion\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Fusion\Services\Package
+ * @see \Fusion\Services\Composer
  */
-class Package extends Facade
+class Composer extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -16,6 +16,6 @@ class Package extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'package';
+        return 'composer';
     }
 }

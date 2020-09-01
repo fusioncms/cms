@@ -126,6 +126,7 @@ class Version
      */
     public static function standardize($input)
     {
+        // return (new \Composer\Semver\VersionParser)->normalize($input);
         $pattern = "/(\d+)(?:\.(\d+))?(?:\.(\d+))?(.*)?/";
         $output  = [];
 

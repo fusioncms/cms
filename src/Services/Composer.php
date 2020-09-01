@@ -9,14 +9,31 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class Package
+class Composer
 {
+    /**
+     * Base path for packages.
+     *
+     * @var string
+     */
+    private $basePath;
+
     /**
      * Memory limit for composer.
      * 
      * @var string
      */
-    private $memory_limit = '2048M';
+    private $memoryLimit = '2048M';
+
+    /**
+     * Constructor.
+     * 
+     * @param string $basePath
+     */
+    public function __construct($basePath = null)
+    {
+        $this->basePath = $basePath ?? fusion_path();
+    }
 
     /**
      * Runs `composer require` command.
@@ -32,15 +49,11 @@ class Package
         try {
             $this
                 ->process($command, [
-                    '--prefer-dist',
-                    '--no-update',
+                    '--update-with-dependencies',
                 ])
                 ->mustRun(function($type, $buffer) {
-                    //
+                    // TODO:
                 });
-
-            Cache::forget('packages');
-            Cache::forget('package_paths');
         } catch (ProcessFailedException $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
         }
@@ -57,14 +70,13 @@ class Package
         $packages = is_array($packages) ? $packages : [ $packages ];
         $command  = sprintf('remove %s', implode(' ', $packages));
         $process  = $this->process($command, [
-            '--no-update',
             '--update-with-dependencies',
 
         ]);
 
         try {
             $process->mustRun(function($type, $buffer) {
-                dump($buffer);
+                // TODO:
             });
         } catch (ProcessFailedException $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
@@ -84,10 +96,10 @@ class Package
 
         try {
             $this->process($command, [
-                '--prefer-dist',
-                '--update-with-dependencies'
+                '--with-dependencies'
             ])->mustRun(function ($type, $buffer) {
                 // TODO:
+                dump($buffer);
             });
         } catch (ProcessFailedException $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
@@ -99,9 +111,9 @@ class Package
      * 
      * @return array
      */
-    public function show()
+    public function installed()
     {
-        return $this->installed()->toArray();
+        return $this->all()->toArray();
     }
 
     /**
@@ -113,7 +125,7 @@ class Package
     public function version($package)
     {
         return Version::standardize(
-            $this->installed()->get($package)->version);
+            $this->all()->get($package)->version);
     }
 
     /**
@@ -135,7 +147,7 @@ class Package
      */
     public function get($package)
     {
-        return $this->installed()->get($package);
+        return $this->all()->get($package);
     }
 
     /**
@@ -146,7 +158,7 @@ class Package
      */
     public function has($package)
     {
-        return $this->installed()->has($package);
+        return $this->all()->has($package);
     }
 
     /**
@@ -155,9 +167,9 @@ class Package
      * 
      * @return \Illuminate\Support\Collection
      */
-    private function installed()
+    private function all()
     {
-        // Cache::forget('packages');
+        Cache::forget('packages');
         return Cache::rememberForever('packages', function() {
             $process = $this->process('show', ['--direct', '--format=json']);
             $process->run();
@@ -180,7 +192,7 @@ class Package
      */
     private function paths()
     {
-        // Cache::forget('package_paths');
+        Cache::forget('package_paths');
         return Cache::rememberForever('package_paths', function() {
             $process = $this->process('show', ['--direct', '--path', '--format=json']);
             $process->run();
@@ -210,14 +222,14 @@ class Package
         $command = array_merge(
             [
                 (new PhpExecutableFinder)->find(),
-                "-d memory_limit={$this->memory_limit}",
+                "-d memory_limit={$this->memoryLimit}",
                 exec('which composer')
             ],
             explode(' ', $command),
             $flags
         );
 
-        return (new Process($command, base_path()))->setTimeout(null);
+        return (new Process($command, $this->basePath))->setTimeout(null);
 
     }
 }
