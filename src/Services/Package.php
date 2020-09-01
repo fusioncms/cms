@@ -24,7 +24,7 @@ class Package
      * @param  mixed $packages
      * @return void
      */
-    public function install($packages)
+    public function require($packages)
     {
         $packages = is_array($packages) ? $packages : [ $packages ];
         $command  = sprintf('require %s', implode(' ', $packages));
@@ -32,7 +32,8 @@ class Package
         try {
             $this
                 ->process($command, [
-                    '--prefer-dist'
+                    '--prefer-dist',
+                    '--no-update',
                 ])
                 ->mustRun(function($type, $buffer) {
                     //
@@ -56,8 +57,9 @@ class Package
         $packages = is_array($packages) ? $packages : [ $packages ];
         $command  = sprintf('remove %s', implode(' ', $packages));
         $process  = $this->process($command, [
-            '--optimize-autoloader',
-            '--no-update'
+            '--no-update',
+            '--update-with-dependencies',
+
         ]);
 
         try {
@@ -79,15 +81,12 @@ class Package
     {
         $packages = is_array($packages) ? $packages : [ $packages ];
         $command  = sprintf('update %s', implode(' ', $packages));
-        $process  = $this->process($command, [
-            '--prefer-dist',
-            '--with-dependencies',
-            '--dry-run',
-            '--ansi'
-        ]);
 
         try {
-            $process->mustRun(function ($type, $buffer) {
+            $this->process($command, [
+                '--prefer-dist',
+                '--update-with-dependencies'
+            ])->mustRun(function ($type, $buffer) {
                 // TODO:
             });
         } catch (ProcessFailedException $exception) {

@@ -48,12 +48,17 @@ class PackageTest extends TestCase
      */
     public function package_manager_can_install_a_package()
     {
-    	Package::install('predis/predis');
+    	// package doesn't exist yet..
+    	$this->assertFalse(Package::has('spatie/test-time'));
 
-    	$this->assertTrue(Package::has('predis/predis'));
+    	// install package..
+    	Package::require('spatie/test-time');
+
+    	// package should now exist..
+    	$this->assertTrue(Package::has('spatie/test-time'));
     	$this->assertEquals(
-    		$this->getBasePath('vendor/predis/predis'),
-    		Package::path('predis/predis')
+    		$this->getBasePath('vendor/spatie/test-time'),
+    		Package::path('spatie/test-time')
     	);
     }
 
@@ -63,10 +68,44 @@ class PackageTest extends TestCase
      * @group services
      * @group package
      */
-    public function package_manager_can_install_a_package_with_specific_version()
+    public function package_manager_can_install_a_specific_package_version()
     {
-    	Package::install('predis/predis:1.0.0');
+    	Package::require('spatie/test-time:1.0.0');
 
-    	$this->assertEquals('1.0.0', Package::version('predis/predis'));
+    	$this->assertEquals('1.0.0', Package::version('spatie/test-time'));
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group services
+     * @group package
+     */
+    public function package_manager_can_update_to_a_specific_package_version()
+    {
+    	// install package..
+    	Package::require('spatie/test-time:1.0.0');
+
+    	// update package..
+    	Package::update('spatie/test-time:1.2.0');
+
+    	$this->assertEquals('1.2.0', Package::version('spatie/test-time'));
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group services
+     * @group package
+     */
+    public function package_manager_can_remove_a_package()
+    {
+    	// install package..
+    	Package::require('spatie/test-time');
+
+    	// remove package..
+    	Package::remove('spatie/test-time');
+
+    	$this->assertFalse(Package::has('spatie/test-time'));
     }
 }
