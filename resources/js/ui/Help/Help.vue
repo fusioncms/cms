@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: 'p-help',
+        name: 'ui-help',
 
         props: {
             text: String,

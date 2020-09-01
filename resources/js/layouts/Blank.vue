@@ -2,7 +2,7 @@
     <div class="layout-blank">
         <slot></slot>
 
-        <p-toast></p-toast>
+        <ui-toast></ui-toast>
     </div>
 </template>
 

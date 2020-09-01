@@ -2,7 +2,7 @@
     import { Sortable } from '@shopify/draggable'
 
     export default {
-        name: 'p-sortable-list',
+        name: 'ui-sortable-list',
 
         props: {
             value: {

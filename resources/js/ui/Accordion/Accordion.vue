@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: 'p-accordion',
+        name: 'ui-accordion',
 
         props: {
             multiple: {

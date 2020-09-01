@@ -3,48 +3,48 @@
         <div class="form__label">{{field.name}}</div>
         <div class="row px-2">
             <div class="w-1/2">
-                <p-input
+                <ui-input
                     :name="field.handle + '_address1'"
                     placeholder="Address 1"
                     :value="data.address1"
                     @input="updateValue($event, 'address1')"
                     class="mb-2"
-                ></p-input>
-                <p-input
+                ></ui-input>
+                <ui-input
                     :name="field.handle + '_address2'"
                     placeholder="Address 2"
                     :value="data.address2"
                     @input="updateValue($event, 'address2')"
                     class="mb-2"
-                ></p-input>
-                <p-input
+                ></ui-input>
+                <ui-input
                     :name="field.handle + '_city'"
                     placeholder="City"
                     :value="data.city"
                     @input="updateValue($event, 'city')"
                     class="mb-2"
-                ></p-input>
-                <p-input
+                ></ui-input>
+                <ui-input
                     :name="field.handle + '_state'"
                     placeholder="State"
                     :value="data.state"
                     @input="updateValue($event, 'state')"
                     class="mb-2"
-                ></p-input>
-                <p-input
+                ></ui-input>
+                <ui-input
                     :name="field.handle + '_zip'"
                     placeholder="ZIP"
                     :value="data.zip"
                     @input="updateValue($event, 'zip')"
                     class="mb-2"
-                ></p-input>
-                <p-input
+                ></ui-input>
+                <ui-input
                     :name="field.handle + '_country'"
                     placeholder="Country"
                     :value="data.country"
                     @input="updateValue($event, 'country')"
                     class="mb-2"
-                ></p-input>
+                ></ui-input>
             </div>
             <div class="w-1/2 pl-6">
                 <div class="h-full rounded" :id="mapID">

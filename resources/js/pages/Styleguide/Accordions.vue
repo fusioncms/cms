@@ -1,11 +1,11 @@
 <template>
-    <p-card class="sg-accordions">
-        <p-card-header title="Accordions"></p-card-header>
+    <ui-card class="sg-accordions">
+        <ui-card-header title="Accordions"></ui-card-header>
 
-        <p-card-body>
+        <ui-card-body>
             
-        </p-card-body>
-    </p-card>
+        </ui-card-body>
+    </ui-card>
 </template>
 
 <script>

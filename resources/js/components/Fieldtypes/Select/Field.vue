@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p-select
+        <ui-select
             :name="field.handle"
             :label="field.name"
             :help="field.help"
@@ -10,7 +10,7 @@
             :multiple="multiple"
             :showControls="showControls"
             :filterable="filterable"
-        ></p-select>
+        ></ui-select>
     </div>
 </template>
 

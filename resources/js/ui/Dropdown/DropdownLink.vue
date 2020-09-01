@@ -10,7 +10,7 @@
 
 <script>
     export default {
-        name: 'p-dropdown-link',
+        name: 'ui-dropdown-link',
 
         props: {
             href: {

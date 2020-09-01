@@ -1,5 +1,5 @@
 <template>
-    <p-field-group
+    <ui-field-group
         :name="name"
         :fieldId="formattedId"
         :label="label"
@@ -10,7 +10,7 @@
         :hasSuccess="hasSuccess"
         :successMessage="successMessage"
         :help="help">
-        <p-password
+        <ui-password
             :id="formattedId"
             :name="name"
             :placeholder="placeholder"
@@ -25,13 +25,13 @@
             :hasSuccess="hasSuccess"
             :message="hasMessage"
             v-model="computedValue">
-        </p-password>
-    </p-field-group>
+        </ui-password>
+    </ui-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-password-group',
+        name: 'ui-password-group',
 
         mixins: [
             require('../../mixins/fields').default

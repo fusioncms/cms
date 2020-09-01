@@ -1,12 +1,12 @@
 <template>
     <div class="form-group" :class="{'form-group--danger': hasError, 'form-group--success': hasSuccess}">
-        <p-label :fieldId="fieldId" :required="required" :hideLabel="hideLabel" v-if="label">{{ label }}</p-label>
+        <ui-label :fieldId="fieldId" :required="required" :hideLabel="hideLabel" v-if="label">{{ label }}</ui-label>
         <slot></slot>
 
         <div :id="fieldId + '_message'" class="form-group__messages" v-if="hasMessage">
-            <p-help-danger v-if="errorMessage" v-html="errorMessage"></p-help-danger>
-            <p-help-success v-if="successMessage" v-html="successMessage"></p-help-success>
-            <p-help v-if="help" v-html="help"></p-help>
+            <ui-help-danger v-if="errorMessage" v-html="errorMessage"></ui-help-danger>
+            <ui-help-success v-if="successMessage" v-html="successMessage"></ui-help-success>
+            <ui-help v-if="help" v-html="help"></ui-help>
         </div>
 
         <slot name="bottom">
@@ -16,7 +16,7 @@
 
 <script>
     export default {
-        name: 'p-field-group',
+        name: 'ui-field-group',
 
         mixins: [
             require('../../mixins/fields').default

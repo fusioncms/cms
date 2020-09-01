@@ -33,7 +33,7 @@
 
 <script>
     export default {
-        name: 'p-button',
+        name: 'ui-button',
 
         mixins: [
             require('../../mixins/variants').default

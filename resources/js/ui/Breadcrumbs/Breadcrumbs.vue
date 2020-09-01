@@ -6,6 +6,6 @@
 
 <script>
     export default {
-        name: 'p-breadcrumbs',
+        name: 'ui-breadcrumbs',
     }
 </script>

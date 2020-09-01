@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-wrap justify-between">
-        <p-select
+        <ui-select
             name="settings.multiple"
             label="Multi Select"
             help="Should this field allow multiple options to be selected?"
@@ -19,9 +19,9 @@
             class="mr-5 w-full lg:w-2/5"
             :has-error="errors.has('settings.multiple')"
             :error-message="errors.get('settings.multiple')">
-        </p-select>
+        </ui-select>
 
-        <p-toggle
+        <ui-toggle
             name="settings.filterable"
             label="Filterable"
             help="Should this field offer a search filter?"
@@ -30,7 +30,7 @@
             class="mr-5 w-full lg:w-2/5"
             :has-error="errors.has('settings.filterable')"
             :error-message="errors.get('settings.filterable')">
-        </p-toggle>
+        </ui-toggle>
     </div>
 </template>
 

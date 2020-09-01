@@ -6,6 +6,6 @@
 
 <script>
     export default {
-        name: 'p-toolbar'
+        name: 'ui-toolbar'
     }
 </script>

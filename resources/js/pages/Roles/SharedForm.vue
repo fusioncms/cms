@@ -9,7 +9,7 @@
 
 		<div class="card">
             <div class="card__body">
-                <p-title
+                <ui-title
                     name="label"
                     autocomplete="off"
                     autofocus
@@ -17,9 +17,9 @@
                     :has-error="form.errors.has('label')"
                     :error-message="form.errors.get('label')"
                     v-model="form.label">
-                </p-title>
+                </ui-title>
 
-				<p-textarea
+				<ui-textarea
 					name="description"
 					label="Description"
 					autocomplete="off"
@@ -28,13 +28,13 @@
 					required
 					v-model="form.description"
 					:rows="2">
-				</p-textarea>
+				</ui-textarea>
 			</div>
 		</div>
 
         <div class="card" v-if="hasPermissions(form.name)">
             <div class="card__body">
-                <p-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions_table">
+                <ui-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions_table">
                     <template slot="name" slot-scope="table">
                         <input
                             type="checkbox"
@@ -49,20 +49,20 @@
                     <template slot="description" slot-scope="table">
                         <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
                     </template>
-                </p-table>
+                </ui-table>
             </div>
         </div>
 
 		<template v-slot:sidebar>
-			<p-definition-list v-if="role">
-                <p-definition name="Created At">
+			<ui-definition-list v-if="role">
+                <ui-definition name="Created At">
                     {{ $moment(role.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Updated At">
+                <ui-definition name="Updated At">
                     {{ $moment(role.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
 		</template>
 	</form-container>
 </template>

@@ -1,5 +1,5 @@
 <template>
-    <p-modal name="delete" title="Delete permanently?">
+    <ui-modal name="delete" title="Delete permanently?">
         <p>
             The selected
             <span v-if="selectionCount === 1">file or folder</span>
@@ -15,10 +15,10 @@
         </p>
 
         <template v-slot:footer>
-            <p-button v-modal:delete>Cancel</p-button>
-            <p-button theme="danger" @click="submit" class="mr-1" v-modal:delete>Delete</p-button>
+            <ui-button v-modal:delete>Cancel</ui-button>
+            <ui-button theme="danger" @click="submit" class="mr-1" v-modal:delete>Delete</ui-button>
         </template>
-    </p-modal>
+    </ui-modal>
 </template>
 
 <script>

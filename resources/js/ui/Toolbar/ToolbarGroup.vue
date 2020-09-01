@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: 'p-toolbar-group',
+        name: 'ui-toolbar-group',
 
         props: {
             grow: {

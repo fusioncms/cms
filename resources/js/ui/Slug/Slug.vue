@@ -1,5 +1,5 @@
 <template>
-        <p-input
+        <ui-input
             monospaced
             :id="formattedId"
             :name="name"
@@ -16,12 +16,12 @@
             :message="message"
             v-model.lazy="model"
             ref="input">
-        </p-input>
+        </ui-input>
 </template>
 
 <script>
     export default {
-        name: 'p-slug',
+        name: 'ui-slug',
 
         mixins: [
             require('../../mixins/fields').default

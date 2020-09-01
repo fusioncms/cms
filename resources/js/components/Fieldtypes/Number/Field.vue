@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p-number
+        <ui-number
             :name="field.handle"
             :label="field.name"
             :help="field.help"
@@ -18,7 +18,7 @@
             <template slot="increase">
                 <fa-icon icon="plus"></fa-icon>
             </template>
-        </p-number>
+        </ui-number>
     </div>
 </template>
 

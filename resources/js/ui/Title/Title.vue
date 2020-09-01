@@ -19,7 +19,7 @@
 
 <script>
     export default {
-        name: 'p-title',
+        name: 'ui-title',
 
         mixins: [
             require('../../mixins/fields').default

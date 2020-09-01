@@ -1,5 +1,5 @@
 <template>
-    <p-field-group
+    <ui-field-group
         :name="name"
         :fieldId="formattedId"
         :label="label"
@@ -10,7 +10,7 @@
         :hasSuccess="hasSuccess"
         :successMessage="successMessage"
         :help="help">
-        <p-textarea
+        <ui-textarea
             :id="formattedId"
             :name="name"
             :placeholder="placeholder"
@@ -19,14 +19,15 @@
             :value="value"
             :rows="rows"
             :required="required"
-            :message="hasMessage">
-        </p-textarea>
-    </p-field-group>
+            :message="hasMessage"
+            v-model="computedValue">
+        </ui-textarea>
+    </ui-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-textarea-group',
+        name: 'ui-textarea-group',
 
         mixins: [
             require('../../mixins/fields').default

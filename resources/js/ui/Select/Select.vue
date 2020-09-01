@@ -17,11 +17,11 @@
             <div v-if="selectedOptions.length > 0" class="field-select__selected" :class="{'field-select__selected--multiple': multiple}">
                 <ul v-if="multiple" class="field-select__list">
                     <li v-for="(option, index) in selectedOptions" :key="index" class="field-select__item">
-                        <p-tag 
+                        <ui-tag 
                             :value="option.label || option" 
                             :label="'Unselect' + option.label || option" 
                             @click="removeSelection(index)">
-                        </p-tag>
+                        </ui-tag>
                     </li>
                 </ul>
 
@@ -35,12 +35,12 @@
             </div>
         </button>
 
-        <!-- <p-input 
+        <!-- <ui-input 
             :id="formattedId" 
             type="text" 
             :required="required"
             :value="selectedOptions">
-        </p-input> -->
+        </ui-input> -->
 
         <!-- Select Dropdown -->
         <div
@@ -49,15 +49,15 @@
             ref="dropdown">
             <!-- Search -->
             <div class="field-dropdown__search">
-                <p-label text="Search Options" :fieldId="'search_options_' + name" v-if="filterable"></p-label>
-                <p-input
+                <ui-label text="Search Options" :fieldId="'search_options_' + name" v-if="filterable"></ui-label>
+                <ui-input
                     v-if="filterable"
                     :name="'search_options_' + name"
                     type="search"
                     ref="search"
                     v-model="search"
                     placeholder="Search for option...">
-                </p-input>
+                </ui-input>
             </div>
 
             <p :id="formattedId + '_controls'" class="field-dropdown__controls" v-if="showControls">
@@ -68,12 +68,12 @@
 
             <div class="field-dropdown__group" v-if="filteredOptions.length > 0">
                 <!-- Multi-select -->
-                <p-checkbox-group 
+                <ui-checkbox-group 
                     ref="options" 
                     class="field-dropdown__options field-dropdown__options--check" 
                     :aria-describedby="formattedId + '_controls'" 
                     v-if="multiple">
-                    <p-checkbox
+                    <ui-checkbox
                         v-for="(option, index) in filteredOptions"
                         class="field-dropdown__option"
                         :id="formattedId + '_' + index"
@@ -82,8 +82,8 @@
                         :name="formattedId + '_option'"
                         v-model="selection">
                         {{ option.label }}
-                    </p-checkbox>
-                </p-checkbox-group>
+                    </ui-checkbox>
+                </ui-checkbox-group>
 
                 <!-- Single Select -->
                 <ul ref="options" v-else v-show="filteredOptions.length > 0" class="field-dropdown__options field-dropdown__options--list">
@@ -110,7 +110,7 @@
     import Popper from 'popper.js'
 
     export default {
-        name: 'p-select',
+        name: 'ui-select',
 
         mixins: [
             require('../../mixins/fields').default

@@ -10,7 +10,7 @@
 
         <div class="row">
             <div class="content-container">
-                <p-table :endpoint="endpoint" id="menus" sort-by="name" primary-key="handle" key="menus_table">
+                <ui-table :endpoint="endpoint" id="menus" sort-by="name" primary-key="handle" key="menus_table">
                     <template slot="name" slot-scope="table">
                         <router-link :to="{ name: 'menu.nodes', params: {menu: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
@@ -24,32 +24,32 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-table-actions :id="'menu_' + table.record.id + '_actions'" :key="'menu_' + table.record.id + '_actions'">
-                            <p-dropdown-link :to="{ name: 'menu.nodes', params: {menu: table.record.id} }">Manage</p-dropdown-link>
-                            <p-dropdown-link :to="{ name: 'menus.edit', params: {menu: table.record.id} }">Edit</p-dropdown-link>
+                        <ui-table-actions :id="'menu_' + table.record.id + '_actions'" :key="'menu_' + table.record.id + '_actions'">
+                            <ui-dropdown-link :to="{ name: 'menu.nodes', params: {menu: table.record.id} }">Manage</ui-dropdown-link>
+                            <ui-dropdown-link :to="{ name: 'menus.edit', params: {menu: table.record.id} }">Edit</ui-dropdown-link>
 
-                            <p-dropdown-link
+                            <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-menu="table.record"
                                 classes="link--danger"
                             >
                                 Delete
-                            </p-dropdown-link>
-                        </p-table-actions>
+                            </ui-dropdown-link>
+                        </ui-table-actions>
                     </template>
-                </p-table>
+                </ui-table>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="delete-menu" title="Delete Menu" key="delete_menu">
+            <ui-modal name="delete-menu" title="Delete Menu" key="delete_menu">
                 <p>Are you sure you want to permenantly delete this menu?</p>
 
                 <template slot="footer" slot-scope="menu">
-                    <p-button v-modal:delete-menu @click="destroy(menu.data.id)" theme="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-menu>Cancel</p-button>
+                    <ui-button v-modal:delete-menu @click="destroy(menu.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-menu>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
         </portal>
     </div>
 </template>

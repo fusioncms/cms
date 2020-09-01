@@ -7,7 +7,7 @@
 
 <script>
     export default {
-        name: 'p-legend',
+        name: 'ui-legend',
 
         props: {
             label: String,

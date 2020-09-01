@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p-select
+        <ui-select
             name="settings.transparency"
             label="Transparency"
             help="Should this field allow transparency?"
@@ -18,16 +18,16 @@
             ]"
             :has-error="errors.has('settings.transparency')"
             :error-message="errors.get('settings.transparency')">
-        </p-select>
+        </ui-select>
 
-        <p-input
+        <ui-input
             name="settings.default"
             label="Default"
             help="Default color value for this field."
             v-model="settings.default"
             :has-error="errors.has('settings.default')"
             :error-message="errors.get('settings.default')">
-        </p-input>
+        </ui-input>
     </div>
 </template>
 

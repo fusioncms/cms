@@ -1,9 +1,9 @@
 <template>
-    <p-card class="sg-tables">
-        <p-card-header title="Tables"></p-card-header>
+    <ui-card class="sg-tables">
+        <ui-card-header title="Tables"></ui-card-header>
 
-        <p-card-body>
-            <p-table id="permissions" 
+        <ui-card-body>
+            <ui-table id="permissions" 
                 endpoint="/datatable/permissions" 
                 sort-by="name" 
                 :per-page="10" 
@@ -20,9 +20,9 @@
                 <template slot="description" slot-scope="table">
                     <p>{{ table.record.description }}</p>
                 </template>
-            </p-table>
-        </p-card-body>
-    </p-card>
+            </ui-table>
+        </ui-card-body>
+    </ui-card>
 </template>
 
 <script>

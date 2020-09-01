@@ -13,7 +13,7 @@
                     </div>
 
                     <form @submit.prevent="submit">
-                        <p-input
+                        <ui-input-group
                             name="email"
                             label="E-mail"
                             autocomplete="off"
@@ -21,10 +21,10 @@
                             :error-message="form.errors.get('email')"
                             autofocus
                             required
-                            v-model="form.email"
-                        ></p-input>
+                            v-model="form.email">
+                            </ui-input-group>
 
-                        <p-input
+                        <ui-input-group
                             name="password"
                             type="password"
                             label="Password"
@@ -34,13 +34,9 @@
                             autofocus
                             required
                             v-model="form.password"
-                        ></p-input>
+                        ></ui-input-group>
 
-                        <button
-                            type="submit"
-                            class="button button--primary"
-                            @click.prevent="submit"
-                        >Login</button>
+                        <p-button variant="primary" @click.prevent="submit">Login</p-button>
                     </form>
                 </div>
             </div>

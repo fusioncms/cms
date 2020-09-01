@@ -1,5 +1,5 @@
 <template>
-    <p-field-group
+    <ui-field-group
         :name="name"
         :fieldId="formattedId"
         :label="label"
@@ -10,7 +10,7 @@
         :hasSuccess="hasSuccess"
         :successMessage="successMessage"
         :help="help">
-        <p-input
+        <ui-input
             :id="formattedId"
             :name="name"
             :type="type"
@@ -26,13 +26,13 @@
             :hasSuccess="hasSuccess"
             :message="hasMessage"
             v-model="computedValue">
-        </p-input>
-    </p-field-group>
+        </ui-input>
+    </ui-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-input-group',
+        name: 'ui-input-group',
 
         mixins: [
             require('../../mixins/fields').default

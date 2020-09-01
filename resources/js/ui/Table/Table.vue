@@ -1,12 +1,12 @@
 <template>
     <div>
-        <p-toolbar>
+        <ui-toolbar>
             <slot name="toolbarPrepend"></slot>
 
             <!-- Search -->
-            <p-toolbar-group grow v-if="! noSearch">
-                <p-label :fieldId="id + '_table_search'" hideLabel>Search</p-label>
-                <p-input
+            <ui-toolbar-group grow v-if="! noSearch">
+                <ui-label :fieldId="id + '_table_search'" hideLabel>Search</ui-label>
+                <ui-input
                     :id="id + '_table_search'"
                     name="search"
                     type="search"
@@ -14,73 +14,73 @@
                     autocomplete="off"
                     :aria-controls="id"
                     v-model="search">
-                </p-input>
-            </p-toolbar-group>
+                </ui-input>
+            </ui-toolbar-group>
 
             <!-- Page View -->
-            <p-toolbar-group>
-                <p-dropdown noArrow id="per-page-options" right>
+            <ui-toolbar-group>
+                <ui-dropdown noArrow id="per-page-options" right>
                     <fa-icon icon="list"></fa-icon>
                     <span class="sr-only-mobile">View</span>
 
                     <template v-slot:menu>
-                        <p-dropdown-item>
+                        <ui-dropdown-item>
                             <p>Results per page:</p>
-                        </p-dropdown-item>
+                        </ui-dropdown-item>
 
-                        <p-dropdown-divider></p-dropdown-divider>
+                        <ui-dropdown-divider></ui-dropdown-divider>
 
-                        <p-dropdown-link v-for="(pages, index) in pagination.perPageOptions" @click.prevent="changePerPage(pages)" :key="index">
+                        <ui-dropdown-link v-for="(pages, index) in pagination.perPageOptions" @click.prevent="changePerPage(pages)" :key="index">
                             <div class="flex justify-between w-full items-center">
                                 <span>{{ pages }}</span>
                                 <fa-icon class="icon" icon="check" v-if="pages === pagination.perPage"></fa-icon>
                             </div>
-                        </p-dropdown-link>
+                        </ui-dropdown-link>
                     </template>
-                </p-dropdown>
-            </p-toolbar-group>
+                </ui-dropdown>
+            </ui-toolbar-group>
 
             <!-- Sorting -->
-            <p-toolbar-group>
-                <p-dropdown noArrow id="sorting-options" right>
+            <ui-toolbar-group>
+                <ui-dropdown noArrow id="sorting-options" right>
                     <fa-icon icon="sort-amount-down"></fa-icon>
                     <span class="sr-only-mobile">Sort</span>
 
                     <template v-slot:menu>
-                        <p-dropdown-item>
+                        <ui-dropdown-item>
                             <p>Sort by:</p>
-                        </p-dropdown-item>
+                        </ui-dropdown-item>
 
-                        <p-dropdown-divider></p-dropdown-divider>
+                        <ui-dropdown-divider></ui-dropdown-divider>
 
-                        <p-dropdown-link v-for="(column, index) in sortable" :key="column + '-sort' || index + '-sort'" @click.prevent="sortRecordsBy(column, sort.order)">
+                        <ui-dropdown-link v-for="(column, index) in sortable" :key="column + '-sort' || index + '-sort'" @click.prevent="sortRecordsBy(column, sort.order)">
                             <div class="flex justify-between w-full items-center">
                                 <span>{{ column_names[column] || column }}</span>
                                 <fa-icon class="icon" icon="check" v-if="sort.key === column"></fa-icon>
                             </div>
-                        </p-dropdown-link>
+                        </ui-dropdown-link>
 
-                        <p-dropdown-divider></p-dropdown-divider>
+                        <ui-dropdown-divider></ui-dropdown-divider>
 
-                        <p-dropdown-link @click.prevent="sortRecordsBy(sort.key, 'asc')">
+                        <ui-dropdown-link @click.prevent="sortRecordsBy(sort.key, 'asc')">
                             <div class="flex justify-between w-full items-center">
                                 <span>Ascending</span>
                                 <fa-icon class="icon" icon="check" v-if="sort.order === 'asc'"></fa-icon>
                             </div>
-                        </p-dropdown-link>
+                        </ui-dropdown-link>
 
-                        <p-dropdown-link @click.prevent="sortRecordsBy(sort.key, 'desc')">
+                        <ui-dropdown-link @click.prevent="sortRecordsBy(sort.key, 'desc')">
                             <div class="flex justify-between w-full items-center">
                                 <span>Descending</span>
                                 <fa-icon class="icon" icon="check" v-if="sort.order === 'desc'"></fa-icon>
                             </div>
-                        </p-dropdown-link>
+                        </ui-dropdown-link>
                     </template>
-                </p-dropdown>
-            </p-toolbar-group>
+                </ui-dropdown>
+            </ui-toolbar-group>
 
             <slot name="toolbarAppend"></slot>
-        </p-toolbar>
+        </ui-toolbar>
 
         <div class="table-wrapper" v-if="records.length" :class="{'loading': loading}">
             <table :id="id" class="table" aria-live="polite">
@@ -132,30 +132,30 @@
         <!-- Pagination -->
         <div class="pagination-group" v-if="this.pagination.totalPages > 1">
             <div v-if="showPageStatus" class="pagination-group__item">
-                <p-pagination-status 
+                <ui-pagination-status 
                     :total="this.pagination.totalPages"
                     :value="this.pagination.currentPage">
-                </p-pagination-status>
+                </ui-pagination-status>
             </div>
 
             <div v-if="showPageNumbers || showPageNav || showPageEnds" class="pagination-group__item">
-                <p-pagination
+                <ui-pagination
                     @input="changePage($event)"
                     :showNumbers="showPageNumbers"
                     :showNav="showPageNav"
                     :showEnds="showPageEnds"
                     :total="this.pagination.totalPages"
                     :value="this.pagination.currentPage">
-                </p-pagination>
+                </ui-pagination>
             </div>
 
             <div v-if="!hidePageSelect" class="pagination-group__item">
-                <p-pagination-select
+                <ui-pagination-select
                     @input="changePage($event)"
                     :label="pageSelectLabel"
                     :total="this.pagination.totalPages"
                     :value="this.pagination.currentPage">
-                </p-pagination-select>
+                </ui-pagination-select>
             </div>
         </div>
 
@@ -174,7 +174,7 @@
     import queryString from 'query-string'
 
     export default {
-        name: 'p-table',
+        name: 'ui-table',
 
         props: {
             id: {

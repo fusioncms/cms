@@ -1,9 +1,9 @@
 <template>
-	<p-breadcrumbs>
-		<p-breadcrumb  v-for="(breadcrumb, index) in breadcrumbs" :key="breadcrumb.name" @click="navigate(breadcrumb)" :divider="index > 0">
+	<ui-breadcrumbs>
+		<ui-breadcrumb  v-for="(breadcrumb, index) in breadcrumbs" :key="breadcrumb.name" @click="navigate(breadcrumb)" :divider="index > 0">
 			{{ breadcrumb.name }}
-		</p-breadcrumb>
-	</p-breadcrumbs>
+		</ui-breadcrumb>
+	</ui-breadcrumbs>
 </template>
 
 <script>

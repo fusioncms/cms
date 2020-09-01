@@ -1,14 +1,14 @@
 <template>
-    <p-card>
-        <p-card-header title="Treeview"></p-card-header>
+    <ui-card>
+        <ui-card-header title="Treeview"></ui-card-header>
 
-        <p-card-body>
-            <p-treeview :nodes="directories" v-model="selected"></p-treeview>
+        <ui-card-body>
+            <ui-treeview :nodes="directories" v-model="selected"></ui-treeview>
 
             <strong>Selected:</strong>
             <p><code>{{ selected }}</code></p>
-        </p-card-body>
-    </p-card>
+        </ui-card-body>
+    </ui-card>
 </template>
 
 <script>

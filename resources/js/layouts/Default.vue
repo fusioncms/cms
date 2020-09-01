@@ -1,6 +1,6 @@
 <template>
     <div class="layout-default">
-        <p-preloader></p-preloader>
+        <ui-preloader></ui-preloader>
     </div>
 </template>
 

@@ -28,7 +28,7 @@
 
                 <div class="modal__footer" v-if="! noFooter">
                     <slot name="footer" :data="data">
-                        <p-button @click.stop.prevent="close" variant="secondary">Close</p-button>
+                        <ui-button @click.stop.prevent="close" variant="secondary">Close</ui-button>
                     </slot>
                 </div>
             </div>
@@ -38,7 +38,7 @@
 
 <script>
     export default {
-        name: 'p-modal',
+        name: 'ui-modal',
 
         mixins: [
             require('../../mixins/stackable').default,

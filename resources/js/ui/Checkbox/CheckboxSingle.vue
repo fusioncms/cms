@@ -1,5 +1,5 @@
 <template>
-    <p-field-group
+    <ui-field-group
         :name="name"
         :fieldId="formattedId"
         :required="required"
@@ -8,19 +8,19 @@
         :hasSuccess="hasSuccess"
         :successMessage="successMessage"
         :help="help">
-        <p-checkbox
+        <ui-checkbox
             :name="name"
             :id="id + '_field'"
             :disabled="disabled"
             :required="required">
             <slot></slot>
-        </p-checkbox>
-    </p-field-group>
+        </ui-checkbox>
+    </ui-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-checkbox-single',
+        name: 'ui-checkbox-single',
 
         mixins: [
             require('../../mixins/fields').default

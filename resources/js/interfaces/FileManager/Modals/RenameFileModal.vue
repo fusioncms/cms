@@ -1,12 +1,12 @@
 <template>
-    <p-modal name="rename-file" :title="title">
-        <p-input name="name" label="current name" placeholder="New name" v-model="selection.name"></p-input>
+    <ui-modal name="rename-file" :title="title">
+        <ui-input name="name" label="current name" placeholder="New name" v-model="selection.name"></ui-input>
 
         <template v-slot:footer>
-            <p-button  @click="cancel" v-modal:rename-file>Cancel</p-button>
-            <p-button theme="primary" @click="submit" v-modal:rename-file class="mr-1">Rename</p-button>
+            <ui-button  @click="cancel" v-modal:rename-file>Cancel</ui-button>
+            <ui-button theme="primary" @click="submit" v-modal:rename-file class="mr-1">Rename</ui-button>
         </template>
-    </p-modal>
+    </ui-modal>
 </template>
 
 <script>

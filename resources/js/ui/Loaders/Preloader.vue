@@ -10,6 +10,6 @@
 
 <script>
     export default {
-        name: 'p-preloader',
+        name: 'ui-preloader',
     }
 </script>

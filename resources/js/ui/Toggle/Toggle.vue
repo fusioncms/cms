@@ -1,5 +1,5 @@
 <template>
-    <p-field-group
+    <ui-field-group
         :name="name"
         :fieldId="formattedId"
         :required="required"
@@ -26,7 +26,7 @@
                 v-model="computedValue"
             >
         </span>
-    </p-field-group>
+    </ui-field-group>
 
     <!-- <div class="form__group">
         <label
@@ -62,7 +62,7 @@
 
 <script>
     export default {
-        name: 'p-toggle',
+        name: 'ui-toggle',
 
         data() {
             return {

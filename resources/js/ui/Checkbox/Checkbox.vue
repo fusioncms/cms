@@ -21,7 +21,7 @@
 
 <script>
     export default {
-        name: 'p-checkbox',
+        name: 'ui-checkbox',
 
         data() {
             return {

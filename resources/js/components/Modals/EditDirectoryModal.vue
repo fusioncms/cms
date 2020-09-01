@@ -1,5 +1,5 @@
 <template>
-    <p-modal v-model="open" class="directory-edit" name="directory-edit" title="Edit Directory" no-footer>
+    <ui-modal v-model="open" class="directory-edit" name="directory-edit" title="Edit Directory" no-footer>
         <form @submit.prevent="updateDirectory" v-if="directory">
             <div class="p-4 bg-gray-800 text-center mb-4">
                 <div class="py-8">
@@ -7,15 +7,15 @@
                 </div>
             </div>
 
-            <p-input label="Name" v-model="form.data.name"></p-input>
+            <ui-input label="Name" v-model="form.data.name"></ui-input>
 
             <div class="flex">
-                <p-button @click="deleteDirectory(directory)" type="button">Delete</p-button>
+                <ui-button @click="deleteDirectory(directory)" type="button">Delete</ui-button>
                 <div class="flex-grow"></div>
-                <p-button theme="primary" type="submit">Submit</p-button>
+                <ui-button theme="primary" type="submit">Submit</ui-button>
             </div>
         </form>
-    </p-modal>
+    </ui-modal>
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-wrap justify-between">
-        <p-number
+        <ui-number
             name="settings.decimals"
             label="Decimal Places"
             help="The number of decimal places this number will accept."
@@ -11,9 +11,9 @@
             class="mr-5 w-2/5 lg:w-1/5"
             :has-error="errors.has('settings.decimals')"
             :error-message="errors.get('settings.decimals')">
-        </p-number>
+        </ui-number>
 
-        <p-number
+        <ui-number
             name="settings.steps"
             label="Step Size"
             help="Step or increment size of the number"
@@ -25,9 +25,9 @@
             class="mr-5 w-2/5 lg:w-1/5"
             :has-error="errors.has('settings.steps')"
             :error-message="errors.get('settings.steps')">
-        </p-number>
+        </ui-number>
 
-        <p-number
+        <ui-number
             name="settings.min"
             label="Min Value"
             help="Minimum allowed value"
@@ -38,9 +38,9 @@
             class="mr-5 w-2/5 lg:w-1/5"
             :has-error="errors.has('settings.min')"
             :error-message="errors.get('settings.min')">
-        </p-number>
+        </ui-number>
 
-        <p-number
+        <ui-number
             name="settings.max"
             label="Max Value"
             help="Maximum allowed value"
@@ -51,7 +51,7 @@
             class="mr-5 w-2/5 lg:w-1/5"
             :has-error="errors.has('settings.max')"
             :error-message="errors.get('settings.max')">
-        </p-number>
+        </ui-number>
     </div>
 </template>
 

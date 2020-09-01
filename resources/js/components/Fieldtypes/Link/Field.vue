@@ -3,21 +3,21 @@
         <div class="form__label">{{field.name}}</div>
         <div class="row px-2">
             <div class="w-full md:w-1/2">
-                <p-input
+                <ui-input
                     :name="field.handle + '_text'"
                     placeholder="Text"
                     v-model="data.text"
                     @input="updateValue($event, 'text')"
                     class="mb-2"
-                ></p-input>
-                <p-input
+                ></ui-input>
+                <ui-input
                     :name="field.handle + '_link'"
                     placeholder="Link"
                     v-model="data.link"
                     @input="updateValue($event, 'link')"
                     class="mb-2"
-                ></p-input>
-                <p-select
+                ></ui-input>
+                <ui-select
                     :name="field.handle + '_target'"
                     autocomplete="off"
                     v-model="data.target"
@@ -32,7 +32,7 @@
                             value: '_blank',
                         }
                     ]"
-                ></p-select>
+                ></ui-select>
             </div>
         </div>
     </div>

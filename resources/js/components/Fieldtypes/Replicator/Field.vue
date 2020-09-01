@@ -6,7 +6,7 @@
             v-html="field.name">
         </label>
 
-        <p-button
+        <ui-button
             v-for="(section, index) in sections"
             :key="section.handle"
             class="button--secondary mr-2"
@@ -14,10 +14,10 @@
 
             {{ section.name }}
             <fa-icon icon="plus" class="fa-xs"></fa-icon>
-        </p-button>
+        </ui-button>
 
-        <p-tabs :move="move">
-            <p-tab
+        <ui-tabs :move="move">
+            <ui-tab
                 v-for="(replicant, index) in replicants"
                 :key="`replicant-${index}-tab`"
                 :name="`[${index + 1}] ${replicant.section.name}`"
@@ -32,8 +32,8 @@
                     :errors="fieldErrors(`${field.handle}.${index}.fields.`)"
                     v-model="replicant.fields[sub.handle]">
                 </component>
-            </p-tab>
-        </p-tabs>
+            </ui-tab>
+        </ui-tabs>
     </div>
 </template>
 

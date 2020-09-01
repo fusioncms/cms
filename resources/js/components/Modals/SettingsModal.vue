@@ -1,5 +1,5 @@
 <template>
-	<p-modal v-model="show" name="settings" no-header flush>
+	<ui-modal v-model="show" name="settings" no-header flush>
 
 		<div class="card">
             <div class="card__body">
@@ -13,7 +13,7 @@
 				<button type="submit" class="button button--primary" @click.prevent="submit">Save Settings</button>
 			</div>
 		</template>
-    </p-modal>
+    </ui-modal>
 </template>
 
 <script>

@@ -11,8 +11,8 @@
         <div class="sidebar-container">
             <mq-layout mq="xl+">
                 <div class="sidebar-container__sidebar">
-                    <p-card>
-                        <p-card-body>
+                    <ui-card>
+                        <ui-card-body>
                             <h2 class="text-heading--xxs">Roles</h2>
 
                             <div class="list">
@@ -26,29 +26,29 @@
                                     {{ role.label }}
                                 </router-link>
                             </div>
-                        </p-card-body>
-                    </p-card>
+                        </ui-card-body>
+                    </ui-card>
                 </div>
             </mq-layout>
 
             <div class="sidebar-container__content">
-                <p-table id="users" :endpoint="endpoint" sort-by="name" key="users_table">
+                <ui-table id="users" :endpoint="endpoint" sort-by="name" key="users_table">
                     <template v-slot:toolbarPrepend v-if="$mq === 'sm' || $mq === 'md' || $mq === 'lg'">
-                        <p-toolbar-group>
-                            <p-dropdown id="user-roles">
+                        <ui-toolbar-group>
+                            <ui-dropdown id="user-roles">
                                 <span>Roles</span>
 
                                 <template v-slot:menu>
-                                    <p-dropdown-link :to="{ name: 'users' }" exact>All</p-dropdown-link>
+                                    <ui-dropdown-link :to="{ name: 'users' }" exact>All</ui-dropdown-link>
 
-                                    <p-dropdown-divider></p-dropdown-divider>
+                                    <ui-dropdown-divider></ui-dropdown-divider>
 
-                                    <p-dropdown-link v-for="role in filteredRoles" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" exact>
+                                    <ui-dropdown-link v-for="role in filteredRoles" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" exact>
                                         {{ role.label }}
-                                    </p-dropdown-link>
+                                    </ui-dropdown-link>
                                 </template>
-                            </p-dropdown>
-                        </p-toolbar-group>
+                            </ui-dropdown>
+                        </ui-toolbar-group>
                     </template>
 
                     <template slot="name" slot-scope="table">
@@ -64,32 +64,32 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
-                            <p-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }">Edit</p-dropdown-link>
+                        <ui-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
+                            <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }">Edit</ui-dropdown-link>
 
-                            <p-dropdown-link
+                            <ui-dropdown-link
                                 v-if="table.record.id != user.id"
                                 @click.prevent
                                 v-modal:delete-user="table.record"
                                 classes="link--danger"
                             >
                                 Delete
-                            </p-dropdown-link>
-                        </p-table-actions>
+                            </ui-dropdown-link>
+                        </ui-table-actions>
                     </template>
-                </p-table>
+                </ui-table>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="delete-user" title="Delete User">
+            <ui-modal name="delete-user" title="Delete User">
                 <p>Are you sure you want to permenantly delete this user?</p>
 
                 <template slot="footer" slot-scope="user">
-                    <p-button v-modal:delete-user @click="destroy(user.data.id)" variant="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-user variant="secondary">Cancel</p-button>
+                    <ui-button v-modal:delete-user @click="destroy(user.data.id)" variant="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-user variant="secondary">Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
         </portal>
     </div>
 </template>

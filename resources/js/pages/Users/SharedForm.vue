@@ -2,14 +2,14 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <p-button :to="{ name: 'users' }" variant="secondary">Go Back</p-button>
-                <p-button variant="primary" @click.prevent="submit" :disabled="!form.hasChanges">Save</p-button>
+                <ui-button :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
+                <ui-button variant="primary" @click.prevent="submit" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
-        <p-card>
-            <p-card-body>
-                <p-title-group
+        <ui-card>
+            <ui-card-body>
+                <ui-title-group
                     name="name"
                     autocomplete="off"
                     autofocus
@@ -17,9 +17,9 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </p-title-group>
+                </ui-title-group>
 
-                <p-input-group
+                <ui-input-group
                     type="email"
                     name="email"
                     label="E-mail"
@@ -28,11 +28,11 @@
                     :error-message="form.errors.get('email')"
                     required
                     v-model="form.email">
-                </p-input-group>
+                </ui-input-group>
 
-                <p-tabs>
-                    <p-tab name="Security">
-                        <p-input-group
+                <ui-tabs>
+                    <ui-tab name="Security">
+                        <ui-input-group
                             type="password"
                             name="password"
                             label="Password"
@@ -41,9 +41,9 @@
                             :error-message="form.errors.get('password')"
                             required
                             v-model="form.password">
-                        </p-input-group>
+                        </ui-input-group>
 
-                        <p-input-group
+                        <ui-input-group
                             type="password"
                             name="password_confirmation"
                             label="Confirm Password"
@@ -52,24 +52,24 @@
                             :error-message="form.errors.get('password_confirmation')"
                             required
                             v-model="form.password_confirmation">
-                        </p-input-group>
-                    </p-tab>
-                </p-tabs>
-            </p-card-body>
-        </p-card>
+                        </ui-input-group>
+                    </ui-tab>
+                </ui-tabs>
+            </ui-card-body>
+        </ui-card>
 
         <template v-slot:sidebar>
-            <p-card>
-                <p-card-body>
-                    <p-toggle
+            <ui-card>
+                <ui-card-body>
+                    <ui-toggle
                         name="status"
                         label="Status"
                         v-model="form.status"
                         :true-value="1"
                         :false-value="0">
-                    </p-toggle>
+                    </ui-toggle>
 
-                    <p-select-group
+                    <ui-select-group
                         name="role"
                         label="Role"
                         :options="roleOptions"
@@ -79,28 +79,28 @@
                         :error-message="form.errors.get('role')"
                         required
                         v-model="form.role">
-                    </p-select-group>
-                </p-card-body>
-            </p-card>
+                    </ui-select-group>
+                </ui-card-body>
+            </ui-card>
 
-            <p-definition-list v-if="user">
-                <p-definition name="Status">
+            <ui-definition-list v-if="user">
+                <ui-definition name="Status">
                     <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': user.status, 'text-danger-500': ! user.status}"></fa-icon> {{ user.status ? 'Enabled' : 'Disabled' }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Verified">
+                <ui-definition name="Verified">
                     <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': user.verified, 'text-danger-500': ! user.verified}"></fa-icon> {{ user.verified ? 'Yes' : 'No' }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Registered">
+                <ui-definition name="Registered">
                     {{ $moment(user.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Last Login">
+                <ui-definition name="Last Login">
                     <span v-if="user.logged_in_at">{{ $moment(user.logged_in_at.date).format('L') }}</span>
                     <span v-else>Never</span>
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
 
             <slot name="sidebar"></slot>
         </template>

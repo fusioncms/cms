@@ -14,8 +14,8 @@
                 </div>
 
                 <div class="controls__content">
-                    <p-accordion :multiple="true">
-                        <p-accordion-item v-for="(section, handle) in theme.options" :key="section.handle" :title="section.name">
+                    <ui-accordion :multiple="true">
+                        <ui-accordion-item v-for="(section, handle) in theme.options" :key="section.handle" :title="section.name">
                             <div class="p-3">
                                 <p class="text-sm" v-if="section.description">{{ section.description }}</p>
 
@@ -33,8 +33,8 @@
                                     class="mb-8"
                                 ></component>
                             </div>
-                        </p-accordion-item>
-                    </p-accordion>
+                        </ui-accordion-item>
+                    </ui-accordion>
                 </div>
 
                 <div class="controls__footer">

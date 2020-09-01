@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p-select
+        <ui-select
             name="taxonomy"
             label="Taxonomy"
             help="The taxonomy from which to show terms."
@@ -10,7 +10,7 @@
             :has-error="errors.has('settings.taxonomy')"
             :error-message="errors.get('settings.taxonomy')"
         >
-        </p-select>
+        </ui-select>
     </div>
 </template>
 

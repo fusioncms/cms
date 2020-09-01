@@ -4,7 +4,7 @@
             <form class="col w-full" @submit.prevent="submit">
                 <p class="mb-6 text-sm">Personal API tokens allow third-party services to authenticate as you to access the API. Tokens should never be shared with anyone and should be treated as passwords.</p>
 
-                <p-input name="name" label="Create New Token" v-model="form.name" :has-error="form.errors.has('name')" :error-message="form.errors.get('name')"></p-input>
+                <ui-input name="name" label="Create New Token" v-model="form.name" :has-error="form.errors.has('name')" :error-message="form.errors.get('name')"></ui-input>
 
                 <button class="button" type="submit" @click.prevent="submit">Create</button>
             </form>
@@ -43,24 +43,24 @@
             </div>
         </div>
 
-        <p-modal name="access-token" v-model="hasAccessToken" title="Your API Token" large no-outside-close no-esc-close>
+        <ui-modal name="access-token" v-model="hasAccessToken" title="Your API Token" large no-outside-close no-esc-close>
             <p class="mb-6">Please copy your new API token. For your security, it won't be shown again.</p>
 
-            <p-textarea name="access-token" v-model="accessToken" :rows="6"></p-textarea>
+            <ui-textarea name="access-token" v-model="accessToken" :rows="6"></ui-textarea>
 
             <template v-slot:footer>
-                <p-button v-modal:access-token>OK</p-button>
+                <ui-button v-modal:access-token>OK</ui-button>
             </template>
-        </p-modal>
+        </ui-modal>
 
-        <p-modal name="revoke-token" v-model="wantsToRevokeToken" title="Revoke API Token" v-if="revokeToken" large no-outside-close no-esc-close>
+        <ui-modal name="revoke-token" v-model="wantsToRevokeToken" title="Revoke API Token" v-if="revokeToken" large no-outside-close no-esc-close>
             <p class="mb-6">Are you sure you want to revoke the <b>{{ revokeToken.name }}</b> token?</p>
 
             <template v-slot:footer>
-                <p-button theme="danger" v-modal:revoke-token @click.prevent="revoke(revokeToken)">Revoke</p-button>
-                <p-button v-modal:revoke-token class="mr-3">Cancel</p-button>
+                <ui-button theme="danger" v-modal:revoke-token @click.prevent="revoke(revokeToken)">Revoke</ui-button>
+                <ui-button v-modal:revoke-token class="mr-3">Cancel</ui-button>
             </template>
-        </p-modal>
+        </ui-modal>
     </div>
 </template>
 

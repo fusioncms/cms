@@ -10,7 +10,7 @@
 
         <div class="row">
             <div class="content-container">
-                <p-table :endpoint="endpoint" id="roles" sort-by="label" key="roles_table">
+                <ui-table :endpoint="endpoint" id="roles" sort-by="label" key="roles_table">
                     <template slot="label" slot-scope="table">
                         <router-link :to="{ name: 'roles.edit', params: {role: table.record.id} }">{{ table.record.label }}</router-link>
                     </template>
@@ -20,34 +20,34 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-table-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
+                        <ui-table-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
 
-                            <p-dropdown-link@click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">
+                            <ui-dropdown-link@click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">
                                 Edit
-                            </p-dropdown-link>
+                            </ui-dropdown-link>
 
-                            <p-dropdown-link
+                            <ui-dropdown-link
                                 v-if="isRemovable(table.record.name)"
                                 @click.prevent v-modal:delete-role="table.record"
                                 classes="link--danger"
                             >
                                 Delete
-                            </p-dropdown-link>
-                        </p-table-actions>
+                            </ui-dropdown-link>
+                        </ui-table-actions>
                     </template>
-                </p-table>
+                </ui-table>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="delete-role" title="Delete Role">
+            <ui-modal name="delete-role" title="Delete Role">
                 <p>Are you sure you want to permenantly delete this role?</p>
 
                 <template slot="footer" slot-scope="role">
-                    <p-button v-modal:delete-role @click="destroy(role.data.id)" theme="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-role>Cancel</p-button>
+                    <ui-button v-modal:delete-role @click="destroy(role.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-role>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
         </portal>
     </div>
 </template>

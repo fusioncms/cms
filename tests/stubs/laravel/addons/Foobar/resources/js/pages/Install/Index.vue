@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <app-title icon="paper-plane">Foobar - Install Wizard</app-title>
+            <apui-title icon="paper-plane">Foobar - Install Wizard</apui-title>
         </portal>
 
         <div class="row">

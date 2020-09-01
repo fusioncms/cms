@@ -13,7 +13,7 @@
 
         <div class="card">
             <div class="card__body">
-                <p-title name="name" readonly v-model="form.name"></p-title>
+                <ui-title name="name" readonly v-model="form.name"></ui-title>
 
                 <fieldset-picker
                     :has-error="form.errors.has('fieldset')"
@@ -26,19 +26,19 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-input label="Handle" monospaced readonly v-model="form.handle"></p-input>
+                    <ui-input label="Handle" monospaced readonly v-model="form.handle"></ui-input>
                 </div>
             </div>
 
-            <p-definition-list v-if="extension">
-                <p-definition name="Created At">
+            <ui-definition-list v-if="extension">
+                <ui-definition name="Created At">
                     {{ $moment(extension.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Updated At">
+                <ui-definition name="Updated At">
                     {{ $moment(extension.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
         </template>
     </form-container>
 </template>

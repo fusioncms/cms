@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p-input
+        <ui-input
             name="settings.placeholder"
             label="Placeholder"
             help="Text that will appear inside the textarea element's content area when empty."
@@ -8,7 +8,7 @@
             v-model="settings.placeholder"
             :has-error="errors.has('settings.placeholder')"
             :error-message="errors.get('settings.placeholder')">
-        </p-input>
+        </ui-input>
     </div>
 </template>
 

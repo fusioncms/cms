@@ -16,7 +16,7 @@
 
 <script>
     export default {
-        name: 'p-breadcrumb',
+        name: 'ui-breadcrumb',
 
         props: {
             href: {

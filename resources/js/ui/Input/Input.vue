@@ -19,7 +19,7 @@
 
 <script>
     export default {
-        name: 'p-input',
+        name: 'ui-input',
 
         mixins: [
             require('../../mixins/fields').default

@@ -6,8 +6,8 @@
 
         <shared-form :form="form" :roles="roles" :user="user" :submit="submit">
             <!-- <template v-slot:sidebar>
-                <p-card v-if="user">
-                    <p-card-body>
+                <ui-card v-if="user">
+                    <ui-card-body>
                         <div class="flex justify-between">
                             <label class="form__label">Status</label>
 
@@ -52,8 +52,8 @@
                             <label class="form__label">Invalid Login Count</label>
                             <p>{{ user.invalid_logins }}</p>
                         </div>
-                    </p-card-body>
-                </p-card>
+                    </ui-card-body>
+                </ui-card>
             </template> -->
         </shared-form>
     </div>

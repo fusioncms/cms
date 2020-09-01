@@ -9,7 +9,7 @@
 
         <div class="card">
             <div class="card__body">
-                <p-title
+                <ui-title
                     name="name"
                     autocomplete="off"
                     autofocus
@@ -17,9 +17,9 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </p-title>
+                </ui-title>
 
-                <p-input
+                <ui-input
                     name="url"
                     label="URL"
                     help="The URL of the node."
@@ -28,10 +28,10 @@
                     :has-error="form.errors.has('url')"
                     :error-message="form.errors.get('url')"
                     v-model="form.url">
-                </p-input>
+                </ui-input>
 
-                <p-tabs v-if="fields.body.length > 0">
-                    <p-tab v-for="section in sections.body" :key="section.handle" :name="section.name">
+                <ui-tabs v-if="fields.body.length > 0">
+                    <ui-tab v-for="section in sections.body" :key="section.handle" :name="section.name">
                         <component
                             class="form__group"
                             v-for="field in section.fields"
@@ -41,23 +41,23 @@
                             :errors="form.errors"
                             v-model="form[field.handle]">
                         </component>
-                    </p-tab>
-                </p-tabs>
+                    </ui-tab>
+                </ui-tabs>
             </div>
         </div>
 
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-toggle
+                    <ui-toggle
                         name="status"
                         label="Status"
                         v-model="form.status"
                         :true-value="1"
                         :false-value="0">
-                    </p-toggle>
+                    </ui-toggle>
 
-                    <p-select
+                    <ui-select
                         name="new_window"
                         label="Open link where"
                         help="Determine where the link should open."
@@ -72,7 +72,7 @@
                             },
                         ]"
                         v-model="form.new_window">
-                    </p-select>
+                    </ui-select>
                 </div>
             </div>
 
@@ -95,19 +95,19 @@
                 </div>
             </div>
 
-			<p-definition-list v-if="node">
-                <p-definition name="Status">
+			<ui-definition-list v-if="node">
+                <ui-definition name="Status">
                     <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': node.status, 'text-danger-500': ! node.status}"></fa-icon> {{ node.status ? 'Enabled' : 'Disabled' }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Created At">
+                <ui-definition name="Created At">
                     {{ $moment(node.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Updated At">
+                <ui-definition name="Updated At">
                     {{ $moment(node.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
         </template>
     </form-container>
 </template>

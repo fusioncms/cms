@@ -42,7 +42,7 @@
 
 <script>
     export default {
-        name: 'p-number',
+        name: 'ui-number',
 
         mixins: [
             require('../../mixins/fields').default

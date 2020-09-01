@@ -1,6 +1,6 @@
 <script>
     export default {
-        name: 'p-sortable-handle',
+        name: 'ui-sortable-handle',
 
         inject: ['sortableListHandleClass'],
 

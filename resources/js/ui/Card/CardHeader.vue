@@ -7,7 +7,7 @@
 
 <script>
     export default {
-        name: 'p-card-header',
+        name: 'ui-card-header',
 
         props: {
             title: String

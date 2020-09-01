@@ -13,7 +13,7 @@
 
         <div class="card">
             <div class="card__body">
-                <p-title
+                <ui-title
                     name="name"
                     autocomplete="off"
                     autofocus
@@ -21,7 +21,7 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </p-title>
+                </ui-title>
 
                 <markdown-fieldtype
                     v-if="ready"
@@ -39,7 +39,7 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-slug
+                    <ui-slug
                         name="handle"
                         label="Handle"
                         monospaced
@@ -50,15 +50,15 @@
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
                         v-model="form.handle">
-                    </p-slug>
+                    </ui-slug>
 
-                    <p-toggle
+                    <ui-toggle
                         name="status"
                         label="Status"
                         v-model="form.status"
                         :true-value="1"
                         :false-value="0">
-                    </p-toggle>
+                    </ui-toggle>
                 </div>
             </div>
 
@@ -67,21 +67,21 @@
                     <p class="text-sm">Below you will find a variety of values you may reference within your template.</p>
 
                     <div v-for="(options, name) in placeholders" :key="name">
-                        <p-button v-if="! isArray(options)" @click="addPlaceholder(options)" class="w-full mb-3 text-xs font-mono">${{ options }}</p-button>
+                        <ui-button v-if="! isArray(options)" @click="addPlaceholder(options)" class="w-full mb-3 text-xs font-mono">${{ options }}</ui-button>
 
-                        <p-dropdown id="values">
+                        <ui-dropdown id="values">
                             ${{ name }}
 
                             <template v-slot:menu>
-                                <p-dropdown-link
+                                <ui-dropdown-link
                                     class="text-xs"
                                     v-for="(value, key) in options"
                                     :key="key"
                                     @click="addPlaceholder(value, name)">
                                         {{ value }}
-                                </p-dropdown-link>
+                                </ui-dropdown-link>
                             </template>
-                        </p-dropdown>
+                        </ui-dropdown>
                     </div>
                 </div>
             </div>

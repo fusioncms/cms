@@ -14,7 +14,7 @@
     import Tooltip from 'tooltip.js'
 
     export default {
-        name: 'p-tooltip',
+        name: 'ui-tooltip',
 
         props: {
             placement: {

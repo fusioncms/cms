@@ -7,7 +7,7 @@
 
 <script>
     export default {
-        name: 'p-definition',
+        name: 'ui-definition',
 
         props: ['name']
     }

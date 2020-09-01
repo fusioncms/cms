@@ -44,7 +44,7 @@
 
 <script>
     export default {
-        name: 'p-pagination',
+        name: 'ui-pagination',
 
         props: {
             maxVisiblePages: {

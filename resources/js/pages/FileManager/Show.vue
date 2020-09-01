@@ -28,12 +28,12 @@
         <div class="card" v-if="loaded" :key="file.name">
             <div class="card__body flex items-center justify-center">
                 <div v-if="file.type == 'image'">
-                    <p-img
+                    <ui-img
                         :src="fileSrc"
                         :alt="file.alt"
                         background-color="#ffffff"
                         class="rounded">
-                    </p-img>
+                    </ui-img>
                 </div>
 
                 <div v-else-if="file.type == 'video'" class="w-full">
@@ -49,13 +49,13 @@
                 </div>
 
                 <div v-else>
-                    <p-img
+                    <ui-img
                         :src="'/vendor/fusion/img/' + file.type + '-small.svg'"
                         background-color="#ffffff"
                         :width="200"
                         :height="200"
                         :alt="file.alt">
-                    </p-img>
+                    </ui-img>
 
                     <div class="text-center px-6 py-3 rounded border border-gray-400 bg-gray-200 text-gray-800">
                         No preview available
@@ -73,7 +73,7 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-slug
+                    <ui-slug
                         name="name"
                         label="Filename"
                         autofocus
@@ -84,9 +84,9 @@
                         :has-error="form.errors.has('name')"
                         :error-message="form.errors.get('name')"
                         v-model="form.name">
-                    </p-slug>
+                    </ui-slug>
 
-                    <p-input
+                    <ui-input
                         name="title"
                         label="Title"
                         autocomplete="off"
@@ -95,9 +95,9 @@
                         :has-error="form.errors.has('title')"
                         :error-message="form.errors.get('title')"
                         v-model="form.title">
-                    </p-input>
+                    </ui-input>
 
-                    <p-input
+                    <ui-input
                         name="alt"
                         label="Alt"
                         autocomplete="off"
@@ -106,9 +106,9 @@
                         :has-error="form.errors.has('alt')"
                         :error-message="form.errors.get('alt')"
                         v-model="form.alt">
-                    </p-input>
+                    </ui-input>
 
-                    <p-textarea
+                    <ui-textarea
                         name="caption"
                         label="Caption"
                         help="This caption is used for image captions to give users more information."
@@ -116,39 +116,39 @@
                         :has-error="form.errors.has('caption')"
                         :error-message="form.errors.get('caption')"
                         v-model="form.caption">
-                    </p-textarea>
+                    </ui-textarea>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card__body">
-                    <p-input
+                    <ui-input
                         name="share"
                         readonly
                         label="Share"
                         class="text-sm"
                         :value="file.url">
-                    </p-input>
+                    </ui-input>
                 </div>
             </div>
 
-            <p-definition-list v-if="file.created_at">
-                <p-definition name="Size">
+            <ui-definition-list v-if="file.created_at">
+                <ui-definition name="Size">
                     {{ file.bytes | bytes }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Mimetype">
+                <ui-definition name="Mimetype">
                     {{ file.mimetype }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Dimensions" v-if="file.dimensions">
+                <ui-definition name="Dimensions" v-if="file.dimensions">
                     {{ file.dimensions.width }} x {{ file.dimensions.height }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Last Modified">
+                <ui-definition name="Last Modified">
                     {{ $moment(file.created_at.date).format('L') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
         </template>
     </form-container>
 </template>

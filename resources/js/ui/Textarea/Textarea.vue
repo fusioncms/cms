@@ -17,7 +17,7 @@
 
 <script>
     export default {
-        name: 'p-textarea',
+        name: 'ui-textarea',
 
         mixins: [
             require('../../mixins/fields').default

@@ -1,79 +1,79 @@
 <template>
-    <p-card class="sg-toolbars">
-        <p-card-header title="Toolbars"></p-card-header>
+    <ui-card class="sg-toolbars">
+        <ui-card-header title="Toolbars"></ui-card-header>
 
-        <p-card-body>
-            <p-toolbar>
-                <p-toolbar-group grow>
-                    <p-label fieldId="toolbar_search_input" hideLabel>Search</p-label>
+        <ui-card-body>
+            <ui-toolbar>
+                <ui-toolbar-group grow>
+                    <ui-label fieldId="toolbar_search_input" hideLabel>Search</ui-label>
                     <div class="input-group">
-                        <p-button icon>
+                        <ui-button icon>
                             <fa-icon icon="search"></fa-icon>
                             <span class="sr-only">Search</span>
-                        </p-button>
-                        <p-input
+                        </ui-button>
+                        <ui-input
                             id="toolbar_search_input"
                             name="search"
                             type="search"
                             placeholder="Search...">
-                        </p-input>
+                        </ui-input>
                     </div>
-                </p-toolbar-group>
+                </ui-toolbar-group>
 
-                <p-toolbar-group>
-                    <p-dropdown no-arrow id="toolbar_menu_text">
+                <ui-toolbar-group>
+                    <ui-dropdown no-arrow id="toolbar_menu_text">
                         <fa-icon icon="sort-amount-down"></fa-icon>
                         <span class="sr-only-mobile">Sort</span>
 
                         <template v-slot:menu>
-                            <p-dropdown-link to="/">
+                            <ui-dropdown-link to="/">
                                 <fa-icon class="icon" icon="font"></fa-icon>
                                 Name
-                            </p-dropdown-link>
+                            </ui-dropdown-link>
 
-                            <p-dropdown-link to="/">
+                            <ui-dropdown-link to="/">
                                 <fa-icon class="icon" icon="file-alt"></fa-icon>
                                 Type
-                            </p-dropdown-link>
+                            </ui-dropdown-link>
 
-                            <p-dropdown-link to="/">
+                            <ui-dropdown-link to="/">
                                 <fa-icon class="icon" icon="calendar-alt"></fa-icon>
                                 Date
-                            </p-dropdown-link>
+                            </ui-dropdown-link>
 
-                            <p-dropdown-divider></p-dropdown-divider>
+                            <ui-dropdown-divider></ui-dropdown-divider>
 
-                            <p-dropdown-link to="/">
+                            <ui-dropdown-link to="/">
                                 <fa-icon class="icon" icon="sort-amount-down"></fa-icon>
                                 Ascending
-                            </p-dropdown-link>
+                            </ui-dropdown-link>
 
-                            <p-dropdown-link to="/">
+                            <ui-dropdown-link to="/">
                                 <fa-icon class="icon" icon="sort-amount-up"></fa-icon>
                                 Descending
-                            </p-dropdown-link>
+                            </ui-dropdown-link>
                         </template>
-                    </p-dropdown>
-                </p-toolbar-group>
+                    </ui-dropdown>
+                </ui-toolbar-group>
 
-                <p-toolbar-group>
+                <ui-toolbar-group>
                     <div class="buttons">
                         <div class="buttons__group">
-                            <p-button icon>
+                            <ui-button icon>
                                 <fa-icon icon="bars"></fa-icon>
                                 <span class="sr-only">List View</span>
-                            </p-button>
+                            </ui-button>
 
-                            <p-button icon disabled>
+                            <ui-button icon disabled>
                                 <fa-icon icon="th-large"></fa-icon>
                                 <span class="sr-only">Grid View</span>
-                            </p-button>
+                            </ui-button>
                         </div>
                     </div>
-                </p-toolbar-group>
-            </p-toolbar>
-        </p-card-body>
-    </p-card>
+                </ui-toolbar-group>
+            </ui-toolbar>
+        </ui-card-body>
+    </ui-card>
 </template>
 
 <script>

@@ -9,7 +9,7 @@
 
 		<div class="card">
             <div class="card__body">
-                <p-title
+                <ui-title
                     name="name"
                     autocomplete="off"
                     autofocus
@@ -17,10 +17,10 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </p-title>
+                </ui-title>
 
-				<p-tabs v-if="sections.body.length > 0">
-                    <p-tab v-for="section in sections.body" :key="section.handle" :name="section.name">
+				<ui-tabs v-if="sections.body.length > 0">
+                    <ui-tab v-for="section in sections.body" :key="section.handle" :name="section.name">
                         <component
                             class="form__group"
                             v-for="field in section.fields"
@@ -30,8 +30,8 @@
                             :errors="form.errors"
                             v-model="form[field.handle]">
                         </component>
-                    </p-tab>
-                </p-tabs>
+                    </ui-tab>
+                </ui-tabs>
 
                 <div v-if="sections.body.length == 0 && taxonomy.id" class="text-center">
                     <p>Things are looking a little empty here!</p>
@@ -43,7 +43,7 @@
 		<template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-slug
+                    <ui-slug
                         name="slug"
                         label="Slug"
                         monospaced
@@ -53,15 +53,15 @@
                         :has-error="form.errors.has('slug')"
                         :error-message="form.errors.get('slug')"
                         v-model="form.slug">
-                    </p-slug>
+                    </ui-slug>
 
-                    <p-toggle
+                    <ui-toggle
                         name="status"
                         label="Status"
                         v-model="form.status"
                         :true-value="1"
                         :false-value="0">
-                    </p-toggle>
+                    </ui-toggle>
                 </div>
             </div>
 
@@ -84,19 +84,19 @@
                 </div>
             </div>
 
-			<p-definition-list v-if="term">
-                <p-definition name="Status">
+			<ui-definition-list v-if="term">
+                <ui-definition name="Status">
                     <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': term.status, 'text-danger-500': ! term.status}"></fa-icon> {{ term.status ? 'Enabled' : 'Disabled' }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Created At">
+                <ui-definition name="Created At">
                     {{ $moment(term.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Updated At">
+                <ui-definition name="Updated At">
                     {{ $moment(term.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
 		</template>
 	</form-container>
 </template>

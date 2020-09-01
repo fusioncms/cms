@@ -1,8 +1,8 @@
 <template>
-    <p-card class="sg-color-pallet">
-        <p-card-header title="Color Pallet"></p-card-header>
+    <ui-card class="sg-color-pallet">
+        <ui-card-header title="Color Pallet"></ui-card-header>
 
-        <p-card-body>
+        <ui-card-body>
             <div class="row">
                 <div class="col w-full md:w-1/2 xxl:w-1/3 flex flex-row flex-wrap mb-4">
                     <h3 class="w-full">Primary</h3>
@@ -102,8 +102,8 @@
                     <div class="bg-gray-900 w-10 h-10 text-xs text-white text-center p-2">900</div>
                 </div>
             </div>
-        </p-card-body>
-    </p-card>
+        </ui-card-body>
+    </ui-card>
 </template>
 
 <script>

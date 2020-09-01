@@ -10,7 +10,7 @@
 
         <div class="row" v-if="endpoint">
             <div class="content-container">
-                <p-table id="entries" :endpoint="endpoint" sort-by="name" :key="taxonomy.handle + '_table'">
+                <ui-table id="entries" :endpoint="endpoint" sort-by="name" :key="taxonomy.handle + '_table'">
                     <template slot="name" slot-scope="table">
                         <router-link :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
@@ -24,31 +24,31 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-table-actions :id="'term_' + table.record.id + '_actions'" :key="'term_' + table.record.id + '_actions'">
-                            <p-dropdown-link @click.prevent :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">Edit</p-dropdown-link>
+                        <ui-table-actions :id="'term_' + table.record.id + '_actions'" :key="'term_' + table.record.id + '_actions'">
+                            <ui-dropdown-link @click.prevent :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">Edit</ui-dropdown-link>
 
-                            <p-dropdown-link
+                            <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-term="table.record"
                                 classes="link--danger"
                             >
                                 Delete
-                            </p-dropdown-link>
-                        </p-table-actions>
+                            </ui-dropdown-link>
+                        </ui-table-actions>
                     </template>
-                </p-table>
+                </ui-table>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="delete-term" title="Delete Term">
+            <ui-modal name="delete-term" title="Delete Term">
                 <p>Are you sure you want to permenantly delete this term?</p>
 
                 <template slot="footer" slot-scope="term">
-                    <p-button v-modal:delete-term @click="destroy(term.data.id)" theme="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-term>Cancel</p-button>
+                    <ui-button v-modal:delete-term @click="destroy(term.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-term>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
         </portal>
     </div>
 </template>

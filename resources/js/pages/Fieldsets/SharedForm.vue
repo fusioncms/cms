@@ -9,7 +9,7 @@
 
 		<div class="card">
             <div class="card__body">
-				<p-title
+				<ui-title
                     name="name"
                     autocomplete="off"
                     autofocus
@@ -17,7 +17,7 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </p-title>
+                </ui-title>
 
 				<section-builder class="mt-6" v-model="form.sections"></section-builder>
 			</div>
@@ -26,7 +26,7 @@
 		<template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-					<p-slug
+					<ui-slug
 						name="handle"
 						label="Handle"
 						autocomplete="off"
@@ -36,19 +36,19 @@
 						:has-error="form.errors.has('handle')"
 						:error-message="form.errors.get('handle')"
 						v-model="form.handle">
-					</p-slug>
+					</ui-slug>
 				</div>
             </div>
 
-			<p-definition-list v-if="resource">
-                <p-definition name="Created At">
+			<ui-definition-list v-if="resource">
+                <ui-definition name="Created At">
                     {{ $moment(resource.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Updated At">
+                <ui-definition name="Updated At">
                     {{ $moment(resource.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
 		</template>
 	</form-container>
 </template>

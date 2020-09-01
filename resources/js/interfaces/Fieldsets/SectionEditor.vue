@@ -2,16 +2,16 @@
 	<div>
         <div class="row">
             <div class="col mb-6 w-full lg:w-1/2">
-                <p-input
+                <ui-input
                     name="label"
                     label="Section Label"
                     v-model="section.name"
                     required>
-                </p-input>
+                </ui-input>
             </div>
 
             <div class="col mb-6 w-full lg:w-1/2">
-                <p-slug
+                <ui-slug
                     name="handle"
                     label="Section Handle"
                     autocomplete="off"
@@ -20,24 +20,24 @@
                     :watch="section.name"
                     v-model="section.handle"
                     required>
-                </p-slug>
+                </ui-slug>
             </div>
 
             <div class="col mb-6 w-full lg:w-1/2">
-                <p-input
+                <ui-input
                     name="description"
                     label="Section Description"
                     v-model="section.description">
-                </p-input>
+                </ui-input>
             </div>
 
             <div class="col mb-6 w-full lg:w-1/2">
-                <p-select
+                <ui-select
                     name="placement"
                     label="Section Placement"
                     :options="placements"
                     v-model="section.placement">
-                </p-select>
+                </ui-select>
             </div>
         </div>
 

@@ -1,5 +1,5 @@
 <template>
-    <p-fieldset
+    <ui-fieldset
         :label="label"
         :inline="inline"
         :help="help"
@@ -7,12 +7,12 @@
         :errorMessage="errorMessage"
         :hasSuccess="hasSuccess">
         <slot></slot>
-    </p-fieldset>
+    </ui-fieldset>
 </template>
 
 <script>
     export default {
-        name: 'p-checkbox-group',
+        name: 'ui-checkbox-group',
 
         props: {
             label: String,

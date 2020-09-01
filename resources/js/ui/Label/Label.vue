@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: 'p-label',
+        name: 'ui-label',
 
         props: {
             label: String,

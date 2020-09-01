@@ -1,5 +1,5 @@
 <template>
-	<p-field-group
+	<ui-field-group
         :name="name"
         :fieldId="formattedId"
         :label="label"
@@ -10,7 +10,7 @@
         :hasSuccess="hasSuccess"
         :successMessage="successMessage"
         :help="help">
-        <p-select
+        <ui-select
             :id="formattedId"
             :name="name"
             :placeholder="placeholder"
@@ -26,15 +26,15 @@
             :hasSuccess="hasSuccess"
             :message="hasMessage"
             v-model="computedValue">
-        </p-select>
-	</p-field-group>
+        </ui-select>
+	</ui-field-group>
 </template>
 
 <script>
     import Popper from 'popper.js'
 
     export default {
-        name: 'p-select-group',
+        name: 'ui-select-group',
 
         mixins: [
             require('../../mixins/fields').default

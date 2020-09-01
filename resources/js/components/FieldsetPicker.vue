@@ -1,5 +1,5 @@
 <template>
-    <p-select
+    <ui-select
         name="fieldset"
         label="Fieldset"
         help="What fieldset would you like to attach?"
@@ -7,7 +7,7 @@
         :has-error="hasError"
         :error-message="errorMessage"
         v-model="model">
-    </p-select>
+    </ui-select>
 </template>
 
 <script>

@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: 'p-tab',
+        name: 'ui-tab',
 
         data() {
             return {

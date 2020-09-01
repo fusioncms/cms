@@ -1,8 +1,8 @@
 <template>
-    <p-card class="sg-typography">
-        <p-card-header title="Typography"></p-card-header>
+    <ui-card class="sg-typography">
+        <ui-card-header title="Typography"></ui-card-header>
 
-        <p-card-body>
+        <ui-card-body>
             <div class="row">
                 <div class="col w-full lg:w-1/2">
                     <h1>Heading 1 <small>Sub Heading</small></h1>
@@ -22,13 +22,13 @@
 
                     <h3>Badges</h3>
                     <p>
-                        <p-badge>Default</p-badge>
-                        <p-badge class="badge--primary">Primary</p-badge>
-                        <p-badge class="badge--secondary">Secondary</p-badge>
-                        <p-badge class="badge--info">Info</p-badge>
-                        <p-badge class="badge--success">Success</p-badge>
-                        <p-badge class="badge--warning">Warning</p-badge>
-                        <p-badge class="badge--danger">Danger</p-badge>
+                        <ui-badge>Default</ui-badge>
+                        <ui-badge class="badge--primary">Primary</ui-badge>
+                        <ui-badge class="badge--secondary">Secondary</ui-badge>
+                        <ui-badge class="badge--info">Info</ui-badge>
+                        <ui-badge class="badge--success">Success</ui-badge>
+                        <ui-badge class="badge--warning">Warning</ui-badge>
+                        <ui-badge class="badge--danger">Danger</ui-badge>
                     </p>
                     <!-- <div class="flex">
                         <ul class="w-1/2">
@@ -54,8 +54,8 @@
                     </div> -->
                 </div>
             </div>
-        </p-card-body>
-    </p-card>
+        </ui-card-body>
+    </ui-card>
 </template>
 
 <script>

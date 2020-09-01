@@ -22,7 +22,7 @@
 
 <script>
     export default {
-        name: 'p-accordion-item',
+        name: 'ui-accordion-item',
 
         data() {
             return {

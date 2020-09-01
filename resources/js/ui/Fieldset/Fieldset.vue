@@ -1,10 +1,10 @@
 <template>
     <fieldset class="form-group" :class="{'form-group--danger': hasError, 'form-group--success': hasSuccess}">
-        <p-legend :label="label" v-if="hasMessage">
-            <p-help-danger v-if="errorMessage" v-html="errorMessage"></p-help-danger>
-            <p-help-success v-if="successMessage" v-html="successMessage"></p-help-success>
-            <p-help v-if="help" v-html="help"></p-help>
-        </p-legend>
+        <ui-legend :label="label" v-if="hasMessage">
+            <ui-help-danger v-if="errorMessage" v-html="errorMessage"></ui-help-danger>
+            <ui-help-success v-if="successMessage" v-html="successMessage"></ui-help-success>
+            <ui-help v-if="help" v-html="help"></ui-help>
+        </ui-legend>
 
         <slot></slot>
     </fieldset>
@@ -12,7 +12,7 @@
 
 <script>
     export default {
-        name: 'p-fieldset',
+        name: 'ui-fieldset',
 
         mixins: [
             require('../../mixins/fields').default

@@ -6,13 +6,13 @@
 
         <div class="row">
             <div class="content-container">
-                <p-upload
+                <ui-upload
                     name="file-upload"
                     ref="upload"
                     accept="zip"
                     :multiple="false"
                     @input="verifyUpload"
-                ></p-upload>
+                ></ui-upload>
             </div>
         </div>
 
@@ -26,7 +26,7 @@
                         <p class="text-gray-800 text-base">{{ theme.description }}</p>
 
                         <div class="w-full border-t-2 border-gray-200 pt-3">
-                            <p-button class="w-full" v-if="! theme.active" @click="setAsActive(theme.namespace)">Set as active</p-button>
+                            <ui-button class="w-full" v-if="! theme.active" @click="setAsActive(theme.namespace)">Set as active</ui-button>
                             <p class="text-center" v-else>Currently Active</p>
                         </div>
                     </div>
@@ -38,13 +38,13 @@
             <router-link :to="{ name: 'themes.settings' }" class="button">Go Back</router-link>
         </portal>
 
-        <p-modal name="confirm" title="Confirm override" key="confirm_modal" v-model="confirmModal">
+        <ui-modal name="confirm" title="Confirm override" key="confirm_modal" v-model="confirmModal">
             <p>Are you sure you want to override this theme? The existing theme will be discarded.</p>
             <template slot="footer">
-                <p-button @click="submitUpload" type="button" class="button button--primary">Yes, please!</p-button>
-                <p-button @click="cancelUpload" type="button" class="mr-3">Leave and Discard Changes</p-button>
+                <ui-button @click="submitUpload" type="button" class="button button--primary">Yes, please!</ui-button>
+                <ui-button @click="cancelUpload" type="button" class="mr-3">Leave and Discard Changes</ui-button>
             </template>
-        </p-modal>
+        </ui-modal>
     </div>
 </template>
 

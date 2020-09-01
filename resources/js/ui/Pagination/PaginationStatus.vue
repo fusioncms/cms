@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: 'p-pagination-status',
+        name: 'ui-pagination-status',
 
         props: {
             total: {

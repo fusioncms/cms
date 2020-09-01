@@ -6,10 +6,10 @@
 
         <div class="row">
             <div class="content-container">
-                <p-table :endpoint="endpoint" id="extensions" sort-by="name" primary-key="handle" key="extensions_table">
+                <ui-table :endpoint="endpoint" id="extensions" sort-by="name" primary-key="handle" key="extensions_table">
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">
-                            <p-status :value="table.record.status" class="mr-2"></p-status>
+                            <ui-status :value="table.record.status" class="mr-2"></ui-status>
 
                             <router-link :to="{ name: 'extensions.edit', params: {extension: table.record.id} }">{{ table.record.name }}</router-link>
                         </div>
@@ -28,31 +28,31 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-table-actions :id="'extension_' + table.record.id + '_actions'" :key="'extension_' + table.record.id + '_actions'">
-                            <p-dropdown-link :to="{ name: 'extensions.edit', params: {extension: table.record.id} }">Edit</p-dropdown-link>
+                        <ui-table-actions :id="'extension_' + table.record.id + '_actions'" :key="'extension_' + table.record.id + '_actions'">
+                            <ui-dropdown-link :to="{ name: 'extensions.edit', params: {extension: table.record.id} }">Edit</ui-dropdown-link>
 
-                            <p-dropdown-link
+                            <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-extension="table.record"
                                 classes="link--danger"
                             >
                                 Delete
-                            </p-dropdown-link>
-                        </p-table-actions>
+                            </ui-dropdown-link>
+                        </ui-table-actions>
                     </template>
-                </p-table>
+                </ui-table>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="delete-extension" title="Delete Extension" key="delete_extension">
+            <ui-modal name="delete-extension" title="Delete Extension" key="delete_extension">
                 <p>Are you sure you want to permenantly delete this extension?</p>
 
                 <template slot="footer" slot-scope="extension">
-                    <p-button v-modal:delete-extension @click="destroy(extension.data.id)" theme="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-extension>Cancel</p-button>
+                    <ui-button v-modal:delete-extension @click="destroy(extension.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-extension>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
         </portal>
     </div>
 </template>

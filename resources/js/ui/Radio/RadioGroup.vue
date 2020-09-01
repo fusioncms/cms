@@ -1,17 +1,17 @@
 <template>
-    <p-fieldset
+    <ui-fieldset
         :label="label"
         :help="help"
         :hasError="hasError"
         :errorMessage="errorMessage"
         :hasSuccess="hasSuccess">
         <slot></slot>
-    </p-fieldset>
+    </ui-fieldset>
 </template>
 
 <script>
     export default {
-        name: 'p-radio-group',
+        name: 'ui-radio-group',
 
         props: {
             label: String,

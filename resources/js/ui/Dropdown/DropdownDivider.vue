@@ -4,6 +4,6 @@
 
 <script>
     export default {
-        name: 'p-dropdown-divider',
+        name: 'ui-dropdown-divider',
     }
 </script>

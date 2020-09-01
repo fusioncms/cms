@@ -1,16 +1,16 @@
 <template>
-	<p-dropdown id="role-filters">
+	<ui-dropdown id="role-filters">
 		<fa-icon class="icon" :icon="['fas', 'user-tag']"></fa-icon>
 		<span class="hidden md:inline">{{ options[role] || 'Everyone' }}</span>
 		
 		<template v-slot:menu>
-			<p-dropdown-link key="default" @click.prevent="setRole(null)">Everyone</p-dropdown-link>
+			<ui-dropdown-link key="default" @click.prevent="setRole(null)">Everyone</ui-dropdown-link>
 
-			<p-dropdown-link v-for="(role, key) in options" :key="key" @click.prevent="setRole(key)">
+			<ui-dropdown-link v-for="(role, key) in options" :key="key" @click.prevent="setRole(key)">
 				{{ role }}
-			</p-dropdown-link>
+			</ui-dropdown-link>
 		</template>
-	</p-dropdown>
+	</ui-dropdown>
 </template>
 
 <script>

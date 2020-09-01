@@ -14,7 +14,7 @@
 
 <script>
     export default {
-        name: 'p-alert',
+        name: 'ui-alert',
 
         mixins: [
             require('../../mixins/variants').default

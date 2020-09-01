@@ -1,15 +1,15 @@
 <template>
-    <p-modal v-model="open" title="Move to directory" name="select directory" no-footer>
-        <p-treeview
+    <ui-modal v-model="open" title="Move to directory" name="select directory" no-footer>
+        <ui-treeview
                 v-model="selectedDirectory"
                 :items="directories"
-        ></p-treeview>
+        ></ui-treeview>
 
         <div class="text-right">
-            <p-button @click="close">Cancel</p-button>
-            <p-button @click="select" theme="primary">Move</p-button>
+            <ui-button @click="close">Cancel</ui-button>
+            <ui-button @click="select" theme="primary">Move</ui-button>
         </div>
-    </p-modal>
+    </ui-modal>
 </template>
 
 <script>

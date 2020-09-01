@@ -10,9 +10,9 @@
 
         <div v-if="$mq == 'sm' && response.id" class="row mb-6">
             <div class="col w-full">
-                <p-card class="flex items-center justify-between">
+                <ui-card class="flex items-center justify-between">
                     <a href="#" @click.prevent="clear" class="rounded p-2 hover:bg-gray-100 text-gray-900 border border-gray-300"><fa-icon :icon="['fas', 'arrow-left']" class="fa-fw"></fa-icon></a>
-                </p-card>
+                </ui-card>
             </div>
         </div>
 

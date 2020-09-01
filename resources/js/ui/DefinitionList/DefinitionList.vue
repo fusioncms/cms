@@ -10,6 +10,6 @@
 
 <script>
     export default {
-        name: 'p-definition-list',
+        name: 'ui-definition-list',
     }
 </script>

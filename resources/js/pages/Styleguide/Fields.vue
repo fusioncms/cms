@@ -1,25 +1,25 @@
 <template>
-    <p-card class="sg-fields">
-        <p-card-header title="Form Fields"></p-card-header>
+    <ui-card class="sg-fields">
+        <ui-card-header title="Form Fields"></ui-card-header>
 
-        <p-card-body>
+        <ui-card-body>
             <!-- Title Field -->
             <div class="row">
                 <div class="col w-full">
                     <h3>Title Field</h3>
                 </div>
                 <div class="col w-full xl:w-1/3">
-                    <p-title-group
+                    <ui-title-group
                         name="title"
                         label="Title"
                         help="What is your name?"
                         autocomplete="off"
                         placeholder="Name">
-                    </p-title-group>
+                    </ui-title-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-title-group
+                    <ui-title-group
                         name="title_success"
                         label="Title Success"
                         help="What is your name?"
@@ -29,11 +29,11 @@
                         value="Jean-Luc Picard"
                         hasSuccess
                         successMessage="That looks like a good name!">
-                    </p-title-group>
+                    </ui-title-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-title-group
+                    <ui-title-group
                         name="title_error"
                         label="Title Error"
                         help="What is your name?"
@@ -43,7 +43,7 @@
                         value="Tea, Earl Gray, Hot"
                         hasError
                         errorMessage="That is not a valid name.">
-                    </p-title-group>
+                    </ui-title-group>
                 </div>
             </div>
 
@@ -56,16 +56,16 @@
                 </div>
                 
                 <div class="col w-full xl:w-1/3">
-                    <p-input-group
+                    <ui-input-group
                         name="input"
                         label="Input"
                         help="Help text for input."
                         autocomplete="off">
-                    </p-input-group>
+                    </ui-input-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-input-group
+                    <ui-input-group
                         name="input_success"
                         label="Input Success"
                         help="What shall we call you?"
@@ -74,11 +74,11 @@
                         value="Jean-Luc Picard"
                         hasSuccess
                         successMessage="This name is valid!">
-                    </p-input-group>
+                    </ui-input-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-input-group
+                    <ui-input-group
                         name="input_error"
                         label="Input Error"
                         type="email"
@@ -89,7 +89,7 @@
                         value="make.it.so@"
                         hasError
                         errorMessage="This email is invalid.">
-                    </p-input-group>
+                    </ui-input-group>
                 </div>
             </div>
 
@@ -102,16 +102,16 @@
                 </div>
 
                 <div class="col w-full md:w-1/3">
-                    <p-password-group
+                    <ui-password-group
                         name="password"
                         label="password"
                         required
                         help="Please enter a password.">
-                    </p-password-group>
+                    </ui-password-group>
                 </div>
 
                 <div class="col w-full md:w-1/3">
-                    <p-password-group
+                    <ui-password-group
                         name="password_error"
                         label="Password Error"
                         required
@@ -119,11 +119,11 @@
                         value="Password"
                         hasSuccess
                         successMessage="Thank you!">
-                    </p-password-group>
+                    </ui-password-group>
                 </div>
 
                 <div class="col w-full md:w-1/3">
-                    <p-password-group
+                    <ui-password-group
                         name="password_success"
                         label="Password Success"
                         required
@@ -131,7 +131,7 @@
                         value="Password"
                         hasError
                         errorMessage="This password is incorrect.">
-                    </p-password-group>
+                    </ui-password-group>
                 </div>
             </div>
 
@@ -144,18 +144,18 @@
                 </div>
 
                 <div class="col w-full sm:w-1/2 lg:w-1/4">
-                    <p-number-group
+                    <ui-number-group
                         name="number"
                         label="Number"
                         :value="1.0"
                         :step="0.1"
                         :decimals="1"
                         help="Choose an number.">
-                    </p-number-group>
+                    </ui-number-group>
                 </div>
                 
                 <div class="col w-full sm:w-1/2 lg:w-1/4">
-                    <p-number-group
+                    <ui-number-group
                         name="number_success"
                         label="Number Success"
                         :required="true"
@@ -164,11 +164,11 @@
                         help="Choose an integer divisible by 5."
                         hasSuccess
                         successMessage="This value is valid!">
-                    </p-number-group>
+                    </ui-number-group>
                 </div>
 
                 <div class="col w-full sm:w-1/2 lg:w-1/4">
-                    <p-number-group
+                    <ui-number-group
                         name="number_error"
                         label="Number Error"
                         :required="true"
@@ -177,7 +177,7 @@
                         help="Choose an integer divisible by 5."
                         hasError
                         errorMessage="This is not a valid integer.">
-                    </p-number-group>
+                    </ui-number-group>
                 </div>
             </div>
             
@@ -190,17 +190,17 @@
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-textarea-group
+                    <ui-textarea-group
                         name="textarea"
                         label="Textarea"
                         help="Help text for textarea."
                         autocomplete="off"
                         :rows="5">
-                    </p-textarea-group>
+                    </ui-textarea-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-textarea-group
+                    <ui-textarea-group
                         name="textarea_success"
                         label="Textarea Success"
                         help="Enter a message."
@@ -210,11 +210,11 @@
                         hasSuccess
                         successMessage="This value is valid!"
                         :rows="5">
-                    </p-textarea-group>
+                    </ui-textarea-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-textarea-group
+                    <ui-textarea-group
                         name="textarea_error"
                         label="Textarea Error"
                         help="Enter a message."
@@ -225,7 +225,7 @@
                         hasError
                         errorMessage="This value is invalid."
                         :rows="5">
-                    </p-textarea-group>
+                    </ui-textarea-group>
                 </div>
             </div>
 
@@ -238,7 +238,7 @@
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-select-group
+                    <ui-select-group
                         name="select"
                         label="Select"
                         help="Help text for select dropdown."
@@ -264,11 +264,11 @@
                                 'value': 'option-5',
                             }
                         ]">
-                    </p-select-group>
+                    </ui-select-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-select-group
+                    <ui-select-group
                         name="select_success"
                         label="Select Success"
                         value="option-1"
@@ -297,11 +297,11 @@
                                 'value': 'option-5',
                             }
                         ]">
-                    </p-select-group>
+                    </ui-select-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-select-group
+                    <ui-select-group
                         name="select_error"
                         label="Select Error"
                         help="Help text for select dropdown."
@@ -329,11 +329,11 @@
                                 'value': 'option-5',
                             }
                         ]">
-                    </p-select-group>
+                    </ui-select-group>
                 </div>
 
                 <div class="col w-full xl:w-1/3">
-                    <p-select-group
+                    <ui-select-group
                         name="select_multiple"
                         label="Select Multiple"
                         help="Help text for select dropdown."
@@ -382,7 +382,7 @@
                                 'value': 'option-10',
                             }
                         ]">
-                    </p-select-group>
+                    </ui-select-group>
                 </div>
             </div>
 
@@ -395,13 +395,13 @@
                 </div>
 
                 <div class="col w-full lg:w-1/2">
-                    <p-upload
+                    <ui-upload
                         name="upload"
                         label="Upload"
                         required
                         help="Upload an image."
                         multiple>
-                    </p-upload>
+                    </ui-upload>
                 </div>
             </div>
             <hr>
@@ -413,177 +413,177 @@
                 </div>
 
                 <div class="col w-full md:w-1/2">
-                    <p-fieldset 
+                    <ui-fieldset 
                         label="Checkboxes" 
                         help="Select all that apply.">
-                        <p-checkbox
+                        <ui-checkbox
                             id="checkbox_0"
                             key="0"
                             name="checkbox">
                             Checkbox 1
-                        </p-checkbox>
+                        </ui-checkbox>
 
-                        <p-checkbox
+                        <ui-checkbox
                             id="checkbox_1"
                             key="1"
                             name="checkbox">
                             Checkbox 2
-                        </p-checkbox>
+                        </ui-checkbox>
 
-                        <p-checkbox
+                        <ui-checkbox
                             id="checkbox_2"
                             key="2"
                             name="checkbox">
                             Checkbox 3
-                        </p-checkbox>
+                        </ui-checkbox>
 
-                        <p-checkbox
+                        <ui-checkbox
                             id="checkbox_3"
                             key="3"
                             name="checkbox">
                             Checkbox 4
-                        </p-checkbox>
+                        </ui-checkbox>
 
-                        <p-checkbox
+                        <ui-checkbox
                             id="checkbox_4"
                             key="4"
                             name="checkbox">
                             Checkbox 5
-                        </p-checkbox>
-                    </p-fieldset>
+                        </ui-checkbox>
+                    </ui-fieldset>
                 </div>
 
                 <div class="col w-full md:w-1/2">
-                    <p-fieldset 
+                    <ui-fieldset 
                         label="Radios" 
                         help="Select an option.">
-                        <p-radio
+                        <ui-radio
                             id="radio_0"
                             key="0"
                             name="radio">
                             Radio 1
-                        </p-radio>
+                        </ui-radio>
 
-                        <p-radio
+                        <ui-radio
                             id="radio_1"
                             key="1"
                             name="radio">
                             Radio 2
-                        </p-radio>
+                        </ui-radio>
 
-                        <p-radio
+                        <ui-radio
                             id="radio_2"
                             key="2"
                             name="radio">
                             Radio 3
-                        </p-radio>
+                        </ui-radio>
 
-                        <p-radio
+                        <ui-radio
                             id="radio_3"
                             key="3"
                             name="radio">
                             Radio 4
-                        </p-radio>
+                        </ui-radio>
 
-                        <p-radio
+                        <ui-radio
                             id="radio_4"
                             key="4"
                             name="radio">
                             Radio 5
-                        </p-radio>
-                    </p-fieldset>
+                        </ui-radio>
+                    </ui-fieldset>
                 </div>
 
                 <div class="col w-full md:w-1/2">
-                    <p-fieldset
+                    <ui-fieldset
                         label="Checkboxes Inline" 
                         help="Select all that apply.">
-                        <p-checkbox
+                        <ui-checkbox
                             id="checkbox_inline_0"
                             key="0"
                             name="checkbox_inline"
                             inline>
                             Checkbox 1
-                        </p-checkbox>
+                        </ui-checkbox>
 
-                        <p-checkbox
+                        <ui-checkbox
                             id="checkbox_inline_1"
                             key="1"
                             name="checkbox_inline"
                             inline>
                             Checkbox 2
-                        </p-checkbox>
+                        </ui-checkbox>
 
-                        <p-checkbox
+                        <ui-checkbox
                             id="checkbox_inline_2"
                             key="2"
                             name="checkbox_inline"
                             inline>
                             Checkbox 3
-                        </p-checkbox>
+                        </ui-checkbox>
 
-                        <p-checkbox
+                        <ui-checkbox
                             id="checkbox_inline_3"
                             key="3"
                             name="checkbox_inline"
                             inline>
                             Checkbox 4
-                        </p-checkbox>
+                        </ui-checkbox>
 
-                        <p-checkbox
+                        <ui-checkbox
                             id="checkbox_inline_4"
                             key="4"
                             name="checkbox_inline"
                             inline>
                             Checkbox 5
-                        </p-checkbox>
-                    </p-fieldset>
+                        </ui-checkbox>
+                    </ui-fieldset>
                 </div>
 
                 <div class="col w-full md:w-1/2">
-                    <p-fieldset 
+                    <ui-fieldset 
                         label="Radios Inline" 
                         help="Select an option.">
-                        <p-radio
+                        <ui-radio
                             id="radio_inline_0"
                             key="0"
                             name="radio_inline"
                             inline>
                             Radio 1
-                        </p-radio>
+                        </ui-radio>
 
-                        <p-radio
+                        <ui-radio
                             id="radio_inline_1"
                             key="1"
                             name="radio_inline"
                             inline>
                             Radio 2
-                        </p-radio>
+                        </ui-radio>
 
-                        <p-radio
+                        <ui-radio
                             id="radio_inline_2"
                             key="2"
                             name="radio_inline"
                             inline>
                             Radio 3
-                        </p-radio>
+                        </ui-radio>
 
-                        <p-radio
+                        <ui-radio
                             id="radio_inline_3"
                             key="3"
                             name="radio_inline"
                             inline>
                             Radio 4
-                        </p-radio>
+                        </ui-radio>
 
-                        <p-radio
+                        <ui-radio
                             id="radio_inline_4"
                             key="4"
                             name="radio_inline"
                             inline>
                             Radio 5
-                        </p-radio>
-                    </p-fieldset>
+                        </ui-radio>
+                    </ui-fieldset>
                 </div>
 
                 <div class="col w-full">
@@ -591,27 +591,27 @@
                 </div>
 
                 <div class="col w-full md:w-1/2">
-                    <p-checkbox-single
+                    <ui-checkbox-single
                         id="checkbox_single"
                         name="checkbox_single"
                         required>
                         <p>I have read and understand this website's <a href="#">Terms of Service</a> and agree with all policies.</p>
-                    </p-checkbox-single>
+                    </ui-checkbox-single>
                 </div>
                 
                 <div class="col w-full md:w-1/2">
-                    <p-checkbox-single
+                    <ui-checkbox-single
                         id="checkbox_single_error"
                         name="checkbox_single_error"
                         hasError
                         errorMessage="This field is required to proceed"
                         required>
                         <p>I have read and understand this website's <a href="#">Terms of Service</a> and agree with all policies.</p>
-                    </p-checkbox-single>
+                    </ui-checkbox-single>
                 </div>
             </div>
-        </p-card-body>
-    </p-card> 
+        </ui-card-body>
+    </ui-card> 
 </template>
 
 <script>

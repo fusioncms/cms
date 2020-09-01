@@ -18,19 +18,19 @@
             @input="$emit('input', $event.target.value)"
             v-model="value"/>
 
-        <p-button icon size="small" class="field-password__button" @click="toggleVisibility()">
+        <ui-button icon size="small" class="field-password__button" @click="toggleVisibility()">
             <fa-icon v-if="revealed" icon="eye-slash"></fa-icon>
             <fa-icon v-else icon="eye"></fa-icon>
 
             <span v-if="revealed" class="sr-only">{{ hideText }}</span>
             <span v-else class="sr-only">{{ showText }}</span>
-        </p-button>
+        </ui-button>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'p-password',
+        name: 'ui-password',
 
         mixins: [
             require('../../mixins/fields').default

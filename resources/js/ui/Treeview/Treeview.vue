@@ -35,9 +35,9 @@
                 </a>
             </div>
 
-            <p-treeview v-show="isOpen(node)" :key="index" :nodes="node.children" :depth="depth + 1" v-model="computedValue" v-if="isFolder(node)" :nested="true">
+            <ui-treeview v-show="isOpen(node)" :key="index" :nodes="node.children" :depth="depth + 1" v-model="computedValue" v-if="isFolder(node)" :nested="true">
                 <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope"><slot :name="slot" v-bind="scope"/></template>
-            </p-treeview>
+            </ui-treeview>
         </li>
     </ul>
 </template>
@@ -46,7 +46,7 @@
     import _ from 'lodash'
 
     export default {
-        name: 'p-treeview',
+        name: 'ui-treeview',
 
         data() {
             return {

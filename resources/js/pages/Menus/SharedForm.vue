@@ -9,7 +9,7 @@
 
         <div class="card">
             <div class="card__body">
-                <p-title
+                <ui-title
                     name="name"
                     autocomplete="off"
                     autofocus
@@ -17,11 +17,11 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </p-title>
+                </ui-title>
 
-                <p-tabs>
-                    <p-tab name="General">
-                        <p-input
+                <ui-tabs>
+                    <ui-tab name="General">
+                        <ui-input
                             name="description"
                             label="Description"
                             help="Give a short description of what this menu will link to."
@@ -30,20 +30,20 @@
                             :has-error="form.errors.has('description')"
                             :error-message="form.errors.get('description')"
                             v-model="form.description">
-                        </p-input>
-                    </p-tab>
+                        </ui-input>
+                    </ui-tab>
 
-                    <p-tab name="Fields">
+                    <ui-tab name="Fields">
                         <section-builder v-model="form.sections"></section-builder>
-                    </p-tab>
-                </p-tabs>
+                    </ui-tab>
+                </ui-tabs>
             </div>
         </div>
 
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-slug
+                    <ui-slug
                         name="handle"
                         label="Handle"
                         monospaced
@@ -54,7 +54,7 @@
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
                         v-model="form.handle">
-                    </p-slug>
+                    </ui-slug>
                 </div>
             </div>
         </template>

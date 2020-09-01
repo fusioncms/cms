@@ -9,7 +9,7 @@
 
 <script>
     export default {
-        name: 'p-pagination-select',
+        name: 'ui-pagination-select',
 
         props: {
             total: {

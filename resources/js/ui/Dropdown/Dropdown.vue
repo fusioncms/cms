@@ -19,7 +19,7 @@
 
 <script>
     export default {
-        name: 'p-dropdown',
+        name: 'ui-dropdown',
 
         props: {
             id: {

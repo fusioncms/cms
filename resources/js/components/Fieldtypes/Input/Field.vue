@@ -1,5 +1,5 @@
 <template>
-    <p-input
+    <ui-input
         :name="field.handle"
         :label="field.name"
         :help="field.help"
@@ -8,7 +8,7 @@
         :has-error="hasError"
         :error-message="errorMessage"
         @input="$emit('input', $event)"
-    ></p-input>
+    ></ui-input>
 </template>
 
 <script>
