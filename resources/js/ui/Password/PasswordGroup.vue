@@ -23,7 +23,8 @@
             :monospaced="monospaced"
             :hasError="hasError"
             :hasSuccess="hasSuccess"
-            :message="hasMessage">
+            :message="hasMessage"
+            v-model="computedValue">
         </p-password>
     </p-field-group>
 </template>

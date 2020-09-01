@@ -1,5 +1,14 @@
 <template>
-        <a v-if="href"
+        <router-link v-if="to" 
+            :to="to" 
+            class="button"
+            :class="[{ 'button--icon': icon, 'button--rounded': rounded, 'disabled': disabled }, variantClass, sizeClass]"@click.native="onClick($event)"
+            v-on="$listeners"
+            v-bind="$attrs">
+            <slot></slot>
+        </router-link>
+
+        <a v-else-if="href"
             :href="href"
             class="button"
             :class="[{ 'button--icon': icon, 'button--rounded': rounded, 'disabled': disabled }, variantClass, sizeClass]"
@@ -36,6 +45,10 @@
             icon: Boolean,
             rounded: Boolean,
             href: String,
+            to: {
+                type: Array|Object|String,
+                default: ''
+            },
             disabled: Boolean,
             value: {
                 required: false,

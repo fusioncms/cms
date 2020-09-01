@@ -2,14 +2,14 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'users' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <p-button :to="{ name: 'users' }" variant="secondary">Go Back</p-button>
+                <p-button variant="primary" @click.prevent="submit" :disabled="!form.hasChanges">Save</p-button>
             </div>
         </portal>
 
-        <div class="card">
-            <div class="card__body">
-                <p-title
+        <p-card>
+            <p-card-body>
+                <p-title-group
                     name="name"
                     autocomplete="off"
                     autofocus
@@ -17,9 +17,9 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </p-title>
+                </p-title-group>
 
-                <p-input
+                <p-input-group
                     type="email"
                     name="email"
                     label="E-mail"
@@ -28,11 +28,11 @@
                     :error-message="form.errors.get('email')"
                     required
                     v-model="form.email">
-                </p-input>
+                </p-input-group>
 
                 <p-tabs>
                     <p-tab name="Security">
-                        <p-input
+                        <p-input-group
                             type="password"
                             name="password"
                             label="Password"
@@ -41,9 +41,9 @@
                             :error-message="form.errors.get('password')"
                             required
                             v-model="form.password">
-                        </p-input>
+                        </p-input-group>
 
-                        <p-input
+                        <p-input-group
                             type="password"
                             name="password_confirmation"
                             label="Confirm Password"
@@ -52,15 +52,15 @@
                             :error-message="form.errors.get('password_confirmation')"
                             required
                             v-model="form.password_confirmation">
-                        </p-input>
+                        </p-input-group>
                     </p-tab>
                 </p-tabs>
-            </div>
-        </div>
+            </p-card-body>
+        </p-card>
 
         <template v-slot:sidebar>
-            <div class="card">
-                <div class="card__body">
+            <p-card>
+                <p-card-body>
                     <p-toggle
                         name="status"
                         label="Status"
@@ -69,19 +69,19 @@
                         :false-value="0">
                     </p-toggle>
 
-                    <p-select
+                    <p-select-group
                         name="role"
                         label="Role"
                         :options="roleOptions"
                         autocomplete="off"
-                        value="user"
+                        :value="user.roles.name"
                         :has-error="form.errors.has('role')"
                         :error-message="form.errors.get('role')"
                         required
                         v-model="form.role">
-                    </p-select>
-                </div>
-            </div>
+                    </p-select-group>
+                </p-card-body>
+            </p-card>
 
             <p-definition-list v-if="user">
                 <p-definition name="Status">
@@ -101,6 +101,8 @@
                     <span v-else>Never</span>
                 </p-definition>
             </p-definition-list>
+
+            <slot name="sidebar"></slot>
         </template>
     </form-container>
 </template>
@@ -114,21 +116,18 @@
         props: {
             form: {
                 type: Object,
-                required: true,
+                required: true
             },
-
             submit: {
-                required: true,
+                required: true
             },
-
             roles: {
                 type: Array,
-                required: true,
+                required: true
             },
-
             user: {
                 type: Object,
-                required: false,
+                required: false
             }
         },
 

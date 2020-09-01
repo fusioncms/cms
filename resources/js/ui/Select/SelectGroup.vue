@@ -24,7 +24,8 @@
             :required="required"
             :hasError="hasError"
             :hasSuccess="hasSuccess"
-            :message="hasMessage">
+            :message="hasMessage"
+            v-model="computedValue">
         </p-select>
 	</p-field-group>
 </template>

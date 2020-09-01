@@ -26,7 +26,8 @@
             :decimals="decimals"
             :hasError="hasError"
             :hasSuccess="hasSuccess"
-            :message="hasMessage">
+            :message="hasMessage"
+            v-model="computedValue">
         </p-number>
     </p-field-group>
 </template>

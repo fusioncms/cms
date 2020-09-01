@@ -8,9 +8,9 @@
             <router-link :to="{ name: 'users.create' }" class="button button--primary">Create User</router-link>
         </portal>
 
-        <div class="sidebar-layout row">
+        <div class="sidebar-container">
             <mq-layout mq="xl+">
-                <div class="sidebar-layout__sidebar col">
+                <div class="sidebar-container__sidebar">
                     <p-card>
                         <p-card-body>
                             <h2 class="text-heading--xxs">Roles</h2>
@@ -31,7 +31,7 @@
                 </div>
             </mq-layout>
 
-            <div class="sidebar-layout__content col">
+            <div class="sidebar-container__content">
                 <p-table id="users" :endpoint="endpoint" sort-by="name" key="users_table">
                     <template v-slot:toolbarPrepend v-if="$mq === 'sm' || $mq === 'md' || $mq === 'lg'">
                         <p-toolbar-group>

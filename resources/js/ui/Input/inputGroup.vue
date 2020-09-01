@@ -24,7 +24,8 @@
             :monospaced="monospaced"
             :hasError="hasError"
             :hasSuccess="hasSuccess"
-            :message="hasMessage">
+            :message="hasMessage"
+            v-model="computedValue">
         </p-input>
     </p-field-group>
 </template>
@@ -104,7 +105,7 @@
                 required: false,
                 type: Boolean,
                 default: false,
-            },
+            }
         }
     }
 </script>

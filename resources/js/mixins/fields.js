@@ -10,6 +10,17 @@ export default {
 
         formattedId() {
             return this.id ? this.id : this.name + '_field'
+        },
+
+        computedValue: {
+            get() {
+                return this.value
+            },
+
+            set(value) {
+                this.model = value
+                this.$emit('input', value)
+            }
         }
     }
 }
