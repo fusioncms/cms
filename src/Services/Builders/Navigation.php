@@ -3,21 +3,21 @@
 namespace Fusion\Services\Builders;
 
 use Fusion\Contracts\Builder as BuilderContract;
-use Fusion\Models\Menu as MenuModel;
+use Fusion\Models\Navigation as NavigationModel;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-class Menu extends Builder implements BuilderContract
+class Navigation extends Builder implements BuilderContract
 {
     /**
      * @var string
      */
-    protected $menu;
+    protected $navigation;
 
     /**
      * @var string
      */
-    protected $namespace = 'Fusion\Models\Menus';
+    protected $namespace = 'Fusion\Models\Navigation';
 
     /**
      * @var \Fusion\Database\Eloquent\Model
@@ -25,34 +25,34 @@ class Menu extends Builder implements BuilderContract
     protected $model;
 
     /**
-     * Create a new Menu instance.
+     * Create a new Navigation instance.
      *
-     * @param string $menu
+     * @param string $navigation
      */
-    public function __construct($menu)
+    public function __construct($navigation)
     {
         parent::__construct();
 
-        $this->menu  = MenuModel::where('handle', $menu)->firstOrFail();
-        $this->model = $this->make();
+        $this->navigation = NavigationModel::where('handle', $navigation)->firstOrFail();
+        $this->model      = $this->make();
     }
 
     /**
-     * Make a new menu model instance.
+     * Make a new navigation model instance.
      */
     public function make()
     {
-        $className = Str::studly($this->menu->handle);
+        $className = Str::studly($this->navigation->handle);
         $traits    = [];
-        $fillable  = ['menu_id', 'name', 'url', 'new_window', 'order', 'status'];
+        $fillable  = ['navigation_id', 'name', 'url', 'new_window', 'order', 'status'];
         $casts     = [
             'order'      => 'integer',
             'new_window' => 'boolean',
             'status'     => 'boolean',
         ];
 
-        if ($this->menu->fieldset) {
-            $fields = $this->menu->fieldset->fields->reject(function ($field) {
+        if ($this->navigation->fieldset) {
+            $fields = $this->navigation->fieldset->fields->reject(function ($field) {
                 $fieldtype = fieldtypes()->get($field->type);
 
                 if ($fieldtype->hasRelationship()) {
@@ -69,32 +69,32 @@ class Menu extends Builder implements BuilderContract
             }
         }
 
-        $path = fusion_path('/src/Models/Menus/'.$className.'.php');
-        $stub = File::get(fusion_path('/stubs/matrices/menu.stub'));
+        $path = fusion_path('/src/Models/Navigation/'.$className.'.php');
+        $stub = File::get(fusion_path('/stubs/matrices/navigation.stub'));
 
         $contents = strtr($stub, [
             '{class}'         => $className,
-            '{handle}'        => $this->menu->handle,
+            '{handle}'        => $this->navigation->handle,
             '{fillable}'      => '[\''.implode('\', \'', $fillable).'\']',
             '{casts}'         => '[\''.implode('\', \'', $casts).'\']',
             '{with}'          => '[\''.implode('\', \'', $this->getWith()).'\']',
             '{dates}'         => '[\''.implode('\', \'', $this->getDates()).'\']',
             '{trait_classes}' => $this->getTraitImportStatements($traits),
             '{traits}'        => $this->getTraitUseStatements($traits),
-            '{menu_id}'       => $this->menu->id,
+            '{navigation_id}'       => $this->navigation->id,
             '{relationships}' => $this->generateRelationships(),
         ]);
 
         File::put($path, $contents);
 
-        return app()->make('Fusion\Models\Menus\\'.$className);
+        return app()->make('Fusion\Models\Navigation\\'.$className);
     }
 
     /**
-     * Get the menu.
+     * Get the navigation.
      */
     public function get()
     {
-        return $this->model->where('menu_id', $this->menu->id)->firstOrCreate(['menu_id' => $this->menu->id]);
+        return $this->model->where('navigation_id', $this->navigation->id)->firstOrCreate(['navigation_id' => $this->navigation->id]);
     }
 }

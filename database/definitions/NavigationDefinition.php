@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(Fusion\Models\Menu::class, function (Faker $faker) {
+$factory->define(Fusion\Models\Navigation::class, function (Faker $faker) {
     $name = $faker->words(2, true);
 
     return [

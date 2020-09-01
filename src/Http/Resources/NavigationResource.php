@@ -15,6 +15,23 @@ class NavigationResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $resource = [
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'handle'      => $this->handle,
+            'description' => $this->description,
+
+            'table'       => $this->table,
+            'fieldset'    => new FieldsetResource($this->fieldset),
+            'nodes'       => NodeResource::collection($this->nodes),
+        ];
+
+        if ($this->fieldset) {
+            foreach ($this->fieldset->fields as $field) {
+                $resource['fields'][$field->handle] = $this->{$field->handle};
+            }
+        }
+
+        return $resource;
     }
 }

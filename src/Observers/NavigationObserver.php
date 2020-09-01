@@ -5,10 +5,10 @@ namespace Fusion\Observers;
 use Fusion\Database\Migration;
 use Fusion\Database\Schema\Blueprint;
 use Fusion\Models\Fieldset;
-use Fusion\Models\Menu;
+use Fusion\Models\Navigation;
 use Illuminate\Support\Str;
 
-class MenuObserver
+class NavigationObserver
 {
     /**
      * @var \Fusion\Database\Migration
@@ -16,7 +16,7 @@ class MenuObserver
     protected $migration;
 
     /**
-     * Create a new MenuObserver instance.
+     * Create a new NavigationObserver instance.
      *
      * @param \Fusion\Database\Migration $migration
      */
@@ -26,17 +26,17 @@ class MenuObserver
     }
 
     /**
-     * Handle the menu "created" event.
+     * Handle the navigation "created" event.
      *
-     * @param \Fusion\Models\Menu $menu
+     * @param \Fusion\Models\Navigation $navigation
      *
      * @return void
      */
-    public function created(Menu $menu)
+    public function created(Navigation $navigation)
     {
-        $this->migration->schema->create($menu->table, function (Blueprint $table) {
+        $this->migration->schema->create($navigation->table, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('menu_id')->index();
+            $table->unsignedBigInteger('navigation_id')->index();
             $table->unsignedBigInteger('parent_id')->index()->default(0);
             $table->string('name');
             $table->string('url')->nullable();
@@ -47,63 +47,63 @@ class MenuObserver
             $table->timestamps();
         });
 
-        $this->createFieldset($menu);
+        $this->createFieldset($navigation);
     }
 
     /**
-     * Handle the menu "updating" event.
+     * Handle the navigation "updating" event.
      *
-     * @param \Fusion\Models\Menu $menu
+     * @param \Fusion\Models\Navigation $navigation
      *
      * @return void
      */
-    public function updating(Menu $menu)
+    public function updating(Navigation $navigation)
     {
-        // Fetch our "old" menu instance
-        $old = Menu::find($menu->id);
+        // Fetch our "old" navigation instance
+        $old = Navigation::find($navigation->id);
 
         // Update table if changed
-        if ($old->table !== $menu->table) {
-            $this->migration->schema->rename($old->table, $menu->table);
+        if ($old->table !== $navigation->table) {
+            $this->migration->schema->rename($old->table, $navigation->table);
         }
 
-        $this->updateFieldset($old, $menu);
+        $this->updateFieldset($old, $navigation);
     }
 
     /**
-     * Handle the menu "deleting" event.
+     * Handle the navigation "deleting" event.
      *
-     * @param \Fusion\Models\Menu $menu
+     * @param \Fusion\Models\Navigation $navigation
      *
      * @return void
      */
-    public function deleting(Menu $menu)
+    public function deleting(Navigation $navigation)
     {
-        $this->deleteFieldset($menu);
+        $this->deleteFieldset($navigation);
     }
 
     /**
-     * Handle the menu "deleted" event.
+     * Handle the navigation "deleted" event.
      *
-     * @param \Fusion\Models\Menu $menu
+     * @param \Fusion\Models\Navigation $navigation
      *
      * @return void
      */
-    public function deleted(Menu $menu)
+    public function deleted(Navigation $navigation)
     {
-        $this->migration->schema->dropIfExists($menu->table);
+        $this->migration->schema->dropIfExists($navigation->table);
     }
 
     /**
-     * Automatically create a fieldset for our menu.
+     * Automatically create a fieldset for our navigation.
      *
-     * @param Menu $menu
+     * @param Navigation $navigation
      */
-    protected function createFieldset($menu)
+    protected function createFieldset($navigation)
     {
-        $menu::unsetEventDispatcher();
+        $navigation::unsetEventDispatcher();
 
-        $fieldsetName = 'Menu: '.$menu->name;
+        $fieldsetName = 'Navigation: '.$navigation->name;
 
         // Create the fieldset first
         $fieldset = fusion()->post('fieldsets', [
@@ -117,21 +117,21 @@ class MenuObserver
         // Then create the sections/fields
         $sections = fusion()->post('fieldsets/'.$fieldset->id.'/sections', $fieldset->toArray());
 
-        $menu->attachFieldset($fieldset);
-        $menu->save();
+        $navigation->attachFieldset($fieldset);
+        $navigation->save();
     }
 
     /**
-     * Automatically update the fieldset for our menu.
+     * Automatically update the fieldset for our navigation.
      *
-     * @param Menu $menu
+     * @param Navigation $navigation
      */
     protected function updateFieldset($old, $new)
     {
         $fieldset = $old->fieldsets()->first();
 
         if ($old->name !== $new->name) {
-            $fieldsetName = 'Menu: '.$new->name;
+            $fieldsetName = 'Navigation: '.$new->name;
 
             $fieldset->name   = $fieldsetName;
             $fieldset->handle = Str::slug($fieldsetName, '_');
@@ -140,13 +140,13 @@ class MenuObserver
     }
 
     /**
-     * Automatically delete the fieldset from our menu.
+     * Automatically delete the fieldset from our navigation.
      *
-     * @param Menu $menu
+     * @param Navigation $navigation
      */
-    protected function deleteFieldset($menu)
+    protected function deleteFieldset($navigation)
     {
-        $fieldset = $menu->fieldsets()->first();
+        $fieldset = $navigation->fieldsets()->first();
 
         $fieldset->delete();
     }

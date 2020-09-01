@@ -2,10 +2,10 @@
 
 use Fusion\Contracts\Factory;
 use Fusion\Models\Fieldset;
-use Fusion\Models\Menu;
+use Fusion\Models\Navigation;
 use Illuminate\Support\Str;
 
-class MenuFactory implements Factory
+class NavigationFactory implements Factory
 {
     /**
      * @var string
@@ -18,9 +18,9 @@ class MenuFactory implements Factory
     protected $fieldset;
 
     /**
-     * Create a new Menu factory.
+     * Create a new Navigation factory.
      *
-     * @return \Fusion\Models\Menu
+     * @return \Fusion\Models\Navigation
      */
     public function create()
     {
@@ -31,9 +31,9 @@ class MenuFactory implements Factory
             $overrides['handle'] = Str::snake($this->name);
         }
 
-        $menu = factory(Menu::class)->create($overrides);
+        $navigation = factory(Navigation::class)->create($overrides);
 
-        return $menu;
+        return $navigation;
     }
 
     /**
@@ -41,7 +41,7 @@ class MenuFactory implements Factory
      *
      * @param string $name
      *
-     * @return \MenuFactory
+     * @return \NavigationFactory
      */
     public function withName($name)
     {
@@ -55,7 +55,7 @@ class MenuFactory implements Factory
      *
      * @param \Fusion\Models\Fieldset $fieldset
      *
-     * @return \MenuFactory
+     * @return \NavigationFactory
      */
     public function withFieldset(Fieldset $fieldset)
     {

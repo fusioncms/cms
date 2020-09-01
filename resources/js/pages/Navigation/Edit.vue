@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-			<page-title icon="anchor">Edit Menu</page-title>
+			<page-title icon="anchor">Edit Navigation</page-title>
 		</portal>
 
         <shared-form v-if="form" :form="form"></shared-form>
@@ -24,6 +24,7 @@
         data() {
             return {
                 id: null,
+                navigation: null,
                 form: null
             }
         },
@@ -34,13 +35,13 @@
 
         methods: {
             submit() {
-                this.form.patch(`/api/menus/${this.id}`)
+                this.form.patch(`/api/navigation/${this.id}`)
                     .then(() => {
-                        axios.post(`/api/fieldsets/${this.form.fieldset.id}/sections`, { sections: this.form.sections })
+                        axios.post(`/api/fieldsets/${this.navigation.fieldset.id}/sections`, { sections: this.form.sections })
                             .then(() => {
-                                toast('Menu successfully saved', 'success')
+                                toast('Navigation successfully saved', 'success')
 
-                                this.$router.push('/menus')
+                                this.$router.push('/navigation')
                             }).catch((response) => {
                                 toast(response.message, 'failed')
                             })
@@ -51,21 +52,22 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            getMenu(to.params.menu, (error, menu) => {
+            getNavigation(to.params.navigation, (error, navigation) => {
                 if (error) {
                     next((vm) => {
-                        vm.$router.push('/menus')
+                        vm.$router.push('/navigation')
 
                         toast(error.toString(), 'danger')
                     })
                 } else {
                     next((vm) => {
-                        vm.id   = menu.id
+                        vm.id   = navigation.id
+                        vm.navigation = navigation
                         vm.form = new Form({
-                            name:        menu.name,
-                            handle:      menu.handle,
-                            description: menu.description,
-                            sections:    menu.fieldset.sections,
+                            name:        navigation.name,
+                            handle:      navigation.handle,
+                            description: navigation.description,
+                            sections:    navigation.fieldset.sections,
                         }, true)
 
                         vm.$nextTick(() => {
@@ -77,11 +79,11 @@
         },
     }
 
-    export function getMenu(menu, callback) {
-        axios.get(`/api/menus/${menu}`).then((response) => {
+    export function getNavigation(navigation, callback) {
+        axios.get(`/api/navigation/${navigation}`).then((response) => {
             callback(null, response.data.data)
         }).catch((error) => {
-            callback(new Error('The requested menu could not be found'))
+            callback(new Error('The requested navigation could not be found'))
         })
     }
 </script>

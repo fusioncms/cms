@@ -1,8 +1,8 @@
 <?php
 
-namespace Fusion\Models\Menus;
+namespace Fusion\Models\Navigation;
 
-use Fusion\Models\Menu;
+use Fusion\Models\Navigation;
 use Fusion\Models\Field;
 use Fusion\Concerns\HasOrder;
 use Illuminate\Support\Str;
@@ -20,7 +20,7 @@ class {class} extends Model
      *
      * @var string
      */
-    protected $table = 'menu_{handle}';
+    protected $table = 'navigation_{handle}';
 
     /**
      * The attributes that should be cast to native types.
@@ -47,23 +47,23 @@ class {class} extends Model
     protected $with = ['children'];
 
     /**
-     * Get the Menu relationship.
+     * Get the Navigation relationship.
      *
      * @return mixed
      */
-    public function menu()
+    public function navigation()
     {
-        return $this->belongsTo(Menu::class);
+        return $this->belongsTo(Navigation::class);
     }
 
     /**
-     * Get all of the fields for the menu.
+     * Get all of the fields for the navigation.
      *
      * @return mixed
      */
     public function getFieldsAttribute()
     {
-        return $this->menu->fieldset->fields;
+        return $this->navigation->fieldset->fields;
     }
 
     public function children()
@@ -83,15 +83,15 @@ class {class} extends Model
     public function tapActivity(Activity $activity, string $eventName)
     {
         $node       = $activity->subject;
-        $menu       = $node->menu;
+        $navigation       = $node->navigation;
         $action     = ucfirst($eventName);
-        $modelName  = strtolower(Str::singular($menu->name));
+        $modelName  = strtolower(Str::singular($navigation->name));
         $properties = [
-            'link' => "menus/{$menu->id}/nodes/{$node->id}/edit",
+            'link' => "navigation/{$navigation->id}/nodes/{$node->id}/edit",
             'icon' => 'anchor'
         ];
 
-        $activity->description = "{$action} {$modelName} menu node ({$node->name})";
+        $activity->description = "{$action} {$modelName} navigation node ({$node->name})";
         $activity->properties  = $properties;
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace Fusion\Tests\Feature\Menu;
+namespace Fusion\Tests\Feature\Navigation;
 
-use Facades\MenuFactory;
-use Fusion\Models\Menu;
+use Facades\NavigationFactory;
+use Fusion\Models\Navigation;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class MenuTest extends TestCase
+class NavigationTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -24,20 +24,20 @@ class MenuTest extends TestCase
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function a_user_with_permissions_can_create_a_menu()
+    public function a_user_with_permissions_can_create_a_navigation()
     {
-        $menu = factory(Menu::class)->make()->toArray();
+        $navigation = factory(Navigation::class)->make()->toArray();
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/menus', $menu)
+            ->json('POST', '/api/navigation', $navigation)
             ->assertStatus(201);
 
-        $this->assertDatabaseHas('menus', [
-            'name'   => $menu['name'],
-            'handle' => $menu['handle'],
+        $this->assertDatabaseHas('navigation', [
+            'name'   => $navigation['name'],
+            'handle' => $navigation['handle'],
         ]);
     }
 
@@ -45,16 +45,16 @@ class MenuTest extends TestCase
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function when_a_menu_is_created_an_associated_fieldset_should_also_be_created()
+    public function when_a_navigation_is_created_an_associated_fieldset_should_also_be_created()
     {
         $this->actingAs($this->owner, 'api');
 
-        $menu = MenuFactory::withName('Header')->create();
+        $navigation = NavigationFactory::withName('Header')->create();
 
         $this->assertDatabaseHas('fieldsets', [
-            'name' => 'Menu: '.$menu->name,
+            'name' => 'Navigation: '.$navigation->name,
         ]);
     }
 
@@ -62,61 +62,61 @@ class MenuTest extends TestCase
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function a_guest_cannot_create_a_new_menu()
+    public function a_guest_cannot_create_a_new_navigation()
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->json('POST', '/api/menus', []);
+        $this->json('POST', '/api/navigation', []);
     }
 
     /**
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function a_user_without_permissions_cannot_view_any_menus()
+    public function a_user_without_permissions_cannot_view_any_navigation()
     {
         $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/menus');
+            ->json('GET', '/api/navigation');
     }
 
     /**
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function a_user_without_permissions_cannot_view_a_menu()
+    public function a_user_without_permissions_cannot_view_a_navigation()
     {
         $this->expectException(AuthorizationException::class);
 
         $this->actingAs($this->owner, 'api');
-        $menu = factory(Menu::class)->create();
+        $navigation = factory(Navigation::class)->create();
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/menus/'.$menu->id);
+            ->json('GET', '/api/navigation/'.$navigation->id);
     }
 
     /**
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function a_user_without_permissions_cannot_create_a_new_menu()
+    public function a_user_without_permissions_cannot_create_a_new_navigation()
     {
         $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->user, 'api')
-            ->json('POST', '/api/menus', []);
+            ->json('POST', '/api/navigation', []);
     }
 
     /**
@@ -125,56 +125,56 @@ class MenuTest extends TestCase
      * @group feature
      * @group role
      */
-    public function a_user_without_permissions_cannot_update_existing_menus()
+    public function a_user_without_permissions_cannot_update_existing_navigation()
     {
         $this->expectException(AuthorizationException::class);
 
         $this->actingAs($this->owner, 'api');
-        $menu = factory(Menu::class)->create();
+        $navigation = factory(Navigation::class)->create();
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/menus/'.$menu->id, []);
+            ->json('PATCH', '/api/navigation/'.$navigation->id, []);
     }
 
     /**
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function a_user_without_permissions_cannot_delete_existing_menus()
+    public function a_user_without_permissions_cannot_delete_existing_navigation()
     {
         $this->expectException(AuthorizationException::class);
 
         $this->actingAs($this->owner, 'api');
-        $menu = factory(Menu::class)->create();
+        $navigation = factory(Navigation::class)->create();
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/menus/'.$menu->id);
+            ->json('DELETE', '/api/navigation/'.$navigation->id);
     }
 
     /**
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function a_user_with_permissions_can_update_an_existing_menu()
+    public function a_user_with_permissions_can_update_an_existing_navigation()
     {
         $this->actingAs($this->owner, 'api');
 
-        $menu = MenuFactory::create();
+        $navigation = NavigationFactory::create();
 
-        $data                = $menu->toArray();
-        $data['description'] = 'This is the new menu description';
+        $data                = $navigation->toArray();
+        $data['description'] = 'This is the new navigation description';
 
         $this
-            ->json('PATCH', '/api/menus/'.$menu->id, $data)
+            ->json('PATCH', '/api/navigation/'.$navigation->id, $data)
             ->assertStatus(200);
 
-        $this->assertDatabaseHas('menus', [
+        $this->assertDatabaseHas('navigation', [
             'name'        => $data['name'],
             'description' => $data['description'],
         ]);
@@ -184,20 +184,20 @@ class MenuTest extends TestCase
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function a_user_with_permissions_can_delete_an_existing_menu()
+    public function a_user_with_permissions_can_delete_an_existing_navigation()
     {
         $this->actingAs($this->owner, 'api');
 
-        $menu = MenuFactory::create();
+        $navigation = NavigationFactory::create();
 
         $this
-            ->json('DELETE', '/api/menus/'.$menu->id)
+            ->json('DELETE', '/api/navigation/'.$navigation->id)
             ->assertStatus(200);
 
-        $this->assertDatabaseMissing('menus', [
-            'name' => $menu->name,
+        $this->assertDatabaseMissing('navigation', [
+            'name' => $navigation->name,
         ]);
     }
 
@@ -205,34 +205,34 @@ class MenuTest extends TestCase
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function a_user_with_permissions_can_move_a_menu_node_before_another()
+    public function a_user_with_permissions_can_move_a_navigation_node_before_another()
     {
         $this->actingAs($this->owner, 'api');
 
-        $menu = $menu = MenuFactory::withName('Test')->create();
+        $navigation = $navigation = NavigationFactory::withName('Test')->create();
 
         $nodeOne = $this
-            ->json('POST', '/api/menus/'.$menu->id.'/nodes', [
+            ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
                 'name' => 'Node One',
                 'url'  => 'https://example.com/node-one',
             ])
             ->getData()->data;
 
         $nodeTwo = $this
-            ->json('POST', '/api/menus/'.$menu->id.'/nodes', [
+            ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
                 'name' => 'Node Two',
                 'url'  => 'https://example.com/node-two',
             ])
             ->getData()->data;
 
-        $this->json('POST', '/api/menus/'.$menu->id.'/nodes/move/before', [
+        $this->json('POST', '/api/navigation/'.$navigation->id.'/nodes/move/before', [
             'move'   => $nodeTwo->id,
             'before' => $nodeOne->id,
         ]);
 
-        $this->assertDatabaseHas($menu->table, [
+        $this->assertDatabaseHas($navigation->table, [
             'name'  => $nodeTwo->name,
             'order' => 0.0,
         ]);
@@ -242,41 +242,41 @@ class MenuTest extends TestCase
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function a_user_with_permissions_can_move_a_menu_node_after_another()
+    public function a_user_with_permissions_can_move_a_navigation_node_after_another()
     {
         $this->actingAs($this->owner, 'api');
 
-        $menu = $menu = MenuFactory::withName('Test')->create();
+        $navigation = $navigation = NavigationFactory::withName('Test')->create();
 
         $nodeOne = $this
-            ->json('POST', '/api/menus/'.$menu->id.'/nodes', [
+            ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
                 'name' => 'Node One',
                 'url'  => 'https://example.com/node-one',
             ])
             ->getData()->data;
 
         $nodeTwo = $this
-            ->json('POST', '/api/menus/'.$menu->id.'/nodes', [
+            ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
                 'name' => 'Node Two',
                 'url'  => 'https://example.com/node-two',
             ])
             ->getData()->data;
 
         $nodeThree = $this
-            ->json('POST', '/api/menus/'.$menu->id.'/nodes', [
+            ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
                 'name' => 'Node Three',
                 'url'  => 'https://example.com/node-three',
             ])
             ->getData()->data;
 
-        $this->json('POST', '/api/menus/'.$menu->id.'/nodes/move/after', [
+        $this->json('POST', '/api/navigation/'.$navigation->id.'/nodes/move/after', [
             'move'  => $nodeOne->id,
             'after' => $nodeTwo->id,
         ]);
 
-        $this->assertDatabaseHas($menu->table, [
+        $this->assertDatabaseHas($navigation->table, [
             'name'  => $nodeOne->name,
             'order' => 2.5,
         ]);
@@ -286,62 +286,62 @@ class MenuTest extends TestCase
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function menu_nodes_can_be_refreshed()
+    public function navigation_nodes_can_be_refreshed()
     {
         $this->actingAs($this->owner, 'api');
 
-        $menu = $menu = MenuFactory::withName('Test')->create();
+        $navigation = $navigation = NavigationFactory::withName('Test')->create();
 
         $nodeOne = $this
-            ->json('POST', '/api/menus/'.$menu->id.'/nodes', [
+            ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
                 'name' => 'Node One',
                 'url'  => 'https://example.com/node-one',
             ])
             ->getData()->data;
 
         $nodeTwo = $this
-            ->json('POST', '/api/menus/'.$menu->id.'/nodes', [
+            ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
                 'name' => 'Node Two',
                 'url'  => 'https://example.com/node-two',
             ])
             ->getData()->data;
 
         $nodeThree = $this
-            ->json('POST', '/api/menus/'.$menu->id.'/nodes', [
+            ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
                 'name' => 'Node Three',
                 'url'  => 'https://example.com/node-three',
             ])
             ->getData()->data;
 
-        $this->json('POST', '/api/menus/'.$menu->id.'/nodes/move/after', [
+        $this->json('POST', '/api/navigation/'.$navigation->id.'/nodes/move/after', [
             'move'  => $nodeOne->id,
             'after' => $nodeTwo->id,
         ]);
 
-        $this->json('PATCH', '/api/menus/'.$menu->id.'/nodes/refresh');
+        $this->json('PATCH', '/api/navigation/'.$navigation->id.'/nodes/refresh');
 
-        $this->assertDatabaseHas($menu->table, ['name' => $nodeTwo->name, 'order' => 1]);
-        $this->assertDatabaseHas($menu->table, ['name' => $nodeOne->name, 'order' => 2]);
-        $this->assertDatabaseHas($menu->table, ['name' => $nodeThree->name, 'order' => 3]);
+        $this->assertDatabaseHas($navigation->table, ['name' => $nodeTwo->name, 'order' => 1]);
+        $this->assertDatabaseHas($navigation->table, ['name' => $nodeOne->name, 'order' => 2]);
+        $this->assertDatabaseHas($navigation->table, ['name' => $nodeThree->name, 'order' => 3]);
     }
 
     /**
      * @test
      * @group fusioncms
      * @group feature
-     * @group menu
+     * @group navigation
      */
-    public function each_menu_must_have_a_unique_handle()
+    public function each_navigation_must_have_a_unique_handle()
     {
         $this->actingAs($this->owner, 'api');
 
-        $menu       = factory(Menu::class)->create()->toArray();
-        $menu['id'] = null;
+        $navigation       = factory(Navigation::class)->create()->toArray();
+        $navigation['id'] = null;
 
         $this
-            ->json('POST', '/api/menus', $menu)
+            ->json('POST', '/api/navigation', $navigation)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['handle']);
     }
@@ -350,26 +350,26 @@ class MenuTest extends TestCase
      * @test
      * @group feature
      * @group validation
-     * @group menu
+     * @group navigation
      */
-    public function menu_handle_must_not_be_a_reserved_keyword()
+    public function navigation_handle_must_not_be_a_reserved_keyword()
     {
         $this->actingAs($this->owner, 'api');
 
         $this
-            ->json('POST', '/api/menus', ['handle' => 'default'])
+            ->json('POST', '/api/navigation', ['handle' => 'default'])
             ->assertJsonValidationErrors([
                 'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
 
         $this
-            ->json('POST', '/api/menus', ['handle' => 'for'])
+            ->json('POST', '/api/navigation', ['handle' => 'for'])
             ->assertJsonValidationErrors([
                 'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
 
         $this
-            ->json('POST', '/api/menus', ['handle' => 'true'])
+            ->json('POST', '/api/navigation', ['handle' => 'true'])
             ->assertJsonValidationErrors([
                 'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);

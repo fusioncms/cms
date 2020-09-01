@@ -12,7 +12,7 @@ return [
     'forms'       => ['viewAny', 'view', 'create', 'update', 'delete'],
     'mailables'   => ['view', 'update'],
     'matrices'    => ['viewAny', 'view', 'create', 'update', 'delete'],
-    'menus'       => ['viewAny', 'view', 'create', 'update', 'delete'],
+    'navigation'  => ['viewAny', 'view', 'create', 'update', 'delete'],
     'addons'      => ['viewAny', 'create', 'update', 'delete'],
     'nodes'       => ['viewAny', 'view', 'create', 'update', 'delete'],
     'singles'     => ['viewAny', 'view', 'create', 'update', 'delete'],

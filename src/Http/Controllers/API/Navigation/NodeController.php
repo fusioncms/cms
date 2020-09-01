@@ -1,11 +1,11 @@
 <?php
 
-namespace Fusion\Http\Controllers\API\Menus;
+namespace Fusion\Http\Controllers\API\Navigation;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\NodeResource;
-use Fusion\Models\Menu;
-use Fusion\Services\Builders\Menu as Builder;
+use Fusion\Models\Navigation;
+use Fusion\Services\Builders\Navigation as Builder;
 use Illuminate\Http\Request;
 
 class NodeController extends Controller
@@ -23,27 +23,27 @@ class NodeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \Fusion\Models\Menu $menu
+     * @param \Fusion\Models\Navigation $navigation
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($menu, $id)
+    public function show($navigation, $id)
     {
         $this->authorize('nodes.view');
 
-        $menu  = Menu::find($menu);
-        $model = (new Builder($menu->handle))->make();
+        $navigation  = Navigation::find($navigation);
+        $model = (new Builder($navigation->handle))->make();
         $node  = $model->find($id);
 
         return new NodeResource($node);
     }
 
-    public function store(Request $request, $menu)
+    public function store(Request $request, $navigation)
     {
         $this->authorize('nodes.create');
 
-        $menu          = Menu::find($menu);
-        $model         = (new Builder($menu->handle))->make();
+        $navigation          = Navigation::find($navigation);
+        $model         = (new Builder($navigation->handle))->make();
         $relationships = [];
 
         $rules = [
@@ -54,9 +54,9 @@ class NodeController extends Controller
             'status'     => 'sometimes',
         ];
 
-        if (isset($menu->fieldset)) {
-            $fields        = $menu->fieldset->database();
-            $relationships = $menu->fieldset->relationships();
+        if (isset($navigation->fieldset)) {
+            $fields        = $navigation->fieldset->database();
+            $relationships = $navigation->fieldset->relationships();
 
             foreach ($fields as $field) {
                 $rules[$field->handle] = 'sometimes';
@@ -64,7 +64,7 @@ class NodeController extends Controller
         }
 
         $attributes            = $request->validate($rules);
-        $attributes['menu_id'] = $menu->id;
+        $attributes['navigation_id'] = $navigation->id;
         $attributes['order']   = $model->orderLast();
 
         $node = $model->create($attributes);
@@ -80,16 +80,16 @@ class NodeController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param string                   $menu
+     * @param string                   $navigation
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $menu, $id)
+    public function update(Request $request, $navigation, $id)
     {
         $this->authorize('nodes.update');
 
-        $menu          = Menu::findOrFail($menu);
-        $node          = (new Builder($menu->handle))->make()->findOrFail($id);
+        $navigation          = Navigation::findOrFail($navigation);
+        $node          = (new Builder($navigation->handle))->make()->findOrFail($id);
         $relationships = [];
         $rules         = [
             'name'       => 'required',
@@ -99,9 +99,9 @@ class NodeController extends Controller
             'status'     => 'sometimes',
         ];
 
-        if (isset($menu->fieldset)) {
-            $fields        = $menu->fieldset->database();
-            $relationships = $menu->fieldset->relationships();
+        if (isset($navigation->fieldset)) {
+            $fields        = $navigation->fieldset->database();
+            $relationships = $navigation->fieldset->relationships();
 
             foreach ($fields as $field) {
                 $rules[$field->handle] = 'sometimes';
@@ -123,12 +123,12 @@ class NodeController extends Controller
         return new NodeResource($node);
     }
 
-    public function destroy(Request $request, $menu, $id)
+    public function destroy(Request $request, $navigation, $id)
     {
         $this->authorize('nodes.delete');
 
-        $menu  = Menu::findOrFail($menu);
-        $model = (new Builder($menu->handle))->make();
+        $navigation  = Navigation::findOrFail($navigation);
+        $model = (new Builder($navigation->handle))->make();
         $node  = $model->findOrFail($id);
 
         $node->delete();

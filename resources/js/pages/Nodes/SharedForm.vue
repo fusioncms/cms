@@ -2,7 +2,7 @@
     <form-container>
 		<portal to="actions">
 			<div class="buttons">
-				<router-link v-if="menu.id" :to="{ name: 'menu.nodes', params: {menu: menu.id} }" class="button">Go Back</router-link>
+				<router-link v-if="navigation.id" :to="{ name: 'navigation.nodes', params: {navigation: navigation.id} }" class="button">Go Back</router-link>
 				<button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
 			</div>
 		</portal>
@@ -124,7 +124,7 @@
                 required: true,
             },
 
-            menu: {
+            navigation: {
                 type: Object,
                 required: true,
             },
@@ -144,12 +144,12 @@
                 let body = []
                 let sidebar = []
 
-                if (this.menu.fieldset) {
-                    body = _.filter(this.menu.fieldset.sections, function(section) {
+                if (this.navigation.fieldset) {
+                    body = _.filter(this.navigation.fieldset.sections, function(section) {
                         return section.placement == 'body'
                     })
 
-                    sidebar = _.filter(this.menu.fieldset.sections, function(section) {
+                    sidebar = _.filter(this.navigation.fieldset.sections, function(section) {
                         return section.placement == 'sidebar'
                     })
                 }
@@ -164,8 +164,8 @@
                 let body = []
                 let sidebar = []
 
-                if (this.menu.fieldset) {
-                    body = _.filter(this.menu.fieldset.sections, function(section) {
+                if (this.navigation.fieldset) {
+                    body = _.filter(this.navigation.fieldset.sections, function(section) {
                         return section.placement == 'body'
                     })
 
@@ -173,7 +173,7 @@
                         return section.fields
                     })
 
-                    sidebar = _.filter(this.menu.fieldset.sections, function(section) {
+                    sidebar = _.filter(this.navigation.fieldset.sections, function(section) {
                         return section.placement == 'sidebar'
                     })
 

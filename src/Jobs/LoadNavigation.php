@@ -115,8 +115,8 @@ class LoadNavigation
                 'icon' => 'layer-group',
             ]);
 
-            $menu->configure->add('Menus')->data([
-                'to'   => '/menus',
+            $menu->configure->add('Navigation')->data([
+                'to'   => '/navigation',
                 'icon' => 'anchor',
             ]);
 
