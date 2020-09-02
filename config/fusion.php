@@ -96,7 +96,7 @@ return [
     |
     */
     'feeds' => [
-        'releases' => 'https://beta.getfusioncms.com/releases.json'
+        'releases' => 'https://beta.getfusioncms.com/releases.json',
     ],
 
     /*
@@ -106,6 +106,6 @@ return [
     |
     */
     'composer' => [
-        'memory_limit' => '2048M'
-    ]
+        'memory_limit' => '2048M',
+    ],
 ];
