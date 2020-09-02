@@ -2,6 +2,7 @@
 
 namespace Fusion\Services;
 
+use Composer\Semver\Comparator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -16,11 +17,11 @@ class Version
     private $items = [];
 
     /**
-     * Cache limit - 24 hours.
+     * Cache limit - 30 min.
      *
      * @var int
      */
-    private $cacheLimit = 60 * 60 * 24;
+    private $cacheLimit = 60 * 30;
 
     /**
      * Constructor.
@@ -31,7 +32,7 @@ class Version
     {
         $this->items = Cache::remember('versions', $this->cacheLimit, function () {
             $response = (new \GuzzleHttp\Client())
-                ->get('https://beta.getfusioncms.com/releases.json');
+                ->get(config('fusion.feeds.releases'));
 
             return json_decode($response->getBody(), true)['items'];
         });
@@ -93,7 +94,7 @@ class Version
      */
     public function current()
     {
-        return self::standardize(FUSION_VERSION);
+        return $this->standardize(FUSION_VERSION);
     }
 
     /**
@@ -103,7 +104,7 @@ class Version
      */
     public function latest()
     {
-        return self::standardize(current($this->items)['title']);
+        return $this->standardize(current($this->items)['title']);
     }
 
     /**
@@ -113,7 +114,7 @@ class Version
      */
     public function hasUpdate()
     {
-        return version_compare($this->current(), $this->latest(), '<');
+        return Comparator::greaterThan($this->latest(), $this->current());
     }
 
     /**
@@ -124,9 +125,8 @@ class Version
      *
      * @return mixed
      */
-    public static function standardize($input)
+    public function standardize($input)
     {
-        // return (new \Composer\Semver\VersionParser)->normalize($input);
         $pattern = "/(\d+)(?:\.(\d+))?(?:\.(\d+))?(.*)?/";
         $output  = [];
 

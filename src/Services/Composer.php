@@ -3,6 +3,7 @@
 namespace Fusion\Services;
 
 use Fusion\Facades\Version;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\Process\Process;
@@ -23,7 +24,7 @@ class Composer
      * 
      * @var string
      */
-    private $memoryLimit = '2048M';
+    private $memoryLimit;
 
     /**
      * Constructor.
@@ -32,7 +33,8 @@ class Composer
      */
     public function __construct($basePath = null)
     {
-        $this->basePath = $basePath ?? fusion_path();
+        $this->basePath    = $basePath ?? fusion_path();
+        $this->memoryLimit = config('fusion.composer.memory_limit');
     }
 
     /**
@@ -43,7 +45,7 @@ class Composer
      */
     public function require($packages)
     {
-        $packages = is_array($packages) ? $packages : [ $packages ];
+        $packages = Arr::wrap($packages);
         $command  = sprintf('require %s', implode(' ', $packages));
 
         try {
@@ -54,6 +56,8 @@ class Composer
                 ->mustRun(function($type, $buffer) {
                     // TODO:
                 });
+
+            $this->clear();
         } catch (ProcessFailedException $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
         }
@@ -67,17 +71,19 @@ class Composer
      */
     public function remove($packages)
     {
-        $packages = is_array($packages) ? $packages : [ $packages ];
+        $packages = Arr::wrap($packages);
         $command  = sprintf('remove %s', implode(' ', $packages));
-        $process  = $this->process($command, [
-            '--update-with-dependencies',
-
-        ]);
 
         try {
-            $process->mustRun(function($type, $buffer) {
-                // TODO:
-            });
+            $this
+                ->process($command, [
+                    '--update-with-dependencies',
+                ])
+                ->mustRun(function($type, $buffer) {
+                    // TODO:
+                });
+
+            $this->clear();
         } catch (ProcessFailedException $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
         }
@@ -91,15 +97,18 @@ class Composer
      */
     public function update($packages)
     {
-        $packages = is_array($packages) ? $packages : [ $packages ];
+        $packages = Arr::wrap($packages);
         $command  = sprintf('update %s', implode(' ', $packages));
 
         try {
-            $this->process($command, [
-                '--with-dependencies'
-            ])->mustRun(function ($type, $buffer) {
-                // TODO:
-            });
+            $this
+                ->process($command, [
+                    '--with-dependencies'
+                ])->mustRun(function ($type, $buffer) {
+                    // TODO:
+                });
+
+            $this->clear();
         } catch (ProcessFailedException $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
         }
@@ -161,6 +170,17 @@ class Composer
     }
 
     /**
+     * Bust cache.
+     * 
+     * @return void
+     */
+    private function clear()
+    {
+        Cache::forget('composer.packages');
+        Cache::forget('composer.paths');
+    }
+
+    /**
      * Returns list of installed packages.
      * [Cached]
      * 
@@ -168,8 +188,7 @@ class Composer
      */
     private function all()
     {
-        Cache::forget('packages');
-        return Cache::rememberForever('packages', function() {
+        return Cache::rememberForever('composer.packages', function() {
             $process = $this->process('show', ['--direct', '--format=json']);
             $process->run();
 
@@ -191,8 +210,7 @@ class Composer
      */
     private function paths()
     {
-        Cache::forget('package_paths');
-        return Cache::rememberForever('package_paths', function() {
+        return Cache::rememberForever('composer.paths', function() {
             $process = $this->process('show', ['--direct', '--path', '--format=json']);
             $process->run();
 
