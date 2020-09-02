@@ -1,7 +1,6 @@
 {
     "name": "fusioncms/cms-test",
     "require": {
-        "composer/composer": "^1.9",
         "test/package-a": "1.1.0"
     },
     "repositories": [
@@ -10,24 +9,19 @@
         },
         {
             "type": "path",
-            "url": "package-a/1.1.0",
-            "options": {
-                "symlink": false
-            }
+            "url": "package-a/1.1.0"
         },
         {
             "type": "path",
-            "url": "package-a/1.2.0",
-            "options": {
-                "symlink": false
-            }
+            "url": "package-a/1.2.0"
         },
         {
             "type": "path",
-            "url": "package-b",
-            "options": {
-                "symlink": false
-            }
+            "url": "package-b/2.0.0"
+        },
+        {
+            "type": "path",
+            "url": "package-b/2.1.0"
         }
     ]
 }

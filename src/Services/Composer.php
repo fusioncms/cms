@@ -99,7 +99,6 @@ class Composer
                 '--with-dependencies'
             ])->mustRun(function ($type, $buffer) {
                 // TODO:
-                dump($buffer);
             });
         } catch (ProcessFailedException $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);

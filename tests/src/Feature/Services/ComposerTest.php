@@ -14,28 +14,25 @@ class ComposerTest extends TestCase
     {
     	parent::setUp();
 
-    	// create mock vendor folder..
-    	(new Process(['tar', '-xzvf', 'vendor.tar.gz'], $this->basePath()))->mustRun();
+    	// init..
+    	(new Process(['composer', 'install'], $this->basePath()))->mustRun();
 
-    	// back up composer files..
+    	// back up..
     	File::copy($this->basePath('composer.json'), $this->basePath('composer.json.bak'));
-    	File::copy($this->basePath('composer.lock'), $this->basePath('composer.lock.bak'));
     
+    	// interact w/ local `vendor`..
     	Composer::swap(new \Fusion\Services\Composer($this->basePath()));
     }
 
     public function tearDown(): void
     {
-    	// remove move vendor directory..
-    	// File::deleteDirectory($this->basePath('vendor'));
-
-    	// remove temp composer files..
+    	// clean up..
+    	File::deleteDirectory($this->basePath('vendor'));
     	File::delete($this->basePath('composer.json'));
     	File::delete($this->basePath('composer.lock'));
 
-    	// restore composer files..
+    	// restore..
     	File::move($this->basePath('composer.json.bak'), $this->basePath('composer.json'));
-    	File::move($this->basePath('composer.lock.bak'), $this->basePath('composer.lock'));
 
     	parent::tearDown();
     }
@@ -46,10 +43,50 @@ class ComposerTest extends TestCase
      * @group services
      * @group composer
      */
-    public function package_manager_knows_about_installed_packages()
+    public function composer_service_caches_list_of_installed_packages()
+    {
+    	$this->assertCount(1, Composer::installed());
+
+    	$this->assertEquals(
+    		['test/package-a'],
+    		array_keys(Composer::installed())
+    	);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group services
+     * @group composer
+     */
+    public function composer_service_can_check_for_installed_package_by_name()
     {
     	$this->assertTrue(Composer::has('test/package-a'));
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group services
+     * @group composer
+     */
+    public function composer_service_can_check_for_installed_package_version()
+    {
     	$this->assertEquals('1.1.0', Composer::version('test/package-a'));
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group services
+     * @group composer
+     */
+    public function composer_service_can_get_installed_package_path()
+    {
+    	$this->assertEquals(
+    		realpath($this->basePath('vendor/test/package-a')),
+    		realpath(Composer::path('test/package-a'))
+    	);
     }
 
 	/**
@@ -58,7 +95,7 @@ class ComposerTest extends TestCase
      * @group services
      * @group composer
      */
-    public function package_manager_can_install_a_new_package()
+    public function composer_service_can_install_a_new_package()
     {
     	// package doesn't exist yet..
     	$this->assertFalse(Composer::has('test/package-b'));
@@ -81,11 +118,11 @@ class ComposerTest extends TestCase
      * @group services
      * @group composer
      */
-    public function package_manager_can_install_a_specific_package_version()
+    public function composer_service_can_install_a_specific_package_version()
     {
-    	Composer::require('test/package-b:2.1.0');
+    	Composer::require('test/package-b:2.0.0');
 
-    	$this->assertEquals('2.1.0', Composer::version('test/package-b'));
+    	$this->assertEquals('2.0.0', Composer::version('test/package-b'));
     }
 
     /**
@@ -94,12 +131,10 @@ class ComposerTest extends TestCase
      * @group services
      * @group composer
      */
-    public function package_manager_can_update_package_to_latest_version()
+    public function composer_service_can_update_package_to_latest_version()
     {
-    	// set version
     	$this->setPackageVersion('test/package-a', '1.2.0');
 
-    	// update package
     	Composer::update('test/package-a');
 
     	$this->assertEquals('1.2.0', Composer::version('test/package-a'));
@@ -111,15 +146,20 @@ class ComposerTest extends TestCase
      * @group services
      * @group composer
      */
-    public function package_manager_can_remove_a_package()
+    public function composer_service_can_remove_a_package()
     {
     	Composer::remove('test/package-a');
 
     	$this->assertFalse(Composer::has('test/package-a'));
     }
 
+	//
+    // ------------------------------------------------
+    //
+
     /**
      * Updates `composer.json` file w/ package & version.
+     * [Helper]
      *
      * @param  string $package
      * @param  string $version
@@ -142,6 +182,7 @@ class ComposerTest extends TestCase
 
     /**
      * Returns base path for composer testing.
+     * [Helper]
      *
      * @param  string $path
      * @return string
