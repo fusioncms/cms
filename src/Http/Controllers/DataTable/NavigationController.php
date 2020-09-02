@@ -3,13 +3,13 @@
 namespace Fusion\Http\Controllers\DataTable;
 
 use Fusion\Http\Controllers\DataTableController;
-use Fusion\Models\Menu;
+use Fusion\Models\Navigation;
 
-class MenuController extends DataTableController
+class NavigationController extends DataTableController
 {
     public function builder()
     {
-        return Menu::query();
+        return Navigation::query();
     }
 
     public function getDisplayableColumns()

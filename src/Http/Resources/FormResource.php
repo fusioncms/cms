@@ -24,7 +24,7 @@ class FormResource extends JsonResource
             'collect_email_addresses' => $this->collect_email_addresses,
             'collect_ip_addresses'    => $this->collect_ip_addresses,
             'response_receipt'        => $this->response_receipt,
-            'message'                 => $this->message,
+            'confirmation_message'    => $this->confirmation_message,
             'redirect_on_submission'  => $this->redirect_on_submission,
             'redirect_url'            => $this->redirect_url,
             'enable_recaptcha'        => $this->enable_recaptcha,

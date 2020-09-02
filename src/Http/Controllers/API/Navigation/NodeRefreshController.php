@@ -1,9 +1,9 @@
 <?php
 
-namespace Fusion\Http\Controllers\API\Menus;
+namespace Fusion\Http\Controllers\API\Navigation;
 
 use Fusion\Http\Controllers\Controller;
-use Fusion\Models\Menu;
+use Fusion\Models\Navigation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -13,27 +13,27 @@ class NodeRefreshController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param string                   $menu
+     * @param string                   $navigation
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request, $menu)
+    public function __invoke(Request $request, $navigation)
     {
         $this->authorize('nodes.update');
 
-        $menu = Menu::find($menu)->firstOrFail();
+        $navigation = Navigation::find($navigation)->firstOrFail();
 
-        $menu->nodes->each(function ($node, $index) {
+        $navigation->nodes->each(function ($node, $index) {
             $node->order = $index + 1;
             $node->save();
         });
 
         activity()
-            ->performedOn($menu)
+            ->performedOn($navigation)
             ->withProperties([
                 'icon' => 'anchor',
-                'link' => 'menus/'.$menu->id.'/nodes',
+                'link' => 'navigation/'.$navigation->id.'/nodes',
             ])
-            ->log('Refreshed '.strtolower(Str::singular($menu->name)).' menu node ordering');
+            ->log('Refreshed '.strtolower(Str::singular($navigation->name)).' navigation node ordering');
     }
 }

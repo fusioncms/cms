@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-			<page-title icon="anchor">Create Menu</page-title>
+			<page-title icon="anchor">Create Navigation</page-title>
 		</portal>
 
         <shared-form :form="form"></shared-form>
@@ -16,7 +16,7 @@
         head: {
             title() {
                 return {
-                    inner: 'Create a Menu'
+                    inner: 'Create Navigation'
                 }
             }
         },
@@ -38,13 +38,13 @@
 
         methods: {
             submit() {
-                this.form.post('/api/menus')
+                this.form.post('/api/navigation')
                     .then((response) => {
                         axios.post(`/api/fieldsets/${response.data.fieldset.id}/sections`, { sections: this.form.sections })
                             .then((response) => {
-                                toast('Menu successfully saved', 'success')
+                                toast('Navigation successfully saved', 'success')
 
-                                this.$router.push('/menus')
+                                this.$router.push('/navigation')
                             }).catch((response) => {
                                 toast(response.message, 'failed')
                             })

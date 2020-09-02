@@ -271,11 +271,11 @@ trait RegistersAssets
                     $this->addNode($dependency);
                 }
 
-                if (!in_array($dependency, $this->nodes[$asset]->children)) {
+                if (!in_array($dependency, $this->nodes[$asset]['children'])) {
                     $this->nodes[$asset]['children'][] = $dependency;
                 }
 
-                if (!in_array($asset, $this->nodes[$dependency]->parents)) {
+                if (!in_array($asset, $this->nodes[$dependency]['parents'])) {
                     $this->nodes[$dependency]['parents'][] = $asset;
                 }
             }
@@ -344,7 +344,7 @@ trait RegistersAssets
 
                 $parentPosition = array_search($node['name'], $nodes[$childNode]['parents']);
 
-                unset($nodes[$childNode]->parents[$parentPosition]);
+                unset($nodes[$childNode]['parents'][$parentPosition]);
 
                 if (!count($nodes[$childNode]['parents'])) {
                     array_push($rootNodes, $nodes[$childNode]);
@@ -377,7 +377,7 @@ trait RegistersAssets
         $rootNodes = [];
 
         foreach ($nodes as $name => $node) {
-            if (!count($node->parents)) {
+            if (!count($node['parents'])) {
                 $rootNodes[$name] = $node;
             }
         }

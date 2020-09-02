@@ -19,7 +19,7 @@ Route::get('/fieldsets', 'FieldsetController@index');
 Route::get('/taxonomies', 'TaxonomyController@index');
 Route::get('/mailables', 'MailableController@index');
 Route::get('/forms', 'FormController@index');
-Route::get('/menus', 'MenuController@index');
+Route::get('/navigation', 'NavigationController@index');
 Route::get('/taxonomies/{taxonomy}', 'TermController@index');
 Route::get('/matrices', 'MatrixController@index');
 Route::get('/matrices/{matrix}/fields', 'MatrixFieldController@index');

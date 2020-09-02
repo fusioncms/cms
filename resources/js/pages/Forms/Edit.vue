@@ -71,7 +71,7 @@
                             collect_email_addresses: form.collect_email_addresses,
                             collect_ip_addresses:    form.collect_ip_addresses,
                             response_receipt:        form.response_receipt,
-                            message:                 form.message,
+                            confirmation_message:    form.confirmation_message,
                             redirect_on_submission:  form.redirect_on_submission,
                             redirect_url:            form.redirect_url,
                             enable_recaptcha:        form.enable_recaptcha,
