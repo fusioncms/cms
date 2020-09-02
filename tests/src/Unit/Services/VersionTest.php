@@ -2,8 +2,8 @@
 
 namespace Fusion\Tests\Unit;
 
-use Fusion\Tests\TestCase;
 use Fusion\Facades\Version;
+use Fusion\Tests\TestCase;
 
 class VersionTest extends TestCase
 {

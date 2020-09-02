@@ -3,9 +3,9 @@
 namespace Fusion\Services;
 
 use Composer\Semver\Comparator;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Cache;
 
 class Version
 {
@@ -131,7 +131,8 @@ class Version
         $output  = [];
 
         if (preg_match($pattern, $input, $output)) {
-            return sprintf('%d.%d.%d%s',
+            return sprintf(
+                '%d.%d.%d%s',
                 $output[1] ?? 0,
                 $output[2] ?? 0,
                 $output[3] ?? 0,
