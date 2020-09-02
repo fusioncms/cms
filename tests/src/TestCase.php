@@ -88,11 +88,14 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Get base path.
      *
+     * @param string $path = '' - suffix
+     *
      * @return string
      */
-    protected function getBasePath()
+    protected function getBasePath($path = '')
     {
-        return fusion_path('/tests/stubs/laravel');
+        return fusion_path('/tests/stubs/laravel').
+               ($path ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : $path);
     }
 
     /**

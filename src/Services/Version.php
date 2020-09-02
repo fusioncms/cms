@@ -2,10 +2,11 @@
 
 namespace Fusion\Services;
 
+use Composer\Semver\Comparator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
-use Composer\Semver\Comparator;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 
 class Version
 {
@@ -17,11 +18,11 @@ class Version
     private $items = [];
 
     /**
-     * Cache limit - 24 hours.
+     * Cache limit - 30 min.
      *
      * @var int
      */
-    private $cacheLimit = 60 * 60 * 24;
+    private $cacheLimit = 60 * 30;
 
     /**
      * Constructor.
@@ -30,9 +31,9 @@ class Version
      */
     public function __construct()
     {
-        $this->items = \Cache::remember('versions', $this->cacheLimit, function () {
+        $this->items = Cache::remember('versions', $this->cacheLimit, function () {
             $response = (new \GuzzleHttp\Client())
-                ->get('https://beta.getfusioncms.com/releases.json');
+                ->get(config('fusion.feeds.releases'));
 
             return json_decode($response->getBody(), true)['items'];
         });
@@ -94,7 +95,7 @@ class Version
      */
     public function current()
     {
-        return self::standardize(FUSION_VERSION);
+        return $this->standardize(FUSION_VERSION);
     }
 
     /**
@@ -104,7 +105,7 @@ class Version
      */
     public function latest()
     {
-        return self::standardize(current($this->items)['title']);
+        return $this->standardize(current($this->items)['title']);
     }
 
     /**
@@ -152,20 +153,23 @@ class Version
      * Creates "PHP-standardized" version number
      * 	(aka Semantic Versioning).
      *
-     * Credit:
-     * https://gist.github.com/jhorsman/62eeea161a13b80e39f5249281e17c39#gistcomment-2918033
-     *
      * @param string $input
      *
      * @return mixed
      */
-    public static function standardize($input)
+    public function standardize($input)
     {
-        $pattern = "/(0|(?:[1-9]\d*))(?:\.(0|(?:[1-9]\d*))(?:\.(0|(?:[1-9]\d*)))?(?:\-([\w][\w\.\-_]*))?)?/";
+        $pattern = "/(\d+)(?:\.(\d+))?(?:\.(\d+))?(.*)?/";
         $output  = [];
 
         if (preg_match($pattern, $input, $output)) {
-            return vsprintf('%d.%d.%d-%s', array_slice($output, 1));
+            return sprintf(
+                '%d.%d.%d%s',
+                $output[1] ?? 0,
+                $output[2] ?? 0,
+                $output[3] ?? 0,
+                $output[4] ?? '',
+            );
         }
 
         return $input;
