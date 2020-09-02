@@ -2,7 +2,7 @@
 
 namespace Fusion\Tests\Unit;
 
-use Fusion\Models\Menu;
+use Fusion\Models\Navigation;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class MenuTest extends TestCase
+class NavigationTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
@@ -18,19 +18,19 @@ class MenuTest extends TestCase
     /**
      * @test
      * @group unit
-     * @group menu
+     * @group navigation
      */
-    public function each_menu_must_have_a_unique_handle()
+    public function each_navigation_must_have_a_unique_handle()
     {
         $this->expectException(QueryException::class);
-        $this->expectExceptionMessage('UNIQUE constraint failed: menus.handle');
+        $this->expectExceptionMessage('UNIQUE constraint failed: navigation.handle');
 
-        DB::table('menus')->insert([
+        DB::table('navigation')->insert([
             'name'   => ($name = $this->faker->word),
             'handle' => Str::slug($name, '_'),
         ]);
 
-        DB::table('menus')->insert([
+        DB::table('navigation')->insert([
             'name'   => $name,
             'handle' => Str::slug($name, '_'),
         ]);

@@ -8,7 +8,7 @@ use Fusion\Concerns\HasFieldset;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 
-class Menu extends Model
+class Navigation extends Model
 {
     use CachesQueries;
     use HasFieldset;
@@ -17,6 +17,8 @@ class Menu extends Model
     protected $with = ['fieldsets'];
 
     protected $appends = ['fieldset'];
+
+    protected $table = 'navigation';
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -36,7 +38,7 @@ class Menu extends Model
      */
     public function getBuilder()
     {
-        $builder = new \Fusion\Services\Builders\Menu($this->handle);
+        $builder = new \Fusion\Services\Builders\Navigation($this->handle);
 
         return $builder->make();
     }
@@ -48,11 +50,11 @@ class Menu extends Model
      */
     public function getTableAttribute()
     {
-        return 'menu_'.$this->handle;
+        return 'navigation_'.$this->handle;
     }
 
     /**
-     * Menus have many nodes.
+     * Navigation has many nodes.
      *
      * @return HasManyRelationship
      */
@@ -77,11 +79,11 @@ class Menu extends Model
         $subject    = $activity->subject;
         $action     = ucfirst($eventName);
         $properties = [
-            'link' => "menus/{$subject->id}/edit",
+            'link' => "navigation/{$subject->id}/edit",
             'icon' => 'anchor',
         ];
 
-        $activity->description = "{$action} menu ({$subject->name})";
+        $activity->description = "{$action} navigation ({$subject->name})";
         $activity->properties  = $properties;
     }
 }

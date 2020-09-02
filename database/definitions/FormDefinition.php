@@ -14,7 +14,7 @@ $factory->define(Form::class, function (Faker $faker) {
         'collect_email_addresses' => true,
         'collect_ip_addresses'    => true,
         'response_receipt'        => true,
-        'message'                 => null,
+        'confirmation_message'    => null,
         'redirect_on_submission'  => false,
         'redirect_url'            => null,
         'enable_recaptcha'        => false,

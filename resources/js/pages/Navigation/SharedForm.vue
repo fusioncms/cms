@@ -2,7 +2,7 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'menus' }" class="button">Go Back</router-link>
+                <router-link :to="{ name: 'navigation' }" class="button">Go Back</router-link>
                 <button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
             </div>
         </portal>
@@ -24,7 +24,7 @@
                         <p-input
                             name="description"
                             label="Description"
-                            help="Give a short description of what this menu will link to."
+                            help="Give a short description of what this navigation will link to."
                             autocomplete="off"
                             required
                             :has-error="form.errors.has('description')"

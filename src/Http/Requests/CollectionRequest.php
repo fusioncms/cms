@@ -13,7 +13,7 @@ class CollectionRequest extends FormRequest
         $this->matrix        = Matrix::where('slug', request()->route('slug'))->firstOrFail();
         $this->model         = (new Collection($this->matrix->handle))->make();
         $this->fieldset      = $this->matrix->fieldset;
-        $this->fields        = $this->fieldset->fields ?? [];
+        $this->fields        = $this->fieldset->fields ?? collect();
         $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
     }
 

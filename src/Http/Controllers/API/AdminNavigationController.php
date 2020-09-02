@@ -4,15 +4,15 @@ namespace Fusion\Http\Controllers\API;
 
 use Fusion\Events\ServingFusion;
 use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\NavigationResource;
+use Fusion\Http\Resources\AdminNavigationResource;
 use Menu;
 
-class NavigationController extends Controller
+class AdminNavigationController extends Controller
 {
     /**
      * Get all admin navigation menu items.
      *
-     * @return \Fusion\Http\Resources\NavigationResource
+     * @return \Fusion\Http\Resources\AdminNavigationResource
      */
     public function index()
     {
@@ -24,7 +24,7 @@ class NavigationController extends Controller
 
         $links = $this->extractLinks($roots);
 
-        return new NavigationResource($links);
+        return new AdminNavigationResource($links);
     }
 
     /**
