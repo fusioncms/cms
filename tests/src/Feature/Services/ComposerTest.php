@@ -96,6 +96,10 @@ class ComposerTest extends TestCase
      */
     public function package_manager_can_update_package_to_latest_version()
     {
+    	// set version
+    	$this->setPackageVersion('test/package-a', '1.2.0');
+
+    	// update package
     	Composer::update('test/package-a');
 
     	$this->assertEquals('1.2.0', Composer::version('test/package-a'));
@@ -115,7 +119,7 @@ class ComposerTest extends TestCase
     }
 
     /**
-     * Set package version in `composer.json` file.
+     * Updates `composer.json` file w/ package & version.
      *
      * @param  string $package
      * @param  string $version

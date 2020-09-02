@@ -2,7 +2,7 @@
     "name": "fusioncms/cms-test",
     "require": {
         "composer/composer": "^1.9",
-        "test/package-a": "1.*"
+        "test/package-a": "1.1.0"
     },
     "repositories": [
         {
