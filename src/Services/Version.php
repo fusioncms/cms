@@ -4,6 +4,8 @@ namespace Fusion\Services;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Composer\Semver\Comparator;
+use Illuminate\Support\Facades\Artisan;
 
 class Version
 {
@@ -112,7 +114,7 @@ class Version
      */
     public function hasUpdate()
     {
-        return version_compare($this->current(), $this->latest(), '<');
+        return Comparator::greaterThan($this->latest(), $this->current());
     }
 
     /**
@@ -123,6 +125,27 @@ class Version
     public function isAutoUpdateEnabled()
     {
         return setting('system.auto_update', false);
+    }
+
+    /**
+     * Dispatch update job.
+     * 
+     * @return void
+     */
+    public function update()
+    {
+        if ($this->hasUpdate()) {
+            BackupRun::withChain([
+                function() {
+                    // Composer::update("fusioncms/cms:{$this->latest()}");
+                },
+                function() {
+                    Artisan::call('fusion:publish');
+                    Artisan::call('optimize:clear');
+                }
+            ])
+            ->dispatch();
+        }
     }
 
     /**

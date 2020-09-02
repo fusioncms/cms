@@ -2,10 +2,8 @@
 
 namespace Fusion\Console;
 
-use Illuminate\Console\Command;
 use Fusion\Facades\Version;
-use Fusion\Jobs\Backups\BackupRun;
-use Fusion\Jobs\Composer\Update as ComposerUpdate;
+use Illuminate\Console\Command;
 
 class UpdateCommand extends Command
 {
@@ -24,16 +22,6 @@ class UpdateCommand extends Command
     protected $description = 'Update FusionCMS to the latest version';
 
     /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->version = Version::latest();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -45,25 +33,6 @@ class UpdateCommand extends Command
             return;
         }
 
-        /**
-         * BEGIN
-         */
-        $this->comment('Backing up...');
-
-        BackupRun::withChain([
-            /**
-             * Update `fusioncms/cms` package
-             */
-            ComposerUpdate::dispatchNow(["fusioncms/cms:{$this->version}"]),
-            
-            /**
-             * Housekeeping
-             */
-            function() {
-                Artisan::call('fusion:publish');
-                Artisan::call('optimize:clear');
-            }
-        ])
-        ->dispatch();
+        Version::update();
     }
 }
