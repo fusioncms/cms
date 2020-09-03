@@ -41,7 +41,7 @@ class Update
     {
         BackupRun::withChain([
             /**
-             * Update to version
+             * Version update..
              */
             function() {
                 Composer::update("fusioncms/cms:{$this->version}");
@@ -51,8 +51,10 @@ class Update
              * Post update..
              */
             function() {
+                Artisan::call('fusion:flush');
+                Artisan::call('fusion:sync');
                 Artisan::call('fusion:publish');
-                Artisan::call('optimize:clear');
+                Artisan::call('migrate');
             }
         ])->dispatch();
     }
