@@ -28,8 +28,9 @@ class UpdateCommand extends Command
      */
     public function handle()
     {
-        if (! Version::hasUpdate()) {
+        if (!Version::hasUpdate()) {
             $this->error('You are currently on the latest version of FusionCMS.');
+
             return;
         }
 

@@ -10,7 +10,8 @@ class ComposerFormatter
     /**
      * Customize logger instance.
      *
-     * @param  Logger  $logger
+     * @param Logger $logger
+     *
      * @return void
      */
     public function __invoke(Logger $logger)

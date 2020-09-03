@@ -3,9 +3,9 @@
 namespace Fusion\Services;
 
 use Composer\Semver\Comparator;
+use Fusion\Jobs\Update;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
-use Fusion\Jobs\Update;
 
 class Version
 {
@@ -115,7 +115,7 @@ class Version
 
     /**
      * Update to latest version.
-     * 
+     *
      * @return void
      */
     public function update()
