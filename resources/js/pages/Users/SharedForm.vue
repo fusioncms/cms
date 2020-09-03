@@ -7,56 +7,51 @@
             </div>
         </portal>
 
-        <div class="card">
-            <div class="card__body">
-                <p-title
-                    name="name"
-                    autocomplete="off"
-                    autofocus
-                    required
-                    :has-error="form.errors.has('name')"
-                    :error-message="form.errors.get('name')"
-                    v-model="form.name">
-                </p-title>
+        <section-card title="General Information" description="General information about this user.">
+            <p-input
+                name="name"
+                label="Name"
+                autocomplete="off"
+                autofocus
+                required
+                :has-error="form.errors.has('name')"
+                :error-message="form.errors.get('name')"
+                v-model="form.name">
+            </p-input>
 
-                <p-input
-                    type="email"
-                    name="email"
-                    label="E-mail"
-                    autocomplete="off"
-                    :has-error="form.errors.has('email')"
-                    :error-message="form.errors.get('email')"
-                    required
-                    v-model="form.email">
-                </p-input>
+            <p-input
+                type="email"
+                name="email"
+                label="E-mail"
+                autocomplete="off"
+                :has-error="form.errors.has('email')"
+                :error-message="form.errors.get('email')"
+                required
+                v-model="form.email">
+            </p-input>
+        </section-card>
 
-                <p-tabs>
-                    <p-tab name="Security">
-                        <p-input
-                            type="password"
-                            name="password"
-                            label="Password"
-                            autocomplete="new-password"
-                            :has-error="form.errors.has('password')"
-                            :error-message="form.errors.get('password')"
-                            required
-                            v-model="form.password">
-                        </p-input>
+        <section-card title="Security" description="Configure this user's security details.">
+            <p-input
+                type="password"
+                name="password"
+                label="Password"
+                autocomplete="new-password"
+                :has-error="form.errors.has('password')"
+                :error-message="form.errors.get('password')"
+                v-model="form.password">
+            </p-input>
 
-                        <p-input
-                            type="password"
-                            name="password_confirmation"
-                            label="Confirm Password"
-                            autocomplete="new-password"
-                            :has-error="form.errors.has('password_confirmation')"
-                            :error-message="form.errors.get('password_confirmation')"
-                            required
-                            v-model="form.password_confirmation">
-                        </p-input>
-                    </p-tab>
-                </p-tabs>
-            </div>
-        </div>
+            <p-input
+                type="password"
+                name="password_confirmation"
+                label="Confirm Password"
+                autocomplete="new-password"
+                :has-error="form.errors.has('password_confirmation')"
+                :error-message="form.errors.get('password_confirmation')"
+                v-model="form.password_confirmation">
+            </p-input>
+        </section-card>
 
         <template v-slot:sidebar>
             <div class="card">

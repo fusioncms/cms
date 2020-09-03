@@ -7,38 +7,33 @@
             </div>
         </portal>
 
-        <div class="card">
-            <div class="card__body">
-                <p-title
-                    name="name"
-                    autocomplete="off"
-                    autofocus
-                    required
-                    :has-error="form.errors.has('name')"
-                    :error-message="form.errors.get('name')"
-                    v-model="form.name">
-                </p-title>
+        <section-card title="General Information" description="General information about this navigation and what it links to.">
+            <p-input
+                name="name"
+                label="Name"
+                description="What should this navigation be called?"
+                autocomplete="off"
+                autofocus
+                required
+                :has-error="form.errors.has('name')"
+                :error-message="form.errors.get('name')"
+                v-model="form.name">
+            </p-input>
 
-                <p-tabs>
-                    <p-tab name="General">
-                        <p-input
-                            name="description"
-                            label="Description"
-                            help="Give a short description of what this navigation will link to."
-                            autocomplete="off"
-                            required
-                            :has-error="form.errors.has('description')"
-                            :error-message="form.errors.get('description')"
-                            v-model="form.description">
-                        </p-input>
-                    </p-tab>
+            <p-textarea
+                name="description"
+                label="Description"
+                help="Give a short description of what this navigation will link to."
+                autocomplete="off"
+                :has-error="form.errors.has('description')"
+                :error-message="form.errors.get('description')"
+                v-model="form.description">
+            </p-textarea>
+        </section-card>
 
-                    <p-tab name="Fields">
-                        <section-builder v-model="form.sections"></section-builder>
-                    </p-tab>
-                </p-tabs>
-            </div>
-        </div>
+        <section-card title="Blueprint" description="Configure this navigation's blueprint.">
+            <section-builder v-model="form.sections"></section-builder>
+        </section-card>
 
         <template v-slot:sidebar>
             <div class="card">

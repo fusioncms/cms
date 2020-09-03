@@ -7,138 +7,132 @@
             </div>
         </portal>
 
-        <div class="card">
-            <div class="card__body">
-                <p-input
-                    name="name"
-                    label="Name"
-                    help="Give your matrix a name."
-                    autocomplete="off"
-                    required
-                    :has-error="form.errors.has('name')"
-                    :error-message="form.errors.get('name')"
-                    v-model="form.name">
-                </p-input>
+        <section-card title="General Information" description="General information about your collection and what it manages.">
+            <p-input
+                name="name"
+                label="Name"
+                help="What should this matrix be called?"
+                autocomplete="off"
+                autofocus
+                required
+                :has-error="form.errors.has('name')"
+                :error-message="form.errors.get('name')"
+                v-model="form.name">
+            </p-input>
 
-                <p-input
-                    name="description"
-                    label="Description"
-                    help="Give a short description of what this matrix will manage and store."
-                    autocomplete="off"
-                    required
-                    :has-error="form.errors.has('description')"
-                    :error-message="form.errors.get('description')"
-                    v-model="form.description">
-                </p-input>
+            <p-textarea
+                name="description"
+                label="Description"
+                help="Give a short description of what this matrix will manage and store."
+                autocomplete="off"
+                :has-error="form.errors.has('description')"
+                :error-message="form.errors.get('description')"
+                v-model="form.description">
+            </p-textarea>
 
-                <p-tabs>
-                    <p-tab name="General">
-                        <p-select
-                            name="type"
-                            label="Type"
-                            help="What type of matrix will this be?"
-                            :options="[
-                                {
-                                    'label': 'Collection',
-                                    'value': 'collection',
-                                },
-                                {
-                                    'label': 'Single',
-                                    'value': 'single',
-                                },
-                            ]"
-                            :has-error="form.errors.has('type')"
-                            :error-message="form.errors.get('type')"
-                            v-model="form.type">
-                        </p-select>
+            <p-select
+                name="type"
+                label="Type"
+                help="What type of matrix will this be?"
+                :options="[
+                    {
+                        'label': 'Collection',
+                        'value': 'collection',
+                    },
+                    {
+                        'label': 'Single',
+                        'value': 'single',
+                    },
+                ]"
+                :has-error="form.errors.has('type')"
+                :error-message="form.errors.get('type')"
+                v-model="form.type">
+            </p-select>
 
-                        <fieldset-picker
-                            :has-error="form.errors.has('fieldset')"
-                            :error-message="form.errors.get('fieldset')"
-                            v-model="form.fieldset">
-                        </fieldset-picker>
-                    </p-tab>
+            <fieldset-picker
+                :has-error="form.errors.has('fieldset')"
+                :error-message="form.errors.get('fieldset')"
+                v-model="form.fieldset">
+            </fieldset-picker>
+        </section-card>
 
-                    <p-tab name="Customize">
-                        <p-input
-                            name="name_label"
-                            label="Name Label"
-                            placeholder="Name"
-                            help="If you'd like, you may customize the label used for your entry names."
-                            :has-error="form.errors.has('name_label')"
-                            :error-message="form.errors.get('name_label')"
-                            v-model="form.name_label">
-                        </p-input>
+        <section-card title="Customizations" description="Configure the various customizations options.">
+            <p-input
+                name="name_label"
+                label="Name Label"
+                placeholder="Name"
+                help="If you'd like, you may customize the label used for your entry names."
+                :has-error="form.errors.has('name_label')"
+                :error-message="form.errors.get('name_label')"
+                v-model="form.name_label">
+            </p-input>
 
-                        <p-input
-                            name="reference_singular"
-                            label="Singular Reference"
-                            :placeholder="singularReference"
-                            help="What would you like to reference this as in singular form? By default will try to guess from the name. Results may vary."
-                            :has-error="form.errors.has('reference_singular')"
-                            :error-message="form.errors.get('reference_singular')"
-                            v-model="form.reference_singular">
-                        </p-input>
+            <p-input
+                name="reference_singular"
+                label="Singular Reference"
+                :placeholder="singularReference"
+                help="What would you like to reference this as in singular form? By default will try to guess from the name. Results may vary."
+                :has-error="form.errors.has('reference_singular')"
+                :error-message="form.errors.get('reference_singular')"
+                v-model="form.reference_singular">
+            </p-input>
 
-                        <p-input
-                            name="reference_plural"
-                            label="Plural Reference"
-                            :placeholder="pluralReference"
-                            help="What would you like to reference this as in plural form? By default will try to guess from the name. Results may vary."
-                            :has-error="form.errors.has('reference_plural')"
-                            :error-message="form.errors.get('reference_plural')"
-                            v-model="form.reference_plural">
-                        </p-input>
+            <p-input
+                name="reference_plural"
+                label="Plural Reference"
+                :placeholder="pluralReference"
+                help="What would you like to reference this as in plural form? By default will try to guess from the name. Results may vary."
+                :has-error="form.errors.has('reference_plural')"
+                :error-message="form.errors.get('reference_plural')"
+                v-model="form.reference_plural">
+            </p-input>
 
-                        <hr>
+            <hr>
 
-                        <p-toggle
-                            v-if="form.type == 'collection'"
-                            name="show_name_field"
-                            label="Show name field"
-                            v-model="form.show_name_field"
-                            :true-value="1"
-                            :false-value="0">
-                        </p-toggle>
+            <p-toggle
+                v-if="form.type == 'collection'"
+                name="show_name_field"
+                label="Show name field"
+                v-model="form.show_name_field"
+                :true-value="1"
+                :false-value="0">
+            </p-toggle>
 
-                        <p-input
-                            v-if="!form.show_name_field"
-                            monospaced
-                            name="name_format"
-                            label="Name Format"
-                            help="What format would you like your generated names and slugs to follow?"
-                            :has-error="form.errors.has('name_format')"
-                            :error-message="form.errors.get('name_format')"
-                            v-model="form.name_format">
-                        </p-input>
-                    </p-tab>
+            <p-input
+                v-if="!form.show_name_field"
+                monospaced
+                name="name_format"
+                label="Name Format"
+                help="What format would you like your generated names and slugs to follow?"
+                :has-error="form.errors.has('name_format')"
+                :error-message="form.errors.get('name_format')"
+                v-model="form.name_format">
+            </p-input>
+        </section-card>
 
-                    <p-tab name="Route">
-                        <p-input
-                            name="route"
-                            label="Route"
-                            help="When the URI matches this pattern..."
-                            autocomplete="off"
-                            monospaced
-                            :has-error="form.errors.has('route')"
-                            :error-message="form.errors.get('route')"
-                            v-model="form.route">
-                        </p-input>
+        <section-card title="Routing" description="Configure how entries within the collection will be accessed on the frontend.">
+            <p-input
+                name="route"
+                label="Route"
+                help="When the URI matches this pattern..."
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('route')"
+                :error-message="form.errors.get('route')"
+                v-model="form.route">
+            </p-input>
 
-                        <p-input
-                            name="template"
-                            label="Template"
-                            help="Render this template"
-                            autocomplete="off"
-                            monospaced
-                            :has-error="form.errors.has('template')"
-                            :error-message="form.errors.get('template')"
-                            v-model="form.template">
-                        </p-input>
-                    </p-tab>
-                </p-tabs>
-            </div>
-        </div>
+            <p-input
+                name="template"
+                label="Template"
+                help="Render this template"
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('template')"
+                :error-message="form.errors.get('template')"
+                v-model="form.template">
+            </p-input>
+        </section-card>
 
         <template v-slot:sidebar>
             <div class="card">
