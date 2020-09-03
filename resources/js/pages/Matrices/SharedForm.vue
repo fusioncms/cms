@@ -11,24 +11,24 @@
             <p-input
                 name="name"
                 label="Name"
-                help="Give your matrix a name."
+                help="What should this matrix be called?"
                 autocomplete="off"
+                autofocus
                 required
                 :has-error="form.errors.has('name')"
                 :error-message="form.errors.get('name')"
                 v-model="form.name">
             </p-input>
 
-            <p-input
+            <p-textarea
                 name="description"
                 label="Description"
                 help="Give a short description of what this matrix will manage and store."
                 autocomplete="off"
-                required
                 :has-error="form.errors.has('description')"
                 :error-message="form.errors.get('description')"
                 v-model="form.description">
-            </p-input>
+            </p-textarea>
 
             <p-select
                 name="type"

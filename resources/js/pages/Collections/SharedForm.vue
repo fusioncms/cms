@@ -7,41 +7,33 @@
             </div>
         </portal>
 
-        <div class="card">
-            <div class="card__body">
+        <p-card v-if="collection.show_name_field">
+            <p-card-body>
                 <p-title
                     name="name"
                     :label="collection.name_label || 'Name'"
                     autocomplete="off"
                     autofocus
                     required
-                    :placeholder="collection.name_label || 'Name'" 
+                    :placeholder="collection.name_label || 'Name'"
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
-                    v-model="form.name"
-                    v-if="collection.show_name_field">
+                    v-model="form.name">
                 </p-title>
+            </p-card-body>
+        </p-card>
 
-                <p-tabs v-if="sections.body.length > 0">
-                    <p-tab v-for="section in sections.body" :key="section.handle" :name="section.name">
-                        <component
-                            class="form__group"
-                            v-for="field in section.fields"
-                            :key="field.handle"
-                            :is="field.type.id + '-fieldtype'"
-                            :field="field"
-                            :errors="form.errors"
-                            v-model="form[field.handle]">
-                        </component>
-                    </p-tab>
-                </p-tabs>
-
-                <div v-else class="text-center">
-                    <p>Things are looking a little empty here!</p>
-                    <router-link class="button" :to="'/matrices/' + collection.id + '/edit'">Configure your collection</router-link>
-                </div>
-            </div>
-        </div>
+        <section-card v-for="section in sections.body" :key="section.handle" :title="section.name" :description="section.description">
+            <component
+                class="form__group"
+                v-for="field in section.fields"
+                :key="field.handle"
+                :is="field.type.id + '-fieldtype'"
+                :field="field"
+                :errors="form.errors"
+                v-model="form[field.handle]">
+            </component>
+        </section-card>
 
         <template v-slot:sidebar>
             <div class="card">
@@ -125,7 +117,7 @@
                 required: true,
             }
         },
-        
+
         computed: {
             sections() {
                 let body = []

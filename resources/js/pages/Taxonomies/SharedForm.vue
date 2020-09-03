@@ -7,64 +7,59 @@
             </div>
         </portal>
 
-        <div class="card">
-            <div class="card__body">
-                <p-title
-                    name="name"
-                    autocomplete="off"
-                    autofocus
-                    required
-                    :has-error="form.errors.has('name')"
-                    :error-message="form.errors.get('name')"
-                    v-model="form.name">
-                </p-title>
+        <section-card title="General Information" description="General information about this taxonomy and what it organizes.">
+            <p-input
+                name="name"
+                label="Name"
+                help="What should this taxonomy be called?"
+                autocomplete="off"
+                autofocus
+                required
+                :has-error="form.errors.has('name')"
+                :error-message="form.errors.get('name')"
+                v-model="form.name">
+            </p-input>
 
-                <p-input
-                    name="description"
-                    label="Description"
-                    help="Give a short description of what this taxonomy will organize and store."
-                    autocomplete="off"
-                    required
-                    :has-error="form.errors.has('description')"
-                    :error-message="form.errors.get('description')"
-                    v-model="form.description">
-                </p-input>
+            <p-textarea
+                name="description"
+                label="Description"
+                help="Give a short description of what this taxonomy will organize and store."
+                autocomplete="off"
+                :has-error="form.errors.has('description')"
+                :error-message="form.errors.get('description')"
+                v-model="form.description">
+            </p-textarea>
 
-                <p-tabs>
-                    <p-tab name="General">
-                        <fieldset-picker
-                            :has-error="form.errors.has('fieldset')"
-                            :error-message="form.errors.get('fieldset')"
-                            v-model="form.fieldset">
-                        </fieldset-picker>
-                    </p-tab>
+            <fieldset-picker
+                :has-error="form.errors.has('fieldset')"
+                :error-message="form.errors.get('fieldset')"
+                v-model="form.fieldset">
+            </fieldset-picker>
+        </section-card>
 
-                    <p-tab name="Route">
-                        <p-input
-                            name="route"
-                            label="Route"
-                            help="When the URI matches this pattern..."
-                            autocomplete="off"
-                            monospaced
-                            :has-error="form.errors.has('route')"
-                            :error-message="form.errors.get('route')"
-                            v-model="form.route">
-                        </p-input>
+        <section-card title="Routing" description="Configure how terms within this taxonomy will be accessed on the frontend.">
+            <p-input
+                name="route"
+                label="Route"
+                help="When the URI matches this pattern..."
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('route')"
+                :error-message="form.errors.get('route')"
+                v-model="form.route">
+            </p-input>
 
-                        <p-input
-                            name="template"
-                            label="Template"
-                            help="Render this template"
-                            autocomplete="off"
-                            monospaced
-                            :has-error="form.errors.has('template')"
-                            :error-message="form.errors.get('template')"
-                            v-model="form.template">
-                        </p-input>
-                    </p-tab>
-                </p-tabs>
-            </div>
-        </div>
+            <p-input
+                name="template"
+                label="Template"
+                help="Render this template"
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('template')"
+                :error-message="form.errors.get('template')"
+                v-model="form.template">
+            </p-input>
+        </section-card>
 
         <template v-slot:sidebar>
             <div class="card">
