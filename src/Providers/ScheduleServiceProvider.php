@@ -16,8 +16,8 @@ class ScheduleServiceProvider extends ServiceProvider
      */
     public function boot(Schedule $schedule)
     {
-        // $this->bootAutoBackups($schedule);
-        // $this->bootAutoUpdates($schedule);
+        $this->bootAutoBackups($schedule);
+        $this->bootAutoUpdates($schedule);
     }
 
     /**
