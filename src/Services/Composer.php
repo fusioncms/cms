@@ -40,81 +40,40 @@ class Composer
     /**
      * Runs `composer require` command.
      *
-     * @param mixed $packages
-     *
+     * @param  mixed  $packages
+     * @param  array  $flags
      * @return void
      */
-    public function require($packages)
+    public function require($packages, array $flags = [])
     {
-        $packages = Arr::wrap($packages);
-        $command  = sprintf('require %s', implode(' ', $packages));
-
-        try {
-            $this
-                ->process($command, [
-                    '--update-with-dependencies',
-                ])
-                ->mustRun(function ($type, $buffer) {
-                    // TODO:
-                });
-
-            $this->clear();
-        } catch (ProcessFailedException $exception) {
-            Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
-        }
-    }
-
-    /**
-     * Runs `composer remove` command.
-     *
-     * @param mixed $packages
-     *
-     * @return void
-     */
-    public function remove($packages)
-    {
-        $packages = Arr::wrap($packages);
-        $command  = sprintf('remove %s', implode(' ', $packages));
-
-        try {
-            $this
-                ->process($command, [
-                    '--update-with-dependencies',
-                ])
-                ->mustRun(function ($type, $buffer) {
-                    // TODO:
-                });
-
-            $this->clear();
-        } catch (ProcessFailedException $exception) {
-            Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
-        }
+        $this->run('require ' . implode(' ', Arr::wrap($packages)),
+            array_merge(['--update-with-dependencies'], $flags));
     }
 
     /**
      * Runs `composer update` command.
      *
-     * @param mixed $packages - one or more packages to update
-     *
+     * @param  mixed  $packages
+     * @param  array  $flags
      * @return void
      */
-    public function update($packages)
+    public function update($packages, array $flags = [])
     {
-        $packages = Arr::wrap($packages);
-        $command  = sprintf('update %s', implode(' ', $packages));
+        $this->run('update ' . implode(' ', Arr::wrap($packages)),
+            array_merge(['--with-dependencies'], $flags));
+    }
 
-        try {
-            $this
-                ->process($command, [
-                    '--with-dependencies',
-                ])->mustRun(function ($type, $buffer) {
-                    // TODO:
-                });
-
-            $this->clear();
-        } catch (ProcessFailedException $exception) {
-            Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
-        }
+    /**
+     * Runs `composer remove` command.
+     *
+     * @param  mixed  $packages
+     * @param  array  $flags
+     * @return void
+     */
+    public function remove($packages, array $flags = [])
+    {
+        $this->run('remove ' . implode(' ', Arr::wrap($packages)),
+            array_merge(['--update-with-dependencies'], $flags));
     }
 
     /**
@@ -178,17 +137,6 @@ class Composer
     }
 
     /**
-     * Bust cache.
-     *
-     * @return void
-     */
-    private function clear()
-    {
-        Cache::forget('composer.packages');
-        Cache::forget('composer.paths');
-    }
-
-    /**
      * Returns list of installed packages.
      * [Cached].
      *
@@ -233,6 +181,40 @@ class Composer
 
             return $output;
         });
+    }
+
+    /**
+     * Bust cache.
+     *
+     * @return void
+     */
+    private function bustCache()
+    {
+        Cache::forget('composer.packages');
+        Cache::forget('composer.paths');
+    }
+
+    /**
+     * Run composer process.
+     * Log output.
+     * 
+     * @param  string $command
+     * @param  array  $flags
+     * @return void
+     */
+    private function run($command, array $flags = [])
+    {
+        try {
+            $this
+                ->process($command, $flags)
+                ->mustRun(function ($type, $buffer) {
+                    Log::channel('composer')->info($buffer);
+                });
+
+            $this->bustCache();
+        } catch (ProcessFailedException $exception) {
+            Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
+        }
     }
 
     /**

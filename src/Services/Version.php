@@ -5,7 +5,7 @@ namespace Fusion\Services;
 use Composer\Semver\Comparator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Cache;
+use Fusion\Jobs\Update;
 
 class Version
 {
@@ -17,25 +17,13 @@ class Version
     private $items = [];
 
     /**
-     * Cache limit - 30 min.
-     *
-     * @var int
-     */
-    private $cacheLimit = 60 * 30;
-
-    /**
      * Constructor.
      *
      * @param array $items
      */
-    public function __construct()
+    public function __construct(array $items = [])
     {
-        $this->items = Cache::remember('versions', $this->cacheLimit, function () {
-            $response = (new \GuzzleHttp\Client())
-                ->get(config('fusion.feeds.releases'));
-
-            return json_decode($response->getBody(), true)['items'];
-        });
+        $this->items = $items;
     }
 
     /**
@@ -82,9 +70,7 @@ class Version
      */
     public function find($version)
     {
-        return collect($this->items)
-            ->where('title', $version)
-            ->first();
+        return collect($this->items)->where('title', $version)->first();
     }
 
     /**
@@ -108,13 +94,33 @@ class Version
     }
 
     /**
-     * Is an update available?
+     * Is new update available?
      *
      * @return bool
      */
     public function hasUpdate()
     {
         return Comparator::greaterThan($this->latest(), $this->current());
+    }
+
+    /**
+     * Is auto-updating enabled?
+     *
+     * @return bool
+     */
+    public function isAutoUpdateEnabled()
+    {
+        return setting('updates.auto_update', 'disabled') == 'enabled';
+    }
+
+    /**
+     * Update to latest version.
+     * 
+     * @return void
+     */
+    public function update()
+    {
+        Update::dispatchIf($this->hasUpdate(), $this->latest());
     }
 
     /**

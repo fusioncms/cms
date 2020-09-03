@@ -6,6 +6,9 @@ use Fusion\Facades\Addon;
 use Fusion\Facades\Theme;
 use Fusion\Models\Role;
 use Fusion\Models\User;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -68,6 +71,7 @@ class FusionServiceProvider extends ServiceProvider
             \Fusion\Console\RefreshCommand::class,
             \Fusion\Console\FlushCommand::class,
             \Fusion\Console\SyncCommand::class,
+            \Fusion\Console\UpdateCommand::class,
         ]);
     }
 
@@ -159,8 +163,16 @@ class FusionServiceProvider extends ServiceProvider
         });
 
         // version history
-        $this->app->singleton('version', function () {
-            return new \Fusion\Services\Version();
+        $this->app->singleton('version', function() {
+            $versions = \Cache::remember('versions', 60 * 30, function () {
+                $response = (new \GuzzleHttp\Client())
+                    ->get(config('fusion.feeds.releases'))
+                    ->getBody();
+
+                return json_decode($response, true)['items'];
+            });
+
+            return new \Fusion\Services\Version($versions);
         });
 
         // package manager
@@ -231,56 +243,40 @@ class FusionServiceProvider extends ServiceProvider
 
     /**
      * Register the package's config.
+     * Merges in `fusioncms` overridding configs.
      *
      * @return void
      */
     private function registerConfig()
     {
-        $this->mergeConfigFile(
-            __DIR__.'/../../config/session.php',
-            'session'
-        );
+        $files = File::files(__DIR__.'/../../config/');
+        
+        foreach ($files as $file) {
+            $name     = File::name($file->getPathname());
+            $original = $this->app['config']->get($name, []);
+            $merging  = require $file->getPathname();
 
-        $this->mergeConfigFile(
-            __DIR__.'/../../config/analytics.php',
-            'analytics'
-        );
-
-        $this->mergeConfigFile(
-            __DIR__.'/../../config/fusion.php',
-            'fusion'
-        );
-
-        $this->mergeConfigFile(
-            __DIR__.'/../../config/installer.php',
-            'installer'
-        );
-
-        $this->mergeConfigFile(
-            __DIR__.'/../../config/permission.php',
-            'permission'
-        );
-
-        $this->mergeConfigFile(
-            __DIR__.'/../../config/sanctum.php',
-            'sanctum'
-        );
+            $this->app['config']->set($name,
+                $this->mergeDeep($original, $merging));
+        }
     }
 
     /**
-     * Merge in `fusioncms` config values.
+     * Deeply merge two arrays.
      *
-     * @param string $key
-     * @param string $path
-     *
-     * @return void
+     * @param  array $original
+     * @param  array $merging
+     * @return array
      */
-    private function mergeConfigFile($path, $key)
+    private function mergeDeep(array $original, array $merging)
     {
-        $this->app['config']->set($key, array_merge(
-            $this->app['config']->get($key, []),
-            require $path
-        ));
+        $output = array_merge($original, $merging);
+
+        foreach ($original as $key => $value)
+            if (is_array($value) && Arr::exists($merging, $key) && ! is_numeric($key))
+                $output[$key] = $this->mergeDeep($value, $merging[$key]);
+
+        return $output;
     }
 
     /**
