@@ -55,7 +55,7 @@ class Composer
                     '--update-with-dependencies',
                 ])
                 ->mustRun(function ($type, $buffer) {
-                    // TODO:
+                    Log::channel('composer')->info($buffer);
                 });
 
             $this->clear();
@@ -82,7 +82,7 @@ class Composer
                     '--update-with-dependencies',
                 ])
                 ->mustRun(function ($type, $buffer) {
-                    // TODO:
+                    Log::channel('composer')->info($buffer);
                 });
 
             $this->clear();
@@ -108,7 +108,7 @@ class Composer
                 ->process($command, [
                     '--with-dependencies',
                 ])->mustRun(function ($type, $buffer) {
-                    // TODO:
+                    Log::channel('composer')->info($buffer);
                 });
 
             $this->clear();

@@ -40,11 +40,6 @@ class ScheduleServiceProvider extends ServiceProvider
             ->when(function() {
                 return Version::isAutoUpdateEnabled() &&
                        Version::hasUpdate();
-            })
-            ->onFailure(function() {
-                Log::error(
-                    sprintf('Failed to update FusionCMS to version: %s', Version::latest())
-                );
             });
     }
 }

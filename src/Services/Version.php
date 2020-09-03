@@ -7,6 +7,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Jobs\Composer\Update as ComposerUpdate;
 
 class Version
 {
@@ -129,7 +131,7 @@ class Version
     }
 
     /**
-     * Dispatch update job.
+     * Update to latest version.
      * 
      * @return void
      */
@@ -137,15 +139,8 @@ class Version
     {
         if ($this->hasUpdate()) {
             BackupRun::withChain([
-                function() {
-                    // Composer::update("fusioncms/cms:{$this->latest()}");
-                },
-                function() {
-                    Artisan::call('fusion:publish');
-                    Artisan::call('optimize:clear');
-                }
-            ])
-            ->dispatch();
+                new ComposerUpdate("fusioncms/cms:{$this->latest()}")
+            ])->dispatch();
         }
     }
 
