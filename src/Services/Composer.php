@@ -137,17 +137,6 @@ class Composer
     }
 
     /**
-     * Bust cache.
-     *
-     * @return void
-     */
-    private function clear()
-    {
-        Cache::forget('composer.packages');
-        Cache::forget('composer.paths');
-    }
-
-    /**
      * Returns list of installed packages.
      * [Cached].
      *
@@ -195,6 +184,17 @@ class Composer
     }
 
     /**
+     * Bust cache.
+     *
+     * @return void
+     */
+    private function bustCache()
+    {
+        Cache::forget('composer.packages');
+        Cache::forget('composer.paths');
+    }
+
+    /**
      * Run composer process.
      * Log output.
      * 
@@ -204,7 +204,6 @@ class Composer
      */
     private function run($command, array $flags = [])
     {
-        dd($command, $flags);
         try {
             $this
                 ->process($command, $flags)
@@ -212,7 +211,7 @@ class Composer
                     Log::channel('composer')->info($buffer);
                 });
 
-            $this->clear();
+            $this->bustCache();
         } catch (ProcessFailedException $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
         }

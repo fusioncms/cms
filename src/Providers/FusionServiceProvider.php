@@ -157,10 +157,6 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(ScheduleServiceProvider::class);
         $this->app->register(ThemeServiceProvider::class);
 
-        $this->app->singleton('version', function() {
-            return new \Fusion\Services\Version;
-        });
-
         // Not sure why Laravel doesn't register this against
         // the class name as well ¯\_(ツ)_/¯
         $this->app->singleton(\Illuminate\Database\Migrations\Migrator::class, function ($app) {
@@ -168,8 +164,16 @@ class FusionServiceProvider extends ServiceProvider
         });
 
         // version history
-        $this->app->singleton('version', function () {
-            return new \Fusion\Services\Version();
+        $this->app->singleton('version', function() {
+            $versions = \Cache::remember('versions', 60 * 30, function () {
+                $response = (new \GuzzleHttp\Client())
+                    ->get(config('fusion.feeds.releases'))
+                    ->getBody();
+
+                return json_decode($response, true)['items'];
+            });
+
+            return new \Fusion\Services\Version($versions);
         });
 
         // package manager

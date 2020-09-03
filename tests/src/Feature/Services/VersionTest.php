@@ -4,8 +4,7 @@ namespace Fusion\Tests\Feature\Services;
 
 use Fusion\Tests\TestCase;
 use Fusion\Facades\Version;
-use Fusion\Facades\Composer;
-use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Bus;
 
 class VersionTest extends TestCase
 {
@@ -17,14 +16,13 @@ class VersionTest extends TestCase
      */
     public function version_service_can_update_to_latest()
     {
-    	Queue::fake();
-    	Queue::assertPushed('Fusion\Jobs\Backups\BackupRun');
+        Bus::fake();
 
-        // Composer::shouldReceive('update')
-        //     ->with('fusioncms/cms', Version::latest())
-        //     ->once()
-        //     ->andReturnTrue();
-
+        Version::swap(new \Fusion\Services\Version([['title' => '9999']]));
         Version::update();
+
+        Bus::assertDispatched('Fusion\Jobs\Update', function($job) {
+            return $job->version == Version::latest();
+        });
     }
 }

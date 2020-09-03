@@ -4,6 +4,7 @@ namespace Fusion\Jobs;
 
 use Exception;
 use Fusion\Facades\Composer;
+use Fusion\Jobs\Backups\BackupRun;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Bus\Queueable;
@@ -12,7 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class DumpAutoload implements ShouldQueue
+class Update implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -20,18 +21,20 @@ class DumpAutoload implements ShouldQueue
     use SerializesModels;
 
     /**
-     * Package to update.
+     * Requested version.
      * 
      * @var string
      */
-    private $package;
+    public $version;
 
     /**
      * Constructor.
+     * 
+     * @param string $version
      */
-    public function __construct($package)
+    public function __construct($version)
     {
-        $this->package = $package;
+        $this->version = $version;
     }
 
     /**
@@ -41,10 +44,22 @@ class DumpAutoload implements ShouldQueue
      */
     public function handle()
     {
-        Composer::update($this->package);
+        BackupRun::withChain([
+            /**
+             * Update to version
+             */
+            function() {
+                Composer::update("fusioncms/cms:{$this->version}");
+            },
 
-        Artisan::call('fusion:publish');
-        Artisan::call('optimize:clear');
+            /**
+             * Post update..
+             */
+            function() {
+                Artisan::call('fusion:publish');
+                Artisan::call('optimize:clear');
+            }
+        ])->dispatch();
     }
 
     /**

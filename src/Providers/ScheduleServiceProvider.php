@@ -17,6 +17,7 @@ class ScheduleServiceProvider extends ServiceProvider
      */
     public function boot(Schedule $schedule)
     {
+        // TODO: More testing required.. :D
         // $this->bootAutoUpdates($schedule);
     }
 
