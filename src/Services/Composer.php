@@ -40,39 +40,39 @@ class Composer
     /**
      * Runs `composer require` command.
      *
-     * @param mixed $packages
-     *
+     * @param  mixed  $packages
+     * @param  array  $flags
      * @return void
      */
-    public function require($packages)
+    public function require($packages, array $flags = [])
     {
-        $this->run('require ' . implode(' ', $packages),
+        $this->run('require ' . implode(' ', Arr::wrap($packages)),
             array_merge(['--update-with-dependencies'], $flags));
     }
 
     /**
      * Runs `composer update` command.
      *
-     * @param  array  $packages
+     * @param  mixed  $packages
      * @param  array  $flags
      * @return void
      */
-    public function update(array $packages, array $flags = [])
+    public function update($packages, array $flags = [])
     {
-        $this->run('update ' . implode(' ', $packages),
+        $this->run('update ' . implode(' ', Arr::wrap($packages)),
             array_merge(['--with-dependencies'], $flags));
     }
 
     /**
      * Runs `composer remove` command.
      *
-     * @param  array  $packages
+     * @param  mixed  $packages
      * @param  array  $flags
      * @return void
      */
-    public function remove(array $packages, array $flags = [])
+    public function remove($packages, array $flags = [])
     {
-        $this->run('remove ' . implode(' ', $packages),
+        $this->run('remove ' . implode(' ', Arr::wrap($packages)),
             array_merge(['--update-with-dependencies'], $flags));
     }
 
@@ -204,6 +204,7 @@ class Composer
      */
     private function run($command, array $flags = [])
     {
+        dd($command, $flags);
         try {
             $this
                 ->process($command, $flags)
