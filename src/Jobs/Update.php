@@ -5,10 +5,10 @@ namespace Fusion\Jobs;
 use Exception;
 use Fusion\Facades\Composer;
 use Fusion\Jobs\Backups\BackupRun;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class Update
 {
@@ -17,14 +17,14 @@ class Update
 
     /**
      * Requested version.
-     * 
+     *
      * @var string
      */
     public $version;
 
     /**
      * Constructor.
-     * 
+     *
      * @param string $version
      */
     public function __construct($version)
@@ -43,19 +43,19 @@ class Update
             /**
              * Version update..
              */
-            function() {
+            function () {
                 Composer::update("fusioncms/cms:{$this->version}");
             },
 
             /**
              * Post update..
              */
-            function() {
+            function () {
                 Artisan::call('fusion:flush');
                 Artisan::call('fusion:sync');
                 Artisan::call('fusion:publish');
                 Artisan::call('migrate');
-            }
+            },
         ])->dispatch();
     }
 

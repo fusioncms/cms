@@ -40,40 +40,49 @@ class Composer
     /**
      * Runs `composer require` command.
      *
-     * @param  mixed  $packages
-     * @param  array  $flags
+     * @param mixed $packages
+     * @param array $flags
+     *
      * @return void
      */
     public function require($packages, array $flags = [])
     {
-        $this->run('require ' . implode(' ', Arr::wrap($packages)),
-            array_merge(['--update-with-dependencies'], $flags));
+        $this->run(
+            'require '.implode(' ', Arr::wrap($packages)),
+            array_merge(['--update-with-dependencies'], $flags)
+        );
     }
 
     /**
      * Runs `composer update` command.
      *
-     * @param  mixed  $packages
-     * @param  array  $flags
+     * @param mixed $packages
+     * @param array $flags
+     *
      * @return void
      */
     public function update($packages, array $flags = [])
     {
-        $this->run('update ' . implode(' ', Arr::wrap($packages)),
-            array_merge(['--with-dependencies'], $flags));
+        $this->run(
+            'update '.implode(' ', Arr::wrap($packages)),
+            array_merge(['--with-dependencies'], $flags)
+        );
     }
 
     /**
      * Runs `composer remove` command.
      *
-     * @param  mixed  $packages
-     * @param  array  $flags
+     * @param mixed $packages
+     * @param array $flags
+     *
      * @return void
      */
     public function remove($packages, array $flags = [])
     {
-        $this->run('remove ' . implode(' ', Arr::wrap($packages)),
-            array_merge(['--update-with-dependencies'], $flags));
+        $this->run(
+            'remove '.implode(' ', Arr::wrap($packages)),
+            array_merge(['--update-with-dependencies'], $flags)
+        );
     }
 
     /**
@@ -197,9 +206,10 @@ class Composer
     /**
      * Run composer process.
      * Log output.
-     * 
-     * @param  string $command
-     * @param  array  $flags
+     *
+     * @param string $command
+     * @param array  $flags
+     *
      * @return void
      */
     private function run($command, array $flags = [])

@@ -7,6 +7,6 @@ return [
             'tap'    => [Fusion\Logging\ComposerFormatter::class],
             'path'   => storage_path('logs/composer.log'),
             'level'  => 'debug',
-        ]
-    ]
+        ],
+    ],
 ];

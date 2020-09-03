@@ -7,7 +7,6 @@ use Fusion\Facades\Theme;
 use Fusion\Models\Role;
 use Fusion\Models\User;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -163,7 +162,7 @@ class FusionServiceProvider extends ServiceProvider
         });
 
         // version history
-        $this->app->singleton('version', function() {
+        $this->app->singleton('version', function () {
             $versions = \Cache::remember('versions', 60 * 30, function () {
                 $response = (new \GuzzleHttp\Client())
                     ->get(config('fusion.feeds.releases'))
@@ -250,31 +249,36 @@ class FusionServiceProvider extends ServiceProvider
     private function registerConfig()
     {
         $files = File::files(__DIR__.'/../../config/');
-        
+
         foreach ($files as $file) {
             $name     = File::name($file->getPathname());
             $original = $this->app['config']->get($name, []);
             $merging  = require $file->getPathname();
 
-            $this->app['config']->set($name,
-                $this->mergeDeep($original, $merging));
+            $this->app['config']->set(
+                $name,
+                $this->mergeDeep($original, $merging)
+            );
         }
     }
 
     /**
      * Deeply merge two arrays.
      *
-     * @param  array $original
-     * @param  array $merging
+     * @param array $original
+     * @param array $merging
+     *
      * @return array
      */
     private function mergeDeep(array $original, array $merging)
     {
         $output = array_merge($original, $merging);
 
-        foreach ($original as $key => $value)
-            if (is_array($value) && Arr::exists($merging, $key) && ! is_numeric($key))
+        foreach ($original as $key => $value) {
+            if (is_array($value) && Arr::exists($merging, $key) && !is_numeric($key)) {
                 $output[$key] = $this->mergeDeep($value, $merging[$key]);
+            }
+        }
 
         return $output;
     }
