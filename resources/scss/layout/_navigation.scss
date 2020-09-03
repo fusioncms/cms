@@ -11,18 +11,18 @@
     background: #2d323b;
     background: linear-gradient(180deg, #191b1f 0%, #2d323b 33%, #363e4e 66%, #445d6d 100%);
 
-    .nav-active & { 
+    .nav-active & {
         right: 0;
 
-        @screen md { 
-            right: auto; 
+        @screen md {
+            right: auto;
             left: 0;
         }
     }
 
-    @screen lg { 
+    @screen lg {
         @apply overflow-y-auto z-20;
-        width: $nav-width-desktop; 
+        width: $nav-width-desktop;
         right: auto;
         left: -$nav-width-desktop;
     }
@@ -89,7 +89,7 @@
 
 .nav-logo {
     &__text {
-        @apply font-brand text-white;
+        @apply font-serif text-white;
         font-size: rem(22px);
     }
 

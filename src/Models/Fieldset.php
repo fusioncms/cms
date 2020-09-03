@@ -3,9 +3,9 @@
 namespace Fusion\Models;
 
 use Fusion\Concerns\HasActivity;
-use Fusion\Concerns\HasDynamicRelationships;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
+use Fusion\Concerns\HasDynamicRelationships;
 
 class Fieldset extends Model
 {

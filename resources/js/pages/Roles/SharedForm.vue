@@ -7,51 +7,48 @@
             </div>
         </portal>
 
-		<div class="card">
-            <div class="card__body">
-                <p-title
-                    name="label"
-                    autocomplete="off"
-                    autofocus
-                    required
-                    :has-error="form.errors.has('label')"
-                    :error-message="form.errors.get('label')"
-                    v-model="form.label">
-                </p-title>
+        <section-card title="General Information" description="General information about this role and what it can manage.">
+            <p-input
+                name="label"
+                label="Name"
+                description="What should this role be called?"
+                autocomplete="off"
+                autofocus
+                required
+                :has-error="form.errors.has('label')"
+                :error-message="form.errors.get('label')"
+                v-model="form.label">
+            </p-input>
 
-				<p-textarea
-					name="description"
-					label="Description"
-					autocomplete="off"
-					:has-error="form.errors.has('description')"
-					:error-message="form.errors.get('description')"
-					required
-					v-model="form.description"
-					:rows="2">
-				</p-textarea>
-			</div>
-		</div>
+            <p-textarea
+                name="description"
+                label="Description"
+                autocomplete="off"
+                :has-error="form.errors.has('description')"
+                :error-message="form.errors.get('description')"
+                v-model="form.description"
+                :rows="2">
+            </p-textarea>
+        </section-card>
 
-        <div class="card" v-if="hasPermissions(form.name)">
-            <div class="card__body">
-                <p-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions_table">
-                    <template slot="name" slot-scope="table">
-                        <input
-                            type="checkbox"
-                            name="permissions"
-                            :id="table.record.name"
-                            :value="table.record.name"
-                            v-model="permissions">
+        <section-card title="Permissions" description="Configure which permissions this role has." v-if="hasPermissions(form.name)">
+            <p-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions_table">
+                <template slot="name" slot-scope="table">
+                    <input
+                        type="checkbox"
+                        name="permissions"
+                        :id="table.record.name"
+                        :value="table.record.name"
+                        v-model="permissions">
 
-                        <code>{{ table.record.name }}</code>
-                    </template>
+                    <code>{{ table.record.name }}</code>
+                </template>
 
-                    <template slot="description" slot-scope="table">
-                        <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
-                    </template>
-                </p-table>
-            </div>
-        </div>
+                <template slot="description" slot-scope="table">
+                    <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
+                </template>
+            </p-table>
+        </section-card>
 
 		<template v-slot:sidebar>
 			<p-definition-list v-if="role">
@@ -106,7 +103,7 @@
             // toggle(name, ev) {
             //     const token  = _.head(_.split(name, '.'))
             //     const items  = this.$refs.permissions.records
-                
+
             //     if (ev.target.checked) {
             //         let matches = _.filter(items, (item) => _.startsWith(item.name, token))
             //             matches = _.map(matches,  (item) => item.name)
