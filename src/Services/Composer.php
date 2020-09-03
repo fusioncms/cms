@@ -46,75 +46,34 @@ class Composer
      */
     public function require($packages)
     {
-        $packages = Arr::wrap($packages);
-        $command  = sprintf('require %s', implode(' ', $packages));
-
-        try {
-            $this
-                ->process($command, [
-                    '--update-with-dependencies',
-                ])
-                ->mustRun(function ($type, $buffer) {
-                    Log::channel('composer')->info($buffer);
-                });
-
-            $this->clear();
-        } catch (ProcessFailedException $exception) {
-            Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
-        }
-    }
-
-    /**
-     * Runs `composer remove` command.
-     *
-     * @param mixed $packages
-     *
-     * @return void
-     */
-    public function remove($packages)
-    {
-        $packages = Arr::wrap($packages);
-        $command  = sprintf('remove %s', implode(' ', $packages));
-
-        try {
-            $this
-                ->process($command, [
-                    '--update-with-dependencies',
-                ])
-                ->mustRun(function ($type, $buffer) {
-                    Log::channel('composer')->info($buffer);
-                });
-
-            $this->clear();
-        } catch (ProcessFailedException $exception) {
-            Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
-        }
+        $this->run('require ' . implode(' ', $packages),
+            array_merge(['--update-with-dependencies'], $flags));
     }
 
     /**
      * Runs `composer update` command.
      *
-     * @param mixed $packages - one or more packages to update
-     *
+     * @param  array  $packages
+     * @param  array  $flags
      * @return void
      */
-    public function update($packages)
+    public function update(array $packages, array $flags = [])
     {
-        $packages = Arr::wrap($packages);
-        $command  = sprintf('update %s', implode(' ', $packages));
+        $this->run('update ' . implode(' ', $packages),
+            array_merge(['--with-dependencies'], $flags));
+    }
 
-        try {
-            $this
-                ->process($command, [
-                    '--with-dependencies',
-                ])->mustRun(function ($type, $buffer) {
-                    Log::channel('composer')->info($buffer);
-                });
-
-            $this->clear();
-        } catch (ProcessFailedException $exception) {
-            Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
-        }
+    /**
+     * Runs `composer remove` command.
+     *
+     * @param  array  $packages
+     * @param  array  $flags
+     * @return void
+     */
+    public function remove(array $packages, array $flags = [])
+    {
+        $this->run('remove ' . implode(' ', $packages),
+            array_merge(['--update-with-dependencies'], $flags));
     }
 
     /**
@@ -233,6 +192,29 @@ class Composer
 
             return $output;
         });
+    }
+
+    /**
+     * Run composer process.
+     * Log output.
+     * 
+     * @param  string $command
+     * @param  array  $flags
+     * @return void
+     */
+    private function run($command, array $flags = [])
+    {
+        try {
+            $this
+                ->process($command, $flags)
+                ->mustRun(function ($type, $buffer) {
+                    Log::channel('composer')->info($buffer);
+                });
+
+            $this->clear();
+        } catch (ProcessFailedException $exception) {
+            Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
+        }
     }
 
     /**
