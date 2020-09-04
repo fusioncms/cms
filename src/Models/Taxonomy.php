@@ -4,18 +4,15 @@ namespace Fusion\Models;
 
 use Fusion\Concerns\CachesQueries;
 use Fusion\Concerns\HasActivity;
-use Fusion\Concerns\HasFieldset;
+use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 
 class Taxonomy extends Model
 {
-    use CachesQueries;
-    use HasFieldset;
+    use HasBlueprint;
     use HasActivity;
-
-    protected $with = ['fieldsets'];
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -27,7 +24,6 @@ class Taxonomy extends Model
         'handle',
         'slug',
         'description',
-        'fieldset_id',
         'sidebar',
         'icon',
         'route',
@@ -42,6 +38,10 @@ class Taxonomy extends Model
     protected $casts = [
         'sidebar' => 'boolean',
     ];
+
+    public function getBlueprintGroup(): string {
+        return 'Taxonomy';
+    }
 
     public function getBuilder()
     {

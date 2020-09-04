@@ -3,14 +3,14 @@
 namespace Fusion\Models;
 
 use Fusion\Concerns\CachesQueries;
-use Fusion\Concerns\HasFieldset;
+use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
 use Fusion\Services\Builders\Replicator as Builder;
 
 class Replicator extends Model
 {
     use CachesQueries;
-    use HasFieldset;
+    use HasBlueprint;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -18,6 +18,10 @@ class Replicator extends Model
      * @var array
      */
     protected $fillable = ['field_id', 'name', 'handle', 'uniqid'];
+
+    public function getBlueprintGroup(): string {
+        return 'Replicator';
+    }
 
     /**
      * @param \Fusion\Models\Section $section
@@ -36,7 +40,7 @@ class Replicator extends Model
      */
     public function sections()
     {
-        return $this->fieldset->sections();
+        return $this->blueprint->sections();
     }
 
     /**

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFieldsetsTable extends Migration
+class CreateBlueprintsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateFieldsetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('fieldsets', function (Blueprint $table) {
+        Schema::create('blueprints', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('handle')->unique();
-            $table->boolean('hidden')->default(false);
+            $table->string('group');
+            $table->boolean('hidden');
+
+            $table->morphs('blueprintable');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateFieldsetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fieldsets');
+        Schema::dropIfExists('blueprints');
     }
 }

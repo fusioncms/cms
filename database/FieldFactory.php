@@ -29,8 +29,6 @@ class FieldFactory implements Factory
 
     /**
      * Create a new Field factory.
-     *
-     * @return \Fusion\Models\Fieldset
      */
     public function create()
     {

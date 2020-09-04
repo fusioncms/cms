@@ -48,12 +48,6 @@
                 :error-message="form.errors.get('type')"
                 v-model="form.type">
             </p-select>
-
-            <fieldset-picker
-                :has-error="form.errors.has('fieldset')"
-                :error-message="form.errors.get('fieldset')"
-                v-model="form.fieldset">
-            </fieldset-picker>
         </section-card>
 
         <section-card title="Customizations" description="Configure the various customizations options.">

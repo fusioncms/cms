@@ -47,14 +47,15 @@ class NavigationTest extends TestCase
      * @group feature
      * @group navigation
      */
-    public function when_a_navigation_is_created_an_associated_fieldset_should_also_be_created()
+    public function when_a_navigation_is_created_an_associated_blueprint_should_also_be_created()
     {
         $this->actingAs($this->owner, 'api');
 
         $navigation = NavigationFactory::withName('Header')->create();
 
-        $this->assertDatabaseHas('fieldsets', [
-            'name' => 'Navigation: '.$navigation->name,
+        $this->assertDatabaseHas('blueprints', [
+            'name'  => $navigation->name,
+            'group' => 'navigation',
         ]);
     }
 

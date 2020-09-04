@@ -1,7 +1,6 @@
 <?php
 
 use Fusion\Contracts\Factory;
-use Fusion\Models\Fieldset;
 use Fusion\Models\Navigation;
 use Illuminate\Support\Str;
 
@@ -11,11 +10,6 @@ class NavigationFactory implements Factory
      * @var string
      */
     protected $name;
-
-    /**
-     * @var \Fusion\Models\Fieldset
-     */
-    protected $fieldset;
 
     /**
      * Create a new Navigation factory.
@@ -46,20 +40,6 @@ class NavigationFactory implements Factory
     public function withName($name)
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Create a form with the given fieldset.
-     *
-     * @param \Fusion\Models\Fieldset $fieldset
-     *
-     * @return \NavigationFactory
-     */
-    public function withFieldset(Fieldset $fieldset)
-    {
-        $this->fieldset = $fieldset;
 
         return $this;
     }

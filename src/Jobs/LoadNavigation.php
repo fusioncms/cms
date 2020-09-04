@@ -90,14 +90,9 @@ class LoadNavigation
                 'icon'  => 'sliders-h',
             ]);
 
-            $menu->configure->add('Extensions')->data([
-                'to'   => '/extensions',
-                'icon' => 'seedling',
-            ]);
-
-            $menu->configure->add('Fieldsets')->data([
-                'to'   => '/fieldsets',
-                'icon' => 'list',
+            $menu->configure->add('Blueprints')->data([
+                'to'   => '/blueprints',
+                'icon' => 'map',
             ]);
 
             $menu->configure->add('Forms')->data([

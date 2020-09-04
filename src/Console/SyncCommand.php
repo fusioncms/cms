@@ -32,7 +32,6 @@ class SyncCommand extends Command
             activity()->withoutLogs(function () {
                 dispatch(new \Fusion\Console\Actions\SyncResources());
                 dispatch(new \Fusion\Console\Actions\SyncAddons());
-                dispatch(new \Fusion\Console\Actions\SyncExtensions());
                 dispatch(new \Fusion\Console\Actions\SyncSettings());
                 dispatch(new \Fusion\Console\Actions\SyncPermissions());
             });

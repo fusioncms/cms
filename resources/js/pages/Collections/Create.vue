@@ -61,13 +61,11 @@
                             status: 1,
                         }
 
-                        if (collection.fieldset) {
-                            _.each(collection.fieldset.sections, (section) => {
-                                _.each(section.fields, (field) => {
-                                    form[field.handle] = field.default
-                                })
+                        _.each(collection.blueprint.sections, (section) => {
+                            _.each(section.fields, (field) => {
+                                form[field.handle] = field.default
                             })
-                        }
+                        })
 
                         vm.collection = collection
                         vm.form = new Form(form, true)
@@ -77,7 +75,7 @@
                 })
                 .catch(() => {
                     vm.$router.push(`/collection/${vm.$router.currentRoute.params.collection}`)
-                    
+
                     toast('Requested entry could not be found.', 'danger')
                 })
         }

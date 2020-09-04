@@ -22,13 +22,11 @@ class SettingResource extends JsonResource
             'group'       => $this->group,
             'icon'        => $this->icon,
             'description' => $this->description,
-            'fieldset'    => new FieldsetResource($this->fieldset),
+            'blueprint'   => new BlueprintResource($this->fieldset),
         ];
 
-        if ($this->fieldset) {
-            foreach ($this->fieldset->fields as $field) {
-                $resource['settings'][$field->handle] = setting("{$this->handle}.{$field->handle}");
-            }
+        foreach ($this->blueprint->fields as $field) {
+            $resource['settings'][$field->handle] = setting("{$this->handle}.{$field->handle}");
         }
 
         return $resource;

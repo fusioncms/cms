@@ -36,7 +36,6 @@
                     handle: '',
                     description: '',
                     type: 'collection',
-                    fieldset: null,
 
                     reference_singular: '',
                     reference_plural: '',

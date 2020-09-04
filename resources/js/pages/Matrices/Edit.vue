@@ -85,7 +85,6 @@
                             handle:             vm.matrix.handle,
                             description:        vm.matrix.description,
                             type:               vm.matrix.type,
-                            fieldset:           vm.matrix.fieldset && vm.matrix.fieldset.id ? vm.matrix.fieldset.id : null,
                             reference_singular: vm.matrix.reference_singular,
                             reference_plural:   vm.matrix.reference_plural,
                             sidebar:            vm.matrix.sidebar ? '1' : '0',

@@ -118,15 +118,13 @@
                 let body = []
                 let sidebar = []
 
-                if (this.matrix.fieldset) {
-                    body = _.filter(this.matrix.fieldset.sections, function(section) {
-                        return section.placement == 'body'
-                    })
+                body = _.filter(this.matrix.blueprint.sections, function(section) {
+                    return section.placement == 'body'
+                })
 
-                    sidebar = _.filter(this.matrix.fieldset.sections, function(section) {
-                        return section.placement == 'sidebar'
-                    })
-                }
+                sidebar = _.filter(this.matrix.blueprint.sections, function(section) {
+                    return section.placement == 'sidebar'
+                })
 
                 return {
                     body: body,

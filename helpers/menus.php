@@ -22,10 +22,10 @@ if (!function_exists('menu')) {
                 $item->target = '_self';
             }
 
-            if ($fieldset = $node->menu->fieldset) {
-                foreach ($fieldset->fields as $field) {
-                    $item->{$field->handle} = $node->{$field->handle};
-                }
+            $blueprint = $node->menu->blueprint;
+
+            foreach ($blueprint->fields as $field) {
+                $item->{$field->handle} = $node->{$field->handle};
             }
         };
 

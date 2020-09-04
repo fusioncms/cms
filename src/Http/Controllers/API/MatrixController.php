@@ -67,10 +67,6 @@ class MatrixController extends Controller
     {
         $matrix = Matrix::create($request->validated());
 
-        if ($request->fieldset) {
-            $matrix->attachFieldset($request->fieldset);
-        }
-
         return new MatrixResource($matrix);
     }
 
@@ -85,12 +81,6 @@ class MatrixController extends Controller
     public function update(MatrixRequest $request, Matrix $matrix)
     {
         $matrix->update($request->validated());
-
-        if ($request->fieldset && (!isset($matrix->fieldset) || $matrix->fieldset->id !== $request->fieldset)) {
-            $matrix->attachFieldset($request->fieldset);
-        } elseif (!$request->fieldset) {
-            $matrix->detachFieldset();
-        }
 
         return new MatrixResource($matrix);
     }

@@ -3,7 +3,7 @@
 namespace Fusion\Console\Actions;
 
 use Fusion\Models\Field;
-use Fusion\Models\Fieldset;
+use Fusion\Models\Blueprint;
 use Fusion\Models\Section;
 use Fusion\Models\Setting as SettingGroup;
 use Fusion\Services\Setting as SettingService;
@@ -27,8 +27,8 @@ class SyncSettings
          *
          * Groups    - Main `settings` table (1x per setting file).
          *             `setting_{filename}` table will be created per file.
-         * Fieldsets - Each Group has a corresponding `fieldsets` record.
-         * Sections  - Each Fieldset can have one or more `sections` records.
+         * Blueprint - Each Group has a corresponding `blueprint` record.
+         * Sections  - Each Blueprint can have one or more `sections` records.
          * Fields    - Each Section can have one or more `fields` records.
          */
         $this->syncSettingGroups();
@@ -56,7 +56,6 @@ class SyncSettings
         // Add/update existing elements..
         collect($groups)
             ->each(function ($group) use ($existing) {
-
                 // create/update group..
                 $group = SettingGroup::updateOrCreate([
                     'handle' => $group['handle'],
@@ -66,17 +65,6 @@ class SyncSettings
                     'icon'        => $group['icon'] ?? 'cog',
                     'description' => $group['description'] ?? '',
                 ]);
-
-                // create/update fieldset..
-                $fieldset = Fieldset::updateOrCreate([
-                    'handle' => 'setting_'.$group['handle'],
-                ], [
-                    'name'   => 'Setting: '.$group['name'],
-                    'hidden' => true,
-                ]);
-
-                // assign fieldset..
-                $group->fieldsets()->sync($fieldset->id);
 
                 // mark for non-removal..
                 $existing->forget($group->id);
@@ -89,7 +77,7 @@ class SyncSettings
     }
 
     /**
-     * Sync Fieldset Section for SettingGroup.
+     * Sync blueprint sections for SettingGroup.
      *
      * @param SettingGroup $group
      *
@@ -98,12 +86,12 @@ class SyncSettings
     public function syncSettingSection(SettingGroup $group, $fields = null)
     {
         $fields   = $fields ?? SettingService::fields($group->handle);
-        $existing = $group->fieldset->sections->pluck('id', 'id');
+        $existing = $group->blueprint->sections->pluck('id', 'id');
         $order    = 0;
 
         collect($fields)
             ->each(function ($fields, $name) use ($group, $existing, &$order) {
-                $section = $group->fieldset->sections()
+                $section = $group->blueprint->sections()
                     ->updateOrCreate([
                         'handle' => str_handle($name),
                     ], [

@@ -3,14 +3,16 @@
 namespace Fusion\Models;
 
 use Fusion\Concerns\CachesQueries;
-use Fusion\Concerns\HasFieldset;
+use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Setting extends Model
 {
     use CachesQueries;
-    use HasFieldset;
+    use HasBlueprint;
+
+    protected static $disableBlueprintEvents = true;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -25,6 +27,10 @@ class Setting extends Model
         'icon',
         'status',
     ];
+
+    public function getBlueprintGroup(): string {
+        return 'Settings';
+    }
 
     /**
      * @return \Fusion\Database\Eloquent\Model

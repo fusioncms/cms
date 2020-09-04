@@ -4,7 +4,7 @@ namespace Fusion\Models;
 
 use Fusion\Concerns\CachesQueries;
 use Fusion\Concerns\HasActivity;
-use Fusion\Concerns\HasFieldset;
+use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
@@ -12,10 +12,10 @@ use Spatie\Activitylog\Models\Activity;
 class Matrix extends Model
 {
     use CachesQueries;
-    use HasFieldset;
+    use HasBlueprint;
     use HasActivity;
 
-    protected $with = ['fieldsets'];
+    protected $with = ['blueprint'];
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -29,7 +29,6 @@ class Matrix extends Model
         'slug',
         'description',
         'type',
-        'fieldset_id',
         'reference_singular',
         'reference_plural',
         'sidebar',
@@ -59,6 +58,10 @@ class Matrix extends Model
         'status'           => 'boolean',
         'show_name_field'  => 'boolean',
     ];
+
+    public function getBlueprintGroup(): string {
+        return Str::plural(ucfirst($this->type));
+    }
 
     public function getBuilder()
     {

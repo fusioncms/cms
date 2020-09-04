@@ -4,7 +4,7 @@ namespace Fusion\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FieldsetRequest extends FormRequest
+class BlueprintRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class FieldsetRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('fieldsets.'.($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('blueprints.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**
@@ -23,11 +23,8 @@ class FieldsetRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->fieldset->id ?? null;
-
         return [
-            'name'   => 'required',
-            'handle' => 'required|unique:fieldsets,handle,'.$id,
+            'name'  => 'required',
         ];
     }
 }

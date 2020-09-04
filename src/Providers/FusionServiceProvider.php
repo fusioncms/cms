@@ -365,10 +365,6 @@ class FusionServiceProvider extends ServiceProvider
             return new \Spatie\Backup\BackupDestination\Backup(Storage::disk('public'), "backups/{$filename}.zip");
         });
 
-        Route::bind('fieldset', function ($id) {
-            return \Fusion\Models\Fieldset::findOrFail($id);
-        });
-
         Route::bind('addon', function ($slug) {
             return \Fusion\Facades\Addon::where('slug', $slug)->first();
         });

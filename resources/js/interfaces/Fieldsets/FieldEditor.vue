@@ -20,7 +20,7 @@
                     <p-slug
                         name="handle"
                         label="Handle"
-                        help="A developer-friendly variant of the fieldset's name."
+                        help="A developer-friendly variant of the field's name."
                         autocomplete="off"
                         required
                         delimiter="_"

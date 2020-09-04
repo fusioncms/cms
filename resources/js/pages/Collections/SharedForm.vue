@@ -123,13 +123,11 @@
                 let body = []
                 let sidebar = []
 
-                if (this.collection.fieldset) {
-                    body = _.filter(this.collection.fieldset.sections, (section) =>
-                        section.placement == 'body')
+                body = _.filter(this.collection.blueprint.sections, (section) =>
+                    section.placement == 'body')
 
-                    sidebar = _.filter(this.collection.fieldset.sections, (section) =>
-                        section.placement == 'sidebar')
-                }
+                sidebar = _.filter(this.collection.blueprint.sections, (section) =>
+                    section.placement == 'sidebar')
 
                 return { body, sidebar }
             }

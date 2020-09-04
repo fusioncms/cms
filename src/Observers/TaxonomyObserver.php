@@ -74,7 +74,7 @@ class TaxonomyObserver
      */
     public function deleting(Taxonomy $taxonomy)
     {
-        $taxonomy->detachFieldset();
+        // $taxonomy->detachFieldset();
     }
 
     /**

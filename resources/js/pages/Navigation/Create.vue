@@ -40,7 +40,7 @@
             submit() {
                 this.form.post('/api/navigation')
                     .then((response) => {
-                        axios.post(`/api/fieldsets/${response.data.fieldset.id}/sections`, { sections: this.form.sections })
+                        axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
                             .then((response) => {
                                 toast('Navigation successfully saved', 'success')
 

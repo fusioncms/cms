@@ -41,12 +41,12 @@ class Section extends Model
     }
 
     /**
-     * A section belongs to a fieldset.
+     * A section belongs to a blueprint.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function fieldset()
+    public function blueprint()
     {
-        return $this->belongsTo(Fieldset::class);
+        return $this->belongsTo(Blueprint::class);
     }
 }

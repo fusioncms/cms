@@ -29,12 +29,6 @@
                 :error-message="form.errors.get('description')"
                 v-model="form.description">
             </p-textarea>
-
-            <fieldset-picker
-                :has-error="form.errors.has('fieldset')"
-                :error-message="form.errors.get('fieldset')"
-                v-model="form.fieldset">
-            </fieldset-picker>
         </section-card>
 
         <section-card title="Routing" description="Configure how terms within this taxonomy will be accessed on the frontend.">
