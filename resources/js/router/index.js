@@ -159,24 +159,6 @@ const router = new Router({
             }
         },
         {
-            path: '/extensions',
-            component: () => import('@/pages/Extensions/Index'),
-            name: 'extensions',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-        {
-            path: '/extensions/:extension/edit',
-            component: () => import('@/pages/Extensions/Edit'),
-            name: 'extensions.edit',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-        {
             path: '/single/:single',
             component: () => import('@/pages/Singles/Edit'),
             name: 'single.edit',
