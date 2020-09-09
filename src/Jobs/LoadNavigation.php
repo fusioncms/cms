@@ -115,8 +115,8 @@ class LoadNavigation
                 'icon' => 'layer-group',
             ]);
 
-            $menu->configure->add('Menus')->data([
-                'to'   => '/menus',
+            $menu->configure->add('Navigation')->data([
+                'to'   => '/navigation',
                 'icon' => 'anchor',
             ]);
 
@@ -168,6 +168,11 @@ class LoadNavigation
             $menu->add('Addons', '#')->data([
                 'to'    => '/addons',
                 'icon'  => 'box-open',
+            ]);
+
+            $menu->add('Updates')->data([
+                'to'    => '/updates',
+                'icon'  => 'download',
             ]);
 
             $menu->add('Settings')->data([

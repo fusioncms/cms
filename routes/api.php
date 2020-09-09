@@ -1,7 +1,7 @@
 <?php
 
 // API - Routes
-Route::get('admin/navigation', 'NavigationController@index');
+Route::get('admin/navigation', 'AdminNavigationController@index');
 Route::get('activity', 'ActivityController@index');
 Route::get('logs', 'LogsController@index');
 Route::get('mail/test', 'MailController@index');
@@ -97,14 +97,14 @@ Route::get('matrices/slug/{slug}', 'MatrixController@slug');
 Route::apiResource('matrices', 'MatrixController');
 
 /**
- * API - Menu Routes.
+ * API - Navigation Routes.
  */
-Route::post('menus/{menu}/nodes/move/before', 'Menus\NodeMoveBeforeController');
-Route::post('menus/{menu}/nodes/move/after', 'Menus\NodeMoveAfterController');
-Route::patch('menus/{menu}/nodes/refresh', 'Menus\NodeRefreshController');
-Route::post('menus/{menu}/reorder', 'Menus\NodeReorderController');
-Route::apiResource('menus/{menu}/nodes', 'Menus\NodeController');
-Route::apiResource('menus', 'Menus\MenuController');
+Route::post('navigation/{navigation}/nodes/move/before', 'Navigation\NodeMoveBeforeController');
+Route::post('navigation/{navigation}/nodes/move/after', 'Navigation\NodeMoveAfterController');
+Route::patch('navigation/{navigation}/nodes/refresh', 'Navigation\NodeRefreshController');
+Route::post('navigation/{navigation}/reorder', 'Navigation\NodeReorderController');
+Route::apiResource('navigation/{navigation}/nodes', 'Navigation\NodeController');
+Route::apiResource('navigation', 'Navigation\NavigationController');
 
 /**
  * API - Addon Routes.
@@ -155,3 +155,12 @@ Route::post('users/{user}/password', 'Users\PasswordController@index');
 Route::apiResource('users', 'Users\UserController');
 Route::apiResource('roles', 'Users\RoleController');
 Route::apiResource('tokens', 'Users\TokenController')->except(['show', 'update']);
+
+/**
+ * API - Updates Routes.
+ */
+Route::prefix('updates')->group(function () {
+    Route::get('', 'UpdatesController@index');
+    Route::get('{version}', 'UpdatesController@show');
+    Route::post('', 'UpdatesController@store');
+});

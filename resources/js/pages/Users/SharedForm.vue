@@ -7,56 +7,52 @@
             </div>
         </portal>
 
-        <ui-card>
-            <ui-card-body>
-                <ui-title-group
-                    name="name"
-                    autocomplete="off"
-                    autofocus
-                    required
-                    :has-error="form.errors.has('name')"
-                    :error-message="form.errors.get('name')"
-                    v-model="form.name">
-                </ui-title-group>
+        <section-card title="General Information" description="General information about this user.">
+            <ui-title-group
+                name="name"
+                autocomplete="off"
+                autofocus
+                required
+                :has-error="form.errors.has('name')"
+                :error-message="form.errors.get('name')"
+                v-model="form.name">
+            </ui-title-group>
 
-                <ui-input-group
-                    type="email"
-                    name="email"
-                    label="E-mail"
-                    autocomplete="off"
-                    :has-error="form.errors.has('email')"
-                    :error-message="form.errors.get('email')"
-                    required
-                    v-model="form.email">
-                </ui-input-group>
+            <ui-input-group
+                type="email"
+                name="email"
+                label="E-mail"
+                autocomplete="off"
+                :has-error="form.errors.has('email')"
+                :error-message="form.errors.get('email')"
+                required
+                v-model="form.email">
+            </ui-input-group>
+        </section-card>
 
-                <ui-tabs>
-                    <ui-tab name="Security">
-                        <ui-input-group
-                            type="password"
-                            name="password"
-                            label="Password"
-                            autocomplete="new-password"
-                            :has-error="form.errors.has('password')"
-                            :error-message="form.errors.get('password')"
-                            required
-                            v-model="form.password">
-                        </ui-input-group>
+        <section-card title="Security" description="Configure this user's security details.">
+            <ui-input-group
+                type="password"
+                name="password"
+                label="Password"
+                autocomplete="new-password"
+                :has-error="form.errors.has('password')"
+                :error-message="form.errors.get('password')"
+                required
+                v-model="form.password">
+            </ui-input-group>
 
-                        <ui-input-group
-                            type="password"
-                            name="password_confirmation"
-                            label="Confirm Password"
-                            autocomplete="new-password"
-                            :has-error="form.errors.has('password_confirmation')"
-                            :error-message="form.errors.get('password_confirmation')"
-                            required
-                            v-model="form.password_confirmation">
-                        </ui-input-group>
-                    </ui-tab>
-                </ui-tabs>
-            </ui-card-body>
-        </ui-card>
+            <ui-input-group
+                type="password"
+                name="password_confirmation"
+                label="Confirm Password"
+                autocomplete="new-password"
+                :has-error="form.errors.has('password_confirmation')"
+                :error-message="form.errors.get('password_confirmation')"
+                required
+                v-model="form.password_confirmation">
+            </ui-input-group>
+        </section-card>
 
         <template v-slot:sidebar>
             <ui-card>

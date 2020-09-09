@@ -31,7 +31,7 @@ class Form extends Model
         'collect_email_addresses',
         'collect_ip_addresses',
         'response_receipt',
-        'message',
+        'confirmation_message',
         'redirect_on_submission',
         'redirect_url',
         'enable_recaptcha',

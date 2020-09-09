@@ -1,12 +1,12 @@
 <template>
     <form-container>
         <portal to="title">
-            <page-title icon="anchor">{{ menu.name }}</page-title>
+            <page-title icon="anchor">{{ navigation.name }}</page-title>
         </portal>
 
         <portal to="actions">
             <div class="buttons">
-                <ui-button :to="{ name: 'menus' }">Go Back</ui-button>
+                <ui-button :to="{ name: 'navigation' }">Go Back</ui-button>
                 <ui-button variant="primary" @click.prevent="save" :disabled="saving">Save</ui-button>
             </div>
         </portal>
@@ -44,7 +44,7 @@
                                 <td>
                                     <ui-status :value="node.status" class="mr-2"></ui-status>
 
-                                    <router-link :to="{ name: 'menu.nodes.edit', params: {menu: menu.id, node: node.id} }">{{ node.name }}</router-link>
+                                    <router-link :to="{ name: 'navigation.nodes.edit', params: {navigation: navigation.id, node: node.id} }">{{ node.name }}</router-link>
 
                                     <fa-icon v-if="node.new_window" class="fa-fw text-gray-500 text-xs" :icon="['fas', 'external-link-alt']"></fa-icon>
                                 </td>
@@ -60,8 +60,7 @@
                                 <td class="actions">
                                     <div class="draggable__actions">
                                         <ui-table-actions right :id="'node_' + node.id + '_actions'" :key="'node_' + node.id + '_actions'">
-                                            <ui-dropdown-link @click.prevent :to="{ name: 'menu.nodes.edit', params: {menu: menu.id, node: node.id} }">Edit</ui-dropdown-link>
-
+                                            <ui-dropdown-link @click.prevent :to="{ name: 'navigation.nodes.edit', params: {navigation: navigation.id, node: node.id} }">Edit</ui-dropdown-link>
                                             <ui-dropdown-link
                                                 v-if="nodes.length > 1"
                                                 @click.prevent
@@ -171,14 +170,14 @@
         head: {
             title() {
                 return {
-                    inner: this.menu.name || 'Loading...'
+                    inner: this.navigation.name || 'Loading...'
                 }
             }
         },
 
         data() {
             return {
-                menu: {},
+                navigation: {},
                 nodes: [],
                 saving: false,
                 before: null,
@@ -206,12 +205,12 @@
             add(type) {
                 this.saving = true
 
-                this.form.post('/api/menus/' + this.menu.id + '/nodes').then((response) => {
+                this.form.post('/api/navigation/' + this.navigation.id + '/nodes').then((response) => {
                     this.fetchNodes().then((response) => {
                         this.reset()
                         this.saving = false
 
-                        toast('Menu node successfully added', 'success')
+                        toast('Navigation node successfully added', 'success')
                     })
                 }).catch((response) => {
                     toast(response.message, 'failed')
@@ -228,14 +227,14 @@
                     }
                 })
 
-                axios.post('/api/menus/' + this.menu.id + '/reorder', {nodes: nodes}).then((response) => {
+                axios.post('/api/navigation/' + this.navigation.id + '/reorder', {nodes: nodes}).then((response) => {
                     this.saving = false
-                    toast('Menu nodes successfully reordered.', 'success')
+                    toast('Navigation nodes successfully reordered.', 'success')
                 })
             },
 
             fetchNodes() {
-                return axios.get('/api/menus/' + this.menu.id).then((response) => {
+                return axios.get('/api/navigation/' + this.navigation.id).then((response) => {
                     this.nodes = response.data.data.nodes
                 })
             },
@@ -247,44 +246,44 @@
             },
 
             destroy(id) {
-                axios.delete('/api/menus/' + this.menu.id + '/nodes/' + id).then((response) => {
+                axios.delete('/api/navigation/' + this.navigation.id + '/nodes/' + id).then((response) => {
                     this.fetchNodes().then(() => {
-                        toast('Menu node successfully deleted.', 'success')
+                        toast('Navigation node successfully deleted.', 'success')
                     })
                 })
             },
 
             moveBefore(move) {
-                axios.post('/api/menus/' + this.menu.id + '/nodes/move/before', {
+                axios.post('/api/navigation/' + this.navigation.id + '/nodes/move/before', {
                     move: move,
                     before: this.before,
                 }).then((response) => {
                     this.fetchNodes().then(() => {
                         this.before = null
 
-                        toast('Menu node successfully moved.', 'success')
+                        toast('Navigation node successfully moved.', 'success')
                     })
                 })
             },
 
             moveAfter(move) {
-                axios.post('/api/menus/' + this.menu.id + '/nodes/move/after', {
+                axios.post('/api/navigation/' + this.navigation.id + '/nodes/move/after', {
                     move: move,
                     after: this.after,
                 }).then((response) => {
                     this.fetchNodes().then(() => {
                         this.after = null
 
-                        toast('Menu node successfully moved.', 'success')
+                        toast('Navigation node successfully moved.', 'success')
                     })
                 })
             }
         },
 
         beforeRouteEnter(to, from, next) {
-            axios.get('/api/menus/' + to.params.menu).then((response) => {
+            axios.get('/api/navigation/' + to.params.navigation).then((response) => {
                 next(function(vm) {
-                    vm.menu = response.data.data
+                    vm.navigation = response.data.data
                     vm.nodes = response.data.data.nodes
 
                     vm.$emit('updateHead')
@@ -293,8 +292,8 @@
         },
 
         beforeRouteUpdate(to, from, next) {
-            axios.get('/api/menus/' + to.params.menu).then((response) => {
-                this.menu = response.data.data
+            axios.get('/api/navigation/' + to.params.navigation).then((response) => {
+                this.navigation = response.data.data
                 this.nodes = response.data.data.nodes
 
                 this.$emit('updateHead')

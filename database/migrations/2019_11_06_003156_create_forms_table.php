@@ -28,7 +28,7 @@ class CreateFormsTable extends Migration
             $table->boolean('response_receipt')->default(false);
 
             // Confirmation settings
-            $table->text('message')->nullable();
+            $table->text('confirmation_message')->nullable();
             $table->boolean('redirect_on_submission')->default(false);
             $table->string('redirect_url')->nullable();
 

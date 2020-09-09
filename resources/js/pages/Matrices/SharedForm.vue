@@ -7,138 +7,132 @@
             </div>
         </portal>
 
-        <div class="card">
-            <div class="card__body">
-                <ui-input-group
-                    name="name"
-                    label="Name"
-                    help="Give your matrix a name."
-                    autocomplete="off"
-                    required
-                    :has-error="form.errors.has('name')"
-                    :error-message="form.errors.get('name')"
-                    v-model="form.name">
-                </ui-input-group>
+        <section-card title="General Information" description="General information about your collection and what it manages.">
+            <ui-input-group
+                name="name"
+                label="Name"
+                help="What should this matrix be called?"
+                autocomplete="off"
+                autofocus
+                required
+                :has-error="form.errors.has('name')"
+                :error-message="form.errors.get('name')"
+                v-model="form.name">
+            </ui-input-group>
 
-                <ui-input-group
-                    name="description"
-                    label="Description"
-                    help="Give a short description of what this matrix will manage and store."
-                    autocomplete="off"
-                    required
-                    :has-error="form.errors.has('description')"
-                    :error-message="form.errors.get('description')"
-                    v-model="form.description">
-                </ui-input-group>
+            <ui-textarea-group
+                name="description"
+                label="Description"
+                help="Give a short description of what this matrix will manage and store."
+                autocomplete="off"
+                :has-error="form.errors.has('description')"
+                :error-message="form.errors.get('description')"
+                v-model="form.description">
+            </ui-textarea-group>
 
-                <ui-tabs>
-                    <ui-tab name="General">
-                        <ui-select-group
-                            name="type"
-                            label="Type"
-                            help="What type of matrix will this be?"
-                            :options="[
-                                {
-                                    'label': 'Collection',
-                                    'value': 'collection',
-                                },
-                                {
-                                    'label': 'Single',
-                                    'value': 'single',
-                                },
-                            ]"
-                            :has-error="form.errors.has('type')"
-                            :error-message="form.errors.get('type')"
-                            v-model="form.type">
-                        </ui-select-group>
+            <ui-select-group
+                name="type"
+                label="Type"
+                help="What type of matrix will this be?"
+                :options="[
+                    {
+                        'label': 'Collection',
+                        'value': 'collection',
+                    },
+                    {
+                        'label': 'Single',
+                        'value': 'single',
+                    },
+                ]"
+                :has-error="form.errors.has('type')"
+                :error-message="form.errors.get('type')"
+                v-model="form.type">
+            </ui-select-group>
 
-                        <fieldset-picker
-                            :has-error="form.errors.has('fieldset')"
-                            :error-message="form.errors.get('fieldset')"
-                            v-model="form.fieldset">
-                        </fieldset-picker>
-                    </ui-tab>
+            <fieldset-picker
+                :has-error="form.errors.has('fieldset')"
+                :error-message="form.errors.get('fieldset')"
+                v-model="form.fieldset">
+            </fieldset-picker>
+        </section-card>
 
-                    <ui-tab name="Customize">
-                        <ui-input-group
-                            name="name_label"
-                            label="Name Label"
-                            placeholder="Name"
-                            help="If you'd like, you may customize the label used for your entry names."
-                            :has-error="form.errors.has('name_label')"
-                            :error-message="form.errors.get('name_label')"
-                            v-model="form.name_label">
-                        </ui-input-group>
+        <section-card title="Customizations" description="Configure the various customizations options.">
+            <ui-input-group
+                name="name_label"
+                label="Name Label"
+                placeholder="Name"
+                help="If you'd like, you may customize the label used for your entry names."
+                :has-error="form.errors.has('name_label')"
+                :error-message="form.errors.get('name_label')"
+                v-model="form.name_label">
+            </ui-input-group>
 
-                        <ui-input-group
-                            name="reference_singular"
-                            label="Singular Reference"
-                            :placeholder="singularReference"
-                            help="What would you like to reference this as in singular form? By default will try to guess from the name. Results may vary."
-                            :has-error="form.errors.has('reference_singular')"
-                            :error-message="form.errors.get('reference_singular')"
-                            v-model="form.reference_singular">
-                        </ui-input-group>
+            <ui-input-group
+                name="reference_singular"
+                label="Singular Reference"
+                :placeholder="singularReference"
+                help="What would you like to reference this as in singular form? By default will try to guess from the name. Results may vary."
+                :has-error="form.errors.has('reference_singular')"
+                :error-message="form.errors.get('reference_singular')"
+                v-model="form.reference_singular">
+            </ui-input-group>
 
-                        <ui-input-group
-                            name="reference_plural"
-                            label="Plural Reference"
-                            :placeholder="pluralReference"
-                            help="What would you like to reference this as in plural form? By default will try to guess from the name. Results may vary."
-                            :has-error="form.errors.has('reference_plural')"
-                            :error-message="form.errors.get('reference_plural')"
-                            v-model="form.reference_plural">
-                        </ui-input-group>
+            <ui-input-group
+                name="reference_plural"
+                label="Plural Reference"
+                :placeholder="pluralReference"
+                help="What would you like to reference this as in plural form? By default will try to guess from the name. Results may vary."
+                :has-error="form.errors.has('reference_plural')"
+                :error-message="form.errors.get('reference_plural')"
+                v-model="form.reference_plural">
+            </ui-input-group>
 
-                        <hr>
+            <hr>
 
-                        <ui-toggle
-                            v-if="form.type == 'collection'"
-                            name="show_name_field"
-                            label="Show name field"
-                            v-model="form.show_name_field"
-                            :true-value="1"
-                            :false-value="0">
-                        </ui-toggle>
+            <ui-toggle
+                v-if="form.type == 'collection'"
+                name="show_name_field"
+                label="Show name field"
+                v-model="form.show_name_field"
+                :true-value="1"
+                :false-value="0">
+            </ui-toggle>
 
-                        <ui-input-group
-                            v-if="!form.show_name_field"
-                            monospaced
-                            name="name_format"
-                            label="Name Format"
-                            help="What format would you like your generated names and slugs to follow?"
-                            :has-error="form.errors.has('name_format')"
-                            :error-message="form.errors.get('name_format')"
-                            v-model="form.name_format">
-                        </ui-input-group>
-                    </ui-tab>
+            <ui-input-group
+                v-if="!form.show_name_field"
+                monospaced
+                name="name_format"
+                label="Name Format"
+                help="What format would you like your generated names and slugs to follow?"
+                :has-error="form.errors.has('name_format')"
+                :error-message="form.errors.get('name_format')"
+                v-model="form.name_format">
+            </ui-input-group>
+        </section-card>
 
-                    <ui-tab name="Route">
-                        <ui-input-group
-                            name="route"
-                            label="Route"
-                            help="When the URI matches this pattern..."
-                            autocomplete="off"
-                            monospaced
-                            :has-error="form.errors.has('route')"
-                            :error-message="form.errors.get('route')"
-                            v-model="form.route">
-                        </ui-input-group>
+        <section-card title="Routing" description="Configure how entries within the collection will be accessed on the frontend.">
+            <ui-input-group
+                name="route"
+                label="Route"
+                help="When the URI matches this pattern..."
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('route')"
+                :error-message="form.errors.get('route')"
+                v-model="form.route">
+            </ui-input-group>
 
-                        <ui-input-group
-                            name="template"
-                            label="Template"
-                            help="Render this template"
-                            autocomplete="off"
-                            monospaced
-                            :has-error="form.errors.has('template')"
-                            :error-message="form.errors.get('template')"
-                            v-model="form.template">
-                        </ui-input-group>
-                    </ui-tab>
-                </ui-tabs>
-            </div>
-        </div>
+            <ui-input-group
+                name="template"
+                label="Template"
+                help="Render this template"
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('template')"
+                :error-message="form.errors.get('template')"
+                v-model="form.template">
+            </ui-input-group>
+        </section-card>
 
         <template v-slot:sidebar>
             <div class="card">

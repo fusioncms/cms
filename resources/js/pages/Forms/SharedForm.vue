@@ -3,137 +3,132 @@
         <portal to="actions">
             <div class="buttons">
                 <ui-button :to="{ name: 'forms' }" variant="secondary">Go Back</ui-button>
-                <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</ui-button>
+                <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
-        <ui-card>
-            <ui-card-body>
-                <ui-title-group
-                    name="name"
-                    autocomplete="off"
-                    autofocus
-                    required
-                    :has-error="form.errors.has('name')"
-                    :error-message="form.errors.get('name')"
-                    v-model="form.name">
-                </ui-title-group>
+        <section-card title="General Information" description="General information about this form and what it collects.">
+            <ui-input-group
+                name="name"
+                label="Name"
+                help="What should this form be called?"
+                autocomplete="off"
+                autofocus
+                required
+                :has-error="form.errors.has('name')"
+                :error-message="form.errors.get('name')"
+                v-model="form.name">
+            </ui-input-group>
 
-                <ui-tabs>
-                    <ui-tab key="general" name="General">
-                        <ui-input-group
-                            name="description"
-                            label="Description"
-                            help="Give a short description of what this form will collect."
-                            autocomplete="off"
-                            required
-                            :has-error="form.errors.has('description')"
-                            :error-message="form.errors.get('description')"
-                            v-model="form.description">
-                        </ui-input-group>
-                    </ui-tab>
+            <ui-textarea-group
+                name="description"
+                label="Description"
+                help="Give a short description of what this form will collect."
+                autocomplete="off"
+                :has-error="form.errors.has('description')"
+                :error-message="form.errors.get('description')"
+                v-model="form.description">
+            </ui-textarea-group>
+        </section-card>
 
-                    <ui-tab key="privacy" name="Privacy">
-                        <ui-fieldset label="Privacy Settings">
-                            <ui-checkbox-single name="collect_email_addresses" id="collect_email_addresses" v-model="form.collect_email_addresses">Collect email addresses</ui-checkbox-single>
-                            <ui-checkbox-single name="collect_ip_addresses" id="collect_ip_addresses" v-model="form.collect_ip_addresses">Collect IP addresses</ui-checkbox-single>
-                            <ui-checkbox-single name="response_receipt" id="response_receipt" help="Respondents will receive a copy of their submission." :disabled="! form.collect_email_addresses" v-model="form.response_receipt">Response receipts</ui-checkbox-single>
-                        </ui-fieldset>
-                    </ui-tab>
+        <section-card title="Privacy" description="Configure this forms privacy settings.">
+            <ui-fieldset label="Privacy Settings">
+                <ui-checkbox-single name="collect_email_addresses" id="collect_email_addresses" v-model="form.collect_email_addresses">Collect email addresses</ui-checkbox-single>
+                <ui-checkbox-single name="collect_ip_addresses" id="collect_ip_addresses" v-model="form.collect_ip_addresses">Collect IP addresses</ui-checkbox-single>
+                <ui-checkbox-single name="response_receipt" id="response_receipt" help="Respondents will receive a copy of their submission." :disabled="! form.collect_email_addresses" v-model="form.response_receipt">Response receipts</ui-checkbox-single>
+            </ui-fieldset>
+        </section-card>
 
-                    <ui-tab key="spam" name="Spam">
-                        <ui-fieldset label="Spam Settings">
-                            <ui-checkbox-single name="enable_recaptcha" id="enable_recaptcha" help="Be sure to enter your site key and secret key in settings." v-model="form.enable_recaptcha">Enable Google reCAPTCHA</ui-checkbox-single>
-                            <ui-checkbox-single name="enable_honeypot" id="enable_honeypot" help="A honeypot is a great and native alternative to Google reCAPTCHA. Both options can be safely enabled at the same time." v-model="form.enable_honeypot">Enable Honeypot</ui-checkbox-single>
-                        </ui-fieldset>
-                    </ui-tab>
+        <section-card title="Spam" description="Configure this forms spam protection settings.">
+            <ui-fieldset label="Spam Settings">
+                <ui-checkbox-single name="enable_recaptcha" id="enable_recaptcha" help="Be sure to enter your site key and secret key in settings." v-model="form.enable_recaptcha">Enable Google reCAPTCHA</ui-checkbox-single>
+                <ui-checkbox-single name="enable_honeypot" id="enable_honeypot" help="A honeypot is a great and native alternative to Google reCAPTCHA. Both options can be safely enabled at the same time." v-model="form.enable_honeypot">Enable Honeypot</ui-checkbox-single>
+            </ui-fieldset>
+        </section-card>
 
-                    <ui-tab key="notifications" name="Notifications">
-                        <ui-textarea-group
-                            name="send_to"
-                            label="Send notifications to..."
-                            help="List emails as a comma separated list."
-                            placeholder="marie.c@example.com, nikola.t@example.com"
-                            :has-error="form.errors.has('send_to')"
-                            :error-message="form.errors.get('send_to')"
-                            v-model="form.send_to">
-                        </ui-textarea-group>
+        <section-card title="Notifications" description="Configure who should receive notifications when submissions are made.">
+            <ui-textarea-group
+                name="send_to"
+                label="Send notifications to..."
+                help="List emails as a comma separated list."
+                placeholder="marie.c@example.com, nikola.t@example.com"
+                :has-error="form.errors.has('send_to')"
+                :error-message="form.errors.get('send_to')"
+                v-model="form.send_to"
+            ></ui-textarea-group>
 
-                        <ui-input-group
-                            name="reply_to"
-                            label="Reply to..."
-                            help="Replies to the confirmation email will be sent to this e-mail. By default this will reference the default email in system settings."
-                            autocomplete="off"
-                            :has-error="form.errors.has('reply_to')"
-                            :error-message="form.errors.get('reply_to')"
-                            v-model="form.reply_to">
-                        </ui-input-group>
-                    </ui-tab>
+            <ui-input-group
+                name="reply_to"
+                label="Reply to..."
+                help="Replies to the confirmation email will be sent to this e-mail. By default this will reference the default email in system settings."
+                autocomplete="off"
+                :has-error="form.errors.has('reply_to')"
+                :error-message="form.errors.get('reply_to')"
+                v-model="form.reply_to">
+            </ui-input-group>
+        </section-card>
 
-                    <ui-tab key="confirmations" name="Confirmations">
-                        <ui-radio-group
-                            inline
-                            label="After submitting the form..."
-                            :has-error="form.errors.has('redirect_on_submission')"
-                            :error-message="form.errors.get('redirect_on_submission')">
-                            <ui-radio id="redirect_on_submission_false" v-model="form.redirect_on_submission" name="redirect_on_submission" :native-value="false">Redirect to default confirmation page...</ui-radio>
-                            <ui-radio id="redirect_on_submission_true" v-model="form.redirect_on_submission" name="redirect_on_submission" :native-value="true">Redirect to custom page...</ui-radio>
-                        </ui-radio-group>
+        <section-card title="Confirmations" description="Configure confirmation settings when submissions are made.">
+            <ui-radio-group
+                inline
+                label="After submitting the form..."
+                :has-error="form.errors.has('redirect_on_submission')"
+                :error-message="form.errors.get('redirect_on_submission')">
+                <ui-radio id="redirect_on_submission_false" v-model="form.redirect_on_submission" name="redirect_on_submission" :native-value="false">Redirect to default confirmation page...</ui-radio>
+                <ui-radio id="redirect_on_submission_true" v-model="form.redirect_on_submission" name="redirect_on_submission" :native-value="true">Redirect to custom page...</ui-radio>
+            </ui-radio-group>
 
-                        <ui-input-group
-                            v-if="form.redirect_on_submission === false"
-                            name="confirmation_message"
-                            label="Message"
-                            help="This message will be displayed on the confirmation page."
-                            autocomplete="off"
-                            :has-error="form.errors.has('confirmation_message')"
-                            :error-message="form.errors.get('confirmation_message')"
-                            placeholder="Thank you! We'll be in touch soon."
-                            v-model="form.confirmation_message">
-                        </ui-input-group>
+            <ui-input-group
+                v-if="form.redirect_on_submission === false"
+                name="confirmation_message"
+                label="Message"
+                help="This message will be displayed on the confirmation page."
+                autocomplete="off"
+                :has-error="form.errors.has('confirmation_message')"
+                :error-message="form.errors.get('confirmation_message')"
+                placeholder="Thank you! We'll be in touch soon."
+                v-model="form.confirmation_message">
+            </ui-input-group>
 
-                        <ui-input-group
-                            v-if="form.redirect_on_submission === true"
-                            name="redirect_url"
-                            label="URL"
-                            help="The URL to redirect users to after submitting the form."
-                            autocomplete="off"
-                            :has-error="form.errors.has('redirect_url')"
-                            :error-message="form.errors.get('redirect_url')"
-                            v-model="form.redirect_url">
-                        </ui-input-group>
-                    </ui-tab>
+            <ui-input-group
+                v-if="form.redirect_on_submission === true"
+                name="redirect_url"
+                label="URL"
+                help="The URL to redirect users to after submitting the form."
+                autocomplete="off"
+                :has-error="form.errors.has('redirect_url')"
+                :error-message="form.errors.get('redirect_url')"
+                v-model="form.redirect_url">
+            </ui-input-group>
+        </section-card>
 
-                    <ui-tab key="templates" name="Templates">
-                        <ui-input-group
-                            name="form_template"
-                            label="Form Template"
-                            help="What template is responsible for rendering this form?"
-                            autocomplete="off"
-                            monospaced
-                            :has-error="form.errors.has('form_template')"
-                            :error-message="form.errors.get('form_template')"
-                            v-model="form.form_template">
-                        </ui-input-group>
+        <section-card title="Templates" description="Configure this forms template settings.">
+            <ui-input-group
+                name="form_template"
+                label="Form Template"
+                help="What template is responsible for rendering this form?"
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('form_template')"
+                :error-message="form.errors.get('form_template')"
+                v-model="form.form_template">
+            </ui-input-group>
 
-                        <ui-input-group
-                            name="thankyou_template"
-                            label="Thank You Template"
-                            help="What template is reponsible for thanking respondents?"
-                            autocomplete="off"
-                            monospaced
-                            :has-error="form.errors.has('thankyou_template')"
-                            :error-message="form.errors.get('thankyou_template')"
-                            v-model="form.thankyou_template">
-                        </ui-input-group>
-                    </ui-tab>
+            <ui-input-group
+                name="thankyou_template"
+                label="Thank You Template"
+                help="What template is reponsible for thanking respondents?"
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('thankyou_template')"
+                :error-message="form.errors.get('thankyou_template')"
+                v-model="form.thankyou_template">
+            </ui-input-group>
+        </section-card>
 
-                    <ui-tab key="fields" name="Fields">
-                        <section-builder v-model="form.sections"></section-builder>
-                    </ui-tab>
-                </ui-tabs>
-            </ui-card-body>
-        </ui-card>
+        <section-card title="Blueprint" description="Configure this forms blueprint.">
+            <section-builder v-model="form.sections"></section-builder>
+        </section-card>
 
         <template v-slot:sidebar>
             <ui-card>

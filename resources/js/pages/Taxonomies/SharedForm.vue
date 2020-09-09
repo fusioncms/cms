@@ -7,64 +7,59 @@
             </div>
         </portal>
 
-        <div class="card">
-            <div class="card__body">
-                <ui-title-group
-                    name="name"
-                    autocomplete="off"
-                    autofocus
-                    required
-                    :has-error="form.errors.has('name')"
-                    :error-message="form.errors.get('name')"
-                    v-model="form.name">
-                </ui-title-group>
+        <section-card title="General Information" description="General information about this taxonomy and what it organizes.">
+            <ui-input-group
+                name="name"
+                label="Name"
+                help="What should this taxonomy be called?"
+                autocomplete="off"
+                autofocus
+                required
+                :has-error="form.errors.has('name')"
+                :error-message="form.errors.get('name')"
+                v-model="form.name">
+            </ui-input-group>
 
-                <ui-input-group
-                    name="description"
-                    label="Description"
-                    help="Give a short description of what this taxonomy will organize and store."
-                    autocomplete="off"
-                    required
-                    :has-error="form.errors.has('description')"
-                    :error-message="form.errors.get('description')"
-                    v-model="form.description">
-                </ui-input-group>
+            <ui-textarea-group
+                name="description"
+                label="Description"
+                help="Give a short description of what this taxonomy will organize and store."
+                autocomplete="off"
+                :has-error="form.errors.has('description')"
+                :error-message="form.errors.get('description')"
+                v-model="form.description">
+            </ui-textarea-group>
 
-                <ui-tabs>
-                    <ui-tab name="General">
-                        <fieldset-picker
-                            :has-error="form.errors.has('fieldset')"
-                            :error-message="form.errors.get('fieldset')"
-                            v-model="form.fieldset">
-                        </fieldset-picker>
-                    </ui-tab>
+            <fieldset-picker
+                :has-error="form.errors.has('fieldset')"
+                :error-message="form.errors.get('fieldset')"
+                v-model="form.fieldset">
+            </fieldset-picker>
+        </section-card>
 
-                    <ui-tab name="Route">
-                        <ui-input-group
-                            name="route"
-                            label="Route"
-                            help="When the URI matches this pattern..."
-                            autocomplete="off"
-                            monospaced
-                            :has-error="form.errors.has('route')"
-                            :error-message="form.errors.get('route')"
-                            v-model="form.route">
-                        </ui-input-group>
+        <section-card title="Routing" description="Configure how terms within this taxonomy will be accessed on the frontend.">
+            <ui-input-group
+                name="route"
+                label="Route"
+                help="When the URI matches this pattern..."
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('route')"
+                :error-message="form.errors.get('route')"
+                v-model="form.route">
+            </ui-input-group>
 
-                        <ui-input-group
-                            name="template"
-                            label="Template"
-                            help="Render this template"
-                            autocomplete="off"
-                            monospaced
-                            :has-error="form.errors.has('template')"
-                            :error-message="form.errors.get('template')"
-                            v-model="form.template">
-                        </ui-input-group>
-                    </ui-tab>
-                </ui-tabs>
-            </div>
-        </div>
+            <ui-input-group
+                name="template"
+                label="Template"
+                help="Render this template"
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('template')"
+                :error-message="form.errors.get('template')"
+                v-model="form.template">
+            </ui-input-group>
+        </section-card>
 
         <template v-slot:sidebar>
             <div class="card">

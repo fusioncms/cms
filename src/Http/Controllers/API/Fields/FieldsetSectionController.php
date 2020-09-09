@@ -209,7 +209,7 @@ class FieldsetSectionController extends Controller
                     'handle'     => $field['handle'],
                     'help'       => $field['help'],
                     'settings'   => $field['settings'],
-                    'validation' => $field['validation'],
+                    'validation' => $field['validation'] ?? '',
                     'type'       => $field['type']['handle'],
                     'order'      => ($index + 1),
                 ]);

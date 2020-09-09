@@ -94,45 +94,45 @@ const router = new Router({
             }
         },
         {
-            path: '/menus',
-            component: () => import('@/pages/Menus/Index'),
-            name: 'menus',
+            path: '/navigation',
+            component: () => import('@/pages/Navigation/Index'),
+            name: 'navigation',
             meta: {
                 requiresAuth: true,
                 layout: 'admin'
             }
         },
         {
-            path: '/menus/create',
-            component: () => import('@/pages/Menus/Create'),
-            name: 'menus.create',
+            path: '/navigation/create',
+            component: () => import('@/pages/Navigation/Create'),
+            name: 'navigation.create',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
             },
         },
         {
-            path: '/menus/:menu/edit',
-            component: () => import('@/pages/Menus/Edit'),
-            name: 'menus.edit',
+            path: '/navigation/:navigation/edit',
+            component: () => import('@/pages/Navigation/Edit'),
+            name: 'navigation.edit',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
             },
         },
         {
-            path: '/menus/:menu/nodes',
+            path: '/navigation/:navigation/nodes',
             component: () => import('@/pages/Nodes/Index'),
-            name: 'menu.nodes',
+            name: 'navigation.nodes',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
             },
         },
         {
-            path: '/menus/:menu/nodes/:node/edit',
+            path: '/navigation/:navigation/nodes/:node/edit',
             component: () => import('@/pages/Nodes/Edit'),
-            name: 'menu.nodes.edit',
+            name: 'navigation.nodes.edit',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
@@ -452,6 +452,16 @@ const router = new Router({
             path: '/addons',
             component: () => import('@/pages/Addons'),
             name: 'addons',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+
+        {
+            path: '/updates',
+            component: () => import('@/pages/Updates/Index'),
+            name: 'updates',
             meta: {
                 requiresAuth: true,
                 layout: 'admin'
