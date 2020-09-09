@@ -12,7 +12,9 @@
             :name="name"
             :id="id + '_field'"
             :disabled="disabled"
-            :required="required">
+            :required="required"
+            :native-value="value"
+            v-model="computedValue">
             <slot></slot>
         </ui-checkbox>
     </ui-field-group>
@@ -35,6 +37,10 @@
             help: String,
             id: {
                 required: false
+            },
+            value: {
+                required: false,
+                type: [String, Number, Boolean, Function, Object, Array, Symbol],
             },
             required: {
                 type: Boolean,

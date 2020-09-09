@@ -1,8 +1,7 @@
 .form-group {
-    @apply leading-normal box-border clear-both text-left relative w-full;
-    margin-bottom: rem(30px);
+    @apply leading-normal box-border clear-both text-left relative w-full mb-3;
 
-    &__messages { @apply mt-3; }
+    &__messages { @apply mt-1; }
 }
 
 .input-group {

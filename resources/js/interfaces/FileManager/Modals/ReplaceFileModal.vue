@@ -3,13 +3,14 @@
         <ui-upload
             ref="upload"
             name="file"
+            label="Replace"
             :multiple="false"
-            @input="uploadFile"
-        ></ui-upload>
+            @input="uploadFile">
+        </ui-upload>
 
         <template v-slot:footer>
             <ui-button v-modal:replace-file>Close</ui-button>
-            <ui-button theme="primary" @click="submit" v-modal:replace-file class="mr-1">Replace</ui-button>
+            <ui-button variant="primary" @click="submit" v-modal:replace-file class="mr-1">Replace</ui-button>
         </template>
     </ui-modal>
 </template>

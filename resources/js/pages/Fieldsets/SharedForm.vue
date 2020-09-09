@@ -2,14 +2,14 @@
 	<form-container>
 		<portal to="actions">
 			<div class="buttons">
-				<router-link :to="{ name: 'fieldsets' }" class="button">Go Back</router-link>
-				<button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+				<ui-button :to="{ name: 'fieldsets' }" variant="secondary">Go Back</ui-button>
+				<ui-button type="submit" variant="primary" @click.prevent="$parent.submit" :disabled="!form.hasChanges">Save</ui-button>
 			</div>
 		</portal>
 
 		<div class="card">
             <div class="card__body">
-				<ui-title
+				<ui-title-group
                     name="name"
                     autocomplete="off"
                     autofocus
@@ -17,7 +17,7 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </ui-title>
+                </ui-title-group>
 
 				<section-builder class="mt-6" v-model="form.sections"></section-builder>
 			</div>
@@ -26,7 +26,7 @@
 		<template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-					<ui-slug
+					<ui-slug-group
 						name="handle"
 						label="Handle"
 						autocomplete="off"
@@ -36,7 +36,7 @@
 						:has-error="form.errors.has('handle')"
 						:error-message="form.errors.get('handle')"
 						v-model="form.handle">
-					</ui-slug>
+					</ui-slug-group>
 				</div>
             </div>
 

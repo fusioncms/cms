@@ -1,13 +1,13 @@
 <template>
     <div>
-        <ui-textarea
+        <ui-textarea-group
             :name="field.handle"
             :label="field.name"
             :help="field.help"
             :placeholder="field.settings.placeholder"
             :value="value"
             @input="$emit('input', $event)"
-        ></ui-textarea>
+        ></ui-textarea-group>
     </div>
 </template>
 

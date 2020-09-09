@@ -1,15 +1,33 @@
 <template>
-    <div class="row p-0">
-        <form class="col col--flush w-full lg:w-1/2" @submit.prevent="add">
-            <ui-input text="text" placeholder="Label" v-model="option.label" ref="label"></ui-input>
-            <ui-input text="text" placeholder="Value" v-model="option.value"></ui-input>
+    <div class="row w-full">
+        <form class="col w-full lg:w-1/2" @submit.prevent="add">
+            <ui-fieldset
+                label="Options"
+                help="<p>Add and arrange as many options as you need</p>">
+                <ui-input-group 
+                    name="label"
+                    text="text" 
+                    label="Label"
+                    placeholder="Label" 
+                    ref="label"
+                    hide-label
+                    v-model="option.label">
+                </ui-input-group>
 
-            <ui-button class="w-full" @click.prevent="add" type="submit">Add</ui-button>
+                <ui-input-group 
+                    name="value"
+                    text="text" 
+                    label="Value"
+                    placeholder="Value" 
+                    hide-label
+                    v-model="option.value">
+                </ui-input-group>
 
-            <p class="mt-6 text-center text-sm text-gray-600">Add and arrange as many options as you need.</p>
+                <ui-button class="w-full" variant="primary" @click.prevent="add">Add</ui-button>
+            </ui-fieldset>
         </form>
 
-        <div class="col col--flush w-full lg:w-1/2">
+        <div class="col w-full lg:w-1/2">
             <ui-sortable-list v-model="options">
                 <div slot-scope="{ items: items }">
                     <ui-sortable-item v-for="(option, index) in items" :key="option.value">

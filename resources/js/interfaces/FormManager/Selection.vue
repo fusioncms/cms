@@ -1,8 +1,8 @@
 <template>
 	<div class="card h-full">
 		<div v-if="hasHeader" class="flex items-center justify-between border-b border-gray-200 p-3">
-			<ui-button @click="$emit('reject')" theme="warning"><fa-icon :icon="['fas', 'times']" class="mr-2"></fa-icon> Reject</ui-button>
-			<ui-button @click="$emit('accept')" theme="info">Accept <fa-icon :icon="['fas', 'check']" class="ml-2"></fa-icon></ui-button>
+			<ui-button @click="$emit('reject')" variant="warning"><fa-icon :icon="['fas', 'times']" class="mr-2"></fa-icon> Reject</ui-button>
+			<ui-button @click="$emit('accept')" variant="info">Accept <fa-icon :icon="['fas', 'check']" class="ml-2"></fa-icon></ui-button>
 		</div>
 
 		<div v-if="selection.length > 0">
@@ -22,7 +22,7 @@
 								<div>{{ item.name }}</div>
 							</div>
 							<div class="w-2/12 text-right">
-								<ui-button @click="remove(item.id)" theme="danger"><fa-icon :icon="['fas', 'trash']"></fa-icon></ui-button>
+								<ui-button @click="remove(item.id)" variant="danger"><fa-icon :icon="['fas', 'trash']"></fa-icon></ui-button>
 							</div>
 						</div>
 					</ui-sortable-item>

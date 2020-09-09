@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ui-select
+        <ui-select-group
             name="settings.type"
             label="Type"
             help="What type of input should this be?"
@@ -38,9 +38,9 @@
             ]"
             :has-error="errors.has('settings.type')"
             :error-message="errors.get('settings.type')">
-        </ui-select>
+        </ui-select-group>
 
-        <ui-input
+        <ui-input-group
             name="settings.placeholder"
             label="Placeholder"
             help="Text that will appear inside the input element's content area when empty."
@@ -48,7 +48,7 @@
             v-model="settings.placeholder"
             :has-error="errors.has('settings.placeholder')"
             :error-message="errors.get('settings.placeholder')">
-        </ui-input>
+        </ui-input-group>
     </div>
 </template>
 

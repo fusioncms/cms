@@ -4,9 +4,9 @@
             <form class="col w-full" @submit.prevent="submit">
                 <p class="mb-6 text-sm">Personal API tokens allow third-party services to authenticate as you to access the API. Tokens should never be shared with anyone and should be treated as passwords.</p>
 
-                <ui-input name="name" label="Create New Token" v-model="form.name" :has-error="form.errors.has('name')" :error-message="form.errors.get('name')"></ui-input>
+                <ui-input-group name="name" label="Create New Token" v-model="form.name" :has-error="form.errors.has('name')" :error-message="form.errors.get('name')"></ui-input-group>
 
-                <button class="button" type="submit" @click.prevent="submit">Create</button>
+                <ui-button type="submit" variant="primary" @click.prevent="submit">Create</ui-button>
             </form>
         </div>
 
@@ -46,7 +46,7 @@
         <ui-modal name="access-token" v-model="hasAccessToken" title="Your API Token" large no-outside-close no-esc-close>
             <p class="mb-6">Please copy your new API token. For your security, it won't be shown again.</p>
 
-            <ui-textarea name="access-token" v-model="accessToken" :rows="6"></ui-textarea>
+            <ui-textarea-group name="access-token" label="Access Token" v-model="accessToken" :rows="6"></ui-textarea-group>
 
             <template v-slot:footer>
                 <ui-button v-modal:access-token>OK</ui-button>
@@ -57,7 +57,7 @@
             <p class="mb-6">Are you sure you want to revoke the <b>{{ revokeToken.name }}</b> token?</p>
 
             <template v-slot:footer>
-                <ui-button theme="danger" v-modal:revoke-token @click.prevent="revoke(revokeToken)">Revoke</ui-button>
+                <ui-button variant="danger" v-modal:revoke-token @click.prevent="revoke(revokeToken)">Revoke</ui-button>
                 <ui-button v-modal:revoke-token class="mr-3">Cancel</ui-button>
             </template>
         </ui-modal>

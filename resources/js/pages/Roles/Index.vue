@@ -44,7 +44,7 @@
                 <p>Are you sure you want to permenantly delete this role?</p>
 
                 <template slot="footer" slot-scope="role">
-                    <ui-button v-modal:delete-role @click="destroy(role.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-role @click="destroy(role.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-role>Cancel</ui-button>
                 </template>
             </ui-modal>

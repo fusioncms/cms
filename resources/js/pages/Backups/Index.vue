@@ -5,10 +5,10 @@
 		</portal>
 
 		<portal to="actions">
-			<ui-button v-modal:settings class="button mr-1">Settings</ui-button>
-			<ui-button v-modal:upload class="button mr-3">Upload</ui-button>
+			<ui-button v-modal:settings class="mr-1">Settings</ui-button>
+			<ui-button v-modal:upload class="mr-3">Upload</ui-button>
 
-			<ui-button @click.prevent v-modal:confirm-form class="button--primary">Backup Now</ui-button>
+			<ui-button @click.prevent v-modal:confirm-form variant="primary">Backup Now</ui-button>
 		</portal>
 
 		<ui-card no-body>
@@ -67,7 +67,7 @@
         		</ui-checkbox>
 
                 <template slot="footer" slot-scope="form">
-                    <ui-button v-modal:restore-form @click="restore(form.data.name)" theme="primary" class="ml-3">Restore</ui-button>
+                    <ui-button v-modal:restore-form @click="restore(form.data.name)" variant="primary" class="ml-3">Restore</ui-button>
                     <ui-button v-modal:restore-form>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -77,7 +77,7 @@
                 <p>This will perform a full backup of your website. Backups can take up to one minute per GB of data.</p>
 
                 <template slot="footer">
-                    <ui-button v-modal:confirm-form @click="backup()" theme="primary" class="ml-3">Backup</ui-button>
+                    <ui-button v-modal:confirm-form @click="backup()" variant="primary" class="ml-3">Backup</ui-button>
                     <ui-button v-modal:confirm-form>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -87,7 +87,7 @@
                 <p>Are you sure you want to permenantly delete this backup?</p>
 
                 <template slot="footer" slot-scope="form">
-                    <ui-button v-modal:delete-form @click="destroy(form.data.name)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-form @click="destroy(form.data.name)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-form>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -96,6 +96,7 @@
 			<ui-modal name="upload" title="Upload Backup" key="upload-backup">
 				<ui-upload
 					name="file-upload"
+					label="Upload"
 					ref="upload"
 					accept="zip"
 					:multiple="false"

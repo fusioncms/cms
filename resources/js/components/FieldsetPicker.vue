@@ -1,5 +1,5 @@
 <template>
-    <ui-select
+    <ui-select-group
         name="fieldset"
         label="Fieldset"
         help="What fieldset would you like to attach?"
@@ -7,7 +7,7 @@
         :has-error="hasError"
         :error-message="errorMessage"
         v-model="model">
-    </ui-select>
+    </ui-select-group>
 </template>
 
 <script>

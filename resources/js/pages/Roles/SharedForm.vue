@@ -2,14 +2,14 @@
 	<form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'roles' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button :to="{ name: 'roles' }" variant="secondary">Go Back</ui-button>
+                <ui-button type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
 		<div class="card">
             <div class="card__body">
-                <ui-title
+                <ui-title-group
                     name="label"
                     autocomplete="off"
                     autofocus
@@ -17,9 +17,9 @@
                     :has-error="form.errors.has('label')"
                     :error-message="form.errors.get('label')"
                     v-model="form.label">
-                </ui-title>
+                </ui-title-group>
 
-				<ui-textarea
+				<ui-textarea-group
 					name="description"
 					label="Description"
 					autocomplete="off"
@@ -28,26 +28,21 @@
 					required
 					v-model="form.description"
 					:rows="2">
-				</ui-textarea>
+				</ui-textarea-group>
 			</div>
 		</div>
 
         <div class="card" v-if="hasPermissions(form.name)">
             <div class="card__body">
-                <ui-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions_table">
+                <ui-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions_table" show-page-status show-page-numbers show-page-nav show-page-ends>
                     <template slot="name" slot-scope="table">
-                        <input
-                            type="checkbox"
-                            name="permissions"
-                            :id="table.record.name"
-                            :value="table.record.name"
-                            v-model="permissions">
-
-                        <code>{{ table.record.name }}</code>
+                        <ui-checkbox :id="table.record.name" name="permissions" :native-value="table.record.name" v-model="permissions">
+                            <code>{{ table.record.name }}</code>
+                        </ui-checkbox>
                     </template>
 
                     <template slot="description" slot-scope="table">
-                        <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
+                        <p>{{ table.record.description }}</p>
                     </template>
                 </ui-table>
             </div>

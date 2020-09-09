@@ -2,14 +2,14 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'matrices' }" class="button button--secondary">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button :to="{ name: 'matrices' }" variant="secondary">Go Back</ui-button>
+                <ui-button type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
         <div class="card">
             <div class="card__body">
-                <ui-input
+                <ui-input-group
                     name="name"
                     label="Name"
                     help="Give your matrix a name."
@@ -18,9 +18,9 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </ui-input>
+                </ui-input-group>
 
-                <ui-input
+                <ui-input-group
                     name="description"
                     label="Description"
                     help="Give a short description of what this matrix will manage and store."
@@ -29,11 +29,11 @@
                     :has-error="form.errors.has('description')"
                     :error-message="form.errors.get('description')"
                     v-model="form.description">
-                </ui-input>
+                </ui-input-group>
 
                 <ui-tabs>
                     <ui-tab name="General">
-                        <ui-select
+                        <ui-select-group
                             name="type"
                             label="Type"
                             help="What type of matrix will this be?"
@@ -50,7 +50,7 @@
                             :has-error="form.errors.has('type')"
                             :error-message="form.errors.get('type')"
                             v-model="form.type">
-                        </ui-select>
+                        </ui-select-group>
 
                         <fieldset-picker
                             :has-error="form.errors.has('fieldset')"
@@ -60,7 +60,7 @@
                     </ui-tab>
 
                     <ui-tab name="Customize">
-                        <ui-input
+                        <ui-input-group
                             name="name_label"
                             label="Name Label"
                             placeholder="Name"
@@ -68,9 +68,9 @@
                             :has-error="form.errors.has('name_label')"
                             :error-message="form.errors.get('name_label')"
                             v-model="form.name_label">
-                        </ui-input>
+                        </ui-input-group>
 
-                        <ui-input
+                        <ui-input-group
                             name="reference_singular"
                             label="Singular Reference"
                             :placeholder="singularReference"
@@ -78,9 +78,9 @@
                             :has-error="form.errors.has('reference_singular')"
                             :error-message="form.errors.get('reference_singular')"
                             v-model="form.reference_singular">
-                        </ui-input>
+                        </ui-input-group>
 
-                        <ui-input
+                        <ui-input-group
                             name="reference_plural"
                             label="Plural Reference"
                             :placeholder="pluralReference"
@@ -88,7 +88,7 @@
                             :has-error="form.errors.has('reference_plural')"
                             :error-message="form.errors.get('reference_plural')"
                             v-model="form.reference_plural">
-                        </ui-input>
+                        </ui-input-group>
 
                         <hr>
 
@@ -101,7 +101,7 @@
                             :false-value="0">
                         </ui-toggle>
 
-                        <ui-input
+                        <ui-input-group
                             v-if="!form.show_name_field"
                             monospaced
                             name="name_format"
@@ -110,11 +110,11 @@
                             :has-error="form.errors.has('name_format')"
                             :error-message="form.errors.get('name_format')"
                             v-model="form.name_format">
-                        </ui-input>
+                        </ui-input-group>
                     </ui-tab>
 
                     <ui-tab name="Route">
-                        <ui-input
+                        <ui-input-group
                             name="route"
                             label="Route"
                             help="When the URI matches this pattern..."
@@ -123,9 +123,9 @@
                             :has-error="form.errors.has('route')"
                             :error-message="form.errors.get('route')"
                             v-model="form.route">
-                        </ui-input>
+                        </ui-input-group>
 
-                        <ui-input
+                        <ui-input-group
                             name="template"
                             label="Template"
                             help="Render this template"
@@ -134,7 +134,7 @@
                             :has-error="form.errors.has('template')"
                             :error-message="form.errors.get('template')"
                             v-model="form.template">
-                        </ui-input>
+                        </ui-input-group>
                     </ui-tab>
                 </ui-tabs>
             </div>
@@ -143,7 +143,7 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <ui-slug
+                    <ui-slug-group
                         name="handle"
                         label="Handle"
                         monospaced
@@ -154,9 +154,9 @@
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
                         v-model="form.handle">
-                    </ui-slug>
+                    </ui-slug-group>
 
-                    <ui-select
+                    <ui-select-group
                         name="parent_id"
                         label="Parent Matrix"
                         help="Should this matrix belong to another?"
@@ -164,7 +164,7 @@
                         :has-error="form.errors.has('parent_id')"
                         :error-message="form.errors.get('parent_id')"
                         v-model="form.parent_id">
-                    </ui-select>
+                    </ui-select-group>
 
                     <ui-toggle
                         name="status"

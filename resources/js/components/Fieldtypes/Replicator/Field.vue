@@ -9,9 +9,9 @@
         <ui-button
             v-for="(section, index) in sections"
             :key="section.handle"
-            class="button--secondary mr-2"
+            variant="secondary"
+            class="mr-2"
             @click="add(index)">
-
             {{ section.name }}
             <fa-icon icon="plus" class="fa-xs"></fa-icon>
         </ui-button>

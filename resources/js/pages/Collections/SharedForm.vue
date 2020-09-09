@@ -2,14 +2,14 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link v-if="collection.slug" :to="{ name: 'collection.index', params: {collection: collection.slug} }" class="button button--secondary">Go Back</router-link>
-                <button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button v-if="collection.slug" :to="{ name: 'collection.index', params: {collection: collection.slug} }" variant="secondary">Go Back</ui-button>
+                <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
         <div class="card">
             <div class="card__body">
-                <ui-title
+                <ui-title-group
                     name="name"
                     :label="collection.name_label || 'Name'"
                     autocomplete="off"
@@ -20,7 +20,7 @@
                     :error-message="form.errors.get('name')"
                     v-model="form.name"
                     v-if="collection.show_name_field">
-                </ui-title>
+                </ui-title-group>
 
                 <ui-tabs v-if="sections.body.length > 0">
                     <ui-tab v-for="section in sections.body" :key="section.handle" :name="section.name">
@@ -38,7 +38,7 @@
 
                 <div v-else class="text-center">
                     <p>Things are looking a little empty here!</p>
-                    <router-link class="button" :to="'/matrices/' + collection.id + '/edit'">Configure your collection</router-link>
+                    <ui-button :to="'/matrices/' + collection.id + '/edit'">Configure your collection</ui-button>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <ui-slug
+                    <ui-slug-group
                         v-if="collection.show_name_field || entry.id"
                         name="slug"
                         label="Slug"
@@ -59,7 +59,7 @@
                         :has-error="form.errors.has('slug')"
                         :error-message="form.errors.get('slug')"
                         v-model="form.slug">
-                    </ui-slug>
+                    </ui-slug-group>
 
                     <ui-toggle
                         name="status"

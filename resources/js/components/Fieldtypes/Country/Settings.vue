@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-wrap justify-between">
-        <ui-select
+        <ui-select-group
             name="settings.multiple"
             label="Multi Select"
             help="Should this field allow multiple options to be selected?"
@@ -19,7 +19,7 @@
             class="mr-5 w-full lg:w-2/5"
             :has-error="errors.has('settings.multiple')"
             :error-message="errors.get('settings.multiple')">
-        </ui-select>
+        </ui-select-group>
 
         <ui-toggle
             name="settings.filterable"

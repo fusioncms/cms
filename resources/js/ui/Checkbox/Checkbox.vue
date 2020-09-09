@@ -23,12 +23,16 @@
     export default {
         name: 'ui-checkbox',
 
+        mixins: [
+            require('../../mixins/fields').default
+        ],
+
         data() {
             return {
                 newValue: this.value,
             }
         },
-
+        
         props: {
             name: {
                 required: true,
@@ -70,19 +74,6 @@
                 type: Boolean,
                 default: false,
             }
-        },
-
-        computed: {
-            computedValue: {
-                get() {
-                    return this.newValue
-                },
-
-                set(value) {
-                    this.newValue = value
-                    this.$emit('input', value)
-                }
-            },
         },
 
         watch: {

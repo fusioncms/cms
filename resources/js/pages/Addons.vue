@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <ui-button v-modal:upload-addon class="button">Upload Addon</ui-button>
+            <ui-button v-modal:upload-addon>Upload Addon</ui-button>
         </portal>
 
         <div class="row">
@@ -62,7 +62,7 @@
                 <p>Are you sure you want to uninstall this addon?</p>
 
                 <template slot="footer" slot-scope="addon">
-                    <ui-button v-modal:uninstall-addon @click="uninstall(addon.data)" theme="danger" class="ml-3">Uninstall</ui-button>
+                    <ui-button v-modal:uninstall-addon @click="uninstall(addon.data)" variant="danger" class="ml-3">Uninstall</ui-button>
                     <ui-button v-modal:uninstall-addon>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -71,7 +71,7 @@
                 <p>Are you sure you want to install this addon?</p>
 
                 <template slot="footer" slot-scope="addon">
-                    <ui-button v-modal:install-addon @click="install(addon.data)" theme="success" class="ml-3">Install</ui-button>
+                    <ui-button v-modal:install-addon @click="install(addon.data)" variant="success" class="ml-3">Install</ui-button>
                     <ui-button v-modal:install-addon>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -81,7 +81,7 @@
                 <p>Are you sure you want to proceed?</p>
 
                 <template slot="footer" slot-scope="addon">
-                    <ui-button v-modal:update-addon @click="update(addon.data)" theme="warning" class="ml-3">Update</ui-button>
+                    <ui-button v-modal:update-addon @click="update(addon.data)" variant="warning" class="ml-3">Update</ui-button>
                     <ui-button v-modal:update-addon>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -89,6 +89,7 @@
             <ui-modal name="upload-addon" title="Upload Addon" key="upload_addon">
                 <ui-upload
                     name="file-upload"
+                    label="Addon"
                     ref="upload"
                     accept="zip"
                     :multiple="false"

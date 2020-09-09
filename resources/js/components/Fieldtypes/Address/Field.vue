@@ -1,63 +1,76 @@
 <template>
-    <div class="px-2 mb-4">
-        <div class="form__label">{{field.name}}</div>
-        <div class="row px-2">
-            <div class="w-1/2">
-                <ui-input
+    <ui-fieldset
+        :label="field.name"
+        :help="field.help">
+            <div class="row">
+                <ui-input-group
+                    class="col md:w-1/2"
+                    label="Address 1"
+                    hide-label
                     :name="field.handle + '_address1'"
                     placeholder="Address 1"
                     :value="data.address1"
-                    @input="updateValue($event, 'address1')"
-                    class="mb-2"
-                ></ui-input>
-                <ui-input
+                    :required="field.required"
+                    @input="updateValue($event, 'address1')">
+                </ui-input-group>
+                <ui-input-group
+                    class="col md:w-1/2"
+                    label="Address 2"
+                    hide-label
                     :name="field.handle + '_address2'"
                     placeholder="Address 2"
                     :value="data.address2"
-                    @input="updateValue($event, 'address2')"
-                    class="mb-2"
-                ></ui-input>
-                <ui-input
+                    @input="updateValue($event, 'address2')">
+                </ui-input-group>
+                <ui-input-group
+                    class="col md:w-1/3"
+                    label="City"
+                    hide-label
                     :name="field.handle + '_city'"
                     placeholder="City"
                     :value="data.city"
-                    @input="updateValue($event, 'city')"
-                    class="mb-2"
-                ></ui-input>
-                <ui-input
+                    :required="field.required"
+                    @input="updateValue($event, 'city')">
+                </ui-input-group>
+                <ui-input-group
+                    class="col md:w-1/3"
+                    label="State"
+                    hide-label
                     :name="field.handle + '_state'"
                     placeholder="State"
                     :value="data.state"
-                    @input="updateValue($event, 'state')"
-                    class="mb-2"
-                ></ui-input>
-                <ui-input
+                    :required="field.required"
+                    @input="updateValue($event, 'state')">
+                </ui-input-group>
+                <ui-input-group
+                    class="col md:w-1/3"
+                    label="Zip Code"
+                    hide-label
                     :name="field.handle + '_zip'"
-                    placeholder="ZIP"
+                    placeholder="Zip Code"
                     :value="data.zip"
-                    @input="updateValue($event, 'zip')"
-                    class="mb-2"
-                ></ui-input>
-                <ui-input
+                    :required="field.required"
+                    @input="updateValue($event, 'zip')">
+                </ui-input-group>
+                <ui-input-group
+                    class="col"
+                    label="Country"
+                    hide-label
                     :name="field.handle + '_country'"
                     placeholder="Country"
                     :value="data.country"
-                    @input="updateValue($event, 'country')"
-                    class="mb-2"
-                ></ui-input>
+                    @input="updateValue($event, 'country')">
+                </ui-input-group>
             </div>
-            <div class="w-1/2 pl-6">
-                <div class="h-full rounded" :id="mapID">
-                    <div class="bg-gray-100 rounded shadow p-3" v-if="mapError" v-html="mapError"></div>
-
-                    <div class="bg-gray-100 rounded shadow p-3" v-show="hasAPIKey == false">
-                        <p>A <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Google Maps API key</a> is required in order to view the map component and retrieve latitude and longitude coordinates for your address.</p>
-                        <p>Once you've obtained one, please visit the <router-link to="/settings/google_maps">Google Maps settings page</router-link> to enter your API key.</p>
-                    </div>
-                </div>
+            <div class="h-full rounded" :id="mapID">
+                <div class="bg-gray-100 rounded shadow p-3" v-if="mapError" v-html="mapError"></div>
+            </div>
+            <div class="help" v-show="hasAPIKey == false">
+                <p>A <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Google Maps API key</a> is required in order to view the map component and retrieve latitude and longitude coordinates for your address. 
+                Once you've obtained one, please visit the <router-link to="/settings/google_maps">Google Maps settings page</router-link> to enter your API key.</p>
             </div>
         </div>
-    </div>
+    </ui-fieldset>
 </template>
 
 <script>
@@ -97,6 +110,8 @@
                 marker: null,
                 data: data,
                 mapError: '',
+                help: '<p>A <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Google Maps API key</a> is required in order to view the map component and retrieve latitude and longitude coordinates for your address.</p><p>Once you have obtained one, please visit the <router-link to="/settings/google_maps">Google Maps settings page</router-link> to enter your API key.</p>'
+
             }
         },
 
@@ -107,9 +122,8 @@
             },
 
             value: {
-                required: false,
-                default: null,
-            },
+                default: null
+            }
         },
 
         computed: {
@@ -238,5 +252,9 @@
                 }, 500
             )
         },
+
+        mounted() {
+            console.log(this.field)
+        }
     }
 </script>

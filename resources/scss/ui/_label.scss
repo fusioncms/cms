@@ -1,5 +1,5 @@
 .label {
-    @apply block uppercase leading-normal tracking-wide text-gray-700 text-sm font-bold mb-3;
+    @apply block uppercase leading-normal tracking-wide text-gray-700 text-sm font-bold mb-1;
     @extend %no-bottom;
 
     &--required:after { 

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ui-select
+        <ui-select-group
             name="settings.display"
             label="Display"
             help="Choose whether to display options in a horizontal row or vertical column."
@@ -18,7 +18,7 @@
             ]"
             :has-error="errors.has('settings.display')"
             :error-message="errors.get('settings.display')">
-        </ui-select>
+        </ui-select-group>
         <div class="col w-full">
             <option-builder v-model="settings.options"></option-builder>
         </div>

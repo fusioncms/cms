@@ -45,7 +45,7 @@
                 <p>Are you sure you want to permenantly delete this term?</p>
 
                 <template slot="footer" slot-scope="term">
-                    <ui-button v-modal:delete-term @click="destroy(term.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-term @click="destroy(term.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-term>Cancel</ui-button>
                 </template>
             </ui-modal>

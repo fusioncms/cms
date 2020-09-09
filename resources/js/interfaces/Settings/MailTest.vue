@@ -10,35 +10,35 @@
 	    <div class="content-container">
 			<!-- SMTP -->
 			<div v-show="settings.mail_driver == 'smtp'">
-				<ui-input name="stmp_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input>
-				<ui-input name="stmp_host" label="Host" v-model="settings.mail_smtp_host" readonly></ui-input>
-				<ui-input name="stmp_port" label="Port" v-model="settings.mail_smtp_port" readonly></ui-input>
-				<ui-input name="stmp_username" label="Username" v-model="settings.mail_smtp_username" readonly></ui-input>
-				<ui-input name="stmp_password" type="password" label="Password" v-model="settings.mail_smtp_password" readonly></ui-input>
-				<ui-input name="stmp_from_name" label="From Name" v-model="settings.mail_name" readonly></ui-input>
-				<ui-input name="stmp_from_address" label="From Address" v-model="settings.mail_server" readonly></ui-input>
+				<ui-input-group name="stmp_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input-group>
+				<ui-input-group name="stmp_host" label="Host" v-model="settings.mail_smtp_host" readonly></ui-input-group>
+				<ui-input-group name="stmp_port" label="Port" v-model="settings.mail_smtp_port" readonly></ui-input-group>
+				<ui-input-group name="stmp_username" label="Username" v-model="settings.mail_smtp_username" readonly></ui-input-group>
+				<ui-input-group name="stmp_password" type="password" label="Password" v-model="settings.mail_smtp_password" readonly></ui-input-group>
+				<ui-input-group name="stmp_from_name" label="From Name" v-model="settings.mail_name" readonly></ui-input-group>
+				<ui-input-group name="stmp_from_address" label="From Address" v-model="settings.mail_server" readonly></ui-input-group>
 			</div>
 
 			<!-- Sparkpost -->
 			<div v-show="settings.mail_driver == 'sparkpost'">
-				<ui-input name="sparkpost_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input>
-				<ui-input name="sparkpost_scret" type="password" label="Secret" v-model="settings.mail_sparkpost_secret" readonly></ui-input>
+				<ui-input-group name="sparkpost_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input-group>
+				<ui-input-group name="sparkpost_scret" type="password" label="Secret" v-model="settings.mail_sparkpost_secret" readonly></ui-input-group>
 			</div>
 
 			<!-- Mailgun -->
 			<div v-show="settings.mail_driver == 'mailgun'">
-				<ui-input name="mailgun_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input>
-				<ui-input name="mailgun_domain" label="Domain" v-model="settings.mail_mailgun_domain" readonly></ui-input>
-				<ui-input name="mailgun_secret" type="password" label="Secret" v-model="settings.mail_mailgun_secret" readonly></ui-input>
+				<ui-input-group name="mailgun_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input-group>
+				<ui-input-group name="mailgun_domain" label="Domain" v-model="settings.mail_mailgun_domain" readonly></ui-input-group>
+				<ui-input-group name="mailgun_secret" type="password" label="Secret" v-model="settings.mail_mailgun_secret" readonly></ui-input-group>
 			</div>
 
 			<!-- Mandrill -->
 			<div v-show="settings.mail_driver == 'mandrill'">
-				<ui-input name="mandrill_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input>
-				<ui-input name="mandrill_scret" type="password" label="Secret" v-model="settings.mail_mandrill_secret" readonly></ui-input>
+				<ui-input-group name="mandrill_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input-group>
+				<ui-input-group name="mandrill_scret" type="password" label="Secret" v-model="settings.mail_mandrill_secret" readonly></ui-input-group>
 			</div>
 
-			<ui-button theme="primary" @click="submit" class="mt-5">Run Test</ui-button>
+			<ui-button variant="primary" @click="submit" class="mt-5">Run Test</ui-button>
 		</div>
 	</div>
 </template>

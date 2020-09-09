@@ -2,14 +2,14 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'dashboard' }" class="button button--secondary">Go Back</router-link>
-                <button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button :to="{ name: 'dashboard' }" variant="secondary">Go Back</ui-button>
+                <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
         <div class="card">
             <div class="card__body">
-                <ui-title
+                <ui-title-group
                     name="name"
                     :label="matrix.name_label || 'Name'" 
                     autocomplete="off"
@@ -20,7 +20,7 @@
                     :error-message="form.errors.get('name')"
                     v-model="form.name"
                     v-if="matrix.show_name_field">
-                </ui-title>
+                </ui-title-group>
 
                 <ui-tabs v-if="sections.body.length > 0">
                     <ui-tab v-for="section in sections.body" :key="section.handle" :name="section.name">
@@ -45,7 +45,7 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <ui-slug
+                    <ui-slug-group
                         name="slug"
                         label="Slug"
                         monospaced
@@ -55,7 +55,7 @@
                         :has-error="form.errors.has('slug')"
                         :error-message="form.errors.get('slug')"
                         v-model="form.slug">
-                    </ui-slug>
+                    </ui-slug-group>
 
                     <ui-toggle
                         name="status"

@@ -3,7 +3,7 @@
         <form-container v-if="form">
             <div class="row mb-6">
                 <div class="col w-1/2">
-                    <ui-input
+                    <ui-input-group
                         name="name"
                         label="Name"
                         help="What this field will be called."
@@ -13,11 +13,11 @@
                         :has-error="form.errors.has('name')"
                         :error-message="form.errors.get('name')"
                         v-model="form.name">
-                    </ui-input>
+                    </ui-input-group>
                 </div>
 
                 <div class="col w-1/2">
-                    <ui-slug
+                    <ui-slug-group
                         name="handle"
                         label="Handle"
                         help="A developer-friendly variant of the fieldset's name."
@@ -29,7 +29,7 @@
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
                         v-model="form.handle">
-                    </ui-slug>
+                    </ui-slug-group>
                 </div>
             </div>
 
@@ -51,7 +51,7 @@
 
                 <div class="row">
                     <div class="col w-full">
-                        <ui-input name="validation" label="Validation Rules" v-model="form.validation" monospaced></ui-input>
+                        <ui-input-group name="validation" label="Validation Rules" v-model="form.validation" monospaced></ui-input-group>
                     </div>
                 </div>
 
@@ -65,8 +65,8 @@
         </form-container>
 
         <template slot="footer">
-            <ui-button theme="button--primary" @click="submit">Save</ui-button>
-            <ui-button class="button--secondary mr-2" @click="close">Close</ui-button>
+            <ui-button variant="primary" @click="submit">Save</ui-button>
+            <ui-button variant="secondary" class="mr-2" @click="close">Close</ui-button>
         </template>
     </ui-modal>
 </template>

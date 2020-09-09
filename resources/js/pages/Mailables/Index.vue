@@ -5,7 +5,7 @@
 		</portal>
 
 		<portal to="actions">
-			<button v-modal:settings class="button">Settings</button>
+			<ui-button v-modal:settings>Settings</ui-button>
 		</portal>
 
 		<div class="row">

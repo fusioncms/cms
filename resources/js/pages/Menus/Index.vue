@@ -46,7 +46,7 @@
                 <p>Are you sure you want to permenantly delete this menu?</p>
 
                 <template slot="footer" slot-scope="menu">
-                    <ui-button v-modal:delete-menu @click="destroy(menu.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-menu @click="destroy(menu.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-menu>Cancel</ui-button>
                 </template>
             </ui-modal>

@@ -37,7 +37,7 @@
 
         <div class="row">
             <div class="col w-full">
-                <a class="button" href="#" @click.prevent="field.add = true">Add Field</a>
+                <ui-button href="#" @click.prevent="field.add = true">Add Field</ui-button>
             </div>
         </div>
 
@@ -51,11 +51,11 @@
             </ui-modal>
 
             <ui-modal name="move-field" title="Move Field" v-model="!! field.move">
-                <ui-select name="move_to" v-model="section" placeholder="Please select a section..." :options="sectionOptions"></ui-select>
+                <ui-select-group name="move_to" label="Move to" hide-label v-model="section" placeholder="Please select a section..." :options="sectionOptions"></ui-select-group>
 
                 <template slot="footer">
-                    <ui-button class="button--primary" @click.prevent="move">Move</ui-button>
-                    <ui-button class="button--secondary mr-2" @click.prevent="field.move = false">Cancel</ui-button>
+                    <ui-button variant="primary" @click.prevent="move">Move</ui-button>
+                    <ui-button variant="secondary" class="mr-2" @click.prevent="field.move = false">Cancel</ui-button>
                 </template>
             </ui-modal>
 

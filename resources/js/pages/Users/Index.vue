@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <router-link :to="{ name: 'users.create' }" class="button button--primary">Create User</router-link>
+            <ui-button :to="{ name: 'users.create' }" variant="primary">Create User</ui-button>
         </portal>
 
         <div class="sidebar-container">

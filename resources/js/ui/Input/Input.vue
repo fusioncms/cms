@@ -14,7 +14,7 @@
         :required="required"
         :aria-required="required" 
         :aria-describedby="message ? formattedId + '_message' : null"
-        @input="handleInput" />
+        @input="handleInput">
 </template>
 
 <script>
@@ -90,10 +90,6 @@
         },
 
         methods: {
-            handleInput (event) {
-                this.$emit('input', event.target.value)
-            },
-
             focus() {
                 this.$el.focus()
             },

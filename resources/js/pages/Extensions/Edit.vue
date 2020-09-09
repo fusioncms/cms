@@ -6,14 +6,14 @@
 
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'extensions' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button :to="{ name: 'extensions' }" variant="secondary">Go Back</ui-button>
+                <ui-button type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
         <div class="card">
             <div class="card__body">
-                <ui-title name="name" readonly v-model="form.name"></ui-title>
+                <ui-title-group name="name" readonly v-model="form.name"></ui-title-group>
 
                 <fieldset-picker
                     :has-error="form.errors.has('fieldset')"
@@ -26,7 +26,7 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <ui-input label="Handle" monospaced readonly v-model="form.handle"></ui-input>
+                    <ui-input-group label="Handle" monospaced readonly v-model="form.handle"></ui-input-group>
                 </div>
             </div>
 

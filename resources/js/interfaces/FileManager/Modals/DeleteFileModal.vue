@@ -6,7 +6,7 @@
 
         <template v-slot:footer>
             <ui-button v-modal:delete>Cancel</ui-button>
-            <ui-button theme="danger" @click="submit" class="mr-1" v-modal:delete>Delete</ui-button>
+            <ui-button variant="danger" @click="submit" class="mr-1" v-modal:delete>Delete</ui-button>
         </template>
     </ui-modal>
 </template>

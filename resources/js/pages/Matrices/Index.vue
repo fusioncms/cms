@@ -53,7 +53,7 @@
                 <p>Are you sure you want to permenantly delete this matrix?</p>
 
                 <template slot="footer" slot-scope="matrix">
-                    <ui-button v-modal:delete-matrix @click="destroy(matrix.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-matrix @click="destroy(matrix.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-matrix>Cancel</ui-button>
                 </template>
             </ui-modal>

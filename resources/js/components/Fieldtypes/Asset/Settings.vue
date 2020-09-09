@@ -1,15 +1,14 @@
 <template>
     <div class="row">
     	<div class="col w-1/2">
-			<ui-number
+			<ui-number-group
 				name="settings.limit"
 				label="Limit"
 				help="Limit the number of assets selected; leave blank if no limit is desired."
-				placeholder=""
-				v-model="settings.limit"
+				:min="1"
 				:has-error="errors.has('settings.limit')"
            		:error-message="errors.get('settings.limit')">
-			</ui-number>
+			</ui-number-group>
 
 			<ui-checkbox-group
 				label="File type restrictions"
@@ -29,7 +28,7 @@
 		</div>
 
     	<div class="col w-1/2">
-			<ui-select
+			<ui-select-group
 				name="settings.root_directory"
 				label="Root directory"
 				help="Select root folder for this field; default root will be used if None selected."
@@ -37,7 +36,7 @@
 				v-model="settings.root_directory"
 				:has-error="errors.has('settings.root_directory')"
            		:error-message="errors.get('settings.root_directory')">
-			</ui-select>
+			</ui-select-group>
 	    </div>
     </div>
 </template>

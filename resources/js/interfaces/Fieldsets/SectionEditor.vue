@@ -2,17 +2,17 @@
 	<div>
         <div class="row">
             <div class="col mb-6 w-full lg:w-1/2">
-                <ui-input
-                    name="label"
+                <ui-input-group
+                    name="section-label"
                     label="Section Label"
                     v-model="section.name"
                     required>
-                </ui-input>
+                </ui-input-group>
             </div>
 
             <div class="col mb-6 w-full lg:w-1/2">
-                <ui-slug
-                    name="handle"
+                <ui-slug-group
+                    name="section-handle"
                     label="Section Handle"
                     autocomplete="off"
                     delimiter="-"
@@ -20,24 +20,24 @@
                     :watch="section.name"
                     v-model="section.handle"
                     required>
-                </ui-slug>
+                </ui-slug-group>
             </div>
 
             <div class="col mb-6 w-full lg:w-1/2">
-                <ui-input
-                    name="description"
+                <ui-input-group
+                    name="section-description"
                     label="Section Description"
                     v-model="section.description">
-                </ui-input>
+                </ui-input-group>
             </div>
 
             <div class="col mb-6 w-full lg:w-1/2">
-                <ui-select
-                    name="placement"
+                <ui-select-group
+                    name="section-placement"
                     label="Section Placement"
                     :options="placements"
                     v-model="section.placement">
-                </ui-select>
+                </ui-select-group>
             </div>
         </div>
 

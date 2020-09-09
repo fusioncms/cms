@@ -2,14 +2,14 @@
 	<form-container>
 		<portal to="actions">
 			<div class="buttons">
-				<router-link v-if="taxonomy.id" :to="{ name: 'terms.index', params: {taxonomy: taxonomy.id} }" class="button">Go Back</router-link>
-				<button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+				<ui-button v-if="taxonomy.id" :to="{ name: 'terms.index', params: {taxonomy: taxonomy.id} }" variant="secondary">Go Back</ui-button>
+				<ui-button type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
 			</div>
 		</portal>
 
 		<div class="card">
             <div class="card__body">
-                <ui-title
+                <ui-title-group
                     name="name"
                     autocomplete="off"
                     autofocus
@@ -17,7 +17,7 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </ui-title>
+                </ui-title-group>
 
 				<ui-tabs v-if="sections.body.length > 0">
                     <ui-tab v-for="section in sections.body" :key="section.handle" :name="section.name">
@@ -35,7 +35,7 @@
 
                 <div v-if="sections.body.length == 0 && taxonomy.id" class="text-center">
                     <p>Things are looking a little empty here!</p>
-                    <router-link class="button" :to="{ name: 'taxonomies.edit', params: { taxonomy: taxonomy.id }}">Configure your taxonomy</router-link>
+                    <ui-button :to="{ name: 'taxonomies.edit', params: { taxonomy: taxonomy.id }}">Configure your taxonomy</ui-button>
                 </div>
 			</div>
 		</div>
@@ -43,7 +43,7 @@
 		<template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <ui-slug
+                    <ui-slug-group
                         name="slug"
                         label="Slug"
                         monospaced
@@ -53,7 +53,7 @@
                         :has-error="form.errors.has('slug')"
                         :error-message="form.errors.get('slug')"
                         v-model="form.slug">
-                    </ui-slug>
+                    </ui-slug-group>
 
                     <ui-toggle
                         name="status"

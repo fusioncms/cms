@@ -41,7 +41,7 @@
                 <p>Are you sure you want to permenantly delete this fieldset?</p>
 
                 <template slot="footer" slot-scope="fieldset">
-                    <ui-button v-modal:delete-fieldset @click="destroy(fieldset.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-fieldset @click="destroy(fieldset.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-fieldset>Cancel</ui-button>
                 </template>
             </ui-modal>

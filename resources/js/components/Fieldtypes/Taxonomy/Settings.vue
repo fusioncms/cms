@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ui-select
+        <ui-select-group
             name="taxonomy"
             label="Taxonomy"
             help="The taxonomy from which to show terms."
@@ -10,7 +10,7 @@
             :has-error="errors.has('settings.taxonomy')"
             :error-message="errors.get('settings.taxonomy')"
         >
-        </ui-select>
+        </ui-select-group>
     </div>
 </template>
 

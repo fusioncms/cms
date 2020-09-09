@@ -22,7 +22,7 @@
                             autofocus
                             required
                             v-model="form.email">
-                            </ui-input-group>
+                        </ui-input-group>
 
                         <ui-input-group
                             name="password"
@@ -33,10 +33,10 @@
                             :error-message="form.errors.get('password')"
                             autofocus
                             required
-                            v-model="form.password"
-                        ></ui-input-group>
+                            v-model="form.password">
+                        </ui-input-group>
 
-                        <p-button variant="primary" @click.prevent="submit">Login</p-button>
+                        <ui-button variant="primary" class="w-full" @click.prevent="submit">Login</ui-button>
                     </form>
                 </div>
             </div>

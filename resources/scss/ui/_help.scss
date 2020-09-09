@@ -1,5 +1,5 @@
 .help {
-    @apply block text-sm leading-normal mb-0;
+    @apply block text-gray-600 text-sm leading-normal mb-0;
     @extend %no-bottom;
 
     &--danger { @apply text-danger-600; }

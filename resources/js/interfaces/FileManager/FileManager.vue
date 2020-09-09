@@ -2,13 +2,13 @@
     <div class="file-manager__wrap" @dragenter="setDropzoneVisible(true)">
         <portal to="actions">
             <div class="buttons">
-                <button class="button" v-modal:new-folder>
+                <ui-button v-modal:new-folder>
                     New Folder
-                </button>
+                </ui-button>
 
-                <button class="button button--primary" @click="$refs.uploader.openDZ()">
+                <ui-button variant="primary" @click="$refs.uploader.openDZ()">
                     Upload
-                </button>
+                </ui-button>
             </div>
         </portal>
 

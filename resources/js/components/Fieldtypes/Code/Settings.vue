@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ui-select
+        <ui-select-group
             name="settings.syntax"
             label="Syntax"
             help="What language should the syntax highlighter use?"
@@ -42,7 +42,7 @@
             ]"
             :has-error="errors.has('settings.syntax')"
             :error-message="errors.get('settings.syntax')">
-        </ui-select>
+        </ui-select-group>
     </div>
 </template>
 

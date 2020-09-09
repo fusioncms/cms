@@ -6,8 +6,8 @@
 
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'menus' }" class="button">Go Back</router-link>
-                <ui-button theme="primary" @click.prevent="save" :disabled="saving">Save</ui-button>
+                <ui-button :to="{ name: 'menus' }">Go Back</ui-button>
+                <ui-button variant="primary" @click.prevent="save" :disabled="saving">Save</ui-button>
             </div>
         </portal>
 
@@ -63,24 +63,23 @@
                                             <ui-dropdown-link @click.prevent :to="{ name: 'menu.nodes.edit', params: {menu: menu.id, node: node.id} }">Edit</ui-dropdown-link>
 
                                             <ui-dropdown-link
+                                                v-if="nodes.length > 1"
                                                 @click.prevent
-                                                v-modal:move-before="node"
-                                            >
+                                                v-modal:move-before="node">
                                                 Move before...
                                             </ui-dropdown-link>
 
                                             <ui-dropdown-link
+                                                v-if="nodes.length > 1"
                                                 @click.prevent
-                                                v-modal:move-after="node"
-                                            >
+                                                v-modal:move-after="node">
                                                 Move after...
                                             </ui-dropdown-link>
 
                                             <ui-dropdown-link
                                                 @click.prevent
                                                 v-modal:delete-node="node"
-                                                classes="link--danger"
-                                            >
+                                                classes="link--danger">
                                                 Delete
                                             </ui-dropdown-link>
                                         </ui-table-actions>
@@ -100,11 +99,11 @@
                 </div>
 
                 <div class="card__body">
-                    <ui-input name="name" label="Name" v-model="form.name"></ui-input>
+                    <ui-input-group name="name" label="Name" v-model="form.name"></ui-input-group>
 
-                    <ui-input name="url" label="URL" v-model="form.url"></ui-input>
+                    <ui-input-group name="url" label="URL" v-model="form.url"></ui-input-group>
 
-                    <ui-select
+                    <ui-select-group
                         name="new_window"
                         label="Open link where"
                         help="Determine where the link should open."
@@ -119,9 +118,9 @@
                             },
                         ]"
                         v-model="form.new_window">
-                    </ui-select>
+                    </ui-select-group>
 
-                    <ui-button theme="primary" @click.prevent="add('custom')">Add</ui-button>
+                    <ui-button variant="primary" @click.prevent="add('custom')">Add</ui-button>
                 </div>
             </div>
         </template>
@@ -131,7 +130,7 @@
                 <p>Are you sure you want to permenantly delete this node?</p>
 
                 <template slot="footer" slot-scope="node">
-                    <ui-button v-modal:delete-node @click="destroy(node.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-node @click="destroy(node.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-node>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -140,11 +139,11 @@
                 <template>
                     <p>Which node would you like to move before?</p>
 
-                    <ui-select name="before" label="Node" :options="options" v-model="before"></ui-select>
+                    <ui-select-group name="before" label="Node" hide-label :options="options" v-model="before"></ui-select-group>
                 </template>
 
                 <template slot="footer" slot-scope="node">
-                    <ui-button v-modal:move-before @click="moveBefore(node.data.id)" theme="danger" class="ml-3">Move</ui-button>
+                    <ui-button v-modal:move-before @click="moveBefore(node.data.id)" variant="danger" class="ml-3">Move</ui-button>
                     <ui-button v-modal:move-after @click="before = null">Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -153,11 +152,11 @@
                 <template>
                     <p>Which node would you like to move after?</p>
 
-                    <ui-select name="after" label="Node" :options="options" v-model="after"></ui-select>
+                    <ui-select-group name="after" label="Node" hide-label :options="options" v-model="after"></ui-select-group>
                 </template>
 
                 <template slot="footer" slot-scope="node">
-                    <ui-button v-modal:move-after @click="moveAfter(node.data.id)" theme="danger" class="ml-3">Move</ui-button>
+                    <ui-button v-modal:move-after @click="moveAfter(node.data.id)" variant="danger" class="ml-3">Move</ui-button>
                     <ui-button v-modal:move-after @click="after = null">Cancel</ui-button>
                 </template>
             </ui-modal>

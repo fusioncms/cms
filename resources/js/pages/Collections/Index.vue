@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <router-link v-if="collection.slug" :to="{ name: 'collection.create', params: {collection: collection.slug} }" class="button button--primary">Create {{ collection.reference_singular }}</router-link>
+            <ui-button v-if="collection.slug" variant="primary" :to="{ name: 'collection.create', params: {collection: collection.slug} }">Create {{ collection.reference_singular }}</ui-button>
         </portal>
 
         <div class="row" v-if="endpoint">
@@ -28,8 +28,7 @@
                             <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-entry="table.record"
-                                classes="link--danger"
-                            >
+                                classes="link--danger">
                                 Delete
                             </ui-dropdown-link>
                         </ui-table-actions>
@@ -43,7 +42,7 @@
                 <p>Are you sure you want to permenantly delete this entry?</p>
 
                 <template slot="footer" slot-scope="entry">
-                    <ui-button v-modal:delete-entry @click="destroy(entry.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-entry @click="destroy(entry.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-entry>Cancel</ui-button>
                 </template>
             </ui-modal>

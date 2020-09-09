@@ -1,12 +1,6 @@
 <template>
     <div>
-        <label
-            class="form__label"
-            :for="field.handle"
-            v-html="field.name">
-        </label>
-
-        <ui-checkbox-group :help="field.help" v-if="taxonomy.terms && taxonomy.terms.length > 0">
+        <ui-checkbox-group :label="field.name" :help="field.help" v-if="taxonomy.terms && taxonomy.terms.length > 0">
             <ui-checkbox
                 v-for="term in taxonomy.terms"
                 :key="term.id"
@@ -23,7 +17,7 @@
         <p v-else class="text-sm leading-none">Add a {{ singular }} below.</p>
 
         <div class="border-t pt-6" v-if="form">
-            <ui-input
+            <ui-input-group
                 class="mb-2"
                 :name="term + '_name'"
                 :placeholder="'New ' + singular + ' name...'"
@@ -32,7 +26,7 @@
                 :has-error="form.errors.has('name')"
                 :error-message="form.errors.get('name')"
                 v-model="form.name">
-            </ui-input>
+            </ui-input-group>
             <ui-button @click.prevent="submit">Add {{ singular }}</ui-button>
         </div>
     </div>

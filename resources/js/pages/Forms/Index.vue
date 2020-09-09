@@ -50,7 +50,7 @@
                 <p>Are you sure you want to permenantly delete this form?</p>
 
                 <template slot="footer" slot-scope="form">
-                    <ui-button v-modal:delete-form @click="destroy(form.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-form @click="destroy(form.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-form>Cancel</ui-button>
                 </template>
             </ui-modal>

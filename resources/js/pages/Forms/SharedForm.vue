@@ -2,14 +2,14 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'forms' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button :to="{ name: 'forms' }" variant="secondary">Go Back</ui-button>
+                <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
-        <div class="card">
-            <div class="card__body">
-                <ui-title
+        <ui-card>
+            <ui-card-body>
+                <ui-title-group
                     name="name"
                     autocomplete="off"
                     autofocus
@@ -17,11 +17,11 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </ui-title>
+                </ui-title-group>
 
                 <ui-tabs>
                     <ui-tab key="general" name="General">
-                        <ui-input
+                        <ui-input-group
                             name="description"
                             label="Description"
                             help="Give a short description of what this form will collect."
@@ -30,42 +30,36 @@
                             :has-error="form.errors.has('description')"
                             :error-message="form.errors.get('description')"
                             v-model="form.description">
-                        </ui-input>
+                        </ui-input-group>
                     </ui-tab>
 
                     <ui-tab key="privacy" name="Privacy">
-                        <ui-checkbox-group inline class="mb-0">
-                            <ui-checkbox name="collect_email_addresses" id="collect_email_addresses" v-model="form.collect_email_addresses">Collect email addresses</ui-checkbox>
-                            <ui-checkbox name="collect_ip_addresses" id="collect_ip_addresses" v-model="form.collect_ip_addresses">Collect IP addresses</ui-checkbox>
-                        </ui-checkbox-group>
-
-                        <ui-checkbox-group class="-mt-3" inline help="Respondents will receive a copy of their submission.">
-                            <ui-checkbox name="response_receipt" id="response_receipt" :disabled="! form.collect_email_addresses" v-model="form.response_receipt">Response receipts</ui-checkbox>
-                        </ui-checkbox-group>
+                        <ui-fieldset label="Privacy Settings">
+                            <ui-checkbox-single name="collect_email_addresses" id="collect_email_addresses" v-model="form.collect_email_addresses">Collect email addresses</ui-checkbox-single>
+                            <ui-checkbox-single name="collect_ip_addresses" id="collect_ip_addresses" v-model="form.collect_ip_addresses">Collect IP addresses</ui-checkbox-single>
+                            <ui-checkbox-single name="response_receipt" id="response_receipt" help="Respondents will receive a copy of their submission." :disabled="! form.collect_email_addresses" v-model="form.response_receipt">Response receipts</ui-checkbox-single>
+                        </ui-fieldset>
                     </ui-tab>
 
                     <ui-tab key="spam" name="Spam">
-                        <ui-checkbox-group help="Be sure to enter your site key and secret key in settings.">
-                            <ui-checkbox name="enable_recaptcha" id="enable_recaptcha" v-model="form.enable_recaptcha">Enable Google reCAPTCHA</ui-checkbox>
-                        </ui-checkbox-group>
-
-                        <ui-checkbox-group help="A honeypot is a great and native alternative to Google reCAPTCHA. Both options can be safely enabled at the same time.">
-                            <ui-checkbox name="enable_honeypot" id="enable_honeypot" v-model="form.enable_honeypot">Enable Honeypot</ui-checkbox>
-                        </ui-checkbox-group>
+                        <ui-fieldset label="Spam Settings">
+                            <ui-checkbox-single name="enable_recaptcha" id="enable_recaptcha" help="Be sure to enter your site key and secret key in settings." v-model="form.enable_recaptcha">Enable Google reCAPTCHA</ui-checkbox-single>
+                            <ui-checkbox-single name="enable_honeypot" id="enable_honeypot" help="A honeypot is a great and native alternative to Google reCAPTCHA. Both options can be safely enabled at the same time." v-model="form.enable_honeypot">Enable Honeypot</ui-checkbox-single>
+                        </ui-fieldset>
                     </ui-tab>
 
                     <ui-tab key="notifications" name="Notifications">
-                        <ui-textarea
+                        <ui-textarea-group
                             name="send_to"
                             label="Send notifications to..."
                             help="List emails as a comma separated list."
                             placeholder="marie.c@example.com, nikola.t@example.com"
                             :has-error="form.errors.has('send_to')"
                             :error-message="form.errors.get('send_to')"
-                            v-model="form.send_to"
-                        ></ui-textarea>
+                            v-model="form.send_to">
+                        </ui-textarea-group>
 
-                        <ui-input
+                        <ui-input-group
                             name="reply_to"
                             label="Reply to..."
                             help="Replies to the confirmation email will be sent to this e-mail. By default this will reference the default email in system settings."
@@ -73,7 +67,7 @@
                             :has-error="form.errors.has('reply_to')"
                             :error-message="form.errors.get('reply_to')"
                             v-model="form.reply_to">
-                        </ui-input>
+                        </ui-input-group>
                     </ui-tab>
 
                     <ui-tab key="confirmations" name="Confirmations">
@@ -81,14 +75,12 @@
                             inline
                             label="After submitting the form..."
                             :has-error="form.errors.has('redirect_on_submission')"
-                            :error-message="form.errors.get('redirect_on_submission')"
-                        >
+                            :error-message="form.errors.get('redirect_on_submission')">
                             <ui-radio id="redirect_on_submission_false" v-model="form.redirect_on_submission" name="redirect_on_submission" :native-value="false">Redirect to default confirmation page...</ui-radio>
-
                             <ui-radio id="redirect_on_submission_true" v-model="form.redirect_on_submission" name="redirect_on_submission" :native-value="true">Redirect to custom page...</ui-radio>
                         </ui-radio-group>
 
-                        <ui-input
+                        <ui-input-group
                             v-if="form.redirect_on_submission === false"
                             name="confirmation_message"
                             label="Message"
@@ -98,9 +90,9 @@
                             :error-message="form.errors.get('confirmation_message')"
                             placeholder="Thank you! We'll be in touch soon."
                             v-model="form.confirmation_message">
-                        </ui-input>
+                        </ui-input-group>
 
-                        <ui-input
+                        <ui-input-group
                             v-if="form.redirect_on_submission === true"
                             name="redirect_url"
                             label="URL"
@@ -109,11 +101,11 @@
                             :has-error="form.errors.has('redirect_url')"
                             :error-message="form.errors.get('redirect_url')"
                             v-model="form.redirect_url">
-                        </ui-input>
+                        </ui-input-group>
                     </ui-tab>
 
                     <ui-tab key="templates" name="Templates">
-                        <ui-input
+                        <ui-input-group
                             name="form_template"
                             label="Form Template"
                             help="What template is responsible for rendering this form?"
@@ -122,9 +114,9 @@
                             :has-error="form.errors.has('form_template')"
                             :error-message="form.errors.get('form_template')"
                             v-model="form.form_template">
-                        </ui-input>
+                        </ui-input-group>
 
-                        <ui-input
+                        <ui-input-group
                             name="thankyou_template"
                             label="Thank You Template"
                             help="What template is reponsible for thanking respondents?"
@@ -133,21 +125,21 @@
                             :has-error="form.errors.has('thankyou_template')"
                             :error-message="form.errors.get('thankyou_template')"
                             v-model="form.thankyou_template">
-                        </ui-input>
+                        </ui-input-group>
                     </ui-tab>
 
                     <ui-tab key="fields" name="Fields">
                         <section-builder v-model="form.sections"></section-builder>
                     </ui-tab>
                 </ui-tabs>
-            </div>
-        </div>
+            </ui-card-body>
+        </ui-card>
 
         <template v-slot:sidebar>
-            <div class="card">
-                <div class="card__body">
-                    <ui-slug
-                        name="handle"
+            <ui-card>
+                <ui-card-body>
+                    <ui-slug-group
+                        name="form-handle"
                         label="Handle"
                         autocomplete="off"
                         monospaced
@@ -157,7 +149,7 @@
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
                         v-model="form.handle">
-                    </ui-slug>
+                    </ui-slug-group>
 
                     <ui-toggle
                         name="status"
@@ -166,8 +158,8 @@
                         :true-value="1"
                         :false-value="0">
                     </ui-toggle>
-                </div>
-            </div>
+                </ui-card-body>
+            </ui-card>
 
             <ui-definition-list v-if="resource">
                 <ui-definition name="Status">

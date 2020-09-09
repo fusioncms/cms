@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ui-select
+        <ui-select-group
             name="settings.time"
             label="Time Options"
             help="Should this also include time?"
@@ -16,12 +16,11 @@
                     label: 'Date and Time'
                 }
             ]"
-
             :has-error="errors.has('settings.time')"
             :error-message="errors.get('settings.time')">
-        </ui-select>
+        </ui-select-group>
 
-        <ui-input
+        <ui-input-group
             name="settings.format"
             label="Date Format"
             help='<a href="https://flatpickr.js.org/formatting/" target="_blank">Flatpickr date format reference</a>'
@@ -29,7 +28,7 @@
             v-model="format"
             :has-error="errors.has('settings.format')"
             :error-message="errors.get('settings.format')">
-        </ui-input>
+        </ui-input-group>
     </div>
 </template>
 

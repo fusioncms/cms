@@ -9,7 +9,7 @@
 
         <template v-slot:footer>
             <ui-button v-modal:move-file>Close</ui-button>
-            <ui-button theme="primary" @click="submit" v-modal:move-file class="mr-1">Move</ui-button>
+            <ui-button variant="primary" @click="submit" v-modal:move-file class="mr-1">Move</ui-button>
         </template>
     </ui-modal>
 </template>

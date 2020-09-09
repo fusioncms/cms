@@ -159,6 +159,7 @@
 
 .field-upload {
     &__label {
+        @apply inline-block;
         cursor: pointer;
 
         &:hover {
@@ -201,7 +202,7 @@
 }
 
 .field-check {
-    @apply flex relative leading-normal mb-4;
+    @apply flex relative leading-normal mb-2;
 
     &--inline {
         @apply inline-flex items-center mr-2;
@@ -228,6 +229,13 @@
         }
 
         &:focus + .field-check__label::before { @apply shadow-focus; }
+
+        &[disabled] + .field-check__label { 
+            @apply text-gray-500; 
+
+            &:before,
+            &:after { opacity: 0.5; }
+        }
     }
 
     &__label { 

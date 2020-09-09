@@ -1,5 +1,6 @@
 <template>
     <ui-field-group
+        :label="label"
         :name="name"
         :fieldId="formattedId"
         :required="required"

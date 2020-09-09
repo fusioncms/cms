@@ -27,6 +27,7 @@
             :hasError="hasError"
             :hasSuccess="hasSuccess"
             :message="hasMessage"
+            :hide-buttons="hideButtons"
             v-model="computedValue">
         </ui-number>
     </ui-field-group>
@@ -119,6 +120,10 @@
             max: {
                 type: [String, Number],
                 default: Infinity
+            },
+            hideButtons: {
+                type: Boolean,
+                default: false
             }
         }
     }

@@ -1,24 +1,16 @@
 <template>
     <div>
-        <ui-number
+        <ui-number-group
             :name="field.handle"
             :label="field.name"
             :help="field.help"
             :placeholder="field.settings.placeholder"
             :value="value"
-            @input="$emit('input', Number($event))"
             :steps="field.settings.steps"
             :decimals="field.settings.decimals"
             :min="Number(field.settings.min)"
-            :max="Number(field.settings.max)"
-        >
-            <template slot="decrease">
-                <fa-icon icon="minus"></fa-icon>
-            </template>
-            <template slot="increase">
-                <fa-icon icon="plus"></fa-icon>
-            </template>
-        </ui-number>
+            :max="Number(field.settings.max)">
+        </ui-number-group>
     </div>
 </template>
 

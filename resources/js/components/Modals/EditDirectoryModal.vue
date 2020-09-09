@@ -7,12 +7,12 @@
                 </div>
             </div>
 
-            <ui-input label="Name" v-model="form.data.name"></ui-input>
+            <ui-input-group name="folder.name" label="Name" v-model="form.data.name"></ui-input-group>
 
             <div class="flex">
-                <ui-button @click="deleteDirectory(directory)" type="button">Delete</ui-button>
+                <ui-button @click="deleteDirectory(directory)">Delete</ui-button>
                 <div class="flex-grow"></div>
-                <ui-button theme="primary" type="submit">Submit</ui-button>
+                <ui-button variant="primary" type="submit">Submit</ui-button>
             </div>
         </form>
     </ui-modal>

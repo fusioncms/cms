@@ -22,5 +22,11 @@ export default {
                 this.$emit('input', value)
             }
         }
+    },
+
+    methods: {
+        handleInput (event) {
+            this.$emit('input', event.target.value)
+        }
     }
 }

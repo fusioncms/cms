@@ -6,14 +6,14 @@
 
         <portal to="actions">
             <div class="buttons">
-                <button class="button button--danger" v-modal:delete>Delete</button>
+                <ui-button variant="primary" v-modal:delete>Delete</ui-button>
 
-                <button class="button" v-modal:move-file>Move</button>
-                <button class="button" v-modal:replace-file>Replace</button>
-                <button class="button" @click.prevent="download">Download</button>
+                <ui-button v-modal:move-file>Move</ui-button>
+                <ui-button v-modal:replace-file>Replace</ui-button>
+                <ui-button @click.prevent="download">Download</ui-button>
 
-                <button class="button" @click.prevent="back">Go Back</button>
-                <button class="button button--primary" @click.prevent="submit">Save</button>
+                <ui-button @click.prevent="back">Go Back</ui-button>
+                <ui-button variant="primary" @click.prevent="submit">Save</ui-button>
             </div>
         </portal>
 
@@ -73,7 +73,7 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <ui-slug
+                    <ui-slug-group
                         name="name"
                         label="Filename"
                         autofocus
@@ -84,9 +84,9 @@
                         :has-error="form.errors.has('name')"
                         :error-message="form.errors.get('name')"
                         v-model="form.name">
-                    </ui-slug>
+                    </ui-slug-group>
 
-                    <ui-input
+                    <ui-input-group
                         name="title"
                         label="Title"
                         autocomplete="off"
@@ -95,9 +95,9 @@
                         :has-error="form.errors.has('title')"
                         :error-message="form.errors.get('title')"
                         v-model="form.title">
-                    </ui-input>
+                    </ui-input-group>
 
-                    <ui-input
+                    <ui-input-group
                         name="alt"
                         label="Alt"
                         autocomplete="off"
@@ -106,9 +106,9 @@
                         :has-error="form.errors.has('alt')"
                         :error-message="form.errors.get('alt')"
                         v-model="form.alt">
-                    </ui-input>
+                    </ui-input-group>
 
-                    <ui-textarea
+                    <ui-textarea-group
                         name="caption"
                         label="Caption"
                         help="This caption is used for image captions to give users more information."
@@ -116,19 +116,19 @@
                         :has-error="form.errors.has('caption')"
                         :error-message="form.errors.get('caption')"
                         v-model="form.caption">
-                    </ui-textarea>
+                    </ui-textarea-group>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card__body">
-                    <ui-input
+                    <ui-input-group
                         name="share"
                         readonly
                         label="Share"
                         class="text-sm"
                         :value="file.url">
-                    </ui-input>
+                    </ui-input-group>
                 </div>
             </div>
 

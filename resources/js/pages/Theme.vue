@@ -8,6 +8,7 @@
             <div class="content-container">
                 <ui-upload
                     name="file-upload"
+                    label="Upload"
                     ref="upload"
                     accept="zip"
                     :multiple="false"
@@ -41,7 +42,7 @@
         <ui-modal name="confirm" title="Confirm override" key="confirm_modal" v-model="confirmModal">
             <p>Are you sure you want to override this theme? The existing theme will be discarded.</p>
             <template slot="footer">
-                <ui-button @click="submitUpload" type="button" class="button button--primary">Yes, please!</ui-button>
+                <ui-button @click="submitUpload" type="button" variant="primary">Yes, please!</ui-button>
                 <ui-button @click="cancelUpload" type="button" class="mr-3">Leave and Discard Changes</ui-button>
             </template>
         </ui-modal>

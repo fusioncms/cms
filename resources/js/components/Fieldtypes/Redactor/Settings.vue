@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ui-input
+        <ui-input-group
             name="settings.placeholder"
             label="Placeholder"
             help="Text that will appear inside the WYSIWYG element's content area when empty."
@@ -8,7 +8,7 @@
             v-model="settings.placeholder"
             :has-error="errors.has('settings.placeholder')"
             :error-message="errors.get('settings.placeholder')">
-        </ui-input>
+        </ui-input-group>
     </div>
 </template>
 

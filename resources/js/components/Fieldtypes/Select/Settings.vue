@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ui-select
+        <ui-select-group
             name="settings.multiple"
             label="Multi Select"
             help="Should this field allow multiple options to be selected?"
@@ -18,7 +18,7 @@
             ]"
             :has-error="errors.has('settings.multiple')"
             :error-message="errors.get('settings.multiple')">
-        </ui-select>
+        </ui-select-group>
 
         <div class="col w-full">
             <option-builder v-model="settings.options"></option-builder>

@@ -34,8 +34,7 @@
                             <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-extension="table.record"
-                                classes="link--danger"
-                            >
+                                classes="link--danger">
                                 Delete
                             </ui-dropdown-link>
                         </ui-table-actions>
@@ -49,7 +48,7 @@
                 <p>Are you sure you want to permenantly delete this extension?</p>
 
                 <template slot="footer" slot-scope="extension">
-                    <ui-button v-modal:delete-extension @click="destroy(extension.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-extension @click="destroy(extension.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-extension>Cancel</ui-button>
                 </template>
             </ui-modal>

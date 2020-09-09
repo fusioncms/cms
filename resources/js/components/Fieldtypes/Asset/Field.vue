@@ -36,21 +36,21 @@
 						<div class="card__body">
                     		<div class="toolbar">
                     			<div class="toolbar__group">
-									<button class="button button--icon" @click.prevent="push">
+									<ui-button icon @click.prevent="push">
 										<fa-icon class="icon" icon="arrow-alt-circle-left"></fa-icon>
-									</button>
+									</ui-button>
                     			</div>
 
                     			<div class="toolbar__group">
                     				<div class="buttons">
 										<div class="buttons__group">
-											<button class="button button--icon" @click.prevent="$refs.uploader.openDZ()">
+											<ui-button icon @click.prevent="$refs.uploader.openDZ()">
 												<fa-icon class="icon" :icon="['fas', 'upload']"></fa-icon>
-											</button>
+											</ui-button>
 
-											<button class="button button--icon" v-modal:new-folder>
+											<ui-button icon v-modal:new-folder>
 												<fa-icon class="icon" :icon="['fas', 'folder-plus']"></fa-icon>
-											</button>
+											</ui-button>
 										</div>
 									</div>
 	                            </div>

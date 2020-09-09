@@ -11,12 +11,12 @@
                             <fa-icon icon="search"></fa-icon>
                             <span class="sr-only">Search</span>
                         </ui-button>
-                        <ui-input
+                        <ui-input-group
                             id="toolbar_search_input"
                             name="search"
                             type="search"
                             placeholder="Search...">
-                        </ui-input>
+                        </ui-input-group>
                     </div>
                 </ui-toolbar-group>
 

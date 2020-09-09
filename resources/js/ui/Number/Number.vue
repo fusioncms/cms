@@ -24,14 +24,14 @@
         @keydown.up.prevent="increase"
         @keydown.down.prevent="decrease">
 
-        <button class="field-number__button field-number__button--decrease button button--icon" @click.prevent="decrease" :disabled="disabled || decreaseDisabled">
+        <button v-if="!hideButtons" class="field-number__button field-number__button--decrease button button--icon" @click.prevent="decrease" :disabled="disabled || decreaseDisabled">
             <slot name="decrease">
                 <fa-icon icon="minus" class="fa-fw"></fa-icon>
                 <span class="sr-only">Decrease</span>
             </slot>
         </button>
         
-        <button class="field-number__button field-number__button--increase button button--icon" @click.prevent="increase" :disabled="disabled || increaseDisabled">
+        <button v-if="!hideButtons" class="field-number__button field-number__button--increase button button--icon" @click.prevent="increase" :disabled="disabled || increaseDisabled">
             <slot name="increase">
                 <fa-icon icon="plus" class="fa-fw"></fa-icon>
                 <span class="sr-only">Increase</span>
@@ -115,6 +115,10 @@
             max: {
                 type: [String, Number],
                 default: Infinity
+            },
+            hideButtons: {
+                type: Boolean,
+                default: false
             }
         },
 

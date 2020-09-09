@@ -108,7 +108,6 @@
                 },
             },
             filterable: {
-                required: false,
                 type: Boolean,
                 default: false,
             },

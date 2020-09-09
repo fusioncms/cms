@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <router-link :to="{ name: 'taxonomies.create' }" class="button">Create Taxonomy</router-link>
+            <ui-button :to="{ name: 'taxonomies.create' }" variant="primary">Create Taxonomy</ui-button>
         </portal>
 
         <div class="row">
@@ -50,7 +50,7 @@
                 <p>Are you sure you want to permenantly delete this taxonomy?</p>
 
                 <template slot="footer" slot-scope="taxonomy">
-                    <ui-button v-modal:delete-taxonomy @click="destroy(taxonomy.data.id)" theme="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-taxonomy @click="destroy(taxonomy.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-taxonomy>Cancel</ui-button>
                 </template>
             </ui-modal>

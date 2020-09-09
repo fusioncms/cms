@@ -33,9 +33,9 @@
 						<div class="card__body">
                     		<div class="toolbar">
                     			<div class="toolbar__group">
-									<button class="button button--icon" @click.prevent="push">
+									<ui-button icon @click.prevent="push">
 										<fa-icon class="icon" icon="arrow-alt-circle-left"></fa-icon>
-									</button>
+									</ui-button>
                     			</div>
 
                     			<div class="toolbar__group toolbar__group--grow">

@@ -1,7 +1,7 @@
 <template>
     <ui-modal name="new-folder" title="Create New Folder">
         <form @submit.prevent="submit">
-            <ui-input
+            <ui-input-group
                 name="name"
                 label="Name this folder"
                 placeholder="Folder name"
@@ -10,12 +10,12 @@
                 :has-error="form.errors.has('name')"
                 :error-message="form.errors.get('name')"
                 v-model="form.name">
-            </ui-input>
+            </ui-input-group>
         </form>
 
         <template v-slot:footer>
             <ui-button v-modal:new-folder>Close</ui-button>
-            <ui-button theme="primary" @click="submit" class="mr-1">Save</ui-button>
+            <ui-button variant="primary" @click="submit" class="mr-1">Save</ui-button>
         </template>
     </ui-modal>
 </template>
