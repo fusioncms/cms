@@ -63,4 +63,49 @@ class Blueprint extends Model
     {
         return null !== @$this->fields;
     }
+
+    /**
+     * Return the fields that define relationships.
+     *
+     * @return self
+     */
+    public function relationships()
+    {
+        return $this->fields->reject(function ($field) {
+            return is_null($field->type()->getRelationship());
+        });
+    }
+
+    /**
+     * Scope a query to only include visible records.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('hidden', false);
+    }
+
+    /**
+     * Tap into activity before persisting to database.
+     *
+     * @param \Spatie\Activitylog\Models\Activity $activity
+     * @param string                              $eventName
+     *
+     * @return void
+     */
+    public function tapActivity(Activity $activity, string $eventName)
+    {
+        $subject    = $activity->subject;
+        $action     = ucfirst($eventName);
+        $properties = [
+            'link' => "blueprints/{$subject->id}/edit",
+            'icon' => 'list',
+        ];
+
+        $activity->description = "{$action} blueprint ({$subject->name})";
+        $activity->properties  = $properties;
+    }
 }

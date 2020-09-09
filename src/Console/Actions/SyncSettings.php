@@ -5,7 +5,7 @@ namespace Fusion\Console\Actions;
 use Fusion\Models\Field;
 use Fusion\Models\Blueprint;
 use Fusion\Models\Section;
-use Fusion\Models\Setting as SettingGroup;
+use Fusion\Models\Setting;
 use Fusion\Services\Setting as SettingService;
 
 class SyncSettings
@@ -33,11 +33,11 @@ class SyncSettings
          */
         $this->syncSettingGroups();
 
-        SettingGroup::all()->each(function ($group) {
-            $this->syncSettingSection($group);
+        Setting::all()->each(function ($setting) {
+            $this->syncSettingSection($setting);
 
-            $group->getBuilder()
-                ->firstOrCreate(['id' => 1, 'setting_id' => $group->id]);
+            $setting->getBuilder()
+                ->firstOrCreate(['id' => 1, 'setting_id' => $setting->id]);
         });
     }
 
@@ -46,57 +46,66 @@ class SyncSettings
      *
      * @return void
      */
-    public function syncSettingGroups($groups = null)
+    public function syncSettingGroups($settings = null)
     {
-        $groups = $groups ?? SettingService::groups();
+        $settings = $settings ?? SettingService::groups();
 
         // Pull existing elements..
-        $existing = SettingGroup::all()->pluck('id', 'id');
+        $existing = Setting::all()->pluck('id', 'id');
 
         // Add/update existing elements..
-        collect($groups)
-            ->each(function ($group) use ($existing) {
-                // create/update group..
-                $group = SettingGroup::updateOrCreate([
-                    'handle' => $group['handle'],
-                ], [
-                    'name'        => $group['name'],
-                    'group'       => $group['group'] ?? 'General',
-                    'icon'        => $group['icon'] ?? 'cog',
-                    'description' => $group['description'] ?? '',
-                ]);
+        foreach ($settings as $setting) {
+            // create/update group..
+            $setting = Setting::updateOrCreate([
+                'handle' => $setting['handle'],
+            ], [
+                'name'        => $setting['name'],
+                'group'       => $setting['group'] ?? 'General',
+                'icon'        => $setting['icon'] ?? 'cog',
+                'description' => $setting['description'] ?? '',
+            ]);
 
-                // mark for non-removal..
-                $existing->forget($group->id);
-            });
+            if (! $setting->blueprint) {
+                dd('setting blueprint not created?', $setting);
+            }
+
+            // mark for non-removal..
+            $existing->forget($setting->id);
+        }
 
         // Clean up removed elements..
         $existing->each(function ($id) {
-            SettingGroup::findOrFail($id)->delete();
+            Setting::findOrFail($id)->delete();
         });
     }
 
     /**
      * Sync blueprint sections for SettingGroup.
      *
-     * @param SettingGroup $group
+     * @param Setting $setting
      *
      * @return void
      */
-    public function syncSettingSection(SettingGroup $group, $fields = null)
+    public function syncSettingSection(Setting $setting, $fields = null)
     {
-        $fields   = $fields ?? SettingService::fields($group->handle);
-        $existing = $group->blueprint->sections->pluck('id', 'id');
+        $fields = $fields ?? SettingService::fields($setting->handle);
+
+        if (isset($setting->blueprint) and count($setting->blueprint->sections)) {
+            $existing = $setting->blueprint->sections->pluck('id', 'id');
+        } else {
+            $existing = collect([]);
+        }
+
         $order    = 0;
 
         collect($fields)
-            ->each(function ($fields, $name) use ($group, $existing, &$order) {
-                $section = $group->blueprint->sections()
+            ->each(function ($fields, $name) use ($setting, $existing, &$order) {
+                $section = $setting->blueprint->sections()
                     ->updateOrCreate([
                         'handle' => str_handle($name),
                     ], [
                         'name'        => $name,
-                        'description' => "Settings for {$group->name} > {$name}",
+                        'description' => "Settings for {$setting->name} > {$name}",
                         'order'       => ++$order,
                     ]);
 

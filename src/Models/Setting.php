@@ -2,17 +2,14 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\CachesQueries;
+
 use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Setting extends Model
 {
-    use CachesQueries;
     use HasBlueprint;
-
-    protected static $disableBlueprintEvents = true;
 
     /**
      * The attributes that are fillable via mass assignment.

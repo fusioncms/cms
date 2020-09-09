@@ -10,9 +10,9 @@ class ResponseRequest extends FormRequest
     public function __construct()
     {
         $this->form          = Form::where('slug', request()->route('form'))->firstOrFail();
-        $this->fieldset      = $this->form->fieldset;
-        $this->fields        = $this->fieldset->fields ?? [];
-        $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
+        $this->blueprint     = $this->form->blueprint;
+        $this->fields        = $this->blueprint->fields ?? [];
+        $this->relationships = $this->blueprint ? $this->blueprint->relationships() : [];
     }
 
     /**

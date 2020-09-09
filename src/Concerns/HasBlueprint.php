@@ -28,13 +28,13 @@ trait HasBlueprint
 
     public function createBlueprint()
     {
-        $this->unsetEventDispatcher();
+        return $this->withoutEvents(function() {
+            $blueprint = $this->blueprint()->create([
+                'name'  => $this->name,
+                'group' => $this->getBlueprintGroup(),
+            ]);
 
-        $blueprint = $this->blueprint()->create([
-            'name'  => $this->name,
-            'group' => $this->getBlueprintGroup(),
-        ]);
-
-        return $blueprint;
+            return $blueprint;
+        });
     }
 }

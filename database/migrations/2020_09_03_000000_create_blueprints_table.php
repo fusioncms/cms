@@ -17,7 +17,7 @@ class CreateBlueprintsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('group');
-            $table->boolean('hidden');
+            $table->boolean('hidden')->default(false);
 
             $table->morphs('blueprintable');
             $table->timestamps();
