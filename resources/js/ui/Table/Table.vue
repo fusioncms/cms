@@ -347,8 +347,6 @@
                 this.pagination.currentPage = 1
                 this.pagination.perPage = page
 
-                console.log(this.pagination.perPage)
-
                 this.getRecords()
             },
 

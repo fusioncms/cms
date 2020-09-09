@@ -86,10 +86,6 @@
                 this.data[handle] = event
                 this.$emit('input', this.data)
             },
-        },
-
-        mounted() {
-            console.log(this.field.name)
         }
     }
 </script>

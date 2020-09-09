@@ -177,10 +177,6 @@
                 next('/mailables')
                 toast('The requested mailable could not be found', 'warning')
             })
-        },
-
-        mounted() {
-            console.log(this.placeholders)
         }
     }
 </script>

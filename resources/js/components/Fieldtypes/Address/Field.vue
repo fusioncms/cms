@@ -251,10 +251,6 @@
                     });
                 }, 500
             )
-        },
-
-        mounted() {
-            console.log(this.field)
         }
     }
 </script>
