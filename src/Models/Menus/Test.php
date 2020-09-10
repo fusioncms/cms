@@ -2,20 +2,19 @@
 
 namespace Fusion\Models\Menus;
 
-use Fusion\Models\Menu;
-use Fusion\Models\Field;
-use Fusion\Concerns\HasOrder;
-use Illuminate\Support\Str;
 use Fusion\Concerns\HasActivity;
+use Fusion\Concerns\HasOrder;
 use Fusion\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
+use Fusion\Models\Menu;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 
 class Test extends Model
 {
-    use HasOrder, HasActivity;
+    use HasOrder;
+    use HasActivity;
 
-	/**
+    /**
      * The table associated with the model.
      *
      * @var string
@@ -42,7 +41,6 @@ class Test extends Model
      * @var array
      */
     protected $dates = ['created_at', 'updated_at'];
-
 
     protected $with = ['children'];
 
@@ -71,13 +69,12 @@ class Test extends Model
         return $this->hasMany(self::class, 'parent_id');
     }
 
-    
-
     /**
      * Tap into activity before persisting to database.
      *
-     * @param  \Spatie\Activitylog\Models\Activity $activity
-     * @param  string   $eventName
+     * @param \Spatie\Activitylog\Models\Activity $activity
+     * @param string                              $eventName
+     *
      * @return void
      */
     public function tapActivity(Activity $activity, string $eventName)
@@ -88,7 +85,7 @@ class Test extends Model
         $modelName  = strtolower(Str::singular($menu->name));
         $properties = [
             'link' => "menus/{$menu->id}/nodes/{$node->id}/edit",
-            'icon' => 'anchor'
+            'icon' => 'anchor',
         ];
 
         $activity->description = "{$action} {$modelName} menu node ({$node->name})";
