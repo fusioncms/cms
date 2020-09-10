@@ -11,27 +11,7 @@ class Menu
      * 
      * @var array
      */
-    protected $items;
-
-    /**
-     * Constructor.
-     *
-     * @param array $items
-     */
-    public function __construct(array $items = [])
-    {
-        $this->items = $items;
-    }
-
-    /**
-     * Get all items.
-     *
-     * @return array
-     */
-    public function all()
-    {
-        return $this->items;
-    }
+    protected $items = [];
 
     /**
      * Item exists?
@@ -97,7 +77,7 @@ class Menu
     	$keys = is_array($key) ? $key : [$key => $value];
 
         foreach ($keys as $key => $value) {
-            $this->items[$key] = $value;
+            Arr::set($this->items, $key, $value);
         }
     }
 }
