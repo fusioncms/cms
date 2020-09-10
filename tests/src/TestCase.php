@@ -2,8 +2,6 @@
 
 namespace Fusion\Tests;
 
-use Caffeinated\Flash\FlashServiceProvider;
-use Caffeinated\Menus\MenusServiceProvider;
 use Fusion\Providers\FusionServiceProvider;
 use Fusion\Tests\Concerns\InstallsFusion;
 use Fusion\Tests\Concerns\MakesDatabaseAssertions;
@@ -150,10 +148,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             // Laravel
             UiServiceProvider::class,
             SanctumServiceProvider::class,
-
-            // Caffeinated
-            FlashServiceProvider::class,
-            MenusServiceProvider::class,
 
             // Spatie
             BackupServiceProvider::class,

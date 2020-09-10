@@ -16,7 +16,9 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Menu::set(['admin' => $this->adminNavigation()]);
+        if (app_installed()) {
+            Menu::set(['admin' => $this->adminNavigation()]);
+        }
     }
 
     /**
