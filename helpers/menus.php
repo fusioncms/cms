@@ -11,7 +11,7 @@ if (!function_exists('menu')) {
     function menu($handle)
     {
         $model = Navigation::where('handle', $handle)->firstOrFail();
-        $menu  = $model->nodes->mapWithKeys(function($node) {
+        $menu  = $model->nodes->mapWithKeys(function ($node) {
             if ($node->status) {
                 $item = [
                     'title'  => $node->name,
@@ -23,7 +23,7 @@ if (!function_exists('menu')) {
                     $item[$field->handle] = $node->{$field->handle} ?? null;
                 }
 
-                return [ str_handle($node->name) => $item ];
+                return [str_handle($node->name) => $item];
             }
         });
 
