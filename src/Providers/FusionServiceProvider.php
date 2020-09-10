@@ -151,6 +151,7 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
         $this->app->register(FieldtypeServiceProvider::class);
+        $this->app->register(MenuServiceProvider::class);
         $this->app->register(SettingServiceProvider::class);
         $this->app->register(ThemeServiceProvider::class);
 
