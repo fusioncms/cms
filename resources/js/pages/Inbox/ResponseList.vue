@@ -4,7 +4,7 @@
             <a href="#" @click.prevent="firstPage" class="text-gray-700 hover:text-gray-900 text-lg m-1 p-3 hover:bg-gray-100 rounded"><fa-icon :icon="['fas', 'angle-double-left']" class="fa-fw"></fa-icon></a>
             <a href="#" @click.prevent="prevPage" class="text-gray-700 hover:text-gray-900 text-lg m-1 p-3 hover:bg-gray-100 rounded"><fa-icon :icon="['fas', 'angle-left']" class="fa-fw"></fa-icon></a>
 
-            <p-select class="m-0 w-full px-4" name="page" filterable v-model="page" :options="pageOptions"></p-select>
+            <ui-select-group label="Page" hide-label class="m-0 w-full px-4" name="page" filterable v-model="page" :options="pageOptions"></ui-select-group>
 
             <a href="#" @click.prevent="nextPage" class="text-gray-700 hover:text-gray-900 text-lg m-1 p-3 hover:bg-gray-100 rounded"><fa-icon :icon="['fas', 'angle-right']" class="fa-fw"></fa-icon></a>
             <a href="#" @click.prevent="lastPage" class="text-gray-700 hover:text-gray-900 text-lg m-1 p-3 hover:bg-gray-100 rounded"><fa-icon :icon="['fas', 'angle-double-right']" class="fa-fw"></fa-icon></a>

@@ -28,7 +28,7 @@
 
 <script>
     export default {
-        name: 'p-toast',
+        name: 'ui-toast',
 
         props: [
             'message',

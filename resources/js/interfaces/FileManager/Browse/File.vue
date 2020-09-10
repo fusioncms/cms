@@ -7,7 +7,7 @@
             :data-selection="file.id"
             :draggable="isDraggable">
 
-			<p-img
+			<ui-img
 				src="/vendor/fusion/img/image-large.svg"
 				background-color="white"
 				class="gallery-image"
@@ -16,7 +16,7 @@
 				:height="100"
 				:alt="file.alt"
 				:draggable="false">
-			</p-img>
+			</ui-img>
 		</div>
 
 		<quick-edit

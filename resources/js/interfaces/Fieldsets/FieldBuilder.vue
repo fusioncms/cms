@@ -8,14 +8,14 @@
         </div>
 
         <div class="row" v-if="fields.length > 0">
-            <p-sortable-list v-model="fields" class="sortable-list">
+            <ui-sortable-list v-model="fields" class="sortable-list">
                 <div class="col mb-6 w-full">
-                    <p-sortable-item v-for="(field, index) in fields" :key="field.handle" class="mb-3 w-full">
+                    <ui-sortable-item v-for="(field, index) in fields" :key="field.handle" class="mb-3 w-full">
                         <div class="section__field">
                             <div>
-                                <p-sortable-handle class="cursor-move inline-block">
+                                <ui-sortable-handle class="cursor-move inline-block">
                                     <fa-icon icon="grip-vertical" class="handle fa-fw text-gray-400 mr-3"></fa-icon>
-                                </p-sortable-handle>
+                                </ui-sortable-handle>
 
                                 <fa-icon :icon="['fas', field.type.icon]" class="fa-fw mr-3"></fa-icon>
                                 <span class="mr-6 font-bold">{{ field.name }}</span>
@@ -23,41 +23,41 @@
                                 <span class="font-mono text-xs uppercase">{{ field.type.name }}</span>
                             </div>
 
-                            <p-actions :id="field.handle + '_actions'">
-                                <p-dropdown-link @click.prevent="set('edit', index)">Edit</p-dropdown-link>
-                                <p-dropdown-link v-if="sections.length > 1" @click.prevent="set('move', index)">Move to...</p-dropdown-link>
-                                <p-dropdown-divider></p-dropdown-divider>
-                                <p-dropdown-link @click.prevent="remove(index)">Delete</p-dropdown-link>
-                            </p-actions>
+                            <ui-table-actions :id="field.handle + '_actions'">
+                                <ui-dropdown-link @click.prevent="set('edit', index)">Edit</ui-dropdown-link>
+                                <ui-dropdown-link v-if="sections.length > 1" @click.prevent="set('move', index)">Move to...</ui-dropdown-link>
+                                <ui-dropdown-divider></ui-dropdown-divider>
+                                <ui-dropdown-link @click.prevent="remove(index)">Delete</ui-dropdown-link>
+                            </ui-table-actions>
                         </div>
-                    </p-sortable-item>
+                    </ui-sortable-item>
                 </div>
-            </p-sortable-list>
+            </ui-sortable-list>
         </div>
 
         <div class="row">
             <div class="col w-full">
-                <a class="button" href="#" @click.prevent="field.add = true">Add Field</a>
+                <ui-button href="#" @click.prevent="field.add = true">Add Field</ui-button>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="add-field" title="Add Field" v-model="field.add" extra-large>
+            <ui-modal name="add-field" title="Add Field" v-model="field.add" extra-large>
                 <fieldtype-picker @click="add"></fieldtype-picker>
 
                 <template slot="footer">
-                    <p-button @click.prevent="field.add = false">Close</p-button>
+                    <ui-button @click.prevent="field.add = false">Close</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
 
-            <p-modal name="move-field" title="Move Field" v-model="!! field.move">
-                <p-select name="move_to" v-model="section" placeholder="Please select a section..." :options="sectionOptions"></p-select>
+            <ui-modal name="move-field" title="Move Field" v-model="!! field.move">
+                <ui-select-group name="move_to" label="Move to" hide-label v-model="section" placeholder="Please select a section..." :options="sectionOptions"></ui-select-group>
 
                 <template slot="footer">
-                    <p-button class="button--primary" @click.prevent="move">Move</p-button>
-                    <p-button class="button--secondary mr-2" @click.prevent="field.move = false">Cancel</p-button>
+                    <ui-button variant="primary" @click.prevent="move">Move</ui-button>
+                    <ui-button variant="secondary" class="mr-2" @click.prevent="field.move = false">Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
 
             <field-editor
                 v-model="field.edit"

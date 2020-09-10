@@ -6,6 +6,6 @@
 
 <script>
     export default {
-        name: 'p-badge',
+        name: 'ui-badge',
     }
 </script>

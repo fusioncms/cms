@@ -1,0 +1,42 @@
+.alert {
+    @apply bg-gray-100 border bg-white border-gray-300 rounded text-gray-700 p-4 mb-6;
+
+    &--primary,
+    &--secondary,
+    &--info,
+    &--success,
+    &--warning,
+    &--danger {  @apply text-white; }
+
+    &--primary {
+        @apply bg-primary-500 border-primary-500;
+    }
+
+    &--secondary {
+        @apply bg-secondary-500 border-secondary-500;
+    }
+
+    &--info {
+        @apply bg-info-500 border-info-500;
+    }
+
+    &--success {
+        @apply bg-success-500 border-success-500;
+    }
+
+    &--warning {
+        @apply text-gray-800 bg-warning-500 border-warning-500;
+    }
+
+    &--danger {
+        @apply bg-danger-500 border-danger-500;
+    }
+
+    &__container {
+        @apply flex flex-row;
+    }
+
+    &__icon { @apply pr-4; }
+
+    &__text { @extend %no-bottom; }
+}

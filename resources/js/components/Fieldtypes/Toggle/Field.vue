@@ -1,12 +1,12 @@
 <template>
     <div>
-        <p-toggle
+        <ui-toggle
             :name="field.handle"
             :label="field.name"
             :help="field.help"
             :value="checked"
             @input="$emit('input', Boolean($event))"
-        ></p-toggle>
+        ></ui-toggle>
     </div>
 </template>
 

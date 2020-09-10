@@ -1,5 +1,5 @@
 <template>
-	<p-modal v-model="show" name="settings" no-header flush>
+	<ui-modal v-model="show" name="settings" no-header flush>
 
 		<div class="card">
             <div class="card__body">
@@ -9,11 +9,11 @@
 
 		<template slot="footer">
 			<div class="buttons">
-				<button type="button" class="button" @click.prevent="close">Close</button>
-				<button type="submit" class="button button--primary" @click.prevent="submit">Save Settings</button>
+				<ui-button @click.prevent="close">Close</ui-button>
+				<ui-button type="submit" variant="primary" @click.prevent="submit">Save Settings</ui-button>
 			</div>
 		</template>
-    </p-modal>
+    </ui-modal>
 </template>
 
 <script>

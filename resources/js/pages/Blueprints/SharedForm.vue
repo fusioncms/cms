@@ -9,13 +9,13 @@
 
 		<div class="card">
             <div class="card__body">
-				<p-title
+				<ui-title-group
                     name="name"
                     readonly
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </p-title>
+                </ui-title-group>
 
 				<section-builder class="mt-6" v-model="form.sections"></section-builder>
 			</div>
@@ -29,12 +29,12 @@
 
                 <p-definition name="Created At">
                     {{ $moment(resource.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Updated At">
+                <ui-definition name="Updated At">
                     {{ $moment(resource.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
 		</template>
 	</form-container>
 </template>

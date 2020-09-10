@@ -1,5 +1,5 @@
 <template>
-    <div class="flex">
+    <div>
         <div ref="body">
             <slot></slot>
         </div>
@@ -14,7 +14,7 @@
     import Tooltip from 'tooltip.js'
 
     export default {
-        name: 'p-tooltip',
+        name: 'ui-tooltip',
 
         props: {
             placement: {

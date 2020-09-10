@@ -6,8 +6,8 @@
             v-html="field.name">
         </label>
 
-        <p-tabs>
-            <p-tab name="Markdown">
+        <ui-tabs>
+            <ui-tab name="Markdown">
                 <textarea
                     :ref="field.handle"
                     :name="field.handle"
@@ -16,11 +16,11 @@
                     v-model="value"
                     autofocus>
                 </textarea>
-            </p-tab>
-            <p-tab name="Preview">
+            </ui-tab>
+            <ui-tab name="Preview">
                 <div v-html="preview" class="markdown-body"></div>
-            </p-tab>
-        </p-tabs>
+            </ui-tab>
+        </ui-tabs>
     </div>
 </template>
 

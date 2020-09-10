@@ -1,17 +1,18 @@
 <template>
-    <p-modal name="replace-file" title="Replace current file with another">
-        <p-upload
+    <ui-modal name="replace-file" title="Replace current file with another">
+        <ui-upload
             ref="upload"
             name="file"
+            label="Replace"
             :multiple="false"
-            @input="uploadFile"
-        ></p-upload>
+            @input="uploadFile">
+        </ui-upload>
 
         <template v-slot:footer>
-            <p-button v-modal:replace-file>Close</p-button>
-            <p-button theme="primary" @click="submit" v-modal:replace-file class="mr-1">Replace</p-button>
+            <ui-button v-modal:replace-file>Close</ui-button>
+            <ui-button variant="primary" @click="submit" v-modal:replace-file class="mr-1">Replace</ui-button>
         </template>
-    </p-modal>
+    </ui-modal>
 </template>
 
 <script>

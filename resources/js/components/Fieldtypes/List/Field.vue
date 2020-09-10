@@ -9,18 +9,18 @@
             </label>
 
             <div class="field__control">
-                <p-sortable-list
+                <ui-sortable-list
                     v-model="items"
                     v-if="items.length"
                     @input="$emit('input', normalizedItems)"
                 >
                     <div slot-scope="{ items: items }" class="bg-white border border-gray-300 rounded">
-                        <p-sortable-item v-for="(item, index) in items" :key="item._id">
+                        <ui-sortable-item v-for="(item, index) in items" :key="item._id">
                             <div class="flex">
                                 <div class="flex flex-1 items-center">
-                                    <p-sortable-handle class="cursor-move inline-block ml-2 text-gray-500">
+                                    <ui-sortable-handle class="cursor-move inline-block ml-2 text-gray-500">
                                         <menu-icon size=".975x"></menu-icon>
-                                    </p-sortable-handle>
+                                    </ui-sortable-handle>
 
                                     <input
                                         class="w-full px-3 py-2"
@@ -32,9 +32,9 @@
                                     </button>
                                 </div>
                             </div>
-                        </p-sortable-item>
+                        </ui-sortable-item>
                     </div>
-                </p-sortable-list>
+                </ui-sortable-list>
 
                 <div v-else class="text-sm">
                     Your list is empty.

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-auto flex-col" :class="{'nav-active' : isNavOpen}">
+    <div class="layout-admin" :class="{'nav-active' : isNavOpen}">
         <header class="header">
             <div class="header__container relative">
                 <div class="header__toggle">
@@ -35,31 +35,31 @@
 
                             <div class="dropdown__menu">
                                 <mq-layout :mq="['sm', 'md', 'lg']">
-                                    <p-dropdown-item>
+                                    <ui-dropdown-item>
                                         <p class="mb-0">
                                             {{ greeting }}, <strong>{{ user.name }}</strong>
                                         </p>
-                                    </p-dropdown-item>
+                                    </ui-dropdown-item>
                                 </mq-layout>
 
-                                <p-dropdown-divider />
+                                <ui-dropdown-divider />
 
-                                <p-dropdown-link href="/" target="_blank" @click.native="onClick()">
+                                <ui-dropdown-link href="/" target="_blank" @click.native="onClick()">
                                     <fa-icon icon="eye" class="icon"></fa-icon>
                                     View website
-                                </p-dropdown-link>
+                                </ui-dropdown-link>
 
-                                <p-dropdown-divider />
+                                <ui-dropdown-divider />
 
-                                <p-dropdown-link :to="'/users/' + user.id + '/edit'" @click.native="onClick()">
+                                <ui-dropdown-link :to="'/users/' + user.id + '/edit'" @click.native="onClick()">
                                     <fa-icon icon="user" class="icon"></fa-icon>
                                     Account
-                                </p-dropdown-link>
+                                </ui-dropdown-link>
 
-                                <p-dropdown-link href="/logout">
+                                <ui-dropdown-link href="/logout">
                                     <fa-icon icon="sign-out-alt" class="icon"></fa-icon>
                                     Log out
-                                </p-dropdown-link>
+                                </ui-dropdown-link>
                             </div>
                         </div>
                     </renderless-dropdown>
@@ -95,7 +95,7 @@
             <p class="mb-0"><span v-if="environment == 'local'">Local Dev Environment - </span>{{ version }}</p>
         </footer>
 
-        <p-toast></p-toast>
+        <ui-toast></ui-toast>
         <confirm-modal></confirm-modal>
     </div>
 </template>

@@ -1,62 +1,37 @@
 <template>
-    <div class="field">
-        <label
-            class="field__label"
-            :for="name"
-            v-if="label"
-            v-html="label">
-        </label>
-
-        <div class="field__control">
-            <input
-                class="field__input"
-                :class="{'font-mono': monospaced, 'text-xs': monospaced, 'field__input--danger': hasError}"
-                :id="id"
-                :name="name"
-                :type="type"
-                :placeholder="placeholder"
-                :readonly="readonly"
-                :disabled="disabled"
-                :autocomplete="autocomplete"
-                :autofocus="autofocus"
-                v-model.lazy="model"
-                ref="input">
-        </div>
-
-        <p class="field__help" v-if="help" v-html="help"></p>
-        <p class="field__help field__help--danger" v-if="errorMessage" v-html="errorMessage"></p>
-    </div>
+        <ui-input
+            monospaced
+            :id="formattedId"
+            :name="name"
+            :type="type"
+            :placeholder="placeholder"
+            :readonly="readonly"
+            :disabled="disabled"
+            :value="value"
+            :autocomplete="autocomplete"
+            :autofocus="autofocus"
+            :required="required"
+            :hasError="hasError"
+            :hasSuccess="hasSuccess"
+            :message="message"
+            v-model.lazy="model"
+            ref="input">
+        </ui-input>
 </template>
 
 <script>
     export default {
-        name: 'p-slug',
+        name: 'ui-slug',
 
-        data() {
-            return {
-                inSync: true
-            }
-        },
-
-        computed: {
-            model: {
-                get() {
-                    return this.value
-                },
-
-                set(value) {
-                    this.$emit('input', this.slugify(value))
-                }
-            },
-
-            isLocked() {
-                return !this.forceWatch &&
-                       _.endsWith(this.$route.name, '.edit')
-            }
-        },
+        mixins: [
+            require('../../mixins/fields').default
+        ],
 
         props: {
-            name: String,
+            name:  {
+                required: true,
+                type: String
+            },
             id: String,
             placeholder: String,
             label: String,
@@ -90,10 +65,15 @@
                 type: Boolean,
                 default: false,
             },
-            errorMessage: {
+            hasSuccess: {
                 required: false,
-                type: String,
-                default: '',
+                type: Boolean,
+                default: false,
+            },
+            message: {
+                required: false,
+                type: Boolean,
+                defaut: false
             },
             autocomplete: {
                 required: false,
@@ -122,6 +102,12 @@
             }
         },
 
+        data() {
+            return {
+                inSync: true
+            }
+        },
+
         watch: {
             watch(value) {
                 if (this.inSync && ! this.isLocked) {
@@ -131,6 +117,23 @@
 
             model(value) {
                 this.inSync = ! this.isLocked && (value === '' || value === this.slugify(this.watch))
+            }
+        },
+
+        computed: {
+            model: {
+                get() {
+                    return this.value
+                },
+
+                set(value) {
+                    this.$emit('input', this.slugify(value))
+                }
+            },
+
+            isLocked() {
+                return !this.forceWatch &&
+                       _.endsWith(this.$route.name, '.edit')
             }
         },
 

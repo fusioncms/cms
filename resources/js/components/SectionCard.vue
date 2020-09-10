@@ -1,6 +1,6 @@
 <template>
-    <p-card>
-        <p-card-body>
+    <ui-card>
+        <ui-card-body>
             <div class="md:grid md:grid-cols-3 md:gap-6">
                 <div class="md:col-span-1">
                     <h3 class="text-lg font-medium leading-6 text-gray-900">{{ title }}</h3>
@@ -14,8 +14,8 @@
                     <slot></slot>
                 </div>
             </div>
-        </p-card-body>
-    </p-card>
+        </ui-card-body>
+    </ui-card>
 </template>
 
 <script>

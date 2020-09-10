@@ -2,13 +2,13 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'taxonomies' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button :to="{ name: 'taxonomies' }" variant="secondary">Go Back</ui-button>
+                <ui-button variant="primary" type="submit" @click.prevent="submit" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
         <section-card title="General Information" description="General information about this taxonomy and what it organizes.">
-            <p-input
+            <ui-input-group
                 name="name"
                 label="Name"
                 help="What should this taxonomy be called?"
@@ -18,9 +18,9 @@
                 :has-error="form.errors.has('name')"
                 :error-message="form.errors.get('name')"
                 v-model="form.name">
-            </p-input>
+            </ui-input-group>
 
-            <p-textarea
+            <ui-textarea-group
                 name="description"
                 label="Description"
                 help="Give a short description of what this taxonomy will organize and store."
@@ -28,11 +28,11 @@
                 :has-error="form.errors.has('description')"
                 :error-message="form.errors.get('description')"
                 v-model="form.description">
-            </p-textarea>
+            </ui-textarea-group>
         </section-card>
 
         <section-card title="Routing" description="Configure how terms within this taxonomy will be accessed on the frontend.">
-            <p-input
+            <ui-input-group
                 name="route"
                 label="Route"
                 help="When the URI matches this pattern..."
@@ -41,9 +41,9 @@
                 :has-error="form.errors.has('route')"
                 :error-message="form.errors.get('route')"
                 v-model="form.route">
-            </p-input>
+            </ui-input-group>
 
-            <p-input
+            <ui-input-group
                 name="template"
                 label="Template"
                 help="Render this template"
@@ -52,13 +52,13 @@
                 :has-error="form.errors.has('template')"
                 :error-message="form.errors.get('template')"
                 v-model="form.template">
-            </p-input>
+            </ui-input-group>
         </section-card>
 
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-slug
+                    <ui-slug-group
                         name="handle"
                         label="Handle"
                         monospaced
@@ -69,7 +69,7 @@
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
                         v-model="form.handle">
-                    </p-slug>
+                    </ui-slug-group>
                 </div>
             </div>
 
@@ -86,25 +86,25 @@
                         v-model="form.icon">
                     </icon-picker>
 
-                    <p-toggle
+                    <ui-toggle
                         name="sidebar"
                         label="Show in Sidebar"
                         v-model="form.sidebar"
                         :true-value="1"
                         :false-value="0">
-                    </p-toggle>
+                    </ui-toggle>
                 </div>
             </div>
 
-            <p-definition-list v-if="taxonomy">
-                <p-definition name="Created At">
+            <ui-definition-list v-if="taxonomy">
+                <ui-definition name="Created At">
                     {{ $moment(taxonomy.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Updated At">
+                <ui-definition name="Updated At">
                     {{ $moment(taxonomy.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
         </template>
     </form-container>
 </template>

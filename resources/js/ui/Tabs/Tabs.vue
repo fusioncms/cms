@@ -57,7 +57,7 @@
 
 <script>
     export default {
-        name: 'p-tabs',
+        name: 'ui-tabs',
 
         data() {
             return {

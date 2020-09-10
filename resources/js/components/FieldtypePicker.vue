@@ -1,6 +1,6 @@
 <template>
     <div class="grid grid-cols-3 lg:grid-cols-6 gap-3">
-        <p-button
+        <ui-button
             v-for="(type, index) in types"
             :key="`add-${type.handle}`"
             :disabled="type.disabled"
@@ -10,7 +10,7 @@
 
             <fa-icon :icon="type.icon" class="icon"></fa-icon>
             {{ type.name }}
-        </p-button>
+        </ui-button>
     </div>
 </template>
 

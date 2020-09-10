@@ -1,0 +1,29 @@
+.form-group {
+    @apply leading-normal box-border clear-both text-left relative w-full mb-3;
+
+    &__messages { @apply mt-1; }
+}
+
+.input-group {
+    @apply flex items-center justify-start w-full;
+
+    > * {
+        @apply relative;
+
+        &:not(:first-child) {  margin-left: -1px; } 
+
+        &:not(:first-child):not(:last-child) {
+            @apply rounded-r-none rounded-l-none;
+        }
+ 
+        &:first-child { 
+            @apply rounded-br-none rounded-tr-none; 
+        }
+
+        &:last-child { 
+            @apply rounded-bl-none rounded-tl-none; 
+        }
+
+        &:focus { z-index: 1; }
+    }
+}

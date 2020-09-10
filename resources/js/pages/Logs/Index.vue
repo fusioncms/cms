@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <p-modal name="error-view" title="Error Details" extra-large>
+        <ui-modal name="error-view" title="Error Details" extra-large>
             <div v-if="currentError.date">
                 <div class="leading-tight mb-3">
                     <div class="flex p-2">
@@ -95,7 +95,7 @@
                     </div>
                 </div>
             </div>
-        </p-modal>
+        </ui-modal>
     </div>
 </template>
 

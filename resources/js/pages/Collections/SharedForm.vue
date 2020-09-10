@@ -2,14 +2,14 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link v-if="collection.slug" :to="{ name: 'collection.index', params: {collection: collection.slug} }" class="button button--secondary">Go Back</router-link>
-                <button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button v-if="collection.slug" :to="{ name: 'collection.index', params: {collection: collection.slug} }" variant="secondary">Go Back</ui-button>
+                <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
-        <p-card v-if="collection.show_name_field">
-            <p-card-body>
-                <p-title
+        <ui-card v-if="collection.show_name_field">
+            <ui-card-body>
+                <ui-title-group
                     name="name"
                     :label="collection.name_label || 'Name'"
                     autocomplete="off"
@@ -18,10 +18,11 @@
                     :placeholder="collection.name_label || 'Name'"
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
-                    v-model="form.name">
-                </p-title>
-            </p-card-body>
-        </p-card>
+                    v-model="form.name"
+                    v-if="collection.show_name_field">
+                </ui-title-group>
+            </ui-card-body>
+        </ui-card>
 
         <section-card v-for="section in sections.body" :key="section.handle" :title="section.name" :description="section.description">
             <component
@@ -38,7 +39,7 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-slug
+                    <ui-slug-group
                         v-if="collection.show_name_field || entry.id"
                         name="slug"
                         label="Slug"
@@ -51,15 +52,15 @@
                         :has-error="form.errors.has('slug')"
                         :error-message="form.errors.get('slug')"
                         v-model="form.slug">
-                    </p-slug>
+                    </ui-slug-group>
 
-                    <p-toggle
+                    <ui-toggle
                         name="status"
                         label="Status"
                         v-model="form.status"
                         :true-value="1"
                         :false-value="0">
-                    </p-toggle>
+                    </ui-toggle>
                 </div>
             </div>
 
@@ -84,19 +85,19 @@
                 </div>
             </div>
 
-            <p-definition-list v-if="entry">
-                <p-definition name="Status">
+            <ui-definition-list v-if="entry">
+                <ui-definition name="Status">
                     <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': entry.status, 'text-danger-500': ! entry.status}"></fa-icon> {{ entry.status ? 'Enabled' : 'Disabled' }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Created At">
+                <ui-definition name="Created At">
                     {{ $moment(entry.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Updated At">
+                <ui-definition name="Updated At">
                     {{ $moment(entry.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
         </template>
     </form-container>
 </template>

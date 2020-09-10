@@ -5,12 +5,12 @@
         </portal>
 
         <portal to="actions">
-            <router-link :to="{ name: 'navigation.create' }" class="button">Create Navigation</router-link>
+            <ui-button :to="{ name: 'navigation.create' }" variant="primary">Create Navigation</ui-button>
         </portal>
 
         <div class="row">
             <div class="content-container">
-                <p-table :endpoint="endpoint" id="navigation" sort-by="name" primary-key="handle" key="navigation_table">
+                <ui-table :endpoint="endpoint" id="navigation" sort-by="name" primary-key="handle" key="navigation_table">
                     <template slot="name" slot-scope="table">
                         <router-link :to="{ name: 'navigation.nodes', params: {navigation: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
@@ -20,36 +20,35 @@
                     </template>
 
                     <template slot="description" slot-scope="table">
-                        <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
+                        <p>{{ table.record.description }}</p>
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions :id="'navigation_' + table.record.id + '_actions'" :key="'navigation_' + table.record.id + '_actions'">
-                            <p-dropdown-link :to="{ name: 'navigation.nodes', params: {navigation: table.record.id} }">Manage</p-dropdown-link>
-                            <p-dropdown-link :to="{ name: 'navigation.edit', params: {navigation: table.record.id} }">Edit</p-dropdown-link>
+                        <ui-actions :id="'navigation_' + table.record.id + '_actions'" :key="'navigation_' + table.record.id + '_actions'">
+                            <ui-dropdown-link :to="{ name: 'navigation.nodes', params: {navigation: table.record.id} }">Manage</ui-dropdown-link>
+                            <ui-dropdown-link :to="{ name: 'navigation.edit', params: {navigation: table.record.id} }">Edit</ui-dropdown-link>
 
-                            <p-dropdown-link
+                            <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-navigation="table.record"
-                                classes="link--danger"
-                            >
+                                classes="link--danger">
                                 Delete
-                            </p-dropdown-link>
-                        </p-actions>
+                            </ui-dropdown-link>
+                        </ui-actions>
                     </template>
-                </p-table>
+                </ui-table>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="delete-navigation" title="Delete Navigation" key="delete_navigation">
+            <ui-modal name="delete-navigation" title="Delete Navigation" key="delete_navigation">
                 <p>Are you sure you want to permenantly delete this navigation?</p>
 
                 <template slot="footer" slot-scope="navigation">
-                    <p-button v-modal:delete-navigation @click="destroy(navigation.data.id)" theme="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-navigation>Cancel</p-button>
+                    <ui-button v-modal:delete-navigation @click="destroy(navigation.data.id)" variant="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-navigation>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
         </portal>
     </div>
 </template>

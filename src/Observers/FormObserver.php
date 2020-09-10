@@ -5,7 +5,6 @@ namespace Fusion\Observers;
 use Fusion\Database\Migration;
 use Fusion\Database\Schema\Blueprint;
 use Fusion\Models\Field;
-use Fusion\Models\Fieldset;
 use Fusion\Models\Form;
 
 class FormObserver

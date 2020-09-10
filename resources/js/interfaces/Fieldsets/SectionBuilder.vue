@@ -1,9 +1,9 @@
 <template>
-    <p-tabs
+    <ui-tabs
         :add="add"
         :move="move">
 
-        <p-tab
+        <ui-tab
             v-for="(section, index) in sections"
             :key="index"
             :name="section.name"
@@ -14,8 +14,8 @@
                 :section="section"
                 :sections="sections">
             </section-editor>
-        </p-tab>
-    </p-tabs>
+        </ui-tab>
+    </ui-tabs>
 </template>
 
 <script>
