@@ -1,16 +1,16 @@
 <template>
-	<p-dropdown id="display-filters" right>
+	<ui-dropdown id="display-filters" right>
 		<fa-icon class="icon" :icon="options[display]"></fa-icon>
 		<span class="hidden md:inline">{{ display | capitalize  }}</span>
 
 		<template v-slot:menu>
-			<p-dropdown-link v-for="(icon, key) in options" :key="key" @click.prevent="setDisplay(key)">
+			<ui-dropdown-link v-for="(icon, key) in options" :key="key" @click.prevent="setDisplay(key)">
 				<fa-icon class="icon" :icon="icon"></fa-icon>
 
 				{{ key | capitalize }}
-			</p-dropdown-link>
+			</ui-dropdown-link>
 		</template>
-	</p-dropdown>
+	</ui-dropdown>
 </template>
 
 <script>

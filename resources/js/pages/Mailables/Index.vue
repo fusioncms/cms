@@ -5,14 +5,14 @@
 		</portal>
 
 		<portal to="actions">
-			<button v-modal:settings class="button">Settings</button>
+			<ui-button v-modal:settings>Settings</ui-button>
 		</portal>
 
 		<div class="row">
 			<div class="content-container">
-				<p-table :endpoint="endpoint" id="mailables" sort-by="name" primary-key="handle" key="mailables_table">
+				<ui-table :endpoint="endpoint" id="mailables" sort-by="name" primary-key="handle" key="mailables_table">
 					<template slot="name" slot-scope="table">
-                        <p-status :value="table.record.status" class="mr-2"></p-status>
+                        <ui-status :value="table.record.status" class="mr-2"></ui-status>
 
                         <router-link :to="{ name: 'mailables.edit', params: {mailable: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
@@ -26,11 +26,11 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions :id="'mail_' + table.record.id + '_actions'" :key="'mail_' + table.record.id + '_actions'">
-                            <p-dropdown-link :to="{ name: 'mailables.edit', params: {mailable: table.record.id} }">Edit</p-dropdown-link>
-                        </p-actions>
+                        <ui-table-actions :id="'mail_' + table.record.id + '_actions'" :key="'mail_' + table.record.id + '_actions'">
+                            <ui-dropdown-link :to="{ name: 'mailables.edit', params: {mailable: table.record.id} }">Edit</ui-dropdown-link>
+                        </ui-table-actions>
                     </template>
-				</p-table>
+				</ui-table>
 			</div>
 		</div>
 

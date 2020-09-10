@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p-select
+        <ui-select-group
             :name="field.handle"
             :label="field.name"
             :help="field.help"
@@ -9,8 +9,8 @@
             :options="options"
             :multiple="multiple"
             :showControls="showControls"
-            :filterable="filterable"
-        ></p-select>
+            :filterable="filterable">
+        </ui-select-group>
     </div>
 </template>
 

@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: 'p-card',
+        name: 'ui-card',
 
         props: {
             classes: {

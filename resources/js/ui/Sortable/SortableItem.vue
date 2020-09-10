@@ -1,6 +1,6 @@
 <script>
     export default {
-        name: 'p-sortable-item',
+        name: 'ui-sortable-item',
 
         inject: ['sortableListItemClass'],
 

@@ -22,7 +22,7 @@
 
 <script>
     export default {
-        name: 'p-radio',
+        name: 'ui-radio',
 
         data() {
             return {

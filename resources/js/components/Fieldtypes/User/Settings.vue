@@ -1,14 +1,14 @@
 <template>
     <div class="row">
     	<div class="col w-1/2">
-			<p-number name="settings.limit"
+			<ui-number name="settings.limit"
 				label="Limit"
 				help="Limit the number of assets selected; leave blank if no limit is desired."
 				placeholder=""
 				v-model="settings.limit"
                 :has-error="errors.has('settings.limit')"
                 :error-message="errors.get('settings.limit')">
-			</p-number>
+			</ui-number>
 		</div>
     </div>
 </template>

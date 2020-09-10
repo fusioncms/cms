@@ -1,18 +1,16 @@
 <template>
-    <div>
-        <router-link v-if="to" :to="to" class="dropdown__link" :class="classes" @click.native="onClick($event)">
-            <slot></slot>
-        </router-link>
+    <router-link v-if="to" :to="to" class="dropdown__link" @click.native="onClick($event)">
+        <slot></slot>
+    </router-link>
 
-        <a v-else :href="href" :target="target" class="dropdown__link" :class="classes" @click="onClick($event)">
-            <slot></slot>
-        </a>
-    </div>
+    <a v-else :href="href" :target="target" class="dropdown__link" @click="onClick($event)">
+        <slot></slot>
+    </a>
 </template>
 
 <script>
     export default {
-        name: 'p-dropdown-link',
+        name: 'ui-dropdown-link',
 
         props: {
             href: {
@@ -31,11 +29,7 @@
                 required: false,
                 default: '',
                 type: String,
-            },
-
-            classes: {
-                required: false,
-            },
+            }
         },
 
         methods: {
@@ -44,6 +38,6 @@
 
                 this.$emit('click', event)
             }
-        },
+        }
     }
 </script>

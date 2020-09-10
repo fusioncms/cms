@@ -1,18 +1,36 @@
 <template>
-    <div class="row p-0">
-        <form class="col col--flush w-full lg:w-1/2" @submit.prevent="add">
-            <p-input text="text" placeholder="Label" v-model="option.label" ref="label"></p-input>
-            <p-input text="text" placeholder="Value" v-model="option.value"></p-input>
+    <div class="row w-full">
+        <form class="col w-full lg:w-1/2" @submit.prevent="add">
+            <ui-fieldset
+                label="Options"
+                help="<p>Add and arrange as many options as you need</p>">
+                <ui-input-group 
+                    name="label"
+                    text="text" 
+                    label="Label"
+                    placeholder="Label" 
+                    ref="label"
+                    hide-label
+                    v-model="option.label">
+                </ui-input-group>
 
-            <p-button class="w-full" @click.prevent="add" type="submit">Add</p-button>
+                <ui-input-group 
+                    name="value"
+                    text="text" 
+                    label="Value"
+                    placeholder="Value" 
+                    hide-label
+                    v-model="option.value">
+                </ui-input-group>
 
-            <p class="mt-6 text-center text-sm text-gray-600">Add and arrange as many options as you need.</p>
+                <ui-button class="w-full" variant="primary" @click.prevent="add">Add</ui-button>
+            </ui-fieldset>
         </form>
 
-        <div class="col col--flush w-full lg:w-1/2">
-            <p-sortable-list v-model="options">
+        <div class="col w-full lg:w-1/2">
+            <ui-sortable-list v-model="options">
                 <div slot-scope="{ items: items }">
-                    <p-sortable-item v-for="(option, index) in items" :key="option.value">
+                    <ui-sortable-item v-for="(option, index) in items" :key="option.value">
                         <div class="flex bg-white shadow">
                             <form v-if="isEditing(index)" class="flex justify-center items-center pl-3 py-1" @submit.prevent="update">
 
@@ -24,9 +42,9 @@
                             </form>
 
                             <div v-else class="flex flex-1 items-center">
-                                <p-sortable-handle class="cursor-move inline-block">
+                                <ui-sortable-handle class="cursor-move inline-block">
                                     <fa-icon icon="ellipsis-v" class="handle fa-fw text-gray-400 mr-3"></fa-icon>
-                                </p-sortable-handle>
+                                </ui-sortable-handle>
 
                                 <div class="mr-3 flex-1">
                                     <input
@@ -45,9 +63,9 @@
                             </div>
 
                         </div>
-                    </p-sortable-item>
+                    </ui-sortable-item>
                 </div>
-            </p-sortable-list>
+            </ui-sortable-list>
         </div>
     </div>
 </template>

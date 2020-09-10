@@ -6,8 +6,8 @@
 
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'navigation' }" class="button">Go Back</router-link>
-                <p-button theme="primary" @click.prevent="save" :disabled="saving">Save</p-button>
+                <ui-button :to="{ name: 'navigation' }">Go Back</ui-button>
+                <ui-button variant="primary" @click.prevent="save" :disabled="saving">Save</ui-button>
             </div>
         </portal>
 
@@ -29,20 +29,20 @@
                     </tr>
                 </thead>
 
-                <p-sortable-list v-model="nodes" class="sortable-list">
+                <ui-sortable-list v-model="nodes" class="sortable-list">
                     <tbody>
-                        <p-sortable-item v-for="node in nodes" :key="node.id">
+                        <ui-sortable-item v-for="node in nodes" :key="node.id">
                             <tr>
                                 <td class="w-8">
-                                    <p-sortable-handle class="mr-6 text-gray-400">
+                                    <ui-sortable-handle class="mr-6 text-gray-400">
                                         <div class="w-6 h-6 flex items-center justify-center">
                                             <fa-icon :icon="['fas', 'grip-vertical']" class="fa-fw"></fa-icon>
                                         </div>
-                                    </p-sortable-handle>
+                                    </ui-sortable-handle>
                                 </td>
 
                                 <td>
-                                    <p-status :value="node.status" class="mr-2"></p-status>
+                                    <ui-status :value="node.status" class="mr-2"></ui-status>
 
                                     <router-link :to="{ name: 'navigation.nodes.edit', params: {navigation: navigation.id, node: node.id} }">{{ node.name }}</router-link>
 
@@ -59,37 +59,35 @@
 
                                 <td class="actions">
                                     <div class="draggable__actions">
-                                        <p-actions right :id="'node_' + node.id + '_actions'" :key="'node_' + node.id + '_actions'">
-                                            <p-dropdown-link @click.prevent :to="{ name: 'navigation.nodes.edit', params: {navigation: navigation.id, node: node.id} }">Edit</p-dropdown-link>
-
-                                            <p-dropdown-link
+                                        <ui-table-actions right :id="'node_' + node.id + '_actions'" :key="'node_' + node.id + '_actions'">
+                                            <ui-dropdown-link @click.prevent :to="{ name: 'navigation.nodes.edit', params: {navigation: navigation.id, node: node.id} }">Edit</ui-dropdown-link>
+                                            <ui-dropdown-link
+                                                v-if="nodes.length > 1"
                                                 @click.prevent
-                                                v-modal:move-before="node"
-                                            >
+                                                v-modal:move-before="node">
                                                 Move before...
-                                            </p-dropdown-link>
+                                            </ui-dropdown-link>
 
-                                            <p-dropdown-link
+                                            <ui-dropdown-link
+                                                v-if="nodes.length > 1"
                                                 @click.prevent
-                                                v-modal:move-after="node"
-                                            >
+                                                v-modal:move-after="node">
                                                 Move after...
-                                            </p-dropdown-link>
+                                            </ui-dropdown-link>
 
-                                            <p-dropdown-link
+                                            <ui-dropdown-link
                                                 @click.prevent
                                                 v-modal:delete-node="node"
-                                                classes="link--danger"
-                                            >
+                                                classes="link--danger">
                                                 Delete
-                                            </p-dropdown-link>
-                                        </p-actions>
+                                            </ui-dropdown-link>
+                                        </ui-table-actions>
                                     </div>
                                 </td>
                             </tr>
-                        </p-sortable-item>
+                        </ui-sortable-item>
                     </tbody>
-                </p-sortable-list>
+                </ui-sortable-list>
             </table>
         </div>
 
@@ -100,11 +98,11 @@
                 </div>
 
                 <div class="card__body">
-                    <p-input name="name" label="Name" v-model="form.name"></p-input>
+                    <ui-input-group name="name" label="Name" v-model="form.name"></ui-input-group>
 
-                    <p-input name="url" label="URL" v-model="form.url"></p-input>
+                    <ui-input-group name="url" label="URL" v-model="form.url"></ui-input-group>
 
-                    <p-select
+                    <ui-select-group
                         name="new_window"
                         label="Open link where"
                         help="Determine where the link should open."
@@ -119,48 +117,48 @@
                             },
                         ]"
                         v-model="form.new_window">
-                    </p-select>
+                    </ui-select-group>
 
-                    <p-button theme="primary" @click.prevent="add('custom')">Add</p-button>
+                    <ui-button variant="primary" @click.prevent="add('custom')">Add</ui-button>
                 </div>
             </div>
         </template>
 
         <portal to="modals">
-            <p-modal name="delete-node" title="Delete Node" key="delete_node">
+            <ui-modal name="delete-node" title="Delete Node" key="delete_node">
                 <p>Are you sure you want to permenantly delete this node?</p>
 
                 <template slot="footer" slot-scope="node">
-                    <p-button v-modal:delete-node @click="destroy(node.data.id)" theme="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-node>Cancel</p-button>
+                    <ui-button v-modal:delete-node @click="destroy(node.data.id)" variant="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-node>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
 
-            <p-modal name="move-before" title="Move before..." key="move_before">
+            <ui-modal name="move-before" title="Move before..." key="move_before">
                 <template>
                     <p>Which node would you like to move before?</p>
 
-                    <p-select name="before" label="Node" :options="options" v-model="before"></p-select>
+                    <ui-select-group name="before" label="Node" hide-label :options="options" v-model="before"></ui-select-group>
                 </template>
 
                 <template slot="footer" slot-scope="node">
-                    <p-button v-modal:move-before @click="moveBefore(node.data.id)" theme="danger" class="ml-3">Move</p-button>
-                    <p-button v-modal:move-after @click="before = null">Cancel</p-button>
+                    <ui-button v-modal:move-before @click="moveBefore(node.data.id)" variant="danger" class="ml-3">Move</ui-button>
+                    <ui-button v-modal:move-after @click="before = null">Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
 
-            <p-modal name="move-after" title="Move after..." key="move_after">
+            <ui-modal name="move-after" title="Move after..." key="move_after">
                 <template>
                     <p>Which node would you like to move after?</p>
 
-                    <p-select name="after" label="Node" :options="options" v-model="after"></p-select>
+                    <ui-select-group name="after" label="Node" hide-label :options="options" v-model="after"></ui-select-group>
                 </template>
 
                 <template slot="footer" slot-scope="node">
-                    <p-button v-modal:move-after @click="moveAfter(node.data.id)" theme="danger" class="ml-3">Move</p-button>
-                    <p-button v-modal:move-after @click="after = null">Cancel</p-button>
+                    <ui-button v-modal:move-after @click="moveAfter(node.data.id)" variant="danger" class="ml-3">Move</ui-button>
+                    <ui-button v-modal:move-after @click="after = null">Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
         </portal>
     </form-container>
 </template>

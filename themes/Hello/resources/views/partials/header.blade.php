@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <p-collapse name="mobile-menu">
+        <ui-collapse name="mobile-menu">
             <div class="w-full py-4 bg-gray-900 text-gray-100 text-right overflow-y-scroll max-h-screen lg:hidden shadow-lg">
                 <ul class="pb-10 container mx-auto px-6">
                     @auth
@@ -67,6 +67,6 @@
                     @endauth
                 </ul>
             </div>
-        </p-collapse>
+        </ui-collapse>
     </div>
 </nav>

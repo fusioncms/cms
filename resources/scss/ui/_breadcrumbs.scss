@@ -1,0 +1,19 @@
+.breadcrumbs {
+    @apply flex flex-wrap border-b leading-normal text-sm list-none px-4 py-2 -mx-4 -mt-4 mb-4;
+
+    &__item {
+        @apply px-1;
+
+        &:first-child { @apply pl-0; }
+
+        &:last-child { @apply pr-0;}
+    }
+
+    &__divider {
+        @apply inline-block text-gray-500 text-xs mr-1;
+    }
+
+    &__link {
+        @apply flex-shrink-0 text-gray-700;
+    }
+}

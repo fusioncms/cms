@@ -5,14 +5,14 @@
         </portal>
 
         <portal to="actions">
-            <router-link v-if="collection.slug" :to="{ name: 'collection.create', params: {collection: collection.slug} }" class="button button--primary">Create {{ collection.reference_singular }}</router-link>
+            <ui-button v-if="collection.slug" variant="primary" :to="{ name: 'collection.create', params: {collection: collection.slug} }">Create {{ collection.reference_singular }}</ui-button>
         </portal>
 
         <div class="row" v-if="endpoint">
             <div class="content-container">
-                <p-table id="entries" :endpoint="endpoint" sort-by="name" :per-page="10" :key="collection.handle + '_table'">
+                <ui-table id="entries" :endpoint="endpoint" sort-by="name" :per-page="10" :key="collection.handle + '_table'">
                     <template slot="name" slot-scope="table">
-                        <p-status :value="table.record.status" class="mr-2"></p-status>
+                        <ui-status :value="table.record.status" class="mr-2"></ui-status>
 
                         <router-link :to="{ name: 'collection.edit', params: {collection: collection.slug, id: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
@@ -22,31 +22,30 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions :id="'entry_' + table.record.id + '_actions'" :key="'entry_' + table.record.id + '_actions'">
-                            <p-dropdown-link :to="{ name: 'collection.edit', params: {collection: collection.slug, id: table.record.id} }">Edit</p-dropdown-link>
+                        <ui-table-actions :id="'entry_' + table.record.id + '_actions'" :key="'entry_' + table.record.id + '_actions'">
+                            <ui-dropdown-link :to="{ name: 'collection.edit', params: {collection: collection.slug, id: table.record.id} }">Edit</ui-dropdown-link>
 
-                            <p-dropdown-link
+                            <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-entry="table.record"
-                                classes="link--danger"
-                            >
+                                classes="link--danger">
                                 Delete
-                            </p-dropdown-link>
-                        </p-actions>
+                            </ui-dropdown-link>
+                        </ui-table-actions>
                     </template>
-                </p-table>
+                </ui-table>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="delete-entry" title="Delete Entry" key="delete_entry">
+            <ui-modal name="delete-entry" title="Delete Entry" key="delete_entry">
                 <p>Are you sure you want to permenantly delete this entry?</p>
 
                 <template slot="footer" slot-scope="entry">
-                    <p-button v-modal:delete-entry @click="destroy(entry.data.id)" theme="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-entry>Cancel</p-button>
+                    <ui-button v-modal:delete-entry @click="destroy(entry.data.id)" variant="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-entry>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
         </portal>
     </div>
 </template>

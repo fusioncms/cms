@@ -1,11 +1,11 @@
 <template>
 	<div class="card__body text-right" v-if="totalPages > 1">
-		<p-pagination
+		<ui-pagination
 			@input="setCurrentPage($event)"
 			:total="totalPages"
 			:value="currentPage"
 			:max-visible-pages="3">
-		</p-pagination>
+		</ui-pagination>
 	</div>
 </template>
 
