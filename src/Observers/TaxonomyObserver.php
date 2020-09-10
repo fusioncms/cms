@@ -66,18 +66,6 @@ class TaxonomyObserver
     }
 
     /**
-     * Handle the taxonomy "deleting" event.
-     *
-     * @param \Fusion\Models\Taxonomy $taxonomy
-     *
-     * @return void
-     */
-    public function deleting(Taxonomy $taxonomy)
-    {
-        // $taxonomy->detachFieldset();
-    }
-
-    /**
      * Handle the taxonomy "deleted" event.
      *
      * @param \Fusion\Models\Taxonomy $taxonomy
