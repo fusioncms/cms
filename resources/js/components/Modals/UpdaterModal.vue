@@ -1,5 +1,5 @@
 <template>
-    <p-modal
+    <ui-modal
         key="updater_modal"
         name="updater"
         :title="`Update to ${version.title}`"
@@ -11,7 +11,7 @@
             <p-button @click="confirm" type="button" class="button button--primary">Confirm</p-button>
             <p-button @click="close" type="button" class="mr-3">Cancel</p-button>
         </template>
-    </p-modal>
+    </ui-modal>
 </template>
 
 <script>

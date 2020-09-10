@@ -2,13 +2,13 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'forms' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button :to="{ name: 'forms' }" variant="secondary">Go Back</ui-button>
+                <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
         <section-card title="General Information" description="General information about this form and what it collects.">
-            <p-input
+            <ui-input-group
                 name="name"
                 label="Name"
                 help="What should this form be called?"
@@ -18,9 +18,9 @@
                 :has-error="form.errors.has('name')"
                 :error-message="form.errors.get('name')"
                 v-model="form.name">
-            </p-input>
+            </ui-input-group>
 
-            <p-textarea
+            <ui-textarea-group
                 name="description"
                 label="Description"
                 help="Give a short description of what this form will collect."
@@ -28,32 +28,26 @@
                 :has-error="form.errors.has('description')"
                 :error-message="form.errors.get('description')"
                 v-model="form.description">
-            </p-textarea>
+            </ui-textarea-group>
         </section-card>
 
         <section-card title="Privacy" description="Configure this forms privacy settings.">
-            <p-checkbox-group inline class="mb-0">
-                <p-checkbox name="collect_email_addresses" id="collect_email_addresses" v-model="form.collect_email_addresses">Collect email addresses</p-checkbox>
-                <p-checkbox name="collect_ip_addresses" id="collect_ip_addresses" v-model="form.collect_ip_addresses">Collect IP addresses</p-checkbox>
-            </p-checkbox-group>
-
-            <p-checkbox-group class="-mt-3" inline help="Respondents will receive a copy of their submission.">
-                <p-checkbox name="response_receipt" id="response_receipt" :disabled="! form.collect_email_addresses" v-model="form.response_receipt">Response receipts</p-checkbox>
-            </p-checkbox-group>
+            <ui-fieldset label="Privacy Settings">
+                <ui-checkbox-single name="collect_email_addresses" id="collect_email_addresses" v-model="form.collect_email_addresses">Collect email addresses</ui-checkbox-single>
+                <ui-checkbox-single name="collect_ip_addresses" id="collect_ip_addresses" v-model="form.collect_ip_addresses">Collect IP addresses</ui-checkbox-single>
+                <ui-checkbox-single name="response_receipt" id="response_receipt" help="Respondents will receive a copy of their submission." :disabled="! form.collect_email_addresses" v-model="form.response_receipt">Response receipts</ui-checkbox-single>
+            </ui-fieldset>
         </section-card>
 
         <section-card title="Spam" description="Configure this forms spam protection settings.">
-            <p-checkbox-group help="Be sure to enter your site key and secret key in settings.">
-                <p-checkbox name="enable_recaptcha" id="enable_recaptcha" v-model="form.enable_recaptcha">Enable Google reCAPTCHA</p-checkbox>
-            </p-checkbox-group>
-
-            <p-checkbox-group help="A honeypot is a great and native alternative to Google reCAPTCHA. Both options can be safely enabled at the same time.">
-                <p-checkbox name="enable_honeypot" id="enable_honeypot" v-model="form.enable_honeypot">Enable Honeypot</p-checkbox>
-            </p-checkbox-group>
+            <ui-fieldset label="Spam Settings">
+                <ui-checkbox-single name="enable_recaptcha" id="enable_recaptcha" help="Be sure to enter your site key and secret key in settings." v-model="form.enable_recaptcha">Enable Google reCAPTCHA</ui-checkbox-single>
+                <ui-checkbox-single name="enable_honeypot" id="enable_honeypot" help="A honeypot is a great and native alternative to Google reCAPTCHA. Both options can be safely enabled at the same time." v-model="form.enable_honeypot">Enable Honeypot</ui-checkbox-single>
+            </ui-fieldset>
         </section-card>
 
         <section-card title="Notifications" description="Configure who should receive notifications when submissions are made.">
-            <p-textarea
+            <ui-textarea-group
                 name="send_to"
                 label="Send notifications to..."
                 help="List emails as a comma separated list."
@@ -61,9 +55,9 @@
                 :has-error="form.errors.has('send_to')"
                 :error-message="form.errors.get('send_to')"
                 v-model="form.send_to"
-            ></p-textarea>
+            ></ui-textarea-group>
 
-            <p-input
+            <ui-input-group
                 name="reply_to"
                 label="Reply to..."
                 help="Replies to the confirmation email will be sent to this e-mail. By default this will reference the default email in system settings."
@@ -71,22 +65,20 @@
                 :has-error="form.errors.has('reply_to')"
                 :error-message="form.errors.get('reply_to')"
                 v-model="form.reply_to">
-            </p-input>
+            </ui-input-group>
         </section-card>
 
         <section-card title="Confirmations" description="Configure confirmation settings when submissions are made.">
-            <p-radio-group
+            <ui-radio-group
                 inline
                 label="After submitting the form..."
                 :has-error="form.errors.has('redirect_on_submission')"
-                :error-message="form.errors.get('redirect_on_submission')"
-            >
-                <p-radio id="redirect_on_submission_false" v-model="form.redirect_on_submission" name="redirect_on_submission" :native-value="false">Redirect to default confirmation page...</p-radio>
+                :error-message="form.errors.get('redirect_on_submission')">
+                <ui-radio id="redirect_on_submission_false" v-model="form.redirect_on_submission" name="redirect_on_submission" :native-value="false">Redirect to default confirmation page...</ui-radio>
+                <ui-radio id="redirect_on_submission_true" v-model="form.redirect_on_submission" name="redirect_on_submission" :native-value="true">Redirect to custom page...</ui-radio>
+            </ui-radio-group>
 
-                <p-radio id="redirect_on_submission_true" v-model="form.redirect_on_submission" name="redirect_on_submission" :native-value="true">Redirect to custom page...</p-radio>
-            </p-radio-group>
-
-            <p-input
+            <ui-input-group
                 v-if="form.redirect_on_submission === false"
                 name="confirmation_message"
                 label="Message"
@@ -96,9 +88,9 @@
                 :error-message="form.errors.get('confirmation_message')"
                 placeholder="Thank you! We'll be in touch soon."
                 v-model="form.confirmation_message">
-            </p-input>
+            </ui-input-group>
 
-            <p-input
+            <ui-input-group
                 v-if="form.redirect_on_submission === true"
                 name="redirect_url"
                 label="URL"
@@ -107,11 +99,11 @@
                 :has-error="form.errors.has('redirect_url')"
                 :error-message="form.errors.get('redirect_url')"
                 v-model="form.redirect_url">
-            </p-input>
+            </ui-input-group>
         </section-card>
 
         <section-card title="Templates" description="Configure this forms template settings.">
-            <p-input
+            <ui-input-group
                 name="form_template"
                 label="Form Template"
                 help="What template is responsible for rendering this form?"
@@ -120,9 +112,9 @@
                 :has-error="form.errors.has('form_template')"
                 :error-message="form.errors.get('form_template')"
                 v-model="form.form_template">
-            </p-input>
+            </ui-input-group>
 
-            <p-input
+            <ui-input-group
                 name="thankyou_template"
                 label="Thank You Template"
                 help="What template is reponsible for thanking respondents?"
@@ -131,7 +123,7 @@
                 :has-error="form.errors.has('thankyou_template')"
                 :error-message="form.errors.get('thankyou_template')"
                 v-model="form.thankyou_template">
-            </p-input>
+            </ui-input-group>
         </section-card>
 
         <section-card title="Blueprint" description="Configure this forms blueprint.">
@@ -139,10 +131,10 @@
         </section-card>
 
         <template v-slot:sidebar>
-            <div class="card">
-                <div class="card__body">
-                    <p-slug
-                        name="handle"
+            <ui-card>
+                <ui-card-body>
+                    <ui-slug-group
+                        name="form-handle"
                         label="Handle"
                         autocomplete="off"
                         monospaced
@@ -152,31 +144,31 @@
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
                         v-model="form.handle">
-                    </p-slug>
+                    </ui-slug-group>
 
-                    <p-toggle
+                    <ui-toggle
                         name="status"
                         label="Status"
                         v-model="form.status"
                         :true-value="1"
                         :false-value="0">
-                    </p-toggle>
-                </div>
-            </div>
+                    </ui-toggle>
+                </ui-card-body>
+            </ui-card>
 
-            <p-definition-list v-if="resource">
-                <p-definition name="Status">
+            <ui-definition-list v-if="resource">
+                <ui-definition name="Status">
                     <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': resource.status, 'text-danger-500': ! resource.status}"></fa-icon> {{ resource.status ? 'Enabled' : 'Disabled' }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Created At">
+                <ui-definition name="Created At">
                     {{ $moment(resource.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Updated At">
+                <ui-definition name="Updated At">
                     {{ $moment(resource.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
         </template>
     </form-container>
 </template>

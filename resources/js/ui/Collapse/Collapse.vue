@@ -13,7 +13,7 @@
 
 <script>
     export default {
-        name: 'p-collapse',
+        name: 'ui-collapse',
 
         data() {
             return {

@@ -1,0 +1,29 @@
+.badge {
+    @apply inline-block bg-gray-300 rounded text-gray-800 font-bold text-xs px-2;
+
+    &--primary {
+        @apply text-white bg-primary-500;
+    }
+
+    &--secondary {
+        @apply text-white bg-secondary-500;
+    }
+
+    &--info {
+        @apply text-white bg-info-500;
+    }
+
+    &--success {
+        @apply text-white bg-success-500;
+    }
+
+    &--warning {
+        @apply bg-warning-500;
+    }
+
+    &--danger {
+        @apply text-white bg-danger-500;
+    }
+
+    &--pill { @apply rounded-full; }
+}

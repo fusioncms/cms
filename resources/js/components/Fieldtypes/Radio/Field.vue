@@ -1,11 +1,11 @@
 <template>
     <div>
-        <p-radio-group
+        <ui-radio-group
             :name="field.name"
             :label="field.name"
             :help="field.help"
             :inline="field.settings.display == 'row'">
-                <p-radio :key="field.name + option.label"
+                <ui-radio :key="field.name + option.label"
                     v-for="option in field.settings.options"
                     :name="field.name"
                     :id="option.value"
@@ -13,8 +13,8 @@
                     :checked="option.value == value"
                     @input="$emit('input', option.value)">
                     {{option.label}}
-                </p-radio>
-        </p-radio-group>
+                </ui-radio>
+        </ui-radio-group>
     </div>
 </template>
 

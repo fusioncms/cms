@@ -20,7 +20,7 @@
                     <div class="card__body text-center" v-if="isValid === false">
                         <p>Configure your Google Analytic settings to gain insight about your website <fa-icon class="text-emoji" :icon="['fas', 'hand-peace']"></fa-icon></p>
 
-                        <router-link class="button items-center" to="/settings/google_analytics#insights"><fa-icon :icon="['fas', 'cog']" class="mr-2 text-sm"></fa-icon> Go to settings</router-link>
+                        <ui-button class="items-center mr-2 " to="/settings/google_analytics#insights"><fa-icon :icon="['fas', 'cog']"></fa-icon> Go to settings</ui-button>
                     </div>
                 </div>
             </div>

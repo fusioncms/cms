@@ -4,15 +4,14 @@
         :data-srcset="lazySrcset"
         :style="styles"
         class="image"
-        ref="image"
-    >
+        ref="image">
 </template>
 
 <script>
     import lozad from 'lozad'
 
     export default {
-        name: 'p-img',
+        name: 'ui-img',
 
         data() {
             return {

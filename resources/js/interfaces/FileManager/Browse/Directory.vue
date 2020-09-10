@@ -7,7 +7,7 @@
 			:draggable="isDraggable"
 			@dblclick="$emit('dblclick')">
 
-			<p-img
+			<ui-img
 				src="/vendor/fusion/img/folder.svg"
 				background-color="white"
 				class="gallery-image"
@@ -17,7 +17,7 @@
 				:alt="directory.name"
 				:draggable="false"
 				aspect-ratio>
-			</p-img>
+			</ui-img>
 		</div>
 
 		<quick-edit

@@ -1,57 +1,75 @@
 <template>
-    <div class="modal--overlay" v-show="isActive" :style="{ zIndex: activeZIndex }" @mousedown="clickedOutside">
-        <div class="modal" :class="styles" :style="{ zIndex: activeZIndex }" ref="stackable" @mousedown.stop>
-            <div class="modal__header" v-if="! noHeader">
-                <slot name="header" :data="data">
-                    <div class="modal__header--title">
-                        <span v-if="title" v-html="title"></span>
-                    </div>
+    <transition name="v-fade">
+        <div :id="name" 
+            class="modal-overlay" 
+            role="dialog" 
+            tab-index="-1"
+            ref="modalContainer" 
+            v-show="isActive" :style="{ zIndex: activeZIndex }" 
+            @mousedown="clickedOutside"
+            @keydown="checkKeyEvent">
+            <div class="modal" :class="[variantClass, sizeClass, styles]" :style="{ zIndex: activeZIndex }" ref="stackable">
+                <div class="modal__header" v-if="! noHeader">
+                    <slot name="header" :data="data">
+                        <div class="modal__title">
+                            <span v-if="title" v-html="title"></span>
+                        </div>
 
-                    <div>
-                        <a href="#" class="modal__header--close-button" @click.stop="close" v-if="! noCloseButton">&times;</a>
-                    </div>
-                </slot>
-            </div>
+                        <a href="#" class="modal__close" @click.stop.prevent="close" v-if="! noCloseButton">
+                            <fa-icon icon="times"></fa-icon>
+                            <span class="sr-only">Close</span>
+                        </a>
+                    </slot>
+                </div>
 
-            <div class="modal__body" :class="{ 'modal__body--flush': flush }">
-                <slot :data="data"></slot>
-            </div>
+                <div class="modal__body" :class="{ 'modal__body--flush': flush }">
+                    <slot :data="data"></slot>
+                </div>
 
-            <div class="modal__footer" v-if="! noFooter">
-                <slot name="footer" :data="data">
-                    <p-button @click.stop="close">Close</p-button>
-                </slot>
+                <div class="modal__footer" v-if="! noFooter">
+                    <slot name="footer" :data="data">
+                        <ui-button @click.stop.prevent="close" variant="secondary">Close</ui-button>
+                    </slot>
+                </div>
             </div>
         </div>
-    </div>
+    </transition>
 </template>
 
 <script>
-    import stackable from '../../mixins/stackable'
-
     export default {
-        name: 'p-modal',
+        name: 'ui-modal',
 
-        mixins: [stackable],
+        mixins: [
+            require('../../mixins/stackable').default,
+            require('../../mixins/variants').default
+        ],
+
+        directives: {
+            focus: {
+                // directive definition
+                inserted: function(el) {
+                    el.focus();
+                },
+            },
+        },
 
         data() {
             return {
                 data: null,
+                initialFocus: null,
                 isActive: !!this.value,
                 isLoaded: !!this.value,
                 stackClass: 'modal--active',
                 stackMinZIndex: 200,
-
-                themes: {
-                    default: '',
-                    primary: 'modal--primary',
-                    secondary: 'modal--secondary',
-                    info: 'modal--info',
-                    success: 'modal--success',
-                    warning: 'modal--warning',
-                    danger: 'modal--danger',
-                    dark: 'modal--dark',
-                },
+                variantClass: null,
+                sizeClass: null,
+                sizes: {
+                    xlarge: 'xlarge',
+                    large: 'large',
+                    small: 'small',
+                    xsmall: 'xsmall' 
+                }
             }
         },
 
@@ -59,9 +77,6 @@
             styles() {
                 let styles = {}
 
-                styles['modal--large'] = this.large
-                styles['modal--x-large'] = this.extraLarge
-                styles[this.themes[this.theme]] = true
                 styles['modal--active'] = this.isActive
 
                 return styles
@@ -73,71 +88,38 @@
                 required: true,
                 type: String,
             },
-
-            title: {
-                required: false,
-                type: String,
-            },
-
+            title: String,
+            variant: String,
+            size: String,
             value: {
-                required: false,
                 type: Boolean,
                 default: false,
             },
-
-            large: {
-                required: false,
-                type: Boolean,
-                default: false,
-            },
-
-            extraLarge: {
-                required: false,
-                type: Boolean,
-                default: false,
-            },
-
             noCloseButton: {
-                required: false,
                 type: Boolean,
                 default: false,
             },
-
             noHeader: {
-                required: false,
                 type: Boolean,
                 default: false,
             },
-
             noFooter: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-
             noEscClose: {
-                required: false,
                 type: Boolean,
                 default: false,
             },
-
             outsideClose: {
-                required: false,
                 type: Boolean,
                 default: false,
             },
-
             flush: {
-                required: false,
                 type: Boolean,
                 default: false,
-            },
-
-            theme: {
-                required: false,
-                type: String,
-                default: 'default',
-            },
+            }
         },
 
         methods: {
@@ -162,6 +144,11 @@
                         document.body.style.removeProperty('overflow')
                     }
                 })
+                
+                if (this.initialFocus) {
+                    this.initialFocus.focus();
+                    this.initialFocus = null;
+                }
             },
 
             toggle() {
@@ -169,6 +156,27 @@
                     this.open()
                 } else {
                     this.close()
+                }
+            },
+
+            checkKeyEvent(event) {
+                const focusableList = this.$refs.modalContainer.querySelectorAll(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+
+                if (focusableList.length < 2 && event.key === 'Tab') {
+                    event.preventDefault();
+                    return;
+                }
+
+                const last = focusableList.length - 1;
+
+                if (event.key === 'Tab' && event.shiftKey === false && event.target === focusableList[last]) {
+                    event.preventDefault();
+                    focusableList[0].focus();
+                } else if (event.key === 'Tab' && event.shiftKey === true && event.target === focusableList[0]) {
+                    event.preventDefault();
+                    focusableList[last].focus();
                 }
             },
 
@@ -191,7 +199,8 @@
             listenForDirective() {
                 this.$bus.$on('toggle-modal-' + this.name, (data) => {
                     this.toggle()
-                    this.data = data
+                    this.data = data.value
+                    this.initialFocus = data.element
                 })
             },
 
@@ -200,6 +209,10 @@
                     this.close()
                 }
             },
+
+            getSize() {
+                return _.has(this.sizes, this.size) ? _.get(this.sizes, this.size) : null
+            }
         },
 
         watch: {
@@ -221,6 +234,17 @@
         created() {
             this.listenForEscape()
             this.listenForDirective()
+            let variant = this.getVariant()
+            let size = this.getSize()
+
+
+            if (variant) {
+                this.variantClass = `modal--${variant}`
+            }
+
+            if (size) {
+                this.sizeClass = `modal--${size}`
+            }
         },
 
         beforeMount () {

@@ -1,0 +1,49 @@
+.treeview {
+    @apply text-sm leading-normal;
+
+    &--nested { margin-left: 24px; }
+
+    &__item { @apply relative; }
+
+    &__node {
+        @apply relative flex items-center rounded px-1;
+
+        &:hover { @apply bg-gray-200; }
+
+        &--file { margin-left: 24px; }
+    }
+
+    &__icon { @apply flex-shrink-0 mr-1; }
+
+    &__toggle {
+        @apply inline-flex items-center justify-center flex-shrink-0 rounded border border-gray-300 leading-none bg-white text-gray-800;
+        width: 20px;
+        height: 20px;
+        margin-right: 4px;
+
+        &:hover { @apply border-gray-500; }
+
+        &:focus {
+            @apply outline-none shadow-focus;
+        }
+    }
+
+    &__label {
+        @apply flex items-center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__link {
+        @apply flex items-center border border-transparent rounded leading-loose px-1 mb-1 mt-1;
+        color: inherit;
+        min-width: 0;
+
+        &:hover:not(.selected) { color: inherit; }
+
+        &.selected {
+            @apply bg-white border-gray-500;
+        }
+    }
+}

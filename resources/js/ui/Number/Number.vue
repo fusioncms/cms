@@ -1,53 +1,52 @@
 <template>
-    <p-field-group
+    <div class="field-number input-group">
+        <input
+        class="field-number__input field"
+        :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
+        :id="formattedId"
         :name="name"
-        :fieldId="formattedId"
-        :label="label"
+        type="number"
+        :placeholder="placeholder"
+        :readonly="readonly"
+        :disabled="disabled"
+        :autocomplete="autocomplete"
+        :autofocus="autofocus"
         :required="required"
-        :hasError="hasError"
-        :errorMessage="errorMessage"
-        :hasSuccess="hasSuccess"
-        :successMessage="successMessage"
-        :help="help">
-        <div class="field-number">
-            <button class="field-number__button button button--icon" @click.prevent="decrease" :disabled="disabled">
-                <slot name="decrease">
-                    <fa-icon icon="minus" class="fa-fw"></fa-icon>
-                    <span class="sr-only">Decrease</span>
-                </slot>
-            </button>
-            <input
-            class="field-number__input field"
-            :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
-            :id="formattedId"
-            :name="name"
-            type="number"
-            :placeholder="placeholder"
-            :readonly="readonly"
-            :disabled="disabled"
-            :autocomplete="autocomplete"
-            :autofocus="autofocus"
-            :required="required"
-            :steps="steps"
-            :min="min"
-            :max="max"
-            :aria-required="required" 
-            :aria-describedby="hasMessage ? formattedId + '_message' : null"
-            v-model="inputValue"
-            @blur="emitValue($event.target.value)">
-            <button class="field-number__button button button--icon" @click.prevent="increase" :disabled="disabled">
-                <slot name="increase">
-                    <fa-icon icon="plus" class="fa-fw"></fa-icon>
-                    <span class="sr-only">Increase</span>
-                </slot>
-            </button>
-        </div>
-    </p-field-group>
+        :step="step"
+        :min="min"
+        :max="max"
+        :aria-required="required" 
+        :aria-describedby="message ? formattedId + '_message' : null"
+        v-model="inputValue"
+        @blur="emitValue($event.target.value)"
+        @keydown.esc="emitValue($event.target.value)"
+        @keydown.enter="emitValue($event.target.value)"
+        @keydown.up.prevent="increase"
+        @keydown.down.prevent="decrease">
+
+        <button v-if="!hideButtons" class="field-number__button field-number__button--decrease button button--icon" @click.prevent="decrease" :disabled="disabled || decreaseDisabled">
+            <slot name="decrease">
+                <fa-icon icon="minus" class="fa-fw"></fa-icon>
+                <span class="sr-only">Decrease</span>
+            </slot>
+        </button>
+        
+        <button v-if="!hideButtons" class="field-number__button field-number__button--increase button button--icon" @click.prevent="increase" :disabled="disabled || increaseDisabled">
+            <slot name="increase">
+                <fa-icon icon="plus" class="fa-fw"></fa-icon>
+                <span class="sr-only">Increase</span>
+            </slot>
+        </button>
+    </div>
 </template>
 
 <script>
     export default {
-        name: 'p-number',
+        name: 'ui-number',
+
+        mixins: [
+            require('../../mixins/fields').default
+        ],
 
         props: {
             name:  {
@@ -56,11 +55,9 @@
             },
             id: String,
             placeholder: String,
-            label: String,
-            help: String,
             value: {
-                type: [String, Number],
-                default: null,
+                type: Number,
+                default: 0
             },
             required: {
                 type: Boolean,
@@ -78,25 +75,20 @@
                 type: Boolean,
                 default: false,
             },
-             hasError: {
+            hasError: {
                 required: false,
                 type: Boolean,
                 default: false,
-            },
-            errorMessage: {
-                required: false,
-                type: String,
-                default: '',
             },
             hasSuccess: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-            successMessage: {
+            message: {
                 required: false,
-                type: String,
-                default: '',
+                type: Boolean,
+                defaut: false
             },
             autocomplete: {
                 required: false,
@@ -108,75 +100,104 @@
                 type: Boolean,
                 default: false,
             },
-            steps: {
-                required: false,
-                type: [Number, String],
+            step: {
+                type: Number,
                 default: 1
             },
             decimals: {
-                required: false,
-                type: [String, Number],
+                type: Number,
                 default: 0
             },
             min: {
-                required: false,
                 type: [String, Number],
-                default: ''
+                default: -Infinity
             },
             max: {
-                required: false,
                 type: [String, Number],
-                default: ''
+                default: Infinity
+            },
+            hideButtons: {
+                type: Boolean,
+                default: false
             }
         },
 
         data() {
             return {
-                inputValue: null
+                inputValue: this.value,
+                increaseDisabled: false,
+                decreaseDisabled: false
             }
         },
 
-        computed: {
-            hasMessage() {
-                return this.help || this.errorMessage || this.successMessage
-            },
-
-            formattedId() {
-                return this.id ? this.id : this.name + '_field'
+        watch: {
+            inputValue(value) {
+                this.inputValue = value
             }
         },
 
         methods: {
             emitValue(newValue) {
-                if(newValue) {
-                    if(this.min && newValue < this.min) {
-                        newValue = this.min
-                    }
-                    if(this.max && newValue > this.max) {
-                        newValue = this.max
-                    }
-                    newValue = this.formatNumber(newValue, this.decimals)
-                } 
-                this.inputValue = newValue
+                let oldValue = this.inputValue
+                newValue = Number(newValue)
+
+                if (oldValue === newValue || typeof this.value !== 'number') {
+                    return
+                }
+
+                if (newValue <= this.min) {
+                    newValue = this.min
+                    this.decreaseDisabled = true
+                }
+
+                if (newValue >= this.max) {
+                    newValue = this.max
+                    this.increaseDisabled = true
+                }
+
+                this.inputValue = this.formatNumber(newValue, this.decimals)
                 this.$emit('input', newValue)
             },
 
             formatNumber(num, decimals) {
                 let regex = new RegExp('^-?\\d+(?:\.\\d{0,' + (decimals || -1) + '})?')
+                
                 return Number(num.toString().match(regex)[0]).toFixed(decimals)
             },
 
             increase() {
-                this.emitValue((Number(this.inputValue) + Number(this.steps)).toFixed(this.decimals))
+                if (this.disabled || this.increaseDisabled) {
+                    return
+                }
+
+                let newValue = Number(this.inputValue) + Number(1 * this.step)
+                this.decreaseDisabled = false
+
+                this.emitValue(newValue)
             },
 
             decrease() {
-                this.emitValue((Number(this.inputValue) - Number(this.steps)).toFixed(this.decimals))
+                if (this.disabled || this.decreaseDisabled) {
+                    return
+                }
+
+                let newValue = Number(this.inputValue) + Number(-1 * this.step)
+                this.increaseDisabled = false
+
+                this.emitValue(newValue)
             }
         },
 
         mounted() {
             this.inputValue = this.value
+
+            if (this.inputValue <= this.min) {
+                this.decreaseDisabled = true
+            }
+
+            if (this.inputValue >= this.max) {
+                this.increaseDisabled = true
+            }
         }
     }
 </script>

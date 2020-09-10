@@ -6,6 +6,6 @@
 
 <script>
     export default {
-        name: 'p-card-body',
+        name: 'ui-card-body',
     }
 </script>

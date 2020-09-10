@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: 'p-dropdown-item',
+        name: 'ui-dropdown-item',
 
         methods: {
             onClick(event) {

@@ -2,13 +2,13 @@
 	<form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'roles' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button :to="{ name: 'roles' }" variant="secondary">Go Back</ui-button>
+                <ui-button type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
         <section-card title="General Information" description="General information about this role and what it can manage.">
-            <p-input
+            <ui-input-group
                 name="label"
                 label="Name"
                 description="What should this role be called?"
@@ -18,9 +18,9 @@
                 :has-error="form.errors.has('label')"
                 :error-message="form.errors.get('label')"
                 v-model="form.label">
-            </p-input>
+            </ui-input-group>
 
-            <p-textarea
+            <ui-textarea-group
                 name="description"
                 label="Description"
                 autocomplete="off"
@@ -28,38 +28,33 @@
                 :error-message="form.errors.get('description')"
                 v-model="form.description"
                 :rows="2">
-            </p-textarea>
+            </ui-textarea-group>
         </section-card>
 
         <section-card title="Permissions" description="Configure which permissions this role has." v-if="hasPermissions(form.name)">
-            <p-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions_table">
+            <ui-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions_table" show-page-status show-page-numbers show-page-nav show-page-ends>
                 <template slot="name" slot-scope="table">
-                    <input
-                        type="checkbox"
-                        name="permissions"
-                        :id="table.record.name"
-                        :value="table.record.name"
-                        v-model="permissions">
-
-                    <code>{{ table.record.name }}</code>
+                    <ui-checkbox :id="table.record.name" name="permissions" :native-value="table.record.name" v-model="permissions">
+                        <code>{{ table.record.name }}</code>
+                    </ui-checkbox>
                 </template>
 
                 <template slot="description" slot-scope="table">
-                    <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
+                    <p>{{ table.record.description }}</p>
                 </template>
-            </p-table>
+            </ui-table>
         </section-card>
 
 		<template v-slot:sidebar>
-			<p-definition-list v-if="role">
-                <p-definition name="Created At">
+			<ui-definition-list v-if="role">
+                <ui-definition name="Created At">
                     {{ $moment(role.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Updated At">
+                <ui-definition name="Updated At">
                     {{ $moment(role.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
 		</template>
 	</form-container>
 </template>

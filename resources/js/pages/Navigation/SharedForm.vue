@@ -2,13 +2,13 @@
     <form-container>
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'navigation' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button :to="{ name: 'navigation' }" variant="secondary">Go Back</ui-button>
+                <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
         <section-card title="General Information" description="General information about this navigation and what it links to.">
-            <p-input
+            <ui-input-group
                 name="name"
                 label="Name"
                 description="What should this navigation be called?"
@@ -18,9 +18,9 @@
                 :has-error="form.errors.has('name')"
                 :error-message="form.errors.get('name')"
                 v-model="form.name">
-            </p-input>
+            </ui-input-group>
 
-            <p-textarea
+            <ui-textarea-group
                 name="description"
                 label="Description"
                 help="Give a short description of what this navigation will link to."
@@ -28,7 +28,7 @@
                 :has-error="form.errors.has('description')"
                 :error-message="form.errors.get('description')"
                 v-model="form.description">
-            </p-textarea>
+            </ui-textarea-group>
         </section-card>
 
         <section-card title="Blueprint" description="Configure this navigation's blueprint.">
@@ -38,7 +38,7 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-slug
+                    <ui-slug-group
                         name="handle"
                         label="Handle"
                         monospaced
@@ -49,7 +49,7 @@
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
                         v-model="form.handle">
-                    </p-slug>
+                    </ui-slug-group>
                 </div>
             </div>
         </template>

@@ -2,14 +2,14 @@
 	<form-container>
 		<portal to="actions">
 			<div class="buttons">
-				<router-link v-if="taxonomy.id" :to="{ name: 'terms.index', params: {taxonomy: taxonomy.id} }" class="button">Go Back</router-link>
-				<button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+				<ui-button v-if="taxonomy.id" :to="{ name: 'terms.index', params: {taxonomy: taxonomy.id} }" variant="secondary">Go Back</ui-button>
+				<ui-button type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
 			</div>
 		</portal>
 
-        <p-card>
-            <p-card-body>
-                <p-input
+		<ui-card>
+            <ui-card-body>
+                <ui-input-group
                     name="name"
                     label="Name"
                     description="What should this term be called?"
@@ -19,9 +19,9 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </p-input>
-            </p-card-body>
-        </p-card>
+                </ui-input-group>
+            </ui-card-body>
+        </ui-card>
 
         <section-card v-for="section in sections.body" :key="section.handle" :title="section.name" :description="section.description">
             <component
@@ -38,7 +38,7 @@
 		<template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-slug
+                    <ui-slug-group
                         name="slug"
                         label="Slug"
                         monospaced
@@ -48,15 +48,15 @@
                         :has-error="form.errors.has('slug')"
                         :error-message="form.errors.get('slug')"
                         v-model="form.slug">
-                    </p-slug>
+                    </ui-slug-group>
 
-                    <p-toggle
+                    <ui-toggle
                         name="status"
                         label="Status"
                         v-model="form.status"
                         :true-value="1"
                         :false-value="0">
-                    </p-toggle>
+                    </ui-toggle>
                 </div>
             </div>
 
@@ -79,19 +79,19 @@
                 </div>
             </div>
 
-			<p-definition-list v-if="term">
-                <p-definition name="Status">
+			<ui-definition-list v-if="term">
+                <ui-definition name="Status">
                     <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': term.status, 'text-danger-500': ! term.status}"></fa-icon> {{ term.status ? 'Enabled' : 'Disabled' }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Created At">
+                <ui-definition name="Created At">
                     {{ $moment(term.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Updated At">
+                <ui-definition name="Updated At">
                     {{ $moment(term.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
+                </ui-definition>
+            </ui-definition-list>
 		</template>
 	</form-container>
 </template>

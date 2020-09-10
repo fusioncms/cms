@@ -6,7 +6,7 @@
 
         <div class="row">
             <div class="content-container">
-                <p-table id="permissions" :endpoint="endpoint" sort-by="name" :per-page="10" no-actions key="permissions_table">
+                <ui-table id="permissions" :endpoint="endpoint" sort-by="name" :per-page="10" no-actions key="permissions_table">
                     <template slot="name" slot-scope="table">
                         <code>{{ table.record.name }}</code>
                     </template>
@@ -14,7 +14,7 @@
                     <template slot="description" slot-scope="table">
                         <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
                     </template>
-                </p-table>
+                </ui-table>
             </div>
         </div>
     </div>

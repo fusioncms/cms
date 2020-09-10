@@ -12,7 +12,7 @@
     import lozad from 'lozad'
 
     export default {
-        name: 'p-img',
+        name: 'ui-img',
 
         data() {
             return {

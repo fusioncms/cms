@@ -4,9 +4,9 @@
 
 		<div class="flex items-start justify-between">
 			<div class="w-1/2">
-				<p-button :disabled="requestOpen" @click="open">
+				<ui-button :disabled="requestOpen" @click="open">
 					<fa-icon :icon="['fas', 'plus-circle']" class="mr-1"></fa-icon> Manage Forms
-				</p-button>
+				</ui-button>
 			</div>
 
 			<form-selection
@@ -17,7 +17,7 @@
 			</form-selection>
 		</div>
 
-		<p-modal name="selection-manager" no-header no-footer extra-large v-model="modalOpen">
+		<ui-modal name="selection-manager" no-header no-footer extra-large v-model="modalOpen">
 			<div class="row">
 				<div class="side-container">
 					<form-selection
@@ -33,9 +33,9 @@
 						<div class="card__body">
                     		<div class="toolbar">
                     			<div class="toolbar__group">
-									<button class="button button--icon" @click.prevent="push">
+									<ui-button icon @click.prevent="push">
 										<fa-icon class="icon" icon="arrow-alt-circle-left"></fa-icon>
-									</button>
+									</ui-button>
                     			</div>
 
                     			<div class="toolbar__group toolbar__group--grow">
@@ -57,7 +57,7 @@
             		</div>
             	</div>
             </div>
-        </p-modal>
+        </ui-modal>
 	</div>
 </template>
 

@@ -1,13 +1,13 @@
 <template>
 	<div class="buttons">
 		<div class="buttons__group">
-			<button class="button button--icon" @click.prevent="toggleView('list')" :disabled="view == 'list'">
+			<ui-button icon @click.prevent="toggleView('list')" :disabled="view == 'list'">
 				<fa-icon class="fa-fw" :icon="['fas', 'bars']"></fa-icon>
-			</button>
+			</ui-button>
 
-			<button class="button button--icon" @click.prevent="toggleView('grid')" :disabled="view == 'grid'">
+			<ui-button icon @click.prevent="toggleView('grid')" :disabled="view == 'grid'">
 				<fa-icon class="fa-fw" :icon="['fas', 'th-large']"></fa-icon>
-			</button>
+			</ui-button>
 		</div>
 	</div>
 </template>

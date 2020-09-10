@@ -9,7 +9,7 @@
                 <div class="card__body" v-if="isValid">
                     <div class="flex flex-wrap justify-around">
                         <div class="w-1/2 md:w-auto">
-                            <p-tooltip>
+                            <ui-tooltip>
                                 <template>
                                     <span class="border-b-4 block">Unique Visitors</span>
                                 </template>
@@ -17,24 +17,24 @@
                                     Total unique visitors, or sessions, accessing <br/>
                                     all pages of the site.
                                 </template>
-                            </p-tooltip>
+                            </ui-tooltip>
                             <span class="block text-3xl xl:text-5xl font-bold">{{ totalVisitors }}</span>
                         </div>
 
                         <div class="w-1/2 md:w-auto">
-                            <p-tooltip>
+                            <ui-tooltip>
                                 <template>
                                     <span class="border-b-4 block">Total Page Views</span>
                                 </template>
                                 <template slot="content">
                                     Total number of pages viewed by all visitors
                                 </template>
-                            </p-tooltip>
+                            </ui-tooltip>
                             <span class="block text-3xl xl:text-5xl font-bold">{{ totalPageViews }}</span>
                         </div>
 
                         <div class="w-1/2 md:w-auto">
-                            <p-tooltip>
+                            <ui-tooltip>
                                 <template>
                                     <span class="border-b-4 block">Bounce Rate</span>
                                 </template>
@@ -42,12 +42,12 @@
                                     Percentage of visits or sessions where the user <br/>
                                     leaves after viewing a single page
                                 </template>
-                            </p-tooltip>
+                            </ui-tooltip>
                             <span class="block text-3xl xl:text-5xl font-bold">{{ bounceRate }}</span>
                         </div>
 
                         <div class="w-1/2 md:w-auto">
-                            <p-tooltip>
+                            <ui-tooltip>
                                 <template>
                                     <span class="border-b-4 block">Session Duration</span>
                                 </template>
@@ -55,7 +55,7 @@
                                     Average length of time that a user <br/>
                                     spends on the site before leaving
                                 </template>
-                            </p-tooltip>
+                            </ui-tooltip>
                             <span class="block text-3xl xl:text-5xl font-bold">{{ sessionDuration }}</span>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                 <div class="card__body text-center" v-if="isValid === false">
                     <p>Configure your Google Analytic settings to gain insight about your website <fa-icon class="text-emoji" :icon="['fas', 'hand-peace']"></fa-icon></p>
 
-                    <router-link class="button items-center" to="/settings/google_analytics#insights"><fa-icon :icon="['fas', 'cog']" class="mr-2 text-sm"></fa-icon> Go to settings</router-link>
+                    <ui-button class="items-center" to="/settings/google_analytics#insights"><fa-icon :icon="['fas', 'cog']" class="mr-2 text-sm"></fa-icon> Go to settings</ui-button>
                 </div>
 
                 <div class="card__body text-center" v-if="isValid === null">

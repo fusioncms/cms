@@ -1,68 +1,107 @@
 <template>
     <div>
-        <div class="toolbar mb-3">
-            <div class="toolbar__group toolbar__group--grow" v-if="! noSearch">
-                <div class="field__group w-full">
-                    <div class="field__group--prepend">
-                        <fa-icon icon="search" class="fa-fw text-gray-400"></fa-icon>
-                    </div>
+        <ui-toolbar>
+            <slot name="toolbarPrepend"></slot>
 
-                    <input type="text" class="field__input" name="search" v-model="search" placeholder="Search" aria-label="Search" :aria-controls="id" autocomplete="off">
-                </div>
-            </div>
+            <!-- Search -->
+            <ui-toolbar-group grow v-if="! noSearch">
+                <ui-label :fieldId="id + '_table_search'" hideLabel>Search</ui-label>
+                <ui-input
+                    :id="id + '_table_search'"
+                    name="search"
+                    type="search"
+                    placeholder="Search"
+                    autocomplete="off"
+                    :aria-controls="id"
+                    v-model="search">
+                </ui-input>
+            </ui-toolbar-group>
 
-            <div class="toolbar__group">
-                <p-dropdown id="sorting-options" right>
-                    <fa-icon icon="sort-amount-down" class="fa-fw mr-2"></fa-icon> Sort
+            <!-- Page View -->
+            <ui-toolbar-group>
+                <ui-dropdown noArrow id="per-page-options" right>
+                    <fa-icon icon="list"></fa-icon>
+                    <span class="sr-only-mobile">View</span>
 
                     <template v-slot:menu>
-                        <p-dropdown-link v-for="(column, index) in sortable" :key="column + '-sort' || index + '-sort'" @click.prevent="sortRecordsBy(column, sort.order)">
+                        <ui-dropdown-item>
+                            <p>Results per page:</p>
+                        </ui-dropdown-item>
+
+                        <ui-dropdown-divider></ui-dropdown-divider>
+
+                        <ui-dropdown-link v-for="(pages, index) in pagination.perPageOptions" @click.prevent="changePerPage(pages)" :key="index">
+                            <div class="flex justify-between w-full items-center">
+                                <span>{{ pages }}</span>
+                                <fa-icon class="icon" icon="check" v-if="pages === pagination.perPage"></fa-icon>
+                            </div>
+                        </ui-dropdown-link>
+                    </template>
+                </ui-dropdown>
+            </ui-toolbar-group>
+
+            <!-- Sorting -->
+            <ui-toolbar-group>
+                <ui-dropdown noArrow id="sorting-options" right>
+                    <fa-icon icon="sort-amount-down"></fa-icon>
+                    <span class="sr-only-mobile">Sort</span>
+
+                    <template v-slot:menu>
+                        <ui-dropdown-item>
+                            <p>Sort by:</p>
+                        </ui-dropdown-item>
+
+                        <ui-dropdown-divider></ui-dropdown-divider>
+
+                        <ui-dropdown-link v-for="(column, index) in sortable" :key="column + '-sort' || index + '-sort'" @click.prevent="sortRecordsBy(column, sort.order)">
                             <div class="flex justify-between w-full items-center">
                                 <span>{{ column_names[column] || column }}</span>
                                 <fa-icon class="icon" icon="check" v-if="sort.key === column"></fa-icon>
                             </div>
-                        </p-dropdown-link>
+                        </ui-dropdown-link>
 
-                        <p-dropdown-divider />
+                        <ui-dropdown-divider></ui-dropdown-divider>
 
-                        <p-dropdown-link @click.prevent="sortRecordsBy(sort.key, 'asc')">
+                        <ui-dropdown-link @click.prevent="sortRecordsBy(sort.key, 'asc')">
                             <div class="flex justify-between w-full items-center">
                                 <span>Ascending</span>
                                 <fa-icon class="icon" icon="check" v-if="sort.order === 'asc'"></fa-icon>
                             </div>
-                        </p-dropdown-link>
+                        </ui-dropdown-link>
 
-                        <p-dropdown-link @click.prevent="sortRecordsBy(sort.key, 'desc')">
+                        <ui-dropdown-link @click.prevent="sortRecordsBy(sort.key, 'desc')">
                             <div class="flex justify-between w-full items-center">
                                 <span>Descending</span>
                                 <fa-icon class="icon" icon="check" v-if="sort.order === 'desc'"></fa-icon>
                             </div>
-                        </p-dropdown-link>
+                        </ui-dropdown-link>
                     </template>
-                </p-dropdown>
-            </div>
-        </div>
+                </ui-dropdown>
+            </ui-toolbar-group>
 
-        <div class="table__wrapper" v-if="records.length">
+            <slot name="toolbarAppend"></slot>
+        </ui-toolbar>
+
+        <div class="table-wrapper" v-if="records.length" :class="{'loading': loading}">
             <table :id="id" class="table" aria-live="polite">
+                <!-- Table Head -->
                 <thead>
                     <tr>
-                        <th
-                            v-for="(column, index) in displayable"
-                            :key="column[primaryKey] || index"
-                            :class="{
-                                'sortable': isSortable(column),
-                            }"
-                            @click.prevent="isSortable(column) && sortRecordsBy(column)"
-                        >
-                            <span :class="{'text-gray-500': (sort.key !== column), 'text-gray-800': (sort.key === column)}">
+                        <th v-for="(column, index) in displayable"
+                            :class="{'sortable': isSortable(column), 'active': (sort.key === column)}"
+                            :key="column[primaryKey] || index">
+                            <a href="#" v-if="isSortable(column)" class="table__heading table__heading--link" @click.prevent="isSortable(column) && sortRecordsBy(column)" :aria-label="'Sort by ' + column_names[column] || column">
                                 <span>{{ column_names[column] || column }}</span>
 
-                                <div class="inline" v-if="isSortable(column)">
+                                <div class="inline" v-if="isSortable(column)" aria-hidden="true">
                                     <fa-icon icon="sort" class="fa-fw" v-if="sort.key !== column"></fa-icon>
                                     <fa-icon icon="sort-up" class="fa-fw" v-if="sort.order === 'asc' && sort.key === column"></fa-icon>
                                     <fa-icon icon="sort-down" class="fa-fw" v-if="sort.order === 'desc' && sort.key === column"></fa-icon>
                                 </div>
+                            </a>
+
+                            <span v-else class="table__heading">
+                                {{ column_names[column] || column }}
                             </span>
                         </th>
 
@@ -70,21 +109,19 @@
                     </tr>
                 </thead>
 
+                <!-- Table Body -->
                 <tbody>
                     <tr v-for="(record, index) in records" :key="record[primaryKey] || index">
-                        <td
-                            v-for="column in displayable"
-                            :key="column"
-                        >
-                            <span class="column__label">{{ column_names[column] || column }}</span>
-                            <span>
-                                <slot :name="column" :record="record">
-                                    {{ record[column] }}
-                                </slot>
-                            </span>
+                        <td v-for="column in displayable"
+                            :key="column">
+                            <span class="column-label">{{ column_names[column] || column }}</span>
+        
+                            <slot :name="column" :record="record">
+                                {{ record[column] }}
+                            </slot>
                         </td>
 
-                        <td class="actions" v-if="hasActions">
+                        <td class="table__actions" v-if="hasActions">
                             <slot name="actions" :record="record"></slot>
                         </td>
                     </tr>
@@ -92,19 +129,40 @@
             </table>
         </div>
 
-        <div class="mt-6" v-if="this.pagination.totalPages > 1">
-            <p-pagination
-                @input="changePage($event)"
-                :total="this.pagination.totalPages"
-                :value="this.pagination.currentPage"
-            ></p-pagination>
+        <!-- Pagination -->
+        <div class="pagination-group" v-if="this.pagination.totalPages > 1">
+            <div v-if="showPageStatus" class="pagination-group__item">
+                <ui-pagination-status 
+                    :total="this.pagination.totalPages"
+                    :value="this.pagination.currentPage">
+                </ui-pagination-status>
+            </div>
+
+            <div v-if="showPageNumbers || showPageNav || showPageEnds" class="pagination-group__item">
+                <ui-pagination
+                    @input="changePage($event)"
+                    :showNumbers="showPageNumbers"
+                    :showNav="showPageNav"
+                    :showEnds="showPageEnds"
+                    :total="this.pagination.totalPages"
+                    :value="this.pagination.currentPage">
+                </ui-pagination>
+            </div>
+
+            <div v-if="!hidePageSelect" class="pagination-group__item">
+                <ui-pagination-select
+                    @input="changePage($event)"
+                    :label="pageSelectLabel"
+                    :total="this.pagination.totalPages"
+                    :value="this.pagination.currentPage">
+                </ui-pagination-select>
+            </div>
         </div>
 
-        <div class="card" v-if="! records.length">
+        <!-- No Results -->
+        <div v-if="!records.length && !initialLoad" class="no-bottom text-heading--md mb-0">
             <slot name="empty-state">
-                <div class="card__body text-center">
-                    <h3 class="m-0">No results found.</h3>
-                </div>
+                <p>No results found.</p>
             </slot>
         </div>
     </div>
@@ -116,24 +174,88 @@
     import queryString from 'query-string'
 
     export default {
-        name: 'p-table',
+        name: 'ui-table',
+
+        props: {
+            id: {
+                required: true,
+                type: String
+            },
+            noRecords: {
+                type: String,
+                default: 'No records to display'
+            },
+            endpoint: {
+                required: true,
+                type: String
+            },
+            sortBy: {
+                type: String,
+                default: 'id'
+            },
+            perPage: {
+                type: Number,
+                default: 10
+            },
+            sortIn: {
+                type: String,
+                default: 'asc'
+            },
+            noSearch: {
+                type: Boolean,
+                default: false
+            },
+            primaryKey: {
+                required: false,
+                type: String
+            },
+            showPageStatus: {
+                type: Boolean,
+                default: false
+            },
+            showPageNumbers: {
+                type: Boolean,
+                default: false
+            },
+            showPageNav: {
+                type: Boolean,
+                default: false
+            },
+            showPageEnds: {
+                type: Boolean,
+                default: false
+            },
+            hidePageSelect: {
+                type: Boolean,
+                default: false
+            },
+            pageSelectLabel: {
+                type: String,
+                default: 'Page'
+            }
+        },
 
         data() {
             return {
+                initialLoad: true,
                 loading: true,
                 displayable: [],
                 column_names: [],
                 sortable: [],
                 records: [],
                 search: '',
-
                 pagination: {
                     totalRecords: 0,
                     currentPage: 1,
                     totalPages: 0,
                     perPage: this.perPage,
+                    perPageOptions: [
+                        10,
+                        50,
+                        100,
+                        250
+                    ]
                 },
-
                 sort: {
                     key: this.sortBy,
                     order: this.sortIn,
@@ -153,53 +275,6 @@
 
             hasActions() {
                 return !!this.$slots.actions || !!this.$scopedSlots.actions
-            },
-        },
-
-        props: {
-            id: {
-                required: true,
-                type: String,
-            },
-
-            noRecords: {
-                required: false,
-                type: String,
-                default: 'No records to display',
-            },
-
-            endpoint: {
-                required: true,
-                type: String,
-            },
-
-            sortBy: {
-                required: false,
-                type: String,
-                default: 'id',
-            },
-
-            perPage: {
-                required: false,
-                type: Number,
-                default: 10,
-            },
-
-            sortIn: {
-                required: false,
-                type: String,
-                default: 'asc',
-            },
-
-            noSearch: {
-                required: false,
-                type: Boolean,
-                default: false,
-            },
-
-            primaryKey: {
-                required: false,
-                type: String,
             },
         },
 
@@ -228,6 +303,7 @@
                     this.pagination.totalPages = response.data.records.last_page
 
                     this.loading = false
+                    this.initialLoad = false
                 })
             },
 
@@ -267,6 +343,13 @@
                 this.getRecords()
             },
 
+            changePerPage(page) {
+                this.pagination.currentPage = 1
+                this.pagination.perPage = page
+
+                this.getRecords()
+            },
+
             destroy(id) {
                 axios.delete(`${this.endpoint}/${id}`).then(() => {
                     this.getRecords()
@@ -282,7 +365,6 @@
 
         created() {
             this.getRecords()
-
             this.listenForEvents()
         }
     }

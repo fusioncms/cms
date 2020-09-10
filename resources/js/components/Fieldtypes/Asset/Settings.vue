@@ -1,22 +1,21 @@
 <template>
     <div class="row">
     	<div class="col w-1/2">
-			<p-number
+			<ui-number-group
 				name="settings.limit"
 				label="Limit"
 				help="Limit the number of assets selected; leave blank if no limit is desired."
-				placeholder=""
-				v-model="settings.limit"
+				:min="1"
 				:has-error="errors.has('settings.limit')"
            		:error-message="errors.get('settings.limit')">
-			</p-number>
+			</ui-number-group>
 
-			<p-checkbox-group
+			<ui-checkbox-group
 				label="File type restrictions"
 				help="Restrict which file types are selectable for this field; leave blank if no retriction is desired."
 				:has-error="errors.has('settings.filetype_restrictions')"
        			:error-message="errors.get('settings.filetype_restrictions')">
-				<p-checkbox
+				<ui-checkbox
 					v-for="(filetype, index) in filetypes"
 					name="settings.filetype_restrictions"
 					:id="index"
@@ -24,12 +23,12 @@
 					:native-value="index"
 					v-model="settings.filetype_restrictions">
 					{{ filetype }}
-				</p-checkbox>
-			</p-checkbox-group>
+				</ui-checkbox>
+			</ui-checkbox-group>
 		</div>
 
     	<div class="col w-1/2">
-			<p-select
+			<ui-select-group
 				name="settings.root_directory"
 				label="Root directory"
 				help="Select root folder for this field; default root will be used if None selected."
@@ -37,7 +36,7 @@
 				v-model="settings.root_directory"
 				:has-error="errors.has('settings.root_directory')"
            		:error-message="errors.get('settings.root_directory')">
-			</p-select>
+			</ui-select-group>
 	    </div>
     </div>
 </template>

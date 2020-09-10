@@ -1,36 +1,35 @@
 <template>
-    <p-field-group
+    <input
+        class="field field--input"
+        :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
+        :id="formattedId"
         :name="name"
-        :fieldId="formattedId"
-        :label="label"
+        :type="type"
+        :placeholder="placeholder"
+        :readonly="readonly"
+        :disabled="disabled"
+        :value="value"
+        :autocomplete="autocomplete"
+        :autofocus="autofocus"
         :required="required"
-        :hasError="hasError"
-        :errorMessage="errorMessage"
-        :hasSuccess="hasSuccess"
-        :successMessage="successMessage"
-        :help="help">
-        <input
-            class="field field--input"
-            :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
-            :id="formattedId"
-            :name="name"
-            :type="type"
-            :placeholder="placeholder"
-            :readonly="readonly"
-            :disabled="disabled"
-            :value="value"
-            :autocomplete="autocomplete"
-            :autofocus="autofocus"
-            :required="required"
-            :aria-required="required"
-            :aria-describedby="hasMessage ? formattedId + '_message' : null"
-            @input="$emit('input', $event.target.value)">
-    </p-field-group>
+        :aria-required="required" 
+        :aria-describedby="message ? formattedId + '_message' : null"
+        @input="handleInput">
 </template>
 
 <script>
     export default {
-        name: 'p-input',
+        name: 'ui-input',
+
+        mixins: [
+            require('../../mixins/fields').default
+        ],
+
+        data() {
+            return {
+                inputValue: this.value
+            }
+        },
 
         props: {
             name:  {
@@ -39,8 +38,6 @@
             },
             id: String,
             placeholder: String,
-            label: String,
-            help: String,
             value: {
                 type: [String, Number],
                 default: '',
@@ -70,20 +67,15 @@
                 type: Boolean,
                 default: false,
             },
-            errorMessage: {
-                required: false,
-                type: String,
-                default: '',
-            },
             hasSuccess: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-            successMessage: {
+            message: {
                 required: false,
-                type: String,
-                default: '',
+                type: Boolean,
+                defaut: false
             },
             autocomplete: {
                 required: false,
@@ -94,16 +86,16 @@
                 required: false,
                 type: Boolean,
                 default: false,
-            },
+            }
         },
 
-        computed: {
-            hasMessage() {
-                return this.help || this.errorMessage || this.successMessage
+        methods: {
+            focus() {
+                this.$el.focus()
             },
-
-            formattedId() {
-                return this.id ? this.id : this.name + '_field'
+            
+            blur() {
+                this.$el.blur()
             }
         }
     }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p-toggle
+        <ui-toggle
             name="settings.default"
             label="Default"
             help="What would you like the default value to be?"
@@ -8,7 +8,7 @@
             v-model="settings.default"
             :has-error="errors.has('settings.default')"
             :error-message="errors.get('settings.default')">
-        </p-toggle>
+        </ui-toggle>
     </div>
 </template>
 
