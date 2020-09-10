@@ -19,10 +19,8 @@ if (!function_exists('menu')) {
                     'target' => $node->new_window ? '_blank' : '_self',
                 ];
 
-                if ($node->menu && $node->menu->fieldset) {
-                    foreach ($node->menu->fieldset->fields as $field) {
-                        $item->{$field->handle} = $node->{$field->handle};
-                    }
+                foreach ($node->fields as $field) {
+                    $item[$field->handle] = $node->{$field->handle} ?? null;
                 }
 
                 return [
