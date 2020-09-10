@@ -147,6 +147,7 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerProviders()
     {
+        $this->app->register(AdminMenuServiceProvider::class);
         $this->app->register(AddonServiceProvider::class);
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(EventServiceProvider::class);

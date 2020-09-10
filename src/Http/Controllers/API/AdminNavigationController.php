@@ -2,10 +2,9 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Fusion\Events\ServingFusion;
+use Fusion\Facades\Menu;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\AdminNavigationResource;
-use Menu;
 
 class AdminNavigationController extends Controller
 {
@@ -18,13 +17,10 @@ class AdminNavigationController extends Controller
     {
         $this->authorize('access.controlPanel');
 
-        event(ServingFusion::class);
+        // $roots = Menu::get('admin')->roots();
+        // $links = $this->extractLinks($roots);
 
-        $roots = Menu::get('admin')->roots();
-
-        $links = $this->extractLinks($roots);
-
-        return new AdminNavigationResource($links);
+        return new AdminNavigationResource(Menu::get('admin'));
     }
 
     /**
@@ -33,7 +29,7 @@ class AdminNavigationController extends Controller
      * @param \Caffeinated\Menus\MenuItem $node
      *
      * @return \Illuminate\Support\Collection
-     */
+     *
     protected function extractLinks($node)
     {
         $linkCollection = collect();
@@ -57,5 +53,5 @@ class AdminNavigationController extends Controller
         }
 
         return $linkCollection;
-    }
+    }*/
 }

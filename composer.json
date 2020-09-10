@@ -47,8 +47,6 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.2.5",
-        "caffeinated/flash": "^4.0",
-        "caffeinated/menus": "^4.0",
         "composer/semver": "^1.5",
         "doctrine/dbal": "^2.9",
         "illuminate/support": "^7.0",

@@ -6,7 +6,8 @@ use Fusion\Models\Matrix;
 use Fusion\Models\Taxonomy;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Str;
-use Menu;
+use Spatie\Menu\Laravel\Menu;
+use Spatie\Menu\Laravel\Link;
 
 class LoadNavigation
 {
@@ -22,6 +23,8 @@ class LoadNavigation
         $matrices   = Matrix::where('sidebar', true)->where('parent_id', 0)->orderBy('name')->get();
         $taxonomies = Taxonomy::where('sidebar', true)->orderBy('name')->get();
 
+        
+/*
         Menu::make('admin', function ($menu) use ($matrices, $taxonomies) {
             $menu->add('Dashboard')->data([
                 'to'    => '/',
@@ -180,5 +183,6 @@ class LoadNavigation
                 'icon' => 'cog',
             ]);
         });
+*/
     }
 }
