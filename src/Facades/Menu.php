@@ -16,6 +16,6 @@ class Menu extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'fusion.menu';
+        return 'menu';
     }
 }

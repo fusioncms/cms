@@ -28,7 +28,7 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('fusion.menu', function () {
+        $this->app->singleton('menu', function () {
             return new \Fusion\Services\Menu;
         });
     }
