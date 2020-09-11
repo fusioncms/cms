@@ -2,7 +2,6 @@
 
 namespace Fusion\Http\Controllers\API\Users;
 
-use Fusion\Events\UserDeleted;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\UserRequest;
 use Fusion\Http\Resources\UserResource;
@@ -116,8 +115,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $this->authorize('users.delete');
-
-        event(new UserDeleted($user));
 
         $user->delete();
     }
