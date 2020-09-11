@@ -22,12 +22,12 @@
 		</div>
 
 		<template v-slot:sidebar>
-			<p-definition-list v-if="resource">
-                <p-definition name="Group">
+			<ui-definition-list v-if="resource">
+                <ui-definition name="Group">
                     {{ resource.group }}
-                </p-definition>
+                </ui-definition>
 
-                <p-definition name="Created At">
+                <ui-definition name="Created At">
                     {{ $moment(resource.created_at).format('Y-MM-DD, hh:mm a') }}
                 </ui-definition>
 

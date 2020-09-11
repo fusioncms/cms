@@ -1,11 +1,13 @@
 <template>
-        <router-link v-if="to" 
-            :to="to" 
+        <router-link v-if="to"
+            :to="to"
             class="button"
-            :class="[{ 'button--icon': icon, 'button--rounded': rounded, 'disabled': disabled }, variantClass, sizeClass]"@click.native="onClick($event)"
+            :class="[{ 'button--icon': icon, 'button--rounded': rounded, 'disabled': disabled }, variantClass, sizeClass]"
             v-on="$listeners"
             v-bind="$attrs">
+
             <slot></slot>
+
         </router-link>
 
         <a v-else-if="href"
@@ -14,8 +16,9 @@
             :class="[{ 'button--icon': icon, 'button--rounded': rounded, 'disabled': disabled }, variantClass, sizeClass]"
             v-on="$listeners"
             v-bind="$attrs">
+
             <slot></slot>
-            
+
             <!-- <fa-icon v-if="props.isLoading" icon="circle-notch" class="ml-3 fa-fw fa-spin"></fa-icon> -->
         </a>
 
@@ -25,8 +28,9 @@
             :disabled="disabled"
             v-on="$listeners"
             v-bind="$attrs">
+
             <slot></slot>
-            
+
             <!-- <fa-icon v-if="props.isLoading" icon="circle-notch" class="ml-3 fa-fw fa-spin"></fa-icon> -->
         </button>
 </template>
@@ -62,7 +66,7 @@
                 sizeClass: null,
                 sizes: {
                     large: 'large',
-                    small: 'small' 
+                    small: 'small'
                 }
             }
         },

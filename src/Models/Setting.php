@@ -25,8 +25,15 @@ class Setting extends Model
         'status',
     ];
 
+    protected $blueprintGroup = 'Settings';
+    protected $blueprintHidden = true;
+
     public function getBlueprintGroup(): string {
         return 'Settings';
+    }
+
+    public function getBlueprintVisibility(): bool {
+        return false;
     }
 
     /**

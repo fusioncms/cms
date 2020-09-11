@@ -55,9 +55,12 @@ class Form extends Model
         'status'                  => 'boolean',
     ];
 
-    public function getBlueprintGroup(): string {
-        return 'Forms';
-    }
+    /**
+     * The blueprint grouping value.
+     *
+     * @var string
+     */
+    protected $blueprintGroup = 'Forms';
 
     /**
      * Get the builder instance.

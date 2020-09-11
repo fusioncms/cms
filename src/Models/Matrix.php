@@ -59,6 +59,11 @@ class Matrix extends Model
         'show_name_field'  => 'boolean',
     ];
 
+    /**
+     * What the generated blueprint should be grouped by.
+     *
+     * @return string
+     */
     public function getBlueprintGroup(): string {
         return Str::plural(ucfirst($this->type));
     }

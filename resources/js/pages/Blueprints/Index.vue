@@ -5,15 +5,13 @@
         </portal>
 
         <section-card v-for="(blueprints, group) in groups" :key="group" :title="group">
-            <p-card class="p-px">
-                <table class="table">
-                    <tbody>
-                        <tr v-for="blueprint in blueprints" :key="blueprint.name">
-                            <td><router-link :to="{ name: 'blueprints.edit', params: {blueprint: blueprint.id} }">{{ blueprint.name }}</router-link></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </p-card>
+            <table class="table">
+                <tbody>
+                    <tr v-for="blueprint in blueprints" :key="blueprint.name">
+                        <td><router-link :to="{ name: 'blueprints.edit', params: {blueprint: blueprint.id} }">{{ blueprint.name }}</router-link></td>
+                    </tr>
+                </tbody>
+            </table>
         </section-card>
     </div>
 </template>
@@ -45,7 +43,9 @@
                 axios.get('/api/blueprints'),
             ]).then(axios.spread(function (blueprints) {
                 next(function(vm) {
-                    vm.blueprints = blueprints.data.data
+                    vm.blueprints = _.reject(blueprints.data.data, function(blueprint) {
+                        return blueprint.hidden == 1
+                    })
                 })
             }))
         },

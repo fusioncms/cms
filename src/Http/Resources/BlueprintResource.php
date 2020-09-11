@@ -19,6 +19,7 @@ class BlueprintResource extends JsonResource
             'id'         => $this->id,
             'name'       => $this->name,
             'group'      => $this->group,
+            'hidden'     => $this->hidden,
             'sections'   => SectionResource::collection($this->sections),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

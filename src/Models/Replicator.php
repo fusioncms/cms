@@ -19,9 +19,7 @@ class Replicator extends Model
      */
     protected $fillable = ['field_id', 'name', 'handle', 'uniqid'];
 
-    public function getBlueprintGroup(): string {
-        return 'Replicator';
-    }
+    protected $blueprintGroup = 'Replicators';
 
     /**
      * @param \Fusion\Models\Section $section

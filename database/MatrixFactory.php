@@ -64,6 +64,23 @@ class MatrixFactory implements Factory
 
         $matrix = factory(Matrix::class)->create($overrides);
 
+        if ($this->sections) {
+            foreach ($this->sections as $data) {
+                $section = $matrix->blueprint->sections()->create([
+                    'name'   => $data['name'],
+                    'handle' => $data['handle'],
+                ]);
+
+                foreach ($data['fields'] as $field) {
+                    $section->fields()->create([
+                        'name'   => $field['name'],
+                        'handle' => $field['handle'],
+                        'type'   => $field['type'],
+                    ]);
+                }
+            }
+        }
+
         return $matrix;
     }
 
@@ -129,6 +146,13 @@ class MatrixFactory implements Factory
     public function withTemplate($template)
     {
         $this->template = $template;
+
+        return $this;
+    }
+
+    public function withSections($sections)
+    {
+        $this->sections = $sections;
 
         return $this;
     }

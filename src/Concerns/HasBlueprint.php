@@ -16,6 +16,10 @@ trait HasBlueprint
             $model->createBlueprint();
         });
 
+        static::updated(function($model) {
+            $model->updateBlueprint();
+        });
+
         static::deleting(function($model) {
             $model->deleteBlueprint();
         });
@@ -26,7 +30,22 @@ trait HasBlueprint
      *
      * @return string
      */
-    abstract public function getBlueprintGroup(): string;
+    public function getBlueprintGroup(): string {
+        if (! property_exists(static::class, 'blueprintGroup')) {
+            throw new \LogicException(static::class . ' must have a "$blueprintGroup" property defined.');
+        }
+
+        return $this->blueprintGroup;
+    }
+
+    /**
+     * Should the blueprint be hidden from the interface?
+     *
+     * @return bool
+     */
+    public function getBlueprintHidden(): bool {
+        return $this->blueprintHidden ?? false;
+    }
 
     /**
      * A model has one blueprint.
@@ -43,8 +62,9 @@ trait HasBlueprint
     {
         return $this->withoutEvents(function() {
             return $this->blueprint()->create([
-                'name'  => $this->name,
-                'group' => $this->getBlueprintGroup(),
+                'name'   => $this->name,
+                'group'  => $this->getBlueprintGroup(),
+                'hidden' => $this->getBlueprintHidden(),
             ]);
         });
     }
@@ -56,8 +76,9 @@ trait HasBlueprint
     {
         return $this->withoutEvents(function() {
             return $this->blueprint()->update([
-                'name'  => $this->name,
-                'group' => $this->getBlueprintGroup(),
+                'name'   => $this->name,
+                'group'  => $this->getBlueprintGroup(),
+                'hidden' => $this->getBlueprintHidden(),
             ]);
         });
     }

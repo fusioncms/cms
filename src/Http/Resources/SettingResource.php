@@ -22,7 +22,7 @@ class SettingResource extends JsonResource
             'group'       => $this->group,
             'icon'        => $this->icon,
             'description' => $this->description,
-            'blueprint'   => new BlueprintResource($this->fieldset),
+            'blueprint'   => new BlueprintResource($this->blueprint),
         ];
 
         foreach ($this->blueprint->fields as $field) {

@@ -14,6 +14,16 @@ class Blueprint extends Model
     protected $fillable = [
         'name',
         'group',
+        'hidden',
+    ];
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'hidden' => 'boolean',
     ];
 
     /**

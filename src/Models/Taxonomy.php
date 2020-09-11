@@ -39,9 +39,7 @@ class Taxonomy extends Model
         'sidebar' => 'boolean',
     ];
 
-    public function getBlueprintGroup(): string {
-        return 'Taxonomy';
-    }
+    protected $blueprintGroup = 'Taxonomy';
 
     public function getBuilder()
     {
