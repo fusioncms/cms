@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature\Users;
+namespace Fusion\Tests\Feature\Auth;
 
 use Fusion\Mail\WelcomeNewUser;
 use Fusion\Models\User;

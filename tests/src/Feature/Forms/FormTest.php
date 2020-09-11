@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature\Form;
+namespace Fusion\Tests\Feature\Forms;
 
 use Facades\FormFactory;
 use Fusion\Models\Form;

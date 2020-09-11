@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class SingleTest extends TestCase
+class PageTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;

@@ -45,6 +45,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
         Hash::driver('bcrypt')->setRounds(4);
 
+        // TODO: remove w/ `laravel/legacy-factories` package
         $this->withFactories(fusion_path('/database/definitions'));
 
         $this->install();

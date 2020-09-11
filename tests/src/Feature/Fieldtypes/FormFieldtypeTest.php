@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\Fieldtypes;
 
 use Fusion\Models\Form;
 use Fusion\Services\Builders\Collection;

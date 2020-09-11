@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature\Users;
+namespace Fusion\Tests\Feature\Auth;
 
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\AuthenticationException;
