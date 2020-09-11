@@ -24,13 +24,34 @@ class SingleTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        // --
-        $this->section      = \Facades\SectionFactory::times(1)->withoutFields()->create();
-        $this->fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($this->section)->create();
-        $this->fieldContent = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($this->section)->create();
-        $this->fieldset     = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->matrix       = \Facades\MatrixFactory::withName('Single')->asSingle()->withFieldset($this->fieldset)->withRoute('{slug}')->withTemplate('index')->create();
-        $this->model        = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
+        $this->matrix = \Facades\MatrixFactory::withName('Single')
+            ->asSingle()
+            ->withSections([
+                [
+                    'name'   => 'General',
+                    'handle' => 'general',
+                    'fields' => [
+                        [
+                            'name'   => 'Excerpt',
+                            'handle' => 'excerpt',
+                            'type'   => 'input',
+                        ],
+                        [
+                            'name'   => 'Content',
+                            'handle' => 'content',
+                            'type'   => 'textarea',
+                        ],
+                    ],
+                ],
+            ])
+            ->withRoute('{slug}')
+            ->withTemplate('index')
+            ->create();
+
+        $this->fieldExcerpt = $this->matrix->blueprint->fields->where('name', 'Excerpt')->first();
+        $this->fieldContent = $this->matrix->blueprint->fields->where('name', 'Content')->first();
+
+        $this->model = (new \Fusion\Services\Builders\Collection($this->matrix->handle))->make();
     }
 
     /**

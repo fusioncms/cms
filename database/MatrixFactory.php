@@ -22,6 +22,11 @@ class MatrixFactory implements Factory
     protected $template;
 
     /**
+     * @var array
+     */
+    protected $sections;
+
+    /**
      * @var bool
      */
     protected $asSingle = false;
