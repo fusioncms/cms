@@ -3,7 +3,7 @@
 namespace Fusion\Tests\Unit;
 
 use Facades\TaxonomyFactory;
-use Fusion\Models\Fieldset;
+use Fusion\Models\Blueprint;
 use Fusion\Models\Taxonomy;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
@@ -19,14 +19,11 @@ class TaxonomyTest extends TestCase
      * @group unit
      * @group taxonomy
      */
-    public function a_taxonomy_can_have_a_fieldset()
+    public function a_taxonomy_should_have_a_blueprint()
     {
         $taxonomy = factory(Taxonomy::class)->create();
-        $fieldset = factory(Fieldset::class)->create();
 
-        $taxonomy->attachFieldset($fieldset);
-
-        $this->assertInstanceOf(Fieldset::class, $taxonomy->fieldset);
+        $this->assertInstanceOf(Blueprint::class, $taxonomy->blueprint);
     }
 
     /**

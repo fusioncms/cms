@@ -19,6 +19,11 @@ class TaxonomyFactory implements Factory
     protected $states;
 
     /**
+     * @var array
+     */
+    protected $sections;
+
+    /**
      * Create a new Taxonomy factory.
      *
      * @return \Fusion\Models\Taxonomy
@@ -39,6 +44,23 @@ class TaxonomyFactory implements Factory
             $taxonomy = factory(Taxonomy::class)->create($overrides);
         }
 
+        if ($this->sections) {
+            foreach ($this->sections as $data) {
+                $section = $taxonomy->blueprint->sections()->create([
+                    'name'   => $data['name'],
+                    'handle' => $data['handle'],
+                ]);
+
+                foreach ($data['fields'] as $field) {
+                    $section->fields()->create([
+                        'name'   => $field['name'],
+                        'handle' => $field['handle'],
+                        'type'   => $field['type'],
+                    ]);
+                }
+            }
+        }
+
         return $taxonomy;
     }
 
@@ -57,7 +79,7 @@ class TaxonomyFactory implements Factory
     }
 
     /**
-     * Add states to Taxonomy.
+     * Add states to the taxonomy.
      *
      * @param array $states
      *
@@ -66,6 +88,20 @@ class TaxonomyFactory implements Factory
     public function withStates(array $states)
     {
         $this->states = $states;
+
+        return $this;
+    }
+
+    /**
+     * Add sections to the taxonomy.
+     *
+     * @param array $sections
+     *
+     * @return \TaxonomyFactory
+     */
+    public function withSections($sections)
+    {
+        $this->sections = $sections;
 
         return $this;
     }

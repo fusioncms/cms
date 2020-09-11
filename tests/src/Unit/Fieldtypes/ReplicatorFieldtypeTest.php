@@ -17,6 +17,8 @@ class ReplicatorFieldtypeTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
+        $this->markTestIncomplete();
+
         // --
         $this->section  = \Facades\SectionFactory::times(1)->withoutFields()->create();
         $this->field    = \Facades\FieldFactory::withName('Replicator')->withType('replicator')->withSection($this->section)->withSettings(['replicator'=>null, 'sections'=>[]])->create();

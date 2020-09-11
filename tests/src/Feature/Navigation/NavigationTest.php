@@ -55,7 +55,7 @@ class NavigationTest extends TestCase
 
         $this->assertDatabaseHas('blueprints', [
             'name'  => $navigation->name,
-            'group' => 'navigation',
+            'group' => 'Navigation',
         ]);
     }
 

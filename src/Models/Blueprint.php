@@ -87,6 +87,18 @@ class Blueprint extends Model
     }
 
     /**
+     * Return the fields that generate database columns.
+     *
+     * @return self
+     */
+    public function database()
+    {
+        return $this->fields->reject(function ($field) {
+            return is_null($field->type()->getColumn());
+        });
+    }
+
+    /**
      * Scope a query to only include visible records.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query

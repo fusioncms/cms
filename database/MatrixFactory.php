@@ -155,6 +155,13 @@ class MatrixFactory implements Factory
         return $this;
     }
 
+    /**
+     * Add sections to the matrix.
+     *
+     * @param array $sections
+     *
+     * @return \TaxonomyFactory
+     */
     public function withSections($sections)
     {
         $this->sections = $sections;

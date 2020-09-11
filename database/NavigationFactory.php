@@ -12,6 +12,11 @@ class NavigationFactory implements Factory
     protected $name;
 
     /**
+     * @var array
+     */
+    protected $sections;
+
+    /**
      * Create a new Navigation factory.
      *
      * @return \Fusion\Models\Navigation
@@ -27,6 +32,23 @@ class NavigationFactory implements Factory
 
         $navigation = factory(Navigation::class)->create($overrides);
 
+        if ($this->sections) {
+            foreach ($this->sections as $data) {
+                $section = $navigation->blueprint->sections()->create([
+                    'name'   => $data['name'],
+                    'handle' => $data['handle'],
+                ]);
+
+                foreach ($data['fields'] as $field) {
+                    $section->fields()->create([
+                        'name'   => $field['name'],
+                        'handle' => $field['handle'],
+                        'type'   => $field['type'],
+                    ]);
+                }
+            }
+        }
+
         return $navigation;
     }
 
@@ -40,6 +62,20 @@ class NavigationFactory implements Factory
     public function withName($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Add sections to the navigation.
+     *
+     * @param array $sections
+     *
+     * @return \TaxonomyFactory
+     */
+    public function withSections($sections)
+    {
+        $this->sections = $sections;
 
         return $this;
     }
