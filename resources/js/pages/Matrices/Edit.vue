@@ -54,11 +54,16 @@
                 }
 
                 this.form.patch(`/api/matrices/${this.id}`).then((response) => {
-                    store.dispatch('navigation/fetchAdminNavigation')
+                    axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
+                        .then((response) => {
+                            store.dispatch('navigation/fetchAdminNavigation')
 
-                    toast('Matrix successfully updated', 'success')
+                            toast('Matrix successfully updated', 'success')
 
-                    this.$router.push('/matrices')
+                            this.$router.push('/matrices')
+                        }).catch((response) => {
+                            toast(response.message, 'failed')
+                        })
                 }).catch((response) => {
                     toast(response.response.data.message, 'failed')
                 })
@@ -87,6 +92,7 @@
                             type:               vm.matrix.type,
                             reference_singular: vm.matrix.reference_singular,
                             reference_plural:   vm.matrix.reference_plural,
+                            sections:           vm.matrix.blueprint.sections,
                             sidebar:            vm.matrix.sidebar ? '1' : '0',
                             quicklink:          vm.matrix.quicklink ? '1' : '0',
                             icon:               vm.matrix.icon,

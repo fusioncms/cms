@@ -40,6 +40,8 @@
                     reference_singular: '',
                     reference_plural: '',
 
+                    sections: [],
+
                     sidebar: '1',
                     quicklink: '1',
                     icon: '',
@@ -78,11 +80,16 @@
                 }
 
                 this.form.post('/api/matrices').then((response) => {
-                    store.dispatch('navigation/fetchAdminNavigation')
+                    axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
+                        .then((response) => {
+                            store.dispatch('navigation/fetchAdminNavigation')
 
-                    toast('Matrix successfully created', 'success')
+                            toast('Matrix successfully created', 'success')
 
-                    this.$router.push('/matrices')
+                            this.$router.push('/matrices')
+                        }).catch((response) => {
+                            toast(response.message, 'failed')
+                        })
                 }).catch((response) => {
                     toast(response.message, 'failed')
                 })

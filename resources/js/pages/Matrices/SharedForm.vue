@@ -128,6 +128,10 @@
             </ui-input-group>
         </section-card>
 
+        <section-card title="Blueprint" description="Configure this matrix' blueprint.">
+            <section-builder v-model="form.sections"></section-builder>
+        </section-card>
+
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
