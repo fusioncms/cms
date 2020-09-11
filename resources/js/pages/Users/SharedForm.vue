@@ -8,17 +8,20 @@
         </portal>
 
         <section-card title="General Information" description="General information about this user.">
-            <ui-title-group
+            <ui-input-group
+                id="user-name"
                 name="name"
+                label="Name"
                 autocomplete="off"
                 autofocus
                 required
                 :has-error="form.errors.has('name')"
                 :error-message="form.errors.get('name')"
                 v-model="form.name">
-            </ui-title-group>
+            </ui-input-group>
 
             <ui-input-group
+                id="user-id"
                 type="email"
                 name="email"
                 label="E-mail"
@@ -28,57 +31,57 @@
                 required
                 v-model="form.email">
             </ui-input-group>
+
+            <ui-toggle
+                id="user-status"
+                name="status"
+                label="Status"
+                v-model="form.status"
+                :true-value="1"
+                :false-value="0">
+            </ui-toggle>
+        </section-card>
+
+        <section-card title="Permissions" description="Select the role to determine which areas of the website this user can access.">
+            <ui-select-group
+                id="user-role"
+                name="role"
+                label="Role"
+                :options="roleOptions"
+                autocomplete="off"
+                :value="user ? user.roles.name : null"
+                :has-error="form.errors.has('role')"
+                :error-message="form.errors.get('role')"
+                required
+                v-model="form.role">
+            </ui-select-group>
         </section-card>
 
         <section-card title="Security" description="Configure this user's security details.">
-            <ui-input-group
+            <ui-password-group
+                id="user-password"
                 type="password"
                 name="password"
                 label="Password"
                 autocomplete="new-password"
                 :has-error="form.errors.has('password')"
                 :error-message="form.errors.get('password')"
-                required
                 v-model="form.password">
-            </ui-input-group>
+            </ui-password-group>
 
-            <ui-input-group
+            <ui-password-group
+                id="user-password-confirm"
                 type="password"
                 name="password_confirmation"
                 label="Confirm Password"
                 autocomplete="new-password"
                 :has-error="form.errors.has('password_confirmation')"
                 :error-message="form.errors.get('password_confirmation')"
-                required
                 v-model="form.password_confirmation">
-            </ui-input-group>
+            </ui-password-group>
         </section-card>
 
         <template v-slot:sidebar>
-            <ui-card>
-                <ui-card-body>
-                    <ui-toggle
-                        name="status"
-                        label="Status"
-                        v-model="form.status"
-                        :true-value="1"
-                        :false-value="0">
-                    </ui-toggle>
-
-                    <ui-select-group
-                        name="role"
-                        label="Role"
-                        :options="roleOptions"
-                        autocomplete="off"
-                        :value="user.roles.name"
-                        :has-error="form.errors.has('role')"
-                        :error-message="form.errors.get('role')"
-                        required
-                        v-model="form.role">
-                    </ui-select-group>
-                </ui-card-body>
-            </ui-card>
-
             <ui-definition-list v-if="user">
                 <ui-definition name="Status">
                     <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': user.status, 'text-danger-500': ! user.status}"></fa-icon> {{ user.status ? 'Enabled' : 'Disabled' }}

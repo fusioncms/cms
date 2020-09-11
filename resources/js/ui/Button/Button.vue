@@ -2,7 +2,7 @@
         <router-link v-if="to" 
             :to="to" 
             class="button"
-            :class="[{ 'button--icon': icon, 'button--rounded': rounded, 'disabled': disabled }, variantClass, sizeClass]"@click.native="onClick($event)"
+            :class="[{ 'button--icon': icon, 'button--rounded': rounded, 'disabled': disabled }, variantClass, sizeClass]" 
             v-on="$listeners"
             v-bind="$attrs">
             <slot></slot>

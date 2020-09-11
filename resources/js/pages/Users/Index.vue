@@ -1,84 +1,71 @@
 <template>
-    <div>
+    <div class="user-page">
         <portal to="title">
             <page-title icon="users">Users - {{ current ? current.label : '' }}</page-title>
         </portal>
 
         <portal to="actions">
-            <ui-button :to="{ name: 'users.create' }" variant="primary">Create User</ui-button>
+            <ui-button key="create-user-btn" :to="{name: 'users.create' }" variant="primary">Create User</ui-button>
         </portal>
 
-        <div class="sidebar-container">
-            <mq-layout mq="xl+">
-                <div class="sidebar-container__sidebar">
-                    <ui-card>
-                        <ui-card-body>
-                            <h2 class="text-heading--xxs">Roles</h2>
+        <div class="content-container">
+            <ui-table class="user-table" id="users" :endpoint="endpoint" sort-by="name" key="users_table">
+                <template v-slot:toolbarPrepend>
+                    <ui-toolbar-group>
+                        <ui-dropdown id="user-roles">
+                            <span>Roles</span>
 
-                            <div class="list">
-                                <router-link class="list__item list__item--action" :to="{ name: 'users' }" exact>All</router-link>
-                            </div>
+                            <template v-slot:menu>
+                                <ui-dropdown-link :to="{ name: 'users' }" exact>All</ui-dropdown-link>
 
-                            <span class="list__divider"></span>
-                            
-                            <div class="list">
-                                <router-link v-for="role in filteredRoles" class="list__item list__item--action" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" exact>
+                                <ui-dropdown-divider></ui-dropdown-divider>
+
+                                <ui-dropdown-link v-for="role in filteredRoles" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" exact>
                                     {{ role.label }}
-                                </router-link>
-                            </div>
-                        </ui-card-body>
-                    </ui-card>
-                </div>
-            </mq-layout>
+                                </ui-dropdown-link>
+                            </template>
+                        </ui-dropdown>
+                    </ui-toolbar-group>
+                </template>
 
-            <div class="sidebar-container__content">
-                <ui-table id="users" :endpoint="endpoint" sort-by="name" key="users_table">
-                    <template v-slot:toolbarPrepend v-if="$mq === 'sm' || $mq === 'md' || $mq === 'lg'">
-                        <ui-toolbar-group>
-                            <ui-dropdown id="user-roles">
-                                <span>Roles</span>
+                <template slot="name" slot-scope="table">
+                    <div class="flex items-center">
+                        <ui-status :value="table.record.status" class="mr-2"></ui-status>
+                        <router-link :to="{ name: 'users.show', params: {user: table.record.id} }">{{ table.record.name }}</router-link>
+                    </div>
+                </template>
 
-                                <template v-slot:menu>
-                                    <ui-dropdown-link :to="{ name: 'users' }" exact>All</ui-dropdown-link>
+                <template slot="email" slot-scope="table">
+                    {{ table.record.email }}
+                </template>
 
-                                    <ui-dropdown-divider></ui-dropdown-divider>
+                <template slot="role" slot-scope="table">
+                    <span class="badge">{{ table.record.role.name }}</span>
+                </template>
 
-                                    <ui-dropdown-link v-for="role in filteredRoles" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" exact>
-                                        {{ role.label }}
-                                    </ui-dropdown-link>
-                                </template>
-                            </ui-dropdown>
-                        </ui-toolbar-group>
-                    </template>
+                <template slot="created_at" slot-scope="table">
+                    {{ $moment(table.record.created_at).format('Y-MM-DD') }}
+                </template>
 
-                    <template slot="name" slot-scope="table">
-                        <router-link :to="{ name: 'users.edit', params: {user: table.record.id} }">{{ table.record.name }}</router-link>
-                    </template>
+                <template slot="email_verified_at" slot-scope="table">
+                    <ui-badge v-if="table.record.email_verified_at" variant="success">Yes</ui-badge>
+                    <ui-badge v-else variant="danger">No</ui-badge>
+                </template>
 
-                    <template slot="email" slot-scope="table">
-                        {{ table.record.email }}
-                    </template>
+                <template slot="actions" slot-scope="table">
+                    <ui-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
+                        <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }">Edit</ui-dropdown-link>
 
-                    <template slot="role" slot-scope="table">
-                        <span class="badge">{{ table.record.role.name }}</span>
-                    </template>
-
-                    <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
-                            <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }">Edit</ui-dropdown-link>
-
-                            <ui-dropdown-link
-                                v-if="table.record.id != user.id"
-                                @click.prevent
-                                v-modal:delete-user="table.record"
-                                classes="link--danger"
-                            >
-                                Delete
-                            </ui-dropdown-link>
-                        </ui-table-actions>
-                    </template>
-                </ui-table>
-            </div>
+                        <ui-dropdown-link
+                            v-if="table.record.id != user.id"
+                            @click.prevent
+                            v-modal:delete-user="table.record"
+                            classes="link--danger">
+                            Delete
+                        </ui-dropdown-link>
+                    </ui-table-actions>
+                </template>
+            </ui-table>
         </div>
 
         <portal to="modals">
