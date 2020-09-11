@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Unit;
+namespace Fusion\Tests\Unit\Fieldtypes;
 
 use Fusion\Models\Field;
 use Fusion\Models\Replicator;

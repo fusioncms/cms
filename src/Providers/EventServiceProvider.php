@@ -13,10 +13,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Fusion\Events\ServingFusion' => [
-            'Fusion\Listeners\FusionServed',
-        ],
-
         'Illuminate\Auth\Events\Verified' => [
             'Fusion\Listeners\LogVerifiedUser',
         ],

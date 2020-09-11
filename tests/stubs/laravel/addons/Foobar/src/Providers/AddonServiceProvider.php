@@ -31,6 +31,7 @@ class AddonServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->register(MenuServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
     }
 }
