@@ -40,7 +40,7 @@
                 </template>
 
                 <template slot="role" slot-scope="table">
-                    <span class="badge">{{ table.record.role.name }}</span>
+                    <ui-badge>{{ table.record.role.label }}</ui-badge>
                 </template>
 
                 <template slot="created_at" slot-scope="table">
@@ -54,6 +54,8 @@
 
                 <template slot="actions" slot-scope="table">
                     <ui-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
+                        <ui-dropdown-link :to="{ name: 'users.show', params: {user: table.record.id} }">View</ui-dropdown-link>
+
                         <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }">Edit</ui-dropdown-link>
 
                         <ui-dropdown-link

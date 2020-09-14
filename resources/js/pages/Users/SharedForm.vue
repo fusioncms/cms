@@ -1,5 +1,5 @@
 <template>
-    <form-container>
+    <div class="user-page">
         <portal to="actions">
             <div class="buttons">
                 <ui-button :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
@@ -80,30 +80,7 @@
                 v-model="form.password_confirmation">
             </ui-password-group>
         </section-card>
-
-        <template v-slot:sidebar>
-            <ui-definition-list v-if="user">
-                <ui-definition name="Status">
-                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': user.status, 'text-danger-500': ! user.status}"></fa-icon> {{ user.status ? 'Enabled' : 'Disabled' }}
-                </ui-definition>
-
-                <ui-definition name="Verified">
-                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': user.verified, 'text-danger-500': ! user.verified}"></fa-icon> {{ user.verified ? 'Yes' : 'No' }}
-                </ui-definition>
-
-                <ui-definition name="Registered">
-                    {{ $moment(user.created_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-
-                <ui-definition name="Last Login">
-                    <span v-if="user.logged_in_at">{{ $moment(user.logged_in_at.date).format('L') }}</span>
-                    <span v-else>Never</span>
-                </ui-definition>
-            </ui-definition-list>
-
-            <slot name="sidebar"></slot>
-        </template>
-    </form-container>
+    </div>
 </template>
 
 <script>

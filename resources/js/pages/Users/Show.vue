@@ -1,24 +1,55 @@
 <template>
     <div class="user-page">
         <portal to="title">
-            <page-title icon="users">User - {{ user.name }}</page-title>
+            <page-title icon="users">User Profile - {{ user.name }}</page-title>
         </portal>
 
         <portal to="actions">
-            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="secondary">Edit User</ui-button>
-            <ui-button key="delete-user-btn" v-if="currentUser.id != user.id" v-modal:delete-user variant="danger">Delete User</ui-button>
+            <ui-button key="view-all-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
+            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary">Edit User</ui-button>
         </portal>
 
-        <portal to="modals">
-            <ui-modal v-if="currentUser.id != user.id" name="delete-user" title="Delete User">
-                <p>Are you sure you want to permenantly delete this user?</p>
+        <section-card title="User Information" description="General information about this user.">
+            <dl class="detail-list">
+                <dt>Name</dt>
+                <dd>{{ user.name }}</dd>
+                <dt>Email</dt>
+                <dd>{{ user.email }}</dd>
+                <dt>Role</dt>
+                <dd>{{ user.roles[0].label }}</dd>
+                <dt>Status</dt>
+                <dd class="flex"><ui-status :value="user.status" class="mr-2"></ui-status> {{ user.status ? 'Enabled' : 'Disabled' }}</dd>
+            </dl>
+        </section-card>
 
-                <template slot="footer">
-                    <ui-button v-modal:delete-user @click="destroy(user.id)" variant="danger" class="ml-3">Delete</ui-button>
-                    <ui-button v-modal:delete-user variant="secondary">Cancel</ui-button>
-                </template>
-            </ui-modal>
-        </portal>
+        <section-card title="Account Activity" description="Information on user account activity and stats.">
+            <dl class="detail-list">
+                <dt>Registered</dt>
+                <dd>{{ $moment(user.created_at).format('Y-MM-DD, hh:mm a') }}</dd>
+
+                <dt>Verified</dt>
+                <dd>{{ user.verified ? $moment(user.email_verified_at).format('Y-MM-DD, hh:mm a') : 'No' }}</dd>
+
+                <dt>Last Updated</dt>
+                <dd>{{ $moment(user.updated_at).format('Y-MM-DD, hh:mm a') }}</dd>
+
+                <dt>Last Login</dt>
+                <dd>{{ user.last_logged_in_at ? $moment(user.last_logged_in_at).format('Y-MM-DD, hh:mm a') : 'Never' }}</dd>
+
+                <dt>Invalid Login Attempts</dt>
+                <dd>{{ user.invalid_logins }}</dd>
+
+                <dt v-if="user.invalidly_logged_in_at">Last Invalid Login</dt>
+                <dd v-if="user.invalidly_logged_in_at">{{ $moment(user.invalidly_logged_in_at).format('Y-MM-DD, hh:mm a') }}</dd>
+
+                <dt v-if="user.password_changed_at">Password Changed</dt>
+                <dd v-if="user.password_changed_at">{{ $moment(user.password_changed_at).format('Y-MM-DD, hh:mm a') }}</dd>
+            </dl>
+        </section-card>
+
+        <section-card title="User Activity Feed" description="See what this user has been doing around the site.">
+            <em>Coming soon...</em>
+        </section-card>
     </div>
 </template>
 
