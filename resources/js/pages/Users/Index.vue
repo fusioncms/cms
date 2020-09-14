@@ -58,6 +58,12 @@
 
                         <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }">Edit</ui-dropdown-link>
 
+                        <ui-dropdown-divider></ui-dropdown-divider>
+
+                        <ui-dropdown-link href="#">Resend Verification</ui-dropdown-link>
+
+                        <ui-dropdown-link href="#">Reset Password</ui-dropdown-link>
+
                         <ui-dropdown-link
                             v-if="table.record.id != user.id"
                             @click.prevent
