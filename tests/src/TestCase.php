@@ -2,8 +2,6 @@
 
 namespace Fusion\Tests;
 
-use Caffeinated\Flash\FlashServiceProvider;
-use Caffeinated\Menus\MenusServiceProvider;
 use Fusion\Providers\FusionServiceProvider;
 use Fusion\Tests\Concerns\InstallsFusion;
 use Fusion\Tests\Concerns\MakesDatabaseAssertions;
@@ -47,6 +45,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
         Hash::driver('bcrypt')->setRounds(4);
 
+        // TODO: remove w/ `laravel/legacy-factories` package
         $this->withFactories(fusion_path('/database/definitions'));
 
         $this->install();
@@ -150,10 +149,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             // Laravel
             UiServiceProvider::class,
             SanctumServiceProvider::class,
-
-            // Caffeinated
-            FlashServiceProvider::class,
-            MenusServiceProvider::class,
 
             // Spatie
             BackupServiceProvider::class,

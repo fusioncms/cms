@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\Fieldtypes;
 
 use Fusion\Models\Directory;
 use Fusion\Models\File;
@@ -10,7 +10,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
-class FilFieldtypeTest extends TestCase
+class FileFieldtypeTest extends TestCase
 {
     use RefreshDatabase;
 

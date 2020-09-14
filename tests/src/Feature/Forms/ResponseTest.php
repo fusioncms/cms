@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature\Form;
+namespace Fusion\Tests\Feature\Forms;
 
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;

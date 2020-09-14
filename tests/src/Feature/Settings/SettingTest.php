@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\FeatureSettings;
+namespace Fusion\Tests\Feature\Settings;
 
 use Fusion\Facades\Setting;
 use Fusion\Tests\TestCase;

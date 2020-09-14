@@ -1,6 +1,6 @@
 <?php
 
-use Fusion\Models\Menu as MenuModel;
+use Fusion\Models\Navigation;
 
 if (!function_exists('menu')) {
     /**
@@ -10,32 +10,22 @@ if (!function_exists('menu')) {
      */
     function menu($handle)
     {
-        $menu  = Menu::make($handle, function () {});
-        $model = MenuModel::where('handle', $handle)->first();
+        $model = Navigation::where('handle', $handle)->firstOrFail();
+        $menu  = $model->nodes->mapWithKeys(function ($node) {
+            if ($node->status) {
+                $item = [
+                    'title'  => $node->name,
+                    'to'     => $node->url,
+                    'target' => $node->new_window ? '_blank' : '_self',
+                ];
 
-        $add = function ($node, $parent = null) use ($menu) {
-            $item = $menu->add($node->name, $node->url);
-
-            if ($node->new_window) {
-                $item->target = '_blank';
-            } else {
-                $item->target = '_self';
-            }
-
-            if ($fieldset = $node->menu->fieldset) {
-                foreach ($fieldset->fields as $field) {
-                    $item->{$field->handle} = $node->{$field->handle};
+                foreach ($node->fields as $field) {
+                    $item[$field->handle] = $node->{$field->handle} ?? null;
                 }
-            }
-        };
 
-        if ($model) {
-            foreach ($model->nodes as $node) {
-                if ($node->status) {
-                    $add($node);
-                }
+                return [str_handle($node->name) => $item];
             }
-        }
+        });
 
         return $menu;
     }

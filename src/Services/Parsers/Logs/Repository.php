@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Services\Logs;
+namespace Fusion\Services\Parsers\Logs;
 
 use File;
 use Illuminate\Support\Str;

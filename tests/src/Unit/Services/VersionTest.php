@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Unit;
+namespace Fusion\Tests\Unit\Services;
 
 use Fusion\Facades\Version;
 use Fusion\Tests\TestCase;

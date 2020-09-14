@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\Console;
 
 use Fusion\Console\Actions\SyncSettings;
 use Fusion\Models\Setting as SettingGroup;
