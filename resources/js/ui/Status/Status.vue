@@ -8,7 +8,7 @@
             </span>
         </template>
         <template slot="content">
-            <span v-if="value">Active</span>
+            <span v-if="value">Enabled</span>
             <span v-if="!value">Disabled</span>
         </template>
     </ui-tooltip>

@@ -62,7 +62,7 @@
                             v-if="table.record.id != user.id"
                             @click.prevent
                             v-modal:delete-user="table.record"
-                            classes="link--danger">
+                            class="danger">
                             Delete
                         </ui-dropdown-link>
                     </ui-table-actions>

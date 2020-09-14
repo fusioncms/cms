@@ -80,6 +80,26 @@
                 v-model="form.password_confirmation">
             </ui-password-group>
         </section-card>
+
+        <section-card v-if="user" title="Actions" description="Management actions that can be performed for this user.">
+            <div class="mb-4">
+                <span class="label">Verification Email</span>
+                <p class="help mb-2">Re-send the verification email to this user.</p>
+                <ui-button variant="secondary">Send Verification</ui-button>
+            </div>
+
+            <div class="mb-4">
+                <span class="label">Password Reset</span>
+                <p class="help mb-2">Force the user to reset their password upon next login attempt.</p>
+                <ui-button variant="secondary">Reset Password</ui-button>
+            </div>
+
+            <div class="mb-4">
+                <span class="label">Delete User</span>
+                <p class="help mb-2">Once you delete this user, there is no going back. Please be certain.</p>
+                <ui-button variant="danger">Delete User</ui-button>
+            </div>
+        </section-card>
     </div>
 </template>
 
