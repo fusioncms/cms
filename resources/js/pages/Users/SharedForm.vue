@@ -2,8 +2,8 @@
     <div class="user-page">
         <portal to="actions">
             <div class="buttons">
-                <ui-button :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
-                <ui-button variant="primary" @click.prevent="submit" :disabled="!form.hasChanges">Save</ui-button>
+                <ui-button key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
+                <ui-button key="save-btn" variant="primary" @click.prevent="submit" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 

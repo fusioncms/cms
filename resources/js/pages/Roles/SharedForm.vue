@@ -2,8 +2,8 @@
 	<div class="roles-page">
         <portal to="actions">
             <div class="buttons">
-                <ui-button :to="{ name: 'roles' }" variant="secondary">Go Back</ui-button>
-                <ui-button v-if="!isOwner" type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
+                <ui-button key="go-back-btn" :to="{ name: 'roles' }" variant="secondary">Go Back</ui-button>
+                <ui-button v-if="!isOwner" key="save-btn" type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 

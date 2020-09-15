@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <ui-button :to="{ name: 'roles.create' }" variant="primary">Create Role</ui-button>
+            <ui-button key="create-role-btn" :to="{ name: 'roles.create' }" variant="primary">Create Role</ui-button>
         </portal>
 
         <ui-card>
