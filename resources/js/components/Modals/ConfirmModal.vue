@@ -3,7 +3,7 @@
         <p>Are you sure you want to leave this page? Any unsaved changes will be discarded.</p>
         <template slot="footer">
             <ui-button @click="closeModal" variant="primary">Cancel and Stay</ui-button>
-            <ui-button @click="runCallback" class="mr-3">Leave and Discard Changes</ui-button>
+            <ui-button @click="runCallback" variant="secondary" class="mr-3">Leave and Discard Changes</ui-button>
         </template>
     </ui-modal>
 </template>

@@ -17,18 +17,16 @@
     }
 
     &__title { 
-        @apply  text-base m-0; 
+        @apply text-base m-0; 
     }
 
     &__subtitle {
-        @apply text-gray-500 leading-5 text-sm mt-1;
+        @apply text-gray-500 leading-5 text-sm;
     }
 
     &--dark {
         @apply text-gray-400 bg-gray-900;
 
-        .card__body, p {
-            @apply text-gray-100;
-        }
+        .card__body, p { @apply text-gray-100; }
     }
 }

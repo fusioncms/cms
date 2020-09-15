@@ -310,6 +310,15 @@ const router = new Router({
             }
         },
         {
+            path: '/users/:user',
+            component: () => import('@/pages/Users/Show'),
+            name: 'users.show',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+        {
             path: '/users/:role',
             component: () => import('@/pages/Users/Index'),
             name: 'users.role',
