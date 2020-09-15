@@ -16,7 +16,7 @@
         head: {
             title() {
                 return {
-                    inner: this.role.name || 'Loading...'
+                    inner: this.role.label || 'Loading...'
                 }
             }
         },

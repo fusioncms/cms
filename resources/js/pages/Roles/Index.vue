@@ -9,7 +9,7 @@
         </portal>
 
         <div class="content-container">
-            <ui-table :endpoint="endpoint" id="roles" sort-by="label" key="roles_table">
+            <ui-table key="roles" class="roles-table" id="roles" :endpoint="endpoint" sort-by="label">
                 <template slot="label" slot-scope="table">
                     <router-link :to="{ name: 'roles.show', params: {role: table.record.id} }">{{ table.record.label }}</router-link>
                 </template>
@@ -22,7 +22,7 @@
                     <ui-table-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
                         <ui-dropdown-link :to="{ name: 'roles.show', params: {role: table.record.id} }">View</ui-dropdown-link>
 
-                        <ui-dropdown-link@click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">Edit</ui-dropdown-link>
+                        <ui-dropdown-link v-if="! isOwner(table.record.id)" @click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">Edit</ui-dropdown-link>
 
                         <ui-dropdown-divider v-if="isRemovable(table.record.name)"></ui-dropdown-divider>
 
@@ -79,6 +79,10 @@
 
                     bus().$emit('refresh-datatable-roles')
                 })
+            },
+
+            isOwner(id) {
+                return id && id === 4
             }
         }
     }
