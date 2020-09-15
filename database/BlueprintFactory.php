@@ -34,8 +34,6 @@ class BlueprintFactory implements Factory
             $this->sections = SectionFactory::times(3)->create();
         }
 
-        dd($this->sections);
-
         $blueprint->sections()->saveMany($this->sections);
 
         return $blueprint;
