@@ -1,5 +1,5 @@
 <template>
-    <form-container>
+    <div class="user-page">
         <portal to="actions">
             <div class="buttons">
                 <ui-button :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
@@ -8,17 +8,20 @@
         </portal>
 
         <section-card title="General Information" description="General information about this user.">
-            <ui-title-group
+            <ui-input-group
+                id="user-name"
                 name="name"
+                label="Name"
                 autocomplete="off"
                 autofocus
                 required
                 :has-error="form.errors.has('name')"
                 :error-message="form.errors.get('name')"
                 v-model="form.name">
-            </ui-title-group>
+            </ui-input-group>
 
             <ui-input-group
+                id="user-id"
                 type="email"
                 name="email"
                 label="E-mail"
@@ -28,79 +31,76 @@
                 required
                 v-model="form.email">
             </ui-input-group>
+
+            <ui-toggle
+                id="user-status"
+                name="status"
+                label="Status"
+                v-model="form.status"
+                :true-value="1"
+                :false-value="0">
+            </ui-toggle>
+        </section-card>
+
+        <section-card title="Permissions" description="Select the role to determine which areas of the website this user can access.">
+            <ui-select-group
+                id="user-role"
+                name="role"
+                label="Role"
+                :options="roleOptions"
+                autocomplete="off"
+                :value="user ? user.roles.name : null"
+                :has-error="form.errors.has('role')"
+                :error-message="form.errors.get('role')"
+                required
+                v-model="form.role">
+            </ui-select-group>
         </section-card>
 
         <section-card title="Security" description="Configure this user's security details.">
-            <ui-input-group
+            <ui-password-group
+                id="user-password"
                 type="password"
                 name="password"
                 label="Password"
                 autocomplete="new-password"
                 :has-error="form.errors.has('password')"
                 :error-message="form.errors.get('password')"
-                required
                 v-model="form.password">
-            </ui-input-group>
+            </ui-password-group>
 
-            <ui-input-group
+            <ui-password-group
+                id="user-password-confirm"
                 type="password"
                 name="password_confirmation"
                 label="Confirm Password"
                 autocomplete="new-password"
                 :has-error="form.errors.has('password_confirmation')"
                 :error-message="form.errors.get('password_confirmation')"
-                required
                 v-model="form.password_confirmation">
-            </ui-input-group>
+            </ui-password-group>
         </section-card>
 
-        <template v-slot:sidebar>
-            <ui-card>
-                <ui-card-body>
-                    <ui-toggle
-                        name="status"
-                        label="Status"
-                        v-model="form.status"
-                        :true-value="1"
-                        :false-value="0">
-                    </ui-toggle>
+        <section-card v-if="user" title="Actions" description="Management actions that can be performed for this user.">
+            <div class="mb-4">
+                <span class="label">Verification Email</span>
+                <p class="help mb-2">Re-send the verification email to this user.</p>
+                <ui-button variant="secondary">Send Verification</ui-button>
+            </div>
 
-                    <ui-select-group
-                        name="role"
-                        label="Role"
-                        :options="roleOptions"
-                        autocomplete="off"
-                        :value="user.roles.name"
-                        :has-error="form.errors.has('role')"
-                        :error-message="form.errors.get('role')"
-                        required
-                        v-model="form.role">
-                    </ui-select-group>
-                </ui-card-body>
-            </ui-card>
+            <div class="mb-4">
+                <span class="label">Password Reset</span>
+                <p class="help mb-2">Force the user to reset their password upon next login attempt.</p>
+                <ui-button variant="secondary">Reset Password</ui-button>
+            </div>
 
-            <ui-definition-list v-if="user">
-                <ui-definition name="Status">
-                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': user.status, 'text-danger-500': ! user.status}"></fa-icon> {{ user.status ? 'Enabled' : 'Disabled' }}
-                </ui-definition>
-
-                <ui-definition name="Verified">
-                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': user.verified, 'text-danger-500': ! user.verified}"></fa-icon> {{ user.verified ? 'Yes' : 'No' }}
-                </ui-definition>
-
-                <ui-definition name="Registered">
-                    {{ $moment(user.created_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-
-                <ui-definition name="Last Login">
-                    <span v-if="user.logged_in_at">{{ $moment(user.logged_in_at.date).format('L') }}</span>
-                    <span v-else>Never</span>
-                </ui-definition>
-            </ui-definition-list>
-
-            <slot name="sidebar"></slot>
-        </template>
-    </form-container>
+            <div class="mb-4">
+                <span class="label">Delete User</span>
+                <p class="help mb-2">Once you delete this user, there is no going back. Please be certain.</p>
+                <ui-button variant="danger">Delete User</ui-button>
+            </div>
+        </section-card>
+    </div>
 </template>
 
 <script>

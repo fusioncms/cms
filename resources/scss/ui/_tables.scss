@@ -18,8 +18,6 @@
     table-layout: fixed;
     word-wrap: break-word;
 
-    @screen md { @apply text-base; }
-
     &__heading {
         @apply relative block w-full px-3 py-3;
 

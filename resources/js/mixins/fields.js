@@ -9,7 +9,7 @@ export default {
         },
 
         formattedId() {
-            return this.id ? this.id : this.name + '_field'
+            return this.id ? this.id : this.name + '-field'
         },
 
         computedValue: {
