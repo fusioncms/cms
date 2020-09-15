@@ -9,13 +9,14 @@ class ActivityController extends DataTableController
 {
     public function builder()
     {
-        return ActivitylogServiceProvider::determineActivityModel()->getQuery();
+        return app(ActivitylogServiceProvider::determineActivityModel())->with('causer', 'subject');
     }
 
     public function getRelationships()
     {
         return [
-            'causer'
+            'causer',
+            'subject',
         ];
     }
 
@@ -31,7 +32,6 @@ class ActivityController extends DataTableController
     public function getFilterable()
     {
         return [
-            'causer.name',
             'description',
         ];
     }
@@ -39,7 +39,6 @@ class ActivityController extends DataTableController
     public function getSortable()
     {
         return [
-            'causer.name',
             'description',
             'created_at',
         ];

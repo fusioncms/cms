@@ -4,69 +4,41 @@
             <h3 class="card__title">Recent Activity</h3>
         </div>
 
-        <div class="card__body" v-if="! activities.length">
-            <p>
-                Looks like nothing has taken place on your website yet.
-            </p>
-        </div>
+        <div class="card__body">
+            <ui-table key="recent-activities" class="recent-activities-table" id="recent-activities" :endpoint="endpoint" sort-by="created_at" sort-in="desc" :per-page="10">
+                <template slot="causer.name" slot-scope="table">
+                    <router-link :to="{ name: 'users.edit', params: {user: table.record.causer.id} }">{{ table.record.causer.name }}</router-link>
+                </template>
 
-        <div v-if="activities.length" class="mt-6">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Action</th>
-                        <th class="w-10"></th>
-                        <th class="w-56">Time</th>
-                    </tr>
-                </thead>
+                <template slot="description" slot-scope="table">
+                    <div class="flex items-center">
+                        <div class="mr-4 w-3">
+                            <fa-icon v-if="table.record.properties.icon" :icon="['fas', table.record.properties.icon]" class="fa-fw"></fa-icon>
+                            <fa-icon v-else class="fa-xs fa-fw" :icon="['fas', 'circle']"></fa-icon>
+                        </div>
 
-                <tbody>
-                    <tr v-for="activity in activities" :key="activity.id">
-                        <td>
-                            <span class="column__label">User</span>
-                            <span>
-                                <router-link :to="{ name: 'users.edit', params: {user: activity.causer.id} }">{{ activity.causer.name }}</router-link>
-                            </span>
-                        </td>
+                        {{ table.record.description }}
 
-                        <td>
-                            <span class="column__label">Action</span>
-                            <span class="flex items-center">
-                                <div class="text-gray-900 mr-4 flex items-center text-sm w-3">
-                                    <fa-icon v-if="activity.properties.icon" :icon="['fas', activity.properties.icon]" class="fa-fw"></fa-icon>
-                                    <fa-icon v-else class="fa-xs fa-fw" :icon="['fas', 'circle']"></fa-icon>
-                                </div>
+                        <router-link :to="'/' + table.record.properties.link" v-if="table.record.properties.link" class="ml-2">
+                            <fa-icon class="fa-fw fa-sm" :icon="['fas', 'link']"></fa-icon>
+                            <span class="sr-only">Link to related property</span>
+                        </router-link>
+                    </div>
+                </template>
 
-                                {{ activity.description }}
-                            </span>
-                        </td>
-
-                        <td class="actions">
-                            <router-link :to="activity.properties.link" v-if="activity.properties.link" class="text-gray-800 hover:text-gray-900">
-                                <fa-icon :icon="['fas', 'arrow-alt-circle-right']"></fa-icon>
-                            </router-link>
-                        </td>
-
-                        <td>
-                            <span class="column__label">Time</span>
-                            <span>{{ $moment(activity.created_at).format('L LT') }}</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <template slot="created_at" slot-scope="table">
+                    <ui-datetime :timestamp="table.record.created_at"></ui-datetime>
+                </template>
+            </ui-table>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        props: {
-            activities: {
-                type: Array,
-                default: () => {
-                    return []
-                }
+        data() {
+            return {
+                'endpoint': '/datatable/activities',
             }
         }
     }
