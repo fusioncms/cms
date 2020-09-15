@@ -43,11 +43,9 @@
                         </td>
 
                         <td class="actions">
-                            <span>
-                                <router-link :to="activity.properties.link" v-if="activity.properties.link" class="text-gray-800 hover:text-gray-900">
-                                    <fa-icon :icon="['fas', 'arrow-alt-circle-right']"></fa-icon>
-                                </router-link>
-                            </span>
+                            <router-link :to="activity.properties.link" v-if="activity.properties.link" class="text-gray-800 hover:text-gray-900">
+                                <fa-icon :icon="['fas', 'arrow-alt-circle-right']"></fa-icon>
+                            </router-link>
                         </td>
 
                         <td>

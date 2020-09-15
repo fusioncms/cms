@@ -1,0 +1,11 @@
+.datetime {
+    @apply flex items-center text-sm;
+
+    &--date {}
+
+    &--time {}
+
+    &__icon {
+        @apply mr-1;
+    }
+}
