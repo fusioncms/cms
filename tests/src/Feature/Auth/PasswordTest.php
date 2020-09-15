@@ -29,6 +29,24 @@ class PasswordTest extends TestCase
         ];
     }
 
+    // public function a_newly_created_user_will_receive_a_password_reset_notification()
+    // {
+    //     Event::fake();
+    //     Event::assertDispatched(PasswordReset::class, function ($event) {
+    //         return $event->user->id === $this->user->id;
+    //     });
+    // }
+
+    // public function a_user_with_permissions_cannot_set_password_of_another_user()
+    // {
+
+    // }
+
+    // public function a_user_with_permissions_can_set_their_own_password()
+    // {
+        
+    // }
+
     /**
      * @test
      * @group fusioncms

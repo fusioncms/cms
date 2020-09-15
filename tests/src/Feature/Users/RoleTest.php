@@ -201,11 +201,9 @@ class RoleTest extends TestCase
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/users', [
-                'name'                  => 'User B',
-                'email'                 => 'user-b@example.com',
-                'password'              => ($password = '@M-J"ga&t9f9P5'),
-                'password_confirmation' => ($password),
-                'role'                  => 'owner',
+                'name'  => 'User B',
+                'email' => 'user-b@example.com',
+                'role'  => 'owner',
             ]);
 
         $oldOwner = $this->owner->fresh();
@@ -223,16 +221,19 @@ class RoleTest extends TestCase
      */
     public function only_the_owner_may_reassign_the_owner_role()
     {
-        $this->expectException(AuthorizationException::class);
-
-        $admin = $this->createUser('Admin User', 'admin-user@example.com', 'secret', 'admin');
+        // grant access
+        $this->admin->givePermissionTo('users.update');
 
         $this
-            ->be($admin, 'api')
-            ->json('PATCH', '/api/users/'.$this->owner->id, [
-                'name'  => $this->owner->name,
-                'email' => $this->owner->email,
+            ->be($this->admin, 'api')
+            ->json('PATCH', '/api/users/'.$this->admin->id, [
+                'name'  => $this->admin->name,
+                'email' => $this->admin->email,
                 'role'  => 'owner',
+            ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'role' => 'The selected role is invalid.',
             ]);
     }
 }

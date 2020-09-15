@@ -7,6 +7,7 @@ use Fusion\Http\Requests\UserRequest;
 use Fusion\Http\Resources\UserResource;
 use Fusion\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -50,22 +51,9 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $attributes             = $request->validated();
-        $attributes['password'] = bcrypt($attributes['password']);
+        $attributes['password'] = bcrypt($attributes['password'] ?? Str::random());
 
         $user = User::create($attributes);
-
-        // role assignment..
-        if (isset($attributes['role'])) {
-            if ($attributes['role'] === 'owner') {
-                User::role('owner')
-                    ->where('id', '<>', $user->id)
-                    ->each(function ($user) {
-                        $user->syncRoles('admin');
-                    });
-            }
-
-            $user->assignRole($attributes['role']);
-        }
 
         return new UserResource($user);
     }
@@ -88,19 +76,6 @@ class UserController extends Controller
         }
 
         $user->update($attributes);
-
-        // role assignment..
-        if (isset($attributes['role'])) {
-            if ($attributes['role'] === 'owner') {
-                User::role('owner')
-                    ->where('id', '<>', $user->id)
-                    ->each(function ($user) {
-                        $user->syncRoles('admin');
-                    });
-            }
-
-            $user->syncRoles($attributes['role']);
-        }
 
         return new UserResource($user);
     }

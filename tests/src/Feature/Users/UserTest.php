@@ -20,24 +20,14 @@ class UserTest extends TestCase
     {
         parent::setUp();
         $this->handleValidationExceptions();
-    }
 
-    public function a_newly_created_user_will_receive_a_password_reset_notification()
-    {
-        Event::fake();
-        Event::assertDispatched(PasswordReset::class, function ($event) {
-            return $event->user->id === $this->user->id;
-        });
-    }
-
-    public function a_user_with_permissions_cannot_set_password_of_another_user()
-    {
-
-    }
-
-    public function a_user_with_permissions_can_set_their_own_password()
-    {
-        
+        // --
+        $this->attributes = [
+            'name'   => $this->faker->name,
+            'email'  => $this->faker->unique()->safeEmail,
+            'role'   => $this->faker->randomElement(['user', 'guest']),
+            'status' => $this->faker->boolean,
+        ];
     }
 
     /**
@@ -48,34 +38,39 @@ class UserTest extends TestCase
      */
     public function a_user_with_permissions_can_create_a_user()
     {
-        $attributes = [
-            'name'                  => $this->faker->name,
-            'email'                 => $this->faker->unique()->safeEmail,
-            'password'              => ($password = '@M-J"ga&t9f9P5'),
-            'password_confirmation' => ($password),
-            'role'                  => $this->faker->randomElement(['user', 'guest']),
-            'status'                => $this->faker->boolean,
-        ];
-
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/users', $attributes)
+            ->json('POST', '/api/users', $this->attributes)
             ->assertStatus(201);
 
         $this->assertDatabaseHas('users', [
-            'name'   => $attributes['name'],
-            'email'  => $attributes['email'],
-            'status' => $attributes['status'],
+            'name'   => $this->attributes['name'],
+            'email'  => $this->attributes['email'],
+            'status' => $this->attributes['status'],
         ]);
+    }
 
-        $newUser = User::orderBy('id', 'desc')->first();
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group user
+     */
+    public function new_user_creations_will_be_recorded_in_activity_log()
+    {
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/users', $this->attributes)
+            ->assertStatus(201);
+
+        $user = User::latest('id')->first();
 
         $this->assertDatabaseHas('activity_log', [
             'subject_type' => User::class,
-            'subject_id'   => $newUser->id,
+            'subject_id'   => $user->id,
             'causer_type'  => User::class,
             'causer_id'    => $this->owner->id,
-            'description'  => "Created user account ({$newUser->name})",
+            'description'  => "Created user account ({$user->name})",
         ]);
     }
 
@@ -189,24 +184,14 @@ class UserTest extends TestCase
         $this
             ->be($this->owner, 'api')
             ->json('PATCH', '/api/users/'.$this->user->id, [
-                'name'                  => ($name = $this->faker->name),
-                'email'                 => ($email = $this->faker->unique()->safeEmail),
-                'password'              => ($password = '%22CweS3QBZ#d'),
-                'password_confirmation' => ($password),
+                'name'  => ($name = $this->faker->name),
+                'email' => ($email = $this->faker->unique()->safeEmail),
             ])
             ->assertStatus(200);
 
         $this->assertDatabaseHas('users', [
             'name'   => $name,
             'email'  => $email,
-        ]);
-
-        $this->assertDatabaseHas('activity_log', [
-            'subject_type' => User::class,
-            'subject_id'   => $this->user->id,
-            'causer_type'  => User::class,
-            'causer_id'    => $this->owner->id,
-            'description'  => "Updated user account ({$name})",
         ]);
     }
 
@@ -216,21 +201,22 @@ class UserTest extends TestCase
      * @group feature
      * @group user
      */
-    public function password_fields_can_be_ignored_upon_update()
+    public function user_updates_will_be_recorded_in_activity_log()
     {
         $this
             ->be($this->owner, 'api')
             ->json('PATCH', '/api/users/'.$this->user->id, [
-                'name'  => ($name = $this->faker->name),
+                'name'  => ($name  = $this->faker->name),
                 'email' => ($email = $this->faker->unique()->safeEmail),
-                // no `password`
-                // no `password_confirmation`
             ])
             ->assertStatus(200);
 
-        $this->assertDatabaseHas('users', [
-            'name'   => $name,
-            'email'  => $email,
+        $this->assertDatabaseHas('activity_log', [
+            'subject_type' => User::class,
+            'subject_id'   => $this->user->id,
+            'causer_type'  => User::class,
+            'causer_id'    => $this->owner->id,
+            'description'  => "Updated user account ({$name})",
         ]);
     }
 
