@@ -25,7 +25,7 @@ class UserController extends DataTableController
             'email',
             'role',
             'created_at',
-            'email_verified_at'
+            'email_verified_at',
         ];
     }
 
@@ -34,18 +34,18 @@ class UserController extends DataTableController
         return [
             'name',
             'email',
-            'created_at'
+            'created_at',
         ];
     }
 
     public function getCustomColumnNames()
     {
         return [
-            'name'  => 'Name',
-            'email' => 'E-mail',
-            'role'  => 'Role',
-            'created_at' => 'Created',
-            'email_verified_at' => 'Verified'
+            'name'              => 'Name',
+            'email'             => 'E-mail',
+            'role'              => 'Role',
+            'created_at'        => 'Created',
+            'email_verified_at' => 'Verified',
         ];
     }
 }
