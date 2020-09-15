@@ -2,14 +2,12 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\CachesQueries;
 use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
 use Fusion\Services\Builders\Replicator as Builder;
 
 class Replicator extends Model
 {
-    use CachesQueries;
     use HasBlueprint;
 
     /**

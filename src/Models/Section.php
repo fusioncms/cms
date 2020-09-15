@@ -2,13 +2,10 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\CachesQueries;
 use Illuminate\Database\Eloquent\Model;
 
 class Section extends Model
 {
-    use CachesQueries;
-
     /**
      * The attributes that are fillable via mass assignment.
      *

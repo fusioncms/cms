@@ -2,7 +2,6 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\CachesQueries;
 use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
