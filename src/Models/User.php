@@ -6,6 +6,7 @@ use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasDynamicRelationships;
 use Fusion\Concerns\HasRoles;
 use Fusion\Concerns\MustVerifyEmail as UserMustVerifyEmail;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -23,6 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasDynamicRelationships;
     use HasActivity;
     use CausesActivity;
+    use CanResetPassword;
 
     /**
      * The attributes that are fillable via mass assignment.

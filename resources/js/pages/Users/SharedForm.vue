@@ -30,7 +30,7 @@
             </ui-input-group>
         </section-card>
 
-        <section-card title="Security" description="Configure this user's security details.">
+        <section-card v-if="canEditPassword" title="Security" description="Configure this user's security details.">
             <ui-input-group
                 type="password"
                 name="password"
@@ -70,7 +70,7 @@
                         label="Role"
                         :options="roleOptions"
                         autocomplete="off"
-                        :value="user.roles.name"
+                        :value="form.role"
                         :has-error="form.errors.has('role')"
                         :error-message="form.errors.get('role')"
                         required
@@ -137,6 +137,12 @@
                         value: role.name
                     }
                 })
+            },
+
+            canEditPassword() {
+                return this.user &&
+                       this.$store.state.auth.user &&
+                       this.user.id == this.$store.state.auth.user.id
             }
         }
     }

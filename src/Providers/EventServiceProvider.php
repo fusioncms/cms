@@ -13,18 +13,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Illuminate\Auth\Events\Verified' => [
-            'Fusion\Listeners\LogVerifiedUser',
-        ],
-
-        'Illuminate\Auth\Events\Registered' => [
-            'Illuminate\Auth\Listeners\SendEmailVerificationNotification',
-        ],
-
-        'Illuminate\Auth\Events\Login' => [
-            'Fusion\Listeners\LogActivityWhenUserLogsIn',
-        ],
-
         'Fusion\Events\FieldsetAttached' => [
             'Fusion\Listeners\WhenFieldsetIsAttached',
         ],
@@ -36,6 +24,10 @@ class EventServiceProvider extends ServiceProvider
         'Fusion\Events\FieldsetReplaced' => [
             'Fusion\Listeners\WhenFieldsetIsReplaced',
         ],
+    ];
+
+    protected $subscribe = [
+        'Fusion\Listeners\UserEventSubscriber',
     ];
 
     /**
