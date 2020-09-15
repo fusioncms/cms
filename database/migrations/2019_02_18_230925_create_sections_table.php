@@ -15,7 +15,7 @@ class CreateSectionsTable extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('fieldset_id');
+            $table->unsignedBigInteger('blueprint_id');
             $table->string('name');
             $table->string('handle');
             $table->string('description')->nullable();
@@ -23,7 +23,7 @@ class CreateSectionsTable extends Migration
             $table->unsignedInteger('order')->default(0);
             $table->timestamps();
 
-            $table->unique(['fieldset_id', 'handle']);
+            $table->unique(['blueprint_id', 'handle']);
         });
     }
 

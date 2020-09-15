@@ -3,9 +3,9 @@
 namespace Fusion\Console\Actions;
 
 use Fusion\Models\Field;
-use Fusion\Models\Fieldset;
+use Fusion\Models\Blueprint;
 use Fusion\Models\Section;
-use Fusion\Models\Setting as SettingGroup;
+use Fusion\Models\Setting;
 use Fusion\Services\Setting as SettingService;
 
 class SyncSettings
@@ -27,17 +27,17 @@ class SyncSettings
          *
          * Groups    - Main `settings` table (1x per setting file).
          *             `setting_{filename}` table will be created per file.
-         * Fieldsets - Each Group has a corresponding `fieldsets` record.
-         * Sections  - Each Fieldset can have one or more `sections` records.
+         * Blueprint - Each Group has a corresponding `blueprint` record.
+         * Sections  - Each Blueprint can have one or more `sections` records.
          * Fields    - Each Section can have one or more `fields` records.
          */
         $this->syncSettingGroups();
 
-        SettingGroup::all()->each(function ($group) {
-            $this->syncSettingSection($group);
+        Setting::all()->each(function ($setting) {
+            $this->syncSettingSection($setting);
 
-            $group->getBuilder()
-                ->firstOrCreate(['id' => 1, 'setting_id' => $group->id]);
+            $setting->getBuilder()
+                ->firstOrCreate(['id' => 1, 'setting_id' => $setting->id]);
         });
     }
 
@@ -46,69 +46,66 @@ class SyncSettings
      *
      * @return void
      */
-    public function syncSettingGroups($groups = null)
+    public function syncSettingGroups($settings = null)
     {
-        $groups = $groups ?? SettingService::groups();
+        $settings = $settings ?? SettingService::groups();
 
         // Pull existing elements..
-        $existing = SettingGroup::all()->pluck('id', 'id');
+        $existing = Setting::all()->pluck('id', 'id');
 
         // Add/update existing elements..
-        collect($groups)
-            ->each(function ($group) use ($existing) {
+        foreach ($settings as $setting) {
+            // create/update group..
+            $setting = Setting::updateOrCreate([
+                'handle' => $setting['handle'],
+            ], [
+                'name'        => $setting['name'],
+                'group'       => $setting['group'] ?? 'General',
+                'icon'        => $setting['icon'] ?? 'cog',
+                'description' => $setting['description'] ?? '',
+            ]);
 
-                // create/update group..
-                $group = SettingGroup::updateOrCreate([
-                    'handle' => $group['handle'],
-                ], [
-                    'name'        => $group['name'],
-                    'group'       => $group['group'] ?? 'General',
-                    'icon'        => $group['icon'] ?? 'cog',
-                    'description' => $group['description'] ?? '',
-                ]);
+            if (! $setting->blueprint) {
+                dd('setting blueprint not created?', $setting);
+            }
 
-                // create/update fieldset..
-                $fieldset = Fieldset::updateOrCreate([
-                    'handle' => 'setting_'.$group['handle'],
-                ], [
-                    'name'   => 'Setting: '.$group['name'],
-                    'hidden' => true,
-                ]);
-
-                // assign fieldset..
-                $group->fieldsets()->sync($fieldset->id);
-
-                // mark for non-removal..
-                $existing->forget($group->id);
-            });
+            // mark for non-removal..
+            $existing->forget($setting->id);
+        }
 
         // Clean up removed elements..
         $existing->each(function ($id) {
-            SettingGroup::findOrFail($id)->delete();
+            Setting::findOrFail($id)->delete();
         });
     }
 
     /**
-     * Sync Fieldset Section for SettingGroup.
+     * Sync blueprint sections for SettingGroup.
      *
-     * @param SettingGroup $group
+     * @param Setting $setting
      *
      * @return void
      */
-    public function syncSettingSection(SettingGroup $group, $fields = null)
+    public function syncSettingSection(Setting $setting, $fields = null)
     {
-        $fields   = $fields ?? SettingService::fields($group->handle);
-        $existing = $group->fieldset->sections->pluck('id', 'id');
+        $fields = $fields ?? SettingService::fields($setting->handle);
+
+        if (isset($setting->blueprint) and count($setting->blueprint->sections)) {
+            $existing = $setting->blueprint->sections->pluck('id', 'id');
+        } else {
+            $existing = collect([]);
+        }
+
         $order    = 0;
 
         collect($fields)
-            ->each(function ($fields, $name) use ($group, $existing, &$order) {
-                $section = $group->fieldset->sections()
+            ->each(function ($fields, $name) use ($setting, $existing, &$order) {
+                $section = $setting->blueprint->sections()
                     ->updateOrCreate([
                         'handle' => str_handle($name),
                     ], [
                         'name'        => $name,
-                        'description' => "Settings for {$group->name} > {$name}",
+                        'description' => "Settings for {$setting->name} > {$name}",
                         'order'       => ++$order,
                     ]);
 

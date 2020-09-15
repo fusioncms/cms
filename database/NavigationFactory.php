@@ -1,7 +1,6 @@
 <?php
 
 use Fusion\Contracts\Factory;
-use Fusion\Models\Fieldset;
 use Fusion\Models\Navigation;
 use Illuminate\Support\Str;
 
@@ -13,9 +12,9 @@ class NavigationFactory implements Factory
     protected $name;
 
     /**
-     * @var \Fusion\Models\Fieldset
+     * @var array
      */
-    protected $fieldset;
+    protected $sections;
 
     /**
      * Create a new Navigation factory.
@@ -32,6 +31,23 @@ class NavigationFactory implements Factory
         }
 
         $navigation = factory(Navigation::class)->create($overrides);
+
+        if ($this->sections) {
+            foreach ($this->sections as $data) {
+                $section = $navigation->blueprint->sections()->create([
+                    'name'   => $data['name'],
+                    'handle' => $data['handle'],
+                ]);
+
+                foreach ($data['fields'] as $field) {
+                    $section->fields()->create([
+                        'name'   => $field['name'],
+                        'handle' => $field['handle'],
+                        'type'   => $field['type'],
+                    ]);
+                }
+            }
+        }
 
         return $navigation;
     }
@@ -51,15 +67,15 @@ class NavigationFactory implements Factory
     }
 
     /**
-     * Create a form with the given fieldset.
+     * Add sections to the navigation.
      *
-     * @param \Fusion\Models\Fieldset $fieldset
+     * @param array $sections
      *
-     * @return \NavigationFactory
+     * @return \TaxonomyFactory
      */
-    public function withFieldset(Fieldset $fieldset)
+    public function withSections($sections)
     {
-        $this->fieldset = $fieldset;
+        $this->sections = $sections;
 
         return $this;
     }

@@ -3,7 +3,7 @@
 namespace Fusion\Tests\Unit;
 
 use Facades\MatrixFactory;
-use Fusion\Models\Fieldset;
+use Fusion\Models\Blueprint;
 use Fusion\Models\Matrix;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
@@ -19,14 +19,11 @@ class MatrixTest extends TestCase
      * @group unit
      * @group matrix
      */
-    public function a_matrix_can_have_a_fieldset()
+    public function a_matrix_should_have_a_blueprint()
     {
-        $matrix   = factory(Matrix::class)->create();
-        $fieldset = factory(Fieldset::class)->create();
+        $matrix = factory(Matrix::class)->create();
 
-        $matrix->attachFieldset($fieldset);
-
-        $this->assertInstanceOf(Fieldset::class, $matrix->fieldset);
+        $this->assertInstanceOf(Blueprint::class, $matrix->blueprint);
     }
 
     /**

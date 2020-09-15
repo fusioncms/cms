@@ -2,9 +2,8 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Database\Migration;
 use Fusion\Database\Schema\Blueprint;
-use Fusion\Models\Fieldset;
+use Fusion\Database\Migration;
 use Fusion\Models\Navigation;
 use Illuminate\Support\Str;
 
@@ -46,8 +45,6 @@ class NavigationObserver
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
-
-        $this->createFieldset($navigation);
     }
 
     /**
@@ -66,20 +63,6 @@ class NavigationObserver
         if ($old->table !== $navigation->table) {
             $this->migration->schema->rename($old->table, $navigation->table);
         }
-
-        $this->updateFieldset($old, $navigation);
-    }
-
-    /**
-     * Handle the navigation "deleting" event.
-     *
-     * @param \Fusion\Models\Navigation $navigation
-     *
-     * @return void
-     */
-    public function deleting(Navigation $navigation)
-    {
-        $this->deleteFieldset($navigation);
     }
 
     /**
@@ -92,62 +75,5 @@ class NavigationObserver
     public function deleted(Navigation $navigation)
     {
         $this->migration->schema->dropIfExists($navigation->table);
-    }
-
-    /**
-     * Automatically create a fieldset for our navigation.
-     *
-     * @param Navigation $navigation
-     */
-    protected function createFieldset($navigation)
-    {
-        $navigation::unsetEventDispatcher();
-
-        $fieldsetName = 'Navigation: '.$navigation->name;
-
-        // Create the fieldset first
-        $fieldset = fusion()->post('fieldsets', [
-            'name'   => $fieldsetName,
-            'handle' => Str::slug($fieldsetName, '_'),
-        ]);
-
-        // Resolve the model instance
-        $fieldset = Fieldset::find($fieldset->data->id);
-
-        // Then create the sections/fields
-        $sections = fusion()->post('fieldsets/'.$fieldset->id.'/sections', $fieldset->toArray());
-
-        $navigation->attachFieldset($fieldset);
-        $navigation->save();
-    }
-
-    /**
-     * Automatically update the fieldset for our navigation.
-     *
-     * @param Navigation $navigation
-     */
-    protected function updateFieldset($old, $new)
-    {
-        $fieldset = $old->fieldsets()->first();
-
-        if ($old->name !== $new->name) {
-            $fieldsetName = 'Navigation: '.$new->name;
-
-            $fieldset->name   = $fieldsetName;
-            $fieldset->handle = Str::slug($fieldsetName, '_');
-            $fieldset->save();
-        }
-    }
-
-    /**
-     * Automatically delete the fieldset from our navigation.
-     *
-     * @param Navigation $navigation
-     */
-    protected function deleteFieldset($navigation)
-    {
-        $fieldset = $navigation->fieldsets()->first();
-
-        $fieldset->delete();
     }
 }

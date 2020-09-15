@@ -2,13 +2,14 @@
 
 namespace Fusion\Tests\Feature\Taxonomy;
 
-use Fusion\Models\Taxonomy;
 use Fusion\Tests\TestCase;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Fusion\Models\Taxonomy;
 use Illuminate\Support\Str;
+use Facades\TaxonomyFactory;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class TaxonomyTest extends TestCase
 {
@@ -244,5 +245,24 @@ class TaxonomyTest extends TestCase
             ->assertJsonValidationErrors([
                 'handle' => 'The handle conflicts with a reserved keyword and may not be used.',
             ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group taxonomy
+     */
+    public function when_a_taxonomy_is_created_an_associated_blueprint_should_also_be_created()
+    {
+        $this->actingAs($this->owner, 'api');
+
+        $taxonomy = TaxonomyFactory::withName('Categories')->create();
+
+        $this->assertDatabaseHas('blueprints', [
+            'name'               => $taxonomy->name,
+            'group'              => 'Taxonomy',
+            'blueprintable_type' => get_class($taxonomy),
+            'blueprintable_id'   => $taxonomy->id,
+        ]);
     }
 }

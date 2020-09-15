@@ -2,21 +2,17 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\CachesQueries;
 use Fusion\Concerns\HasActivity;
-use Fusion\Concerns\HasFieldset;
+use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 
 class Navigation extends Model
 {
-    use CachesQueries;
-    use HasFieldset;
+    use HasBlueprint;
     use HasActivity;
 
-    protected $with = ['fieldsets'];
-
-    protected $appends = ['fieldset'];
+    protected $with = ['blueprint'];
 
     protected $table = 'navigation';
 
@@ -30,6 +26,8 @@ class Navigation extends Model
         'handle',
         'description',
     ];
+
+    protected $blueprintGroup = 'Navigation';
 
     /**
      * Get the builder instance.

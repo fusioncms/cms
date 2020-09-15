@@ -21,6 +21,8 @@ class ReplicatorFieldtypeTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
+        $this->markTestIncomplete();
+
         // --
         $this->fieldset = factory(Fieldset::class)->create(['name' => 'RP Fieldset', 'handle' => 'rp_fieldset']);
         $this->section  = factory(Section::class)->make(['name' => 'RS', 'handle' => 'rs_section']);

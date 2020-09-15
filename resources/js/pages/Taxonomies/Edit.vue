@@ -68,7 +68,6 @@
                             name:        vm.taxonomy.name,
                             handle:      vm.taxonomy.handle,
                             description: vm.taxonomy.description,
-                            fieldset:    vm.taxonomy.fieldset && vm.taxonomy.fieldset.id ? vm.taxonomy.fieldset.id : null,
                             sidebar:     vm.taxonomy.sidebar ? '1' : '0',
                             icon:        vm.taxonomy.icon,
                             route:       vm.taxonomy.route,

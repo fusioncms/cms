@@ -2,21 +2,17 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\CachesQueries;
 use Fusion\Concerns\HasActivity;
-use Fusion\Concerns\HasFieldset;
+use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 
 class Form extends Model
 {
-    use CachesQueries;
-    use HasFieldset;
+    use HasBlueprint;
     use HasActivity;
 
-    protected $with = ['fieldsets'];
-
-    protected $appends = ['fieldset'];
+    protected $with = ['blueprint'];
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -57,6 +53,13 @@ class Form extends Model
         'enable_honeypot'         => 'boolean',
         'status'                  => 'boolean',
     ];
+
+    /**
+     * The blueprint grouping value.
+     *
+     * @var string
+     */
+    protected $blueprintGroup = 'Forms';
 
     /**
      * Get the builder instance.

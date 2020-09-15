@@ -47,8 +47,8 @@ class Form extends Builder implements BuilderContract
         $fillable  = ['form_id', 'identifiable_ip_address'];
         $casts     = [];
 
-        if ($this->form->fieldset) {
-            $fields = $this->form->fieldset->fields->reject(function ($field) {
+        if ($this->form->blueprint) {
+            $fields = $this->form->blueprint->fields->reject(function ($field) {
                 $fieldtype = fieldtypes()->get($field->type);
 
                 if ($fieldtype->hasRelationship()) {

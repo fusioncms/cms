@@ -45,7 +45,7 @@ class MatrixResource extends JsonResource
 
             'status'             => $this->status,
 
-            'fieldset'         => new FieldsetResource($this->fieldset),
+            'blueprint'        => new BlueprintResource($this->blueprint),
             'parent'           => new MatrixResource($this->parent),
             'children'         => MatrixResource::collection($this->whenLoaded('children')),
         ];

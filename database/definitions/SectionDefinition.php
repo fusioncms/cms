@@ -1,5 +1,6 @@
 <?php
 
+use Fusion\Models\Blueprint;
 use Faker\Generator as Faker;
 use Fusion\Models\Section;
 
@@ -10,6 +11,6 @@ $factory->define(Section::class, function (Faker $faker) {
         'description'      => $faker->sentence,
         'placement'        => $faker->randomElement(['body', 'sidebar']),
         'order'            => 99,
-        'fieldset_id'      => factory(Fusion\Models\Fieldset::class),
+        'blueprint_id'     => factory(Blueprint::class),
     ];
 });

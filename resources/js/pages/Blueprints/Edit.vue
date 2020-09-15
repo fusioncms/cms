@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <page-title icon="list">Edit Fieldset</page-title>
+            <page-title icon="list">Edit Blueprint</page-title>
         </portal>
 
         <shared-form
@@ -39,13 +39,13 @@
 
         methods: {
             submit() {
-                this.form.patch(`/api/fieldsets/${this.resource.id}`)
+                this.form.patch(`/api/blueprints/${this.resource.id}`)
                     .then(() => {
-                        axios.post(`/api/fieldsets/${this.resource.id}/sections`, { sections: this.form.sections })
+                        axios.post(`/api/blueprints/${this.resource.id}/sections`, { sections: this.form.sections })
                             .then(() => {
-                                toast('Fieldset successfully updated', 'success')
+                                toast('Blueprint successfully updated', 'success')
 
-                                this.$router.push('/fieldsets')
+                                this.$router.push('/blueprints')
                             }).catch((response) => {
                                 toast(response.message, 'failed')
                             })
@@ -56,20 +56,20 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            getFieldset(to.params.fieldset, (error, fieldset) => {
+            getBlueprint(to.params.blueprint, (error, blueprint) => {
                 if (error) {
                     next((vm) => {
-                        vm.$router.push('/fieldsets')
+                        vm.$router.push('/blueprints')
 
                         toast(error.toString(), 'danger')
                     })
                 } else {
                     next((vm) => {
-                        vm.resource = fieldset
+                        vm.resource = blueprint
+
                         vm.form = new Form({
-                            name: fieldset.name,
-                            handle: fieldset.handle,
-                            sections: fieldset.sections
+                            name: blueprint.name,
+                            sections: blueprint.sections
                         }, true)
 
                         vm.$nextTick(() => {
@@ -81,11 +81,11 @@
         }
     }
 
-    export function getFieldset(fieldset, callback) {
-        axios.get('/api/fieldsets/' + fieldset).then((response) => {
+    export function getBlueprint(blueprint, callback) {
+        axios.get('/api/blueprints/' + blueprint).then((response) => {
             callback(null, response.data.data)
         }).catch(function(error) {
-            callback(new Error('The requested fieldset could not be found'))
+            callback(new Error('The requested blueprint could not be found'))
         })
     }
 </script>

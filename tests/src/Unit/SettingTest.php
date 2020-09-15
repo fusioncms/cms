@@ -2,7 +2,7 @@
 
 namespace Fusion\Tests\Unit;
 
-use Fusion\Models\Fieldset;
+use Fusion\Models\Blueprint;
 use Fusion\Models\Setting;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
@@ -34,9 +34,9 @@ class SettingTest extends TestCase
      * @group unit
      * @group settings
      */
-    public function each_setting_group_will_have_one_fieldset()
+    public function each_setting_group_will_have_one_blueprint()
     {
-        $this->assertInstanceOf(Fieldset::class, Setting::first()->fieldset);
+        $this->assertInstanceOf(Blueprint::class, Setting::first()->blueprint);
     }
 
     /**

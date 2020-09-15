@@ -3,7 +3,6 @@
 namespace Fusion\Tests\Feature\Matrix;
 
 use Facades\MatrixFactory;
-use Fusion\Models\Fieldset;
 use Fusion\Models\Matrix;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -125,10 +124,7 @@ class MatrixTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $matrix   = factory(Matrix::class)->make()->toArray();
-        $fieldset = factory(Fieldset::class)->create();
-
-        $matrix['fieldset'] = $fieldset->id;
+        $matrix = factory(Matrix::class)->make()->toArray();
 
         $this
             ->json('POST', '/api/matrices', $matrix)

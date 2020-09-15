@@ -46,7 +46,7 @@ class SettingController extends Controller
     public function update(SettingRequest $request, Setting $setting)
     {
         // Filter out relationships
-        $relationships = $setting->fieldset->relationships();
+        $relationships = $setting->blueprint->relationships();
         $validated     = collect($request->validated())->reject(function ($value, $handle) use ($relationships) {
             return $relationships->contains('handle', $handle);
         })->toArray();

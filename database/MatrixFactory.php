@@ -1,7 +1,6 @@
 <?php
 
 use Fusion\Contracts\Factory;
-use Fusion\Models\Fieldset;
 use Fusion\Models\Matrix;
 use Illuminate\Support\Str;
 
@@ -23,6 +22,11 @@ class MatrixFactory implements Factory
     protected $template;
 
     /**
+     * @var array
+     */
+    protected $sections;
+
+    /**
      * @var bool
      */
     protected $asSingle = false;
@@ -31,11 +35,6 @@ class MatrixFactory implements Factory
      * @var bool
      */
     protected $asCollection = false;
-
-    /**
-     * @var \Fusion\Models\Fieldset
-     */
-    protected $fieldset;
 
     /**
      * Create a new Matrix factory.
@@ -68,13 +67,24 @@ class MatrixFactory implements Factory
             $overrides['type'] = 'single';
         }
 
-        if (!$this->fieldset) {
-            $this->fieldset = factory(Fieldset::class)->create();
-        }
-
         $matrix = factory(Matrix::class)->create($overrides);
 
-        $matrix->attachFieldset($this->fieldset);
+        if ($this->sections) {
+            foreach ($this->sections as $data) {
+                $section = $matrix->blueprint->sections()->create([
+                    'name'   => $data['name'],
+                    'handle' => $data['handle'],
+                ]);
+
+                foreach ($data['fields'] as $field) {
+                    $section->fields()->create([
+                        'name'   => $field['name'],
+                        'handle' => $field['handle'],
+                        'type'   => $field['type'],
+                    ]);
+                }
+            }
+        }
 
         return $matrix;
     }
@@ -118,20 +128,6 @@ class MatrixFactory implements Factory
     }
 
     /**
-     * Create a matrix with the given fieldset.
-     *
-     * @param \Fusion\Models\Fieldset $fieldset
-     *
-     * @return \MatrixFactory
-     */
-    public function withFieldset(Fieldset $fieldset)
-    {
-        $this->fieldset = $fieldset;
-
-        return $this;
-    }
-
-    /**
      * Create a matrix with the given route.
      *
      * @param string $route
@@ -155,6 +151,20 @@ class MatrixFactory implements Factory
     public function withTemplate($template)
     {
         $this->template = $template;
+
+        return $this;
+    }
+
+    /**
+     * Add sections to the matrix.
+     *
+     * @param array $sections
+     *
+     * @return \TaxonomyFactory
+     */
+    public function withSections($sections)
+    {
+        $this->sections = $sections;
 
         return $this;
     }

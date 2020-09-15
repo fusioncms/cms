@@ -13,16 +13,16 @@
                 <ui-table :endpoint="endpoint" id="addons" sort-by="name" primary-key="handle" key="addons_table">
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">
-                            <p-status
+                            <ui-status
                                 v-if="table.record.installed"
                                 :value="table.record.enabled"
                                 class="mr-2">
-                            </p-status>
+                            </ui-status>
 
-                            <p-status
+                            <ui-status
                                 v-else
                                 class="mr-2">
-                            </p-status>
+                            </ui-status>
 
                             {{ table.record.name }}
                         </div>

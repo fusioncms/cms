@@ -17,13 +17,27 @@ class TermTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        // --
-        $section      = \Facades\SectionFactory::times(1)->withoutFields()->create();
-        $fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($section)->create();
-        $fieldContent = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($section)->create();
-        $fieldset     = \Facades\FieldsetFactory::withName('General')->withSections(collect([$section]))->create();
-
-        $this->taxonomy = \Facades\TaxonomyFactory::withName('Categories')->withFieldset($fieldset)->withStates(['terms'])->create();
+        $this->taxonomy = \Facades\TaxonomyFactory::withName('Categories')
+            ->withStates(['terms'])
+            ->withSections([
+                [
+                    'name'   => 'General',
+                    'handle' => 'general',
+                    'fields' => [
+                        [
+                            'name'   => 'Excerpt',
+                            'handle' => 'excerpt',
+                            'type'   => 'input',
+                        ],
+                        [
+                            'name'   => 'Content',
+                            'handle' => 'content',
+                            'type'   => 'textarea',
+                        ],
+                    ],
+                ],
+            ])
+            ->create();
     }
 
     /**
