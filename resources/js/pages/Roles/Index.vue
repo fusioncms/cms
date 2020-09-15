@@ -1,42 +1,40 @@
 <template>
-    <div>
+    <div class="roles-page">
         <portal to="title">
             <page-title icon="user-shield">Roles</page-title>
         </portal>
 
         <portal to="actions">
-            <router-link :to="{ name: 'roles.create' }" class="button">Create Role</router-link>
+            <ui-button :to="{ name: 'roles.create' }" variant="primary">Create Role</ui-button>
         </portal>
 
-        <div class="row">
-            <div class="content-container">
-                <ui-table :endpoint="endpoint" id="roles" sort-by="label" key="roles_table">
-                    <template slot="label" slot-scope="table">
-                        <router-link :to="{ name: 'roles.edit', params: {role: table.record.id} }">{{ table.record.label }}</router-link>
-                    </template>
+        <div class="content-container">
+            <ui-table :endpoint="endpoint" id="roles" sort-by="label" key="roles_table">
+                <template slot="label" slot-scope="table">
+                    <router-link :to="{ name: 'roles.show', params: {role: table.record.id} }">{{ table.record.label }}</router-link>
+                </template>
 
-                    <template slot="description" slot-scope="table">
-                        <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
-                    </template>
+                <template slot="description" slot-scope="table">
+                    <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
+                </template>
 
-                    <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
+                <template slot="actions" slot-scope="table">
+                    <ui-table-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
+                        <ui-dropdown-link :to="{ name: 'roles.show', params: {role: table.record.id} }">View</ui-dropdown-link>
 
-                            <ui-dropdown-link@click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">
-                                Edit
-                            </ui-dropdown-link>
+                        <ui-dropdown-link@click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">Edit</ui-dropdown-link>
 
-                            <ui-dropdown-link
-                                v-if="isRemovable(table.record.name)"
-                                @click.prevent v-modal:delete-role="table.record"
-                                classes="link--danger"
-                            >
-                                Delete
-                            </ui-dropdown-link>
-                        </ui-table-actions>
-                    </template>
-                </ui-table>
-            </div>
+                        <ui-dropdown-divider v-if="isRemovable(table.record.name)"></ui-dropdown-divider>
+
+                        <ui-dropdown-link
+                            v-if="isRemovable(table.record.name)"
+                            @click.prevent v-modal:delete-role="table.record"
+                            classes="danger">
+                            Delete
+                        </ui-dropdown-link>
+                    </ui-table-actions>
+                </template>
+            </ui-table>
         </div>
 
         <portal to="modals">
@@ -45,7 +43,7 @@
 
                 <template slot="footer" slot-scope="role">
                     <ui-button v-modal:delete-role @click="destroy(role.data.id)" variant="danger" class="ml-3">Delete</ui-button>
-                    <ui-button v-modal:delete-role>Cancel</ui-button>
+                    <ui-button v-modal:delete-role variant="secondary">Cancel</ui-button>
                 </template>
             </ui-modal>
         </portal>
