@@ -15,19 +15,15 @@ class UserActivityController extends DataTableController
     public function getDisplayableColumns()
     {
         return [
-            'name',
-            'email',
-            'role',
+            'description',
             'created_at',
-            'email_verified_at',
         ];
     }
 
     public function getSortable()
     {
         return [
-            'name',
-            'email',
+            'description',
             'created_at',
         ];
     }
@@ -35,11 +31,8 @@ class UserActivityController extends DataTableController
     public function getCustomColumnNames()
     {
         return [
-            'name'              => 'Name',
-            'email'             => 'E-mail',
-            'role'              => 'Role',
-            'created_at'        => 'Created',
-            'email_verified_at' => 'Verified',
+            'description' => 'Action',
+            'created_at'  => 'Time',
         ];
     }
 }
