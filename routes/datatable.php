@@ -13,7 +13,9 @@
 
 Route::get('/users', 'UserController@index');
 Route::get('/users/{role}', 'UserController@index');
+Route::get('/users/{user}/activities', 'UserActivityController@index');
 Route::get('/roles', 'RoleController@index');
+Route::get('/roles/{role}/permissions', 'RolePermissionController@index');
 Route::get('/permissions', 'PermissionController@index');
 Route::get('/taxonomies', 'TaxonomyController@index');
 Route::get('/mailables', 'MailableController@index');
