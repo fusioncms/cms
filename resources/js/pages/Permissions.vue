@@ -6,7 +6,7 @@
 
         <div class="row">
             <div class="content-container">
-                <ui-table id="permissions" :endpoint="endpoint" sort-by="name" :per-page="10" no-actions key="permissions_table">
+                <ui-table id="permissions" :endpoint="endpoint" sort-by="name" :per-page="10" key="permissions_table">
                     <template slot="name" slot-scope="table">
                         <code>{{ table.record.name }}</code>
                     </template>
