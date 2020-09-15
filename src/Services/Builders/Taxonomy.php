@@ -47,8 +47,8 @@ class Taxonomy extends Builder implements BuilderContract
         $fillable  = ['taxonomy_id', 'parent_id', 'name', 'slug', 'status'];
         $casts     = [];
 
-        if ($this->taxonomy->fieldset) {
-            $fields = $this->taxonomy->fieldset->fields->reject(function ($field) {
+        if ($this->taxonomy->blueprint) {
+            $fields = $this->taxonomy->blueprint->fields->reject(function ($field) {
                 $fieldtype = fieldtypes()->get($field->type);
 
                 if ($fieldtype->hasRelationship()) {

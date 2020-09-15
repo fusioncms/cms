@@ -92,18 +92,6 @@ class MatrixObserver
     }
 
     /**
-     * Handle the matrix "deleting" event.
-     *
-     * @param \Fusion\Models\Matrix $matrix
-     *
-     * @return void
-     */
-    public function deleting(Matrix $matrix)
-    {
-        $matrix->detachFieldset();
-    }
-
-    /**
      * Handle the matrix "deleted" event.
      *
      * @param \Fusion\Models\Matrix $matrix

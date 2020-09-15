@@ -12,7 +12,7 @@
         :autocomplete="autocomplete"
         :autofocus="autofocus"
         :required="required"
-        :aria-required="required" 
+        :aria-required="required"
         :aria-describedby="message ? formattedId + '_message' : null"
         @input="handleInput">
 </template>
@@ -93,7 +93,7 @@
             focus() {
                 this.$el.focus()
             },
-            
+
             blur() {
                 this.$el.blur()
             }

@@ -13,17 +13,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Fusion\Events\FieldsetAttached' => [
-            'Fusion\Listeners\WhenFieldsetIsAttached',
-        ],
-
-        'Fusion\Events\FieldsetDetached' => [
-            'Fusion\Listeners\WhenFieldsetIsDetached',
-        ],
-
-        'Fusion\Events\FieldsetReplaced' => [
-            'Fusion\Listeners\WhenFieldsetIsReplaced',
-        ],
+        
     ];
 
     protected $subscribe = [
@@ -44,9 +34,7 @@ class EventServiceProvider extends ServiceProvider
         \Fusion\Models\Matrix::observe(\Fusion\Observers\MatrixObserver::class);
         \Fusion\Models\Section::observe(\Fusion\Observers\SectionObserver::class);
         \Fusion\Models\Setting::observe(\Fusion\Observers\SettingObserver::class);
-        \Fusion\Models\Fieldset::observe(\Fusion\Observers\FieldsetObserver::class);
         \Fusion\Models\Taxonomy::observe(\Fusion\Observers\TaxonomyObserver::class);
-        \Fusion\Models\Extension::observe(\Fusion\Observers\ExtensionObserver::class);
         \Fusion\Models\Navigation::observe(\Fusion\Observers\NavigationObserver::class);
         \Fusion\Models\Replicator::observe(\Fusion\Observers\ReplicatorObserver::class);
         \Fusion\Models\User::observe(\Fusion\Observers\UserObserver::class);

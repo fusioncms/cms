@@ -8,7 +8,7 @@
             <a href="https://beta.getfusioncms.com/changelog" title="Changelog" target="_blank">{{ current }}</a>
         </portal>
 
-        <div class="card" v-for="(version, i1) in versions">
+        <div class="card" v-for="(version, i1) in versions" :key="i1">
             <div class="card__header flex items-center justify-between">
                 <h3 class="card__title">
                     {{ version.title }}
@@ -20,15 +20,15 @@
 
                 <div class="flex items-center justify-start">
                     <!-- upgrade --
-                    <p-button v-if="version.id > id" @click="upgrade(version.id)" disabled>
+                    <ui-button v-if="version.id > id" @click="upgrade(version.id)" disabled>
                         Upgrade to {{ version.title }}
-                    </p-button>
+                    </ui-button>
                     -->
 
                     <!-- current version -->
-                    <p-button v-if="version._isCurrent" disabled>
+                    <ui-button v-if="version._isCurrent" disabled>
                         Current version
-                    </p-button>
+                    </ui-button>
 
                     <!-- attachments -->
                     <a  v-for="(attachment, i2) in version.attachments"
@@ -52,12 +52,12 @@
             <div class="card__body">
                 <p>{{ versions.content_text }}</p>
 
-                <div v-for="changelog, name in version._changelog">
-                    <div class="row" v-for="issues, text in changelog"> 
+                <div v-for="(changelog, name) in version._changelog" :key="name">
+                    <div class="row" v-for="(issues, text) in changelog" :key="text">
                         <div class="col">
                             <span class="badge">{{ name }}</span>
                         </div>
-                        
+
                         <div class="col">
                             {{ text }}
 
@@ -75,27 +75,27 @@
         </div>
 
         <div class="mt-6" v-if="pagination.total > 1">
-            <p-pagination
+            <ui-pagination
                 @input="changePage($event)"
                 :total="pagination.last_page"
                 :value="pagination.current_page"
-            ></p-pagination>
+            ></ui-pagination>
         </div>
 
         <portal to="modals">
-            <p-modal
+            <ui-modal
                 key="updater_modal"
                 name="updater"
                 :title="`Update to ${version.title}`"
                 v-model="isConfirming">
 
                 <p>Are you sure you want to update to version {{ version.title }}?</p>
-                
+
                 <template slot="footer">
-                    <p-button @click="confirm" type="button" class="button button--primary">Confirm</p-button>
-                    <p-button @click="close" type="button" class="mr-3">Cancel</p-button>
+                    <ui-button @click="confirm" type="button" class="button button--primary">Confirm</ui-button>
+                    <ui-button @click="close" type="button" class="mr-3">Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
         </portal>
     </div>
 </template>
@@ -103,7 +103,7 @@
 <script>
     export default {
         name: 'updates',
-        
+
         data() {
             return {
                 version: false,

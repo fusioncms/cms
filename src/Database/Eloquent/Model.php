@@ -2,12 +2,13 @@
 
 namespace Fusion\Database\Eloquent;
 
+use Fusion\Concerns\CachesQueries;
 use Fusion\Concerns\HasDynamicRelationships;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class Model extends EloquentModel
 {
-    use HasDynamicRelationships;
+    use CachesQueries, HasDynamicRelationships;
 
     /**
      * @var Model

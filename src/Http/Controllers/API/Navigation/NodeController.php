@@ -54,9 +54,9 @@ class NodeController extends Controller
             'status'     => 'sometimes',
         ];
 
-        if (isset($navigation->fieldset)) {
-            $fields        = $navigation->fieldset->database();
-            $relationships = $navigation->fieldset->relationships();
+        if (isset($navigation->blueprint)) {
+            $fields        = $navigation->blueprint->database();
+            $relationships = $navigation->blueprint->relationships();
 
             foreach ($fields as $field) {
                 $rules[$field->handle] = 'sometimes';
@@ -99,9 +99,9 @@ class NodeController extends Controller
             'status'     => 'sometimes',
         ];
 
-        if (isset($navigation->fieldset)) {
-            $fields        = $navigation->fieldset->database();
-            $relationships = $navigation->fieldset->relationships();
+        if (isset($navigation->blueprint)) {
+            $fields        = $navigation->blueprint->database();
+            $relationships = $navigation->blueprint->relationships();
 
             foreach ($fields as $field) {
                 $rules[$field->handle] = 'sometimes';

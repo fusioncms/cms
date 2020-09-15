@@ -2,10 +2,9 @@
 
 namespace Fusion\Http\Requests;
 
-use Fusion\Rules\NotAReservedKeyword;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ExtensionRequest extends FormRequest
+class BlueprintRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +13,7 @@ class ExtensionRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('extensions.'.($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('blueprints.'.($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**
@@ -24,11 +23,8 @@ class ExtensionRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->extension->id ?? null;
-
         return [
-            'name'   => 'required|regex:/^[A-z]/i',
-            'handle' => ['required', 'unique:extensions,handle,'.$id, new NotAReservedKeyword()],
+            'name'  => 'required',
         ];
     }
 }

@@ -56,7 +56,7 @@ class {class} extends Model
      */
     public function getFieldsAttribute()
     {
-        return $this->taxonomy->fieldset->fields ?? null;
+        return $this->taxonomy->blueprint->fields ?? null;
     }
 
     public function parent()

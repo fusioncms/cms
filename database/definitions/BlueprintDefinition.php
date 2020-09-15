@@ -13,9 +13,9 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(Fusion\Models\Fieldset::class, function (Faker $faker) {
+$factory->define(Fusion\Models\Blueprint::class, function (Faker $faker) {
     return [
-        'name'   => ($name = $faker->unique()->word),
-        'handle' => str_handle($name),
+        'name'  => $faker->unique()->word,
+        'group' => $faker->unique()->word,
     ];
 });

@@ -2,16 +2,10 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\HasActivity;
-use Fusion\Concerns\HasDynamicRelationships;
 use Fusion\Database\Eloquent\Model;
-use Spatie\Activitylog\Models\Activity;
 
-class Fieldset extends Model
+class Blueprint extends Model
 {
-    use HasDynamicRelationships;
-    use HasActivity;
-
     /**
      * The attributes that are fillable via mass assignment.
      *
@@ -19,7 +13,7 @@ class Fieldset extends Model
      */
     protected $fillable = [
         'name',
-        'handle',
+        'group',
         'hidden',
     ];
 
@@ -33,17 +27,15 @@ class Fieldset extends Model
     ];
 
     /**
-     * A fieldset is polymorphic.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * Get the owning blueprintable model.
      */
-    public function fieldsettable()
+    public function blueprintable()
     {
         return $this->morphTo();
     }
 
     /**
-     * A fieldset has many sections.
+     * A blueprint has many sections.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -83,18 +75,6 @@ class Fieldset extends Model
     }
 
     /**
-     * Return the fields that generate database columns.
-     *
-     * @return self
-     */
-    public function database()
-    {
-        return $this->fields->reject(function ($field) {
-            return is_null($field->type()->getColumn());
-        });
-    }
-
-    /**
      * Return the fields that define relationships.
      *
      * @return self
@@ -103,6 +83,18 @@ class Fieldset extends Model
     {
         return $this->fields->reject(function ($field) {
             return is_null($field->type()->getRelationship());
+        });
+    }
+
+    /**
+     * Return the fields that generate database columns.
+     *
+     * @return self
+     */
+    public function database()
+    {
+        return $this->fields->reject(function ($field) {
+            return is_null($field->type()->getColumn());
         });
     }
 
@@ -131,11 +123,11 @@ class Fieldset extends Model
         $subject    = $activity->subject;
         $action     = ucfirst($eventName);
         $properties = [
-            'link' => "fieldsets/{$subject->id}/edit",
+            'link' => "blueprints/{$subject->id}/edit",
             'icon' => 'list',
         ];
 
-        $activity->description = "{$action} fieldset ({$subject->name})";
+        $activity->description = "{$action} blueprint ({$subject->name})";
         $activity->properties  = $properties;
     }
 }

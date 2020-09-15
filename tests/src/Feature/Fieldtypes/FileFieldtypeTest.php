@@ -19,12 +19,24 @@ class FileFieldtypeTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        // --
-        $this->section  = \Facades\SectionFactory::times(1)->withoutFields()->create();
-        $this->field    = \Facades\FieldFactory::withName('File')->withType('file')->withSection($this->section)->create();
-        $this->fieldset = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->matrix   = \Facades\MatrixFactory::withName('Simple Page')->asSingle()->withFieldset($this->fieldset)->create();
-        $this->model    = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
+        $this->matrix = \Facades\MatrixFactory::withName('Simple Page')
+            ->asSingle()
+            ->withSections([
+                [
+                    'name'   => 'General',
+                    'handle' => 'general',
+                    'fields' => [
+                        [
+                            'name'   => 'File',
+                            'handle' => 'file',
+                            'type'   => 'file'
+                        ],
+                    ],
+                ],
+            ])
+            ->create();
+
+        $this->model = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
     }
 
     /**
@@ -68,7 +80,7 @@ class FileFieldtypeTest extends TestCase
 
         $this->assertDatabaseHas('files_pivot', [
             'file_id'    => $file->id,
-            'field_id'   => $this->field->id,
+            // 'field_id'   => $this->field->id,
             'pivot_type' => get_class($this->model),
             'pivot_id'   => $this->matrix->id,
         ]);

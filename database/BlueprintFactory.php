@@ -2,10 +2,10 @@
 
 use Facades\SectionFactory;
 use Fusion\Contracts\Factory;
-use Fusion\Models\Fieldset;
+use Fusion\Models\Blueprint;
 use Illuminate\Support\Str;
 
-class FieldsetFactory implements Factory
+class BlueprintFactory implements Factory
 {
     /**
      * @var string
@@ -18,34 +18,33 @@ class FieldsetFactory implements Factory
     protected $sections;
 
     /**
-     * Create a new Fieldset factory.
+     * Create a new Blueprint factory.
      *
-     * @return \Fusion\Models\Fieldset
+     * @return \Fusion\Models\Blueprint
      */
     public function create()
     {
-        $fieldset = factory(Fieldset::class)->create();
+        $blueprint = factory(Blueprint::class)->create();
 
         if ($this->name) {
             $overrides['name']   = $this->name;
-            $overrides['handle'] = Str::slug($this->name, '_');
         }
 
         if (!$this->sections) {
             $this->sections = SectionFactory::times(3)->create();
         }
 
-        $fieldset->sections()->saveMany($this->sections);
+        $blueprint->sections()->saveMany($this->sections);
 
-        return $fieldset;
+        return $blueprint;
     }
 
     /**
-     * Set fieldset name.
+     * Set blueprint name.
      *
      * @param string $name
      *
-     * @return \FieldsetFactory
+     * @return \BlueprintFactory
      */
     public function withName($name)
     {
@@ -55,11 +54,11 @@ class FieldsetFactory implements Factory
     }
 
     /**
-     * Create a fieldset with the given sections.
+     * Create a blueprint with the given sections.
      *
      * @param array|\Illuminate\Support\Collection $sections
      *
-     * @return \FieldsetFactory
+     * @return \BlueprintFactory
      */
     public function withSections($sections)
     {

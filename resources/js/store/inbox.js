@@ -129,7 +129,7 @@ export default {
 
         extractFields(context, response) {
             let fields = []
-            let sections = response.form.fieldset.sections
+            let sections = response.form.blueprint.sections
 
             _.each(sections, (section) => {
                 _.each(section.fields, (field) => {

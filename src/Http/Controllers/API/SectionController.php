@@ -1,29 +1,29 @@
 <?php
 
-namespace Fusion\Http\Controllers\API\Fields;
+namespace Fusion\Http\Controllers\API;
 
-use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\FieldsetResource;
-use Fusion\Models\Fieldset;
 use Fusion\Models\Section;
+use Fusion\Models\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Resources\BlueprintResource;
 
-class FieldsetSectionController extends Controller
+class SectionController extends Controller
 {
-    public function store(Request $request, Fieldset $fieldset)
+    public function store(Request $request, Blueprint $blueprint)
     {
         $sections = collect($request->sections);
 
         $attached = $this->getAttachedSections($sections);
         $updated  = $this->getUpdatedSections($sections);
-        $detached = $this->getDetachedSections($fieldset, $sections);
+        $detached = $this->getDetachedSections($blueprint, $sections);
 
-        $fieldset = $this->deleteSections($fieldset, $detached);
-        $fieldset = $this->updateSections($fieldset, $updated);
-        $fieldset = $this->createSections($fieldset, $attached);
+        $blueprint = $this->deleteSections($blueprint, $detached);
+        $blueprint = $this->updateSections($blueprint, $updated);
+        $blueprint = $this->createSections($blueprint, $attached);
 
-        return new FieldsetResource($fieldset);
+        return new BlueprintResource($blueprint);
     }
 
     /**
@@ -51,36 +51,36 @@ class FieldsetSectionController extends Controller
     }
 
     /**
-     * @param Fieldset   $fieldset
+     * @param Blueprint   $blueprint
      * @param Collection $sections
      *
      * @return Collection
      */
-    protected function getDetachedSections(Fieldset $fieldset, Collection $sections)
+    protected function getDetachedSections(Blueprint $blueprint, Collection $sections)
     {
         if ($sections->isEmpty()) {
             return collect();
         }
 
-        $existing = $fieldset->sections->pluck('id');
+        $existing = $blueprint->sections->pluck('id');
         $saving   = $this->getUpdatedSections($sections)->pluck('id');
 
         return $existing->diff($saving);
     }
 
     /**
-     * Create Sections on Fieldset.
+     * Create Sections on Blueprint.
      *
-     * @param Fieldset   $fieldset
+     * @param Blueprint   $blueprint
      * @param Collection $sections
      *
-     * @return Fieldset
+     * @return Blueprint
      */
-    protected function createSections(Fieldset $fieldset, Collection $sections)
+    protected function createSections(Blueprint $blueprint, Collection $sections)
     {
         if ($sections->isNotEmpty()) {
-            $sections->each(function ($data, $index) use ($fieldset) {
-                $section = $fieldset->sections()->create([
+            $sections->each(function ($data, $index) use ($blueprint) {
+                $section = $blueprint->sections()->create([
                     'name'        => $data['name'],
                     'handle'      => $data['handle'],
                     'description' => $data['description'],
@@ -94,21 +94,21 @@ class FieldsetSectionController extends Controller
             });
         }
 
-        return $fieldset;
+        return $blueprint;
     }
 
     /**
-     * Update Sections on Fieldset.
+     * Update Sections on Blueprint.
      *
-     * @param Fieldset   $fieldset
+     * @param Blueprint   $blueprint
      * @param Collection $sections
      *
-     * @return Fieldset
+     * @return Blueprint
      */
-    protected function updateSections(Fieldset $fieldset, Collection $sections)
+    protected function updateSections(Blueprint $blueprint, Collection $sections)
     {
         if ($sections->isNotEmpty()) {
-            $sections->each(function ($data, $index) use ($fieldset) {
+            $sections->each(function ($data, $index) use ($blueprint) {
                 $id = $data['id'];
                 $fields = collect($data['fields']);
 
@@ -117,7 +117,7 @@ class FieldsetSectionController extends Controller
                 unset($data['id']);
                 unset($data['fields']);
 
-                $section = $fieldset->sections()->findOrFail($id);
+                $section = $blueprint->sections()->findOrFail($id);
                 $section->update($data);
 
                 $detached = $this->getDetachedFields($section, $fields);
@@ -130,28 +130,28 @@ class FieldsetSectionController extends Controller
             });
         }
 
-        return $fieldset;
+        return $blueprint;
     }
 
     /**
-     * Remove Sections from Fieldset.
+     * Remove Sections from Blueprint.
      *
-     * @param Fieldset   $fieldset
+     * @param Blueprint   $blueprint
      * @param Collection $ids
      *
-     * @return Fieldset
+     * @return Blueprint
      */
-    protected function deleteSections(Fieldset $fieldset, Collection $ids)
+    protected function deleteSections(Blueprint $blueprint, Collection $ids)
     {
         if ($ids->count()) {
-            $sections = $fieldset->sections()->whereIn('id', $ids)->get();
+            $sections = $blueprint->sections()->whereIn('id', $ids)->get();
 
             $sections->each(function ($section) {
                 $section->delete();
             });
         }
 
-        return $fieldset;
+        return $blueprint;
     }
 
     /**

@@ -1,7 +1,6 @@
 <?php
 
 use Fusion\Contracts\Factory;
-use Fusion\Models\Fieldset;
 use Fusion\Models\Taxonomy;
 use Illuminate\Support\Str;
 
@@ -13,16 +12,16 @@ class TaxonomyFactory implements Factory
     protected $name;
 
     /**
-     * @var \Fusion\Models\Fieldset
-     */
-    protected $fieldset;
-
-    /**
      * For applying factory states..
      *
      * @var array
      */
     protected $states;
+
+    /**
+     * @var array
+     */
+    protected $sections;
 
     /**
      * Create a new Taxonomy factory.
@@ -39,17 +38,28 @@ class TaxonomyFactory implements Factory
             $overrides['slug']   = Str::slug($this->name);
         }
 
-        if (!$this->fieldset) {
-            $this->fieldset = factory(Fieldset::class)->create();
-        }
-
         if ($this->states) {
             $taxonomy = factory(Taxonomy::class)->states($this->states)->create($overrides);
         } else {
             $taxonomy = factory(Taxonomy::class)->create($overrides);
         }
 
-        $taxonomy->attachFieldset($this->fieldset);
+        if ($this->sections) {
+            foreach ($this->sections as $data) {
+                $section = $taxonomy->blueprint->sections()->create([
+                    'name'   => $data['name'],
+                    'handle' => $data['handle'],
+                ]);
+
+                foreach ($data['fields'] as $field) {
+                    $section->fields()->create([
+                        'name'   => $field['name'],
+                        'handle' => $field['handle'],
+                        'type'   => $field['type'],
+                    ]);
+                }
+            }
+        }
 
         return $taxonomy;
     }
@@ -69,21 +79,7 @@ class TaxonomyFactory implements Factory
     }
 
     /**
-     * Create a taxonomy with the given fieldset.
-     *
-     * @param \Fusion\Models\Fieldset $fieldset
-     *
-     * @return \TaxonomyFactory
-     */
-    public function withFieldset(Fieldset $fieldset)
-    {
-        $this->fieldset = $fieldset;
-
-        return $this;
-    }
-
-    /**
-     * Add states to Taxonomy.
+     * Add states to the taxonomy.
      *
      * @param array $states
      *
@@ -92,6 +88,20 @@ class TaxonomyFactory implements Factory
     public function withStates(array $states)
     {
         $this->states = $states;
+
+        return $this;
+    }
+
+    /**
+     * Add sections to the taxonomy.
+     *
+     * @param array $sections
+     *
+     * @return \TaxonomyFactory
+     */
+    public function withSections($sections)
+    {
+        $this->sections = $sections;
 
         return $this;
     }

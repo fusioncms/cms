@@ -20,20 +20,18 @@ class FieldObserver
         $fieldtype = fieldtypes()->get($field->type);
         $fieldtype->onSaved($field);
 
-        $fieldset   = $field->section->fieldset;
-        $containers = $this->getFieldsettables($fieldset);
-        $column     = $fieldtype->getColumn('type');
-        $settings   = $fieldtype->getColumn('settings') ?? [];
+        $blueprint     = $field->section->blueprint;
+        $blueprintable = $blueprint->blueprintable;
+        $column        = $fieldtype->getColumn('type');
+        $settings      = $fieldtype->getColumn('settings') ?? [];
 
         array_unshift($settings, $field->handle);
 
         if (!is_null($column)) {
-            $containers->each(function ($container) use ($field, $column, $settings) {
-                Schema::table($container->getTable(), function ($table) use ($field, $column, $settings) {
-                    if (!Schema::hasColumn($table->getTable(), $field->handle)) {
-                        call_user_func_array([$table, $column], $settings)->nullable();
-                    }
-                });
+            Schema::table($blueprintable->table, function ($table) use ($field, $column, $settings) {
+                if (!Schema::hasColumn($table->getTable(), $field->handle)) {
+                    call_user_func_array([$table, $column], $settings)->nullable();
+                }
             });
         }
     }
@@ -50,8 +48,8 @@ class FieldObserver
         $fieldtype = fieldtypes()->get($field->type);
         $fieldtype->onSaved($field);
 
-        $fieldset   = $field->section->fieldset;
-        $containers = $this->getFieldsettables($fieldset);
+        $blueprint     = $field->section->blueprint;
+        $blueprintable = $blueprint->blueprintable;
 
         $old = [
             'handle' => $field->getOriginal('handle'),
@@ -65,34 +63,32 @@ class FieldObserver
             'type'   => $field->type,
         ];
 
-        $containers->each(function ($container) use ($old, $new) {
-            $table = $container->getTable();
+        $table = $blueprintable->table;
 
-            if ($old['handle'] !== $new['handle']) {
-                $fieldtype = fieldtypes()->get($new['type']);
-                $column = $fieldtype->getColumn('type');
+        if ($old['handle'] !== $new['handle']) {
+            $fieldtype = fieldtypes()->get($new['type']);
+            $column = $fieldtype->getColumn('type');
 
-                if (!is_null($column)) {
-                    Schema::table($table, function ($table) use ($old, $new) {
-                        $table->renameColumn("`{$old['handle']}`", "`{$new['handle']}`");
-                    });
-                }
+            if (!is_null($column)) {
+                Schema::table($table, function ($table) use ($old, $new) {
+                    $table->renameColumn("`{$old['handle']}`", "`{$new['handle']}`");
+                });
             }
+        }
 
-            if ($old['type'] !== $new['type']) {
-                $fieldtype = fieldtypes()->get($new['type']);
-                $column = $fieldtype->getColumn('type');
-                $settings = $fieldtype->getColumn('settings') ?? [];
+        if ($old['type'] !== $new['type']) {
+            $fieldtype = fieldtypes()->get($new['type']);
+            $column = $fieldtype->getColumn('type');
+            $settings = $fieldtype->getColumn('settings') ?? [];
 
-                array_unshift($settings, $new['handle']);
+            array_unshift($settings, $new['handle']);
 
-                if (!is_null($column)) {
-                    Schema::table($table, function ($table) use ($column, $settings) {
-                        call_user_func_array([$table, $column], $settings)->change();
-                    });
-                }
+            if (!is_null($column)) {
+                Schema::table($table, function ($table) use ($column, $settings) {
+                    call_user_func_array([$table, $column], $settings)->change();
+                });
             }
-        });
+        }
     }
 
     /**
@@ -116,8 +112,8 @@ class FieldObserver
      */
     public function deleted(Field $field)
     {
-        $fieldset   = $field->section->fieldset;
-        $containers = $this->getFieldsettables($fieldset);
+        $blueprint     = $field->section->blueprint;
+        $blueprintable = $blueprint->blueprintable;
 
         $fieldtype = fieldtypes()->get($field->type);
         $column    = $fieldtype->getColumn('type');
@@ -126,39 +122,13 @@ class FieldObserver
         array_unshift($settings, $field->handle);
 
         if (!is_null($column)) {
-            $containers->each(function ($container) use ($field) {
-                $table = $container->getTable();
+            $table = $blueprintable->table;
 
-                if (Schema::hasColumn($table, $field->handle)) {
-                    Schema::table($table, function ($table) use ($field) {
-                        $table->dropColumn($field->handle);
-                    });
-                }
-            });
+            if (Schema::hasColumn($table, $field->handle)) {
+                Schema::table($table, function ($table) use ($field) {
+                    $table->dropColumn($field->handle);
+                });
+            }
         }
-    }
-
-    /**
-     * Pure witchcraft. Fetches the related fieldsettables and resolves their
-     * proper Eloquent models.
-     *
-     * https://media.giphy.com/media/zIwIWQx12YNEI/giphy.gif
-     *
-     * @param Fieldset $fieldset
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    protected function getFieldsettables($fieldset)
-    {
-        return DB::table('fieldsettables')->where('fieldset_id', $fieldset->id)->get()->map(function ($morph) {
-            $model = app()->make($morph->fieldsettable_type);
-            $model = $model->find($morph->fieldsettable_id);
-
-            return $model;
-        })->reject(function ($model) {
-            return is_null($model);
-        })->map(function ($model) {
-            return $model->getBuilder();
-        });
     }
 }

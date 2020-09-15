@@ -51,8 +51,8 @@ class Navigation extends Builder implements BuilderContract
             'status'     => 'boolean',
         ];
 
-        if ($this->navigation->fieldset) {
-            $fields = $this->navigation->fieldset->fields->reject(function ($field) {
+        if ($this->navigation->blueprint) {
+            $fields = $this->navigation->blueprint->fields->reject(function ($field) {
                 $fieldtype = fieldtypes()->get($field->type);
 
                 if ($fieldtype->hasRelationship()) {

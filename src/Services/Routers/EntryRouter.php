@@ -26,7 +26,7 @@ class EntryRouter extends Router
             // Eager load our relatable fields
             $relationships = [];
 
-            foreach ($matrix->fieldset->fields as $field) {
+            foreach ($matrix->blueprint->fields as $field) {
                 $fieldtype = fieldtypes()->get($field->type);
 
                 if ($fieldtype->hasRelationship()) {
