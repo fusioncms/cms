@@ -9,7 +9,7 @@ class UserActivityController extends DataTableController
 {
     public function builder()
     {
-        return User::find(request()->route('user'))->activities()->getQuery();
+        return User::find(request()->route('user'))->actions()->getQuery();
     }
 
     public function getDisplayableColumns()
@@ -17,6 +17,13 @@ class UserActivityController extends DataTableController
         return [
             'description',
             'created_at',
+        ];
+    }
+
+    public function getFilterable()
+    {
+        return [
+            'description',
         ];
     }
 

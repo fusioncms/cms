@@ -6,7 +6,7 @@
 
         <portal to="actions">
             <ui-button key="view-all-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
-            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary">Edit User</ui-button>
+            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary" v-if="user.id">Edit User</ui-button>
         </portal>
 
         <section-card title="User Information" description="General information about this user.">
@@ -16,7 +16,7 @@
                 <dt>Email</dt>
                 <dd>{{ user.email }}</dd>
                 <dt>Role</dt>
-                <dd>{{ user.roles[0].label }}</dd>
+                <dd>{{ user.roles ? user.roles[0].label : 'Loading...' }}</dd>
                 <dt>Status</dt>
                 <dd class="flex"><ui-status :value="user.status" class="mr-2"></ui-status> {{ user.status ? 'Enabled' : 'Disabled' }}</dd>
             </dl>
@@ -48,7 +48,28 @@
         </section-card>
 
         <section-card title="User Activity Feed" description="See what this user has been doing around the site.">
-            <em>Coming soon...</em>
+            <ui-table :key="'activities-' + user.id" class="activities-table" id="activities" :endpoint="endpoint" sort-by="created_at" :per-page="10" v-if="user.id">
+                <template slot="description" slot-scope="table">
+                    <div class="flex items-center">
+                        <div class="text-gray-900 mr-4 w-3">
+                            <fa-icon v-if="table.record.properties.icon" :icon="['fas', table.record.properties.icon]" class="fa-fw"></fa-icon>
+                            <fa-icon v-else class="fa-xs fa-fw" :icon="['fas', 'circle']"></fa-icon>
+                        </div>
+
+                        {{ table.record.description }}
+                    </div>
+                </template>
+
+                <template slot="created_at" slot-scope="table">
+                    <div class="flex items-center">
+                        <div class="text-gray-900 mr-1 w-3">
+                            <fa-icon class="fa-xs fa-fw" :icon="['far', 'clock']"></fa-icon>
+                        </div>
+
+                        {{ $moment(table.record.created_at).format('Y-MM-DD') }}
+                    </div>
+                </template>
+            </ui-table>
         </section-card>
     </div>
 </template>
@@ -60,7 +81,13 @@
         computed: {
             ...mapGetters({
                 currentUser: 'auth/getUser'
-            })
+            }),
+
+            endpoint() {
+                if (this.user.id) {
+                    return '/datatable/users/' + this.user.id + '/activities'
+                }
+            },
         },
 
         head: {
@@ -128,4 +155,3 @@
         }))
     }
 </script>
-
