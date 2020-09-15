@@ -11,6 +11,7 @@
 |
 */
 
+Route::get('/activities', 'ActivityController@index');
 Route::get('/users', 'UserController@index');
 Route::get('/users/{role}', 'UserController@index');
 Route::get('/users/{user}/activities', 'UserActivityController@index');
