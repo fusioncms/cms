@@ -1,21 +1,19 @@
 <template>
-    <div>
+    <div class="permissions-page">
         <portal to="title">
             <page-title icon="key">Permissions</page-title>
         </portal>
 
-        <div class="row">
-            <div class="content-container">
-                <ui-table id="permissions" :endpoint="endpoint" sort-by="name" :per-page="10" no-actions key="permissions_table">
-                    <template slot="name" slot-scope="table">
-                        <code>{{ table.record.name }}</code>
-                    </template>
+        <div class="content-container">
+            <ui-table key="permissions" class="permissions-table" id="permissions" :endpoint="endpoint" sort-by="name" no-actions show-page-status show-page-numbers show-page-nav show-page-ends>
+                <template slot="name" slot-scope="table">
+                    <code>{{ table.record.name }}</code>
+                </template>
 
-                    <template slot="description" slot-scope="table">
-                        <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
-                    </template>
-                </ui-table>
-            </div>
+                <template slot="description" slot-scope="table">
+                    <p>{{ table.record.description }}</p>
+                </template>
+            </ui-table>
         </div>
     </div>
 </template>

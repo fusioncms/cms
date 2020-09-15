@@ -9,7 +9,7 @@
         </portal>
 
         <div class="content-container">
-            <ui-table key="roles" class="roles-table" id="roles" :endpoint="endpoint" sort-by="label">
+            <ui-table key="roles" class="roles-table" id="roles" :endpoint="endpoint" sort-by="label" show-page-status show-page-numbers show-page-nav show-page-ends>
                 <template slot="label" slot-scope="table">
                     <router-link :to="{ name: 'roles.show', params: {role: table.record.id} }">{{ table.record.label }}</router-link>
                 </template>
