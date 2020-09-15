@@ -32,3 +32,15 @@
         @apply block border-t border-gray-400 my-2;
     }
 }
+
+.detail-list {
+    @apply flex flex-wrap leading-normal;
+
+    dt {
+        @apply w-1/3 font-bold py-3 pr-2;
+    }
+
+    dd {
+        @apply w-2/3 py-3;
+    }
+}
