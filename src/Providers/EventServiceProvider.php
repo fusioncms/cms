@@ -13,9 +13,14 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        
+        //
     ];
 
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
     protected $subscribe = [
         'Fusion\Listeners\UserEventSubscriber',
     ];

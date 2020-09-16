@@ -177,4 +177,63 @@ class User extends Authenticatable implements MustVerifyEmail
         $activity->description = "{$action} user account ({$subject->name})";
         $activity->properties  = $properties;
     }
+
+    /**
+     * On successful login, log the activity and set the current date.
+     *
+     * @return void
+     */
+    public function logSuccessfulLogin()
+    {
+        activity('sign-ins')
+            ->withProperties(['icon' => 'sign-in-alt'])
+            ->log('Signed in');
+
+        static::withoutEvents(function() {
+            $this->logged_in_at = now();
+            $this->save();
+        });
+    }
+
+    /**
+     * On a failed login attempt, log the date and increase the number
+     * of times this has consecutively happened.
+     *
+     * @return void
+     */
+    public function logFailedLogin()
+    {
+        static::withoutEvents(function() {
+            $this->increment('invalid_logins');
+            $this->invalidly_logged_in_at = now();
+            $this->save();
+        });
+    }
+
+    /**
+     * On password change, log the current date.
+     *
+     * @return void
+     */
+    public function logPasswordChange()
+    {
+        static::withoutEvents(function() {
+            $this->password_changed_at = now();
+            $this->save();
+        });
+    }
+
+    /**
+     * On successful login, clear the last invalid login stats.
+     *
+     * @return void
+     */
+    public function clearFailedLoginAttempts()
+    {
+        static::withoutEvents(function() {
+            $this->invalid_logins = 0;
+            $this->invalidly_logged_in_at = null;
+            $this->save();
+        });
+    }
 }

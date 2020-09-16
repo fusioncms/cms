@@ -9,25 +9,29 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 class UserEventSubscriber
 {
     /**
-     * Handle 'user login' event.
-     *
-     * @param Illuminate\Auth\Events\Login  $event
-     * @return void
+     * Handle the user failed login event.
      */
-    public function handleUserLogin($event)
+    public function handleUserFailedLogin($event)
     {
-        activity()
-            ->performedOn($event->user)
-            ->withProperties([
-                'icon' => 'sign-in-alt',
-                'link' => "users/{$event->user->id}/edit"
-            ])
-            ->log("Signed in ({$event->user->name})");
+        // Log the activity
+        $event->user->logFailedLogin();
     }
 
     /**
-     * Handle 'user registration' event.
-     * 
+     * Handle the user login event.
+     */
+    public function handleUserLogin($event)
+    {
+        // Log the activity
+        auth()->user()->logSuccessfulLogin();
+
+        // Clear any failed login attempts
+        auth()->user()->clearFailedLoginAttempts();
+    }
+
+    /**
+     * Handle the user registration event.
+     *
      * @param  \Illuminate\Auth\Events\Registered  $event
      * @return void
      */
@@ -46,7 +50,19 @@ class UserEventSubscriber
      */
     public function handleUserPasswordReset($event)
     {
-        
+        // Log the activity
+        $event->user->logPasswordChange();
+    }
+
+    /**
+     * Handle 'user logout' event.
+     *
+     * @param Illuminate\Auth\Events\Logout  $event
+     * @return void
+     */
+    public function handleUserLogout($event)
+    {
+        //
     }
 
     /**
@@ -58,31 +74,9 @@ class UserEventSubscriber
     public function handleUserVerification($event)
     {
         if (setting('users.user_email_welcome') === 'enabled') {
-            Mail::to($event->user)
-                ->send(new WelcomeNewUser($event->user));
+            Mail::to($verified->user)
+                ->send(new WelcomeNewUser($verified->user));
         }
-    }
-
-    /**
-     * Handle 'user validated' event.
-     * 
-     * @param  \Illuminate\Auth\Events\Validated  $event
-     * @return void
-     */
-    public function handleUserValidated($event)
-    {
-        
-    }
-
-    /**
-     * Handle 'user logout' event.
-     *
-     * @param Illuminate\Auth\Events\Logout  $event
-     * @return void
-     */
-    public function handleUserLogout($event)
-    {
-
     }
 
     /**
@@ -93,6 +87,9 @@ class UserEventSubscriber
      */
     public function subscribe($events)
     {
+        $events->listen('Illuminate\Auth\Events\Failed',
+            [UserEventSubscriber::class, 'handleUserFailedLogin']);
+
         $events->listen('Illuminate\Auth\Events\Login',
             [UserEventSubscriber::class, 'handleUserLogin']);
 
@@ -105,9 +102,6 @@ class UserEventSubscriber
         $events->listen('Illuminate\Auth\Events\Verified',
             [UserEventSubscriber::class, 'handleUserVerification']);
 
-        $events->listen('Illuminate\Auth\Events\Validated',
-            [UserEventSubscriber::class, 'handleUserValidated']);
-        
         $events->listen('Illuminate\Auth\Events\Logout',
             [UserEventSubscriber::class, 'handleUserLogout']);
     }
