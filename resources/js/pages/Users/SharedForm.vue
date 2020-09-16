@@ -58,27 +58,29 @@
         </section-card>
 
         <section-card title="Security" description="Configure this user's security details.">
-            <ui-password-group
-                id="user-password"
-                type="password"
-                name="password"
-                label="Password"
-                autocomplete="new-password"
-                :has-error="form.errors.has('password')"
-                :error-message="form.errors.get('password')"
-                v-model="form.password">
-            </ui-password-group>
+            <ui-fieldset :help="user ? 'Only fill out the password fields below if you intend to update the user account password.' : null">
+                <ui-password-group
+                    id="user-password"
+                    type="password"
+                    name="password"
+                    label="Password"
+                    autocomplete="new-password"
+                    :has-error="form.errors.has('password')"
+                    :error-message="form.errors.get('password')"
+                    v-model="form.password">
+                </ui-password-group>
 
-            <ui-password-group
-                id="user-password-confirm"
-                type="password"
-                name="password_confirmation"
-                label="Confirm Password"
-                autocomplete="new-password"
-                :has-error="form.errors.has('password_confirmation')"
-                :error-message="form.errors.get('password_confirmation')"
-                v-model="form.password_confirmation">
-            </ui-password-group>
+                <ui-password-group
+                    id="user-password-confirm"
+                    type="password"
+                    name="password_confirmation"
+                    label="Confirm Password"
+                    autocomplete="new-password"
+                    :has-error="form.errors.has('password_confirmation')"
+                    :error-message="form.errors.get('password_confirmation')"
+                    v-model="form.password_confirmation">
+                </ui-password-group>
+            </ui-fieldset>
         </section-card>
 
         <section-card v-if="user" title="Actions" description="Management actions that can be performed for this user.">

@@ -6,7 +6,7 @@
 
         <portal to="actions">
             <ui-button key="go-back-btn" :to="{ name: 'roles' }" variant="secondary">Go Back</ui-button>
-            <ui-button v-if="role.id" key="edit-role-btn" :to="{ name: 'roles.edit', params: {role: role.id} }" variant="primary">Edit Role</ui-button>
+            <ui-button v-if="!isOwner" key="edit-role-btn" :to="{ name: 'roles.edit', params: {role: role.id} }" variant="primary">Edit Role</ui-button>
         </portal>
 
         <section-card :title="role.label" :description="role.description">
