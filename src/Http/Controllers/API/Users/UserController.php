@@ -86,6 +86,7 @@ class UserController extends Controller
         // password (optional)..
         if (isset($attributes['password'])) {
             $attributes['password'] = bcrypt($attributes['password']);
+
             $user->logPasswordChange();
         }
 
