@@ -30,14 +30,12 @@ class TaxonomyResource extends JsonResource
             'route'            => $this->route,
             'template'         => $this->template,
 
-            'fieldset'         => new FieldsetResource($this->fieldset),
+            'blueprint'        => new BlueprintResource($this->blueprint),
             'terms'            => $this->terms,
         ];
 
-        if ($this->fields) {
-            foreach ($this->fields as $field) {
-                $resource['fields'][$field->handle] = $this->{$field->handle};
-            }
+        foreach ($this->blueprint->fields as $field) {
+            $resource['fields'][$field->handle] = $this->{$field->handle};
         }
 
         return $resource;

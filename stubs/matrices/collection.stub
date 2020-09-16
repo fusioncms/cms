@@ -73,7 +73,7 @@ class {class} extends Model
      */
     public function getFieldsAttribute()
     {
-        return $this->matrix->fieldset->fields ?? null;
+        return $this->matrix->blueprint->fields ?? null;
     }
 
     public function parent()

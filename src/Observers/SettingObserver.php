@@ -62,25 +62,6 @@ class SettingObserver
     }
 
     /**
-     * Handle the setting  "deleting" event.
-     *
-     * @param \Fusion\Models\Setting $setting
-     *
-     * @return void
-     */
-    public function deleting(Setting $setting)
-    {
-        $fieldsets = $setting->fieldsets;
-
-        $setting->detachFieldset();
-
-        // Manually remove fieldsets..
-        $fieldsets->each(function ($fieldset) {
-            $fieldset->delete();
-        });
-    }
-
-    /**
      * Handle the setting "deleted" event.
      *
      * @param \Fusion\Models\Setting $setting

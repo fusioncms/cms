@@ -144,15 +144,13 @@
                 let body = []
                 let sidebar = []
 
-                if (this.navigation.fieldset) {
-                    body = _.filter(this.navigation.fieldset.sections, function(section) {
-                        return section.placement == 'body'
-                    })
+                body = _.filter(this.navigation.blueprint.sections, function(section) {
+                    return section.placement == 'body'
+                })
 
-                    sidebar = _.filter(this.navigation.fieldset.sections, function(section) {
-                        return section.placement == 'sidebar'
-                    })
-                }
+                sidebar = _.filter(this.navigation.blueprint.sections, function(section) {
+                    return section.placement == 'sidebar'
+                })
 
                 return {
                     body: body,
@@ -164,23 +162,21 @@
                 let body = []
                 let sidebar = []
 
-                if (this.navigation.fieldset) {
-                    body = _.filter(this.navigation.fieldset.sections, function(section) {
-                        return section.placement == 'body'
-                    })
+                body = _.filter(this.navigation.blueprint.sections, function(section) {
+                    return section.placement == 'body'
+                })
 
-                    body = _.flatMap(body, function(section) {
-                        return section.fields
-                    })
+                body = _.flatMap(body, function(section) {
+                    return section.fields
+                })
 
-                    sidebar = _.filter(this.navigation.fieldset.sections, function(section) {
-                        return section.placement == 'sidebar'
-                    })
+                sidebar = _.filter(this.navigation.blueprint.sections, function(section) {
+                    return section.placement == 'sidebar'
+                })
 
-                    sidebar = _.flatMap(sidebar, function(section) {
-                        return section.fields
-                    })
-                }
+                sidebar = _.flatMap(sidebar, function(section) {
+                    return section.fields
+                })
 
                 return {
                     body: body,

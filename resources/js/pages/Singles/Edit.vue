@@ -48,15 +48,13 @@
                 let body = []
                 let sidebar = []
 
-                if (this.matrix.fieldset) {
-                    body = _.filter(this.matrix.fieldset.sections, function(section) {
-                        return section.placement == 'body'
-                    })
+                body = _.filter(this.matrix.blueprint.sections, function(section) {
+                    return section.placement == 'body'
+                })
 
-                    sidebar = _.filter(this.matrix.fieldset.sections, function(section) {
-                        return section.placement == 'sidebar'
-                    })
-                }
+                sidebar = _.filter(this.matrix.blueprint.sections, function(section) {
+                    return section.placement == 'sidebar'
+                })
 
                 return {
                     body: body,
@@ -127,13 +125,11 @@
                 status: single.status,
             }
 
-            if (matrix.fieldset) {
-                _.forEach(matrix.fieldset.sections, function(section) {
-                    _.forEach(section.fields, function(field) {
-                        fields[field.handle] = single[field.handle]
-                    })
+            _.forEach(matrix.blueprint.sections, function(section) {
+                _.forEach(section.fields, function(field) {
+                    fields[field.handle] = single[field.handle]
                 })
-            }
+            })
 
             callback(null, single, matrix, fields)
         })

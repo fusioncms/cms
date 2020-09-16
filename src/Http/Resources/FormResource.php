@@ -36,14 +36,12 @@ class FormResource extends JsonResource
             'status'                  => $this->status,
 
             'table'                   => $this->table,
-            'fieldset'                => new FieldsetResource($this->fieldset),
+            'blueprint'               => new BlueprintResource($this->blueprint),
             'responses'               => $this->responses,
         ];
 
-        if ($this->fieldset) {
-            foreach ($this->fieldset->fields as $field) {
-                $resource['fields'][$field->handle] = $this->{$field->handle};
-            }
+        foreach ($this->blueprint->fields as $field) {
+            $resource['fields'][$field->handle] = $this->{$field->handle};
         }
 
         return $resource;

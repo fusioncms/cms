@@ -109,7 +109,7 @@ class Setting
                 $this->items[$key] = $value;
 
                 // override config (if necessary)..
-                $group->fieldset->fields->each(function ($field) use ($group, $key, $value) {
+                $group->blueprint->fields->each(function ($field) use ($group, $key, $value) {
                     if ($key == "{$group->handle}.{$field->handle}") {
                         if ($field->settings['override'] !== false) {
                             config([$field->settings['override'] => $value]);
@@ -129,7 +129,7 @@ class Setting
     {
         if (settings_available()) {
             return SettingGroup::all()->flatMap(function ($group) {
-                return collect($group->fieldset->fields ?? [])
+                return collect($group->blueprint->fields ?? [])
                     ->mapWithKeys(function ($field) use ($group) {
                         return ["{$group->handle}.{$field->handle}" => $group->settings->{$field->handle} ?? $field->settings['default'] ?? null];
                     });

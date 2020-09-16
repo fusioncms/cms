@@ -44,7 +44,6 @@ class TaxonomyRequest extends FormRequest
             'handle'      => ['required', 'not_regex:/[^a-z0-9_]/i', 'unique:taxonomies,handle,'.$id, new NotAReservedKeyword()],
             'slug'        => 'required|unique:taxonomies,slug,'.$id,
             'description' => 'sometimes',
-            'fieldset'    => 'sometimes',
 
             'sidebar'     => 'required',
             'icon'        => 'sometimes',

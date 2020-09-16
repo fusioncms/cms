@@ -101,13 +101,11 @@
                 status: entry.status,
             }
 
-            if (matrix.fieldset) {
-                _.forEach(matrix.fieldset.sections, function(section) {
-                    _.forEach(section.fields, function(field) {
-                        fields[field.handle] = entry[field.handle]
-                    })
+            _.forEach(matrix.blueprint.sections, function(section) {
+                _.forEach(section.fields, function(field) {
+                    fields[field.handle] = entry[field.handle]
                 })
-            }
+            })
 
             callback(null, entry, matrix, fields)
         }).catch(function(error) {

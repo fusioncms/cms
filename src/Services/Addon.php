@@ -69,9 +69,6 @@ class Addon extends Collection
         $this->disable($namespace);
         $this->setProperty($namespace, 'installed', false);
 
-        // Remove extensions before rolling back..
-        dispatch(new \Fusion\Console\Actions\SyncExtensions());
-
         Artisan::call('addon:rollback', [
             'namespace' => $namespace,
         ]);

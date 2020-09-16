@@ -1,7 +1,6 @@
 <?php
 
 use Fusion\Contracts\Factory;
-use Fusion\Models\Fieldset;
 use Fusion\Models\Form;
 use Illuminate\Support\Str;
 
@@ -11,11 +10,6 @@ class FormFactory implements Factory
      * @var string
      */
     protected $name;
-
-    /**
-     * @var \Fusion\Models\Fieldset
-     */
-    protected $fieldset;
 
     /**
      * @var bool
@@ -87,20 +81,6 @@ class FormFactory implements Factory
     {
         $this->redirectOnSubmission = true;
         $this->redirectUrl          = $uri;
-
-        return $this;
-    }
-
-    /**
-     * Create a form with the given fieldset.
-     *
-     * @param \Fusion\Models\Fieldset $fieldset
-     *
-     * @return \FormFactory
-     */
-    public function withFieldset(Fieldset $fieldset)
-    {
-        $this->fieldset = $fieldset;
 
         return $this;
     }

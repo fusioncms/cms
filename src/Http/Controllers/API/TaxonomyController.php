@@ -51,10 +51,6 @@ class TaxonomyController extends Controller
     {
         $taxonomy = Taxonomy::create($request->validated());
 
-        if ($request->fieldset) {
-            $taxonomy->attachFieldset($request->fieldset);
-        }
-
         return new TaxonomyResource($taxonomy);
     }
 
@@ -69,12 +65,6 @@ class TaxonomyController extends Controller
     public function update(TaxonomyRequest $request, Taxonomy $taxonomy)
     {
         $taxonomy->update($request->validated());
-
-        if ($request->fieldset && (!isset($taxonomy->fieldset) || $taxonomy->fieldset->id !== $request->fieldset)) {
-            $taxonomy->attachFieldset($request->fieldset);
-        } elseif (!$request->fieldset) {
-            $taxonomy->detachFieldset();
-        }
 
         return new TaxonomyResource($taxonomy);
     }

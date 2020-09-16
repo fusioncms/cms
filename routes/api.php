@@ -28,11 +28,6 @@ Route::prefix('collections')->group(function () {
 });
 
 /**
- * API - Extension Routes.
- */
-Route::apiResource('extensions', 'ExtensionController');
-
-/**
  * API - Field Routes.
  */
 Route::prefix('fields')->group(function () {
@@ -53,10 +48,10 @@ Route::prefix('fieldtypes')->group(function () {
 Route::get('replicators/{replicator}', 'Fields\ReplicatorController@show');
 
 /**
- * API - Fieldset Routes.
+ * API - Blueprint Routes.
  */
-Route::apiResource('fieldsets/{fieldset}/sections', 'Fields\FieldsetSectionController');
-Route::apiResource('fieldsets', 'Fields\FieldsetController');
+Route::apiResource('blueprints', 'BlueprintController');
+Route::apiResource('blueprints/{blueprint}/sections', 'SectionController');
 
 /**
  * API - FileManager Routes.

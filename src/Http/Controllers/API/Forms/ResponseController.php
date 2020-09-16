@@ -54,9 +54,9 @@ class ResponseController extends Controller
             'handle' => 'sometimes',
         ];
 
-        if (isset($form->fieldset)) {
-            $fields        = $form->fieldset->database();
-            $relationships = $form->fieldset->relationships();
+        if (isset($form->blueprint)) {
+            $fields        = $form->blueprint->database();
+            $relationships = $form->blueprint->relationships();
 
             foreach ($fields as $field) {
                 $rules[$field->handle] = 'sometimes';
@@ -95,9 +95,9 @@ class ResponseController extends Controller
             'handle' => 'sometimes',
         ];
 
-        if (isset($form->fieldset)) {
-            $fields        = $form->fieldset->database();
-            $relationships = $form->fieldset->relationships();
+        if (isset($form->blueprint)) {
+            $fields        = $form->blueprint->database();
+            $relationships = $form->blueprint->relationships();
 
             foreach ($fields as $field) {
                 $rules[$field->handle] = 'sometimes';

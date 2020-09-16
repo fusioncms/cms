@@ -57,17 +57,11 @@ class FormTest extends TestCase
         // assert response table exists..
         $this->assertDatabaseHasTable($form->table);
 
-        // assert associated fieldset exists..
-        $this->assertDatabaseHas('fieldsets', [
-            'name'   => ($name = 'Form: '.$form->name),
-            'handle' => str_handle($name),
-        ]);
-
-        // assert link between form/responses exists..
-        $this->assertDatabaseHas('fieldsettables', [
-            'fieldset_id'        => $form->fieldset->id,
-            'fieldsettable_type' => Form::class,
-            'fieldsettable_id'   => $form->id,
+        // assert associated blueprint exists..
+        $this->assertDatabaseHas('blueprints', [
+            'name'                => $form->name,
+            'blueprintable_type' => Form::class,
+            'blueprintable_id'   => $form->id,
         ]);
     }
 
@@ -201,7 +195,7 @@ class FormTest extends TestCase
      * @group feature
      * @group form
      */
-    public function an_updated_form_request_will_also_update_associated_fieldset_name()
+    public function an_updated_form_request_will_also_update_associated_blueprint_name()
     {
         $this->actingAs($this->owner, 'api');
         $form = FormFactory::create();
@@ -217,14 +211,14 @@ class FormTest extends TestCase
             ->json('PATCH', '/api/forms/'.$form->id, $attributes)
             ->assertStatus(200);
 
-        $this->assertDatabaseMissing('fieldsets', [
-            'id'   => $form->fieldset->id,
+        $this->assertDatabaseMissing('blueprints', [
+            'id'   => $form->blueprint->id,
             'name' => $oldName,
         ]);
 
-        $this->assertDatabaseHas('fieldsets', [
-            'id'   => $form->fieldset->id,
-            'name' => 'Form: '.$attributes['name'],
+        $this->assertDatabaseHas('blueprints', [
+            'id'   => $form->blueprint->id,
+            'name' => $attributes['name'],
         ]);
     }
 
@@ -257,27 +251,20 @@ class FormTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
         $form     = FormFactory::create();
-        $fieldset = $form->fieldset;
+        $blueprint = $form->blueprint;
 
         $this
             ->be($this->owner, 'api')
             ->json('DELETE', '/api/forms/'.$form->id)
             ->assertStatus(200);
 
-        $this->assertDatabaseMissing('fieldsets', [
-            'name'   => ($name = 'Form: '.$form->name),
-            'handle' => str_handle($name),
+        $this->assertDatabaseMissing('blueprints', [
+            'id'   => $blueprint->id,
+            'name' => $form->name,
         ]);
 
         // assert response table exists..
         $this->assertDatabaseDoesNotHaveTable($form->table);
-
-        // assert link between form/responses exists..
-        $this->assertDatabaseMissing('fieldsettables', [
-            'fieldset_id'        => $fieldset->id,
-            'fieldsettable_type' => Form::class,
-            'fieldsettable_id'   => $form->id,
-        ]);
     }
 
     /**
@@ -357,6 +344,8 @@ class FormTest extends TestCase
      */
     public function a_form_can_be_set_to_collect_emails()
     {
+        $this->markTestIncomplete();
+
         $this->actingAs($this->owner, 'api');
         $form = FormFactory::thatCollectsEmails()->create();
 
@@ -407,8 +396,7 @@ class FormTest extends TestCase
     }
 
     /**
-     * TODO:.
-     *
+     * @test
      * @group feature
      * @group form
      * @group response
@@ -416,8 +404,7 @@ class FormTest extends TestCase
      */
     public function a_new_form_response_will_notify_all_subscribers()
     {
-        // TODO:
-        // Mail::faker();
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
     /**

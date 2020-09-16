@@ -63,7 +63,7 @@ class {class} extends Model
      */
     public function getFieldsAttribute()
     {
-        return $this->form->fieldset->fields;
+        return $this->form->blueprint->fields;
     }
 
     public function getIdentifiableEmailAddressAttribute($email)

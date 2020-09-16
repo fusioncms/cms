@@ -45,8 +45,8 @@ class Collection extends Builder implements BuilderContract
         $casts     = ['status' => 'boolean'];
         $fields    = [];
 
-        if ($this->matrix->fieldset) {
-            $fields = $this->matrix->fieldset->fields->reject(function ($field) {
+        if ($this->matrix->blueprint) {
+            $fields = $this->matrix->blueprint->fields->reject(function ($field) {
                 $fieldtype = fieldtypes()->get($field->type);
 
                 if ($fieldtype->hasRelationship()) {

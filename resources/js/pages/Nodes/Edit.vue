@@ -101,13 +101,11 @@
                 status: node.status,
             }
 
-            if (navigation.fieldset) {
-                _.forEach(navigation.fieldset.sections, function(section) {
-                    _.forEach(section.fields, function(field) {
-                        fields[field.handle] = node[field.handle]
-                    })
+            _.forEach(navigation.blueprint.sections, function(section) {
+                _.forEach(section.fields, function(field) {
+                    fields[field.handle] = node[field.handle]
                 })
-            }
+            })
 
             callback(null, node, navigation, fields)
         }))

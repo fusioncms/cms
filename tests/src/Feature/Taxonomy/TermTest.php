@@ -19,12 +19,27 @@ class TermTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        // --
-        $this->section      = \Facades\SectionFactory::times(1)->withoutFields()->create();
-        $this->fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($this->section)->create();
-        $this->fieldContent = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($this->section)->create();
-        $this->fieldset     = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->taxonomy     = \Facades\TaxonomyFactory::withName('Tags')->withFieldset($this->fieldset)->create();
+        $this->taxonomy = \Facades\TaxonomyFactory::withName('Tags')
+            ->withSections([
+                [
+                    'name'   => 'General',
+                    'handle' => 'general',
+                    'fields' => [
+                        [
+                            'name'   => 'Excerpt',
+                            'handle' => 'excerpt',
+                            'type'   => 'input',
+                        ],
+                        [
+                            'name'   => 'Content',
+                            'handle' => 'content',
+                            'type'   => 'textarea',
+                        ],
+                    ],
+                ],
+            ])
+            ->create();
+
         $this->model        = (new \Fusion\Services\Builders\Taxonomy($this->taxonomy->handle))->make();
     }
 

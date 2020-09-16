@@ -2,13 +2,10 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
 
 class Seo extends Model
 {
-    use CachesQueries;
-
     /**
      * The attributes that are fillable via mass assignment.
      *

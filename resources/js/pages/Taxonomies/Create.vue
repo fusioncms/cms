@@ -24,12 +24,10 @@
 
         data() {
             return {
-                fieldsets: [],
                 form: new Form({
                     name: '',
                     handle: '',
                     description: '',
-                    fieldset: null,
 
                     sidebar: '1',
                     icon: '',

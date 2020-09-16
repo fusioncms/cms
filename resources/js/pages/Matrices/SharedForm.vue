@@ -48,12 +48,6 @@
                 :error-message="form.errors.get('type')"
                 v-model="form.type">
             </ui-select-group>
-
-            <fieldset-picker
-                :has-error="form.errors.has('fieldset')"
-                :error-message="form.errors.get('fieldset')"
-                v-model="form.fieldset">
-            </fieldset-picker>
         </section-card>
 
         <section-card title="Customizations" description="Configure the various customizations options.">
@@ -132,6 +126,10 @@
                 :error-message="form.errors.get('template')"
                 v-model="form.template">
             </ui-input-group>
+        </section-card>
+
+        <section-card title="Blueprint" description="Configure this matrix' blueprint.">
+            <section-builder v-model="form.sections"></section-builder>
         </section-card>
 
         <template v-slot:sidebar>
