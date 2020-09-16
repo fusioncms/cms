@@ -114,8 +114,7 @@ class MenuServiceProvider extends ServiceProvider
                 'title'    => 'Configure',
                 'icon'     => 'sliders-h',
                 'children' => [
-                    'extensions' => ['title' => 'Extensions', 'to' => '/extensions'],
-                    'fieldsets'  => ['title' => 'Fieldsets',  'to' => '/fieldsets'],
+                    'blueprints' => ['title' => 'Blueprints', 'to' => '/blueprints'],
                     'forms'      => ['title' => 'Forms',      'to' => '/forms'],
                     'mailables'  => ['title' => 'Mailables',  'to' => '/mailables'],
                     'matrices'   => ['title' => 'Matrix',     'to' => '/matrices'],
