@@ -37,6 +37,5 @@ class EventServiceProvider extends ServiceProvider
         \Fusion\Models\Taxonomy::observe(\Fusion\Observers\TaxonomyObserver::class);
         \Fusion\Models\Navigation::observe(\Fusion\Observers\NavigationObserver::class);
         \Fusion\Models\Replicator::observe(\Fusion\Observers\ReplicatorObserver::class);
-        \Fusion\Models\User::observe(\Fusion\Observers\UserObserver::class);
     }
 }

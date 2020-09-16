@@ -132,10 +132,15 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return "//www.gravatar.com/avatar/{$email}?s={$size}";
     }
-
+    
+    /**
+     * Determine if the user has verified their email address.
+     *
+     * @return bool
+     */
     public function getVerifiedAttribute()
     {
-        return !is_null($this->email_verified_at);
+        return $this->hasVerifiedEmail();
     }
 
     /**

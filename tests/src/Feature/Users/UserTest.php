@@ -3,13 +3,13 @@
 namespace Fusion\Tests\Feature\Users;
 
 use Fusion\Models\User;
+use Fusion\Mail\SetPassword;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
 
 class UserTest extends TestCase
 {
@@ -48,6 +48,29 @@ class UserTest extends TestCase
             'email'  => $this->attributes['email'],
             'status' => $this->attributes['status'],
         ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group user
+     * @group password
+     */
+    public function a_newly_created_user_will_receive_password_set_notification()
+    {
+        Mail::fake();
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/users', [
+                'name'  => $this->faker->name,
+                'email' => $this->faker->unique()->safeEmail,
+            ]);
+
+        Mail::assertSent(SetPassword::class, function($mail) {
+            return $mail->user->id === User::latest('id')->first()->id;
+        });
     }
 
     /**

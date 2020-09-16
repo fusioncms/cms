@@ -2,15 +2,19 @@
 
 namespace Fusion\Http\Controllers\API\Users;
 
+use Fusion\Concerns\SendsPasswordSetEmails;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\UserRequest;
 use Fusion\Http\Resources\UserResource;
 use Fusion\Models\User;
+use Fusion\Events\Users\NewBackendUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    use SendsPasswordSetEmails;
+
     /**
      * Return a paginated resource of all users.
      *
@@ -55,6 +59,12 @@ class UserController extends Controller
 
         $user = User::create($attributes);
 
+        // handle role setting..
+        $this->assureOwnerRoleLimit($user);
+
+        // Note: suppression req'd during imports..
+        $this->sendPasswordSetNotification($user);
+
         return new UserResource($user);
     }
 
@@ -77,6 +87,9 @@ class UserController extends Controller
 
         $user->update($attributes);
 
+        // handle role setting..
+        $this->assureOwnerRoleLimit($user);
+
         return new UserResource($user);
     }
 
@@ -92,5 +105,26 @@ class UserController extends Controller
         $this->authorize('users.delete');
 
         $user->delete();
+    }
+
+    /**
+     * Assure only one `owner` exists.
+     * [helper]
+     *   
+     * @return void
+     */
+    private function assureOwnerRoleLimit(User $user)
+    {
+        if ($role = request()->input('role')) {
+            if ($role === 'owner') {
+                User::role('owner')
+                    ->where('id', '<>', $user->id)
+                    ->each(function ($user) {
+                        $user->syncRoles('admin');
+                    });
+            }
+
+            $user->assignRole($role);
+        }
     }
 }

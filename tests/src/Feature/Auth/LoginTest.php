@@ -3,6 +3,7 @@
 namespace Fusion\Tests\Feature\Auth;
 
 use Auth;
+use Fusion\Models\User;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -41,6 +42,30 @@ class LoginTest extends TestCase
             ->actingAs($this->user)
             ->get('/login')
             ->assertRedirect('/home');
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group auth
+     * @group activity
+     */
+    public function a_logged_in_user_will_be_tracked_in_activity_log()
+    {
+        $this
+            ->from('/login')
+            ->post('/login', [
+                'email'    => $this->owner->email,
+                'password' => 'secret',
+            ]);
+
+        $this->assertDatabaseHas('activity_log', [
+            'subject_type' => User::class,
+            'subject_id'   => $this->owner->id,
+            'causer_type'  => User::class,
+            'causer_id'    => $this->owner->id,
+            'description'  => "Signed in ({$this->owner->name})",
+        ]);
     }
 
     /**

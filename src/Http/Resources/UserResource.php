@@ -25,7 +25,7 @@ class UserResource extends JsonResource
             'invalidly_logged_in_at' => $this->invalidly_logged_in_at,
             'password_changed_at'    => $this->password_changed_at,
             'email_verified_at'      => $this->email_verified_at,
-            'verified'               => $this->verified,
+            'verified'               => $this->hasVerifiedEmail(),
             'invalid_logins'         => $this->invalid_logins,
             'fields'                 => $this->fields,
             'created_by'             => $this->created_by,
