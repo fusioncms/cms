@@ -1,80 +1,73 @@
 <template>
-    <div class="row" v-if="isValid">
-        <div class="col w-full">
-            <div class="analytics card">
-                <div class="card__header">
-                    <h3 class="card__title">Last 30 Days</h3>
+    <ui-card v-if="isValid">
+        <ui-card-header title="Analytics: Last 30 Days"></ui-card-header>
+
+        <ui-card-body v-if="isValid">
+            <div class="flex flex-wrap justify-around">
+                <div class="w-1/2 md:w-auto">
+                    <ui-tooltip>
+                        <template>
+                            <span class="border-b-4 block">Unique Visitors</span>
+                        </template>
+                        <template slot="content">
+                            Total unique visitors, or sessions, accessing <br/>
+                            all pages of the site.
+                        </template>
+                    </ui-tooltip>
+                    <span class="block text-3xl xl:text-5xl font-bold">{{ totalVisitors }}</span>
                 </div>
 
-                <div class="card__body" v-if="isValid">
-                    <div class="flex flex-wrap justify-around">
-                        <div class="w-1/2 md:w-auto">
-                            <ui-tooltip>
-                                <template>
-                                    <span class="border-b-4 block">Unique Visitors</span>
-                                </template>
-                                <template slot="content">
-                                    Total unique visitors, or sessions, accessing <br/>
-                                    all pages of the site.
-                                </template>
-                            </ui-tooltip>
-                            <span class="block text-3xl xl:text-5xl font-bold">{{ totalVisitors }}</span>
-                        </div>
-
-                        <div class="w-1/2 md:w-auto">
-                            <ui-tooltip>
-                                <template>
-                                    <span class="border-b-4 block">Total Page Views</span>
-                                </template>
-                                <template slot="content">
-                                    Total number of pages viewed by all visitors
-                                </template>
-                            </ui-tooltip>
-                            <span class="block text-3xl xl:text-5xl font-bold">{{ totalPageViews }}</span>
-                        </div>
-
-                        <div class="w-1/2 md:w-auto">
-                            <ui-tooltip>
-                                <template>
-                                    <span class="border-b-4 block">Bounce Rate</span>
-                                </template>
-                                <template slot="content">
-                                    Percentage of visits or sessions where the user <br/>
-                                    leaves after viewing a single page
-                                </template>
-                            </ui-tooltip>
-                            <span class="block text-3xl xl:text-5xl font-bold">{{ bounceRate }}</span>
-                        </div>
-
-                        <div class="w-1/2 md:w-auto">
-                            <ui-tooltip>
-                                <template>
-                                    <span class="border-b-4 block">Session Duration</span>
-                                </template>
-                                <template slot="content">
-                                    Average length of time that a user <br/>
-                                    spends on the site before leaving
-                                </template>
-                            </ui-tooltip>
-                            <span class="block text-3xl xl:text-5xl font-bold">{{ sessionDuration }}</span>
-                        </div>
-                    </div>
-
-                    <apex-chart v-show="isValid && isReady" width="100%" height="350" :options="options" :series="series"></apex-chart>
+                <div class="w-1/2 md:w-auto">
+                    <ui-tooltip>
+                        <template>
+                            <span class="border-b-4 block">Total Page Views</span>
+                        </template>
+                        <template slot="content">
+                            Total number of pages viewed by all visitors
+                        </template>
+                    </ui-tooltip>
+                    <span class="block text-3xl xl:text-5xl font-bold">{{ totalPageViews }}</span>
                 </div>
 
-                <div class="card__body text-center" v-if="isValid === false">
-                    <p>Configure your Google Analytic settings to gain insight about your website <fa-icon class="text-emoji" :icon="['fas', 'hand-peace']"></fa-icon></p>
-
-                    <ui-button class="items-center" to="/settings/google_analytics#insights"><fa-icon :icon="['fas', 'cog']" class="mr-2 text-sm"></fa-icon> Go to settings</ui-button>
+                <div class="w-1/2 md:w-auto">
+                    <ui-tooltip>
+                        <template>
+                            <span class="border-b-4 block">Bounce Rate</span>
+                        </template>
+                        <template slot="content">
+                            Percentage of visits or sessions where the user <br/>
+                            leaves after viewing a single page
+                        </template>
+                    </ui-tooltip>
+                    <span class="block text-3xl xl:text-5xl font-bold">{{ bounceRate }}</span>
                 </div>
 
-                <div class="card__body text-center" v-if="isValid === null">
-                    <fa-icon :icon="['fas', 'circle-notch']" class="fa-spin mr-3"></fa-icon> Loading overview...
+                <div class="w-1/2 md:w-auto">
+                    <ui-tooltip>
+                        <template>
+                            <span class="border-b-4 block">Session Duration</span>
+                        </template>
+                        <template slot="content">
+                            Average length of time that a user <br/>
+                            spends on the site before leaving
+                        </template>
+                    </ui-tooltip>
+                    <span class="block text-3xl xl:text-5xl font-bold">{{ sessionDuration }}</span>
                 </div>
             </div>
-        </div>
-    </div>
+
+            <apex-chart v-show="isValid && isReady" width="100%" height="350" :options="options" :series="series"></apex-chart>
+        </ui-card-body>
+
+        <ui-card-body v-if="isValid === false">>
+            <p>Configure your Google Analytic settings to gain insight about your website <fa-icon class="text-emoji" :icon="['fas', 'hand-peace']"></fa-icon></p>
+            <ui-button to="/settings/google_analytics#insights"><fa-icon :icon="['fas', 'cog']" class="mr-2"></fa-icon> Go to settings</ui-button>
+        </ui-card-body>
+
+        <ui-card-body v-if="isValid === null">
+            <fa-icon :icon="['fas', 'circle-notch']" class="fa-spin mr-3"></fa-icon> Loading overview...
+        </ui-card-body>
+    </ui-card>
 </template>
 
 <script>

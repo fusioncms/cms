@@ -1,10 +1,8 @@
 <template>
-    <div class="card">
-        <div class="card__header">
-            <h3 class="card__title">Recent Activity</h3>
-        </div>
+    <ui-card>
+        <ui-card-header title="Recent Activity"></ui-card-header>
 
-        <div class="card__body">
+        <ui-card-body>
             <ui-table key="recent-activities" class="recent-activities-table" id="recent-activities" :endpoint="endpoint" sort-by="created_at" sort-in="desc" :per-page="10">
                 <template slot="causer.name" slot-scope="table">
                     <router-link :to="{ name: 'users.edit', params: {user: table.record.causer.id} }">{{ table.record.causer.name }}</router-link>
@@ -30,8 +28,8 @@
                     <ui-datetime :timestamp="table.record.created_at"></ui-datetime>
                 </template>
             </ui-table>
-        </div>
-    </div>
+        </ui-card-body>
+    </ui-card>
 </template>
 
 <script>
