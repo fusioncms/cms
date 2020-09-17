@@ -9,7 +9,7 @@ export default {
 
     methods: {
         $can(permission) {
-            return this.$user.permissions.indexOf(permission) !== -1
+            return this.$user.permitted.indexOf(permission) !== -1
         }
     }
 }
