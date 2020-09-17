@@ -2,10 +2,8 @@
 
 namespace Fusion\Tests\Feature;
 
-use Facades\FieldFactory;
 use Facades\MatrixFactory;
 use Fusion\Models\Blueprint;
-use Fusion\Services\Builders\Single;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

@@ -62,7 +62,8 @@ class Matrix extends Model
      *
      * @return string
      */
-    public function getBlueprintGroup(): string {
+    public function getBlueprintGroup(): string
+    {
         return Str::plural(ucfirst($this->type));
     }
 

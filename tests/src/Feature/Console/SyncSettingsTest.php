@@ -95,7 +95,7 @@ class SyncSettingsTest extends TestCase
         // test addition..
         $this->assertDatabaseHas('sections', [
             'blueprint_id' => $blueprint->id,
-            'handle'      => 'foobar',
+            'handle'       => 'foobar',
         ]);
     }
 

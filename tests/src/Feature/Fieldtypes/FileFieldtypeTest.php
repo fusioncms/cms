@@ -29,7 +29,7 @@ class FileFieldtypeTest extends TestCase
                         [
                             'name'   => 'File',
                             'handle' => 'file',
-                            'type'   => 'file'
+                            'type'   => 'file',
                         ],
                     ],
                 ],

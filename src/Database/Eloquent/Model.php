@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class Model extends EloquentModel
 {
-    use CachesQueries, HasDynamicRelationships;
+    use CachesQueries;
+    use HasDynamicRelationships;
 
     /**
      * @var Model

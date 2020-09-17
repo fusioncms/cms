@@ -26,7 +26,7 @@ class FormFieldtypeTest extends TestCase
                         [
                             'name'   => 'Form',
                             'handle' => 'form',
-                            'type'   => 'form'
+                            'type'   => 'form',
                         ],
                     ],
                 ],
@@ -34,8 +34,8 @@ class FormFieldtypeTest extends TestCase
             ->create();
 
         $this->fieldForm = $this->matrix->blueprint->sections->first()->fields()->first();
-        $this->model = (new Collection($this->matrix->handle))->make();
-        $this->forms = factory(Form::class, 3)->create();
+        $this->model     = (new Collection($this->matrix->handle))->make();
+        $this->forms     = factory(Form::class, 3)->create();
     }
 
     /**
