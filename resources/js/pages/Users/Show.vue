@@ -5,8 +5,8 @@
         </portal>
 
         <portal to="actions">
-            <ui-button key="view-all-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
-            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary" v-if="user.id">Edit User</ui-button>
+            <ui-button key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
+            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary">Edit User</ui-button>
         </portal>
 
         <section-card title="User Information" description="General information about this user.">

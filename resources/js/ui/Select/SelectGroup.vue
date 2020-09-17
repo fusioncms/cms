@@ -24,8 +24,7 @@
             :required="required"
             :hasError="hasError"
             :hasSuccess="hasSuccess"
-            :message="hasMessage"
-            v-model="computedValue">
+            :message="hasMessage">
         </ui-select>
 	</ui-field-group>
 </template>
@@ -108,6 +107,7 @@
                 },
             },
             filterable: {
+                required: false,
                 type: Boolean,
                 default: false,
             },
