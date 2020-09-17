@@ -66,7 +66,7 @@
                             <ui-dropdown-link href="#">Reset Password</ui-dropdown-link>
 
                             <ui-dropdown-link
-                                v-if="table.record.id != user.id"
+                                v-if="table.record.id != $user.id"
                                 @click.prevent
                                 v-modal:delete-user="table.record"
                                 class="danger">
@@ -92,8 +92,6 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
-
     export default {
         head: {
             title() {
@@ -111,10 +109,6 @@
         },
 
         computed: {
-            ...mapGetters({
-                user: 'auth/getUser',
-            }),
-
             filteredRoles() {
                 return _.filter(this.roles, (role) => role.name !== 'Guest')
             },

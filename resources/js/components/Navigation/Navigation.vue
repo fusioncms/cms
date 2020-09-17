@@ -36,7 +36,6 @@
 
         computed: {
             ...mapGetters({
-                user: 'auth/getUser',
                 navigation: 'navigation/getNavigation',
                 settings: 'settings/getSettings',
             }),
