@@ -1,27 +1,27 @@
 <template>
-    <div class="card">
-        <div class="card__header">
-            <h3 class="card__title">Recent News</h3>
-        </div>
+    <ui-card>
+        <ui-card-header title="Recent News"></ui-card-header>
 
-        <div class="mt-6">
-            <a :href="entry.url" target="_blank" class="mb-3 md:mx-6 md:my-3 flex text-gray-700 hover:text-black hover:bg-gray-100 border border-gray-300 text-gray-700 rounded overflow-hidden p-px" v-for="entry in feed" :key="entry.id">
-                <div class="w-24 bg-white text-gray-800 flex-shrink-0 flex flex-col border-r border-gray-200">
-                    <span class="block text-center text-sm text-white h-6 bg-danger-500 flex items-center justify-center rounded-t">{{ $moment(entry.date_published).format('MMM Y') }}</span>
-
-                    <span class="flex-1 flex items-center justify-center font-bold text-3xl leading-none">{{ $moment(entry.date_published).format('DD') }}</span>
-                </div>
-
-                <div class="w-full p-3 bg-white">
-                    <span class="block font-bold text-gray-700 tracking-wide text-sm">Update</span>
-                    <span class="block">{{ entry.title }}</span>
-                </div>
-            </a>
-        </div>
-    </div>
+        <ui-card-body>
+            <ul class="dashboard-news">
+                <li class="dashboard-news__item" v-for="(entry, index) in feed" v-if="index <= 3" :key="entry.id">
+                    <article> 
+                        <header>
+                            <ui-badge variant="primary" class="mr-2">Update</ui-badge>
+                            <h3><a :href="entry.url" target="_blank">{{ entry.title }}</a></h3>
+                            <ui-date :timestamp="entry.date_published"></ui-date> 
+                        </header>
+                        <p v-if="entry.content_text">{{ excerpt(entry.content_text) }} <a :href="entry.url" target="_blank">Read More</a></p>
+                    </article>
+                </li>
+            </ul>
+        </ui-card-body>
+    </ui-card>
 </template>
 
 <script>
+    import _ from 'lodash'
+    
     export default {
         props: {
             feed: {
@@ -29,6 +29,12 @@
                 default: () => {
                     return []
                 }
+            }
+        },
+        
+        methods: {
+            excerpt(item) {
+                return _.truncate(item, { 'length': 150 })
             }
         }
     }
