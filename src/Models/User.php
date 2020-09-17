@@ -137,6 +137,23 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get all of the assigned permissions for the user.
+     */
+    public function getPermissionsAttribute()
+    {
+        $permissions = collect();
+        $model       = app(config('permission.models.permission'))->make();
+
+        $model->all()->each(function($permission) use (&$permissions) {
+            if ($this->can($permission->name)) {
+                $permissions->push($permission->name);
+            }
+        });
+
+        return $permissions;
+    }
+
+    /**
      * Scope to query resource.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
