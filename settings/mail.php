@@ -9,12 +9,12 @@ return [
         'General' => [
             [
                 'name'        => 'Driver',
-                'handle'      => 'mail_driver',
+                'handle'      => 'mail_default',
                 'description' => 'Select the desired e-mail driver.',
                 'type'        => 'select',
                 'options'     => ['smtp' => 'SMTP', 'sparkpost' => 'SparkPost', 'mailgun' => 'Mailgun', 'mandrill' => 'Mandrill', 'log' => 'Log'],
                 'default'     => 'smtp',
-                'override'    => 'mail.driver',
+                'override'    => 'mail.default',
                 'required'    => true,
             ],
             [
@@ -40,26 +40,26 @@ return [
                 'handle'      => 'mail_smtp_host',
                 'description' => 'The host name of your SMTP server.',
                 'default'     => 'smtp.example.com',
-                'override'    => 'mail.host',
+                'override'    => 'mail.mailers.smtp.host',
             ],
             [
                 'name'        => 'Port',
                 'handle'      => 'mail_smtp_port',
                 'description' => 'The port number of your SMTP server.',
                 'default'     => '587',
-                'override'    => 'mail.port',
+                'override'    => 'mail.mailers.smtp.port',
             ],
             [
                 'name'        => 'SMTP Username',
                 'handle'      => 'mail_smtp_username',
                 'description' => 'The username for your SMTP server.',
-                'override'    => 'mail.username',
+                'override'    => 'mail.mailers.smtp.username',
             ],
             [
                 'name'        => 'SMTP Password',
                 'handle'      => 'mail_smtp_password',
                 'description' => 'The password for your SMTP server.',
-                'override'    => 'mail.password',
+                'override'    => 'mail.mailers.smtp.password',
             ],
         ],
         'Sparkpost' => [

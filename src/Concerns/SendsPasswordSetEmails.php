@@ -5,7 +5,6 @@ namespace Fusion\Concerns;
 use Fusion\Models\User;
 use Fusion\Mail\SetPassword;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Password;
 
 trait SendsPasswordSetEmails
 {
@@ -17,8 +16,6 @@ trait SendsPasswordSetEmails
      */
     protected function sendPasswordSetNotification(User $user)
     {
-        $token = Password::broker()->createToken($user);
-
-        Mail::to($user)->send(new SetPassword($user, $token));
+        Mail::to($user)->send(new SetPassword($user));
     }
 }

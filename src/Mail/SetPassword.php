@@ -5,6 +5,7 @@ namespace Fusion\Mail;
 use Fusion\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Password;
 
 class SetPassword extends DatabaseMailable
 {
@@ -19,13 +20,6 @@ class SetPassword extends DatabaseMailable
     public $user;
 
     /**
-     * Password set link.
-     * 
-     * @var string
-     */
-    public $url;
-
-    /**
      * Default inner template.
      *
      * @var string
@@ -35,17 +29,27 @@ class SetPassword extends DatabaseMailable
     /**
      * Create a new message instance.
      *
-     * @param User   $user
-     * @param string $token
+     * @param User $user
      *
      * @return void
      */
-    public function __construct(User $user, string $token)
+    public function __construct(User $user)
     {
         $this->user = $user;
-        $this->url  = url(route('password.set', [
-            'token' => $token,
-            'email' => $user->email,
+    }
+
+    /**
+     * Include `token url` into $this->viewData.
+     * 
+     * @return $this
+     */
+    public function build()
+    {
+        $this->viewData['url'] = url(route('password.set', [
+            'token' => Password::broker()->createToken($this->user),
+            'email' => $this->user->email,
         ], false));
+
+        return parent::build();
     }
 }

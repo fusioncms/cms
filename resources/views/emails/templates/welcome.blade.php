@@ -1,4 +1,4 @@
-# Welcome, {{ $user->fullName }}!
+# Welcome, {{ $user->name }}!
 
 Thank you for becoming a member.
 

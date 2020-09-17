@@ -3,7 +3,7 @@
 You are receiving this email because a new account has been created for you.
 Please click the button below to set your password.
 
-@component('mail::button', ['url' => $this->url])
+@component('mail::button', ['url' => $url])
 Set Password
 @endcomponent
 
