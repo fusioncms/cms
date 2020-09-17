@@ -29,7 +29,7 @@
 
                 <dt>Verified</dt>
                 <dd>
-                    <ui-datetime :timestamp="user.email_verified_at" v-if="user.verified"></ui-datetime>
+                    <ui-datetime :timestamp="user.email_verified_at" v-if="verified"></ui-datetime>
                     <span v-else>No</span>
                 </dd>
 
@@ -38,7 +38,7 @@
 
                 <dt>Last Login</dt>
                 <dd>
-                    <ui-datetime :timestamp="user.last_logged_in_at" v-if="user.last_logged_in_at"></ui-datetime>
+                    <ui-datetime :timestamp="user.logged_in_at" v-if="user.logged_in_at"></ui-datetime>
                     <span v-else>Never</span>
                 </dd>
 
@@ -92,6 +92,14 @@
                 if (this.user.id) {
                     return '/datatable/users/' + this.user.id + '/activities'
                 }
+            },
+
+            verified() {
+                if (this.user.email_verified_at && this.user.email_verified_at != '0000-00-00 00:00:00') {
+                    return true
+                }
+
+                return false
             },
         },
 

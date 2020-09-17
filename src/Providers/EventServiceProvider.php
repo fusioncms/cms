@@ -13,17 +13,16 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Illuminate\Auth\Events\Verified' => [
-            'Fusion\Listeners\LogVerifiedUser',
-        ],
+        //
+    ];
 
-        'Illuminate\Auth\Events\Registered' => [
-            'Illuminate\Auth\Listeners\SendEmailVerificationNotification',
-        ],
-
-        'Illuminate\Auth\Events\Login' => [
-            'Fusion\Listeners\LogActivityWhenUserLogsIn',
-        ],
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        'Fusion\Listeners\UserEventSubscriber',
     ];
 
     /**
