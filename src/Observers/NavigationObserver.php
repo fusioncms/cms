@@ -2,10 +2,9 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Database\Schema\Blueprint;
 use Fusion\Database\Migration;
+use Fusion\Database\Schema\Blueprint;
 use Fusion\Models\Navigation;
-use Illuminate\Support\Str;
 
 class NavigationObserver
 {

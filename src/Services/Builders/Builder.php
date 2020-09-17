@@ -3,7 +3,6 @@
 namespace Fusion\Services\Builders;
 
 use Fusion\Contracts\Builder as BuilderContract;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 abstract class Builder implements BuilderContract

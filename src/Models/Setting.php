@@ -2,7 +2,6 @@
 
 namespace Fusion\Models;
 
-
 use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -25,14 +24,16 @@ class Setting extends Model
         'status',
     ];
 
-    protected $blueprintGroup = 'Settings';
+    protected $blueprintGroup  = 'Settings';
     protected $blueprintHidden = true;
 
-    public function getBlueprintGroup(): string {
+    public function getBlueprintGroup(): string
+    {
         return 'Settings';
     }
 
-    public function getBlueprintVisibility(): bool {
+    public function getBlueprintVisibility(): bool
+    {
         return false;
     }
 

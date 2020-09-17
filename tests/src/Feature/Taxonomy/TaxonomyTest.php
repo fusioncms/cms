@@ -2,14 +2,14 @@
 
 namespace Fusion\Tests\Feature\Taxonomy;
 
-use Fusion\Tests\TestCase;
-use Fusion\Models\Taxonomy;
-use Illuminate\Support\Str;
 use Facades\TaxonomyFactory;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Fusion\Models\Taxonomy;
+use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 
 class TaxonomyTest extends TestCase
 {

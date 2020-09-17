@@ -60,8 +60,8 @@ class FormTest extends TestCase
         // assert associated blueprint exists..
         $this->assertDatabaseHas('blueprints', [
             'name'                => $form->name,
-            'blueprintable_type' => Form::class,
-            'blueprintable_id'   => $form->id,
+            'blueprintable_type'  => Form::class,
+            'blueprintable_id'    => $form->id,
         ]);
     }
 
@@ -250,7 +250,7 @@ class FormTest extends TestCase
     public function a_deleted_form_request_will_also_delete_associated_tables()
     {
         $this->actingAs($this->owner, 'api');
-        $form     = FormFactory::create();
+        $form      = FormFactory::create();
         $blueprint = $form->blueprint;
 
         $this

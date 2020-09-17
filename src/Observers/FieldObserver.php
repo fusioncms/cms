@@ -3,7 +3,6 @@
 namespace Fusion\Observers;
 
 use Fusion\Models\Field;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class FieldObserver
@@ -67,7 +66,7 @@ class FieldObserver
 
         if ($old['handle'] !== $new['handle']) {
             $fieldtype = fieldtypes()->get($new['type']);
-            $column = $fieldtype->getColumn('type');
+            $column    = $fieldtype->getColumn('type');
 
             if (!is_null($column)) {
                 Schema::table($table, function ($table) use ($old, $new) {
@@ -78,8 +77,8 @@ class FieldObserver
 
         if ($old['type'] !== $new['type']) {
             $fieldtype = fieldtypes()->get($new['type']);
-            $column = $fieldtype->getColumn('type');
-            $settings = $fieldtype->getColumn('settings') ?? [];
+            $column    = $fieldtype->getColumn('type');
+            $settings  = $fieldtype->getColumn('settings') ?? [];
 
             array_unshift($settings, $new['handle']);
 

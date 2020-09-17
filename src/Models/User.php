@@ -182,7 +182,7 @@ class User extends Authenticatable implements MustVerifyEmail
             ->withProperties(['icon' => 'sign-in-alt'])
             ->log('Signed in');
 
-        static::withoutEvents(function() {
+        static::withoutEvents(function () {
             $this->logged_in_at = now();
             $this->save();
         });
@@ -196,7 +196,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function logFailedLogin()
     {
-        static::withoutEvents(function() {
+        static::withoutEvents(function () {
             $this->increment('invalid_logins');
             $this->invalidly_logged_in_at = now();
             $this->save();
@@ -210,7 +210,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function logPasswordChange()
     {
-        static::withoutEvents(function() {
+        static::withoutEvents(function () {
             $this->password_changed_at = now();
             $this->save();
         });
@@ -223,7 +223,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function clearFailedLoginAttempts()
     {
-        static::withoutEvents(function() {
+        static::withoutEvents(function () {
             $this->invalid_logins = 0;
             $this->invalidly_logged_in_at = null;
             $this->save();
