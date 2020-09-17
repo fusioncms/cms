@@ -80,14 +80,8 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
-
     export default {
         computed: {
-            ...mapGetters({
-                currentUser: 'auth/getUser'
-            }),
-
             endpoint() {
                 if (this.user.id) {
                     return '/datatable/users/' + this.user.id + '/activities'

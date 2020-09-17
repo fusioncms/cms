@@ -20,7 +20,7 @@
                         <div class="dropdown dropdown--right" slot-scope="props" :class="{'dropdown--open': props.isOpen}" v-click-outside="props.close">
                             <button class="nav-button nav-button--full" @click.prevent="props.toggle()">
                                 <mq-layout mq="xl+">
-                                    <span>{{ greeting }}, <strong>{{ user.name }}</strong></span>
+                                    <span>{{ greeting }}, <strong>{{ $user.name }}</strong></span>
                                 </mq-layout>
 
                                 <mq-layout mq="xl+">
@@ -37,7 +37,7 @@
                                 <mq-layout :mq="['sm', 'md', 'lg']">
                                     <ui-dropdown-item>
                                         <p class="mb-0">
-                                            {{ greeting }}, <strong>{{ user.name }}</strong>
+                                            {{ greeting }}, <strong>{{ $user.name }}</strong>
                                         </p>
                                     </ui-dropdown-item>
                                 </mq-layout>
@@ -51,7 +51,7 @@
 
                                 <ui-dropdown-divider />
 
-                                <ui-dropdown-link :to="'/users/' + user.id + '/edit'" @click.native="onClick()">
+                                <ui-dropdown-link :to="'/users/' + $user.id + '/edit'" @click.native="onClick()">
                                     <fa-icon icon="user" class="icon"></fa-icon>
                                     Account
                                 </ui-dropdown-link>
@@ -124,7 +124,6 @@
 
         computed: {
             ...mapGetters({
-                user: 'auth/getUser',
                 navigation: 'navigation/getNavigation',
                 version: 'fusion/getVersion',
             }),
