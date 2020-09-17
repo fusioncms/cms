@@ -1,0 +1,24 @@
+.analytics {
+    @apply flex flex-wrap justify-around;
+
+    &__stat {
+        @apply text-center w-1/2;
+
+        @screen md { @apply w-auto; }
+    }
+
+    &__stat-label {
+        @apply inline-flex flex-wrap items-center justify-center border-b; 
+
+        h3 { @apply mb-0 mr-2; }
+    }
+
+    &__stat-value {
+        @apply block text-3xl;
+        font-weight: 600;
+
+        @screen xl {
+            @apply text-5xl;
+        }
+    }
+}

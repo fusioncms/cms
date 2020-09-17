@@ -3,56 +3,81 @@
         <ui-card-header title="Analytics: Last 30 Days"></ui-card-header>
 
         <ui-card-body v-if="isValid">
-            <div class="flex flex-wrap justify-around">
-                <div class="w-1/2 md:w-auto">
-                    <ui-tooltip>
-                        <template>
-                            <span class="border-b-4 block">Unique Visitors</span>
-                        </template>
-                        <template slot="content">
-                            Total unique visitors, or sessions, accessing <br/>
-                            all pages of the site.
-                        </template>
-                    </ui-tooltip>
-                    <span class="block text-3xl xl:text-5xl font-bold">{{ totalVisitors }}</span>
+            <div class="analytics">
+                <div class="analytics__stat">
+                    <div class="analytics__stat-label">
+                        <h3>Unique Visitors</h3>
+
+                        <ui-tooltip>
+                            <template>
+                                <span class="icon icon--info icon--xs">
+                                    <fa-icon icon="question"></fa-icon>
+                                </span>
+                            </template>
+                            <template slot="content">
+                                <span id="analytic-visitors">Total unique visitors, or sessions, accessing all pages of the site.</span>
+                            </template>
+                        </ui-tooltip>
+                    </div>
+                    
+                    <span class="analytics__stat-value" aria-labelledby="analytic-visitors">{{ totalVisitors }}</span>
                 </div>
 
-                <div class="w-1/2 md:w-auto">
-                    <ui-tooltip>
-                        <template>
-                            <span class="border-b-4 block">Total Page Views</span>
-                        </template>
-                        <template slot="content">
-                            Total number of pages viewed by all visitors
-                        </template>
-                    </ui-tooltip>
-                    <span class="block text-3xl xl:text-5xl font-bold">{{ totalPageViews }}</span>
+                <div class="analytics__stat">
+                    <div class="analytics__stat-label">
+                        <h3>Total Page Views</h3>
+
+                        <ui-tooltip>
+                            <template>
+                                <span class="icon icon--info icon--xs">
+                                    <fa-icon icon="question"></fa-icon>
+                                </span>
+                            </template>
+                            <template slot="content">
+                                <span id="analytic-total-views">Total number of pages viewed by all visitors.</span>
+                            </template>
+                        </ui-tooltip>
+                    </div>
+                    
+                    <span class="analytics__stat-value" aria-labelledby="analytic-total-views">{{ totalPageViews }}</span>
                 </div>
 
-                <div class="w-1/2 md:w-auto">
-                    <ui-tooltip>
-                        <template>
-                            <span class="border-b-4 block">Bounce Rate</span>
-                        </template>
-                        <template slot="content">
-                            Percentage of visits or sessions where the user <br/>
-                            leaves after viewing a single page
-                        </template>
-                    </ui-tooltip>
-                    <span class="block text-3xl xl:text-5xl font-bold">{{ bounceRate }}</span>
+                <div class="analytics__stat">
+                    <div class="analytics__stat-label">
+                        <h3>Bounce Rate</h3>
+
+                        <ui-tooltip>
+                            <template>
+                                <span class="icon icon--info icon--xs">
+                                    <fa-icon icon="question"></fa-icon>
+                                </span>
+                            </template>
+                            <template slot="content">
+                                <span id="analytic-bounce-rate"> Percentage of visits or sessions where the user leaves after viewing a single page.</span>
+                            </template>
+                        </ui-tooltip>
+                    </div>
+                    
+                    <span class="analytics__stat-value" aria-labelledby="analytic-bounce-rate">{{ bounceRate }}</span>
                 </div>
 
-                <div class="w-1/2 md:w-auto">
-                    <ui-tooltip>
-                        <template>
-                            <span class="border-b-4 block">Session Duration</span>
-                        </template>
-                        <template slot="content">
-                            Average length of time that a user <br/>
-                            spends on the site before leaving
-                        </template>
-                    </ui-tooltip>
-                    <span class="block text-3xl xl:text-5xl font-bold">{{ sessionDuration }}</span>
+                <div class="analytics__stat">
+                    <div class="analytics__stat-label">
+                        <h3>Session Duration</h3>
+
+                        <ui-tooltip>
+                            <template>
+                                <span class="icon icon--info icon--xs">
+                                    <fa-icon icon="question"></fa-icon>
+                                </span>
+                            </template>
+                            <template slot="content">
+                                <span id="analytic-duration">Average length of time that a user spends on the site before leaving.</span>
+                            </template>
+                        </ui-tooltip>
+                    </div>
+                    
+                    <span class="analytics__stat-value" aria-labelledby="analytic-duration">{{ sessionDuration }}</span>
                 </div>
             </div>
 
