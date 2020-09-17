@@ -2,12 +2,12 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Fusion\Models\Section;
-use Fusion\Models\Blueprint;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\BlueprintResource;
+use Fusion\Models\Blueprint;
+use Fusion\Models\Section;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class SectionController extends Controller
 {
@@ -51,7 +51,7 @@ class SectionController extends Controller
     }
 
     /**
-     * @param Blueprint   $blueprint
+     * @param Blueprint  $blueprint
      * @param Collection $sections
      *
      * @return Collection
@@ -71,7 +71,7 @@ class SectionController extends Controller
     /**
      * Create Sections on Blueprint.
      *
-     * @param Blueprint   $blueprint
+     * @param Blueprint  $blueprint
      * @param Collection $sections
      *
      * @return Blueprint
@@ -100,7 +100,7 @@ class SectionController extends Controller
     /**
      * Update Sections on Blueprint.
      *
-     * @param Blueprint   $blueprint
+     * @param Blueprint  $blueprint
      * @param Collection $sections
      *
      * @return Blueprint
@@ -136,7 +136,7 @@ class SectionController extends Controller
     /**
      * Remove Sections from Blueprint.
      *
-     * @param Blueprint   $blueprint
+     * @param Blueprint  $blueprint
      * @param Collection $ids
      *
      * @return Blueprint

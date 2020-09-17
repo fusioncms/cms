@@ -3,7 +3,6 @@
 namespace Fusion\Concerns;
 
 use Fusion\Models\Blueprint;
-use Fusion\Database\Migration;
 
 trait HasBlueprint
 {
@@ -12,15 +11,15 @@ trait HasBlueprint
      */
     public static function bootHasBlueprint()
     {
-        static::created(function($model) {
+        static::created(function ($model) {
             $model->createBlueprint();
         });
 
-        static::updated(function($model) {
+        static::updated(function ($model) {
             $model->updateBlueprint();
         });
 
-        static::deleting(function($model) {
+        static::deleting(function ($model) {
             $model->deleteBlueprint();
         });
     }
@@ -30,9 +29,10 @@ trait HasBlueprint
      *
      * @return string
      */
-    public function getBlueprintGroup(): string {
-        if (! property_exists(static::class, 'blueprintGroup')) {
-            throw new \LogicException(static::class . ' must have a "$blueprintGroup" property defined.');
+    public function getBlueprintGroup(): string
+    {
+        if (!property_exists(static::class, 'blueprintGroup')) {
+            throw new \LogicException(static::class.' must have a "$blueprintGroup" property defined.');
         }
 
         return $this->blueprintGroup;
@@ -43,7 +43,8 @@ trait HasBlueprint
      *
      * @return bool
      */
-    public function getBlueprintHidden(): bool {
+    public function getBlueprintHidden(): bool
+    {
         return $this->blueprintHidden ?? false;
     }
 
@@ -60,7 +61,7 @@ trait HasBlueprint
      */
     public function createBlueprint()
     {
-        return $this->withoutEvents(function() {
+        return $this->withoutEvents(function () {
             return $this->blueprint()->create([
                 'name'   => $this->name,
                 'group'  => $this->getBlueprintGroup(),
@@ -74,7 +75,7 @@ trait HasBlueprint
      */
     public function updateBlueprint()
     {
-        return $this->withoutEvents(function() {
+        return $this->withoutEvents(function () {
             return $this->blueprint()->update([
                 'name'   => $this->name,
                 'group'  => $this->getBlueprintGroup(),
@@ -88,7 +89,7 @@ trait HasBlueprint
      */
     public function deleteBlueprint()
     {
-        return $this->withoutEvents(function() {
+        return $this->withoutEvents(function () {
             return $this->blueprint()->delete();
         });
     }

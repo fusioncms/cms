@@ -1,13 +1,13 @@
 <template>
     <div>
-        <ui-toolbar>
+        <ui-toolbar v-if="! noSearch">
             <slot name="toolbarPrepend"></slot>
 
             <!-- Search -->
-            <ui-toolbar-group grow v-if="! noSearch">
-                <ui-label :fieldId="id + '_table_search'" hideLabel>Search</ui-label>
+            <ui-toolbar-group grow>
+                <ui-label :fieldId="id + '-table-search'" hideLabel>Search</ui-label>
                 <ui-input
-                    :id="id + '_table_search'"
+                    :id="id + '-table-search'"
                     name="search"
                     type="search"
                     placeholder="Search"
@@ -346,6 +346,7 @@
             changePerPage(page) {
                 this.pagination.currentPage = 1
                 this.pagination.perPage = page
+
 
                 this.getRecords()
             },

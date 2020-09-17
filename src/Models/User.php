@@ -144,6 +144,23 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get all of the assigned permissions for the user.
+     */
+    public function getPermittedAttribute()
+    {
+        $permitted = collect();
+        $model     = app(config('permission.models.permission'))->make();
+
+        $model->all()->each(function($permission) use (&$permitted) {
+            if ($this->can($permission->name)) {
+                $permitted->push($permission->name);
+            }
+        });
+
+        return $permitted;
+    }
+
+    /**
      * Scope to query resource.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -190,7 +207,7 @@ class User extends Authenticatable implements MustVerifyEmail
             ->withProperties(['icon' => 'sign-in-alt'])
             ->log("Signed in ({$this->name})");
 
-        static::withoutEvents(function() {
+        static::withoutEvents(function () {
             $this->logged_in_at = now();
             $this->save();
         });
@@ -204,7 +221,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function logFailedLogin()
     {
-        static::withoutEvents(function() {
+        static::withoutEvents(function () {
             $this->increment('invalid_logins');
             $this->invalidly_logged_in_at = now();
             $this->save();
@@ -218,7 +235,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function logPasswordChange()
     {
-        static::withoutEvents(function() {
+        static::withoutEvents(function () {
             $this->password_changed_at = now();
             $this->save();
         });
@@ -231,7 +248,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function clearFailedLoginAttempts()
     {
-        static::withoutEvents(function() {
+        static::withoutEvents(function () {
             $this->invalid_logins = 0;
             $this->invalidly_logged_in_at = null;
             $this->save();

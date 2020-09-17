@@ -330,6 +330,15 @@ const router = new Router({
             }
         },
         {
+            path: '/roles/:role',
+            component: () => import('@/pages/Roles/Show'),
+            name: 'roles.show',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+        {
             path: '/permissions',
             component: () => import('@/pages/Permissions'),
             name: 'permissions',

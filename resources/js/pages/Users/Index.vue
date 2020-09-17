@@ -8,73 +8,75 @@
             <ui-button key="create-user-btn" :to="{name: 'users.create' }" variant="primary">Create User</ui-button>
         </portal>
 
-        <div class="content-container">
-            <ui-table class="user-table" id="users" :endpoint="endpoint" sort-by="name" key="users_table">
-                <template v-slot:toolbarPrepend>
-                    <ui-toolbar-group>
-                        <ui-dropdown id="user-roles">
-                            <span>Roles</span>
+        <ui-card>
+            <ui-card-body>
+                <ui-table key="users" class="user-table" id="users" :endpoint="endpoint" sort-by="name" show-page-status show-page-numbers show-page-nav show-page-ends>
+                    <template v-slot:toolbarPrepend>
+                        <ui-toolbar-group>
+                            <ui-dropdown id="user-roles">
+                                <span>Roles</span>
 
-                            <template v-slot:menu>
-                                <ui-dropdown-link :to="{ name: 'users' }" exact>All</ui-dropdown-link>
+                                <template v-slot:menu>
+                                    <ui-dropdown-link :to="{ name: 'users' }" exact>All</ui-dropdown-link>
 
-                                <ui-dropdown-divider></ui-dropdown-divider>
+                                    <ui-dropdown-divider></ui-dropdown-divider>
 
-                                <ui-dropdown-link v-for="role in filteredRoles" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" exact>
-                                    {{ role.label }}
-                                </ui-dropdown-link>
-                            </template>
-                        </ui-dropdown>
-                    </ui-toolbar-group>
-                </template>
+                                    <ui-dropdown-link v-for="role in filteredRoles" v-if="role.id !== 1" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" exact>
+                                        {{ role.label }}
+                                    </ui-dropdown-link>
+                                </template>
+                            </ui-dropdown>
+                        </ui-toolbar-group>
+                    </template>
 
-                <template slot="name" slot-scope="table">
-                    <div class="flex items-center">
-                        <ui-status :value="table.record.status" class="mr-2"></ui-status>
-                        <router-link :to="{ name: 'users.show', params: {user: table.record.id} }">{{ table.record.name }}</router-link>
-                    </div>
-                </template>
+                    <template slot="name" slot-scope="table">
+                        <div class="flex items-center">
+                            <ui-status :value="table.record.status" class="mr-2"></ui-status>
+                            <router-link :to="{ name: 'users.show', params: {user: table.record.id} }">{{ table.record.name }}</router-link>
+                        </div>
+                    </template>
 
-                <template slot="email" slot-scope="table">
-                    {{ table.record.email }}
-                </template>
+                    <template slot="email" slot-scope="table">
+                        {{ table.record.email }}
+                    </template>
 
-                <template slot="role" slot-scope="table">
-                    <ui-badge>{{ table.record.role.label }}</ui-badge>
-                </template>
+                    <template slot="role" slot-scope="table">
+                        <ui-badge>{{ table.record.role.label }}</ui-badge>
+                    </template>
 
-                <template slot="created_at" slot-scope="table">
-                    {{ $moment(table.record.created_at).format('Y-MM-DD') }}
-                </template>
+                    <template slot="created_at" slot-scope="table">
+                        <ui-date :timestamp="table.record.created_at"></ui-date>
+                    </template>
 
-                <template slot="email_verified_at" slot-scope="table">
-                    <ui-badge v-if="table.record.email_verified_at" variant="success">Yes</ui-badge>
-                    <ui-badge v-else variant="danger">No</ui-badge>
-                </template>
+                    <template slot="email_verified_at" slot-scope="table">
+                        <ui-badge v-if="table.record.email_verified_at" variant="success">Yes</ui-badge>
+                        <ui-badge v-else variant="danger">No</ui-badge>
+                    </template>
 
-                <template slot="actions" slot-scope="table">
-                    <ui-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
-                        <ui-dropdown-link :to="{ name: 'users.show', params: {user: table.record.id} }">View</ui-dropdown-link>
+                    <template slot="actions" slot-scope="table">
+                        <ui-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
+                            <ui-dropdown-link :to="{ name: 'users.show', params: {user: table.record.id} }">View</ui-dropdown-link>
 
-                        <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }">Edit</ui-dropdown-link>
+                            <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }">Edit</ui-dropdown-link>
 
-                        <ui-dropdown-divider></ui-dropdown-divider>
+                            <ui-dropdown-divider></ui-dropdown-divider>
 
-                        <ui-dropdown-link href="#">Resend Verification</ui-dropdown-link>
+                            <ui-dropdown-link href="#">Resend Verification</ui-dropdown-link>
 
-                        <ui-dropdown-link href="#">Reset Password</ui-dropdown-link>
+                            <ui-dropdown-link href="#">Reset Password</ui-dropdown-link>
 
-                        <ui-dropdown-link
-                            v-if="table.record.id != user.id"
-                            @click.prevent
-                            v-modal:delete-user="table.record"
-                            class="danger">
-                            Delete
-                        </ui-dropdown-link>
-                    </ui-table-actions>
-                </template>
-            </ui-table>
-        </div>
+                            <ui-dropdown-link
+                                v-if="table.record.id != $user.id"
+                                @click.prevent
+                                v-modal:delete-user="table.record"
+                                class="danger">
+                                Delete
+                            </ui-dropdown-link>
+                        </ui-table-actions>
+                    </template>
+                </ui-table>
+            </ui-card-body>
+        </ui-card>
 
         <portal to="modals">
             <ui-modal name="delete-user" title="Delete User">
@@ -90,8 +92,6 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
-
     export default {
         head: {
             title() {
@@ -109,10 +109,6 @@
         },
 
         computed: {
-            ...mapGetters({
-                user: 'auth/getUser',
-            }),
-
             filteredRoles() {
                 return _.filter(this.roles, (role) => role.name !== 'Guest')
             },

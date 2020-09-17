@@ -2,8 +2,8 @@
 
 namespace Fusion\Console\Actions;
 
-use Fusion\Models\Field;
 use Fusion\Models\Blueprint;
+use Fusion\Models\Field;
 use Fusion\Models\Section;
 use Fusion\Models\Setting;
 use Fusion\Services\Setting as SettingService;
@@ -65,7 +65,7 @@ class SyncSettings
                 'description' => $setting['description'] ?? '',
             ]);
 
-            if (! $setting->blueprint) {
+            if (!$setting->blueprint) {
                 dd('setting blueprint not created?', $setting);
             }
 

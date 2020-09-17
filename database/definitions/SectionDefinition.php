@@ -1,7 +1,7 @@
 <?php
 
-use Fusion\Models\Blueprint;
 use Faker\Generator as Faker;
+use Fusion\Models\Blueprint;
 use Fusion\Models\Section;
 
 $factory->define(Section::class, function (Faker $faker) {

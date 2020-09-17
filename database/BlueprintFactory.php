@@ -3,7 +3,6 @@
 use Facades\SectionFactory;
 use Fusion\Contracts\Factory;
 use Fusion\Models\Blueprint;
-use Illuminate\Support\Str;
 
 class BlueprintFactory implements Factory
 {
