@@ -168,6 +168,6 @@ class PasswordTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('POST', "/api/users/{$this->owner->id}/password", []);
+            ->json('PATCH', "/api/users/{$this->owner->id}", []);
     }
 }

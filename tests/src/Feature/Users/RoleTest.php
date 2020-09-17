@@ -200,14 +200,14 @@ class RoleTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/users', [
-                'name'  => 'User B',
-                'email' => 'user-b@example.com',
+            ->json('PATCH', '/api/users/' . $this->user->id, [
+                'name'  => $this->user->name,
+                'email' => $this->user->email,
                 'role'  => 'owner',
             ]);
 
         $oldOwner = $this->owner->fresh();
-        $newOwner = User::where('name', 'User B')->first();
+        $newOwner = $this->user->fresh();
 
         $this->assertFalse($oldOwner->hasRole('owner'));
         $this->assertTrue($newOwner->hasRole('owner'));

@@ -2,6 +2,7 @@
 
 namespace Fusion\Listeners;
 
+use Fusion\Models\User;
 use Fusion\Mail\WelcomeNewUser;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -13,8 +14,10 @@ class UserEventSubscriber
      */
     public function handleUserFailedLogin($event)
     {
-        // Log the activity
-        $event->user->logFailedLogin();
+        if ($user = User::where('email', $event->credentials['email'])->first()) {
+            // Log the activity
+            $event->user->logFailedLogin();
+        }
     }
 
     /**
@@ -23,10 +26,10 @@ class UserEventSubscriber
     public function handleUserLogin($event)
     {
         // Log the activity
-        auth()->user()->logSuccessfulLogin();
+        $event->user->logSuccessfulLogin();
 
         // Clear any failed login attempts
-        auth()->user()->clearFailedLoginAttempts();
+        $event->user->clearFailedLoginAttempts();
     }
 
     /**
@@ -74,8 +77,8 @@ class UserEventSubscriber
     public function handleUserVerification($event)
     {
         if (setting('users.user_email_welcome') === 'enabled') {
-            Mail::to($verified->user)
-                ->send(new WelcomeNewUser($verified->user));
+            Mail::to($event->user)
+                ->send(new WelcomeNewUser($event->user));
         }
     }
 

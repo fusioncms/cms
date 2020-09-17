@@ -185,9 +185,10 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function logSuccessfulLogin()
     {
-        activity('sign-ins')
+        activity()
+            ->performedOn($this)
             ->withProperties(['icon' => 'sign-in-alt'])
-            ->log('Signed in');
+            ->log("Signed in ({$this->name})");
 
         static::withoutEvents(function() {
             $this->logged_in_at = now();

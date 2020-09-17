@@ -38,6 +38,8 @@ class UserTest extends TestCase
      */
     public function a_user_with_permissions_can_create_a_user()
     {
+        Mail::fake();
+
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/users', $this->attributes)
@@ -81,6 +83,8 @@ class UserTest extends TestCase
      */
     public function new_user_creations_will_be_recorded_in_activity_log()
     {
+        Mail::fake();
+        
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/users', $this->attributes)

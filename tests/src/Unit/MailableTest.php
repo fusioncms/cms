@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use Fusion\Models\Mailable;
 use Fusion\Tests\TestCase;
+use Fusion\Models\Mailable;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -14,13 +14,6 @@ class MailableTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        Mailable::registerNewMailables();
-    }
 
     /**
      * @test
