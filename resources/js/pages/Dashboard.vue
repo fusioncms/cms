@@ -5,7 +5,7 @@
         </portal>
 
         <div class="row">
-            <div class="dashboard-page__column">
+            <div v-if="quicklinks.length" class="dashboard-page__column">
                 <quick-links :links="quicklinks"></quick-links>
             </div>
 
