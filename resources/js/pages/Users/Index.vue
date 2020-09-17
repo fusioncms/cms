@@ -45,7 +45,7 @@
                     </template>
 
                     <template slot="created_at" slot-scope="table">
-                        {{ $moment(table.record.created_at).format('Y-MM-DD') }}
+                        <ui-date :timestamp="table.record.created_at"></ui-date>
                     </template>
 
                     <template slot="email_verified_at" slot-scope="table">
