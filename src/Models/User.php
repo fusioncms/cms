@@ -151,7 +151,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $permitted = collect();
         $model     = app(config('permission.models.permission'))->make();
 
-        $model->all()->each(function($permission) use (&$permitted) {
+        $model->all()->each(function ($permission) use (&$permitted) {
             if ($this->can($permission->name)) {
                 $permitted->push($permission->name);
             }

@@ -482,12 +482,26 @@ const router = new Router({
         },
 
         {
-            path: '*',
+            path: '/403',
+            component: () => import('@/pages/403'),
+            name: '403',
+            meta: {
+                layout: 'error'
+            }
+        },
+
+        {
+            path: '/404',
             component: () => import('@/pages/404'),
             name: '404',
             meta: {
                 layout: 'error'
             }
+        },
+
+        {
+            path: '*',
+            redirect: '/404'
         },
     ],
 })

@@ -2,7 +2,6 @@ import Vue from 'vue'
 
 import store from '@/store'
 import router from '@/router'
-import auth from '@/mixins/auth'
 import forms from '@/mixins/forms'
 import setting from '@/mixins/setting'
 
@@ -16,7 +15,6 @@ export default class Fusion {
         this.vue = null
 
         // Mixins
-        Vue.mixin(auth)
         Vue.mixin(forms)
         Vue.mixin(setting)
 

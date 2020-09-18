@@ -56,8 +56,8 @@ class SettingServiceProvider extends ServiceProvider
     private function bootConfigOverrides()
     {
         SettingGroup::all()->each(function ($group) {
-            if ($group->fieldset) {
-                $group->fieldset->fields->each(function ($field) use ($group) {
+            if ($group->blueprint) {
+                $group->blueprint->fields->each(function ($field) use ($group) {
                     if ($field->settings['override'] !== false) {
                         $key = $field->settings['override'];
                         $value = setting("{$group->handle}.{$field->handle}");
