@@ -1,4 +1,5 @@
 import './apexcharts'
+import './auth'
 import './axios'
 import './eventbus'
 import './fontawesome'

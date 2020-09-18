@@ -26,6 +26,8 @@
 
 <script>
     export default {
+        permission: 'access.controlPanel',
+
         head: {
             title() {
                 return {

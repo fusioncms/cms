@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <ui-button key="create-user-btn" :to="{name: 'users.create' }" variant="primary">Create User</ui-button>
+            <ui-button key="create-user-btn" :to="{name: 'users.create' }" variant="primary" v-if="$can('users.create')">Create User</ui-button>
         </portal>
 
         <ui-card>
@@ -21,7 +21,7 @@
 
                                     <ui-dropdown-divider></ui-dropdown-divider>
 
-                                    <ui-dropdown-link v-for="role in filteredRoles" v-if="role.id !== 1" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" exact>
+                                    <ui-dropdown-link v-for="role in filteredRoles" :key="role.name" :to="{ name: 'users.role', params: { role: role.name } }" exact>
                                         {{ role.label }}
                                     </ui-dropdown-link>
                                 </template>
@@ -32,7 +32,8 @@
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">
                             <ui-status :value="table.record.status" class="mr-2"></ui-status>
-                            <router-link :to="{ name: 'users.show', params: {user: table.record.id} }">{{ table.record.name }}</router-link>
+                            <router-link :to="{ name: 'users.show', params: {user: table.record.id} }" v-if="$can('users.view')">{{ table.record.name }}</router-link>
+                            <span v-else>{{ table.record.name }}</span>
                         </div>
                     </template>
 
@@ -55,18 +56,18 @@
 
                     <template slot="actions" slot-scope="table">
                         <ui-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
-                            <ui-dropdown-link :to="{ name: 'users.show', params: {user: table.record.id} }">View</ui-dropdown-link>
+                            <ui-dropdown-link :to="{ name: 'users.show', params: {user: table.record.id} }" v-if="$can('users.view')">View</ui-dropdown-link>
 
-                            <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }">Edit</ui-dropdown-link>
+                            <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }" v-if="$can('users.update')">Edit</ui-dropdown-link>
 
                             <ui-dropdown-divider></ui-dropdown-divider>
 
-                            <ui-dropdown-link href="#">Resend Verification</ui-dropdown-link>
+                            <ui-dropdown-link href="#" v-if="$can('users.update')">Resend Verification</ui-dropdown-link>
 
-                            <ui-dropdown-link href="#">Reset Password</ui-dropdown-link>
+                            <ui-dropdown-link href="#" v-if="$can('users.update')">Reset Password</ui-dropdown-link>
 
                             <ui-dropdown-link
-                                v-if="table.record.id != $user.id"
+                                v-if="table.record.id != $user.id && $can('users.delete')"
                                 @click.prevent
                                 v-modal:delete-user="table.record"
                                 class="danger">
@@ -93,6 +94,8 @@
 
 <script>
     export default {
+        permission: 'users.viewAny',
+
         head: {
             title() {
                 return {
@@ -110,7 +113,7 @@
 
         computed: {
             filteredRoles() {
-                return _.filter(this.roles, (role) => role.name !== 'Guest')
+                return _.filter(this.roles, (role) => role.name !== 'Guest' && role.id !== 1)
             },
 
             endpoint() {
