@@ -46,11 +46,7 @@ class UserEventSubscriber
 
             // e-mail verification enabled..
             if ($event->user->shouldVerifyEmail()) {
-
-                // requires email verification..
-                if (! $event->user->hasVerifiedEmail()) {
-                    $event->user->sendEmailVerificationNotification();
-                }
+                $event->user->sendEmailVerificationNotification();
 
             // e-mail verification disabled..
             } else {
@@ -91,6 +87,13 @@ class UserEventSubscriber
     {
         // Log the activity
         $event->user->logPasswordChange();
+
+        // auto-matically verify user email..
+        if ($user instanceof MustVerifyEmail) {
+            if ($event->user->shouldVerifyEmail() && ! $user->hasVerifiedEmail()) {
+                $user->markEmailAsVerified();
+            }
+        }
     }
 
     /**
@@ -140,7 +143,7 @@ class UserEventSubscriber
         );
 
         $events->listen(
-            'Illuminate\Auth\Events\Registered',
+            'Fusion\Events\FullyRegistered',
             [UserEventSubscriber::class, 'handleUserFullRegistration']
         );
 
