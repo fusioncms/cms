@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="w-full container max-w-xs">
-        <form method="POST" action="{{ route('password.update') }}" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form method="POST" action="{{ route('password.set') }}" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             @csrf
 
             <input type="hidden" name="token" value="{{ $token }}">

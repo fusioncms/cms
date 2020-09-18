@@ -45,7 +45,7 @@ class SetPassword extends DatabaseMailable
      */
     public function build()
     {
-        $this->viewData['url'] = url(route('password.set', [
+        $this->viewData['url'] = url(route('password.setForm', [
             'token' => Password::broker()->createToken($this->user),
             'email' => $this->user->email,
         ], false));

@@ -13,11 +13,10 @@ trait MustVerifyEmail
      */
     public function hasVerifiedEmail()
     {
-        if (setting('users.user_email_verification') === 'disabled') {
-            return true;
-        }
+        if ($this->shouldVerifyEmail())
+            return !is_null($this->email_verified_at);
 
-        return !is_null($this->email_verified_at);
+        return true;
     }
 
     /**
@@ -33,17 +32,26 @@ trait MustVerifyEmail
     }
 
     /**
+     * Mark the given user's email as unverified.
+     *
+     * @return bool
+     */
+    public function markEmailAsUnverified()
+    {
+        return $this->forceFill([
+            'email_verified_at' => null,
+        ])->save();
+    }
+
+    /**
      * Send the email verification notification.
      *
      * @return void
      */
     public function sendEmailVerificationNotification()
     {
-        if (setting('users.user_email_verification') === 'disabled') {
-            return;
-        }
-
-        $this->notify(new VerifyEmail());
+        if ($this->shouldVerifyEmail())
+            $this->notify(new VerifyEmail());
     }
 
     /**
@@ -54,5 +62,15 @@ trait MustVerifyEmail
     public function getEmailForVerification()
     {
         return $this->email;
+    }
+
+    /**
+     * Determines if email verification is enabled.
+     * 
+     * @return bool
+     */
+    public function shouldVerifyEmail()
+    {
+        return setting('users.user_email_verification') === 'enabled';
     }
 }

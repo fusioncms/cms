@@ -24,7 +24,8 @@
             :required="required"
             :hasError="hasError"
             :hasSuccess="hasSuccess"
-            :message="hasMessage">
+            :message="hasMessage"
+            v-model="computedValue">
         </ui-select>
 	</ui-field-group>
 </template>

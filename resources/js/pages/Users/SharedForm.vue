@@ -49,7 +49,7 @@
                 label="Role"
                 :options="roleOptions"
                 autocomplete="off"
-                :value="user ? user.roles.name : null"
+                :value="form.role"
                 :has-error="form.errors.has('role')"
                 :error-message="form.errors.get('role')"
                 required
@@ -57,7 +57,7 @@
             </ui-select-group>
         </section-card>
 
-        <section-card title="Security" description="Configure this user's security details.">
+        <section-card v-if="canEditPassword" title="Security" description="Configure this user's security details.">
             <ui-fieldset :help="user ? 'Only fill out the password fields below if you intend to update the user account password.' : null">
                 <ui-password-group
                     id="user-password"
@@ -87,21 +87,32 @@
             <div class="mb-4">
                 <span class="label">Verification Email</span>
                 <p class="help mb-2">Re-send the verification email to this user.</p>
-                <ui-button variant="secondary">Send Verification</ui-button>
+                <ui-button variant="secondary" @click="emailVerification">Send Verification</ui-button>
             </div>
 
             <div class="mb-4">
                 <span class="label">Password Reset</span>
                 <p class="help mb-2">Force the user to reset their password upon next login attempt.</p>
-                <ui-button variant="secondary">Reset Password</ui-button>
+                <ui-button variant="secondary" @click="passwordReset">Reset Password</ui-button>
             </div>
 
             <div class="mb-4">
                 <span class="label">Delete User</span>
                 <p class="help mb-2">Once you delete this user, there is no going back. Please be certain.</p>
-                <ui-button variant="danger">Delete User</ui-button>
+                <ui-button variant="danger" v-modal:delete-user>Delete User</ui-button>
             </div>
         </section-card>
+
+        <portal to="modals">
+            <ui-modal name="delete-user" title="Delete User" key="delete_user">
+                <p>Are you sure you want to permenantly delete this user?</p>
+
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:delete-user @click="destroy" variant="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-user>Cancel</ui-button>
+                </template>
+            </ui-modal>
+        </portal>
     </div>
 </template>
 
@@ -145,6 +156,37 @@
                 return this.user &&
                        this.$store.state.auth.user &&
                        this.user.id == this.$store.state.auth.user.id
+            }
+        },
+
+        methods: {
+            destroy() {
+                axios.delete(`/api/users/${this.user.id}`)
+                    .then((response) => {
+                        toast('User successfully removed from system.', 'success')
+
+                        this.$router.push('/users')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
+            },
+
+            emailVerification() {
+                axios.post(`/api/users/${this.user.id}/verify`)
+                    .then((response) => {
+                        toast('Email verification notification has been sent to user.', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
+            },
+
+            passwordReset() {
+                axios.post(`/api/users/${this.user.id}/password`)
+                    .then((response) => {
+                        toast('Password reset notification has been sent to user.', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
             }
         }
     }

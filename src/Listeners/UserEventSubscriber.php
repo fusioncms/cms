@@ -4,6 +4,7 @@ namespace Fusion\Listeners;
 
 use Fusion\Models\User;
 use Fusion\Mail\WelcomeNewUser;
+use Fusion\Events\FullyRegistered;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Mail;
 
@@ -41,8 +42,42 @@ class UserEventSubscriber
      */
     public function handleUserRegistration($event)
     {
-        if ($event->user instanceof MustVerifyEmail && !$event->user->hasVerifiedEmail()) {
-            $event->user->sendEmailVerificationNotification();
+        if ($event->user instanceof MustVerifyEmail) {
+
+            // e-mail verification enabled..
+            if ($event->user->shouldVerifyEmail()) {
+
+                // requires email verification..
+                if (! $event->user->hasVerifiedEmail()) {
+                    $event->user->sendEmailVerificationNotification();
+                }
+
+            // e-mail verification disabled..
+            } else {
+                $event->user->markEmailAsVerified();
+
+                event(new Verified($event->user));
+            }
+        } else {
+            event(new FullyRegistered($event->user));
+        }
+    }
+
+    /**
+     * Handle 'user fully registered' event.
+     *
+     * @param  \Fusion\Events\FullyRegistered  $event
+     * @return void
+     */
+    public function handleUserFullRegistration($event)
+    {
+        if (is_null($event->user->fully_registered_at)) {
+            $event->user->forceFill([
+                'fully_registered_at' => now()
+            ])->save();
+            
+            Mail::to($event->user)
+                ->send(new WelcomeNewUser($event->user));
         }
     }
 
@@ -70,17 +105,14 @@ class UserEventSubscriber
     }
 
     /**
-     * Handle 'user verification' event.
+     * Handle 'email verification' event.
      * 
      * @param  \Illuminate\Auth\Events\Verified  $event
      * @return void
      */
     public function handleUserVerification($event)
     {
-        if (setting('users.user_email_welcome') === 'enabled') {
-            Mail::to($event->user)
-                ->send(new WelcomeNewUser($event->user));
-        }
+        event(new FullyRegistered($event->user));
     }
 
     /**
@@ -105,6 +137,11 @@ class UserEventSubscriber
         $events->listen(
             'Illuminate\Auth\Events\Registered',
             [UserEventSubscriber::class, 'handleUserRegistration']
+        );
+
+        $events->listen(
+            'Illuminate\Auth\Events\Registered',
+            [UserEventSubscriber::class, 'handleUserFullRegistration']
         );
 
         $events->listen(

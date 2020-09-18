@@ -149,6 +149,8 @@ Route::prefix('settings')->group(function () {
 Route::apiResource('users', 'Users\UserController');
 Route::apiResource('roles', 'Users\RoleController');
 Route::apiResource('tokens', 'Users\TokenController')->except(['show', 'update']);
+Route::post('users/{user}/verify', 'Users\VerifyEmailController@store');
+Route::post('users/{user}/password', 'Users\ResetPasswordController@store');
 
 /**
  * API - Updates Routes.
