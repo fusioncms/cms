@@ -6,7 +6,7 @@
 
         <portal to="actions">
             <ui-button key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
-            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary">Edit User</ui-button>
+            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary" v-if="$can('users.update')">Edit User</ui-button>
         </portal>
 
         <section-card title="User Information" description="General information about this user.">
@@ -81,6 +81,8 @@
 
 <script>
     export default {
+        permission: 'users.view',
+
         computed: {
             endpoint() {
                 if (this.user.id) {
