@@ -1,16 +1,16 @@
 <template>
-    <div>
+    <div class="matrix-page">
         <portal to="title">
             <page-title icon="layer-group">Matrix</page-title>
         </portal>
 
         <portal to="actions">
-            <router-link :to="{ name: 'matrices.create' }" class="button">Create Matrix</router-link>
+            <ui-button key="create-matrix-btn" :to="{ name: 'matrices.create' }" variant="primary" v-if="$can('matrices.create')">Create Matrix</ui-button>
         </portal>
 
-        <div class="row">
-            <div class="content-container">
-                <ui-table :endpoint="endpoint" id="matrices" sort-by="name" primary-key="handle" key="matrices_table">
+        <ui-card>
+            <ui-card-body>
+                <ui-table key="matrices" class="matrix-table" id="matrices" :endpoint="endpoint" sort-by="name" primary-key="handle" show-page-status show-page-numbers show-page-nav show-page-ends>
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">
                             <ui-status :value="table.record.status" class="mr-2"></ui-status>
@@ -33,20 +33,22 @@
 
                     <template slot="actions" slot-scope="table">
                         <ui-table-actions :id="'matrix_' + table.record.id + '_actions'" :key="'matrix_' + table.record.id + '_actions'">
-                            <ui-dropdown-link :to="{ name: 'matrices.edit', params: {matrix: table.record.id} }">Edit</ui-dropdown-link>
+                            <ui-dropdown-link :to="{ name: 'matrices.edit', params: {matrix: table.record.id} }" v-if="$can('matrices.update')">Edit</ui-dropdown-link>
+
+                            <ui-dropdown-divider></ui-dropdown-divider>
 
                             <ui-dropdown-link
+                                v-if="$can('matrices.delete')"
                                 @click.prevent
                                 v-modal:delete-matrix="table.record"
-                                classes="link--danger"
-                            >
+                                class="danger">
                                 Delete
                             </ui-dropdown-link>
                         </ui-table-actions>
                     </template>
                 </ui-table>
-            </div>
-        </div>
+            </ui-card-body>
+        </ui-card>
 
         <portal to="modals">
             <ui-modal name="delete-matrix" title="Delete Matrix" key="delete_matrix">
