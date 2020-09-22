@@ -7,9 +7,12 @@ use Fusion\Mail\SetPassword;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
 class UserTest extends TestCase
 {
@@ -28,6 +31,9 @@ class UserTest extends TestCase
             'role'   => $this->faker->randomElement(['user', 'guest']),
             'status' => $this->faker->boolean,
         ];
+
+        // suppress any emails..
+        Mail::fake();
     }
 
     /**
@@ -38,8 +44,6 @@ class UserTest extends TestCase
      */
     public function a_user_with_permissions_can_create_a_user()
     {
-        Mail::fake();
-
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/users', $this->attributes)
@@ -61,8 +65,6 @@ class UserTest extends TestCase
      */
     public function a_newly_created_user_will_receive_password_set_notification()
     {
-        Mail::fake();
-
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/users', [
@@ -83,8 +85,6 @@ class UserTest extends TestCase
      */
     public function new_user_creations_will_be_recorded_in_activity_log()
     {
-        Mail::fake();
-        
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/users', $this->attributes)
@@ -206,20 +206,148 @@ class UserTest extends TestCase
      * @group feature
      * @group user
      */
-    public function a_user_with_permissions_can_update_a_user()
+    public function a_user_with_permissions_can_update_a_user_profile()
+    {
+        $attributes = [
+            'name'  => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+        ];
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', "/api/users/{$this->owner->id}", $attributes);
+
+        $this->assertDatabaseHas('users', [
+            'name'  => $attributes['name'],
+            'email' => $attributes['email'],
+        ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group password
+     */
+    public function password_fields_are_not_required_when_updating_user_profile()
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/users/'.$this->user->id, [
-                'name'  => ($name = $this->faker->name),
-                'email' => ($email = $this->faker->unique()->safeEmail),
-            ])
-            ->assertStatus(200);
+            ->json('PATCH', "/api/users/{$this->owner->id}", [
+                'name'  => $this->owner->name,
+                'email' => $this->owner->email,
+            ]);
 
-        $this->assertDatabaseHas('users', [
-            'name'   => $name,
-            'email'  => $email,
-        ]);
+        $this->assertTrue(
+            Hash::check('secret', $this->owner->fresh()->password));
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group password
+     */
+    public function a_user_with_permissions_cannot_update_the_password_of_another_user()
+    {
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', "/api/users/{$this->user->id}", [
+                'name'                  => $this->user->name,
+                'email'                 => $this->user->email,
+                'password'              => 'new-password',
+                'password_confirmation' => 'new-password'
+            ]);
+
+        $this->assertFalse(
+            Hash::check('new-password', $this->user->fresh()->password));
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group password
+     */
+    public function a_user_with_permissions_can_update_their_own_password()
+    {
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', "/api/users/{$this->owner->id}", [
+                'name'                  => $this->owner->name,
+                'email'                 => $this->owner->email,
+                'password'              => 'new-password',
+                'password_confirmation' => 'new-password'
+            ]);
+
+        $this->assertTrue(
+            Hash::check('new-password', $this->owner->fresh()->password));
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group password
+     */
+    public function password_updates_will_be_recorded_in_the_database()
+    {
+        $lastChanged = $this->owner->password_changed_at;
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', "/api/users/{$this->owner->id}", [
+                'name'                  => $this->owner->name,
+                'email'                 => $this->owner->email,
+                'password'              => 'new-password',
+                'password_confirmation' => 'new-password'
+            ]);
+
+        $this->assertTrue($lastChanged <
+            $this->owner->fresh()->password_changed_at);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group password
+     */
+    public function password_confirmation_field_is_required_when_updating_a_password()
+    {
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', "/api/users/{$this->owner->id}", [
+                'name'     => $this->owner->name,
+                'email'    => $this->owner->email,
+                'password' => $this->faker->password
+            ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'password_confirmation' => 'The password confirmation field is required when password is present.',
+            ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group password
+     */
+    public function new_passwords_must_be_at_least_6_characters_long()
+    {
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', "/api/users/{$this->owner->id}", [
+                'name'                  => $this->owner->name,
+                'email'                 => $this->owner->email,
+                'password'              => 'short',
+                'password_confirmation' => 'short',
+            ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'password' => 'The password field must be at least 6 characters long.',
+            ]);
     }
 
     /**
@@ -232,11 +360,10 @@ class UserTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/users/'.$this->user->id, [
+            ->json('PATCH', "/api/users/{$this->user->id}", [
                 'name'  => ($name  = $this->faker->name),
                 'email' => ($email = $this->faker->unique()->safeEmail),
-            ])
-            ->assertStatus(200);
+            ]);
 
         $this->assertDatabaseHas('activity_log', [
             'subject_type' => User::class,
@@ -257,7 +384,7 @@ class UserTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/users/'.$this->user->id, [
+            ->json('PATCH', "/api/users/{$this->user->id}", [
                 'name'  => $this->user->name,
                 'email' => $this->user->email,
                 'role'  => 'fake-role',
@@ -278,7 +405,7 @@ class UserTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/users/'.$this->user->id, [])
+            ->json('PATCH', "/api/users/{$this->user->id}", [])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
                 'name'  => 'The name field is required.',
@@ -316,7 +443,7 @@ class UserTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/users/'.$this->user->id, [
+            ->json('PATCH', "/api/users/{$this->user->id}", [
                 'name'  => $this->user->name,
                 'email' => $this->owner->email,
             ])
@@ -324,5 +451,34 @@ class UserTest extends TestCase
             ->assertJsonValidationErrors([
                 'email' => 'The email has already been taken.',
             ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group user
+     */
+    public function a_user_with_permission_can_resend_email_verification_to_another_user()
+    {
+        Notification::fake();
+
+        setting([
+            'users.user_email_verification' => 'enabled',
+        ]);
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/users/{$this->user->id}/verify")
+            ->assertStatus(202);
+
+        $this->assertFalse($this->user->fresh()->hasVerifiedEmail());
+
+        Notification::assertSentTo($this->user, VerifyEmail::class);
+    }
+
+    public function a_user_with_permission_can_force_another_user_to_reset_password()
+    {
+        
     }
 }

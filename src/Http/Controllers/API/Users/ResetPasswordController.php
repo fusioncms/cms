@@ -5,14 +5,11 @@ namespace Fusion\Http\Controllers\API\Users;
 use Fusion\Models\User;
 use Fusion\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Password;
 
 class ResetPasswordController extends Controller
 {
-    use SendsPasswordResetEmails;
-
     /**
      * Request for user to reset password.
      *
@@ -28,7 +25,6 @@ class ResetPasswordController extends Controller
             'password' => Str::random(),
         ])->save();
 
-        // Send password reset notification..
         $user->sendPasswordResetNotification(
             Password::broker()->createToken($user));
         

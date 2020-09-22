@@ -48,22 +48,31 @@ class UserRequest extends FormRequest
         ];
 
         /**
-         *  Requesting user must be `owner` to re-assign this role.
+         *  Requesting user must be `owner`
+         *    to re-assign `owner` role.
          */
         if (! $this->user()->hasRole('owner')) {
             array_push($rules['role'], Rule::notIn(['owner']));
         }
 
         /**
-         * Admins can update their own password.
+         * Passwords can only be updated by their user.
          */
-        if ($this->method() === 'PATCH') {
-            if ($this->user()->id == $this->user->id) {
-                $rules['password'] = ['sometimes', new SecurePassword()];
-                $rules['password_confirmation'] = 'required_with:password|same:password';
-            }
+        if ($this->isOwningUser()) {
+            $rules['password'] = ['sometimes', new SecurePassword()];
+            $rules['password_confirmation'] = 'required_with:password|same:password';
         }
 
         return $rules;
+    }
+
+    /**
+     * Determine if requesting User is this User.
+     * 
+     * @return boolean
+     */
+    public function isOwningUser()
+    {
+        return $this->user && $this->user()->id == $this->user->id;
     }
 }

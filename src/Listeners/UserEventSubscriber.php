@@ -5,6 +5,7 @@ namespace Fusion\Listeners;
 use Fusion\Models\User;
 use Fusion\Mail\WelcomeNewUser;
 use Fusion\Events\FullyRegistered;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Mail;
 
@@ -72,8 +73,10 @@ class UserEventSubscriber
                 'fully_registered_at' => now()
             ])->save();
             
-            Mail::to($event->user)
-                ->send(new WelcomeNewUser($event->user));
+            if (setting('users.user_email_welcome') === 'enabled') {
+                Mail::to($event->user)
+                    ->send(new WelcomeNewUser($event->user));
+            }
         }
     }
 

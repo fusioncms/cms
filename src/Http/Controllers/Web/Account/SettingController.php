@@ -40,19 +40,17 @@ class SettingController extends Controller
      */
     public function update(SettingRequest $request)
     {
-        $attributes = $request->validated();
-        $user       = auth()->user();
-        $oldEmail   = $user->email;
+        $user         = $request->user();
+        $attributes   = $request->validated();
+        $emailUpdated = $attributes['email'] !== $user->email;
 
         // update..
         $user->update($attributes);
 
         // email update requires new verification..
-        if ($oldEmail !== $attributes['email']) {
-            if ($user instanceof MustVerifyEmail) {
-                $user->markEmailAsUnverified();
-                $user->sendEmailVerificationNotification();
-            }
+        if ($emailUpdated && $user instanceof MustVerifyEmail) {
+            $user->markEmailAsUnverified();
+            $user->sendEmailVerificationNotification();
         }
 
         return back()->with('success', 'Account successfully updated!');
