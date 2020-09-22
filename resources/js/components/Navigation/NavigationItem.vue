@@ -1,5 +1,5 @@
 <template>
-    <li class="nav-menu__item">
+    <li class="nav-menu__item" v-if="shouldShow">
         <span v-if="divider" class="nav-menu__heading"><slot></slot></span>
 
         <router-link v-if="! hasChildren && ! divider" exact :to="to" class="nav-menu__link" @click.native="onClick($event)">
@@ -24,7 +24,7 @@
         </a>
 
         <ul class="nav-menu nav-menu--nested" v-if="hasChildren" v-show="showChildren">
-            <li v-for="(child, id) in children" class="nav-menu__item" :key="id">
+            <li v-for="(child, id) in filteredChildren" class="nav-menu__item" :key="id">
                 <router-link exact :to="child.to" class="nav-menu__link" @click.native="onClick($event)">
                     {{ child.title }}
                 </router-link>
@@ -47,6 +47,11 @@
         },
 
         props: {
+            permission: {
+                type: String,
+                default: '',
+            },
+
             icon: {
                 type: String,
             },
@@ -81,8 +86,33 @@
 
         computed: {
             hasChildren() {
-                return this.children != false
-            }
+                return this.filteredChildren.length > 0
+            },
+
+            shouldShow() {
+                if (! this.hasChildren && this.children) {
+                    return false
+                }
+
+                if (! this.permission) return true
+
+                return this.$can(this.permission)
+            },
+
+            filteredChildren() {
+                if (this.children != false) {
+                    let vm = this
+                    let children = _.filter(this.children, function(child) {
+                        if (!child.permission) return true
+
+                        return vm.$can(child.permission)
+                    })
+
+                    return children
+                }
+
+                return []
+            },
         },
 
         methods: {

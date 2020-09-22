@@ -14,6 +14,7 @@ return [
     'navigation'  => ['viewAny', 'view', 'create', 'update', 'delete'],
     'addons'      => ['viewAny', 'create', 'update', 'delete'],
     'nodes'       => ['viewAny', 'view', 'create', 'update', 'delete'],
+    'permissions' => ['viewAny'],
     'singles'     => ['viewAny', 'view', 'create', 'update', 'delete'],
     'responses'   => ['viewAny', 'view', 'create', 'update', 'delete'],
     'roles'       => ['viewAny', 'view', 'create', 'update', 'delete'],
