@@ -1,5 +1,6 @@
 <template>
     <ui-field-group
+        class="flex flex-wrap items-center"
         :label="label"
         :name="name"
         :fieldId="formattedId"
@@ -10,7 +11,7 @@
         :successMessage="successMessage"
         :help="help">
 
-        <span class="toggle__wrap"
+        <span class="toggle__wrap ml-3"
             :class="[computedValue ? 'toggle__wrap--checked' : 'toggle__wrap--unchecked']">
             <input
                 class="field__toggle"
@@ -76,49 +77,39 @@
                 required: true,
                 type: String,
             },
-
             label: String,
             help: String,
-
             id: {
                 required: false
             },
-
             value: {
                 required: false,
                 type: [String, Number, Boolean, Function, Object, Array, Symbol],
             },
-
             nativeValue: {
                 required: false,
                 type: [String, Number, Boolean, Function, Object, Array, Symbol],
             },
-
             disabled: {
                 type: Boolean,
                 default: false,
             },
-
             required: {
                 type: Boolean,
                 default: false,
             },
-
             indeterminate: {
                 type: Boolean,
                 default: false,
             },
-
             trueValue: {
                 type: [String, Number, Boolean, Function, Object, Array],
                 default: true
             },
-
             falseValue: {
                 type: [String, Number, Boolean, Function, Object, Array],
                 default: false
             },
-
             hasError: Boolean,
             hasSuccess: Boolean,
             errorMessage: String,
