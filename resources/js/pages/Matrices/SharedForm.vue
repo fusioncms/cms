@@ -1,5 +1,5 @@
 <template>
-    <form-container>
+    <div class="matrix-page">
         <portal to="actions">
             <div class="buttons">
                 <ui-button :to="{ name: 'matrices' }" variant="secondary">Go Back</ui-button>
@@ -8,17 +8,36 @@
         </portal>
 
         <section-card title="General Information" description="General information about your collection and what it manages.">
-            <ui-input-group
-                name="name"
-                label="Name"
-                help="What should this matrix be called?"
-                autocomplete="off"
-                autofocus
-                required
-                :has-error="form.errors.has('name')"
-                :error-message="form.errors.get('name')"
-                v-model="form.name">
-            </ui-input-group>
+            <div class="row">
+                <div class="col w-full lg:w-1/2">
+                    <ui-input-group
+                        name="name"
+                        label="Name"
+                        help="What should this matrix be called?"
+                        autocomplete="off"
+                        autofocus
+                        required
+                        :has-error="form.errors.has('name')"
+                        :error-message="form.errors.get('name')"
+                        v-model="form.name">
+                    </ui-input-group>
+                </div>
+                <div class="col w-full lg:w-1/2">
+                    <ui-slug-group
+                        name="handle"
+                        label="Handle"
+                        help="A developer-friendly identifier."
+                        monospaced
+                        autocomplete="off"
+                        required
+                        delimiter="_"
+                        :watch="form.name"
+                        :has-error="form.errors.has('handle')"
+                        :error-message="form.errors.get('handle')"
+                        v-model="form.handle">
+                    </ui-slug-group>
+                </div>
+            </div>
 
             <ui-textarea-group
                 name="description"
@@ -29,6 +48,7 @@
                 :error-message="form.errors.get('description')"
                 v-model="form.description">
             </ui-textarea-group>
+
 
             <ui-select-group
                 name="type"
@@ -48,6 +68,25 @@
                 :error-message="form.errors.get('type')"
                 v-model="form.type">
             </ui-select-group>
+
+            <ui-select-group
+                name="parent_id"
+                label="Parent Matrix"
+                help="Should this matrix belong to another?"
+                :options="parentOptions"
+                :has-error="form.errors.has('parent_id')"
+                :error-message="form.errors.get('parent_id')"
+                v-model="form.parent_id">
+            </ui-select-group>
+
+            <ui-toggle
+                name="status"
+                label="Status"
+                :help="form.status ? 'Toggle to disable this matrix.' : 'Toggle to enable this matrix.'"
+                v-model="form.status"
+                :true-value="1"
+                :false-value="0">
+            </ui-toggle>
         </section-card>
 
         <section-card title="Customizations" description="Configure the various customizations options.">
@@ -81,12 +120,11 @@
                 v-model="form.reference_plural">
             </ui-input-group>
 
-            <hr>
-
             <ui-toggle
                 v-if="form.type == 'collection'"
                 name="show_name_field"
                 label="Show name field"
+                :help="!form.show_name_field ? 'Auto-generate a name using the format in the field below.' : 'Include a name field on this matrix.'"
                 v-model="form.show_name_field"
                 :true-value="1"
                 :false-value="0">
@@ -102,6 +140,35 @@
                 :error-message="form.errors.get('name_format')"
                 v-model="form.name_format">
             </ui-input-group>
+        </section-card>
+
+        <section-card title="Appearance" description="Choose where to show this matrix and how to represent it.">
+            <icon-picker
+                name="icon"
+                label="Icon"
+                placeholder="Search icons..."
+                help="Choose an icon that best represents your matrix."
+                :has-error="form.errors.has('icon')"
+                :error-message="form.errors.get('icon')"
+                required
+                v-model="form.icon">
+            </icon-picker>
+
+            <ui-toggle
+                name="sidebar"
+                label="Show in Sidebar"
+                v-model="form.sidebar"
+                :true-value="1"
+                :false-value="0">
+            </ui-toggle>
+
+            <ui-toggle
+                name="quicklink"
+                label="Show as Quicklink"
+                v-model="form.quicklink"
+                :true-value="1"
+                :false-value="0">
+            </ui-toggle>
         </section-card>
 
         <section-card title="Routing" description="Configure how entries within the collection will be accessed on the frontend.">
@@ -131,89 +198,7 @@
         <section-card title="Blueprint" description="Configure this matrix' blueprint.">
             <section-builder v-model="form.sections"></section-builder>
         </section-card>
-
-        <template v-slot:sidebar>
-            <div class="card">
-                <div class="card__body">
-                    <ui-slug-group
-                        name="handle"
-                        label="Handle"
-                        monospaced
-                        autocomplete="off"
-                        required
-                        delimiter="_"
-                        :watch="form.name"
-                        :has-error="form.errors.has('handle')"
-                        :error-message="form.errors.get('handle')"
-                        v-model="form.handle">
-                    </ui-slug-group>
-
-                    <ui-select-group
-                        name="parent_id"
-                        label="Parent Matrix"
-                        help="Should this matrix belong to another?"
-                        :options="parentOptions"
-                        :has-error="form.errors.has('parent_id')"
-                        :error-message="form.errors.get('parent_id')"
-                        v-model="form.parent_id">
-                    </ui-select-group>
-
-                    <ui-toggle
-                        name="status"
-                        label="Status"
-                        v-model="form.status"
-                        :true-value="1"
-                        :false-value="0">
-                    </ui-toggle>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card__body">
-                    <icon-picker
-                        name="icon"
-                        label="Icon"
-                        placeholder="Search icons..."
-                        help="Choose an icon that best represents your matrix."
-                        :has-error="form.errors.has('icon')"
-                        :error-message="form.errors.get('icon')"
-                        required
-                        v-model="form.icon">
-                    </icon-picker>
-
-                    <ui-toggle
-                        name="sidebar"
-                        label="Show in Sidebar"
-                        v-model="form.sidebar"
-                        :true-value="1"
-                        :false-value="0">
-                    </ui-toggle>
-
-                    <ui-toggle
-                        name="quicklink"
-                        label="Show as Quicklink"
-                        v-model="form.quicklink"
-                        :true-value="1"
-                        :false-value="0">
-                    </ui-toggle>
-                </div>
-            </div>
-
-            <ui-definition-list v-if="matrix">
-                <ui-definition name="Status">
-                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': matrix.status, 'text-danger-500': ! matrix.status}"></fa-icon> {{ matrix.status ? 'Enabled' : 'Disabled' }}
-                </ui-definition>
-
-                <ui-definition name="Created At">
-                    {{ $moment(matrix.created_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-
-                <ui-definition name="Updated At">
-                    {{ $moment(matrix.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-            </ui-definition-list>
-        </template>
-    </form-container>
+    </div>
 </template>
 
 <script>
