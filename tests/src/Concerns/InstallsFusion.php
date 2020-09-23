@@ -7,8 +7,8 @@ use Fusion\Console\Installer\CreateDefaultPermissions;
 use Fusion\Console\Installer\CreateDefaultRoles;
 use Fusion\Facades\Addon;
 use Fusion\Facades\Theme;
-use Fusion\Models\User;
 use Fusion\Models\Mailable;
+use Fusion\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 

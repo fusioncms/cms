@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use Fusion\Tests\TestCase;
 use Fusion\Models\Mailable;
+use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;

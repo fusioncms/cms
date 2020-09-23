@@ -2,19 +2,18 @@
 
 namespace Fusion\Tests\Feature\Auth;
 
+use Fusion\Events\FullyRegistered;
 use Fusion\Mail\WelcomeNewUser;
 use Fusion\Models\User;
 use Fusion\Tests\TestCase;
-use Fusion\Events\FullyRegistered;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class RegisterTest extends TestCase
 {
@@ -26,7 +25,7 @@ class RegisterTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
         //--
-        
+
         // supress any emails..
         Mail::fake();
         Notification::fake();
@@ -132,7 +131,7 @@ class RegisterTest extends TestCase
      */
     public function successful_registration_will_fire_registrated_event()
     {
-        Event::fake([ Registered::class ]);
+        Event::fake([Registered::class]);
 
         $this->makeUserRegistration();
 
@@ -162,7 +161,7 @@ class RegisterTest extends TestCase
      */
     public function successful_registration_will_forgo_email_verification_if_setting_disabled()
     {
-        Event::fake([ Verified::class ]);
+        Event::fake([Verified::class]);
 
         setting([
             'users.user_email_welcome'      => 'disabled',
@@ -171,7 +170,7 @@ class RegisterTest extends TestCase
 
         $user = $this->makeUserRegistration();
 
-        Event::assertDispatched(Verified::class, function($mail) use ($user) {
+        Event::assertDispatched(Verified::class, function ($mail) use ($user) {
             return $mail->user->id == $user->id;
         });
     }
@@ -183,7 +182,7 @@ class RegisterTest extends TestCase
      */
     public function verified_registration_will_fire_fully_registrated_event()
     {
-        Event::fake([ FullyRegistered::class ]);
+        Event::fake([FullyRegistered::class]);
 
         setting([
             'users.user_email_verification' => 'disabled',
@@ -236,7 +235,7 @@ class RegisterTest extends TestCase
 
     /**
      * Simulate successful registration form.
-     * 
+     *
      * @return \Fusion\Models\User
      */
     private function makeUserRegistration()

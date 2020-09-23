@@ -4,7 +4,6 @@ namespace Fusion\Tests\Feature\Users;
 
 use Fusion\Models\Permission;
 use Fusion\Models\Role;
-use Fusion\Models\User;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -200,7 +199,7 @@ class RoleTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/users/' . $this->user->id, [
+            ->json('PATCH', '/api/users/'.$this->user->id, [
                 'name'  => $this->user->name,
                 'email' => $this->user->email,
                 'role'  => 'owner',

@@ -5,10 +5,10 @@ namespace Fusion\Mail;
 use Exception;
 use Fusion\Models\Mailable;
 use Illuminate\Mail\Mailable as BaseMailable;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 
 abstract class DatabaseMailable extends BaseMailable
@@ -82,7 +82,7 @@ abstract class DatabaseMailable extends BaseMailable
         $template = "views/emails/{$mailable->handle}.blade.php";
 
         // Register temporary template path..
-        View::addLocation($path);     
+        View::addLocation($path);
 
         // Layout contents
         $contents = File::get(view($this->layout)->getPath());

@@ -13,8 +13,9 @@ trait MustVerifyEmail
      */
     public function hasVerifiedEmail()
     {
-        if ($this->shouldVerifyEmail())
+        if ($this->shouldVerifyEmail()) {
             return !is_null($this->email_verified_at);
+        }
 
         return true;
     }
@@ -50,8 +51,9 @@ trait MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
-        if ($this->shouldVerifyEmail())
+        if ($this->shouldVerifyEmail()) {
             $this->notify(new VerifyEmail());
+        }
     }
 
     /**
@@ -66,7 +68,7 @@ trait MustVerifyEmail
 
     /**
      * Determines if email verification is enabled.
-     * 
+     *
      * @return bool
      */
     public function shouldVerifyEmail()

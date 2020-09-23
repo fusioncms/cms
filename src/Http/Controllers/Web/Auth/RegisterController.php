@@ -5,7 +5,6 @@ namespace Fusion\Http\Controllers\Web\Auth;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;

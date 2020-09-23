@@ -59,7 +59,7 @@ class ResetPasswordTest extends TestCase
      */
     public function a_valid_user_can_reset_password_with_a_valid_token()
     {
-        Event::fake([ PasswordReset::class ]);
+        Event::fake([PasswordReset::class]);
 
         $validToken = Password::broker()->createToken($this->user);
 

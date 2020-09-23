@@ -7,9 +7,9 @@ use Fusion\Tests\TestCase;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\URL;
 
 class EmailVerificationTest extends TestCase
 {
@@ -65,7 +65,7 @@ class EmailVerificationTest extends TestCase
     public function an_unverified_user_will_not_see_verification_notice_if_user_email_verification_setting_disabled()
     {
         setting([
-            'users.user_email_verification' => 'disabled'
+            'users.user_email_verification' => 'disabled',
         ]);
 
         $this
@@ -101,7 +101,7 @@ class EmailVerificationTest extends TestCase
         // Creating for `unverified user`.
         $validSignature = URL::signedRoute('verification.verify', [
             'id'   => $this->unverifiedUser->id,
-            'hash' => sha1($this->unverifiedUser->email)
+            'hash' => sha1($this->unverifiedUser->email),
         ]);
 
         $this
@@ -122,7 +122,7 @@ class EmailVerificationTest extends TestCase
         // Creating for `unverified user`.
         $validSignature = URL::signedRoute('verification.verify', [
             'id'   => $this->unverifiedUser->id,
-            'hash' => sha1($this->unverifiedUser->email)
+            'hash' => sha1($this->unverifiedUser->email),
         ]);
 
         $this
@@ -132,7 +132,8 @@ class EmailVerificationTest extends TestCase
 
         // assert user is still unverified..
         $this->assertFalse(
-            $this->unverifiedUser->fresh()->hasVerifiedEmail());
+            $this->unverifiedUser->fresh()->hasVerifiedEmail()
+        );
     }
 
     /**
@@ -148,7 +149,7 @@ class EmailVerificationTest extends TestCase
         // Creating for `unverified user`.
         $invalidSignature = URL::signedRoute('verification.verify', [
             'id'   => 123,
-            'hash' => sha1($this->unverifiedUser->email)
+            'hash' => sha1($this->unverifiedUser->email),
         ]);
 
         $this
@@ -158,7 +159,8 @@ class EmailVerificationTest extends TestCase
 
         // assert user is still unverified..
         $this->assertFalse(
-            $this->unverifiedUser->fresh()->hasVerifiedEmail());
+            $this->unverifiedUser->fresh()->hasVerifiedEmail()
+        );
     }
 
     /**
@@ -171,7 +173,8 @@ class EmailVerificationTest extends TestCase
         $this->assertTrue(
             $this
                 ->verifyUser($this->unverifiedUser)
-                ->hasVerifiedEmail());
+                ->hasVerifiedEmail()
+        );
     }
 
     /**
@@ -200,7 +203,7 @@ class EmailVerificationTest extends TestCase
     public function a_newly_verified_user_will_not_receive_welcome_email_if_setting_disabled()
     {
         setting([
-            'users.user_email_welcome' => 'disabled'
+            'users.user_email_welcome' => 'disabled',
         ]);
 
         $this->verifyUser($this->unverifiedUser);
@@ -216,7 +219,7 @@ class EmailVerificationTest extends TestCase
     public function a_guest_cannot_resend_verification_email()
     {
         $this->withExceptionHandling();
-        
+
         $this
             ->post(route('verification.resend'))
             ->assertRedirect('/login');
@@ -254,12 +257,13 @@ class EmailVerificationTest extends TestCase
     }
 
     // ----------------------------------------
-    
+
     /**
      * Successfully verify user.
-     * [helper]
-     * 
-     * @param  \Fusion\Models\User $user
+     * [helper].
+     *
+     * @param \Fusion\Models\User $user
+     *
      * @return \Fusion\Models\User
      */
     private function verifyUser($user)
@@ -268,7 +272,7 @@ class EmailVerificationTest extends TestCase
         // Creating for `unverified user`.
         $route = URL::signedRoute('verification.verify', [
             'id'   => $user->id,
-            'hash' => sha1($user->email)
+            'hash' => sha1($user->email),
         ]);
 
         $this

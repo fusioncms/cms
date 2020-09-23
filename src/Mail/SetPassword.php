@@ -40,7 +40,7 @@ class SetPassword extends DatabaseMailable
 
     /**
      * Include `token url` into $this->viewData.
-     * 
+     *
      * @return $this
      */
     public function build()
