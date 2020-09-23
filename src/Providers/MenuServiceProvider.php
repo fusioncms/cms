@@ -41,9 +41,9 @@ class MenuServiceProvider extends ServiceProvider
     private function adminNavigation()
     {
         $items = collect([
-            'dashboard'   => ['title' => 'Dashboard',    'to' => '/',      'icon' => 'grip-horizontal'],
+            'dashboard'   => ['title' => 'Dashboard', 'to' => '/', 'icon' => 'grip-horizontal', 'permission' => 'access.controlPanel'],
             'filemanager' => ['title' => 'File Manager', 'to' => '/files', 'icon' => 'images'],
-            'inbox'       => ['title' => 'Inbox',        'to' => '/inbox', 'icon' => 'inbox'],
+            'inbox'       => ['title' => 'Inbox', 'to' => '/inbox', 'icon' => 'inbox'],
         ]);
 
         // matrices
@@ -135,9 +135,9 @@ class MenuServiceProvider extends ServiceProvider
                 'title'    => 'Users',
                 'icon'     => 'users',
                 'children' => [
-                    'users'       => ['title' => 'Users',       'to' => '/users'],
-                    'roles'       => ['title' => 'Roles',       'to' => '/roles'],
-                    'permissions' => ['title' => 'Permissions', 'to' => '/permissions'],
+                    'users'       => ['title' => 'Users', 'to' => '/users', 'permission' => 'users.viewAny'],
+                    'roles'       => ['title' => 'Roles', 'to' => '/roles', 'permission' => 'roles.viewAny'],
+                    'permissions' => ['title' => 'Permissions', 'to' => '/permissions', 'permission' => 'permissions.viewAny'],
                 ],
             ],
             'customize' => [

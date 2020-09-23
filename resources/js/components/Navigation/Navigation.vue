@@ -3,7 +3,7 @@
         <div class="nav__container">
             <nav class="nav-menu">
                 <ul class="nav-menu__list">
-                    <nav-item v-for="(item, id) in navigation" :key="id" :to="item.to" :icon="item.icon" :children="item.children" :divider="item.divider || false">
+                    <nav-item v-for="(item, id) in navigation" :key="id" :to="item.to" :icon="item.icon" :children="item.children" :divider="item.divider || false" :permission="item.permission">
                         {{ item.title }}
                     </nav-item>
                 </ul>
