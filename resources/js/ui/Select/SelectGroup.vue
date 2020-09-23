@@ -17,14 +17,15 @@
             :readonly="readonly"
             :disabled="disabled"
             :multiple="multiple"
-            :value="value"
             :options="options"
             :filterable="filterable"
             :showControls="showControls"
             :required="required"
             :hasError="hasError"
             :hasSuccess="hasSuccess"
-            :message="hasMessage">
+            :message="hasMessage"
+            :value="value"
+            @input="onInput($event)">
         </ui-select>
 	</ui-field-group>
 </template>
@@ -125,6 +126,12 @@
                 required: false,
                 type: Boolean,
                 default: false
+            }
+        },
+
+        methods: {
+            onInput(e) {
+                this.$emit('input', e)
             }
         }
     }
