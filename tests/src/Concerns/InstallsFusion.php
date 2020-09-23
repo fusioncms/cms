@@ -48,8 +48,6 @@ trait InstallsFusion
 
         Artisan::call('fusion:flush');
         Artisan::call('fusion:sync');
-
-        Mailable::registerNewMailables();
     }
 
     /**
