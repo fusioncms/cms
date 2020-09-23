@@ -2,19 +2,19 @@
 
 namespace Fusion\Http\Controllers\API\Users;
 
-use Fusion\Models\User;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class ResetPasswordController extends Controller
 {
     /**
      * Request for user to reset password.
      *
-     * @param \Illuminate\Http\Request  $request
-     * @param \Fusion\Models\User       $user
+     * @param \Illuminate\Http\Request $request
+     * @param \Fusion\Models\User      $user
      *
      * @return void
      */
@@ -26,8 +26,9 @@ class ResetPasswordController extends Controller
         ])->save();
 
         $user->sendPasswordResetNotification(
-            Password::broker()->createToken($user));
-        
+            Password::broker()->createToken($user)
+        );
+
         return response()->json([], 202);
     }
 }

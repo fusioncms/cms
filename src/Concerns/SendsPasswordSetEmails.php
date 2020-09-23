@@ -2,8 +2,8 @@
 
 namespace Fusion\Concerns;
 
-use Fusion\Models\User;
 use Fusion\Mail\SetPassword;
+use Fusion\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 trait SendsPasswordSetEmails
@@ -11,7 +11,8 @@ trait SendsPasswordSetEmails
     /**
      * Send the password set notification.
      *
-     * @param  string  $token
+     * @param string $token
+     *
      * @return void
      */
     protected function sendPasswordSetNotification(User $user)

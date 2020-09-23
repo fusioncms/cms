@@ -2,17 +2,17 @@
 
 namespace Fusion\Tests\Feature\Users;
 
-use Fusion\Models\User;
 use Fusion\Mail\SetPassword;
+use Fusion\Models\User;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 
 class UserTest extends TestCase
@@ -61,7 +61,8 @@ class UserTest extends TestCase
 
         // role..
         $this->assertTrue(
-            $user->hasRole($this->attributes['role']));
+            $user->hasRole($this->attributes['role'])
+        );
     }
 
     /**
@@ -80,7 +81,7 @@ class UserTest extends TestCase
                 'email' => $this->faker->unique()->safeEmail,
             ]);
 
-        Mail::assertSent(SetPassword::class, function($mail) {
+        Mail::assertSent(SetPassword::class, function ($mail) {
             return $mail->user->id === User::latest('id')->first()->id;
         });
     }
@@ -219,7 +220,7 @@ class UserTest extends TestCase
         $attributes = [
             'name'  => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
-            'role'  => 'admin'
+            'role'  => 'admin',
         ];
 
         $this
@@ -255,7 +256,8 @@ class UserTest extends TestCase
             ]);
 
         $this->assertTrue(
-            Hash::check('secret', $this->owner->fresh()->password));
+            Hash::check('secret', $this->owner->fresh()->password)
+        );
     }
 
     /**
@@ -272,11 +274,12 @@ class UserTest extends TestCase
                 'name'                  => $this->user->name,
                 'email'                 => $this->user->email,
                 'password'              => 'new-password',
-                'password_confirmation' => 'new-password'
+                'password_confirmation' => 'new-password',
             ]);
 
         $this->assertFalse(
-            Hash::check('new-password', $this->user->fresh()->password));
+            Hash::check('new-password', $this->user->fresh()->password)
+        );
     }
 
     /**
@@ -293,11 +296,12 @@ class UserTest extends TestCase
                 'name'                  => $this->owner->name,
                 'email'                 => $this->owner->email,
                 'password'              => 'new-password',
-                'password_confirmation' => 'new-password'
+                'password_confirmation' => 'new-password',
             ]);
 
         $this->assertTrue(
-            Hash::check('new-password', $this->owner->fresh()->password));
+            Hash::check('new-password', $this->owner->fresh()->password)
+        );
     }
 
     /**
@@ -316,7 +320,7 @@ class UserTest extends TestCase
                 'name'                  => $this->owner->name,
                 'email'                 => $this->owner->email,
                 'password'              => 'new-password',
-                'password_confirmation' => 'new-password'
+                'password_confirmation' => 'new-password',
             ]);
 
         $this->assertTrue($lastChanged <
@@ -336,7 +340,7 @@ class UserTest extends TestCase
             ->json('PATCH', "/api/users/{$this->owner->id}", [
                 'name'     => $this->owner->name,
                 'email'    => $this->owner->email,
-                'password' => $this->faker->password
+                'password' => $this->faker->password,
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
@@ -510,7 +514,8 @@ class UserTest extends TestCase
 
         // assert password changed..
         $this->assertFalse(
-            Hash::check('secret', $this->user->fresh()->password));
+            Hash::check('secret', $this->user->fresh()->password)
+        );
 
         $this->assertDatabaseHas('password_resets', [
             'email' => $this->user->email,

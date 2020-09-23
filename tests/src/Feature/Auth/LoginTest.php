@@ -74,7 +74,7 @@ class LoginTest extends TestCase
             ->from('/login')
             ->post('/login', [
                 'email'    => $this->owner->email,
-                'password' => 'secret'
+                'password' => 'secret',
             ]);
 
         $this->assertDatabaseHas('activity_log', [
@@ -97,7 +97,7 @@ class LoginTest extends TestCase
             ->from('/login')
             ->post('/login', [
                 'email'    => $this->owner->email,
-                'password' => 'secret'
+                'password' => 'secret',
             ]);
 
         $this->assertEquals(0, $this->owner->invalid_logins);
@@ -160,8 +160,10 @@ class LoginTest extends TestCase
                 'password' => 'invalid-password',
             ]);
 
-        $this->assertEquals(1,
-            $this->user->fresh()->invalid_logins);
+        $this->assertEquals(
+            1,
+            $this->user->fresh()->invalid_logins
+        );
     }
 
     /**

@@ -132,7 +132,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return "//www.gravatar.com/avatar/{$email}?s={$size}";
     }
-    
+
     /**
      * Determine if the user has verified their email address.
      *

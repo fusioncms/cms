@@ -4,8 +4,8 @@ namespace Fusion\Http\Controllers\Web\Account;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\Account\SettingRequest;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {

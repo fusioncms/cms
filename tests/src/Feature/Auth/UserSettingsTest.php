@@ -4,11 +4,11 @@ namespace Fusion\Tests\Feature\Auth;
 
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Validation\ValidationException;
 
 class UserSettingsTest extends TestCase
@@ -118,7 +118,7 @@ class UserSettingsTest extends TestCase
             ->be($this->user)
             ->post('/account/settings', [
                 'name'  => $this->user->name,
-                'email' => $this->faker->unique()->safeEmail
+                'email' => $this->faker->unique()->safeEmail,
             ]);
 
         $this->assertFalse($this->user->fresh()->hasVerifiedEmail());
@@ -143,7 +143,7 @@ class UserSettingsTest extends TestCase
             ->be($this->user)
             ->post('/account/settings', [
                 'name'  => $this->user->name,
-                'email' => $this->faker->unique()->safeEmail
+                'email' => $this->faker->unique()->safeEmail,
             ]);
 
         $this->assertTrue($this->user->fresh()->hasVerifiedEmail());

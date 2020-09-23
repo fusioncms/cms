@@ -2,9 +2,9 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Fusion\Rules\SecurePassword;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -29,7 +29,7 @@ class UserRequest extends FormRequest
         $this->merge([
             'status' => $this->status ?? true,
             'role'   => $this->role ? $this->role :
-                setting('users.default_user_role', 'user')
+                setting('users.default_user_role', 'user'),
         ]);
     }
 
@@ -41,11 +41,11 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $id = $this->user->id ?? null;
-        
+
         $rules = [
             'name'   => 'required',
             'email'  => 'required|email|unique:users,email,'.$id,
-            'role'   => ['sometimes','exists:roles,name'],
+            'role'   => ['sometimes', 'exists:roles,name'],
             'status' => 'sometimes|boolean',
         ];
 
@@ -53,7 +53,7 @@ class UserRequest extends FormRequest
          *  `Owner` role can only be assigned by user with
          *    existing `owner` role.
          */
-        if (! $this->user()->hasRole('owner')) {
+        if (!$this->user()->hasRole('owner')) {
             array_push($rules['role'], Rule::notIn(['owner']));
         }
 
@@ -61,7 +61,7 @@ class UserRequest extends FormRequest
          * Passwords can only be updated by their user.
          */
         if ($this->isOwningUser()) {
-            $rules['password'] = ['sometimes', new SecurePassword()];
+            $rules['password']              = ['sometimes', new SecurePassword()];
             $rules['password_confirmation'] = 'required_with:password|same:password';
         }
 
@@ -70,8 +70,8 @@ class UserRequest extends FormRequest
 
     /**
      * Determine if requesting User is this User.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isOwningUser()
     {

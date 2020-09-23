@@ -7,7 +7,6 @@ use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\UserRequest;
 use Fusion\Http\Resources\UserResource;
 use Fusion\Models\User;
-use Fusion\Events\Users\NewBackendUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -113,9 +112,10 @@ class UserController extends Controller
 
     /**
      * Assure only one `owner` exists.
-     * [helper]
+     * [helper].
      *
-     * @param  \Fusion\Models\User $user
+     * @param \Fusion\Models\User $user
+     *
      * @return void
      */
     private function assureOwnerRoleLimit(User $user)
