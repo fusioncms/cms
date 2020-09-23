@@ -41,7 +41,8 @@ Auth::routes([
     'confirm'  => true,
 ]);
 
-Route::get('logout', 'Auth\LoginController@logout');
+Route::get('password/set/{token}', 'Auth\SetPasswordController@showSetForm')->name('password.setForm');
+Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['prefix' => 'account', 'middleware' => ['auth', 'verified']], function () {
     Route::get('/', 'Account\SettingController@index');

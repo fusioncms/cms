@@ -2,8 +2,8 @@
 
 namespace Fusion\Tests\Feature;
 
-use Fusion\Models\Mailable;
 use Fusion\Tests\TestCase;
+use Fusion\Models\Mailable;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,9 +18,7 @@ class MailableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        Mailable::registerNewMailables();
-
+        
         $this->handleValidationExceptions();
     }
 

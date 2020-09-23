@@ -2,6 +2,7 @@
 
 namespace Fusion\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Fusion\Rules\SecurePassword;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,16 +15,8 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        $authorized = $this->user()->can('users.'.($this->method() === 'POST' ? 'create' : 'update'));
-
-        /**
-         * Only user with role `owner` may re-assign this role.
-         */
-        if ($this->role == 'owner') {
-            $authorized = $this->user()->hasRole('owner');
-        }
-
-        return $authorized;
+        return $this->user()->can('users.'.
+            ($this->method() === 'POST' ? 'create' : 'update'));
     }
 
     /**
@@ -35,6 +28,8 @@ class UserRequest extends FormRequest
     {
         $this->merge([
             'status' => $this->status ?? true,
+            'role'   => $this->role ? $this->role :
+                setting('users.default_user_role', 'user')
         ]);
     }
 
@@ -46,23 +41,40 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $id = $this->user->id ?? null;
-
+        
         $rules = [
-            'name'              => 'required',
-            'email'             => 'required|email|unique:users,email,'.$id,
-            'role'              => 'sometimes|exists:roles,name',
-            'status'            => 'sometimes|boolean',
-            'email_verified_at' => 'sometimes|required',
-
-            'password_confirmation' => 'required_with:password|same:password',
+            'name'   => 'required',
+            'email'  => 'required|email|unique:users,email,'.$id,
+            'role'   => ['sometimes','exists:roles,name'],
+            'status' => 'sometimes|boolean',
         ];
 
-        if ($this->method() === 'POST') {
-            $rules['password'] = ['required', new SecurePassword()];
-        } else {
+        /**
+         *  `Owner` role can only be assigned by user with
+         *    existing `owner` role.
+         */
+        if (! $this->user()->hasRole('owner')) {
+            array_push($rules['role'], Rule::notIn(['owner']));
+        }
+
+        /**
+         * Passwords can only be updated by their user.
+         */
+        if ($this->isOwningUser()) {
             $rules['password'] = ['sometimes', new SecurePassword()];
+            $rules['password_confirmation'] = 'required_with:password|same:password';
         }
 
         return $rules;
+    }
+
+    /**
+     * Determine if requesting User is this User.
+     * 
+     * @return boolean
+     */
+    public function isOwningUser()
+    {
+        return $this->user && $this->user()->id == $this->user->id;
     }
 }

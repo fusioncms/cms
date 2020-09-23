@@ -2,15 +2,19 @@
 
 namespace Fusion\Http\Controllers\API\Users;
 
-use Fusion\Events\UserDeleted;
+use Fusion\Concerns\SendsPasswordSetEmails;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\UserRequest;
 use Fusion\Http\Resources\UserResource;
 use Fusion\Models\User;
+use Fusion\Events\Users\NewBackendUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    use SendsPasswordSetEmails;
+
     /**
      * Return a paginated resource of all users.
      *
@@ -51,22 +55,16 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $attributes             = $request->validated();
-        $attributes['password'] = bcrypt($attributes['password']);
+        $attributes['password'] = bcrypt($attributes['password'] ?? Str::random());
 
-        $user = User::create($attributes);
+        $user = User::create($attributes)
+            ->assignRole($attributes['role']);
 
-        // role assignment..
-        if (isset($attributes['role'])) {
-            if ($attributes['role'] === 'owner') {
-                User::role('owner')
-                    ->where('id', '<>', $user->id)
-                    ->each(function ($user) {
-                        $user->syncRoles('admin');
-                    });
-            }
+        // handle role setting..
+        $this->assureOwnerRoleLimit($user);
 
-            $user->assignRole($attributes['role']);
-        }
+        // Note: suppression req'd during imports..
+        $this->sendPasswordSetNotification($user);
 
         return new UserResource($user);
     }
@@ -81,29 +79,20 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        $attributes = $request->validated();
+        $attributes  = $request->validated();
 
         // password (optional)..
-        if (isset($attributes['password'])) {
+        if ($request->isOwningUser() && isset($attributes['password'])) {
             $attributes['password'] = bcrypt($attributes['password']);
 
             $user->logPasswordChange();
         }
 
         $user->update($attributes);
+        $user->syncRoles($attributes['role']);
 
-        // role assignment..
-        if (isset($attributes['role'])) {
-            if ($attributes['role'] === 'owner') {
-                User::role('owner')
-                    ->where('id', '<>', $user->id)
-                    ->each(function ($user) {
-                        $user->syncRoles('admin');
-                    });
-            }
-
-            $user->syncRoles($attributes['role']);
-        }
+        // handle role setting..
+        $this->assureOwnerRoleLimit($user);
 
         return new UserResource($user);
     }
@@ -119,8 +108,28 @@ class UserController extends Controller
     {
         $this->authorize('users.delete');
 
-        event(new UserDeleted($user));
-
         $user->delete();
+    }
+
+    /**
+     * Assure only one `owner` exists.
+     * [helper]
+     *
+     * @param  \Fusion\Models\User $user
+     * @return void
+     */
+    private function assureOwnerRoleLimit(User $user)
+    {
+        if ($user->hasRole('owner')) {
+            /**
+             * Assure no other user has `owner` role.
+             */
+            User::role('owner')
+                ->where('id', '<>', $user->id)
+                ->each(function ($user) {
+                    $user->removeRole('owner');
+                    $user->assignRole('admin');
+                });
+        }
     }
 }

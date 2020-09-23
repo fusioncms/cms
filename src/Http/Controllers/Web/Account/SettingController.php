@@ -5,6 +5,7 @@ namespace Fusion\Http\Controllers\Web\Account;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\Account\SettingRequest;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class SettingController extends Controller
 {
@@ -39,7 +40,18 @@ class SettingController extends Controller
      */
     public function update(SettingRequest $request)
     {
-        auth()->user()->update($request->validated());
+        $user         = $request->user();
+        $attributes   = $request->validated();
+        $emailUpdated = $attributes['email'] !== $user->email;
+
+        // update..
+        $user->update($attributes);
+
+        // email update requires new verification..
+        if ($emailUpdated && $user instanceof MustVerifyEmail) {
+            $user->markEmailAsUnverified();
+            $user->sendEmailVerificationNotification();
+        }
 
         return back()->with('success', 'Account successfully updated!');
     }
