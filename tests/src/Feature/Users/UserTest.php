@@ -8,6 +8,7 @@ use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Mail;
@@ -477,8 +478,29 @@ class UserTest extends TestCase
         Notification::assertSentTo($this->user, VerifyEmail::class);
     }
 
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group user
+     */
     public function a_user_with_permission_can_force_another_user_to_reset_password()
     {
-        
+        Notification::fake();
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/users/{$this->user->id}/password")
+            ->assertStatus(202);
+
+        // assert password changed..
+        $this->assertFalse(
+            Hash::check('secret', $this->user->fresh()->password));
+
+        $this->assertDatabaseHas('password_resets', [
+            'email' => $this->user->email,
+        ]);
+
+        Notification::assertSentTo($this->user, ResetPassword::class);
     }
 }
