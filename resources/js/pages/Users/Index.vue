@@ -158,11 +158,32 @@
 
         methods: {
             destroy(id) {
-                axios.delete('/api/users/' + id).then((response) => {
-                    toast('User successfully deleted.', 'success')
+                axios.delete(`/api/users/${id}`)
+                    .then((response) => {
+                        toast('User successfully deleted.', 'success')
 
-                    bus().$emit('refresh-datatable-users')
-                })
+                        bus().$emit('refresh-datatable-users')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
+            },
+
+            emailVerification(id) {
+                axios.post(`/api/users/${id}/verify`)
+                    .then((response) => {
+                        toast('Email verification notification has been sent to user.', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
+            },
+
+            passwordReset(id) {
+                axios.post(`/api/users/${id}/password`)
+                    .then((response) => {
+                        toast('Password reset notification has been sent to user.', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
             }
         }
     }

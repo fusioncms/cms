@@ -92,9 +92,11 @@ class UserEventSubscriber
         $event->user->logPasswordChange();
 
         // auto-matically verify user email..
-        if ($user instanceof MustVerifyEmail) {
-            if ($event->user->shouldVerifyEmail() && ! $user->hasVerifiedEmail()) {
-                $user->markEmailAsVerified();
+        if ($event->user instanceof MustVerifyEmail) {
+            if ($event->user->shouldVerifyEmail() && ! $event->user->hasVerifiedEmail()) {
+                $event->user->markEmailAsVerified();
+
+                event(new Verified($event->user));
             }
         }
     }

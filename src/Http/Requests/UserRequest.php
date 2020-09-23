@@ -28,6 +28,8 @@ class UserRequest extends FormRequest
     {
         $this->merge([
             'status' => $this->status ?? true,
+            'role'   => $this->role ? $this->role :
+                setting('users.default_user_role', 'user')
         ]);
     }
 
@@ -48,8 +50,8 @@ class UserRequest extends FormRequest
         ];
 
         /**
-         *  Requesting user must be `owner`
-         *    to re-assign `owner` role.
+         *  `Owner` role can only be assigned by user with
+         *    existing `owner` role.
          */
         if (! $this->user()->hasRole('owner')) {
             array_push($rules['role'], Rule::notIn(['owner']));

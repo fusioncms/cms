@@ -4,12 +4,9 @@ namespace Fusion\Http\Controllers\Web\Auth;
 
 use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class SetPasswordController extends Controller
 {
-    use ResetsPasswords;
-
     /**
      * Display the password set view for the given token.
      *

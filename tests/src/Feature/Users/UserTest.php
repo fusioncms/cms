@@ -50,11 +50,18 @@ class UserTest extends TestCase
             ->json('POST', '/api/users', $this->attributes)
             ->assertStatus(201);
 
+        // user..
         $this->assertDatabaseHas('users', [
             'name'   => $this->attributes['name'],
             'email'  => $this->attributes['email'],
             'status' => $this->attributes['status'],
         ]);
+
+        $user = User::latest('id')->first();
+
+        // role..
+        $this->assertTrue(
+            $user->hasRole($this->attributes['role']));
     }
 
     /**
@@ -212,16 +219,24 @@ class UserTest extends TestCase
         $attributes = [
             'name'  => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
+            'role'  => 'admin'
         ];
 
         $this
             ->be($this->owner, 'api')
             ->json('PATCH', "/api/users/{$this->owner->id}", $attributes);
 
+        // user..
         $this->assertDatabaseHas('users', [
             'name'  => $attributes['name'],
             'email' => $attributes['email'],
         ]);
+
+        $user = $this->owner->fresh();
+
+        // role..
+        $this->assertFalse($user->hasRole('owner'));
+        $this->assertTrue($user->hasRole('admin'));
     }
 
     /**

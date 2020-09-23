@@ -57,7 +57,8 @@ class UserController extends Controller
         $attributes             = $request->validated();
         $attributes['password'] = bcrypt($attributes['password'] ?? Str::random());
 
-        $user = User::create($attributes);
+        $user = User::create($attributes)
+            ->assignRole($attributes['role']);
 
         // handle role setting..
         $this->assureOwnerRoleLimit($user);
@@ -88,6 +89,7 @@ class UserController extends Controller
         }
 
         $user->update($attributes);
+        $user->syncRoles($attributes['role']);
 
         // handle role setting..
         $this->assureOwnerRoleLimit($user);
@@ -112,21 +114,22 @@ class UserController extends Controller
     /**
      * Assure only one `owner` exists.
      * [helper]
-     *   
+     *
+     * @param  \Fusion\Models\User $user
      * @return void
      */
     private function assureOwnerRoleLimit(User $user)
     {
-        if ($role = request()->input('role')) {
-            if ($role === 'owner') {
-                User::role('owner')
-                    ->where('id', '<>', $user->id)
-                    ->each(function ($user) {
-                        $user->syncRoles('admin');
-                    });
-            }
-
-            $user->assignRole($role);
+        if ($user->hasRole('owner')) {
+            /**
+             * Assure no other user has `owner` role.
+             */
+            User::role('owner')
+                ->where('id', '<>', $user->id)
+                ->each(function ($user) {
+                    $user->removeRole('owner');
+                    $user->assignRole('admin');
+                });
         }
     }
 }
