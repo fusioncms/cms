@@ -87,13 +87,13 @@
             <div class="mb-4">
                 <span class="label">Verification Email</span>
                 <p class="help mb-2">Re-send the verification email to this user.</p>
-                <ui-button variant="secondary" @click="emailVerification">Send Verification</ui-button>
+                <ui-button variant="secondary" v-modal:verify-user>Send Verification</ui-button>
             </div>
 
             <div class="mb-4">
                 <span class="label">Password Reset</span>
                 <p class="help mb-2">Force the user to reset their password upon next login attempt.</p>
-                <ui-button variant="secondary" @click="passwordReset">Reset Password</ui-button>
+                <ui-button variant="secondary" v-modal:password-user>Reset Password</ui-button>
             </div>
 
             <div class="mb-4">
@@ -104,6 +104,24 @@
         </section-card>
 
         <portal to="modals">
+            <ui-modal name="verify-user" title="Verification Email" key="verify_user">
+                <p>Are you sure you want to re-send the verification email to this user?</p>
+
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:verify-user @click="emailVerification" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:verify-user>Cancel</ui-button>
+                </template>
+            </ui-modal>
+
+            <ui-modal name="password-user" title="Password Reset" key="password_user">
+                <p>Are you sure you want to force user to reset their password upon next login attempt?</p>
+
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:password-user @click="passwordReset" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:password-user>Cancel</ui-button>
+                </template>
+            </ui-modal>
+
             <ui-modal name="delete-user" title="Delete User" key="delete_user">
                 <p>Are you sure you want to permenantly delete this user?</p>
 

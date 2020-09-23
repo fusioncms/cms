@@ -62,9 +62,19 @@
 
                             <ui-dropdown-divider></ui-dropdown-divider>
 
-                            <ui-dropdown-link href="#" v-if="$can('users.update')">Resend Verification</ui-dropdown-link>
+                            <ui-dropdown-link
+                                v-if="$can('users.update')"
+                                @click.prevent
+                                v-modal:verify-user="table.record">
+                                Resend Verification
+                            </ui-dropdown-link>
 
-                            <ui-dropdown-link href="#" v-if="$can('users.update')">Reset Password</ui-dropdown-link>
+                            <ui-dropdown-link
+                                v-if="$can('users.update')"
+                                @click.prevent
+                                v-modal:password-user="table.record">
+                                Reset Password
+                            </ui-dropdown-link>
 
                             <ui-dropdown-link
                                 v-if="table.record.id != $user.id && $can('users.delete')"
@@ -80,6 +90,24 @@
         </ui-card>
 
         <portal to="modals">
+            <ui-modal name="verify-user" title="Verification Email">
+                <p>Are you sure you want to re-send the verification email to this user?</p>
+
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:verify-user @click="emailVerification(user.data.id)" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:verify-user>Cancel</ui-button>
+                </template>
+            </ui-modal>
+
+            <ui-modal name="password-user" title="Password Reset">
+                <p>Are you sure you want to force user to reset their password upon next login attempt?</p>
+
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:password-user @click="passwordReset(user.data.id)" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:password-user>Cancel</ui-button>
+                </template>
+            </ui-modal>
+
             <ui-modal name="delete-user" title="Delete User">
                 <p>Are you sure you want to permenantly delete this user?</p>
 
