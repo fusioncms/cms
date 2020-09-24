@@ -16,7 +16,7 @@
     &:disabled { opacity: 0.5; }
 
     &--title {
-        @apply font-bold text-xl px-6 py-3;
+        @apply font-bold text-xl py-3;
 
         &:hover { @apply bg-gray-200; }
 
@@ -36,6 +36,10 @@
     &--input {}
 
     &--textarea {}
+
+    &--xs {
+        @apply text-xs px-1 py-1;
+    }
 
     &--sm {
         @apply text-sm px-2 py-1;

@@ -1,6 +1,10 @@
 <template>
     <div class="form-group" :class="{'form-group--danger': hasError, 'form-group--success': hasSuccess}">
+        <slot name="top">
+        </slot>
+
         <ui-label :fieldId="fieldId" :required="required" :hideLabel="hideLabel" v-if="label">{{ label }}</ui-label>
+        
         <slot></slot>
 
         <div :id="fieldId + '_message'" class="form-group__messages" v-if="hasMessage">

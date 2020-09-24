@@ -15,7 +15,8 @@
                         <div class="flex items-center">
                             <ui-status :value="table.record.status" class="mr-2"></ui-status>
 
-                            <router-link :to="{ name: 'matrices.edit', params: {matrix: table.record.id} }">{{ table.record.name }}</router-link>
+                            <router-link v-if="$can('matrices.update')" :to="{ name: 'matrices.edit', params: {matrix: table.record.id} }">{{ table.record.name }}</router-link>
+                            <span v-else>{{ table.record.name }}</span>
                         </div>
                     </template>
 
@@ -56,7 +57,7 @@
 
                 <template slot="footer" slot-scope="matrix">
                     <ui-button v-modal:delete-matrix @click="destroy(matrix.data.id)" variant="danger" class="ml-3">Delete</ui-button>
-                    <ui-button v-modal:delete-matrix>Cancel</ui-button>
+                    <ui-button v-modal:delete-matrix variant="secondary">Cancel</ui-button>
                 </template>
             </ui-modal>
         </portal>
