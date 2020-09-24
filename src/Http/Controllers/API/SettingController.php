@@ -51,7 +51,7 @@ class SettingController extends Controller
             return $relationships->contains('handle', $handle);
         })->toArray();
 
-        $setting->settings()->update($validated);
+        $setting->settings->update($validated);
 
         // Persist relationships...
         foreach ($relationships as $relationship) {
