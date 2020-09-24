@@ -11,9 +11,9 @@ class Backup extends Task
      * 
      * @return void
      */
-	public function handle()
-	{
-		$this->schedule
+    protected function handle()
+    {
+        $this->schedule
             ->job(new BackupRun)
             ->daily()
             ->timezone(setting('system.time_zone'))
@@ -22,5 +22,5 @@ class Backup extends Task
             ->when(function() {
                 return setting('backups.scheduled_backups', 'disabled') == 'enabled';
             });
-	}
+    }
 }

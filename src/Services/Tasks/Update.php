@@ -6,14 +6,14 @@ use Fusion\Facades\Version;
 
 class Update extends Task
 {
-	/**
+    /**
      * Schedule Task.
      * 
      * @return void
      */
-	public function handle()
-	{
-		$this->schedule
+    protected function handle()
+    {
+        $this->schedule
             ->command('fusion:update')
             ->daily()
             ->timezone(setting('system.time_zone'))
@@ -23,5 +23,5 @@ class Update extends Task
                 return Version::isAutoUpdateEnabled() &&
                        Version::hasUpdate();
             });
-	}
+    }
 }
