@@ -14,6 +14,7 @@
             :disabled="disabled"
             :required="required"
             :native-value="value"
+            :indeterminate="indeterminate"
             v-model="computedValue">
             <slot></slot>
         </ui-checkbox>
@@ -47,6 +48,10 @@
                 default: false,
             },
             disabled: {
+                type: Boolean,
+                default: false,
+            },
+            indeterminate: {
                 type: Boolean,
                 default: false,
             },
