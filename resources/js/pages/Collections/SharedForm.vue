@@ -24,7 +24,7 @@
                     v-if="collection.show_name_field">
                 </ui-title-group>
                 
-                <div class="entry-slug" v-if="form.slug || form.errors.has('slug')">
+                <div class="entry-slug" v-if="form.slug">
                     <div v-if="!editSlug" class="entry-slug__current">
                         <span class="entry-slug__label">Slug:</span> 
 
@@ -33,7 +33,7 @@
                         <ui-button class="entry-slug__action" size="xsmall" @click.prevent="openEdit()">Edit</ui-button>
                     </div>
 
-                    <div v-if="editSlug || form.errors.has('slug')" class="entry-slug__edit">
+                    <div v-if="editSlug" class="entry-slug__edit">
                         <label v-if="editSlug" class="entry-slug__label" for="edit-slug">Slug:</label>
 
                         <ui-slug
@@ -49,8 +49,6 @@
 
                         <ui-button class="entry-slug__action" variant="secondary" size="xsmall" @click.prevent="closeEdit()">Cancel</ui-button>
                     </div>
-
-                    <ui-help-danger v-if="form.errors.has('slug')" id="edit-error">{{ form.errors.get('slug') }}</ui-help-danger>
                 </div>
 
                 <ui-slug
