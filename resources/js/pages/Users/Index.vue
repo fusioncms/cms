@@ -10,7 +10,7 @@
 
         <ui-card>
             <ui-card-body>
-                <ui-table key="users" class="user-table" id="users" :endpoint="endpoint" sort-by="name" show-page-status show-page-numbers show-page-nav show-page-ends>
+                <ui-table bulk key="users" class="user-table" id="users" :endpoint="endpoint" sort-by="name" show-page-status show-page-numbers show-page-nav show-page-ends>
                     <template v-slot:toolbarPrepend>
                         <ui-toolbar-group>
                             <ui-dropdown id="user-roles">

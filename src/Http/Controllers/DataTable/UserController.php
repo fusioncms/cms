@@ -18,6 +18,29 @@ class UserController extends DataTableController
         }
     }
 
+    /**
+     * Get the available bulk actions.
+     *
+     * @return array
+     */
+    public function getBulkActions()
+    {
+        return [
+            'Resend Email Verification' => [
+                'permission' => '',
+                'handler'    => '',
+            ],
+            'Reset Password' => [
+                'permission' => '',
+                'handler'    => '',
+            ],
+            'Delete' => [
+                'permission' => '',
+                'handler'    => '',
+            ],
+        ];
+    }
+
     public function getDisplayableColumns()
     {
         return [
@@ -47,5 +70,10 @@ class UserController extends DataTableController
             'created_at'        => 'Created',
             'email_verified_at' => 'Verified',
         ];
+    }
+
+    protected function deleteUsersAction()
+    {
+        dd('deleting users...');
     }
 }

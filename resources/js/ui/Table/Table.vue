@@ -87,7 +87,27 @@
                 <!-- Table Head -->
                 <thead>
                     <tr>
+                        <th v-if="bulk" width="50px">
+                            <div class="pl-4 flex items-center">
+                                <ui-checkbox-single
+                                    name="toggle-select-all"
+                                    id="toggle-select-all"
+                                    :checked="records.length === selected.length"
+                                    @input="toggleSelectAll"
+                                    :indeterminate="true"
+                                ></ui-checkbox-single>
+
+                                <!-- <input
+                                    type="checkbox"
+                                    @change="toggleSelectAll"
+                                    :checked="records.length === selected.length"
+                                    :indeterminate.prop="selected.length > 0 && (records.length !== selected.length)"
+                                > -->
+                            </div>
+                        </th>
+
                         <th v-for="(column, index) in displayable"
+                            v-show="! hasSelections"
                             :class="{'sortable': isSortable(column), 'active': (sort.key === column)}"
                             :key="column[primaryKey] || index">
                             <a href="#" v-if="isSortable(column)" class="table__heading table__heading--link" @click.prevent="isSortable(column) && sortRecordsBy(column)" :aria-label="'Sort by ' + column_names[column] || column">
@@ -105,17 +125,42 @@
                             </span>
                         </th>
 
-                        <th v-if="hasActions" class="w-20">&nbsp;</th>
+                        <th v-show="hasSelections" :colspan="displayable.length">
+                            <span class="table__heading">
+                                {{ this.selected.length }} record{{ this.selected.length > 1 ? 's' : '' }} selected
+                            </span>
+                        </th>
+
+                        <th v-if="bulk">
+                            <div class="flex justify-end mr-4">
+                                <select name="bulk-actions" class="p-1 border rounded" id="bulk-actions">
+                                    <option selected disabled>Bulk Actions</option>
+
+                                    <option v-for="(data, action) in bulk_actions" :key="action">{{ action }}</option>
+                                </select>
+                            </div>
+                        </th>
+
+                        <th v-if="hasActions && ! bulk" class="w-20">&nbsp;</th>
                     </tr>
                 </thead>
 
                 <!-- Table Body -->
                 <tbody>
                     <tr v-for="(record, index) in records" :key="record[primaryKey] || index">
+                        <td v-if="bulk">
+                            <ui-checkbox-single
+                                :name="'select-' + record[primaryKey] || index"
+                                :id="'select-' + record[primaryKey] || index"
+                                :native-value="record[primaryKey]"
+                                v-model="selected"
+                            ></ui-checkbox-single>
+                        </td>
+
                         <td v-for="column in displayable"
                             :key="column">
                             <span class="column-label">{{ column_names[column] || column }}</span>
-        
+
                             <slot :name="column" :record="record">
                                 {{ record[column] }}
                             </slot>
@@ -132,7 +177,7 @@
         <!-- Pagination -->
         <div class="pagination-group" v-if="this.pagination.totalPages > 1">
             <div v-if="showPageStatus" class="pagination-group__item">
-                <ui-pagination-status 
+                <ui-pagination-status
                     :total="this.pagination.totalPages"
                     :value="this.pagination.currentPage">
                 </ui-pagination-status>
@@ -181,6 +226,10 @@
                 required: true,
                 type: String
             },
+            bulk: {
+                type: Boolean,
+                default: false
+            },
             noRecords: {
                 type: String,
                 default: 'No records to display'
@@ -207,7 +256,8 @@
             },
             primaryKey: {
                 required: false,
-                type: String
+                type: String,
+                default: 'id'
             },
             showPageStatus: {
                 type: Boolean,
@@ -241,6 +291,7 @@
                 loading: true,
                 displayable: [],
                 column_names: [],
+                bulk_actions: [],
                 sortable: [],
                 records: [],
                 search: '',
@@ -260,6 +311,7 @@
                     key: this.sortBy,
                     order: this.sortIn,
                 },
+                selected: [],
             }
         },
 
@@ -276,6 +328,10 @@
             hasActions() {
                 return !!this.$slots.actions || !!this.$scopedSlots.actions
             },
+
+            hasSelections() {
+                return this.selected.length > 0
+            }
         },
 
         watch: {
@@ -291,6 +347,15 @@
         },
 
         methods: {
+            toggleSelectAll() {
+                if (this.selected.length > 0) {
+                    this.selected = []
+                    return
+                }
+
+                this.selected = _.map(this.records, 'id')
+            },
+
             getRecords() {
                 this.loading = true
 
@@ -299,6 +364,7 @@
                     this.displayable = response.data.displayable
                     this.sortable = response.data.sortable
                     this.column_names = response.data.column_names
+                    this.bulk_actions = response.data.bulk_actions
                     this.pagination.totalRecords = response.data.records.total
                     this.pagination.totalPages = response.data.records.last_page
 

@@ -32,7 +32,7 @@
                 newValue: this.value,
             }
         },
-        
+
         props: {
             name: {
                 required: true,
