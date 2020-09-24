@@ -51,8 +51,8 @@ class CollectionController extends DataTableController
     public function getCustomColumnNames()
     {
         return [
-            'name'   => 'Name',
-            'slug'   => 'Slug',
+            'name'       => 'Name',
+            'slug'       => 'Slug',
             'created_at' => 'Created',
             'updated_at' => 'Updated',
         ];
