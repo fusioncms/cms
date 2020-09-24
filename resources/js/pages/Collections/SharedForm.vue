@@ -24,16 +24,16 @@
                     v-if="collection.show_name_field">
                 </ui-title-group>
                 
-                <div class="entry-slug" v-if="form.slug">
+                <div class="entry-slug" v-if="form.slug || form.errors.has('slug')">
                     <div v-if="!editSlug" class="entry-slug__current">
                         <span class="entry-slug__label">Slug:</span> 
 
                         <span class="entry-slug__value">{{ form.slug }}</span>
 
-                        <a href="#" class="entry-slug__action" @click.prevent="toggleEdit()">Edit</a>
+                        <ui-button class="entry-slug__action" size="xsmall" @click.prevent="openEdit()">Edit</ui-button>
                     </div>
 
-                    <div v-if="editSlug" class="entry-slug__edit">
+                    <div v-if="editSlug || form.errors.has('slug')" class="entry-slug__edit">
                         <label v-if="editSlug" class="entry-slug__label" for="edit-slug">Slug:</label>
 
                         <ui-slug
@@ -45,10 +45,12 @@
                             v-model="slugValue">
                         </ui-slug>
 
-                        <a href="#" class="entry-slug__action" @click.prevent="saveSlug()">Apply</a>
+                        <ui-button class="entry-slug__action" variant="primary" size="xsmall" @click.prevent="saveSlug()">Apply</ui-button>
 
-                        <a href="#" class="entry-slug__action" @click.prevent="toggleEdit()">Cancel</a>
+                        <ui-button class="entry-slug__action" variant="secondary" size="xsmall" @click.prevent="closeEdit()">Cancel</ui-button>
                     </div>
+
+                    <ui-help-danger v-if="form.errors.has('slug')" id="edit-error">{{ form.errors.get('slug') }}</ui-help-danger>
                 </div>
 
                 <ui-slug
@@ -101,15 +103,15 @@
         </section-card>
 
         <section-card v-for="(section) in sections.sidebar" :key="section.handle" :title="section.name" :description="section.description">
-                <component
-                    v-for="field in section.fields"
-                    :key="field.handle"
-                    :is="field.type.id + '-fieldtype'"
-                    :field="field"
-                    :has-error="form.errors.has(field.handle)"
-                    :error-message="form.errors.get(field.handle)"
-                    v-model="form[field.handle]">
-                </component>
+            <component
+                v-for="field in section.fields"
+                :key="field.handle"
+                :is="field.type.id + '-fieldtype'"
+                :field="field"
+                :has-error="form.errors.has(field.handle)"
+                :error-message="form.errors.get(field.handle)"
+                v-model="form[field.handle]">
+            </component>
         </section-card>
     </div>
 </template>
@@ -154,14 +156,14 @@
         },
 
         methods: {
-            toggleEdit() {
-                if (this.editSlug) {
-                    this.slugValue = ''
-                } else {
-                    this.slugValue = this.form.slug
-                }
+            openEdit() {
+                this.slugValue = this.form.slug
+                this.editSlug = true
+            },
 
-                this.editSlug = !this.editSlug
+            closeEdit() {
+                this.slugValue = ''
+                this.editSlug = false
             },
 
             saveSlug() {
@@ -171,7 +173,7 @@
                     this.form.slug = this.slugValue
                 }
 
-                this.toggleEdit()
+                this.closeEdit()
             }
         }
     }

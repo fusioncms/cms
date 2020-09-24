@@ -1,5 +1,5 @@
 .entry-slug {
-    @apply relative flex leading-normal text-sm mt-2;
+    @apply leading-normal text-sm mt-2;
 
     &__current,
     &__edit {
@@ -16,7 +16,7 @@
         @apply flex-wrap;
 
         input { 
-            @apply leading-normal tracking-wide w-full flex-shrink;
+            @apply flex-auto leading-normal mr-2 mb-2 tracking-wide w-full flex-shrink;
             
             @screen lg {
                 width: 400px;
@@ -25,20 +25,16 @@
         }
     }
 
-    &__info {
-        @apply inline-block absolute top-0 right-0;
-    }
-
     &__label {
-        @apply inline-block mr-2 py-1;
+        @apply inline-block mr-2 mb-2;
         font-weight: 600;
     }
 
     &__value {
-        @apply text-xs px-1 py-1 border rounded leading-normal tracking-wide bg-gray-100 font-mono;
+        @apply flex-auto text-xs px-1 py-1 mb-2 mr-2 border rounded leading-normal tracking-wide bg-gray-100 font-mono;
     }
 
     &__action {
-        @apply inline-block ml-2 py-1;
+        @apply inline-block mr-2 mb-2;
     }
 }
