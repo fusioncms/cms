@@ -19,8 +19,6 @@ class MailableTest extends TestCase
     {
         parent::setUp();
 
-        Mailable::registerNewMailables();
-
         $this->handleValidationExceptions();
     }
 

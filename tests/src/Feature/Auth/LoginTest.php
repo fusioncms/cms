@@ -3,6 +3,7 @@
 namespace Fusion\Tests\Feature\Auth;
 
 use Auth;
+use Fusion\Models\User;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -65,6 +66,48 @@ class LoginTest extends TestCase
      * @test
      * @group fusioncms
      * @group auth
+     * @group activity
+     */
+    public function a_successful_login_will_be_tracked_in_activity_log()
+    {
+        $this
+            ->from('/login')
+            ->post('/login', [
+                'email'    => $this->owner->email,
+                'password' => 'secret',
+            ]);
+
+        $this->assertDatabaseHas('activity_log', [
+            'subject_type' => User::class,
+            'subject_id'   => $this->owner->id,
+            'causer_type'  => User::class,
+            'causer_id'    => $this->owner->id,
+            'description'  => "Signed in ({$this->owner->name})",
+        ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group auth
+     */
+    public function a_successful_login_will_clear_failed_login_attempts()
+    {
+        $this
+            ->from('/login')
+            ->post('/login', [
+                'email'    => $this->owner->email,
+                'password' => 'secret',
+            ]);
+
+        $this->assertEquals(0, $this->owner->invalid_logins);
+        $this->assertNull($this->owner->invalidly_logged_in_at);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group auth
      */
     public function login_form_requires_a_valid_email()
     {
@@ -101,6 +144,26 @@ class LoginTest extends TestCase
         $this->assertTrue(session()->hasOldInput('email'));
         $this->assertFalse(session()->hasOldInput('password'));
         $this->assertGuest();
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group auth
+     */
+    public function a_failed_login_attempt_will_record_invalid_attempts()
+    {
+        $this
+            ->from('/login')
+            ->post('/login', [
+                'email'    => $this->user->email,
+                'password' => 'invalid-password',
+            ]);
+
+        $this->assertEquals(
+            1,
+            $this->user->fresh()->invalid_logins
+        );
     }
 
     /**

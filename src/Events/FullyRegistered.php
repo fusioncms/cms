@@ -4,19 +4,21 @@ namespace Fusion\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-class UserDeleted
+class FullyRegistered
 {
     use SerializesModels;
 
     /**
-     * @var Fusion\Models\User
+     * The authenticated user.
+     *
+     * @var \Illuminate\Contracts\Auth\Authenticatable
      */
     public $user;
 
     /**
      * Create a new event instance.
      *
-     * @param User $user
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
      *
      * @return void
      */

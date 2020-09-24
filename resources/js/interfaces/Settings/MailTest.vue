@@ -9,8 +9,8 @@
 
 	    <div class="content-container">
 			<!-- SMTP -->
-			<div v-show="settings.mail_driver == 'smtp'">
-				<ui-input-group name="stmp_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input-group>
+			<div v-show="settings.mail_default == 'smtp'">
+				<ui-input-group name="stmp_driver" label="Driver" v-model="settings.mail_default" readonly></ui-input-group>
 				<ui-input-group name="stmp_host" label="Host" v-model="settings.mail_smtp_host" readonly></ui-input-group>
 				<ui-input-group name="stmp_port" label="Port" v-model="settings.mail_smtp_port" readonly></ui-input-group>
 				<ui-input-group name="stmp_username" label="Username" v-model="settings.mail_smtp_username" readonly></ui-input-group>
@@ -20,21 +20,21 @@
 			</div>
 
 			<!-- Sparkpost -->
-			<div v-show="settings.mail_driver == 'sparkpost'">
-				<ui-input-group name="sparkpost_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input-group>
+			<div v-show="settings.mail_default == 'sparkpost'">
+				<ui-input-group name="sparkpost_driver" label="Driver" v-model="settings.mail_default" readonly></ui-input-group>
 				<ui-input-group name="sparkpost_scret" type="password" label="Secret" v-model="settings.mail_sparkpost_secret" readonly></ui-input-group>
 			</div>
 
 			<!-- Mailgun -->
-			<div v-show="settings.mail_driver == 'mailgun'">
-				<ui-input-group name="mailgun_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input-group>
+			<div v-show="settings.mail_default == 'mailgun'">
+				<ui-input-group name="mailgun_driver" label="Driver" v-model="settings.mail_default" readonly></ui-input-group>
 				<ui-input-group name="mailgun_domain" label="Domain" v-model="settings.mail_mailgun_domain" readonly></ui-input-group>
 				<ui-input-group name="mailgun_secret" type="password" label="Secret" v-model="settings.mail_mailgun_secret" readonly></ui-input-group>
 			</div>
 
 			<!-- Mandrill -->
-			<div v-show="settings.mail_driver == 'mandrill'">
-				<ui-input-group name="mandrill_driver" label="Driver" v-model="settings.mail_driver" readonly></ui-input-group>
+			<div v-show="settings.mail_default == 'mandrill'">
+				<ui-input-group name="mandrill_driver" label="Driver" v-model="settings.mail_default" readonly></ui-input-group>
 				<ui-input-group name="mandrill_scret" type="password" label="Secret" v-model="settings.mail_mandrill_secret" readonly></ui-input-group>
 			</div>
 

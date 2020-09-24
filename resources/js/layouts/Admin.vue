@@ -42,8 +42,6 @@
                                     </ui-dropdown-item>
                                 </mq-layout>
 
-                                <ui-dropdown-divider />
-
                                 <ui-dropdown-link href="/" target="_blank" @click.native="onClick()">
                                     <fa-icon icon="eye" class="icon"></fa-icon>
                                     View website
@@ -51,10 +49,17 @@
 
                                 <ui-dropdown-divider />
 
-                                <ui-dropdown-link :to="'/users/' + $user.id + '/edit'" @click.native="onClick()">
-                                    <fa-icon icon="user" class="icon"></fa-icon>
-                                    Account
+                                <ui-dropdown-link :to="'/users/' + $user.id" @click.native="onClick()">
+                                    <fa-icon icon="id-card" class="icon"></fa-icon>
+                                    View Profile
                                 </ui-dropdown-link>
+
+                                <ui-dropdown-link :to="'/users/' + $user.id + '/edit'" @click.native="onClick()">
+                                    <fa-icon icon="user-cog" class="icon"></fa-icon>
+                                    Edit Profile
+                                </ui-dropdown-link>
+
+                                <ui-dropdown-divider />
 
                                 <ui-dropdown-link href="/logout">
                                     <fa-icon icon="sign-out-alt" class="icon"></fa-icon>

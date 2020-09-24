@@ -3,12 +3,13 @@
 namespace Fusion\Mail;
 
 use Exception;
-use File;
 use Fusion\Models\Mailable;
 use Illuminate\Mail\Mailable as BaseMailable;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Storage;
 
 abstract class DatabaseMailable extends BaseMailable
 {
@@ -81,7 +82,7 @@ abstract class DatabaseMailable extends BaseMailable
         $template = "views/emails/{$mailable->handle}.blade.php";
 
         // Register temporary template path..
-        app('view.finder')->addLocation($path);
+        View::addLocation($path);
 
         // Layout contents
         $contents = File::get(view($this->layout)->getPath());
@@ -95,7 +96,8 @@ abstract class DatabaseMailable extends BaseMailable
             Storage::disk('temp')->delete($template);
         });
 
-        return $this->markdown($mailable->handle);
+        // Finally, set markdown for email..
+        $this->markdown($this->getHandle());
     }
 
     /**

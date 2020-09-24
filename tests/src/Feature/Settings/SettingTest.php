@@ -63,7 +63,7 @@ class SettingTest extends TestCase
      */
     public function a_request_for_setting_can_be_loaded_by_full_address()
     {
-        $this->assertTrue(setting('mail.mail_driver') === 'smtp');
+        $this->assertTrue(setting('mail.mail_default') === 'smtp');
         $this->assertTrue(setting('mail.mail_server') === 'server@example.com');
     }
 

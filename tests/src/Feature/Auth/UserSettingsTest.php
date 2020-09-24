@@ -4,9 +4,11 @@ namespace Fusion\Tests\Feature\Auth;
 
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 
 class UserSettingsTest extends TestCase
@@ -83,26 +85,70 @@ class UserSettingsTest extends TestCase
      */
     public function a_user_can_update_their_personal_information()
     {
-        $old = $this->owner->toArray();
-        $new = [
+        $attributes = [
             'name'  => $this->faker->name,
-            'email' => $this->faker->safeEmail,
+            'email' => $this->user->email,
         ];
 
         $this
-            ->be($this->owner)
-            ->post('/account/settings', $new);
+            ->be($this->user)
+            ->post('/account/settings', $attributes);
 
         $this->assertDatabaseHas('users', [
-            'id'    => $this->owner->id,
-            'name'  => $new['name'],
-            'email' => $new['email'],
+            'id'    => $this->user->id,
+            'name'  => $attributes['name'],
+            'email' => $attributes['email'],
+        ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group auth
+     */
+    public function a_user_will_need_to_verify_an_updated_email_if_setting_enabled()
+    {
+        Notification::fake();
+
+        setting([
+            'users.user_email_verification' => 'enabled',
         ]);
 
-        $this->assertDatabaseMissing('users', [
-            'id'    => $this->owner->id,
-            'name'  => $old['name'],
-            'email' => $old['email'], ]);
+        $this
+            ->be($this->user)
+            ->post('/account/settings', [
+                'name'  => $this->user->name,
+                'email' => $this->faker->unique()->safeEmail,
+            ]);
+
+        $this->assertFalse($this->user->fresh()->hasVerifiedEmail());
+
+        Notification::assertSentTo($this->user, VerifyEmail::class);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group auth
+     */
+    public function email_verification_will_be_forgoed_when_for_email_updates_if_setting_disabled()
+    {
+        Notification::fake();
+
+        setting([
+            'users.user_email_verification' => 'disabled',
+        ]);
+
+        $this
+            ->be($this->user)
+            ->post('/account/settings', [
+                'name'  => $this->user->name,
+                'email' => $this->faker->unique()->safeEmail,
+            ]);
+
+        $this->assertTrue($this->user->fresh()->hasVerifiedEmail());
+
+        Notification::assertNothingSent($this->user, VerifyEmail::class);
     }
 
     /**
