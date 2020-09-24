@@ -1,0 +1,44 @@
+.entry-slug {
+    @apply relative flex leading-normal text-sm mt-2;
+
+    &__current,
+    &__edit {
+        @apply flex flex-wrap w-full;
+
+        @screen lg {
+            @apply flex flex-no-wrap items-center;
+        }
+    }
+
+    &__current {}
+
+    &__edit {
+        @apply flex-wrap;
+
+        input { 
+            @apply leading-normal tracking-wide w-full flex-shrink;
+            
+            @screen lg {
+                width: 400px;
+                max-width: 100%;
+            }
+        }
+    }
+
+    &__info {
+        @apply inline-block absolute top-0 right-0;
+    }
+
+    &__label {
+        @apply inline-block mr-2 py-1;
+        font-weight: 600;
+    }
+
+    &__value {
+        @apply text-xs px-1 py-1 border rounded leading-normal tracking-wide bg-gray-100 font-mono;
+    }
+
+    &__action {
+        @apply inline-block ml-2 py-1;
+    }
+}

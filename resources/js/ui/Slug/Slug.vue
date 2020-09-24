@@ -117,6 +117,7 @@
 
             model(value) {
                 this.inSync = ! this.isLocked && (value === '' || value === this.slugify(this.watch))
+                this.model = this.slugify(value)
             }
         },
 
@@ -143,6 +144,7 @@
                 const b = 'aaaaeeeeiiiioooouuuuncsyyyoarsnpwgnmuxzh'
                 const p = new RegExp(a.split('').join('|'), 'g')
                 const d = new RegExp(this.delimiter + '{2,}', 'g')
+                const e = new RegExp('^' + this.delimiter + '+|' +this.delimiter + '+$', 'g')
 
                 return value
                     .toString()
@@ -153,6 +155,7 @@
                     .replace(/([^\w\s]|_)+/g, ' ')           // Remove all non-word chars
                     .replace(/\s+/g, this.delimiter)         // Convert spaces with delimiter
                     .replace(d, this.delimiter)              // Replace multiple delimiters with a single one
+                    .replace(e, '')                          // Remove first and last floating delimiter if exists
             }
         }
     }
