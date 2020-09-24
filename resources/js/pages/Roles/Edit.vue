@@ -13,10 +13,12 @@
     import SharedForm from './SharedForm'
 
     export default {
+        permission: 'roles.update',
+
         head: {
             title() {
                 return {
-                    inner: this.role.name || 'Loading...'
+                    inner: this.role.label || 'Loading...'
                 }
             }
         },

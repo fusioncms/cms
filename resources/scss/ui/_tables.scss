@@ -1,0 +1,110 @@
+
+.table-wrapper {
+    @screen md {
+        @apply relative border-gray-300 bg-white rounded border p-px;
+    }
+
+    &.loading {
+        &:after {
+            @apply absolute top-0 left-0 right-0 bottom-0 block w-full h-full z-20;
+            content: '';
+            background: rgba(white, 0.5);
+        }
+    }
+}
+
+.table {
+    @apply w-full text-sm;
+    table-layout: fixed;
+    word-wrap: break-word;
+
+    &__heading {
+        @apply relative block w-full px-3 py-3;
+
+        @screen lg {
+            @apply px-4;
+        }
+
+        &--link {
+            color: inherit;
+            transition: all 0.3s $transition-effect;
+
+            &:hover,
+            &:active,
+            &:focus { 
+                color: inherit;
+                z-index: 1; 
+            }
+        }
+    }
+
+    &__actions {
+        @apply align-middle text-center absolute p-3 right-0 top-0;
+
+        @screen md {
+            @apply align-middle px-6 text-right relative  w-12;
+        }
+
+        .dropdown__menu { @apply w-40; }
+    }
+
+    thead {
+        @apply hidden;
+
+        @screen md { display: table-header-group; }
+
+        th {
+            @apply bg-gray-100 border-gray-200 border-b-2 text-xs text-gray-600 font-medium leading-4 tracking-wider text-left uppercase p-0;
+
+            &.sortable {
+                transition: all 0.3s $transition-effect;
+
+                &:hover {
+                    @apply cursor-pointer border-gray-500 bg-gray-200;
+                }
+
+                &.active { @apply text-gray-800; }
+            }
+        }
+    }
+
+    tbody {
+        @screen md { @apply border-0; }
+
+        tr {
+            @apply flex flex-col bg-white mb-3 relative border border-gray-300 rounded pr-10;
+
+            @screen md {
+                @apply rounded-none p-0 border-0;
+                display: table-row;
+
+                &:nth-child(even) { @apply bg-gray-100; }
+            }
+        }
+
+        td {
+            @apply align-middle px-3 py-3;
+            @extend %no-bottom;
+
+            @screen lg {
+                @apply px-4;
+            }
+
+            &:first-child {
+                @apply text-gray-900 font-medium;
+            }
+
+            p { @apply text-sm; }
+        }
+    }
+}
+
+.column-label {
+    @apply block text-xs text-gray-500 tracking-wider leading-snug uppercase font-semibold mb-2;
+
+    @screen md { @apply hidden; }
+}
+
+.column-stat {
+    @screen md { @apply text-right; }
+}

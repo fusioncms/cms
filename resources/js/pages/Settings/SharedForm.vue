@@ -1,8 +1,8 @@
 <template>
 	<div class="card">
 		<div class="card__body">
-			<p-tabs>
-				<p-tab v-for="(section, i1) in group.fieldset.sections" :key="i1" :name="section.name" :active="i1 === 0">
+			<ui-tabs>
+				<ui-tab v-for="(section, i1) in group.blueprint.sections" :key="i1" :name="section.name" :active="i1 === 0">
 					<div v-for="(field, i2) in fields(section.fields)" :key="i2" class="pb-5">
 						<component
 							v-if="field.settings.component"
@@ -18,8 +18,8 @@
 							v-model="form[field.handle]">
 						</component>
 					</div>
-				</p-tab>
-			</p-tabs>
+				</ui-tab>
+			</ui-tabs>
 		</div>
 	</div>
 </template>

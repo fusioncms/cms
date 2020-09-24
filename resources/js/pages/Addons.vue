@@ -5,24 +5,24 @@
         </portal>
 
         <portal to="actions">
-            <p-button v-modal:upload-addon class="button">Upload Addon</p-button>
+            <ui-button v-modal:upload-addon>Upload Addon</ui-button>
         </portal>
 
         <div class="row">
             <div class="content-container">
-                <p-table :endpoint="endpoint" id="addons" sort-by="name" primary-key="handle" key="addons_table">
+                <ui-table :endpoint="endpoint" id="addons" sort-by="name" primary-key="handle" key="addons_table">
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">
-                            <p-status
+                            <ui-status
                                 v-if="table.record.installed"
                                 :value="table.record.enabled"
                                 class="mr-2">
-                            </p-status>
+                            </ui-status>
 
-                            <p-status
+                            <ui-status
                                 v-else
                                 class="mr-2">
-                            </p-status>
+                            </ui-status>
 
                             {{ table.record.name }}
                         </div>
@@ -37,64 +37,65 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions v-show="table.record.installed" :id="'addon_' + table.record.slug + '_actions_installed'" :key="'addon_' + table.record.slug + '_actions_installed'">
-                            <p-dropdown-link v-if="table.record.enabled" @click="disable(table.record.slug)">Disable</p-dropdown-link>
-                            <p-dropdown-link v-else @click="enable(table.record.slug)">Enable</p-dropdown-link>
+                        <ui-table-actions v-show="table.record.installed" :id="'addon_' + table.record.slug + '_actions_installed'" :key="'addon_' + table.record.slug + '_actions_installed'">
+                            <ui-dropdown-link v-if="table.record.enabled" @click="disable(table.record.slug)">Disable</ui-dropdown-link>
+                            <ui-dropdown-link v-else @click="enable(table.record.slug)">Enable</ui-dropdown-link>
 
-                            <p-dropdown-link @click.prevent v-modal:uninstall-addon="table.record.slug" classes="link--danger">
+                            <ui-dropdown-link @click.prevent v-modal:uninstall-addon="table.record.slug" classes="link--danger">
                                 Uninstall
-                            </p-dropdown-link>
-                        </p-actions>
+                            </ui-dropdown-link>
+                        </ui-table-actions>
 
-                        <p-actions v-show="!table.record.installed" :id="'addon_' + table.record.slug + '_actions_uninstalled'" :key="'addon_' + table.record.slug + '_actions_uninstalled'">
-                            <p-dropdown-link v-modal:install-addon="table.record.slug">
+                        <ui-table-actions v-show="!table.record.installed" :id="'addon_' + table.record.slug + '_actions_uninstalled'" :key="'addon_' + table.record.slug + '_actions_uninstalled'">
+                            <ui-dropdown-link v-modal:install-addon="table.record.slug">
                                 Install
-                            </p-dropdown-link>
-                        </p-actions>
+                            </ui-dropdown-link>
+                        </ui-table-actions>
                     </template>
-                </p-table>
+                </ui-table>
             </div>
         </div>
 
         <portal to="modals">
-            <p-modal name="uninstall-addon" title="Uninstall Addon" key="uninstall_addon">
+            <ui-modal name="uninstall-addon" title="Uninstall Addon" key="uninstall_addon">
                 <p>Existing data related to this addon will be removed.</p>
                 <p>Are you sure you want to uninstall this addon?</p>
 
                 <template slot="footer" slot-scope="addon">
-                    <p-button v-modal:uninstall-addon @click="uninstall(addon.data)" theme="danger" class="ml-3">Uninstall</p-button>
-                    <p-button v-modal:uninstall-addon>Cancel</p-button>
+                    <ui-button v-modal:uninstall-addon @click="uninstall(addon.data)" variant="danger" class="ml-3">Uninstall</ui-button>
+                    <ui-button v-modal:uninstall-addon>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
 
-            <p-modal name="install-addon" title="Install Addon" key="install_addon">
+            <ui-modal name="install-addon" title="Install Addon" key="install_addon">
                 <p>Are you sure you want to install this addon?</p>
 
                 <template slot="footer" slot-scope="addon">
-                    <p-button v-modal:install-addon @click="install(addon.data)" theme="success" class="ml-3">Install</p-button>
-                    <p-button v-modal:install-addon>Cancel</p-button>
+                    <ui-button v-modal:install-addon @click="install(addon.data)" variant="success" class="ml-3">Install</ui-button>
+                    <ui-button v-modal:install-addon>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
 
-            <p-modal name="update-addon" title="Update Module" key="update_addon">
+            <ui-modal name="update-addon" title="Update Module" key="update_addon">
                 <p>This will migrate any new migrations and run db:seed.</p>
                 <p>Are you sure you want to proceed?</p>
 
                 <template slot="footer" slot-scope="addon">
-                    <p-button v-modal:update-addon @click="update(addon.data)" theme="warning" class="ml-3">Update</p-button>
-                    <p-button v-modal:update-addon>Cancel</p-button>
+                    <ui-button v-modal:update-addon @click="update(addon.data)" variant="warning" class="ml-3">Update</ui-button>
+                    <ui-button v-modal:update-addon>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
 
-            <p-modal name="upload-addon" title="Upload Addon" key="upload_addon">
-                <p-upload
+            <ui-modal name="upload-addon" title="Upload Addon" key="upload_addon">
+                <ui-upload
                     name="file-upload"
+                    label="Addon"
                     ref="upload"
                     accept="zip"
                     :multiple="false"
                     @input="upload"
-                ></p-upload>
-            </p-modal>
+                ></ui-upload>
+            </ui-modal>
         </portal>
     </div>
 </template>

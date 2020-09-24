@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\Console;
 
 use Fusion\Console\Actions\SyncPermissions;
 use Fusion\Tests\TestCase;

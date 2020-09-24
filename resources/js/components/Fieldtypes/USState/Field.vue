@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p-select
+        <ui-select-group
             :name="field.handle"
             :label="field.name"
             :help="field.help"
@@ -9,7 +9,7 @@
             :options="states"
             placeholder="Select a state..."
             :filterable="field.settings.filterable || false"
-        ></p-select>
+        ></ui-select-group>
     </div>
 </template>
 

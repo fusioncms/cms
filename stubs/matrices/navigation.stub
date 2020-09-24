@@ -63,7 +63,7 @@ class {class} extends Model
      */
     public function getFieldsAttribute()
     {
-        return $this->navigation->fieldset->fields;
+        return $this->navigation->blueprint->fields;
     }
 
     public function children()

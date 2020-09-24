@@ -31,7 +31,7 @@ class CreateDefaultRoles
         'owner' => [
             'name'        => 'owner',
             'label'       => 'Owner',
-            'description' => 'Owners have full control panel access.',
+            'description' => 'The owner has full, unlimited control panel access and permissions. This role is not editable.',
         ],
     ];
 

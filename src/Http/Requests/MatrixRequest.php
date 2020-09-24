@@ -46,7 +46,6 @@ class MatrixRequest extends FormRequest
             'slug'               => 'required|unique:matrices,slug,'.$id,
             'description'        => 'sometimes',
             'type'               => 'required',
-            'fieldset'           => 'sometimes',
 
             'reference_singular' => 'sometimes',
             'reference_plural'   => 'sometimes',

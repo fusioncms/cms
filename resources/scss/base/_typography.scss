@@ -30,7 +30,7 @@
     }
 
     &--xxs {
-        font-size: rem(15px);
+        @apply text-xs;
         font-weight: 600;
         text-transform: uppercase;
     }

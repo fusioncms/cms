@@ -13,33 +13,16 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Fusion\Events\ServingFusion' => [
-            'Fusion\Listeners\FusionServed',
-        ],
+        //
+    ];
 
-        'Illuminate\Auth\Events\Verified' => [
-            'Fusion\Listeners\LogVerifiedUser',
-        ],
-
-        'Illuminate\Auth\Events\Registered' => [
-            'Illuminate\Auth\Listeners\SendEmailVerificationNotification',
-        ],
-
-        'Illuminate\Auth\Events\Login' => [
-            'Fusion\Listeners\LogActivityWhenUserLogsIn',
-        ],
-
-        'Fusion\Events\FieldsetAttached' => [
-            'Fusion\Listeners\WhenFieldsetIsAttached',
-        ],
-
-        'Fusion\Events\FieldsetDetached' => [
-            'Fusion\Listeners\WhenFieldsetIsDetached',
-        ],
-
-        'Fusion\Events\FieldsetReplaced' => [
-            'Fusion\Listeners\WhenFieldsetIsReplaced',
-        ],
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        'Fusion\Listeners\UserEventSubscriber',
     ];
 
     /**
@@ -56,9 +39,7 @@ class EventServiceProvider extends ServiceProvider
         \Fusion\Models\Matrix::observe(\Fusion\Observers\MatrixObserver::class);
         \Fusion\Models\Section::observe(\Fusion\Observers\SectionObserver::class);
         \Fusion\Models\Setting::observe(\Fusion\Observers\SettingObserver::class);
-        \Fusion\Models\Fieldset::observe(\Fusion\Observers\FieldsetObserver::class);
         \Fusion\Models\Taxonomy::observe(\Fusion\Observers\TaxonomyObserver::class);
-        \Fusion\Models\Extension::observe(\Fusion\Observers\ExtensionObserver::class);
         \Fusion\Models\Navigation::observe(\Fusion\Observers\NavigationObserver::class);
         \Fusion\Models\Replicator::observe(\Fusion\Observers\ReplicatorObserver::class);
     }

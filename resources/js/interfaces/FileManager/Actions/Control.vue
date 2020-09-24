@@ -1,15 +1,15 @@
 <template>
 	<div>
-		<p-dropdown id="control-filter" right v-show="hasSelection">
+		<ui-dropdown id="control-filter" right v-show="hasSelection">
 			<fa-icon class="fa-fw" :icon="['fas', 'bolt']"></fa-icon>
 
 			<template v-slot:menu>
-				<p-dropdown-link @click.prevent="clearSelection"><fa-icon :icon="['fas', 'minus-square']"></fa-icon> Unselect All</p-dropdown-link>
-				<p-dropdown-link v-if="singleSelection" v-modal:rename-file><fa-icon :icon="['fas', 'tag']"></fa-icon> Rename File</p-dropdown-link>
-				<p-dropdown-link v-modal:move-file><fa-icon :icon="['fas', 'exchange-alt']"></fa-icon> Move Selected</p-dropdown-link>
-				<p-dropdown-link v-modal:delete><fa-icon :icon="['fas', 'trash']"></fa-icon> Delete Selected</p-dropdown-link>
+				<ui-dropdown-link @click.prevent="clearSelection"><fa-icon :icon="['fas', 'minus-square']"></fa-icon> Unselect All</ui-dropdown-link>
+				<ui-dropdown-link v-if="singleSelection" v-modal:rename-file><fa-icon :icon="['fas', 'tag']"></fa-icon> Rename File</ui-dropdown-link>
+				<ui-dropdown-link v-modal:move-file><fa-icon :icon="['fas', 'exchange-alt']"></fa-icon> Move Selected</ui-dropdown-link>
+				<ui-dropdown-link v-modal:delete><fa-icon :icon="['fas', 'trash']"></fa-icon> Delete Selected</ui-dropdown-link>
 			</template>
-		</p-dropdown>
+		</ui-dropdown>
 
 		<portal to="modals">
 	        <move-file-modal></move-file-modal>

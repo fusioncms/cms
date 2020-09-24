@@ -1,15 +1,15 @@
 <template>
-	<p-dropdown id="sort-filters">
+	<ui-dropdown id="sort-filters">
 		<fa-icon class="icon" :icon="sortIcon(sort)"></fa-icon>
 		<span class="hidden md:inline">{{ options[sort] }}</span>
 
 		<template v-slot:menu>
-			<p-dropdown-link v-for="(value, key) in options" :key="key" @click.prevent="sortBy(key)">
+			<ui-dropdown-link v-for="(value, key) in options" :key="key" @click.prevent="sortBy(key)">
 				<fa-icon class="icon" :icon="['fas', sortIcon(key)]"></fa-icon>
 				{{ value }}
-			</p-dropdown-link>
+			</ui-dropdown-link>
 		</template>
-	</p-dropdown>
+	</ui-dropdown>
 </template>
 
 <script>

@@ -1,10 +1,10 @@
 <template>
     <div>
-        <p-checkbox-group
+        <ui-checkbox-group
             :label="field.name"
             :help="field.help"
             :inline="field.settings.display == 'row'">
-                <p-checkbox
+                <ui-checkbox
                     v-for="option in field.settings.options"
                     :key="option.value"
                     :name="field.name"
@@ -16,8 +16,8 @@
                     <template>
                         {{option.label}}
                     </template>
-                </p-checkbox>
-        </p-checkbox-group>
+                </ui-checkbox>
+        </ui-checkbox-group>
     </div>
 </template>
 

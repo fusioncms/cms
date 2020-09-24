@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Unit;
+namespace Fusion\Tests\Unit\Fieldtypes;
 
 use Fusion\Models\Field;
 use Fusion\Models\Replicator;
@@ -16,6 +16,8 @@ class ReplicatorFieldtypeTest extends TestCase
     {
         parent::setUp();
         $this->handleValidationExceptions();
+
+        $this->markTestIncomplete();
 
         // --
         $this->section  = \Facades\SectionFactory::times(1)->withoutFields()->create();

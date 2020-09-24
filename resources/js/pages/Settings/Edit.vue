@@ -6,8 +6,8 @@
 
         <portal to="actions">
             <div class="buttons" v-if="form">
-                <router-link :to="{ name: 'settings' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button :to="{ name: 'settings' }" variant="secondary">Go Back</ui-button>
+                <ui-button type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 

@@ -1,41 +1,47 @@
 <template>
-    <div class="px-2 mb-4">
-        <div class="form__label">{{field.name}}</div>
-        <div class="row px-2">
-            <div class="w-full md:w-1/2">
-                <p-input
-                    :name="field.handle + '_text'"
-                    placeholder="Text"
-                    v-model="data.text"
-                    @input="updateValue($event, 'text')"
-                    class="mb-2"
-                ></p-input>
-                <p-input
-                    :name="field.handle + '_link'"
-                    placeholder="Link"
-                    v-model="data.link"
-                    @input="updateValue($event, 'link')"
-                    class="mb-2"
-                ></p-input>
-                <p-select
-                    :name="field.handle + '_target'"
-                    autocomplete="off"
-                    v-model="data.target"
-                    @input="updateValue($event, 'target')"
-                    :options="[
-                        {
-                            label: 'Open in Same Window',
-                            value: '_self',
-                        },
-                        {
-                            label: 'Open in New Window',
-                            value: '_blank',
-                        }
-                    ]"
-                ></p-select>
-            </div>
+    <ui-fieldset
+        :label="field.name"
+        :help="field.help">
+        <div class="row">
+            <ui-input-group
+                class="col md:w-1/3"
+                label="Link Text"
+                hide-label
+                :name="field.handle + '_text'"
+                placeholder="Link Text"
+                v-model="data.text"
+                @input="updateValue($event, 'text')">
+            </ui-input-group>
+            <ui-input-group
+                class="col md:w-1/3"
+                label="Link URL"
+                hide-label
+                :name="field.handle + '_link'"
+                placeholder="Link URL"
+                v-model="data.link"
+                @input="updateValue($event, 'link')">
+            </ui-input-group>
+            <ui-select-group
+                class="col md:w-1/3"
+                label="Open Link"
+                hide-label
+                :name="field.handle + '_target'"
+                autocomplete="off"
+                v-model="data.target"
+                @input="updateValue($event, 'target')"
+                :options="[
+                    {
+                        label: 'Open in Same Window',
+                        value: '_self',
+                    },
+                    {
+                        label: 'Open in New Window',
+                        value: '_blank',
+                    }
+                ]">
+            </ui-select-group>
         </div>
-    </div>
+    </ui-fieldset>
 </template>
 
 <script>
@@ -67,12 +73,11 @@
         props: {
             field: {
                 type: Object,
-                required: true,
+                required: true
             },
 
             value: {
-                required: false,
-                default: null,
+                default: null
             },
         },
 

@@ -3,7 +3,6 @@
 namespace Fusion\Models;
 
 use File as FileSystem;
-use Fusion\Concerns\CachesQueries;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
@@ -11,8 +10,6 @@ use Storage;
 
 class File extends Model
 {
-    use CachesQueries;
-
     protected $fillable = [
         'uuid',
         'directory_id',

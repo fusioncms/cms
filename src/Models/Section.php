@@ -2,19 +2,16 @@
 
 namespace Fusion\Models;
 
-use Fusion\Concerns\CachesQueries;
 use Illuminate\Database\Eloquent\Model;
 
 class Section extends Model
 {
-    use CachesQueries;
-
     /**
      * The attributes that are fillable via mass assignment.
      *
      * @var array
      */
-    protected $fillable = ['fieldset_id', 'name', 'handle', 'description', 'placement', 'order'];
+    protected $fillable = ['blueprint_id', 'name', 'handle', 'description', 'placement', 'order'];
 
     /**
      * The attributes that should be casted to native types.
@@ -41,12 +38,12 @@ class Section extends Model
     }
 
     /**
-     * A section belongs to a fieldset.
+     * A section belongs to a blueprint.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function fieldset()
+    public function blueprint()
     {
-        return $this->belongsTo(Fieldset::class);
+        return $this->belongsTo(Blueprint::class);
     }
 }

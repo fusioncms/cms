@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\Fieldtypes;
 
 use Fusion\Models\Form;
 use Fusion\Services\Builders\Collection;
@@ -16,15 +16,26 @@ class FormFieldtypeTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        // --
-        $this->section   = \Facades\SectionFactory::times(1)->withoutFields()->create();
-        $this->fieldForm = \Facades\FieldFactory::withName('Form')->withType('form')->withSection($this->section)->create();
-        $this->fieldset  = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->matrix    = \Facades\MatrixFactory::withName('FooBar')->asCollection()->withFieldset($this->fieldset)->create();
-        $this->model     = (new Collection($this->matrix->handle))->make();
+        $this->matrix = \Facades\MatrixFactory::withName('FooBar')
+            ->asCollection()
+            ->withSections([
+                [
+                    'name'   => 'General',
+                    'handle' => 'general',
+                    'fields' => [
+                        [
+                            'name'   => 'Form',
+                            'handle' => 'form',
+                            'type'   => 'form',
+                        ],
+                    ],
+                ],
+            ])
+            ->create();
 
-        // --
-        $this->forms = factory(Form::class, 3)->create();
+        $this->fieldForm = $this->matrix->blueprint->sections->first()->fields()->first();
+        $this->model     = (new Collection($this->matrix->handle))->make();
+        $this->forms     = factory(Form::class, 3)->create();
     }
 
     /**

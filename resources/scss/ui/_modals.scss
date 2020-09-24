@@ -1,0 +1,81 @@
+.modal {
+    @apply rounded shadow-md bg-white relative w-full m-auto;
+    max-width: 800px;
+
+    &--xlarge {max-width: 1400px; }
+
+    &--large { max-width: 1200px; }
+
+    &--small { max-width: 600px; }
+
+    &--xsmall { max-width: 300px; }
+
+    &--primary {}
+
+    &--secondary {}
+
+    &--success {}
+
+    &--warning {}
+
+    &--danger {}
+
+    &__body {
+        @apply p-4;
+        @extend %no-bottom;
+
+        @screen md {
+            @apply px-6 py-4;
+        }
+
+        &--flush {
+            @apply p-0;
+        }
+    }
+
+    &__header {
+        @apply flex justify-between items-center border-b border-gray-200 tracking-wide leading-normal p-4;
+
+        @screen md {
+            @apply px-6 py-4;
+        }
+    }
+
+    &__title {
+        @apply text-xl;
+    }
+
+    &__close {
+        @apply text-xl text-gray-500;
+
+        &:hover {
+            @apply text-black;
+        }
+    }
+
+    &__footer {
+        @apply flex flex-row-reverse items-center p-4 border-t border-gray-200;
+
+        @screen md {
+            @apply px-6 py-4;
+        }
+    }
+}
+
+.modal-overlay {
+    @apply fixed inset-0 overflow-auto bg-smoke-400 flex py-5 px-4;
+
+    @screen md {
+        @apply py-10 px-6;
+    }
+}
+
+// Vue transition
+.v-fade-enter-active,
+.v-fade-leave-active { transition: opacity 0.3s $transition-effect; }
+
+.v-fade-enter-to,
+.v-fade-leave { opacity: 1; }
+
+.v-fade-enter,
+.v-fade-leave-to { opacity: 0; }

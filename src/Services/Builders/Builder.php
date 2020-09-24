@@ -3,7 +3,6 @@
 namespace Fusion\Services\Builders;
 
 use Fusion\Contracts\Builder as BuilderContract;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 abstract class Builder implements BuilderContract
@@ -173,29 +172,5 @@ abstract class Builder implements BuilderContract
         }
 
         return trim($generated);
-    }
-
-    /**
-     * Pure witchcraft. Fetches the related fieldsettables and resolves their
-     * proper Eloquent models.
-     *
-     * https://media.giphy.com/media/zIwIWQx12YNEI/giphy.gif
-     *
-     * @param Fieldset $fieldset
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    protected function getFieldsettables($fieldset)
-    {
-        return DB::table('fieldsettables')->where('fieldset_id', $fieldset->id)->get()->map(function ($morph) {
-            $model = app()->make($morph->fieldsettable_type);
-            $model = $model->find($morph->fieldsettable_id);
-
-            return $model;
-        })->reject(function ($model) {
-            return is_null($model);
-        })->map(function ($model) {
-            return $model;
-        });
     }
 }

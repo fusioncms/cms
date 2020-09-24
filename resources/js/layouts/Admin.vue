@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-auto flex-col" :class="{'nav-active' : isNavOpen}">
+    <div class="layout-admin" :class="{'nav-active' : isNavOpen}">
         <header class="header">
             <div class="header__container relative">
                 <div class="header__toggle">
@@ -20,7 +20,7 @@
                         <div class="dropdown dropdown--right" slot-scope="props" :class="{'dropdown--open': props.isOpen}" v-click-outside="props.close">
                             <button class="nav-button nav-button--full" @click.prevent="props.toggle()">
                                 <mq-layout mq="xl+">
-                                    <span>{{ greeting }}, <strong>{{ user.name }}</strong></span>
+                                    <span>{{ greeting }}, <strong>{{ $user.name }}</strong></span>
                                 </mq-layout>
 
                                 <mq-layout mq="xl+">
@@ -35,31 +35,36 @@
 
                             <div class="dropdown__menu">
                                 <mq-layout :mq="['sm', 'md', 'lg']">
-                                    <p-dropdown-item>
+                                    <ui-dropdown-item>
                                         <p class="mb-0">
-                                            {{ greeting }}, <strong>{{ user.name }}</strong>
+                                            {{ greeting }}, <strong>{{ $user.name }}</strong>
                                         </p>
-                                    </p-dropdown-item>
+                                    </ui-dropdown-item>
                                 </mq-layout>
 
-                                <p-dropdown-divider />
-
-                                <p-dropdown-link href="/" target="_blank" @click.native="onClick()">
+                                <ui-dropdown-link href="/" target="_blank" @click.native="onClick()">
                                     <fa-icon icon="eye" class="icon"></fa-icon>
                                     View website
-                                </p-dropdown-link>
+                                </ui-dropdown-link>
 
-                                <p-dropdown-divider />
+                                <ui-dropdown-divider />
 
-                                <p-dropdown-link :to="'/users/' + user.id + '/edit'" @click.native="onClick()">
-                                    <fa-icon icon="user" class="icon"></fa-icon>
-                                    Account
-                                </p-dropdown-link>
+                                <ui-dropdown-link :to="'/users/' + $user.id" @click.native="onClick()">
+                                    <fa-icon icon="id-card" class="icon"></fa-icon>
+                                    View Profile
+                                </ui-dropdown-link>
 
-                                <p-dropdown-link href="/logout">
+                                <ui-dropdown-link :to="'/users/' + $user.id + '/edit'" @click.native="onClick()">
+                                    <fa-icon icon="user-cog" class="icon"></fa-icon>
+                                    Edit Profile
+                                </ui-dropdown-link>
+
+                                <ui-dropdown-divider />
+
+                                <ui-dropdown-link href="/logout">
                                     <fa-icon icon="sign-out-alt" class="icon"></fa-icon>
                                     Log out
-                                </p-dropdown-link>
+                                </ui-dropdown-link>
                             </div>
                         </div>
                     </renderless-dropdown>
@@ -95,7 +100,7 @@
             <p class="mb-0"><span v-if="environment == 'local'">Local Dev Environment - </span>{{ version }}</p>
         </footer>
 
-        <p-toast></p-toast>
+        <ui-toast></ui-toast>
         <confirm-modal></confirm-modal>
     </div>
 </template>
@@ -124,7 +129,6 @@
 
         computed: {
             ...mapGetters({
-                user: 'auth/getUser',
                 navigation: 'navigation/getNavigation',
                 version: 'fusion/getVersion',
             }),

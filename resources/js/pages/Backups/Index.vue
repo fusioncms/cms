@@ -5,13 +5,13 @@
 		</portal>
 
 		<portal to="actions">
-			<p-button v-modal:settings class="button mr-1">Settings</p-button>
-			<p-button v-modal:upload class="button mr-3">Upload</p-button>
+			<ui-button v-modal:settings class="mr-1">Settings</ui-button>
+			<ui-button v-modal:upload class="mr-3">Upload</ui-button>
 
-			<p-button @click.prevent v-modal:confirm-form class="button--primary">Backup Now</p-button>
+			<ui-button @click.prevent v-modal:confirm-form variant="primary">Backup Now</ui-button>
 		</portal>
 
-		<p-card no-body>
+		<ui-card no-body>
 			<div class="card__body text-center" v-if="! ready">
 				<fa-icon :icon="['fas', 'circle-notch']" class="fa-spin mr-3"></fa-icon> Loading backups...
 			</div>
@@ -31,77 +31,78 @@
 							<td>{{ backup.happened }}</td>
 							<td>{{ backup.size }}</td>
 							<td class="text-right">
-								<p-dropdown right>
+								<ui-dropdown right>
 									<fa-icon :icon="['fas', 'bars']"></fa-icon>
 
 									<template slot="options">
-										<p-dropdown-item @click.prevent v-modal:restore-form="backup">
+										<ui-dropdown-item @click.prevent v-modal:restore-form="backup">
 											Restore
-										</p-dropdown-item>
+										</ui-dropdown-item>
 
-										<p-dropdown-item @click="download(backup.name)">
+										<ui-dropdown-item @click="download(backup.name)">
 											Download
-										</p-dropdown-item>
+										</ui-dropdown-item>
 
-										<p-dropdown-item v-if="! backup.isNewest" @click.prevent v-modal:delete-form="backup">
+										<ui-dropdown-item v-if="! backup.isNewest" @click.prevent v-modal:delete-form="backup">
 											Delete
-										</p-dropdown-item>
+										</ui-dropdown-item>
 									</template>
-								</p-dropdown>
+								</ui-dropdown>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-		</p-card>
+		</ui-card>
 
         <portal to="modals">
             <settings-modal handle="backups"></settings-modal>
 
             <!-- Restore from existing backup -->
-            <p-modal name="restore-form" title="Restore Backup" key="restore_form">
+            <ui-modal name="restore-form" title="Restore Backup" key="restore_form">
                 <p>Restoring a backup will <b>replace all files and the database with the contents of the backup.</b> Unless you specify to create a new backup during this process, there will be no way to undo your changes if you change your mind.</p>
 
-        		<p-checkbox name="saveBackup" v-model="saveBackup">
+        		<ui-checkbox name="saveBackup" v-model="saveBackup">
         			Create a backup before restoring
-        		</p-checkbox>
+        		</ui-checkbox>
 
                 <template slot="footer" slot-scope="form">
-                    <p-button v-modal:restore-form @click="restore(form.data.name)" theme="primary" class="ml-3">Restore</p-button>
-                    <p-button v-modal:restore-form>Cancel</p-button>
+                    <ui-button v-modal:restore-form @click="restore(form.data.name)" variant="primary" class="ml-3">Restore</ui-button>
+                    <ui-button v-modal:restore-form>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
 
             <!-- Run manual backup process -->
-			<p-modal name="confirm-form" title="Backup Now" key="confirm_form">
+			<ui-modal name="confirm-form" title="Backup Now" key="confirm_form">
                 <p>This will perform a full backup of your website. Backups can take up to one minute per GB of data.</p>
 
                 <template slot="footer">
-                    <p-button v-modal:confirm-form @click="backup()" theme="primary" class="ml-3">Backup</p-button>
-                    <p-button v-modal:confirm-form>Cancel</p-button>
+                    <ui-button v-modal:confirm-form @click="backup()" variant="primary" class="ml-3">Backup</ui-button>
+                    <ui-button v-modal:confirm-form>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
 
             <!-- Delete existing backup -->
-			<p-modal name="delete-form" title="Delete Backup" key="delete_form">
+			<ui-modal name="delete-form" title="Delete Backup" key="delete_form">
                 <p>Are you sure you want to permenantly delete this backup?</p>
 
                 <template slot="footer" slot-scope="form">
-                    <p-button v-modal:delete-form @click="destroy(form.data.name)" theme="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-form>Cancel</p-button>
+                    <ui-button v-modal:delete-form @click="destroy(form.data.name)" variant="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-form>Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
 
 			<!-- Upload backup -->
-			<p-modal name="upload" title="Upload Backup" key="upload-backup">
-				<p-upload
+			<ui-modal name="upload" title="Upload Backup" key="upload-backup">
+				<ui-upload
 					name="file-upload"
+					label="Upload"
 					ref="upload"
 					accept="zip"
 					:multiple="false"
 					@input="upload"
-				></p-upload>
-			</p-modal>
+				></ui-upload>
+			</ui-modal>
         </portal>
 	</div>
 </template>

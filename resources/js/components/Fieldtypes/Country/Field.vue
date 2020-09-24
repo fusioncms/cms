@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p-select
+        <ui-select-group
             :name="field.handle"
             :label="field.name"
             :help="field.help"
@@ -9,7 +9,8 @@
             :options="countries"
             placeholder="Select a country..."
             :filterable="field.settings.filterable || false"
-        ></p-select>
+            :multiple="field.settings.multiple">
+        </ui-select-group>
     </div>
 </template>
 
@@ -41,6 +42,8 @@
             if (index !== -1 && ! this.countries) {
                 this.$emit('input', this.countries[index].value)
             }
+
+            console.log(this.field)
         }
     }
 </script>

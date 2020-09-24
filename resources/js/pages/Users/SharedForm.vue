@@ -1,14 +1,15 @@
 <template>
-    <form-container>
+    <div class="user-page">
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'users' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
+                <ui-button key="save-btn" variant="primary" @click.prevent="submit" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
         <section-card title="General Information" description="General information about this user.">
-            <p-input
+            <ui-input-group
+                id="user-name"
                 name="name"
                 label="Name"
                 autocomplete="off"
@@ -17,9 +18,10 @@
                 :has-error="form.errors.has('name')"
                 :error-message="form.errors.get('name')"
                 v-model="form.name">
-            </p-input>
+            </ui-input-group>
 
-            <p-input
+            <ui-input-group
+                id="user-id"
                 type="email"
                 name="email"
                 label="E-mail"
@@ -28,76 +30,108 @@
                 :error-message="form.errors.get('email')"
                 required
                 v-model="form.email">
-            </p-input>
+            </ui-input-group>
+
+            <ui-toggle
+                id="user-status"
+                name="status"
+                label="Status"
+                v-model="form.status"
+                :true-value="1"
+                :false-value="0">
+            </ui-toggle>
         </section-card>
 
-        <section-card title="Security" description="Configure this user's security details.">
-            <p-input
-                type="password"
-                name="password"
-                label="Password"
-                autocomplete="new-password"
-                :has-error="form.errors.has('password')"
-                :error-message="form.errors.get('password')"
-                v-model="form.password">
-            </p-input>
-
-            <p-input
-                type="password"
-                name="password_confirmation"
-                label="Confirm Password"
-                autocomplete="new-password"
-                :has-error="form.errors.has('password_confirmation')"
-                :error-message="form.errors.get('password_confirmation')"
-                v-model="form.password_confirmation">
-            </p-input>
+        <section-card title="Permissions" description="Select the role to determine which areas of the website this user can access.">
+            <ui-select-group
+                id="user-role"
+                name="role"
+                label="Role"
+                :options="roleOptions"
+                autocomplete="off"
+                :value="form.role"
+                :has-error="form.errors.has('role')"
+                :error-message="form.errors.get('role')"
+                required
+                v-model="form.role">
+            </ui-select-group>
         </section-card>
 
-        <template v-slot:sidebar>
-            <div class="card">
-                <div class="card__body">
-                    <p-toggle
-                        name="status"
-                        label="Status"
-                        v-model="form.status"
-                        :true-value="1"
-                        :false-value="0">
-                    </p-toggle>
+        <section-card v-if="canEditPassword" title="Security" description="Configure this user's security details.">
+            <ui-fieldset :help="user ? 'Only fill out the password fields below if you intend to update the user account password.' : null">
+                <ui-password-group
+                    id="user-password"
+                    type="password"
+                    name="password"
+                    label="Password"
+                    autocomplete="new-password"
+                    :has-error="form.errors.has('password')"
+                    :error-message="form.errors.get('password')"
+                    v-model="form.password">
+                </ui-password-group>
 
-                    <p-select
-                        name="role"
-                        label="Role"
-                        :options="roleOptions"
-                        autocomplete="off"
-                        value="user"
-                        :has-error="form.errors.has('role')"
-                        :error-message="form.errors.get('role')"
-                        required
-                        v-model="form.role">
-                    </p-select>
-                </div>
+                <ui-password-group
+                    id="user-password-confirm"
+                    type="password"
+                    name="password_confirmation"
+                    label="Confirm Password"
+                    autocomplete="new-password"
+                    :has-error="form.errors.has('password_confirmation')"
+                    :error-message="form.errors.get('password_confirmation')"
+                    v-model="form.password_confirmation">
+                </ui-password-group>
+            </ui-fieldset>
+        </section-card>
+
+        <section-card v-if="user" title="Actions" description="Management actions that can be performed for this user.">
+            <div class="mb-4">
+                <span class="label">Verification Email</span>
+                <p class="help mb-2">Re-send the verification email to this user.</p>
+                <ui-button variant="secondary" v-modal:verify-user>Send Verification</ui-button>
             </div>
 
-            <p-definition-list v-if="user">
-                <p-definition name="Status">
-                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': user.status, 'text-danger-500': ! user.status}"></fa-icon> {{ user.status ? 'Enabled' : 'Disabled' }}
-                </p-definition>
+            <div class="mb-4">
+                <span class="label">Password Reset</span>
+                <p class="help mb-2">Force the user to reset their password upon next login attempt.</p>
+                <ui-button variant="secondary" v-modal:password-user>Reset Password</ui-button>
+            </div>
 
-                <p-definition name="Verified">
-                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': user.verified, 'text-danger-500': ! user.verified}"></fa-icon> {{ user.verified ? 'Yes' : 'No' }}
-                </p-definition>
+            <div class="mb-4">
+                <span class="label">Delete User</span>
+                <p class="help mb-2">Once you delete this user, there is no going back. Please be certain.</p>
+                <ui-button variant="danger" v-modal:delete-user>Delete User</ui-button>
+            </div>
+        </section-card>
 
-                <p-definition name="Registered">
-                    {{ $moment(user.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
+        <portal to="modals">
+            <ui-modal name="verify-user" title="Verification Email" key="verify_user">
+                <p>Are you sure you want to re-send the verification email to this user?</p>
 
-                <p-definition name="Last Login">
-                    <span v-if="user.logged_in_at">{{ $moment(user.logged_in_at.date).format('L') }}</span>
-                    <span v-else>Never</span>
-                </p-definition>
-            </p-definition-list>
-        </template>
-    </form-container>
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:verify-user @click="emailVerification" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:verify-user>Cancel</ui-button>
+                </template>
+            </ui-modal>
+
+            <ui-modal name="password-user" title="Password Reset" key="password_user">
+                <p>Are you sure you want to force user to reset their password upon next login attempt?</p>
+
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:password-user @click="passwordReset" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:password-user>Cancel</ui-button>
+                </template>
+            </ui-modal>
+
+            <ui-modal name="delete-user" title="Delete User" key="delete_user">
+                <p>Are you sure you want to permenantly delete this user?</p>
+
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:delete-user @click="destroy" variant="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-user>Cancel</ui-button>
+                </template>
+            </ui-modal>
+        </portal>
+    </div>
 </template>
 
 <script>
@@ -109,21 +143,18 @@
         props: {
             form: {
                 type: Object,
-                required: true,
+                required: true
             },
-
             submit: {
-                required: true,
+                required: true
             },
-
             roles: {
                 type: Array,
-                required: true,
+                required: true
             },
-
             user: {
                 type: Object,
-                required: false,
+                required: false
             }
         },
 
@@ -137,6 +168,43 @@
                         value: role.name
                     }
                 })
+            },
+
+            canEditPassword() {
+                return this.user &&
+                       this.$store.state.auth.user &&
+                       this.user.id == this.$store.state.auth.user.id
+            }
+        },
+
+        methods: {
+            destroy() {
+                axios.delete(`/api/users/${this.user.id}`)
+                    .then((response) => {
+                        toast('User successfully removed from system.', 'success')
+
+                        this.$router.push('/users')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
+            },
+
+            emailVerification() {
+                axios.post(`/api/users/${this.user.id}/verify`)
+                    .then((response) => {
+                        toast('Email verification notification has been sent to user.', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
+            },
+
+            passwordReset() {
+                axios.post(`/api/users/${this.user.id}/password`)
+                    .then((response) => {
+                        toast('Password reset notification has been sent to user.', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
             }
         }
     }

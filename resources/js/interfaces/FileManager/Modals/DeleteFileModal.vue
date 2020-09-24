@@ -1,14 +1,14 @@
 <template>
-    <p-modal name="delete" title="Delete permanently?">
+    <ui-modal name="delete" title="Delete permanently?">
         <p>This file will be permanently deleted. <strong>Be advised this action can not be undone.</strong></p>
 
         <p>Any existing links to this file (if not removed) may result in errors.</p>
 
         <template v-slot:footer>
-            <p-button v-modal:delete>Cancel</p-button>
-            <p-button theme="danger" @click="submit" class="mr-1" v-modal:delete>Delete</p-button>
+            <ui-button v-modal:delete>Cancel</ui-button>
+            <ui-button variant="danger" @click="submit" class="mr-1" v-modal:delete>Delete</ui-button>
         </template>
-    </p-modal>
+    </ui-modal>
 </template>
 
 <script>

@@ -6,14 +6,14 @@
 
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'mailables' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button :to="{ name: 'mailables' }">Go Back</ui-button>
+                <ui-button type="submit" variant="primary" @click.prevent="submit" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
         <div class="card">
             <div class="card__body">
-                <p-title
+                <ui-title-group
                     name="name"
                     autocomplete="off"
                     autofocus
@@ -21,7 +21,28 @@
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </p-title>
+                </ui-title-group>
+
+                <hr>
+
+                <div v-for="(options, name) in placeholders" :key="name">
+                    <ui-button v-if="! isArray(options)" @click="addPlaceholder(options)"><code>${{ options }}</code></ui-button>
+
+                    <ui-dropdown :id="name + '-values'">
+                        <code>${{ name }}</code>
+
+                        <template v-slot:menu>
+                            <ui-dropdown-link
+                                v-for="(value, key) in options"
+                                :key="key"
+                                @click="addPlaceholder(value, name)">
+                                <code>{{ value }}</code>
+                            </ui-dropdown-link>
+                        </template>
+                    </ui-dropdown>
+                </div>
+
+                <p class="help mt-1 mb-3">Select values to add it to your mail template.</p>
 
                 <markdown-fieldtype
                     v-if="ready"
@@ -39,7 +60,7 @@
         <template v-slot:sidebar>
             <div class="card">
                 <div class="card__body">
-                    <p-slug
+                    <ui-slug-group
                         name="handle"
                         label="Handle"
                         monospaced
@@ -50,39 +71,15 @@
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
                         v-model="form.handle">
-                    </p-slug>
+                    </ui-slug-group>
 
-                    <p-toggle
+                    <ui-toggle
                         name="status"
                         label="Status"
                         v-model="form.status"
                         :true-value="1"
                         :false-value="0">
-                    </p-toggle>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card__body">
-                    <p class="text-sm">Below you will find a variety of values you may reference within your template.</p>
-
-                    <div v-for="(options, name) in placeholders" :key="name">
-                        <p-button v-if="! isArray(options)" @click="addPlaceholder(options)" class="w-full mb-3 text-xs font-mono">${{ options }}</p-button>
-
-                        <p-dropdown id="values">
-                            ${{ name }}
-
-                            <template v-slot:menu>
-                                <p-dropdown-link
-                                    class="text-xs"
-                                    v-for="(value, key) in options"
-                                    :key="key"
-                                    @click="addPlaceholder(value, name)">
-                                        {{ value }}
-                                </p-dropdown-link>
-                            </template>
-                        </p-dropdown>
-                    </div>
+                    </ui-toggle>
                 </div>
             </div>
         </template>

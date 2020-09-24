@@ -1,7 +1,9 @@
 <template>
 	<div class="gallery-text">
 		<span v-show="isEditing">
-			<p-input
+			<ui-input-group
+				label="Name"
+				name="name"
 				ref="edit"
 				autocomplete="off"
 				placeholder="Filename"
@@ -11,7 +13,7 @@
 				@keyup.native.enter="update"
 				@keyup.native.esc="revert"
 				@focusout.native="revert">
-			</p-input>
+			</ui-input-group>
 		</span>
 
 		<div v-show="!isEditing" class="truncate" @dblclick="edit">{{ form.name }}</div>

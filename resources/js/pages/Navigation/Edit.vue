@@ -37,7 +37,7 @@
             submit() {
                 this.form.patch(`/api/navigation/${this.id}`)
                     .then(() => {
-                        axios.post(`/api/fieldsets/${this.navigation.fieldset.id}/sections`, { sections: this.form.sections })
+                        axios.post(`/api/blueprints/${this.navigation.blueprint.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Navigation successfully saved', 'success')
 
@@ -67,7 +67,7 @@
                             name:        navigation.name,
                             handle:      navigation.handle,
                             description: navigation.description,
-                            sections:    navigation.fieldset.sections,
+                            sections:    navigation.blueprint.sections,
                         }, true)
 
                         vm.$nextTick(() => {

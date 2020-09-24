@@ -5,7 +5,6 @@ namespace Fusion\Observers;
 use Fusion\Database\Migration;
 use Fusion\Database\Schema\Blueprint;
 use Fusion\Models\Field;
-use Fusion\Models\Fieldset;
 use Fusion\Models\Form;
 
 class FormObserver
@@ -42,8 +41,6 @@ class FormObserver
 
             $table->timestamps();
         });
-
-        $this->createFieldset($form);
     }
 
     /**
@@ -62,20 +59,6 @@ class FormObserver
         if ($old->table !== $form->table) {
             $this->migration->schema->rename($old->table, $form->table);
         }
-
-        $this->updateFieldset($old, $form);
-    }
-
-    /**
-     * Handle the form "deleting" event.
-     *
-     * @param \Fusion\Models\Form $form
-     *
-     * @return void
-     */
-    public function deleting(Form $form)
-    {
-        $this->deleteFieldset($form);
     }
 
     /**
@@ -136,18 +119,6 @@ class FormObserver
                 $fieldset->save();
             });
         }
-    }
-
-    /**
-     * Automatically delete the fieldset from our form.
-     *
-     * @param Form $form
-     *
-     * @return void
-     */
-    protected function deleteFieldset(Form $form)
-    {
-        $form->fieldset()->delete();
     }
 
     /**

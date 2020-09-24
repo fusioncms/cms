@@ -1,19 +1,23 @@
 <template>
-    <div>
+    <div class="dashboard-page">
         <portal to="title">
             <page-title icon="grip-horizontal">Dashboard</page-title>
         </portal>
 
-        <quick-links :links="quicklinks"></quick-links>
-
-        <analytics-overview></analytics-overview>
-
         <div class="row">
-            <div class="col w-full lg:w-2/3">
+            <div v-if="quicklinks.length" class="dashboard-page__column">
+                <quick-links :links="quicklinks"></quick-links>
+            </div>
+
+            <div class="dashboard-page__column">
+                <analytics-overview></analytics-overview>
+            </div>
+
+            <div class="dashboard-page__column dashboard-page__column--two-thirds">
                 <recent-activity :activities="activities"></recent-activity>
             </div>
 
-            <div class="col w-full lg:w-1/3">
+            <div class="dashboard-page__column dashboard-page__column--third">
                 <recent-news :feed="feed"></recent-news>
             </div>
         </div>
@@ -22,6 +26,8 @@
 
 <script>
     export default {
+        permission: 'access.controlPanel',
+
         head: {
             title() {
                 return {
@@ -52,7 +58,7 @@
             axios.all([
                 axios.get('/api/matrices'),
                 axios.get('/api/activity'),
-                axios.get(process.env.MIX_NEWS_FEED || 'https://beta.getfusioncms.com/blog.json').catch(function() {
+                axios.get(process.env.MIX_NEWS_FEED || 'https://beta.getfusioncms.com/blog.json', {withCredentials: false}).catch(function() {
                     return {
                         data: {
                             items: [],

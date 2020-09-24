@@ -125,8 +125,8 @@ class CollectionController extends Controller
         $model  = (new Collection($matrix->handle))->make();
         $entry  = $model->findOrFail($id);
 
-        if (isset($matrix->fieldset)) {
-            foreach ($matrix->fieldset->relationships() as $relationship) {
+        if (isset($matrix->blueprint)) {
+            foreach ($matrix->blueprint->relationships() as $relationship) {
                 fieldtypes()->get($relationship->type)->destroyRelationship($entry, $relationship);
             }
         }

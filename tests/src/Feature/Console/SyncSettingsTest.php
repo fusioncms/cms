@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\Console;
 
 use Fusion\Console\Actions\SyncSettings;
 use Fusion\Models\Setting as SettingGroup;
@@ -47,21 +47,21 @@ class SyncSettingsTest extends TestCase
         (new SyncSettings())->syncSettingGroups($groups);
 
         // test removal..
-        $this->assertDatabaseMissing('settings', ['handle' => 'api']);
-        $this->assertDatabaseMissing('fieldsets', ['handle' => 'api']);
+        $this->assertDatabaseMissing('settings', ['name' => 'API']);
+        $this->assertDatabaseMissing('blueprints', ['name' => 'API']);
         $this->assertDatabaseDoesNotHaveTable('settings_api');
 
         // test modification..
-        $this->assertDatabaseMissing('settings', ['handle' => 'backups']);
-        $this->assertDatabaseMissing('fieldsets', ['handle' => 'backups']);
+        $this->assertDatabaseMissing('settings', ['name' => 'Backups']);
+        $this->assertDatabaseMissing('blueprints', ['name' => 'Backups']);
         $this->assertDatabaseDoesNotHaveTable('settings_backups');
-        $this->assertDatabaseHas('settings', ['handle' => 'baz']);
-        $this->assertDatabaseHas('fieldsets', ['handle' => 'setting_baz']);
+        $this->assertDatabaseHas('settings', ['name' => 'Baz']);
+        $this->assertDatabaseHas('blueprints', ['name' => 'Baz']);
         $this->assertDatabaseHasTable('settings_baz');
 
         // test addition..
-        $this->assertDatabaseHas('settings', ['handle' => 'foobar']);
-        $this->assertDatabaseHas('fieldsets', ['handle' => 'setting_foobar']);
+        $this->assertDatabaseHas('settings', ['name' => 'Foobar']);
+        $this->assertDatabaseHas('blueprints', ['name' => 'Foobar']);
         $this->assertDatabaseHasTable('settings_foobar');
     }
 
@@ -73,9 +73,9 @@ class SyncSettingsTest extends TestCase
      */
     public function console_command_will_sync_setting_section_records()
     {
-        $group    = SettingGroup::where('handle', 'api')->firstOrFail();
-        $fieldset = $group->fieldset();
-        $fields   = SettingService::fields($group->handle);
+        $group     = SettingGroup::where('handle', 'api')->firstOrFail();
+        $blueprint = $group->blueprint;
+        $fields    = SettingService::fields($group->handle);
 
         // add group..
         $fields['FooBar'] = [];
@@ -88,14 +88,14 @@ class SyncSettingsTest extends TestCase
 
         // test removal..
         $this->assertDatabaseMissing('sections', [
-            'fieldset_id' => $fieldset->id,
-            'handle'      => 'general',
+            'blueprint_id' => $blueprint->id,
+            'handle'       => 'general',
         ]);
 
         // test addition..
         $this->assertDatabaseHas('sections', [
-            'fieldset_id' => $fieldset->id,
-            'handle'      => 'foobar',
+            'blueprint_id' => $blueprint->id,
+            'handle'       => 'foobar',
         ]);
     }
 
@@ -108,7 +108,7 @@ class SyncSettingsTest extends TestCase
     public function console_command_will_sync_setting_field_records()
     {
         $group   = SettingGroup::where('handle', 'files')->firstOrFail();
-        $section = $group->fieldset()->sections->first();
+        $section = $group->blueprint->sections->first();
         $fields  = SettingService::fields($group->handle);
         $fields  = $fields->get('General');
 

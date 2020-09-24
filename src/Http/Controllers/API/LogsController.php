@@ -3,7 +3,7 @@
 namespace Fusion\Http\Controllers\API;
 
 use Fusion\Http\Controllers\Controller;
-use Fusion\Services\Logs\Repository;
+use Fusion\Services\Parsers\Logs\Repository;
 use Illuminate\Http\Request;
 
 class LogsController extends Controller

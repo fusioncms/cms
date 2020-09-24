@@ -6,7 +6,6 @@ use Fusion\Facades\Addon;
 use Fusion\Facades\Theme;
 use Fusion\Models\Role;
 use Fusion\Models\User;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -152,6 +151,7 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
         $this->app->register(FieldtypeServiceProvider::class);
+        $this->app->register(MenuServiceProvider::class);
         $this->app->register(SettingServiceProvider::class);
         $this->app->register(ThemeServiceProvider::class);
         $this->app->register(ScheduleServiceProvider::class);
@@ -276,7 +276,11 @@ class FusionServiceProvider extends ServiceProvider
         $output = array_merge($original, $merging);
 
         foreach ($original as $key => $value) {
-            if (is_array($value) && Arr::exists($merging, $key) && !is_numeric($key)) {
+            if (is_numeric($key) or !isset($merging[$key])) {
+                continue;
+            }
+
+            if (is_array($value) && is_array($merging[$key])) {
                 $output[$key] = $this->mergeDeep($value, $merging[$key]);
             }
         }
@@ -364,10 +368,6 @@ class FusionServiceProvider extends ServiceProvider
         // TODO: point to correct disk if it changes from local storage
         Route::bind('backup', function ($filename) {
             return new \Spatie\Backup\BackupDestination\Backup(Storage::disk('public'), "backups/{$filename}.zip");
-        });
-
-        Route::bind('fieldset', function ($id) {
-            return \Fusion\Models\Fieldset::findOrFail($id);
         });
 
         Route::bind('addon', function ($slug) {

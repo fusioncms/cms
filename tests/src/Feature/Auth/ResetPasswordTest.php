@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature\Users;
+namespace Fusion\Tests\Feature\Auth;
 
 use Event;
 use Fusion\Tests\TestCase;
@@ -59,7 +59,7 @@ class ResetPasswordTest extends TestCase
      */
     public function a_valid_user_can_reset_password_with_a_valid_token()
     {
-        Event::fake();
+        Event::fake([PasswordReset::class]);
 
         $validToken = Password::broker()->createToken($this->user);
 

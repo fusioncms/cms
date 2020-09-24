@@ -1,9 +1,9 @@
 <template>
-    <p-modal name="edit-field" title="Edit Field" noCloseButton noEscClose extra-large v-model="modalOpen">
+    <ui-modal name="edit-field" title="Edit Field" noCloseButton noEscClose extra-large v-model="modalOpen">
         <form-container v-if="form">
             <div class="row mb-6">
                 <div class="col w-1/2">
-                    <p-input
+                    <ui-input-group
                         name="name"
                         label="Name"
                         help="What this field will be called."
@@ -13,14 +13,14 @@
                         :has-error="form.errors.has('name')"
                         :error-message="form.errors.get('name')"
                         v-model="form.name">
-                    </p-input>
+                    </ui-input-group>
                 </div>
 
                 <div class="col w-1/2">
-                    <p-slug
+                    <ui-slug-group
                         name="handle"
                         label="Handle"
-                        help="A developer-friendly variant of the fieldset's name."
+                        help="A developer-friendly variant of the field's name."
                         autocomplete="off"
                         required
                         delimiter="_"
@@ -29,7 +29,7 @@
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
                         v-model="form.handle">
-                    </p-slug>
+                    </ui-slug-group>
                 </div>
             </div>
 
@@ -51,7 +51,7 @@
 
                 <div class="row">
                     <div class="col w-full">
-                        <p-input name="validation" label="Validation Rules" v-model="form.validation" monospaced></p-input>
+                        <ui-input-group name="validation" label="Validation Rules" v-model="form.validation" monospaced></ui-input-group>
                     </div>
                 </div>
 
@@ -65,10 +65,10 @@
         </form-container>
 
         <template slot="footer">
-            <p-button theme="button--primary" @click="submit">Save</p-button>
-            <p-button class="button--secondary mr-2" @click="close">Close</p-button>
+            <ui-button variant="primary" @click="submit">Save</ui-button>
+            <ui-button variant="secondary" class="mr-2" @click="close">Close</ui-button>
         </template>
-    </p-modal>
+    </ui-modal>
 </template>
 
 <script>

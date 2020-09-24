@@ -40,32 +40,25 @@ const router = new Router({
         },
 
         {
-            path: '/fieldsets',
-            component: () => import('@/pages/Fieldsets/Index'),
-            name: 'fieldsets',
+            path: '/blueprints',
+            component: () => import('@/pages/Blueprints/Index'),
+            name: 'blueprints',
             meta: {
                 requiresAuth: true,
                 layout: 'admin'
             }
         },
+
         {
-            path: '/fieldsets/create',
-            component: () => import('@/pages/Fieldsets/Create'),
-            name: 'fieldsets.create',
+            path: '/blueprints/:blueprint/edit',
+            component: () => import('@/pages/Blueprints/Edit'),
+            name: 'blueprints.edit',
             meta: {
                 requiresAuth: true,
                 layout: 'admin'
             }
         },
-        {
-            path: '/fieldsets/:fieldset/edit',
-            component: () => import('@/pages/Fieldsets/Edit'),
-            name: 'fieldsets.edit',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
+
         {
             path: '/taxonomies',
             component: () => import('@/pages/Taxonomies/Index'),
@@ -160,24 +153,6 @@ const router = new Router({
             path: '/matrices/:matrix/edit',
             component: () => import('@/pages/Matrices/Edit'),
             name: 'matrices.edit',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-        {
-            path: '/extensions',
-            component: () => import('@/pages/Extensions/Index'),
-            name: 'extensions',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-        {
-            path: '/extensions/:extension/edit',
-            component: () => import('@/pages/Extensions/Edit'),
-            name: 'extensions.edit',
             meta: {
                 requiresAuth: true,
                 layout: 'admin'
@@ -310,6 +285,15 @@ const router = new Router({
             }
         },
         {
+            path: '/users/:user',
+            component: () => import('@/pages/Users/Show'),
+            name: 'users.show',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+        {
             path: '/users/:role',
             component: () => import('@/pages/Users/Index'),
             name: 'users.role',
@@ -340,6 +324,15 @@ const router = new Router({
             path: '/roles/:role/edit',
             component: () => import('@/pages/Roles/Edit'),
             name: 'roles.edit',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+        {
+            path: '/roles/:role',
+            component: () => import('@/pages/Roles/Show'),
+            name: 'roles.show',
             meta: {
                 requiresAuth: true,
                 layout: 'admin'
@@ -489,12 +482,26 @@ const router = new Router({
         },
 
         {
-            path: '*',
+            path: '/403',
+            component: () => import('@/pages/403'),
+            name: '403',
+            meta: {
+                layout: 'error'
+            }
+        },
+
+        {
+            path: '/404',
             component: () => import('@/pages/404'),
             name: '404',
             meta: {
                 layout: 'error'
             }
+        },
+
+        {
+            path: '*',
+            redirect: '/404'
         },
     ],
 })

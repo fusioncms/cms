@@ -5,7 +5,6 @@ namespace Fusion\Http\Controllers\Web\Auth;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -64,18 +63,10 @@ class RegisterController extends Controller
             'email'    => $attributes['email'],
             'password' => Hash::make($attributes['password']),
         ])->assignRole(
-            setting('user.default_user_role', 'user')
+            setting('users.default_user_role', 'user')
         );
 
-        if (setting('users.user_email_verification') === 'disabled') {
-            // Automatically verify registration
-            if ($user->markEmailAsVerified()) {
-                event(new Verified($user));
-            }
-        } else {
-            // Requires email verification
-            event(new Registered($user));
-        }
+        event(new Registered($user));
 
         $this->guard()->login($user);
 

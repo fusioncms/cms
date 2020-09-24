@@ -12,9 +12,9 @@ class SingleRequest extends FormRequest
     {
         $this->matrix        = Matrix::findOrFail(request()->route('single'));
         $this->model         = (new Single($this->matrix->handle))->make();
-        $this->fieldset      = $this->matrix->fieldset;
-        $this->fields        = $this->fieldset->fields ?? [];
-        $this->relationships = $this->fieldset ? $this->fieldset->relationships() : [];
+        $this->blueprint     = $this->matrix->blueprint;
+        $this->fields        = $this->blueprint->fields ?? [];
+        $this->relationships = $this->blueprint ? $this->blueprint->relationships() : [];
     }
 
     /**

@@ -1,123 +1,120 @@
 <template>
-	<p-field-group
-        :name="name"
-        :fieldId="formattedId"
-        :label="label"
-        :required="required"
-        :hasError="hasError"
-        :errorMessage="errorMessage"
-        :hasSuccess="hasSuccess"
-        :successMessage="successMessage"
-        :help="help">
-        <div v-click-outside="close">
-            <!-- Select Button -->
-            <button
-                class="field field-select"
-                :class="{ 'field-select--open': isOpen, 'field--danger': hasError, 'field--success': hasSuccess}" 
-                type="button"
-                ref="button"
-                :disabled="disabled"
-                @click="toggle"
-                @keydown.down.prevent="highlightNext"
-                @keydown.up.prevent="highlightPrevious"
-                @keydown.enter="selectHighlighted"
-                @keydown.esc="close">
-                
-                <!-- Selected Item/Items -->
-                <div v-if="selectedOptions.length > 0" class="field-select__selected" :class="{'field-select__selected--multiple': multiple}">
-                    <ul v-if="multiple" class="field-select__list">
-                        <li v-for="(option, index) in selectedOptions" :key="index" class="field-select__item tag">
-                            {{ option.label || option }}
-                            
-                            <button @click.stop="removeSelection(index)">
-                                <fa-icon icon="times"></fa-icon>
-                                <span class="sr-only">Unselect {{ option.label || option }}</span>
-                            </button>
-                        </li>
-                    </ul>
+    <div v-click-outside="close">
+        <!-- Select Button -->
+        <button
+            class="field field-select"
+            :class="{ 'field-select--open': isOpen, 'field-select--readonly': readonly, 'field--danger': hasError, 'field--success': hasSuccess}" 
+            type="button"
+            ref="button"
+            :disabled="disabled || readonly"
+            @click="toggle"
+            @keydown.down.prevent="highlightNext"
+            @keydown.up.prevent="highlightPrevious"
+            @keydown.enter="selectHighlighted"
+            @keydown.esc="close">
+            
+            <!-- Selected Item/Items -->
+            <div v-if="selectedOptions.length > 0" class="field-select__selected" :class="{'field-select__selected--multiple': multiple}">
+                <ul v-if="multiple" class="field-select__list">
+                    <li v-for="(option, index) in selectedOptions" :key="index" class="field-select__item">
+                        <ui-tag 
+                            :value="option.label || option" 
+                            :label="'Unselect' + option.label || option" 
+                            @click="removeSelection(index)">
+                        </ui-tag>
+                    </li>
+                </ul>
 
-                    <span v-else v-html="selectedOptions[0].label || selectedOptions[0]"></span>
-                </div>
-
-                <span v-else class="field-select__placeholder" v-html="placeholder"></span>
-
-                <div class="field-select__arrow">
-                    <fa-icon icon="chevron-down" class="fa-fw"></fa-icon>
-                </div>
-            </button>
-
-            <input :id="formattedId" type="hidden" :value="selectedOptions">
-
-            <!-- Select Dropdown -->
-            <div
-                v-show="isOpen"
-                class="field-dropdown"
-                ref="dropdown">
-                <!-- Search -->
-                <div class="field-dropdown__search">
-                    <p-label text="Search Options" :field_name="'search_options_' + name" v-if="filterable"></p-label>
-                    <input
-                        v-if="filterable"
-                        :name="'search_options_' + name"
-                        type="search"
-                        ref="search"
-                        class="field"
-                        v-model="search"
-                        placeholder="Search for option..."/>
-                </div>
-
-                <p :id="formattedId + '_controls'" class="field-dropdown__controls" v-if="showControls">
-                    <span>Press enter to select,</span>
-                    <span>↑ ↓ to navigate,</span>
-                    <span>esc to dismiss</span>
-                </p>
-
-                <div class="field-dropdown__group" v-if="filteredOptions.length > 0">
-                    <!-- Multi-select -->
-                    <p-checkbox-group 
-                        ref="options" 
-                        class="field-dropdown__options field-dropdown__options--check" 
-                        :aria-describedby="formattedId + '_controls'" 
-                        v-if="multiple">
-                        <p-checkbox
-                            v-for="(option, index) in filteredOptions"
-                            class="field-dropdown__option"
-                            :id="formattedId + '_' + index"
-                            :key="index"
-                            :native-value="option.value"
-                            :name="formattedId + '_option'"
-                            v-model="selection">
-                            {{ option.label }}
-                        </p-checkbox>
-                    </p-checkbox-group>
-
-                    <!-- Single Select -->
-                    <ul ref="options" v-else v-show="filteredOptions.length > 0" class="field-dropdown__options field-dropdown__options--list">
-                        <li v-for="(option, index) in filteredOptions"
-                            tab-index="0"
-                            :key="index"
-                            class="field-dropdown__option"
-                            :class="{'field-dropdown__option--selected': inSelection(option), 'field-dropdown__option--highlighted': isHighlighted(index)}"
-                            @click="addSelection(option)">
-                            {{ option.label }}
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- No Results -->
-                <p v-else class="field-dropdown__empty">
-                    No results found for "{{ search }}"
-                </p>
+                <span v-else v-html="selectedOptions[0].label || selectedOptions[0]"></span>
             </div>
+
+            <span v-else class="field-select__placeholder" v-html="placeholder"></span>
+
+            <div class="field-select__arrow">
+                <fa-icon icon="chevron-down" class="fa-fw"></fa-icon>
+            </div>
+        </button>
+
+        <!-- <ui-input 
+            :id="formattedId" 
+            type="text" 
+            :required="required"
+            :value="selectedOptions">
+        </ui-input> -->
+
+        <!-- Select Dropdown -->
+        <div
+            v-show="isOpen"
+            class="field-dropdown"
+            ref="dropdown">
+            <!-- Search -->
+            <div class="field-dropdown__search">
+                <ui-label text="Search Options" :fieldId="'search_options_' + name" v-if="filterable"></ui-label>
+                <ui-input
+                    v-if="filterable"
+                    :name="'search_options_' + name"
+                    type="search"
+                    ref="search"
+                    v-model="search"
+                    placeholder="Search for option...">
+                </ui-input>
+            </div>
+
+            <p :id="formattedId + '_controls'" class="field-dropdown__controls" v-if="showControls">
+                <span>Press enter to select,</span>
+                <span>↑ ↓ to navigate,</span>
+                <span>esc to dismiss</span>
+            </p>
+
+            <div class="field-dropdown__group" v-if="filteredOptions.length > 0">
+                <!-- Multi-select -->
+                <ui-checkbox-group 
+                    ref="options" 
+                    class="field-dropdown__options field-dropdown__options--check" 
+                    :aria-describedby="formattedId + '_controls'" 
+                    v-if="multiple">
+                    <ui-checkbox
+                        v-for="(option, index) in filteredOptions"
+                        class="field-dropdown__option"
+                        :id="formattedId + '_' + index"
+                        :key="index"
+                        :native-value="option.value"
+                        :name="formattedId + '_option'"
+                        v-model="selection">
+                        {{ option.label }}
+                    </ui-checkbox>
+                </ui-checkbox-group>
+
+                <!-- Single Select -->
+                <ul ref="options" v-else v-show="filteredOptions.length > 0" class="field-dropdown__options field-dropdown__options--list">
+                    <li v-for="(option, index) in filteredOptions"
+                        tab-index="0"
+                        :key="index"
+                        class="field-dropdown__option"
+                        :class="{'field-dropdown__option--selected': inSelection(option), 'field-dropdown__option--highlighted': isHighlighted(index)}"
+                        @click="addSelection(option)">
+                        {{ option.label }}
+                    </li>
+                </ul>
+            </div>
+
+            <!-- No Results -->
+            <p v-else class="field-dropdown__empty">
+                No results found for "{{ search }}"
+            </p>
         </div>
-	</p-field-group>
+    </div>
 </template>
 
 <script>
     import Popper from 'popper.js'
 
     export default {
-        name: 'p-select',
+        name: 'ui-select',
+
+        mixins: [
+            require('../../mixins/fields').default
+        ],
 
         data() {
             return {
@@ -138,10 +135,6 @@
                 default: null,
             },
             id: String,
-            label: {
-                required: false,
-                type: String,
-            },
             help: {
                 required: false,
                 type: String,
@@ -150,6 +143,14 @@
                 required: false,
                 type: String,
                 default: 'Please select an option...',
+            },
+            required: {
+                type: Boolean,
+                default: false,
+            },
+            readonly: {
+                type: Boolean,
+                default: false,
             },
             disabled: {
                 type: Boolean,
@@ -160,20 +161,15 @@
                 type: Boolean,
                 default: false,
             },
-            errorMessage: {
-                required: false,
-                type: String,
-                default: '',
-            },
             hasSuccess: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-            successMessage: {
+            message: {
                 required: false,
-                type: String,
-                default: '',
+                type: Boolean,
+                defaut: false
             },
             options: {
                 required: false,
@@ -198,11 +194,6 @@
                 default: false,
             },
             multiple: {
-                required: false,
-                type: Boolean,
-                default: false
-            },
-            required: {
                 required: false,
                 type: Boolean,
                 default: false
@@ -247,14 +238,6 @@
                 } else {
                     return this.$refs.options.children[this.highlighted]
                 }
-            },
-
-            hasMessage() {
-                return this.help || this.errorMessage || this.successMessage
-            },
-
-            formattedId() {
-                return this.id ? this.id : this.name + '_field'
             }
         },
 

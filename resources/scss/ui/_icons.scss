@@ -1,0 +1,58 @@
+.icon {
+    @apply inline-flex items-center justify-center rounded-full;
+    line-height: 1;
+
+    &--primary {
+        @apply text-white bg-primary-500;
+    }
+
+    &--secondary {
+        @apply text-white bg-secondary-500;
+    }
+
+    &--info {
+        @apply text-white bg-info-500;
+    }
+
+    &--success {
+        @apply text-white bg-success-500;
+    }
+
+    &--warning {
+        @apply text-white bg-warning-500;
+    }
+
+    &--danger {
+        @apply text-white bg-danger-500;
+    }
+
+    &--xs {
+        width: rem(18px);
+        height: rem(18px);
+        font-size: rem(12px);
+    }
+
+    &--sm {
+        width: rem(21px);
+        height: rem(21px);
+        font-size: rem(16px);
+    }
+
+    &--md {
+        width: rem(42px);
+        height: rem(42px);
+        font-size: rem(35px);
+    }
+
+    &--lg {
+        width: rem(60px);
+        height: rem(60px);
+        font-size: rem(48px);
+    }
+
+    &--xl {
+        width: rem(75px);
+        height: rem(75px);
+        font-size: rem(65px);
+    }
+}

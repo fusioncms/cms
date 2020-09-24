@@ -1,73 +1,64 @@
 <template>
-	<div class="form__group">
-		<div class="w-full">
-			<label
-				class="form__label"
-				:for="name"
-				v-if="label"
-				v-html="label">
-			</label>
+	<ui-field-group
+        :name="name"
+        :fieldId="formattedId"
+        :label="label"
+        :hideLabel="hideLabel"
+        :required="required"
+        :hasError="hasError"
+        :errorMessage="errorMessage"
+        :hasSuccess="hasSuccess"
+        :successMessage="successMessage"
+        :help="help">
+		<div class="flex w-full" v-click-outside="close">
+			<button
+				style="height: 42px; width: 42px;"
+				class="p-2 flex items-center justify-center rounded border border-gray-400 text-gray-600 mr-3 text-2xl focus:outline-none"
+				:class="{'pattern-checkers': ! selected}"
+				@click.prevent="open">
+				<fa-icon v-if="selected" :icon="['fas', selected]" fixed-width></fa-icon>
+			</button>
+			
+			<div class="flex-1">
+				<div class="form__group relative">
+					<input
+						class="form__control"
+						:class="{'form__error': hasError}"
+						:id="name"
+						:name="name"
+						type="text"
+						:placeholder="placeholder"
+						:readonly="readonly"
+						:disabled="disabled"
+						:autocomplete="autocomplete"
+						:autofocus="autofocus"
+						v-model="search"
+						@focus="open"
+						@keydown.esc="close"
+						ref="search"
+					>
 
-			<div class="flex w-full" v-click-outside="close">
-				<button
-					style="height: 42px; width: 42px;"
-					class="p-2 flex items-center justify-center rounded border border-gray-400 text-gray-600 mr-3 text-2xl focus:outline-none"
-					:class="{'pattern-checkers': ! selected}"
-					@click.prevent="open">
-					<fa-icon v-if="selected" :icon="['fas', selected]" fixed-width></fa-icon>
-				</button>
-				
-				<div class="flex-1">
-					<div class="form__group relative">
-						<input
-							class="form__control"
-							:class="{'form__error': hasError}"
-							:id="name"
-							:name="name"
-							type="text"
-							:placeholder="placeholder"
-							:readonly="readonly"
-							:disabled="disabled"
-							:autocomplete="autocomplete"
-							:autofocus="autofocus"
-							v-model="search"
-							@focus="open"
-							@keydown.esc="close"
-							ref="search"
-						>
-
-						<div v-show="isOpen" class="form__select-dropdown overflow-y-scroll" style="height: 500px;" ref="dropdown" @keydown.esc="close">
-							<div v-for="category in filtered" :key="category.label">
-								<div class="px-4 pt-4">
-									<div class="border-b">
-										<span class="leading-relaxed text-xs tracking-wider font-semibold uppercase">{{ category.label }}</span>
-									</div>
+					<div v-show="isOpen" class="form__select-dropdown overflow-y-scroll" style="height: 500px;" ref="dropdown" @keydown.esc="close">
+						<div v-for="category in filtered" :key="category.label">
+							<div class="px-4 pt-4">
+								<div class="border-b">
+									<span class="leading-relaxed text-xs tracking-wider font-semibold uppercase">{{ category.label }}</span>
 								</div>
+							</div>
 
-								<div class="px-3 py-4 text-2xl">
-									<a href="#" @click.prevent="select(icon)" class="inline-flex bg-white p-2 m-1 rounded border-2 border-gray-300 text-gray-600 hover:text-gray-900" v-for="icon in category.icons" :key="icon">
-										<fa-icon :icon="['fas', icon]" fixed-width></fa-icon>
+							<div class="px-3 py-4 text-2xl">
+								<a href="#" @click.prevent="select(icon)" class="inline-flex bg-white p-2 m-1 rounded border-2 border-gray-300 text-gray-600 hover:text-gray-900" v-for="icon in category.icons" :key="icon">
+									<fa-icon :icon="['fas', icon]" fixed-width></fa-icon>
 
-										<span class="text-xs ml-2">{{ icon }}</span>
-									</a>
-								</div>
+									<span class="text-xs ml-2">{{ icon }}</span>
+								</a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-			<div class="form__control--meta" v-if="help || errorMessage">
-				<div class="form__help">
-					<span v-if="help" v-html="help"></span>
-					<span v-if="errorMessage" class="form__error--message" v-html="errorMessage"></span>
-				</div>
-			</div>
-		</div>	
-		
-
-		
-	</div>
+		</div>
+	</ui-field-group>
 </template>
 
 <script>
@@ -75,7 +66,11 @@
 	import Popper from 'popper.js'
 	import icons from '../../metadata/fontawesome.js'
 
-	export default {	
+	export default {
+		mixins: [
+            require('../mixins/fields').default
+		],
+			
 		data () {
 			return {
 				search: '',
@@ -85,12 +80,16 @@
 			};
 		},
 
-
 		props: {
 			name: String,
             placeholder: String,
-            label: String,
-            help: String,
+			help: String,
+			label: String,
+			hideLabel: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
             value: {
                 type: String,
                 default: '',
@@ -121,6 +120,16 @@
                 default: false,
             },
             errorMessage: {
+                required: false,
+                type: String,
+                default: '',
+            },
+            hasSuccess: {
+                required: false,
+                type: Boolean,
+                default: false,
+            },
+            successMessage: {
                 required: false,
                 type: String,
                 default: '',

@@ -11,34 +11,51 @@
 @import "base/globals";
 @import "base/typography";
 
-@import "components/alerts";
 @import "components/animations";
 @import "components/page-title";
-@import "components/backgrounds";
-@import "components/badges";
-@import "components/buttons";
-@import "components/cards";
-@import "components/dropdown";
-@import "components/help";
-@import "components/icons";
-@import "components/loaders";
 @import "components/quicklinks";
-@import "components/tables";
-@import "components/tabs";
-@import "components/tags";
-@import "components/toolbar";
-@import "components/forms/fields";
-@import "components/forms/grid";
-@import "components/forms/groups";
+
+@import "ui/alerts";
+@import "ui/badges";
+@import "ui/breadcrumbs";
+@import "ui/buttons";
+@import "ui/cards";
+@import "ui/datetime";
+@import "ui/dropdown";
+@import "ui/help";
+@import "ui/icons";
+@import "ui/label";
+@import "ui/legend";
+@import "ui/list";
+@import "ui/loaders";
+@import "ui/modals";
+@import "ui/pagination";
+@import "ui/tables";
+@import "ui/tabs";
+@import "ui/tags";
+@import "ui/toast";
+@import "ui/toolbar";
+@import "ui/tooltip";
+@import "ui/treeview";
+@import "ui/forms/fields";
+@import "ui/forms/groups";
 
 @import "layout/columns";
 @import "layout/containers";
 @import "layout/footer";
 @import "layout/header";
+@import "layout/layouts";
 @import "layout/navigation";
 @import "layout/section";
 
+@import "pages/analytics";
 @import "pages/customize";
+@import "pages/dashboard";
+@import "pages/file-manager";
+@import "pages/logs";
+@import "pages/permissions";
+@import "pages/roles";
+@import "pages/users";
 
 @import "vendor/codemirror";
 @import "vendor/draggable";
@@ -56,23 +73,8 @@ OLD STYLES
 **/
 
 // Components
-@import "refactor/components/banner";
 @import "refactor/components/charts";
-@import "refactor/components/jumbotron";
-@import "refactor/components/list";
-@import "refactor/components/loader";
-@import "refactor/components/modal";
-@import "refactor/components/pagination";
-// @import "refactor/components/radio";
-@import "refactor/components/section_builder";
-// @import "refactor/components/select";
-@import "refactor/components/spinner";
-@import "refactor/components/toast";
-@import "refactor/components/tooltip";
-@import "refactor/components/treeview";
-@import "refactor/components/upload";
-@import "refactor/components/logs";
-@import "refactor/components/file-manager";
+@import "refactor/components/section-builder";
 
 // Fieldtypes
 @import "refactor/components/fieldtypes/color-picker";
@@ -85,7 +87,6 @@ OLD STYLES
 @tailwind utilities;
 
 // Layout
-// @import "refactor/layout/containers";
 @import "refactor/layout/gallery";
 @import "refactor/layout/inbox";
 @import "refactor/layout/mailables";

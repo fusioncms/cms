@@ -20,7 +20,7 @@
     }
 
     &__window {
-        @apply relative flex flex-auto items-center justify-center h-screen overflow-y-auto bg-gray-900 pattern-blueprint;
+        @apply relative flex flex-auto items-center justify-center h-screen overflow-y-auto bg-gray-900;
     }
 }
 

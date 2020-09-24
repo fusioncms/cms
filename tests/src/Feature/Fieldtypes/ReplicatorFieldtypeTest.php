@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature;
+namespace Fusion\Tests\Feature\Fieldtypes;
 
 use Fusion\Models\Field;
 use Fusion\Models\Fieldset;
@@ -20,6 +20,8 @@ class ReplicatorFieldtypeTest extends TestCase
     {
         parent::setUp();
         $this->handleValidationExceptions();
+
+        $this->markTestIncomplete();
 
         // --
         $this->fieldset = factory(Fieldset::class)->create(['name' => 'RP Fieldset', 'handle' => 'rp_fieldset']);

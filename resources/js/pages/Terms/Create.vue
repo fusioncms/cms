@@ -40,15 +40,13 @@
                 let body = []
                 let sidebar = []
 
-                if (this.taxonomy.fieldset) {
-                    body = _.filter(this.taxonomy.fieldset.sections, function(section) {
-                        return section.placement == 'body'
-                    })
+                body = _.filter(this.taxonomy.blueprint.sections, function(section) {
+                    return section.placement == 'body'
+                })
 
-                    sidebar = _.filter(this.taxonomy.fieldset.sections, function(section) {
-                        return section.placement == 'sidebar'
-                    })
-                }
+                sidebar = _.filter(this.taxonomy.blueprint.sections, function(section) {
+                    return section.placement == 'sidebar'
+                })
 
                 return {
                     body: body,
@@ -107,13 +105,11 @@
                 status: 1,
             }
 
-            if (taxonomy.fieldset) {
-                _.forEach(taxonomy.fieldset.sections, function(section) {
-                    _.forEach(section.fields, function(field) {
-                        fields[field.handle] = field.default
-                    })
+            _.forEach(taxonomy.blueprint.sections, function(section) {
+                _.forEach(section.fields, function(field) {
+                    fields[field.handle] = field.default
                 })
-            }
+            })
 
             callback(null, taxonomy, fields)
         }).catch(function(error) {

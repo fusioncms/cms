@@ -1,5 +1,5 @@
 <template>
-    <p-field-group
+    <ui-field-group
         :name="name"
         :fieldId="formattedId"
         :required="required"
@@ -37,20 +37,20 @@
         <template v-slot:bottom>
             <ul v-if="files.length" class="field-upload-list">
                 <li v-for="(file, index) in files" :key="file.name" class="field-upload-list__item">
-                    <p-button @click.prevent="remove(index)" class="button--small button--icon">
+                    <ui-button @click.prevent="remove(index)" class="button--small button--icon">
                         <fa-icon icon="trash-alt"></fa-icon>
                         <span class="sr-only">Remove File</span>
-                    </p-button>
+                    </ui-button>
                     <span class="field-upload-list__file">{{ file.name }} - {{ file.size | bytes }}</span>
                 </li>
             </ul>
         </template>
-    </p-field-group>
+    </ui-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-upload',
+        name: 'ui-upload',
         
         mixins: [
             require ('../../mixins/filehelper').default

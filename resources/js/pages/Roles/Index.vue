@@ -1,18 +1,19 @@
 <template>
-    <div>
+    <div class="roles-page">
         <portal to="title">
             <page-title icon="user-shield">Roles</page-title>
         </portal>
 
         <portal to="actions">
-            <router-link :to="{ name: 'roles.create' }" class="button">Create Role</router-link>
+            <ui-button key="create-role-btn" :to="{ name: 'roles.create' }" variant="primary" v-if="$can('roles.create')">Create Role</ui-button>
         </portal>
 
-        <div class="row">
-            <div class="content-container">
-                <p-table :endpoint="endpoint" id="roles" sort-by="label" key="roles_table">
+        <ui-card>
+            <ui-card-body>
+                <ui-table key="roles" class="roles-table" id="roles" :endpoint="endpoint" sort-by="label" show-page-status show-page-numbers show-page-nav show-page-ends>
                     <template slot="label" slot-scope="table">
-                        <router-link :to="{ name: 'roles.edit', params: {role: table.record.id} }">{{ table.record.label }}</router-link>
+                        <router-link :to="{ name: 'roles.show', params: {role: table.record.id} }" v-if="$can('roles.view')">{{ table.record.label }}</router-link>
+                        <span v-else>{{ table.record.label }}</span>
                     </template>
 
                     <template slot="description" slot-scope="table">
@@ -20,34 +21,34 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
+                        <ui-table-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
+                            <ui-dropdown-link :to="{ name: 'roles.show', params: {role: table.record.id} }" v-if="$can('roles.view')">View</ui-dropdown-link>
 
-                            <p-dropdown-link@click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">
-                                Edit
-                            </p-dropdown-link>
+                            <ui-dropdown-link v-if="! isOwner(table.record.id) && $can('roles.update')" @click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">Edit</ui-dropdown-link>
 
-                            <p-dropdown-link
-                                v-if="isRemovable(table.record.name)"
+                            <ui-dropdown-divider v-if="isRemovable(table.record.name) && $can('roles.delete')"></ui-dropdown-divider>
+
+                            <ui-dropdown-link
+                                v-if="isRemovable(table.record.name) && $can('roles.delete')"
                                 @click.prevent v-modal:delete-role="table.record"
-                                classes="link--danger"
-                            >
+                                classes="danger">
                                 Delete
-                            </p-dropdown-link>
-                        </p-actions>
+                            </ui-dropdown-link>
+                        </ui-table-actions>
                     </template>
-                </p-table>
-            </div>
-        </div>
+                </ui-table>
+            </ui-card-body>
+        </ui-card>
 
         <portal to="modals">
-            <p-modal name="delete-role" title="Delete Role">
+            <ui-modal name="delete-role" title="Delete Role">
                 <p>Are you sure you want to permenantly delete this role?</p>
 
                 <template slot="footer" slot-scope="role">
-                    <p-button v-modal:delete-role @click="destroy(role.data.id)" theme="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-role>Cancel</p-button>
+                    <ui-button v-modal:delete-role @click="destroy(role.data.id)" variant="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-role variant="secondary">Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
         </portal>
     </div>
 </template>
@@ -56,6 +57,8 @@
     import _ from 'lodash'
 
     export default {
+        permission: 'roles.viewAny',
+
         head: {
             title() {
                 return {
@@ -81,6 +84,10 @@
 
                     bus().$emit('refresh-datatable-roles')
                 })
+            },
+
+            isOwner(id) {
+                return id && id === 4
             }
         }
     }

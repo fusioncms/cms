@@ -2,8 +2,7 @@
 
 namespace Fusion\Tests;
 
-use Caffeinated\Flash\FlashServiceProvider;
-use Caffeinated\Menus\MenusServiceProvider;
+use Fusion\Models\User;
 use Fusion\Providers\FusionServiceProvider;
 use Fusion\Tests\Concerns\InstallsFusion;
 use Fusion\Tests\Concerns\MakesDatabaseAssertions;
@@ -47,14 +46,18 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
         Hash::driver('bcrypt')->setRounds(4);
 
+        // TODO: remove w/ `laravel/legacy-factories` package
         $this->withFactories(fusion_path('/database/definitions'));
 
         $this->install();
 
-        $this->owner          = $this->createUser('Jane Doe', 'admin@example.com', 'secret', 'owner');
-        $this->user           = $this->createUser('Ducky Consumer', 'guest@example.com', 'secret', 'user');
-        $this->unverifiedUser = $this->createUser('Unverified Consumer', 'unverified@example.com', 'secret', null, ['email_verified_at' => null]);
-        $this->guest          = $this->createGuest();
+        User::withoutEvents(function () {
+            $this->owner          = $this->createUser('Jane Doe', 'admin@example.com', 'secret', 'owner');
+            $this->admin          = $this->createUser('Anthony Admin', 'admin-user@example.com', 'secret', 'admin');
+            $this->user           = $this->createUser('Ducky Consumer', 'guest@example.com', 'secret', 'user');
+            $this->unverifiedUser = $this->createUser('Unverified Consumer', 'unverified@example.com', 'secret', null, ['email_verified_at' => null]);
+            $this->guest          = $this->createGuest();
+        });
     }
 
     /**
@@ -150,10 +153,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             // Laravel
             UiServiceProvider::class,
             SanctumServiceProvider::class,
-
-            // Caffeinated
-            FlashServiceProvider::class,
-            MenusServiceProvider::class,
 
             // Spatie
             BackupServiceProvider::class,

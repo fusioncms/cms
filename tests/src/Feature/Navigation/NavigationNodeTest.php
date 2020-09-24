@@ -17,15 +17,30 @@ class NavigationNodeTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        // --
         $this->actingAs($this->owner, 'api');
 
-        $this->section      = \Facades\SectionFactory::times(1)->withoutFields()->create();
-        $this->fieldExcerpt = \Facades\FieldFactory::withName('Excerpt')->withSection($this->section)->create();
-        $this->fieldContent = \Facades\FieldFactory::withName('Content')->withType('textarea')->withSection($this->section)->create();
-        $this->fieldset     = \Facades\FieldsetFactory::withName('General')->withSections(collect([$this->section]))->create();
-        $this->navigation   = \Facades\NavigationFactory::withName('Header')->withFieldset($this->fieldset)->create();
-        $this->model        = (new \Fusion\Services\Builders\Navigation($this->navigation->handle))->make();
+        $this->navigation = \Facades\NavigationFactory::withName('Header')
+            ->withSections([
+                [
+                    'name'   => 'General',
+                    'handle' => 'general',
+                    'fields' => [
+                        [
+                            'name'   => 'Excerpt',
+                            'handle' => 'excerpt',
+                            'type'   => 'input',
+                        ],
+                        [
+                            'name'   => 'Content',
+                            'handle' => 'content',
+                            'type'   => 'textarea',
+                        ],
+                    ],
+                ],
+            ])
+            ->create();
+
+        $this->model = (new \Fusion\Services\Builders\Navigation($this->navigation->handle))->make();
     }
 
     /**

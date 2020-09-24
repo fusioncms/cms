@@ -1,17 +1,17 @@
 <template>
-    <p-modal name="move-file" title="Move file(s) to directory">
-        <p-treeview :items="directories" v-model="directory"><i class="fas fa-folder-open"></i>
+    <ui-modal name="move-file" title="Move file(s) to directory">
+        <ui-treeview :items="directories" v-model="directory"><i class="fas fa-folder-open"></i>
             <template slot="prepend" slot-scope="{ node, open }">
                 <fa-icon v-if="open" :icon="['fas', 'folder-open']" class="mr-2" :class="{'fill-current text-info-500': node.isCurrent}"></fa-icon>
                 <fa-icon v-else :icon="['fas', 'folder']" class="mr-2" :class="{'fill-current text-info-500': node.isCurrent}"></fa-icon>
             </template>
-        </p-treeview>
+        </ui-treeview>
 
         <template v-slot:footer>
-            <p-button v-modal:move-file>Close</p-button>
-            <p-button theme="primary" @click="submit" v-modal:move-file class="mr-1">Move</p-button>
+            <ui-button v-modal:move-file>Close</ui-button>
+            <ui-button variant="primary" @click="submit" v-modal:move-file class="mr-1">Move</ui-button>
         </template>
-    </p-modal>
+    </ui-modal>
 </template>
 
 <script>

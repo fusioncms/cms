@@ -1,14 +1,19 @@
 <template>
-	<form-container>
+	<div class="roles-page">
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'roles' }" class="button">Go Back</router-link>
-                <button type="submit" @click.prevent="submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+                <ui-button key="go-back-btn" :to="{ name: 'roles' }" variant="secondary">Go Back</ui-button>
+                <ui-button v-if="!isOwner" key="save-btn" type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
+        <ui-alert v-if="isOwner" icon="info-circle" variant="info">
+            <p>Owner role information and permissions are not editable.</p>
+        </ui-alert>
+
         <section-card title="General Information" description="General information about this role and what it can manage.">
-            <p-input
+            <ui-input-group
+                id="roles-name"
                 name="label"
                 label="Name"
                 description="What should this role be called?"
@@ -17,51 +22,39 @@
                 required
                 :has-error="form.errors.has('label')"
                 :error-message="form.errors.get('label')"
-                v-model="form.label">
-            </p-input>
+                v-model="form.label"
+                :readonly="isOwner">
+            </ui-input-group>
 
-            <p-textarea
+            <ui-textarea-group
+                id="roles-description"
                 name="description"
                 label="Description"
                 autocomplete="off"
                 :has-error="form.errors.has('description')"
                 :error-message="form.errors.get('description')"
                 v-model="form.description"
+                :readonly="isOwner"
                 :rows="2">
-            </p-textarea>
+            </ui-textarea-group>
         </section-card>
 
-        <section-card title="Permissions" description="Configure which permissions this role has." v-if="hasPermissions(form.name)">
-            <p-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions_table">
+        <section-card title="Permissions" description="Permissions allow you to restrict which areas of the controle panel this user can access." v-if="hasPermissions(form.name)">
+            <ui-table key="permissions-table" ref="permissions" id="permissions-table" endpoint="/datatable/permissions" sort-by="name" no-actions show-page-status>
                 <template slot="name" slot-scope="table">
-                    <input
-                        type="checkbox"
-                        name="permissions"
-                        :id="table.record.name"
-                        :value="table.record.name"
-                        v-model="permissions">
+                    <code v-if="isOwner">{{ table.record.name }}</code>
 
-                    <code>{{ table.record.name }}</code>
+                    <ui-checkbox v-else :id="'roles-checkbox-' + table.record.name" name="permissions" :native-value="table.record.name" v-model="permissions">
+                        <code>{{ table.record.name }}</code>
+                    </ui-checkbox>
                 </template>
 
                 <template slot="description" slot-scope="table">
-                    <span class="text-gray-800 text-sm">{{ table.record.description }}</span>
+                    <p>{{ table.record.description }}</p>
                 </template>
-            </p-table>
+            </ui-table>
         </section-card>
-
-		<template v-slot:sidebar>
-			<p-definition-list v-if="role">
-                <p-definition name="Created At">
-                    {{ $moment(role.created_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-
-                <p-definition name="Updated At">
-                    {{ $moment(role.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </p-definition>
-            </p-definition-list>
-		</template>
-	</form-container>
+	</div>
 </template>
 
 <script>
@@ -96,10 +89,15 @@
                 set(value){
                     this.form.permissions = value
                 }
+            },
+
+            isOwner() {
+                return this.role.id && this.role.id === 4
             }
         },
 
         methods: {
+            
             // toggle(name, ev) {
             //     const token  = _.head(_.split(name, '.'))
             //     const items  = this.$refs.permissions.records

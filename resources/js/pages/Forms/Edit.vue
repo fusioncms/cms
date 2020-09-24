@@ -41,7 +41,7 @@
             submit() {
                 this.form.patch(`/api/forms/${this.id}`)
                     .then(() => {
-                        axios.post(`/api/fieldsets/${this.resource.fieldset.id}/sections`, { sections: this.form.sections })
+                        axios.post(`/api/blueprints/${this.resource.blueprint.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Form successfully saved', 'success')
                             })
@@ -67,7 +67,7 @@
                             name:                    form.name,
                             handle:                  form.handle,
                             description:             form.description,
-                            sections:                form.fieldset.sections,
+                            sections:                form.blueprint.sections,
                             collect_email_addresses: form.collect_email_addresses,
                             collect_ip_addresses:    form.collect_ip_addresses,
                             response_receipt:        form.response_receipt,

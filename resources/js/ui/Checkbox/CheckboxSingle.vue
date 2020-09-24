@@ -1,26 +1,32 @@
 <template>
-    <p-field-group
+    <ui-field-group
         :name="name"
-        :fieldId="id + '_field'"
+        :fieldId="formattedId"
         :required="required"
         :hasError="hasError"
         :errorMessage="errorMessage"
         :hasSuccess="hasSuccess"
         :successMessage="successMessage"
         :help="help">
-        <p-checkbox
+        <ui-checkbox
             :name="name"
             :id="id + '_field'"
             :disabled="disabled"
-            :required="required">
+            :required="required"
+            :native-value="value"
+            v-model="computedValue">
             <slot></slot>
-        </p-checkbox>
-    </p-field-group>
+        </ui-checkbox>
+    </ui-field-group>
 </template>
 
 <script>
     export default {
-        name: 'p-checkbox-single',
+        name: 'ui-checkbox-single',
+
+        mixins: [
+            require('../../mixins/fields').default
+        ],
 
         props: {
             name: {
@@ -31,6 +37,10 @@
             help: String,
             id: {
                 required: false
+            },
+            value: {
+                required: false,
+                type: [String, Number, Boolean, Function, Object, Array, Symbol],
             },
             required: {
                 type: Boolean,
@@ -59,12 +69,6 @@
                 required: false,
                 type: String,
                 default: '',
-            }
-        },
-
-        computed: {
-            hasMessage() {
-                return this.help || this.errorMessage || this.successMessage
             }
         }
     }

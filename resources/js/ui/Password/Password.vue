@@ -1,20 +1,11 @@
 <template>
-    <p-field-group
-        :name="name"
-        :fieldId="formattedId"
-        :label="label"
-        :required="required"
-        :hasError="hasError"
-        :errorMessage="errorMessage"
-        :hasSuccess="hasSuccess"
-        :successMessage="successMessage"
-        :help="help">
+    <div class="field-password">
         <input
             class="field field--input"
             :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
             :id="formattedId"
             :name="name"
-            type="password"
+            :type="type"
             :placeholder="placeholder"
             :readonly="readonly"
             :disabled="disabled"
@@ -23,18 +14,32 @@
             :autofocus="autofocus"
             :required="required"
             :aria-required="required" 
-            :aria-describedby="hasMessage ? formattedId + '_message' : null">
-    </p-field-group>
+            :aria-describedby="message ? formattedId + '_message' : null"
+            @input="$emit('input', $event.target.value)"
+            v-model="value"/>
+
+        <ui-button icon size="small" class="field-password__button" @click="toggleVisibility()">
+            <fa-icon v-if="revealed" icon="eye-slash"></fa-icon>
+            <fa-icon v-else icon="eye"></fa-icon>
+
+            <span v-if="revealed" class="sr-only">{{ hideText }}</span>
+            <span v-else class="sr-only">{{ showText }}</span>
+        </ui-button>
+    </div>
 </template>
 
 <script>
     export default {
-        name: 'p-password',
+        name: 'ui-password',
+
+        mixins: [
+            require('../../mixins/fields').default
+        ],
 
         data() {
             return {
                 revealed: false,
-                type: 'password',
+                type: 'password'
             }
         },
 
@@ -87,20 +92,15 @@
                 type: Boolean,
                 default: false,
             },
-            errorMessage: {
-                required: false,
-                type: String,
-                default: '',
-            },
             hasSuccess: {
                 required: false,
                 type: Boolean,
                 default: false,
             },
-            successMessage: {
+            message: {
                 required: false,
-                type: String,
-                default: '',
+                type: Boolean,
+                defaut: false
             },
             autocomplete: {
                 required: false,
@@ -112,16 +112,6 @@
                 type: Boolean,
                 default: false,
             },
-        },
-
-        computed: {
-            hasMessage() {
-                return this.help || this.errorMessage || this.successMessage
-            },
-
-            formattedId() {
-                return this.id ? this.id : this.name + '_field'
-            }
         },
 
         methods: {

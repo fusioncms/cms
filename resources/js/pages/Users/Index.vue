@@ -1,34 +1,40 @@
 <template>
-    <div>
+    <div class="user-page">
         <portal to="title">
-            <page-title icon="users">Users</page-title>
+            <page-title icon="users">Users - {{ current ? current.label : '' }}</page-title>
         </portal>
 
         <portal to="actions">
-            <router-link :to="{ name: 'users.create' }" class="button">Create User</router-link>
+            <ui-button key="create-user-btn" :to="{name: 'users.create' }" variant="primary" v-if="$can('users.create')">Create User</ui-button>
         </portal>
 
-        <div class="row">
-            <div class="side-container">
-                <div class="card">
-                    <div class="card__body">
-                        <div class="list">
-                            <router-link :to="{ name: 'users' }" class="list--item" exact>All Users</router-link>
+        <ui-card>
+            <ui-card-body>
+                <ui-table key="users" class="user-table" id="users" :endpoint="endpoint" sort-by="name" show-page-status show-page-numbers show-page-nav show-page-ends>
+                    <template v-slot:toolbarPrepend>
+                        <ui-toolbar-group>
+                            <ui-dropdown id="user-roles">
+                                <span>Roles</span>
 
-                            <span class="list--separator">Roles</span>
+                                <template v-slot:menu>
+                                    <ui-dropdown-link :to="{ name: 'users' }" exact>All</ui-dropdown-link>
 
-                            <router-link v-for="role in filteredRoles" :key="role.id" :to="{ name: 'users.role', params: { role: role.name } }" class="list--item" exact>
-                                {{ role.label }}
-                            </router-link>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                    <ui-dropdown-divider></ui-dropdown-divider>
 
-            <div class="content-container">
-                <p-table id="users" :endpoint="endpoint" sort-by="name" key="users_table">
+                                    <ui-dropdown-link v-for="role in filteredRoles" :key="role.name" :to="{ name: 'users.role', params: { role: role.name } }" exact>
+                                        {{ role.label }}
+                                    </ui-dropdown-link>
+                                </template>
+                            </ui-dropdown>
+                        </ui-toolbar-group>
+                    </template>
+
                     <template slot="name" slot-scope="table">
-                        <router-link :to="{ name: 'users.edit', params: {user: table.record.id} }">{{ table.record.name }}</router-link>
+                        <div class="flex items-center">
+                            <ui-status :value="table.record.status" class="mr-2"></ui-status>
+                            <router-link :to="{ name: 'users.show', params: {user: table.record.id} }" v-if="$can('users.view')">{{ table.record.name }}</router-link>
+                            <span v-else>{{ table.record.name }}</span>
+                        </div>
                     </template>
 
                     <template slot="email" slot-scope="table">
@@ -36,44 +42,88 @@
                     </template>
 
                     <template slot="role" slot-scope="table">
-                        <span class="badge">{{ table.record.role.name }}</span>
+                        <ui-badge>{{ table.record.role.label }}</ui-badge>
+                    </template>
+
+                    <template slot="created_at" slot-scope="table">
+                        <ui-date :timestamp="table.record.created_at"></ui-date>
+                    </template>
+
+                    <template slot="email_verified_at" slot-scope="table">
+                        <ui-badge v-if="table.record.email_verified_at" variant="success">Yes</ui-badge>
+                        <ui-badge v-else variant="danger">No</ui-badge>
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <p-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
-                            <p-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }">Edit</p-dropdown-link>
+                        <ui-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
+                            <ui-dropdown-link :to="{ name: 'users.show', params: {user: table.record.id} }" v-if="$can('users.view')">View</ui-dropdown-link>
 
-                            <p-dropdown-link
-                                v-if="table.record.id != user.id"
+                            <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }" v-if="$can('users.update')">Edit</ui-dropdown-link>
+
+                            <ui-dropdown-divider></ui-dropdown-divider>
+
+                            <ui-dropdown-link
+                                v-if="$can('users.update')"
+                                @click.prevent
+                                v-modal:verify-user="table.record">
+                                Resend Verification
+                            </ui-dropdown-link>
+
+                            <ui-dropdown-link
+                                v-if="$can('users.update')"
+                                @click.prevent
+                                v-modal:password-user="table.record">
+                                Reset Password
+                            </ui-dropdown-link>
+
+                            <ui-dropdown-link
+                                v-if="table.record.id != $user.id && $can('users.delete')"
                                 @click.prevent
                                 v-modal:delete-user="table.record"
-                                classes="link--danger"
-                            >
+                                class="danger">
                                 Delete
-                            </p-dropdown-link>
-                        </p-actions>
+                            </ui-dropdown-link>
+                        </ui-table-actions>
                     </template>
-                </p-table>
-            </div>
-        </div>
+                </ui-table>
+            </ui-card-body>
+        </ui-card>
 
         <portal to="modals">
-            <p-modal name="delete-user" title="Delete User">
+            <ui-modal name="verify-user" title="Verification Email">
+                <p>Are you sure you want to re-send the verification email to this user?</p>
+
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:verify-user @click="emailVerification(user.data.id)" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:verify-user>Cancel</ui-button>
+                </template>
+            </ui-modal>
+
+            <ui-modal name="password-user" title="Password Reset">
+                <p>Are you sure you want to force user to reset their password upon next login attempt?</p>
+
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:password-user @click="passwordReset(user.data.id)" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:password-user>Cancel</ui-button>
+                </template>
+            </ui-modal>
+
+            <ui-modal name="delete-user" title="Delete User">
                 <p>Are you sure you want to permenantly delete this user?</p>
 
                 <template slot="footer" slot-scope="user">
-                    <p-button v-modal:delete-user @click="destroy(user.data.id)" theme="danger" class="ml-3">Delete</p-button>
-                    <p-button v-modal:delete-user>Cancel</p-button>
+                    <ui-button v-modal:delete-user @click="destroy(user.data.id)" variant="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-user variant="secondary">Cancel</ui-button>
                 </template>
-            </p-modal>
+            </ui-modal>
         </portal>
     </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
-
     export default {
+        permission: 'users.viewAny',
+
         head: {
             title() {
                 return {
@@ -90,12 +140,8 @@
         },
 
         computed: {
-            ...mapGetters({
-                user: 'auth/getUser',
-            }),
-
             filteredRoles() {
-                return _.filter(this.roles, (role) => role.name !== 'Guest')
+                return _.filter(this.roles, (role) => role.name !== 'Guest' && role.id !== 1)
             },
 
             endpoint() {
@@ -104,6 +150,23 @@
                 }
 
                 return '/datatable/users'
+            },
+
+            current() {
+                let vm = this
+                let index = _.findIndex(this.roles, function(item) {
+                    return item.name == vm.role
+                })
+
+                if (index != -1) {
+                    return this.roles[index]
+                }
+
+                return {
+                    name: 'all',
+                    label: 'All'
+                }
+
             }
         },
 
@@ -123,11 +186,32 @@
 
         methods: {
             destroy(id) {
-                axios.delete('/api/users/' + id).then((response) => {
-                    toast('User successfully deleted.', 'success')
+                axios.delete(`/api/users/${id}`)
+                    .then((response) => {
+                        toast('User successfully deleted.', 'success')
 
-                    bus().$emit('refresh-datatable-users')
-                })
+                        bus().$emit('refresh-datatable-users')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
+            },
+
+            emailVerification(id) {
+                axios.post(`/api/users/${id}/verify`)
+                    .then((response) => {
+                        toast('Email verification notification has been sent to user.', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
+            },
+
+            passwordReset(id) {
+                axios.post(`/api/users/${id}/password`)
+                    .then((response) => {
+                        toast('Password reset notification has been sent to user.', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
             }
         }
     }

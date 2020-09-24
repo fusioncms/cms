@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-import router from '@/router'
 import store from '@/store'
+import router from '@/router'
 import forms from '@/mixins/forms'
 import setting from '@/mixins/setting'
 

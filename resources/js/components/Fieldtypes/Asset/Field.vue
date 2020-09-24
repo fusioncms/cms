@@ -4,9 +4,9 @@
 
 		<div class="flex items-start justify-between">
 			<div class="w-1/2">
-				<p-button :disabled="requestOpen" @click="open">
+				<ui-button :disabled="requestOpen" @click="open">
 					<fa-icon :icon="['fas', 'plus-circle']" class="mr-1"></fa-icon> Manage Assets
-				</p-button>
+				</ui-button>
 			</div>
 
 			<file-selection
@@ -18,7 +18,7 @@
 		</div>
 
 		<!-- File Manager Modal -->
-		<p-modal name="file-manager" no-header no-footer extra-large v-model="modalOpen">
+		<ui-modal name="file-manager" no-header no-footer extra-large v-model="modalOpen">
 			<file-uploader ref="uploader"></file-uploader>
 
 			<div class="row" @dragenter="setDropzoneVisible(true)">
@@ -36,21 +36,21 @@
 						<div class="card__body">
                     		<div class="toolbar">
                     			<div class="toolbar__group">
-									<button class="button button--icon" @click.prevent="push">
+									<ui-button icon @click.prevent="push">
 										<fa-icon class="icon" icon="arrow-alt-circle-left"></fa-icon>
-									</button>
+									</ui-button>
                     			</div>
 
                     			<div class="toolbar__group">
                     				<div class="buttons">
 										<div class="buttons__group">
-											<button class="button button--icon" @click.prevent="$refs.uploader.openDZ()">
+											<ui-button icon @click.prevent="$refs.uploader.openDZ()">
 												<fa-icon class="icon" :icon="['fas', 'upload']"></fa-icon>
-											</button>
+											</ui-button>
 
-											<button class="button button--icon" v-modal:new-folder>
+											<ui-button icon v-modal:new-folder>
 												<fa-icon class="icon" :icon="['fas', 'folder-plus']"></fa-icon>
-											</button>
+											</ui-button>
 										</div>
 									</div>
 	                            </div>
@@ -95,7 +95,7 @@
             		</div>
             	</div>
             </div>
-        </p-modal>
+        </ui-modal>
 
         <portal to="modals">
             <new-folder-modal></new-folder-modal>

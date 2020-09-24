@@ -59,7 +59,7 @@
             submit() {
                 this.form.post('/api/forms')
                     .then((response) => {
-                        axios.post(`/api/fieldsets/${response.data.fieldset.id}/sections`, { sections: this.form.sections })
+                        axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Form successfully saved', 'success')
 
