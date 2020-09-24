@@ -227,6 +227,21 @@
                 .field-check--radio & { @apply bg-white; } 
             }
         }
+        
+
+        &:indeterminate + .field-check__label {
+            .field-check--checkbox & {
+                &:before {
+                    @apply bg-gray-200;
+                }
+    
+                &:after { 
+                    @apply border-gray-500 border-l-0;
+                    content: ''; 
+                    transform: rotate(0deg);
+                }
+            }
+        }
 
         &:focus + .field-check__label::before { @apply shadow-focus; }
 
