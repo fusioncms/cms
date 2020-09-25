@@ -13,8 +13,10 @@
             :id="id + '_field'"
             :disabled="disabled"
             :required="required"
-            :native-value="value"
             :indeterminate="indeterminate"
+            :native-value="nativeValue"
+            :checked="checked"
+            @click.stop
             v-model="computedValue">
             <slot></slot>
         </ui-checkbox>
@@ -34,26 +36,42 @@
                 required: true,
                 type: String,
             },
-            label: String,
-            help: String,
             id: {
                 required: false
             },
+            label: String,
+            help: String,
             value: {
                 required: false,
                 type: [String, Number, Boolean, Function, Object, Array, Symbol],
+            },
+            nativeValue: {
+                required: false,
+                type: [String, Number, Boolean, Function, Object, Array, Symbol],
+            },
+            disabled: {
+                type: Boolean,
+                default: false,
             },
             required: {
                 type: Boolean,
                 default: false,
             },
-            disabled: {
+            checked: {
                 type: Boolean,
                 default: false,
             },
             indeterminate: {
                 type: Boolean,
                 default: false,
+            },
+            trueValue: {
+                type: [String, Number, Boolean, Function, Object, Array],
+                default: true
+            },
+            falseValue: {
+                type: [String, Number, Boolean, Function, Object, Array],
+                default: false
             },
             hasError: {
                 required: false,
