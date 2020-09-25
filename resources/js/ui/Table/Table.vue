@@ -87,8 +87,8 @@
                 <!-- Table Head -->
                 <thead>
                     <tr>
-                        <th v-if="bulk" width="50px">
-                            <div class="pl-4 flex items-center">
+                        <th v-if="hasBulkActions" width="50px">
+                            <div class="table__select-all">
                                 <ui-checkbox
                                     name="toggle-select-all"
                                     id="toggle-select-all"
@@ -125,11 +125,11 @@
                         </th>
 
                         <th v-show="hasSelections" class="w-48">
-                            <div class="flex justify-end mr-4">
-                                <select name="bulk-actions" class="p-1 border rounded" id="bulk-actions">
-                                    <option selected disabled>Bulk Actions</option>
+                            <div class="bulk-actions">
+                                <select name="bulk-actions" id="bulk-actions" class="field-select field-select--sm field-select--bordered" v-model="action" @change="showBulkActionConfirmation = true">
+                                    <option selected disabled :value="null">Bulk Actions</option>
 
-                                    <option v-for="(data, action) in bulk_actions" :key="action">{{ action }}</option>
+                                    <option v-for="(action, index) in allowedBulkActions" :key="action.name" :value="index">{{ action.name }}</option>
                                 </select>
                             </div>
                         </th>
@@ -141,14 +141,16 @@
                 <!-- Table Body -->
                 <tbody>
                     <tr v-for="(record, index) in records" :key="record[primaryKey] || index">
-                        <td v-if="bulk">
-                            <ui-checkbox-single
-                                v-if="isSelectable(record[primaryKey])"
-                                :name="'select-' + record[primaryKey] || index"
-                                :id="'select-' + record[primaryKey] || index"
-                                :native-value="record[primaryKey]"
-                                v-model="selected"
-                            ></ui-checkbox-single>
+                        <td v-if="hasBulkActions">
+                            <div class="flex flex-1">
+                                <ui-checkbox
+                                    v-if="isSelectable(record[primaryKey])"
+                                    :name="'select-' + record[primaryKey] || index"
+                                    :id="'select-' + record[primaryKey] || index"
+                                    :native-value="record[primaryKey]"
+                                    v-model="selected"
+                                ></ui-checkbox>
+                            </div>
                         </td>
 
                         <td v-for="column in displayable"
@@ -204,6 +206,17 @@
                 <p>No results found.</p>
             </slot>
         </div>
+
+        <portal to="modals">
+            <ui-modal v-if="action !== null" name="confirm-bulk-action" :title="'Confirm Bulk ' + this.allowedBulkActions[action].name" v-model="showBulkActionConfirmation">
+                <p>Are you sure you want to perform this action against <b>{{ this.selected.length }}</b> record{{this.selected.length > 1 ? 's' : '' }}?</p>
+
+                <template slot="footer">
+                    <ui-button @click.prevent="confirmBulkAction" :loading="working" class="ml-3" variant="primary">Confirm</ui-button>
+                    <ui-button @click.prevent="cancelBulkAction" v-if="! working" variant="secondary">Cancel</ui-button>
+                </template>
+            </ui-modal>
+        </portal>
     </div>
 </template>
 
@@ -281,8 +294,11 @@
 
         data() {
             return {
+                action: null,
+                showBulkActionConfirmation: false,
                 initialLoad: true,
                 loading: true,
+                working: false,
                 displayable: [],
                 column_names: [],
                 bulk_actions: [],
@@ -324,6 +340,14 @@
                 return !!this.$slots.actions || !!this.$scopedSlots.actions
             },
 
+            hasBulkActions() {
+                if (! this.bulk) return false
+                if (! this.selectable.length > 0) return false
+                if (! this.allowedBulkActions.length > 0) return false
+
+                return true
+            },
+
             hasSelections() {
                 return this.selected.length > 0
             },
@@ -335,11 +359,27 @@
                     return ! vm.bulk_actions_exempt.includes(record[vm.primaryKey])
                 })
             },
+
+            allowedBulkActions() {
+                let vm = this
+
+                return _.filter(this.bulk_actions, (action) => {
+                    if (!action.permission) return true
+
+                    return vm.$can(action.permission)
+                })
+            },
         },
 
         watch: {
             endpoint() {
                 this.getRecords()
+            },
+
+            showBulkActionConfirmation(value) {
+                if (value == false) {
+                    this.action = null
+                }
             },
 
             search: _.debounce(function(value) {
@@ -350,6 +390,30 @@
         },
 
         methods: {
+            cancelBulkAction() {
+                this.showBulkActionConfirmation = false
+                this.action = null
+            },
+
+            confirmBulkAction() {
+                let vm = this
+
+                this.working = true
+
+                axios.post(`${this.bulk_actions[this.action].route}`, {
+                    records: this.selected
+                }).then((response) => {
+                    toast('Bulk action completed successfully.', 'success')
+
+                    vm.getRecords()
+
+                    vm.showBulkActionConfirmation = false
+                    vm.selected = []
+                    vm.action = null
+                    vm.working = false
+                })
+            },
+
             isSelectable(id) {
                 return ! this.bulk_actions_exempt.includes(id)
             },

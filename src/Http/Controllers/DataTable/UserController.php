@@ -26,17 +26,30 @@ class UserController extends DataTableController
     public function getBulkActions()
     {
         return [
-            'Resend Email Verification' => [
+            [
+                'name'       => 'Enable',
                 'permission' => 'users.update',
-                'route'      => '',
+                'route'      => '/datatable/users/actions/enable',
             ],
-            'Reset Password' => [
+            [
+                'name'       => 'Disable',
                 'permission' => 'users.update',
-                'route'      => '',
+                'route'      => '/datatable/users/actions/disable',
             ],
-            'Delete' => [
+            [
+                'name'       => 'Resend Email Verification',
+                'permission' => 'users.update',
+                'route'      => '/datatable/users/actions/verify-email',
+            ],
+            [
+                'name'       => 'Reset Password',
+                'permission' => 'users.update',
+                'route'      => '/datatable/users/actions/reset-password',
+            ],
+            [
+                'name'       => 'Delete',
                 'permission' => 'users.delete',
-                'route'      => '',
+                'route'      => '/datatable/users/actions/delete',
             ],
         ];
     }
@@ -84,8 +97,11 @@ class UserController extends DataTableController
         ];
     }
 
-    protected function deleteUsersAction()
+    public function getFilterable()
     {
-        dd('deleting users...');
+        return [
+            'name',
+            'email'
+        ];
     }
 }

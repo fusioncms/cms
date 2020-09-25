@@ -7,8 +7,8 @@
         opacity: 1;
     }
 
-    &:focus:not([disabled]) { 
-        @apply outline-none shadow-focus; 
+    &:focus:not([disabled]) {
+        @apply outline-none shadow-focus;
     }
 
     &[readonly] { @apply bg-gray-200; }
@@ -48,7 +48,7 @@
     &--success {
         @apply border-success-500;
 
-        &:focus:not([disabled]) { 
+        &:focus:not([disabled]) {
             @apply border-success-300 shadow-focus-success;
         }
     }
@@ -56,8 +56,8 @@
     &--danger {
         @apply border-danger-500;
 
-        &:focus:not([disabled]) { 
-            @apply border-danger-300 shadow-focus-danger; 
+        &:focus:not([disabled]) {
+            @apply border-danger-300 shadow-focus-danger;
         }
     }
 }
@@ -93,6 +93,14 @@
 .field-select {
     @apply flex justify-between items-center w-full px-3 py-2;
 
+    &--sm {
+        @apply p-1;
+    }
+
+    &--bordered {
+        @apply border;
+    }
+
     &--readonly {
         opacity: 1!important;
     }
@@ -109,8 +117,8 @@
         @apply flex flex-wrap list-none p-0 m-0 -mb-1;
     }
 
-    &__item { 
-        @apply mb-1 mr-1; 
+    &__item {
+        @apply mb-1 mr-1;
     }
 
     &__arrow { @apply text-xs; }
@@ -135,7 +143,7 @@
     &__options {
         max-height: rem(385px);
         overflow-y: auto;
-        
+
         &--list {
             @apply list-none p-0 m-0;
         }
@@ -163,7 +171,7 @@
         cursor: pointer;
 
         &:hover {
-            @apply bg-primary-700 border-primary-700; 
+            @apply bg-primary-700 border-primary-700;
         }
 
         * { pointer-events: none; }
@@ -182,7 +190,7 @@
         }
 
         &:active + label {
-            @apply bg-primary-900 border-primary-900; 
+            @apply bg-primary-900 border-primary-900;
         }
     }
 }
@@ -211,7 +219,7 @@
     &__input {
         @apply inline-block flex-shrink-0 opacity-0 mr-2;
         width: rem(20px);
-        
+
         & + .field-check__label::after { content: none; }
 
         &:checked + .field-check__label {
@@ -219,25 +227,25 @@
                 @apply bg-primary-500 border-primary-500;
             }
 
-            &:after { 
-                content: ''; 
+            &:after {
+                content: '';
 
                 .field-check--checkbox & { @apply border-white; }
 
-                .field-check--radio & { @apply bg-white; } 
+                .field-check--radio & { @apply bg-white; }
             }
         }
-        
+
 
         &:indeterminate + .field-check__label {
             .field-check--checkbox & {
                 &:before {
                     @apply bg-gray-200;
                 }
-    
-                &:after { 
+
+                &:after {
                     @apply border-gray-500 border-l-0;
-                    content: ''; 
+                    content: '';
                     transform: rotate(0deg);
                 }
             }
@@ -245,16 +253,16 @@
 
         &:focus + .field-check__label::before { @apply shadow-focus; }
 
-        &[disabled] + .field-check__label { 
-            @apply text-gray-500; 
+        &[disabled] + .field-check__label {
+            @apply text-gray-500;
 
             &:before,
             &:after { opacity: 0.5; }
         }
     }
 
-    &__label { 
-        display: inline-block; 
+    &__label {
+        display: inline-block;
         @extend %no-bottom;
 
         &:before,
@@ -267,7 +275,7 @@
             top: rem(3px);
             height: rem(20px);
             width: rem(20px);
-            
+
             .field-check--checkbox & { @apply rounded; }
 
             .field-check--radio & { @apply rounded-full; }

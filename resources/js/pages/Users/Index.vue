@@ -94,8 +94,8 @@
                 <p>Are you sure you want to re-send the verification email to this user?</p>
 
                 <template slot="footer" slot-scope="user">
-                    <ui-button v-modal:verify-user @click="emailVerification(user.data.id)" class="ml-3">Confirm</ui-button>
-                    <ui-button v-modal:verify-user>Cancel</ui-button>
+                    <ui-button v-modal:verify-user @click="emailVerification(user.data.id)" variant="primary" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:verify-user variant="secondary">Cancel</ui-button>
                 </template>
             </ui-modal>
 
@@ -103,8 +103,8 @@
                 <p>Are you sure you want to force user to reset their password upon next login attempt?</p>
 
                 <template slot="footer" slot-scope="user">
-                    <ui-button v-modal:password-user @click="passwordReset(user.data.id)" class="ml-3">Confirm</ui-button>
-                    <ui-button v-modal:password-user>Cancel</ui-button>
+                    <ui-button v-modal:password-user @click="passwordReset(user.data.id)" variant="primary" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:password-user variant="secondary">Cancel</ui-button>
                 </template>
             </ui-modal>
 

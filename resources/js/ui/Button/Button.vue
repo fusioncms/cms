@@ -19,19 +19,19 @@
 
             <slot></slot>
 
-            <!-- <fa-icon v-if="props.isLoading" icon="circle-notch" class="ml-3 fa-fw fa-spin"></fa-icon> -->
+            <fa-icon v-if="loading" icon="circle-notch" class="ml-3 fa-fw fa-spin"></fa-icon>
         </a>
 
         <button v-else
             class="button"
             :class="[{ 'button--icon': icon, 'button--rounded': rounded, 'disabled': disabled }, variantClass, sizeClass]"
-            :disabled="disabled"
+            :disabled="disabled || loading"
             v-on="$listeners"
             v-bind="$attrs">
 
             <slot></slot>
 
-            <!-- <fa-icon v-if="props.isLoading" icon="circle-notch" class="ml-3 fa-fw fa-spin"></fa-icon> -->
+            <fa-icon v-if="loading" icon="circle-notch" class="ml-3 fa-fw fa-spin"></fa-icon>
         </button>
 </template>
 
@@ -49,6 +49,7 @@
             icon: Boolean,
             rounded: Boolean,
             href: String,
+            loading: Boolean,
             to: {
                 type: Array|Object|String,
                 default: ''
