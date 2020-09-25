@@ -1,10 +1,8 @@
 <template>
     <div>
         <portal to="title">
-            <page-title :icon="collection.icon">Create {{ collection.reference_singular }}</page-title>
+            <page-title :icon="collection.icon || 'pencil-alt'" :subtitle="collection.description">Create {{ collection.reference_singular }}</page-title>
         </portal>
-
-        <portal to="subtitle">{{ collection.description }}</portal>
 
         <shared-form
             v-if="form"

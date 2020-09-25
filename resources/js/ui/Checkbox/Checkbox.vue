@@ -7,6 +7,7 @@
             :id="id"
             :disabled="disabled"
             :required="required"
+            :checked="checked"
             :indeterminate.prop="indeterminate"
             :value="nativeValue"
             :true-value="trueValue"
@@ -32,7 +33,7 @@
                 newValue: this.value,
             }
         },
-        
+
         props: {
             name: {
                 required: true,
@@ -54,6 +55,10 @@
                 default: false,
             },
             required: {
+                type: Boolean,
+                default: false,
+            },
+            checked: {
                 type: Boolean,
                 default: false,
             },

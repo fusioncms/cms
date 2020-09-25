@@ -77,7 +77,7 @@
         <main id="main-content" class="main-content w-full flex-auto">
             <!-- Content -->
             <div class="main-content__container">
-                <div class="flex flex-row flex-wrap items-center justify-between mb-6">
+                <div class="flex flex-row flex-wrap justify-between mb-6">
                     <div class="main-content__header">
                         <portal-target name="title" slim></portal-target>
                     </div>

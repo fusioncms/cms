@@ -590,7 +590,7 @@
                     <h3>Single Checkbox w/ Content</h3>
                 </div>
 
-                <div class="col w-full md:w-1/2">
+                <div class="col w-full md:w-1/3">
                     <ui-checkbox-single
                         id="checkbox_single"
                         name="checkbox_single"
@@ -599,7 +599,7 @@
                     </ui-checkbox-single>
                 </div>
                 
-                <div class="col w-full md:w-1/2">
+                <div class="col w-full md:w-1/3">
                     <ui-checkbox-single
                         id="checkbox_single_error"
                         name="checkbox_single_error"
@@ -607,6 +607,16 @@
                         errorMessage="This field is required to proceed"
                         required>
                         <p>I have read and understand this website's <a href="#">Terms of Service</a> and agree with all policies.</p>
+                    </ui-checkbox-single>
+                </div>
+
+                <div class="col w-full md:w-1/3">
+                    <ui-checkbox-single
+                        id="checkbox_single_indeterminate"
+                        name="checkbox_single_indeterminate"
+                        indeterminate
+                        required>
+                        <p>Inteterminate Checkbox</p>
                     </ui-checkbox-single>
                 </div>
             </div>
