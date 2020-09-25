@@ -89,20 +89,13 @@
                     <tr>
                         <th v-if="bulk" width="50px">
                             <div class="pl-4 flex items-center">
-                                <ui-checkbox-single
+                                <ui-checkbox
                                     name="toggle-select-all"
                                     id="toggle-select-all"
-                                    :checked="records.length === selected.length"
+                                    :checked="selectable.length === selected.length"
                                     @input="toggleSelectAll"
-                                    :indeterminate="true"
-                                ></ui-checkbox-single>
-
-                                <!-- <input
-                                    type="checkbox"
-                                    @change="toggleSelectAll"
-                                    :checked="records.length === selected.length"
-                                    :indeterminate.prop="selected.length > 0 && (records.length !== selected.length)"
-                                > -->
+                                    :indeterminate="selected.length > 0 && (selectable.length !== selected.length)"
+                                ></ui-checkbox>
                             </div>
                         </th>
 
@@ -131,7 +124,7 @@
                             </span>
                         </th>
 
-                        <th v-if="bulk">
+                        <th v-show="hasSelections" class="w-48">
                             <div class="flex justify-end mr-4">
                                 <select name="bulk-actions" class="p-1 border rounded" id="bulk-actions">
                                     <option selected disabled>Bulk Actions</option>
@@ -141,7 +134,7 @@
                             </div>
                         </th>
 
-                        <th v-if="hasActions && ! bulk" class="w-20">&nbsp;</th>
+                        <th v-show="hasActions && ! hasSelections" class="w-48">&nbsp;</th>
                     </tr>
                 </thead>
 
@@ -150,6 +143,7 @@
                     <tr v-for="(record, index) in records" :key="record[primaryKey] || index">
                         <td v-if="bulk">
                             <ui-checkbox-single
+                                v-if="isSelectable(record[primaryKey])"
                                 :name="'select-' + record[primaryKey] || index"
                                 :id="'select-' + record[primaryKey] || index"
                                 :native-value="record[primaryKey]"
@@ -166,7 +160,7 @@
                             </slot>
                         </td>
 
-                        <td class="table__actions" v-if="hasActions">
+                        <td class="table__actions w-20" v-if="hasActions">
                             <slot name="actions" :record="record"></slot>
                         </td>
                     </tr>
@@ -292,6 +286,7 @@
                 displayable: [],
                 column_names: [],
                 bulk_actions: [],
+                bulk_actions_exempt: [],
                 sortable: [],
                 records: [],
                 search: '',
@@ -331,7 +326,15 @@
 
             hasSelections() {
                 return this.selected.length > 0
-            }
+            },
+
+            selectable() {
+                let vm = this
+
+                return _.filter(this.records, (record) => {
+                    return ! vm.bulk_actions_exempt.includes(record[vm.primaryKey])
+                })
+            },
         },
 
         watch: {
@@ -347,13 +350,17 @@
         },
 
         methods: {
+            isSelectable(id) {
+                return ! this.bulk_actions_exempt.includes(id)
+            },
+
             toggleSelectAll() {
                 if (this.selected.length > 0) {
                     this.selected = []
                     return
                 }
 
-                this.selected = _.map(this.records, 'id')
+                this.selected = _.map(this.selectable, 'id')
             },
 
             getRecords() {
@@ -365,6 +372,7 @@
                     this.sortable = response.data.sortable
                     this.column_names = response.data.column_names
                     this.bulk_actions = response.data.bulk_actions
+                    this.bulk_actions_exempt = response.data.bulk_actions_exempt
                     this.pagination.totalRecords = response.data.records.total
                     this.pagination.totalPages = response.data.records.last_page
 

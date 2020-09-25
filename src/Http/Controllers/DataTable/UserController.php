@@ -27,18 +27,30 @@ class UserController extends DataTableController
     {
         return [
             'Resend Email Verification' => [
-                'permission' => '',
-                'handler'    => '',
+                'permission' => 'users.update',
+                'route'      => '',
             ],
             'Reset Password' => [
-                'permission' => '',
-                'handler'    => '',
+                'permission' => 'users.update',
+                'route'      => '',
             ],
             'Delete' => [
-                'permission' => '',
-                'handler'    => '',
+                'permission' => 'users.delete',
+                'route'      => '',
             ],
         ];
+    }
+
+    /**
+     * Owners are exempt from bulk actions.
+     *
+     * @return array
+     */
+    public function getExemptFromBulkActions()
+    {
+        return User::whereHas('roles', function ($query) {
+            $query->where('name', 'Owner');
+        })->get()->pluck('id');
     }
 
     public function getDisplayableColumns()

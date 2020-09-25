@@ -15,6 +15,7 @@
             :required="required"
             :indeterminate="indeterminate"
             :native-value="nativeValue"
+            :checked="checked"
             @click.stop
             v-model="computedValue">
             <slot></slot>
@@ -53,6 +54,10 @@
                 default: false,
             },
             required: {
+                type: Boolean,
+                default: false,
+            },
+            checked: {
                 type: Boolean,
                 default: false,
             },

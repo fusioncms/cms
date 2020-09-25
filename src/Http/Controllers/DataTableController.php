@@ -37,11 +37,12 @@ abstract class DataTableController extends Controller
     public function index(Request $request)
     {
         return response()->json([
-            'displayable'  => array_values($this->getDisplayableColumns()),
-            'sortable'     => array_values($this->getSortable()),
-            'column_names' => $this->getCustomColumnNames(),
-            'records'      => $this->getRecords($request),
-            'bulk_actions' => $this->getBulkActions(),
+            'displayable'         => array_values($this->getDisplayableColumns()),
+            'sortable'            => array_values($this->getSortable()),
+            'column_names'        => $this->getCustomColumnNames(),
+            'records'             => $this->getRecords($request),
+            'bulk_actions'        => $this->getBulkActions(),
+            'bulk_actions_exempt' => $this->getExemptFromBulkActions(),
         ]);
     }
 
@@ -62,6 +63,16 @@ abstract class DataTableController extends Controller
      * @return array
      */
     protected function getBulkActions()
+    {
+        return [];
+    }
+
+    /**
+     * Get the rows that should be exempt from bulk actions.
+     *
+     * @return array
+     */
+    public function getExemptFromBulkActions()
     {
         return [];
     }
