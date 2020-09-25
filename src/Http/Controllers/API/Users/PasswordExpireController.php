@@ -6,7 +6,7 @@ use Fusion\Http\Controllers\Controller;
 use Fusion\Models\User;
 use Illuminate\Http\Request;
 
-class SetPasswordController extends Controller
+class PasswordExpireController extends Controller
 {
     /**
      * Request for user to reset password.
