@@ -2,7 +2,6 @@
 
 namespace Fusion\Http\Controllers\API\Users;
 
-use Fusion\Concerns\SendsPasswordSetEmails;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\UserRequest;
 use Fusion\Http\Resources\UserResource;
@@ -12,8 +11,6 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    use SendsPasswordSetEmails;
-
     /**
      * Return a paginated resource of all users.
      *
@@ -62,8 +59,8 @@ class UserController extends Controller
         // handle role setting..
         $this->assureOwnerRoleLimit($user);
 
-        // Note: suppression req'd during imports..
-        $this->sendPasswordSetNotification($user);
+        // force password set..
+        $user->sendPasswordExpiredNotification();
 
         return new UserResource($user);
     }

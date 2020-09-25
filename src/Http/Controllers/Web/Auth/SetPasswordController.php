@@ -2,15 +2,38 @@
 
 namespace Fusion\Http\Controllers\Web\Auth;
 
+use Fusion\Models\User;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Rules\SecurePassword;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\RedirectsUsers;
 
 class SetPasswordController extends Controller
 {
+    use RedirectsUsers;
+
+    /**
+     * Where to redirect users after setting their password.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/';
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display the password set view for the given token.
-     *
-     * If no token is present, display the link request form.
      *
      * @param \Illuminate\Http\Request $request
      *
@@ -18,9 +41,35 @@ class SetPasswordController extends Controller
      */
     public function showSetForm(Request $request)
     {
-        return view('auth.passwords.set')->with([
-            'token' => $request->route()->parameter('token'),
-            'email' => $request->email,
-        ]);
+        return $request->user()->passwordHasExpired()
+            ? view('auth.passwords.set')
+            : redirect($this->redirectPath());
     }
+
+    /**
+     * Reset the given user's password.
+     * 
+     * @param  Request  $request
+     * @return RedirectResponse|JsonResponse
+     */
+    public function setPassword(Request $request)
+    {
+        $user       = $request->user();
+        $attributes = $request->validate([
+            'password' => ['required', 'confirmed', new SecurePassword()],
+        ]);
+
+        $user->password = Hash::make($attributes['password']);
+        
+        $user->setRememberToken(Str::random(60));
+        
+        $user->save();
+
+        event(new PasswordReset($user));
+
+        return $request->wantsJson()
+            ? response()->json(['message' => 'Password successfully updated!'], 200)
+            : redirect($this->redirectPath())->with('status', 'Password successfully updated!');
+    }
+
 }

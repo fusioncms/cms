@@ -1,4 +1,4 @@
-# Set Password Notification
+# New Account Notification
 
 You are receiving this email because a new account has been created for you.
 

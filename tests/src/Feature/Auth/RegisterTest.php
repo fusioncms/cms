@@ -129,6 +129,19 @@ class RegisterTest extends TestCase
      * @group fusioncms
      * @group auth
      */
+    public function successful_registration_will_set_user_password_expiration()
+    {
+        $user = $this->makeUserRegistration();
+
+        $this->assertFalse($user->passwordHasExpired());
+        $this->assertTrue($user->password_expires_at instanceof \DateTime);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group auth
+     */
     public function successful_registration_will_fire_registrated_event()
     {
         Event::fake([Registered::class]);

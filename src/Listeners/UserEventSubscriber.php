@@ -13,6 +13,10 @@ class UserEventSubscriber
 {
     /**
      * Handle the user failed login event.
+     *
+     * @param \Illuminate\Auth\Events\Failed $event
+     *
+     * @return void
      */
     public function handleUserFailedLogin($event)
     {
@@ -24,6 +28,10 @@ class UserEventSubscriber
 
     /**
      * Handle the user login event.
+     * 
+     * @param \Illuminate\Auth\Events\Login $event
+     *
+     * @return void
      */
     public function handleUserLogin($event)
     {
@@ -43,6 +51,9 @@ class UserEventSubscriber
      */
     public function handleUserRegistration($event)
     {
+        // set password expiration..
+        $event->user->setPasswordExpiration();
+
         if ($event->user instanceof MustVerifyEmail) {
 
             // e-mail verification enabled..
@@ -92,6 +103,9 @@ class UserEventSubscriber
     {
         // Log the activity
         $event->user->logPasswordChange();
+
+        // set new password expiration..
+        $event->user->setPasswordExpiration();
 
         // auto-matically verify user email..
         if ($event->user instanceof MustVerifyEmail) {

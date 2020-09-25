@@ -5,10 +5,8 @@ namespace Fusion\Http\Controllers\API\Users;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
 
-class ResetPasswordController extends Controller
+class SetPasswordController extends Controller
 {
     /**
      * Request for user to reset password.
@@ -20,14 +18,9 @@ class ResetPasswordController extends Controller
      */
     public function store(Request $request, User $user)
     {
-        // Generate new password..
-        $user->forceFill([
-            'password' => Str::random(),
-        ])->save();
+        $this->authorize('users.update');
 
-        $user->sendPasswordResetNotification(
-            Password::broker()->createToken($user)
-        );
+        $user->markPasswordAsExpired();
 
         return response()->json([], 202);
     }
