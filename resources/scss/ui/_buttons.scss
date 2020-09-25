@@ -57,9 +57,11 @@
         > .icon { @apply m-0; }
     }
 
-    &--small { @apply text-sm; }
+    &--xsmall { @apply text-xs px-2 py-1; }
 
-    &--large { @apply text-lg; }
+    &--small { @apply text-sm px-2 py-1; }
+
+    &--large { @apply text-lg px-6 py-3; }
 
     &--brand, 
     &--primary, 

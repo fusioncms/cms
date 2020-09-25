@@ -67,7 +67,8 @@
                 sizeClass: null,
                 sizes: {
                     large: 'large',
-                    small: 'small'
+                    small: 'small',
+                    xsmall: 'xsmall'
                 }
             }
         },
