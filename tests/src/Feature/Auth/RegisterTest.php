@@ -164,7 +164,7 @@ class RegisterTest extends TestCase
 
         $user = $this->makeUserRegistration();
 
-        Notification::assertSentTo($user, VerifyEmail::class);
+        Notification::assertSentToTimes($user, VerifyEmail::class, 1);
     }
 
     /**
