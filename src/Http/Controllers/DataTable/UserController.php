@@ -3,6 +3,7 @@
 namespace Fusion\Http\Controllers\DataTable;
 
 use Fusion\Http\Controllers\DataTableController;
+use Illuminate\Support\Facades\Password;
 use Fusion\Models\User;
 
 class UserController extends DataTableController
@@ -103,5 +104,48 @@ class UserController extends DataTableController
             'name',
             'email'
         ];
+    }
+
+    public function enableAction()
+    {
+        foreach(request()->get('records') as $record) {
+            User::find($record)->update([
+                'status' => true
+            ]);
+        }
+    }
+
+    public function disableAction()
+    {
+        foreach(request()->get('records') as $record) {
+            User::find($record)->update([
+                'status' => false
+            ]);
+        }
+    }
+
+    public function deleteAction()
+    {
+        foreach(request()->get('records') as $record) {
+            User::find($record)->delete();
+        }
+    }
+
+    public function verifyEmailAction()
+    {
+        foreach(request()->get('records') as $record) {
+            User::find($record)->sendEmailVerificationNotification();
+        }
+    }
+
+    public function resetPasswordAction()
+    {
+        foreach(request()->get('records') as $record) {
+            $user = User::find($record);
+
+            $user->sendPasswordResetNotification(
+                Password::broker()->createToken($user)
+            );
+        }
     }
 }

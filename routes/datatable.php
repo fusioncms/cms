@@ -19,11 +19,11 @@ Route::prefix('users')->group(function () {
     Route::get('/{user}/activities', 'UserActivityController@index');
 
     // Bulk Actions
-    Route::post('/actions/enable', 'UserActionController@enable');
-    Route::post('/actions/disable', 'UserActionController@disable');
-    Route::post('/actions/delete', 'UserActionController@delete');
-    Route::post('/actions/verify-email', 'UserActionController@verifyEmail');
-    Route::post('/actions/reset-password', 'UserActionController@resetPassword');
+    Route::post('/actions/enable', 'UserController@enableAction');
+    Route::post('/actions/disable', 'UserController@disableAction');
+    Route::post('/actions/delete', 'UserController@deleteAction');
+    Route::post('/actions/verify-email', 'UserController@verifyEmailAction');
+    Route::post('/actions/reset-password', 'UserController@resetPasswordAction');
 });
 
 Route::get('/roles', 'RoleController@index');
