@@ -100,7 +100,7 @@
             </ui-modal>
 
             <ui-modal name="password-user" title="Password Reset">
-                <p>Are you sure you want to force user to reset their password upon next login attempt?</p>
+                <p>Are you sure you want to send this user a password reset notification?</p>
 
                 <template slot="footer" slot-scope="user">
                     <ui-button v-modal:password-user @click="passwordReset(user.data.id)" variant="primary" class="ml-3">Confirm</ui-button>
@@ -206,7 +206,7 @@
             },
 
             passwordReset(id) {
-                axios.post(`/api/users/${id}/password`)
+                axios.post(`/api/users/${id}/reset-password`)
                     .then((response) => {
                         toast('Password reset notification has been sent to user.', 'success')
                     }).catch((response) => {

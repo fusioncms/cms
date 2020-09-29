@@ -4,17 +4,14 @@ namespace Fusion\Http\Controllers\Web\Auth;
 
 use Fusion\Models\User;
 use Fusion\Http\Controllers\Controller;
-use Fusion\Rules\FreshPassword;
 use Fusion\Rules\SecurePassword;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Auth\RedirectsUsers;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class SetPasswordController extends Controller
 {
-    use RedirectsUsers;
+    use ResetsPasswords;
 
     /**
      * Where to redirect users after setting their password.
@@ -22,16 +19,6 @@ class SetPasswordController extends Controller
      * @var string
      */
     protected $redirectTo = '/';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
      * Display the password set view for the given token.
@@ -42,49 +29,38 @@ class SetPasswordController extends Controller
      */
     public function showSetForm(Request $request)
     {
-        return $request->user()->passwordHasExpired()
-            ? view('auth.passwords.set')
-            : redirect($this->redirectPath());
+        return view('auth.passwords.set')->with([
+            'token' => $request->token,
+            'email' => $request->email
+        ]);
     }
 
     /**
-     * Reset the given user's password.
-     * 
-     * @param  Request  $request
-     * @return RedirectResponse|JsonResponse
+     * Set the user's `password` and `password_changed_at` date.
+     * [override]
+     *
+     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
+     * @param  string  $password
+     * @return void
      */
-    public function setPassword(Request $request)
+    protected function setUserPassword($user, $password)
     {
-        $user       = $request->user();
-        $attributes = $request->validate($this->rules());
-
-        // update password..
-        $user->password = Hash::make($attributes['password']);
+        $user->password = Hash::make($password);
         $user->password_changed_at = now();
-        $user->setRememberToken(Str::random(60));
-        $user->save();
-
-        event(new PasswordReset($user));
-
-        return $request->wantsJson()
-            ? response()->json(['message' => 'Password successfully updated!'], 200)
-            : redirect($this->redirectPath())->with('status', 'Password successfully updated!');
     }
 
     /**
      * Validation rules.
+     * [override]
      * 
      * @return array
      */
     protected function rules()
     {
         return [
-            'password' => [
-                'required',
-                'confirmed',
-                new FreshPassword(),
-                new SecurePassword()
-            ]
+            'token'    => 'required',
+            'email'    => 'required|email',
+            'password' => [ 'required', 'confirmed', new SecurePassword ]
         ];
     }
 }

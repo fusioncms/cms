@@ -42,7 +42,7 @@ Auth::routes([
 ]);
 
 Route::get('password/set', 'Auth\SetPasswordController@showSetForm')->name('password.setForm');
-Route::post('password/set', 'Auth\SetPasswordController@setPassword')->name('password.set');
+Route::post('password/set', 'Auth\SetPasswordController@reset')->name('password.set');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['prefix' => 'account', 'middleware' => ['auth', 'verified']], function () {

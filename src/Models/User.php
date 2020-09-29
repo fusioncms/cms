@@ -83,7 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'logged_in_at',
         'invalidly_logged_in_at',
         'password_changed_at',
-        'fully_registered_at',
+        'welcomed_at',
     ];
 
     /**

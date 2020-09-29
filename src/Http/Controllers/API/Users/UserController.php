@@ -69,8 +69,6 @@ class UserController extends Controller
          * - Verifying their e-mail address.
          * - Setting their own password.
          */
-        $user->markPasswordAsExpired();
-
         Mail::to($user)
             ->send(new ConfirmNewUser($user));
 

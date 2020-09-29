@@ -4,10 +4,35 @@
     <div class="items-center justify-center flex flex-col flex-1">
         <form method="POST" action="{{ route('password.set') }}" class="p-6 w-full md:max-w-lg">
             @csrf
+
+            <input type="hidden" name="token" value="{{ $token }}">
             
-            <h2 class="m-0 mb-10 text-center text-4xl font-bold tracking-wider leading-tight">
-                Update Your Password
-            </h2>
+            <div class="flex flex-col items-center leading-none mb-6">
+                <h2>Please Set Your Password</h2>
+            </div>
+
+            <div class="mb-6">
+                <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="email">
+                    {{ __('E-Mail Address') }}
+                </label>
+
+                <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    class="form__control w-full {{ $errors->has('email') ? 'border-red-500 border-2' : '' }}"
+                    value="{{ $email ?? old('email') }}"
+                    required
+                    autofocus>
+
+                 @if ($errors->has('email'))
+                    <div class="text-sm mb-3 mt-1 flex justify-between">
+                        <div class="text-grey-darker italic">
+                            <span class="block text-red-500">{{ $errors->first('email') }}</span>
+                        </div>
+                    </div>
+                @endif
+            </div>
 
             <div class="mb-6">
                 <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="password">

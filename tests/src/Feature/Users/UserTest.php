@@ -8,11 +8,13 @@ use Fusion\Mail\ConfirmNewUser;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+
 
 class UserTest extends TestCase
 {
@@ -87,9 +89,6 @@ class UserTest extends TestCase
          *  1) Verify e-mail address.
          *  2) Set their own password.
          */
-        $this->assertTrue(
-            User::latest('id')->first()->passwordHasExpired());
-
         Mail::assertSent(ConfirmNewUser::class, function ($mail) {
             return $mail->user->id === User::latest('id')->first()->id;
         });
@@ -510,14 +509,13 @@ class UserTest extends TestCase
      * @group feature
      * @group user
      */
-    public function a_user_with_permission_can_force_another_user_to_reset_password()
+    public function a_user_with_permission_can_send_user_reset_password_notification()
     {
         $this
             ->be($this->owner, 'api')
-            ->json('POST', "/api/users/{$this->user->id}/password")
+            ->json('POST', "/api/users/{$this->user->id}/reset-password")
             ->assertStatus(202);
 
-        $this->assertTrue(
-            $this->user->fresh()->passwordHasExpired());
+        Notification::assertSentTo($this->user, ResetPassword::class);
     }
 }
