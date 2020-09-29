@@ -30,13 +30,14 @@
 
                         <span class="entry-slug__value">{{ form.slug }}</span>
 
-                        <ui-button class="entry-slug__action" size="xsmall" @click.prevent="openEdit()">Edit</ui-button>
+                        <ui-button ref="edit" class="entry-slug__action" size="xsmall" @click.prevent="openEdit()">Edit</ui-button>
                     </div>
 
                     <div v-if="editSlug" class="entry-slug__edit">
                         <label v-if="editSlug" class="entry-slug__label" for="edit-slug">Slug:</label>
 
                         <ui-slug
+                            ref="slug"
                             class="field--xs"
                             id="edit-slug"
                             name="edit_slug"
@@ -157,11 +158,13 @@
             openEdit() {
                 this.slugValue = this.form.slug
                 this.editSlug = true
+                this.slugFocus()
             },
 
             closeEdit() {
                 this.slugValue = ''
                 this.editSlug = false
+                this.editBtnFocus()
             },
 
             saveSlug() {
@@ -172,6 +175,20 @@
                 }
 
                 this.closeEdit()
+            },
+
+            slugFocus() {
+                let vm = this
+                this.$nextTick(() => {
+                    vm.$refs.slug.$el.focus()
+                })
+            },
+
+            editBtnFocus() {
+                let vm = this
+                this.$nextTick(() => {
+                    vm.$refs.edit.$el.focus()
+                })
             }
         }
     }
