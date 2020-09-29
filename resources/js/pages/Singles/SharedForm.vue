@@ -1,5 +1,5 @@
 <template>
-    <form-container>
+    <div class="single-page">
         <portal to="actions">
             <div class="buttons">
                 <ui-button :to="{ name: 'dashboard' }" variant="secondary">Go Back</ui-button>
@@ -7,27 +7,70 @@
             </div>
         </portal>
 
-        <ui-card v-if="matrix.show_name_field">
+        <ui-card>
             <ui-card-body>
                 <ui-title-group
+                    class="mb-0"
                     name="name"
-                    :label="matrix.name_label || 'Name'"
+                    :label="single.name_label || 'Name'"
                     autocomplete="off"
                     autofocus
                     required
-                    :placeholder="matrix.name_label || 'Name'"
+                    :readonly="editSlug"
+                    :placeholder="single.name_label || 'Name'"
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
-                    v-model="form.name"
-                    v-if="matrix.show_name_field">
+                    v-model="form.name">
                 </ui-title-group>
+                
+                <div class="entry-slug" v-if="form.slug">
+                    <div v-if="!editSlug" class="entry-slug__current">
+                        <span class="entry-slug__label">Slug:</span> 
+
+                        <span class="entry-slug__value">{{ form.slug }}</span>
+
+                        <ui-button ref="edit" class="entry-slug__action" size="xsmall" @click.prevent="openEdit()">Edit</ui-button>
+                    </div>
+
+                    <div v-if="editSlug" class="entry-slug__edit">
+                        <label v-if="editSlug" class="entry-slug__label" for="edit-slug">Slug:</label>
+
+                        <ui-slug
+                            ref="slug"
+                            class="field--xs"
+                            id="edit-slug"
+                            name="edit_slug"
+                            monospaced
+                            autocomplete="off"
+                            v-model="slugValue">
+                        </ui-slug>
+
+                        <ui-button class="entry-slug__action" variant="primary" size="xsmall" @click.prevent="saveSlug()">Apply</ui-button>
+
+                        <ui-button class="entry-slug__action" variant="secondary" size="xsmall" @click.prevent="closeEdit()">Cancel</ui-button>
+                    </div>
+                </div>
+
+                <ui-slug
+                    v-if="entry.id"
+                    type="hidden"
+                    name="slug"
+                    label="Slug"
+                    monospaced
+                    autocomplete="off"
+                    required
+                    :help="single.show_name_field ? '' : 'This field is auto-generated based on pattern specified.'"
+                    :watch="form.name"
+                    :readonly="!single.show_name_field"
+                    :has-error="form.errors.has('slug')"
+                    :error-message="form.errors.get('slug')"
+                    v-model="form.slug">
+                </ui-slug>
             </ui-card-body>
         </ui-card>
 
         <section-card v-for="section in sections.body" :key="section.handle" :title="section.name" :description="section.description">
-            <component
-                class="form__group"
-                v-for="field in section.fields"
+            <component v-for="field in section.fields"
                 :key="field.handle"
                 :is="field.type.id + '-fieldtype'"
                 :field="field"
@@ -36,75 +79,49 @@
             </component>
         </section-card>
 
-        <template v-slot:sidebar>
-            <div class="card">
-                <div class="card__body">
-                    <ui-slug-group
-                        name="slug"
-                        label="Slug"
-                        monospaced
-                        autocomplete="off"
-                        required
-                        :watch="form.name"
-                        :has-error="form.errors.has('slug')"
-                        :error-message="form.errors.get('slug')"
-                        v-model="form.slug">
-                    </ui-slug-group>
+        <section-card title="Settings" description="Settings and configurations for this entry.">
+            <ui-toggle
+                name="status"
+                label="Status"
+                :help="form.status ? 'Toggle to disable this entry.' : 'Toggle to enable this entry.'"
+                v-model="form.status"
+                :true-value="1"
+                :false-value="0">
+            </ui-toggle>
 
-                    <ui-toggle
-                        name="status"
-                        label="Status"
-                        v-model="form.status"
-                        :true-value="1"
-                        :false-value="0">
-                    </ui-toggle>
-                </div>
-            </div>
+            <hr v-if="entry">
 
-            <div class="card" v-for="(section) in sections.sidebar" :key="section.handle">
-                <div class="card__header">
-                    <h3 class="card__title">{{ section.name }}</h3>
-                    <p v-if="section.description" class="card__subtitle">{{ section.description }}</p>
-                </div>
+            <dl v-if="entry" class="detail-list">
+                <dt>Created</dt>
+                <dd><ui-datetime :timestamp="entry.created_at"></ui-datetime></dd>
 
-                <div class="card__body">
-                    <component
-                        class="form__group"
-                        v-for="field in section.fields"
-                        :key="field.handle"
-                        :is="field.type.id + '-fieldtype'"
-                        :field="field"
-                        :errors="form.errors"
-                        v-model="form[field.handle]">
-                    </component>
-                </div>
-            </div>
+                <dt>Last Updated</dt>
+                <dd><ui-datetime :timestamp="entry.updated_at"></ui-datetime></dd>
+            </dl>
+        </section-card>
 
-            <ui-definition-list v-if="single">
-                <ui-definition name="Status">
-                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': single.status, 'text-danger-500': ! single.status}"></fa-icon> {{ single.status ? 'Enabled' : 'Disabled' }}
-                </ui-definition>
-
-                <ui-definition name="Created At">
-                    {{ $moment(single.created_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-
-                <ui-definition name="Updated At">
-                    {{ $moment(single.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-            </ui-definition-list>
-        </template>
-    </form-container>
+        <section-card v-for="(section) in sections.sidebar" :key="section.handle" :title="section.name" :description="section.description">
+            <component
+                v-for="field in section.fields"
+                :key="field.handle"
+                :is="field.type.id + '-fieldtype'"
+                :field="field"
+                :has-error="form.errors.has(field.handle)"
+                :error-message="form.errors.get(field.handle)"
+                v-model="form[field.handle]">
+            </component>
+        </section-card>
+    </div>
 </template>
 
 <script>
     export default {
         props: {
-            single: {
+            entry: {
                 required: true
             },
 
-            matrix: {
+            single: {
                 required: true,
             },
 
@@ -114,16 +131,23 @@
             }
         },
 
+        data() {
+            return {
+                editSlug: false,
+                slugValue: ''
+            }
+        },
+
         computed: {
             sections() {
                 let body = []
                 let sidebar = []
 
-                body = _.filter(this.matrix.blueprint.sections, function(section) {
+                body = _.filter(this.single.blueprint.sections, function(section) {
                     return section.placement == 'body'
                 })
 
-                sidebar = _.filter(this.matrix.blueprint.sections, function(section) {
+                sidebar = _.filter(this.single.blueprint.sections, function(section) {
                     return section.placement == 'sidebar'
                 })
 
@@ -133,5 +157,43 @@
                 }
             },
         },
+
+        methods: {
+            openEdit() {
+                this.slugValue = this.form.slug
+                this.editSlug = true
+                this.slugFocus()
+            },
+
+            closeEdit() {
+                this.slugValue = ''
+                this.editSlug = false
+                this.editBtnFocus()
+            },
+
+            saveSlug() {
+                if (this.slugValue === '') {
+                    this.slugValue = this.form.slug
+                } else {
+                    this.form.slug = this.slugValue
+                }
+
+                this.closeEdit()
+            },
+
+            slugFocus() {
+                let vm = this
+                this.$nextTick(() => {
+                    vm.$refs.slug.$el.focus()
+                })
+            },
+
+            editBtnFocus() {
+                let vm = this
+                this.$nextTick(() => {
+                    vm.$refs.edit.$el.focus()
+                })
+            }
+        }
     }
 </script>

@@ -1,16 +1,14 @@
 <template>
     <div>
         <portal to="title">
-            <page-title :icon="matrix.icon || 'pencil-alt'">Edit {{ matrix.reference_singular }}</page-title>
+            <page-title :icon="single.icon || 'pencil-alt'" :subtitle="single.description">Edit {{ single.reference_singular }}</page-title>
         </portal>
-
-        <portal to="subtitle">{{ matrix.description }}</portal>
 
         <shared-form
             v-if="form"
             :form="form"
-            :single="single"
-            :matrix="matrix">
+            :entry="entry"
+            :single="single">
         </shared-form>
     </div>
 </template>
@@ -33,8 +31,8 @@
 
         data() {
             return {
-                matrix: {},
                 single: {},
+                entry: {},
                 form: null,
             }
         },
@@ -48,11 +46,11 @@
                 let body = []
                 let sidebar = []
 
-                body = _.filter(this.matrix.blueprint.sections, function(section) {
+                body = _.filter(this.single.blueprint.sections, function(section) {
                     return section.placement == 'body'
                 })
 
-                sidebar = _.filter(this.matrix.blueprint.sections, function(section) {
+                sidebar = _.filter(this.single.blueprint.sections, function(section) {
                     return section.placement == 'sidebar'
                 })
 
@@ -65,7 +63,7 @@
 
         methods: {
             submit() {
-                this.form.patch('/api/singles/' + this.matrix.id)
+                this.form.patch('/api/singles/' + this.single.id)
                     .then((response) => {
                         toast('Single saved successfully', 'success')
 
@@ -78,10 +76,10 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            getSingle(to.params.single, (error, single, matrix, fields) => {
+            getSingle(to.params.single, (error, entry, matrix, fields) => {
                 next((vm) => {
-                    vm.matrix = matrix
-                    vm.single = single
+                    vm.single = matrix
+                    vm.entry = entry
                     vm.form   = new Form(fields, true)
 
                     vm.$emit('updateHead')
@@ -90,9 +88,9 @@
         },
 
         beforeRouteUpdate(to,from,next) {
-            getSingle(to.params.single, (error, single, matrix, fields) => {
-                this.matrix = matrix
-                this.single = single
+            getSingle(to.params.single, (error, entry, matrix, fields) => {
+                this.single = matrix
+                this.entry = entry
                 this.form   = new Form(fields, true)
 
                 this.$emit('updateHead')
@@ -104,15 +102,15 @@
 
     export function getSingle(slug, callback) {
         axios.get('/api/singles/' + slug).then((response) => {
-            let single = {}
+            let entry = {}
             let matrix = {}
 
             if (_.has(response, 'data.data.single')) {
                 matrix = response.data.data.matrix
-                single   = response.data.data.single
+                entry   = response.data.data.single
             } else {
                 matrix = response.data.data
-                single   = {
+                entry   = {
                     name: matrix.name,
                     slug: matrix.slug,
                     status: 1
@@ -120,18 +118,20 @@
             }
 
             let fields = {
-                name: single.name,
-                slug: single.slug,
-                status: single.status,
+                name: entry.name,
+                slug: entry.slug,
+                status: entry.status,
             }
 
             _.forEach(matrix.blueprint.sections, function(section) {
                 _.forEach(section.fields, function(field) {
-                    fields[field.handle] = single[field.handle]
+                    fields[field.handle] = entry[field.handle]
                 })
             })
 
-            callback(null, single, matrix, fields)
+            callback(null, entry, matrix, fields)
+        }).catch(function(error) {
+            callback(new Error('The requested entry could not be found'))
         })
     }
 </script>
