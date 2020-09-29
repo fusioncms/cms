@@ -3,8 +3,8 @@
 namespace Fusion\Http\Controllers\DataTable;
 
 use Fusion\Http\Controllers\DataTableController;
-use Illuminate\Support\Facades\Password;
 use Fusion\Models\User;
+use Illuminate\Support\Facades\Password;
 
 class UserController extends DataTableController
 {
@@ -102,45 +102,45 @@ class UserController extends DataTableController
     {
         return [
             'name',
-            'email'
+            'email',
         ];
     }
 
     public function enableAction()
     {
-        foreach(request()->get('records') as $record) {
+        foreach (request()->get('records') as $record) {
             User::find($record)->update([
-                'status' => true
+                'status' => true,
             ]);
         }
     }
 
     public function disableAction()
     {
-        foreach(request()->get('records') as $record) {
+        foreach (request()->get('records') as $record) {
             User::find($record)->update([
-                'status' => false
+                'status' => false,
             ]);
         }
     }
 
     public function deleteAction()
     {
-        foreach(request()->get('records') as $record) {
+        foreach (request()->get('records') as $record) {
             User::find($record)->delete();
         }
     }
 
     public function verifyEmailAction()
     {
-        foreach(request()->get('records') as $record) {
+        foreach (request()->get('records') as $record) {
             User::find($record)->sendEmailVerificationNotification();
         }
     }
 
     public function resetPasswordAction()
     {
-        foreach(request()->get('records') as $record) {
+        foreach (request()->get('records') as $record) {
             $user = User::find($record);
 
             $user->sendPasswordResetNotification(
