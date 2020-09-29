@@ -8,9 +8,9 @@ use Fusion\Http\Resources\UserResource;
 use Fusion\Mail\ConfirmNewUser;
 use Fusion\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -64,7 +64,7 @@ class UserController extends Controller
 
         /**
          * Forces new users to confirm themselves.
-         * 
+         *
          * Via:
          * - Verifying their e-mail address.
          * - Setting their own password.

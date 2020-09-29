@@ -83,7 +83,7 @@ class FusionServiceProvider extends ServiceProvider
         $kernel = $this->app->make(\Illuminate\Contracts\Http\Kernel::class);
 
         // $kernel->appendMiddlewareToGroup('web', \Fusion\Http\Middleware\PasswordExpired::class);
-        
+
         $kernel->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
 
         $kernel->pushMiddleware(\Fusion\Http\Middleware\DecodeFormData::class);

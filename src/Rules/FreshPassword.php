@@ -2,8 +2,8 @@
 
 namespace Fusion\Rules;
 
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 
 class FreshPassword implements Rule
 {
@@ -17,8 +17,8 @@ class FreshPassword implements Rule
     /**
      * Create a new rule instance.
      *
-     * @param  \Fusion\Models\User $user
-     * 
+     * @param \Fusion\Models\User $user
+     *
      * @return void
      */
     public function __construct(User $user)
@@ -37,7 +37,7 @@ class FreshPassword implements Rule
      */
     public function passes($attribute, $value)
     {
-        return ! Hash::check($value, $this->user->password);
+        return !Hash::check($value, $this->user->password);
     }
 
     /**
@@ -47,6 +47,6 @@ class FreshPassword implements Rule
      */
     public function message()
     {
-        return "Password must differ from your current one.";
+        return 'Password must differ from your current one.';
     }
 }

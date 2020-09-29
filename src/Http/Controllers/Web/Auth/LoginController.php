@@ -2,8 +2,6 @@
 
 namespace Fusion\Http\Controllers\Web\Auth;
 
-use Fusion\Models\User;
-use Illuminate\Http\Request;
 use Fusion\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 

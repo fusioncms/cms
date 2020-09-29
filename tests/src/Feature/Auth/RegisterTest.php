@@ -132,7 +132,7 @@ class RegisterTest extends TestCase
     public function successful_registration_will_null_password_expiration()
     {
         $user = $this->makeUserRegistration();
-        
+
         $this->assertFalse($user->passwordHasExpired());
     }
 

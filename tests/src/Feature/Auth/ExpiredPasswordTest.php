@@ -5,8 +5,8 @@ namespace Fusion\Tests\Feature\Auth;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Hash;
 
 class ExpiredPasswordTest extends TestCase
 {
@@ -106,7 +106,7 @@ class ExpiredPasswordTest extends TestCase
             ->from(route('password.expiredForm'))
             ->post(route('password.expired'), [
                 'password'              => 'new-password',
-                'password_confirmation' => 'new-password'
+                'password_confirmation' => 'new-password',
             ])
             ->assertRedirect('/');
 
@@ -124,7 +124,7 @@ class ExpiredPasswordTest extends TestCase
      */
     public function setting_password_will_fire_password_reset_event()
     {
-        Event::fake([ PasswordReset::class ]);
+        Event::fake([PasswordReset::class]);
 
         $this->user->markPasswordAsExpired();
 
@@ -133,7 +133,7 @@ class ExpiredPasswordTest extends TestCase
             ->from(route('password.expiredForm'))
             ->post(route('password.expired'), [
                 'password'              => 'new-password',
-                'password_confirmation' => 'new-password'
+                'password_confirmation' => 'new-password',
             ]);
 
         Event::assertDispatched(PasswordReset::class, function ($event) {
@@ -156,7 +156,7 @@ class ExpiredPasswordTest extends TestCase
             ->from(route('password.expiredForm'))
             ->post(route('password.expired'), [
                 'password'              => 'short',
-                'password_confirmation' => 'short'
+                'password_confirmation' => 'short',
             ])
             ->assertRedirect(route('password.expiredForm'))
             ->assertSessionHasErrors('password');
@@ -177,7 +177,7 @@ class ExpiredPasswordTest extends TestCase
             ->from(route('password.expiredForm'))
             ->post(route('password.expired'), [
                 'password'              => 'new-password',
-                'password_confirmation' => 'different'
+                'password_confirmation' => 'different',
             ])
             ->assertRedirect(route('password.expiredForm'))
             ->assertSessionHasErrors('password');
@@ -198,11 +198,11 @@ class ExpiredPasswordTest extends TestCase
             ->from(route('password.expiredForm'))
             ->post(route('password.expired'), [
                 'password'              => 'secret',
-                'password_confirmation' => 'secret'
+                'password_confirmation' => 'secret',
             ])
             ->assertRedirect(route('password.expiredForm'))
             ->assertSessionHasErrors([
-                'password' => 'Password must differ from your current one.'
+                'password' => 'Password must differ from your current one.',
             ]);
     }
 }
