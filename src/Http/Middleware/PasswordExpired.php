@@ -17,12 +17,12 @@ class PasswordExpired
     {
         $acceptedRoutes = [
             route('logout'),
-            route('password.setForm')
+            route('password.expiredForm')
         ];
 
         if ($request->user() && $request->user()->passwordHasExpired()) {
             if (! in_array(url()->current(), $acceptedRoutes)) {
-                return redirect()->route('password.setForm');
+                return redirect()->route('password.expiredForm');
             }
         }
 
