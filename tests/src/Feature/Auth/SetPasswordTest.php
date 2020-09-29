@@ -5,8 +5,8 @@ namespace Fusion\Tests\Feature\Auth;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
 class SetPasswordTest extends TestCase
@@ -36,7 +36,7 @@ class SetPasswordTest extends TestCase
                 'token'                 => $validToken,
                 'email'                 => $this->user->email,
                 'password'              => 'new-password',
-                'password_confirmation' => 'new-password'
+                'password_confirmation' => 'new-password',
             ]);
 
         $user = $this->user->fresh();
@@ -63,7 +63,7 @@ class SetPasswordTest extends TestCase
                 'token'                 => $validToken,
                 'email'                 => $this->user->email,
                 'password'              => 'new-password',
-                'password_confirmation' => 'new-password'
+                'password_confirmation' => 'new-password',
             ]);
 
         Event::assertDispatched(PasswordReset::class, function ($event) {
@@ -87,7 +87,7 @@ class SetPasswordTest extends TestCase
                 'token'                 => $invalidToken,
                 'email'                 => $this->user->email,
                 'password'              => 'new-password',
-                'password_confirmation' => 'new-password'
+                'password_confirmation' => 'new-password',
             ])
             ->assertRedirect(route('password.setForm', $invalidToken));
 
@@ -111,7 +111,7 @@ class SetPasswordTest extends TestCase
                 'token'                 => $validToken,
                 'email'                 => $this->user->email,
                 'password'              => 'short',
-                'password_confirmation' => 'short'
+                'password_confirmation' => 'short',
             ])
             ->assertRedirect(route('password.setForm', $validToken))
             ->assertSessionHasErrors('password');
@@ -134,7 +134,7 @@ class SetPasswordTest extends TestCase
                 'token'                 => $validToken,
                 'email'                 => $this->user->email,
                 'password'              => 'new-password',
-                'password_confirmation' => 'different'
+                'password_confirmation' => 'different',
             ])
             ->assertRedirect(route('password.setForm', $validToken))
             ->assertSessionHasErrors('password');

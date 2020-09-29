@@ -28,7 +28,7 @@ class UserEventSubscriber
 
     /**
      * Handle the user login event.
-     * 
+     *
      * @param \Illuminate\Auth\Events\Login $event
      *
      * @return void
@@ -78,7 +78,7 @@ class UserEventSubscriber
     public function handleUserWelcome($event)
     {
         if (is_null($event->user->welcomed_at)) {
-            $event->user->forceFill([ 'welcomed_at' => now() ])->save();
+            $event->user->forceFill(['welcomed_at' => now()])->save();
 
             if (setting('users.user_email_welcome') === 'enabled') {
                 Mail::to($event->user)

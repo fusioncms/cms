@@ -20,7 +20,7 @@ class VerifyEmailController extends Controller
     public function store(Request $request, User $user)
     {
         $this->authorize('users.update');
-        
+
         if ($user instanceof MustVerifyEmail && $user->shouldVerifyEmail()) {
             $user->markEmailAsUnverified();
             $user->sendEmailVerificationNotification();

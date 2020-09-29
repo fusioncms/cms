@@ -2,19 +2,18 @@
 
 namespace Fusion\Tests\Feature\Users;
 
+use Fusion\Mail\ConfirmNewUser;
 use Fusion\Models\User;
 use Fusion\Tests\TestCase;
-use Fusion\Mail\ConfirmNewUser;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
-
 
 class UserTest extends TestCase
 {

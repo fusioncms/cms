@@ -15,7 +15,7 @@ trait MustVerifyEmail
     {
         return $this->hasVerifiedEmail();
     }
-    
+
     /**
      * Determine if the user has verified their email address.
      *

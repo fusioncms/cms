@@ -5,7 +5,7 @@ namespace Fusion\Concerns;
 trait PasswordCanExpire
 {
     /**
-     * Initialize the trait
+     * Initialize the trait.
      *
      * @return void
      */
@@ -21,7 +21,7 @@ trait PasswordCanExpire
      */
     public function passwordHasExpired()
     {
-        return ! is_null($this->password_expires_at) &&
+        return !is_null($this->password_expires_at) &&
                now() > $this->password_expires_at;
     }
 

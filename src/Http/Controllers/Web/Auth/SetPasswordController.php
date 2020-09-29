@@ -2,12 +2,12 @@
 
 namespace Fusion\Http\Controllers\Web\Auth;
 
-use Fusion\Models\User;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Models\User;
 use Fusion\Rules\SecurePassword;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class SetPasswordController extends Controller
 {
@@ -31,28 +31,29 @@ class SetPasswordController extends Controller
     {
         return view('auth.passwords.set')->with([
             'token' => $request->token,
-            'email' => $request->email
+            'email' => $request->email,
         ]);
     }
 
     /**
      * Set the user's `password` and `password_changed_at` date.
-     * [override]
+     * [override].
      *
-     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
-     * @param  string  $password
+     * @param \Illuminate\Contracts\Auth\CanResetPassword $user
+     * @param string                                      $password
+     *
      * @return void
      */
     protected function setUserPassword($user, $password)
     {
-        $user->password = Hash::make($password);
+        $user->password            = Hash::make($password);
         $user->password_changed_at = now();
     }
 
     /**
      * Validation rules.
-     * [override]
-     * 
+     * [override].
+     *
      * @return array
      */
     protected function rules()
@@ -60,7 +61,7 @@ class SetPasswordController extends Controller
         return [
             'token'    => 'required',
             'email'    => 'required|email',
-            'password' => [ 'required', 'confirmed', new SecurePassword ]
+            'password' => ['required', 'confirmed', new SecurePassword()],
         ];
     }
 }

@@ -22,7 +22,8 @@ class PasswordResetController extends Controller
         $this->authorize('users.update');
 
         $user->sendPasswordResetNotification(
-            Password::broker()->createToken($user));
+            Password::broker()->createToken($user)
+        );
 
         return response()->json([], 202);
     }
