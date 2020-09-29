@@ -60,14 +60,4 @@ trait PasswordCanExpire
             'password_expires_at' => null,
         ])->save();
     }
-
-    /**
-     * Determines if passwords can expire.
-     *
-     * @return bool
-     */
-    public function passwordCanExpire()
-    {
-        return ! setting('users.user_password_expiration');
-    }
 }

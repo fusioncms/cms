@@ -51,9 +51,6 @@ class UserEventSubscriber
      */
     public function handleUserRegistration($event)
     {
-        // set password expiration..
-        $event->user->setPasswordExpiration();
-
         if ($event->user instanceof MustVerifyEmail) {
 
             // e-mail verification enabled..
@@ -104,8 +101,8 @@ class UserEventSubscriber
         // Log the activity
         $event->user->logPasswordChange();
 
-        // set new password expiration..
-        $event->user->setPasswordExpiration();
+        // remove password expiration..
+        $event->user->removePasswordExpiration();
 
         // auto-matically verify user email..
         if ($event->user instanceof MustVerifyEmail) {
