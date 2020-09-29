@@ -11,6 +11,16 @@ trait MustVerifyEmail
      *
      * @return bool
      */
+    public function getVerifiedAttribute()
+    {
+        return $this->hasVerifiedEmail();
+    }
+    
+    /**
+     * Determine if the user has verified their email address.
+     *
+     * @return bool
+     */
     public function hasVerifiedEmail()
     {
         if ($this->shouldVerifyEmail()) {

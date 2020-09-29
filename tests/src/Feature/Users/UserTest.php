@@ -2,18 +2,19 @@
 
 namespace Fusion\Tests\Feature\Users;
 
-use Fusion\Mail\SetPassword;
 use Fusion\Models\User;
 use Fusion\Tests\TestCase;
+use Fusion\Mail\ConfirmNewUser;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+
 
 class UserTest extends TestCase
 {
@@ -35,6 +36,7 @@ class UserTest extends TestCase
 
         // suppress any emails..
         Mail::fake();
+        Notification::fake();
     }
 
     /**
@@ -57,11 +59,9 @@ class UserTest extends TestCase
             'status' => $this->attributes['status'],
         ]);
 
-        $user = User::latest('id')->first();
-
         // role..
         $this->assertTrue(
-            $user->hasRole($this->attributes['role'])
+            User::latest('id')->first()->hasRole($this->attributes['role'])
         );
     }
 
@@ -81,7 +81,15 @@ class UserTest extends TestCase
                 'email' => $this->faker->unique()->safeEmail,
             ]);
 
-        Mail::assertSent(SetPassword::class, function ($mail) {
+        /**
+         * Users created from back-end will have
+         *   to first confirm themselves before
+         *   authenticating.
+         *
+         *  1) Verify e-mail address.
+         *  2) Set their own password.
+         */
+        Mail::assertSent(ConfirmNewUser::class, function ($mail) {
             return $mail->user->id === User::latest('id')->first()->id;
         });
     }
@@ -481,8 +489,6 @@ class UserTest extends TestCase
      */
     public function a_user_with_permission_can_resend_email_verification_to_another_user()
     {
-        Notification::fake();
-
         setting([
             'users.user_email_verification' => 'enabled',
         ]);
@@ -503,23 +509,12 @@ class UserTest extends TestCase
      * @group feature
      * @group user
      */
-    public function a_user_with_permission_can_force_another_user_to_reset_password()
+    public function a_user_with_permission_can_send_user_reset_password_notification()
     {
-        Notification::fake();
-
         $this
             ->be($this->owner, 'api')
-            ->json('POST', "/api/users/{$this->user->id}/password")
+            ->json('POST', "/api/users/{$this->user->id}/reset-password")
             ->assertStatus(202);
-
-        // assert password changed..
-        $this->assertFalse(
-            Hash::check('secret', $this->user->fresh()->password)
-        );
-
-        $this->assertDatabaseHas('password_resets', [
-            'email' => $this->user->email,
-        ]);
 
         Notification::assertSentTo($this->user, ResetPassword::class);
     }

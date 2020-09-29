@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Password;
 
-class SetPassword extends DatabaseMailable
+class ConfirmNewUser extends DatabaseMailable
 {
     use Queueable;
     use SerializesModels;
@@ -24,7 +24,7 @@ class SetPassword extends DatabaseMailable
      *
      * @var string
      */
-    protected $template = 'emails.templates.setpassword';
+    protected $template = 'emails.templates.confirm';
 
     /**
      * Create a new message instance.

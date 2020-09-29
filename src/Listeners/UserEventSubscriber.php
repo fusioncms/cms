@@ -2,7 +2,7 @@
 
 namespace Fusion\Listeners;
 
-use Fusion\Events\FullyRegistered;
+use Fusion\Events\UserWelcomed;
 use Fusion\Mail\WelcomeNewUser;
 use Fusion\Models\User;
 use Illuminate\Auth\Events\Verified;
@@ -13,6 +13,10 @@ class UserEventSubscriber
 {
     /**
      * Handle the user failed login event.
+     *
+     * @param \Illuminate\Auth\Events\Failed $event
+     *
+     * @return void
      */
     public function handleUserFailedLogin($event)
     {
@@ -24,6 +28,10 @@ class UserEventSubscriber
 
     /**
      * Handle the user login event.
+     * 
+     * @param \Illuminate\Auth\Events\Login $event
+     *
+     * @return void
      */
     public function handleUserLogin($event)
     {
@@ -56,23 +64,21 @@ class UserEventSubscriber
                 event(new Verified($event->user));
             }
         } else {
-            event(new FullyRegistered($event->user));
+            event(new UserWelcomed($event->user));
         }
     }
 
     /**
-     * Handle 'user fully registered' event.
+     * Handle 'user welcome' event.
      *
-     * @param \Fusion\Events\FullyRegistered $event
+     * @param \Fusion\Events\UserWelcomed $event
      *
      * @return void
      */
-    public function handleUserFullRegistration($event)
+    public function handleUserWelcome($event)
     {
-        if (is_null($event->user->fully_registered_at)) {
-            $event->user->forceFill([
-                'fully_registered_at' => now(),
-            ])->save();
+        if (is_null($event->user->welcomed_at)) {
+            $event->user->forceFill([ 'welcomed_at' => now() ])->save();
 
             if (setting('users.user_email_welcome') === 'enabled') {
                 Mail::to($event->user)
@@ -92,6 +98,9 @@ class UserEventSubscriber
     {
         // Log the activity
         $event->user->logPasswordChange();
+
+        // remove password expiration..
+        $event->user->removePasswordExpiration();
 
         // auto-matically verify user email..
         if ($event->user instanceof MustVerifyEmail) {
@@ -124,7 +133,7 @@ class UserEventSubscriber
      */
     public function handleUserVerification($event)
     {
-        event(new FullyRegistered($event->user));
+        event(new UserWelcomed($event->user));
     }
 
     /**
@@ -152,8 +161,8 @@ class UserEventSubscriber
         );
 
         $events->listen(
-            'Fusion\Events\FullyRegistered',
-            [UserEventSubscriber::class, 'handleUserFullRegistration']
+            'Fusion\Events\UserWelcomed',
+            [UserEventSubscriber::class, 'handleUserWelcome']
         );
 
         $events->listen(

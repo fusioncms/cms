@@ -2,15 +2,26 @@
 
 namespace Fusion\Http\Controllers\Web\Auth;
 
+use Fusion\Models\User;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Rules\SecurePassword;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class SetPasswordController extends Controller
 {
+    use ResetsPasswords;
+
+    /**
+     * Where to redirect users after setting their password.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/';
+
     /**
      * Display the password set view for the given token.
-     *
-     * If no token is present, display the link request form.
      *
      * @param \Illuminate\Http\Request $request
      *
@@ -19,8 +30,37 @@ class SetPasswordController extends Controller
     public function showSetForm(Request $request)
     {
         return view('auth.passwords.set')->with([
-            'token' => $request->route()->parameter('token'),
-            'email' => $request->email,
+            'token' => $request->token,
+            'email' => $request->email
         ]);
+    }
+
+    /**
+     * Set the user's `password` and `password_changed_at` date.
+     * [override]
+     *
+     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
+     * @param  string  $password
+     * @return void
+     */
+    protected function setUserPassword($user, $password)
+    {
+        $user->password = Hash::make($password);
+        $user->password_changed_at = now();
+    }
+
+    /**
+     * Validation rules.
+     * [override]
+     * 
+     * @return array
+     */
+    protected function rules()
+    {
+        return [
+            'token'    => 'required',
+            'email'    => 'required|email',
+            'password' => [ 'required', 'confirmed', new SecurePassword ]
+        ];
     }
 }

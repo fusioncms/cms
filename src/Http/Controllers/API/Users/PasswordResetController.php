@@ -6,12 +6,11 @@ use Fusion\Http\Controllers\Controller;
 use Fusion\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
 
-class ResetPasswordController extends Controller
+class PasswordResetController extends Controller
 {
     /**
-     * Request for user to reset password.
+     * Request for `reset password` request.
      *
      * @param \Illuminate\Http\Request $request
      * @param \Fusion\Models\User      $user
@@ -20,14 +19,10 @@ class ResetPasswordController extends Controller
      */
     public function store(Request $request, User $user)
     {
-        // Generate new password..
-        $user->forceFill([
-            'password' => Str::random(),
-        ])->save();
+        $this->authorize('users.update');
 
         $user->sendPasswordResetNotification(
-            Password::broker()->createToken($user)
-        );
+            Password::broker()->createToken($user));
 
         return response()->json([], 202);
     }

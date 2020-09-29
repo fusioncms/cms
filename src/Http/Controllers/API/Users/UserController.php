@@ -2,18 +2,18 @@
 
 namespace Fusion\Http\Controllers\API\Users;
 
-use Fusion\Concerns\SendsPasswordSetEmails;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\UserRequest;
 use Fusion\Http\Resources\UserResource;
+use Fusion\Mail\ConfirmNewUser;
 use Fusion\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
-    use SendsPasswordSetEmails;
-
     /**
      * Return a paginated resource of all users.
      *
@@ -54,7 +54,7 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $attributes             = $request->validated();
-        $attributes['password'] = bcrypt($attributes['password'] ?? Str::random());
+        $attributes['password'] = Hash::make($attributes['password'] ?? Str::random());
 
         $user = User::create($attributes)
             ->assignRole($attributes['role']);
@@ -62,8 +62,15 @@ class UserController extends Controller
         // handle role setting..
         $this->assureOwnerRoleLimit($user);
 
-        // Note: suppression req'd during imports..
-        $this->sendPasswordSetNotification($user);
+        /**
+         * Forces new users to confirm themselves.
+         * 
+         * Via:
+         * - Verifying their e-mail address.
+         * - Setting their own password.
+         */
+        Mail::to($user)
+            ->send(new ConfirmNewUser($user));
 
         return new UserResource($user);
     }

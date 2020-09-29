@@ -2,7 +2,7 @@
 
 namespace Fusion\Tests\Feature\Auth;
 
-use Fusion\Events\FullyRegistered;
+use Fusion\Events\UserWelcomed;
 use Fusion\Mail\WelcomeNewUser;
 use Fusion\Models\User;
 use Fusion\Tests\TestCase;
@@ -129,6 +129,18 @@ class RegisterTest extends TestCase
      * @group fusioncms
      * @group auth
      */
+    public function successful_registration_will_null_password_expiration()
+    {
+        $user = $this->makeUserRegistration();
+        
+        $this->assertFalse($user->passwordHasExpired());
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group auth
+     */
     public function successful_registration_will_fire_registrated_event()
     {
         Event::fake([Registered::class]);
@@ -151,7 +163,7 @@ class RegisterTest extends TestCase
 
         $user = $this->makeUserRegistration();
 
-        Notification::assertSentTo($user, VerifyEmail::class);
+        Notification::assertSentToTimes($user, VerifyEmail::class, 1);
     }
 
     /**
@@ -180,9 +192,9 @@ class RegisterTest extends TestCase
      * @group fusioncms
      * @group auth
      */
-    public function verified_registration_will_fire_fully_registrated_event()
+    public function verified_registration_will_fire_user_welcomed_event()
     {
-        Event::fake([FullyRegistered::class]);
+        Event::fake([UserWelcomed::class]);
 
         setting([
             'users.user_email_verification' => 'disabled',
@@ -190,7 +202,7 @@ class RegisterTest extends TestCase
 
         $user = $this->makeUserRegistration();
 
-        Event::assertDispatched(FullyRegistered::class, function ($event) use ($user) {
+        Event::assertDispatched(UserWelcomed::class, function ($event) use ($user) {
             return $event->user->id === $user->id;
         });
     }

@@ -4,7 +4,7 @@ namespace Fusion\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-class FullyRegistered
+class UserWelcomed
 {
     use SerializesModels;
 

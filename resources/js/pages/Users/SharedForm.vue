@@ -92,7 +92,7 @@
 
             <div class="mb-4">
                 <span class="label">Password Reset</span>
-                <p class="help mb-2">Force the user to reset their password upon next login attempt.</p>
+                <p class="help mb-2">Re-send password reset email to this user.</p>
                 <ui-button variant="secondary" v-modal:password-user>Reset Password</ui-button>
             </div>
 
@@ -114,7 +114,7 @@
             </ui-modal>
 
             <ui-modal name="password-user" title="Password Reset" key="password_user">
-                <p>Are you sure you want to force user to reset their password upon next login attempt?</p>
+                <p>Are you sure you want to send this user a password reset notification?</p>
 
                 <template slot="footer" slot-scope="user">
                     <ui-button v-modal:password-user @click="passwordReset" class="ml-3">Confirm</ui-button>
@@ -199,7 +199,7 @@
             },
 
             passwordReset() {
-                axios.post(`/api/users/${this.user.id}/password`)
+                axios.post(`/api/users/${this.user.id}/reset-password`)
                     .then((response) => {
                         toast('Password reset notification has been sent to user.', 'success')
                     }).catch((response) => {
