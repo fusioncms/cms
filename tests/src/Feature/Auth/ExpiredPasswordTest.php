@@ -181,4 +181,27 @@ class ExpiredPasswordTest extends TestCase
             ->assertRedirect(route('password.setForm'))
             ->assertSessionHasErrors('password');
     }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group auth
+     * @group password
+     */
+    public function password_set_form_requires_fresh_password()
+    {
+        $this->user->markPasswordAsExpired();
+
+        $this
+            ->actingAs($this->user)
+            ->from(route('password.setForm'))
+            ->post(route('password.set'), [
+                'password'              => 'secret',
+                'password_confirmation' => 'secret'
+            ])
+            ->assertRedirect(route('password.setForm'))
+            ->assertSessionHasErrors([
+                'password' => 'Password must differ from your current one.'
+            ]);
+    }
 }

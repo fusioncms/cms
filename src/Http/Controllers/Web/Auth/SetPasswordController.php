@@ -4,6 +4,7 @@ namespace Fusion\Http\Controllers\Web\Auth;
 
 use Fusion\Models\User;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Rules\FreshPassword;
 use Fusion\Rules\SecurePassword;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -55,14 +56,12 @@ class SetPasswordController extends Controller
     public function setPassword(Request $request)
     {
         $user       = $request->user();
-        $attributes = $request->validate([
-            'password' => ['required', 'confirmed', new SecurePassword()],
-        ]);
+        $attributes = $request->validate($this->rules());
 
+        // update password..
         $user->password = Hash::make($attributes['password']);
-        
+        $user->password_changed_at = now();
         $user->setRememberToken(Str::random(60));
-        
         $user->save();
 
         event(new PasswordReset($user));
@@ -72,4 +71,20 @@ class SetPasswordController extends Controller
             : redirect($this->redirectPath())->with('status', 'Password successfully updated!');
     }
 
+    /**
+     * Validation rules.
+     * 
+     * @return array
+     */
+    protected function rules()
+    {
+        return [
+            'password' => [
+                'required',
+                'confirmed',
+                new FreshPassword(),
+                new SecurePassword()
+            ]
+        ];
+    }
 }

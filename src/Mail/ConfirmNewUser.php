@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Password;
 
-class ForceSetPassword extends DatabaseMailable
+class ConfirmNewUser extends DatabaseMailable
 {
     use Queueable;
     use SerializesModels;
@@ -24,7 +24,7 @@ class ForceSetPassword extends DatabaseMailable
      *
      * @var string
      */
-    protected $template = 'emails.templates.password';
+    protected $template = 'emails.templates.confirm';
 
     /**
      * Create a new message instance.
@@ -45,7 +45,7 @@ class ForceSetPassword extends DatabaseMailable
      */
     public function build()
     {
-        $this->viewData['url'] = url(route('password.reset', [
+        $this->viewData['url'] = url(route('password.setForm', [
             'token' => Password::broker()->createToken($this->user),
             'email' => $this->user->email,
         ], false));

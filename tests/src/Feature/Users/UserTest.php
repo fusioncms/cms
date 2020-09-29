@@ -4,7 +4,7 @@ namespace Fusion\Tests\Feature\Users;
 
 use Fusion\Models\User;
 use Fusion\Tests\TestCase;
-use Fusion\Mail\ForceSetPassword;
+use Fusion\Mail\ConfirmNewUser;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Notifications\VerifyEmail;
@@ -79,10 +79,18 @@ class UserTest extends TestCase
                 'email' => $this->faker->unique()->safeEmail,
             ]);
 
+        /**
+         * Users created from back-end will have
+         *   to first confirm themselves before
+         *   authenticating.
+         *
+         *  1) Verify e-mail address.
+         *  2) Set their own password.
+         */
         $this->assertTrue(
             User::latest('id')->first()->passwordHasExpired());
 
-        Mail::assertSent(ForceSetPassword::class, function ($mail) {
+        Mail::assertSent(ConfirmNewUser::class, function ($mail) {
             return $mail->user->id === User::latest('id')->first()->id;
         });
     }

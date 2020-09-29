@@ -2,10 +2,6 @@
 
 namespace Fusion\Concerns;
 
-use Fusion\Mail\ForceSetPassword;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Password;
-
 trait PasswordCanExpire
 {
     /**
@@ -66,14 +62,12 @@ trait PasswordCanExpire
     }
 
     /**
-     * Send the password set notification.
+     * Determines if passwords can expire.
      *
-     * @return void
+     * @return bool
      */
-    public function sendPasswordExpiredNotification()
+    public function passwordCanExpire()
     {
-        $this->markPasswordAsExpired();
-
-        Mail::to($this)->send(new ForceSetPassword($this));
+        return ! setting('users.user_password_expiration');
     }
 }
