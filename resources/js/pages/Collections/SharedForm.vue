@@ -7,6 +7,22 @@
             </div>
         </portal>
 
+        <portal to="sidebar-left">
+            <page-sidebar>
+                <sticky-sidebar>
+                    Hello world!
+                </sticky-sidebar>
+            </page-sidebar>
+        </portal>
+
+        <portal to="sidebar-right">
+            <page-sidebar>
+                <sticky-sidebar>
+                    Hello world!
+                </sticky-sidebar>
+            </page-sidebar>
+        </portal>
+
         <ui-card v-if="collection.show_name_field">
             <ui-card-body>
                 <ui-title-group

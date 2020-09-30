@@ -1,17 +1,30 @@
 .main-content { 
-    @apply bg-gray-100;
-    margin-top: 55px;
+    @apply w-full flex flex-col justify-center flex-auto pb-6;
     
     @screen lg {
+        @apply flex-row;
         transition: padding 0.5s $transition-effect;
 
         .nav-active & { padding-left: $nav-width-desktop; }
     }
 
     &__container {
-        @apply py-6 px-4;
+        @apply pt-6 px-4;
+        width: 100%;
+        max-width: 1300px;
+        margin: 0 auto;
 
-        @screen xl { @apply p-6; }
+        @screen xl { @apply p-6 pb-0; }
+    }
+
+    &__sidebar {
+        @apply p-4 pb-0;
+        width: 100%;
+
+        @screen lg {
+            @apply p-6;
+            width: 200px;
+        }
     }
 
     &__header {
@@ -31,37 +44,6 @@
     }
 
     &__body {}
-}
-
-.form-container {
-    @extend .row;
-
-    @screen xl { @apply flex-no-wrap; }
-
-    &__content {
-        @extend .col;
-        width: 100%;
-        transition: width 0.5s $transition-effect;
-
-        @screen xl { flex: 1 1 auto; }
-    }
-
-    &__sidebar {
-        @extend .col;
-        width: 100%;
-        transition: width 0.5s $transition-effect;
-
-        @screen xl { 
-            @apply flex-shrink-0;
-            width: 400px;
-
-            .nav-active & { width: 300px; }
-        }
-
-        @screen xxl {  
-            .nav-active & { width: 400px; }
-        }
-    }
 }
 
 .sidebar-container {

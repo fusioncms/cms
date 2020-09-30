@@ -4,9 +4,19 @@
 }
 
 .layout-admin {
-    @apply flex flex-auto flex-col;
+    @apply flex flex-auto flex-col bg-gray-100;
+    height: 100vh;
+    overflow: hidden;
+    padding-top: 55px; // Offset fixed header
+
+    &__wrapper {
+        overflow: scroll;
+
+        .prevent-scroll & { overflow: hidden; }
+    }
 }
 
 .layout-blank {
     @apply h-full flex-1;
 }
+

@@ -19,14 +19,18 @@ Vue.component('edit-directory-modal', require('@/components/Modals/EditDirectory
 Vue.component('fieldtype-picker', require('@/components/FieldtypePicker').default)
 Vue.component('form-container', require('@/components/FormContainer').default)
 Vue.component('icon-picker', require('@/components/IconPicker').default)
+Vue.component('layout-header', require('@/components/Layout/Header').default)
+Vue.component('layout-footer', require('@/components/Layout/Footer').default)
 Vue.component('nav-menu', require('@/components/Navigation/Navigation').default)
 Vue.component('nav-item', require('@/components/Navigation/NavigationItem').default)
 Vue.component('nav-toggle', require('@/components/Navigation/NavigationToggle').default)
 Vue.component('option-builder', require('@/components/OptionBuilder').default)
+Vue.component('page-sidebar', require('@/components/PageSidebar').default)
 Vue.component('page-title', require('@/components/PageTitle').default)
 Vue.component('section-card', require('@/components/SectionCard').default)
 Vue.component('select-directory-modal', require('@/components/Modals/SelectDirectoryModal').default)
 Vue.component('settings-modal', require('@/components/Modals/SettingsModal').default)
+Vue.component('sticky-sidebar', require('@/components/StickySidebar/StickySidebar').default)
 
 // Interfaces
 Vue.component('analytics-overview', require('@/interfaces/Analytics/AnalyticsOverview').default)
