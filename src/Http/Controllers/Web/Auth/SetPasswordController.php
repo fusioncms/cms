@@ -9,6 +9,7 @@ use Fusion\Rules\SecurePassword;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
 class SetPasswordController extends Controller
@@ -62,7 +63,7 @@ class SetPasswordController extends Controller
                 'confirmed',
                 new FreshPassword,
                 new SecurePassword
-            ],
+            ]
         ]);
 
         $user->removePasswordExpiration();
@@ -73,7 +74,7 @@ class SetPasswordController extends Controller
 
         event(new PasswordReset($user));
 
-        return $this->sendResetResponse($request)
+        return $this->sendResetResponse($request, 'Success');
     }
 
     /**

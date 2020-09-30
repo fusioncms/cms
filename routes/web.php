@@ -45,7 +45,7 @@ Route::group(['prefix' => 'password'], function () {
     Route::get('set', 'Auth\SetPasswordController@showSetForm')->name('password.setForm');
     Route::post('set', 'Auth\SetPasswordController@reset')->name('password.set');
     Route::get('expire', 'Auth\SetPasswordController@showExpiredForm')->name('password.expiredForm');
-    Route::post('expire', 'Auth\SetPasswordController@update')->name('password.expire');
+    Route::post('expire', 'Auth\SetPasswordController@update')->name('password.expired');
 });
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
