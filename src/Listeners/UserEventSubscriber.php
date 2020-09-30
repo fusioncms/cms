@@ -2,8 +2,8 @@
 
 namespace Fusion\Listeners;
 
-use Fusion\Models\User;
 use Fusion\Jobs\Onboard;
+use Fusion\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 
