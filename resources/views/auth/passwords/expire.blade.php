@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="w-full container max-w-xs">
-        <form method="POST" action="{{ route('password.expire') }}" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form method="POST" action="{{ route('password.expired') }}" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             @csrf
 
             <div class="flex flex-col items-center leading-none mb-6">
-                <h2>Please Set Your Password</h2>
+                <h2>Please Update Your Password</h2>
             </div>
 
             <div class="mb-6">
@@ -50,7 +50,7 @@
                     type="submit"
                     class="cursor-pointer inline-flex justify-center py-2 px-3 rounded shadow no-underline appearance-none leading-tight bg-black text-white border-0 hover:bg-black hover:text-white"
                 >
-                    {{ __('Set Password') }}
+                    {{ __('Update Password') }}
                 </button>
             </div>
 

@@ -66,8 +66,6 @@ class SetPasswordController extends Controller
             ]
         ]);
 
-        $user->removePasswordExpiration();
-
         $this->setUserPassword($user, $attributes['password']);
         $user->setRememberToken(Str::random(60));
         $user->save();
