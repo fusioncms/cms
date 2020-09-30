@@ -3,14 +3,14 @@
 namespace Fusion\Jobs;
 
 use Exception;
-use Fusion\Models\User;
 use Fusion\Mail\WelcomeNewUser;
+use Fusion\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class Onboard implements ShouldQueue
 {
