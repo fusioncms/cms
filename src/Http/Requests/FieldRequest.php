@@ -2,29 +2,31 @@
 
 namespace Fusion\Http\Requests;
 
+use Exception;
 use Fusion\Rules\NotAReservedKeyword;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class FieldRequest extends FormRequest
 {
     /**
-     * Fieldtype of requesting Field.
-     *
-     * @var array
+     * @var \Fusion\Models\Field
      */
     protected $fieldtype;
 
     /**
-     * Additional rules for fieldtype.
-     *
-     * @var array
+     * Create a new instance.
+     * 
+     * @param \Illuminate\Http\Request $request
      */
-    protected $fieldMessages;
-
     public function __construct(Request $request)
     {
-        $this->fieldtype = fieldtypes()->get($request->type['handle']);
+        try {
+            $this->fieldtype = fieldtypes()->get($request->type['handle']);
+        } catch(Exception $e) {
+            throw ValidationException::withMessages(['type' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -34,7 +36,7 @@ class FieldRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('fields.update');
+        return $this->user()->can('blueprints.update');
     }
 
     /**
@@ -57,9 +59,10 @@ class FieldRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'   => 'required|regex:/^[A-z]/i',
-            'type'   => 'required',
-            'handle' => ['required', 'not_regex:/[^a-z0-9_]/i', new NotAReservedKeyword()],
+            'name'       => 'required|regex:/^[A-z]/i',
+            'type'       => 'required',
+            'handle'     => ['required', 'not_regex:/[^a-z0-9_]/i', new NotAReservedKeyword()],
+            'validation' => 'sometimes|string'
         ] + $this->fieldtype->rules;
     }
 
@@ -85,3 +88,4 @@ class FieldRequest extends FormRequest
         ] + $this->fieldtype->messages;
     }
 }
+

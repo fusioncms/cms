@@ -122,7 +122,7 @@ class PageTest extends TestCase
             ->be($this->owner, 'api')
             ->json('PATCH', '/api/singles/'.$this->matrix->id, [])
             ->assertStatus(422)
-            ->assertJsonValidationErrors(['name', 'slug', 'status']);
+            ->assertJsonValidationErrors(['name', 'slug']);
     }
 
     /**

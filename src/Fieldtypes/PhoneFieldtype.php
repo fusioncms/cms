@@ -2,22 +2,22 @@
 
 namespace Fusion\Fieldtypes;
 
-class InputFieldtype extends Fieldtype
+class PhoneFieldtype extends Fieldtype
 {
     /**
      * @var string
      */
-    public $name = 'Input';
+    public $name = 'URL';
 
     /**
      * @var string
      */
-    public $icon = 'i-cursor';
+    public $icon = 'phone';
 
     /**
      * @var string
      */
-    public $description = 'Simple text input field.';
+    public $description = 'URL input field.';
 
     /**
      * @var string

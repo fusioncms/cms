@@ -1,0 +1,60 @@
+<?php
+
+namespace Fusion\Fieldtypes;
+
+use Fusion\Models\Field;
+
+class EmailFieldtype extends Fieldtype
+{
+    /**
+     * @var string
+     */
+    public $name = 'Email';
+
+    /**
+     * @var string
+     */
+    public $icon = 'envelope-open-text';
+
+    /**
+     * @var string
+     */
+    public $description = 'E-mail input field.';
+
+    /**
+     * @var string
+     */
+    public $cast = 'string';
+
+    /**
+     * @var array
+     */
+    public $settings = [
+        'placeholder' => '',
+    ];
+
+    /**
+     * @var array
+     */
+    public $column = [
+        'type' => 'string',
+    ];
+
+    /**
+     * Get custom rules when saving field.
+     *
+     * @param Field $field
+     * @param mixed $value
+     *
+     * @return array
+     */
+    public function rules(Field $field, $value = null)
+    {
+        $validation = explode('|', $field->validation ?: 'sometimes');
+        $validation = array_merge($validation, ['email']);
+
+        return [
+            $field->handle => $validation
+        ];
+    }
+}

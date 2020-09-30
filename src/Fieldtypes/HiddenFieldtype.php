@@ -2,22 +2,22 @@
 
 namespace Fusion\Fieldtypes;
 
-class InputFieldtype extends Fieldtype
+class HiddenFieldtype extends Fieldtype
 {
     /**
      * @var string
      */
-    public $name = 'Input';
+    public $name = 'Hidden';
 
     /**
      * @var string
      */
-    public $icon = 'i-cursor';
+    public $icon = 'ghost';
 
     /**
      * @var string
      */
-    public $description = 'Simple text input field.';
+    public $description = 'Hidden input field.';
 
     /**
      * @var string
