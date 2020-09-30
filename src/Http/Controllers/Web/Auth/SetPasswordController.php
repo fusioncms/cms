@@ -9,8 +9,8 @@ use Fusion\Rules\SecurePassword;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class SetPasswordController extends Controller
 {
@@ -61,9 +61,9 @@ class SetPasswordController extends Controller
             'password' => [
                 'required',
                 'confirmed',
-                new FreshPassword,
-                new SecurePassword
-            ]
+                new FreshPassword(),
+                new SecurePassword(),
+            ],
         ]);
 
         $this->setUserPassword($user, $attributes['password']);
