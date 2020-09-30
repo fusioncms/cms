@@ -19,7 +19,7 @@ class FreshPassword implements Rule
     public function passes($attribute, $value)
     {
         return request()->user() &&
-               ! Hash::check($value, request()->user()->password);
+               !Hash::check($value, request()->user()->password);
     }
 
     /**
