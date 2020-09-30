@@ -15,9 +15,8 @@ class ExpiredPasswordTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
         $this->handleValidationExceptions();
-        // --
-        $this->markTestIncomplete();
     }
 
     /**
@@ -202,7 +201,7 @@ class ExpiredPasswordTest extends TestCase
             ])
             ->assertRedirect(route('password.expiredForm'))
             ->assertSessionHasErrors([
-                'password' => 'Password must differ from your current one.',
+                'password' => 'New password must differ from current password.',
             ]);
     }
 }
