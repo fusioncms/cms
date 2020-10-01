@@ -4,7 +4,6 @@ namespace Fusion\Http\Controllers\API\Fields;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\FieldRequest;
-use Fusion\Models\Field;
 
 class FieldController extends Controller
 {
