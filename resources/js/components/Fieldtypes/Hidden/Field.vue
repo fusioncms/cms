@@ -1,7 +1,6 @@
 <template>
     <ui-input-group
         :name="field.handle"
-        type="hidden"
         :label="field.name"
         :help="field.help"
         :placeholder="field.settings.placeholder"
