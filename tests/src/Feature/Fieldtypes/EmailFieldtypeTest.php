@@ -2,10 +2,9 @@
 
 namespace Fusion\Tests\Feature\Fieldtypes;
 
-use Fusion\Models\Form;
 use Fusion\Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class EmailFieldtypeTest extends TestCase
 {
@@ -51,11 +50,11 @@ class EmailFieldtypeTest extends TestCase
             ->json('PATCH', '/api/singles/'.$this->matrix->id, [
                 'name'  => 'Invalid Single',
                 'slug'  => 'invalid-single',
-                'email' => 'fake-email'
+                'email' => 'fake-email',
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'email' => 'The Email must be a valid email address.'
+                'email' => 'The Email must be a valid email address.',
             ]);
     }
 
@@ -72,7 +71,7 @@ class EmailFieldtypeTest extends TestCase
             ->json('PATCH', '/api/singles/'.$this->matrix->id, [
                 'name'  => 'Invalid Single',
                 'slug'  => 'invalid-single',
-                'email' => $this->faker->unique()->safeEmail
+                'email' => $this->faker->unique()->safeEmail,
             ])
             ->assertStatus(201);
     }

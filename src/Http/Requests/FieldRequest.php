@@ -17,14 +17,14 @@ class FieldRequest extends FormRequest
 
     /**
      * Create a new instance.
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      */
     public function __construct(Request $request)
     {
         try {
             $this->fieldtype = fieldtypes()->get($request->type['handle']);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw ValidationException::withMessages(['type' => $e->getMessage()]);
         }
     }
@@ -87,4 +87,3 @@ class FieldRequest extends FormRequest
         ] + $this->fieldtype->messages;
     }
 }
-

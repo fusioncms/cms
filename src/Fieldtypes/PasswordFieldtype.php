@@ -53,10 +53,10 @@ class PasswordFieldtype extends Fieldtype
     {
         $validation = explode('|', $field->validation ?: 'sometimes');
 
-        array_push($validation, new SecurePassword);
+        array_push($validation, new SecurePassword());
 
         return [
-            $field->handle => $validation
+            $field->handle => $validation,
         ];
     }
 }
