@@ -54,7 +54,7 @@ class UrlFieldtype extends Fieldtype
         $validation = array_merge($validation, ['url']);
 
         return [
-            $field->handle => $validation
+            $field->handle => $validation,
         ];
     }
 }

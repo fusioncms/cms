@@ -2,10 +2,9 @@
 
 namespace Fusion\Tests\Feature\Fieldtypes;
 
-use Fusion\Models\Form;
 use Fusion\Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class PasswordFieldtypeTest extends TestCase
 {
@@ -51,11 +50,11 @@ class PasswordFieldtypeTest extends TestCase
             ->json('PATCH', '/api/singles/'.$this->matrix->id, [
                 'name'     => 'Invalid Single',
                 'slug'     => 'invalid-single',
-                'password' => 'short'
+                'password' => 'short',
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'password' => 'The Password field must be at least 6 characters long.'
+                'password' => 'The Password field must be at least 6 characters long.',
             ]);
     }
 
@@ -72,7 +71,7 @@ class PasswordFieldtypeTest extends TestCase
             ->json('PATCH', '/api/singles/'.$this->matrix->id, [
                 'name'     => 'Invalid Single',
                 'slug'     => 'invalid-single',
-                'password' => $this->faker->password
+                'password' => $this->faker->password,
             ])
             ->assertStatus(201);
     }

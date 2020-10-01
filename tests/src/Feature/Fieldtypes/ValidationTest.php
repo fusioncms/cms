@@ -54,12 +54,12 @@ class ValidationTest extends TestCase
      */
     public function a_user_with_permissions_can_validate_a_fieldtype()
     {
-    	$this
-    		->be($this->owner, 'api')
+        $this
+            ->be($this->owner, 'api')
             ->json('POST', '/api/fields/validate', [
-            	'name'   => 'Input',
-            	'handle' => 'input',
-            	'type'   => ['handle' => 'input'],
+                'name'   => 'Input',
+                'handle' => 'input',
+                'type'   => ['handle' => 'input'],
             ])
             ->assertStatus(200);
     }
@@ -72,16 +72,16 @@ class ValidationTest extends TestCase
      */
     public function a_new_field_requires_a_valid_fieldtype()
     {
-    	$this
-    		->be($this->owner, 'api')
+        $this
+            ->be($this->owner, 'api')
             ->json('POST', '/api/fields/validate', [
-            	'name'   => 'Fake Field',
-            	'handle' => 'fake-field',
-            	'type'   => ['handle' => 'fake'],
+                'name'   => 'Fake Field',
+                'handle' => 'fake-field',
+                'type'   => ['handle' => 'fake'],
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-            	'type' => 'Fieldtype not found in registry. [fake]'
+                'type' => 'Fieldtype not found in registry. [fake]',
             ]);
     }
 }

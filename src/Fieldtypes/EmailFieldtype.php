@@ -54,7 +54,7 @@ class EmailFieldtype extends Fieldtype
         $validation = array_merge($validation, ['email']);
 
         return [
-            $field->handle => $validation
+            $field->handle => $validation,
         ];
     }
 }

@@ -2,10 +2,9 @@
 
 namespace Fusion\Tests\Feature\Fieldtypes;
 
-use Fusion\Models\Form;
 use Fusion\Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class UrlFieldtypeTest extends TestCase
 {
@@ -51,11 +50,11 @@ class UrlFieldtypeTest extends TestCase
             ->json('PATCH', '/api/singles/'.$this->matrix->id, [
                 'name' => 'Invalid Single',
                 'slug' => 'invalid-single',
-                'url'  => 'fake-url'
+                'url'  => 'fake-url',
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'url' => 'The URL format is invalid.'
+                'url' => 'The URL format is invalid.',
             ]);
     }
 
@@ -72,7 +71,7 @@ class UrlFieldtypeTest extends TestCase
             ->json('PATCH', '/api/singles/'.$this->matrix->id, [
                 'name'  => 'Invalid Single',
                 'slug'  => 'invalid-single',
-                'url'   => $this->faker->url
+                'url'   => $this->faker->url,
             ])
             ->assertStatus(201);
     }
