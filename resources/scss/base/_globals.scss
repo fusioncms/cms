@@ -7,6 +7,10 @@ html {
 
 body { @apply text-gray-800; }
 
+div {
+    &:focus { outline: 0; }
+}
+
 .admin {
     @apply flex flex-col min-h-screen font-sans tracking-wide leading-loose;
 

@@ -1,4 +1,12 @@
 .sticky-sidebar {
     position: sticky;
     top: 0;
+
+    &__link {
+        @apply block;
+        
+        &.is-active { 
+            font-weight: bold;
+        }
+    }
 }

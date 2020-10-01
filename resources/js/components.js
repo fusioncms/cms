@@ -31,6 +31,7 @@ Vue.component('section-card', require('@/components/SectionCard').default)
 Vue.component('select-directory-modal', require('@/components/Modals/SelectDirectoryModal').default)
 Vue.component('settings-modal', require('@/components/Modals/SettingsModal').default)
 Vue.component('sticky-sidebar', require('@/components/StickySidebar/StickySidebar').default)
+Vue.component('sticky-sidebar-link', require('@/components/StickySidebar/StickySidebarLink').default)
 
 // Interfaces
 Vue.component('analytics-overview', require('@/interfaces/Analytics/AnalyticsOverview').default)

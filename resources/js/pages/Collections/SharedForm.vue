@@ -9,21 +9,15 @@
 
         <portal to="sidebar-left">
             <page-sidebar>
-                <sticky-sidebar>
-                    Hello world!
+                <sticky-sidebar v-if="collection">
+                    <sticky-sidebar-link :href="'#' + collection.handle + '_name_panel'" v-if="collection.show_name_field">Name</sticky-sidebar-link>
+                    <sticky-sidebar-link v-for="section in sections.body" :key="section.handle" :href="'#' + section.handle + '_panel'">{{ section.name }}</sticky-sidebar-link>
+                    <sticky-sidebar-link :href="'#' + collection.handle + '_settings_panel'">Settings</sticky-sidebar-link>
                 </sticky-sidebar>
             </page-sidebar>
         </portal>
 
-        <portal to="sidebar-right">
-            <page-sidebar>
-                <sticky-sidebar>
-                    Hello world!
-                </sticky-sidebar>
-            </page-sidebar>
-        </portal>
-
-        <ui-card v-if="collection.show_name_field">
+        <ui-card :id="collection.handle + '_name_panel'" v-if="collection.show_name_field" tabindex="-1">
             <ui-card-body>
                 <ui-title-group
                     class="mb-0"
@@ -85,7 +79,7 @@
             </ui-card-body>
         </ui-card>
 
-        <section-card v-for="section in sections.body" :key="section.handle" :title="section.name" :description="section.description">
+        <section-card v-for="section in sections.body" :key="section.handle" :id="section.handle + '_panel'" :title="section.name" :description="section.description" tabindex="-1">
             <component v-for="field in section.fields"
                 :key="field.handle"
                 :is="field.type.id + '-fieldtype'"
@@ -95,7 +89,7 @@
             </component>
         </section-card>
 
-        <section-card title="Settings" description="Settings and configurations for this entry.">
+        <section-card :id="collection.handle + '_settings_panel'" title="Settings" description="Settings and configurations for this entry." tabindex="-1">
             <ui-toggle
                 name="status"
                 label="Status"
@@ -116,7 +110,7 @@
             </dl>
         </section-card>
 
-        <section-card v-for="(section) in sections.sidebar" :key="section.handle" :title="section.name" :description="section.description">
+        <section-card v-for="(section) in sections.sidebar" :key="section.handle" :title="section.name" :description="section.description" tabindex="-1">
             <component
                 v-for="field in section.fields"
                 :key="field.handle"
