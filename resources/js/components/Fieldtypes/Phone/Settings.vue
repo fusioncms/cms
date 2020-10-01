@@ -16,7 +16,7 @@
     import fieldtype from '@/mixins/fieldtype'
 
     export default {
-        name: 'input-fieldtype-settings',
+        name: 'phone-fieldtype-settings',
 
         data() {
             return {

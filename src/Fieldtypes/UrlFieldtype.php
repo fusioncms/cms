@@ -14,7 +14,7 @@ class UrlFieldtype extends Fieldtype
     /**
      * @var string
      */
-    public $icon = 'sitemap';
+    public $icon = 'external-link-alt';
 
     /**
      * @var string

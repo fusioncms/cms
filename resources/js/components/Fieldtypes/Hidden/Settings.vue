@@ -1,13 +1,13 @@
 <template>
     <div>
         <ui-input-group
-            name="settings.placeholder"
-            label="Placeholder"
-            help="Text that will appear inside the input element's content area when empty."
+            name="settings.value"
+            label="Value"
+            help="Value that will be submitted for this field."
             autocomplete="off"
-            v-model="settings.placeholder"
-            :has-error="errors.has('settings.placeholder')"
-            :error-message="errors.get('settings.placeholder')">
+            v-model="settings.value"
+            :has-error="errors.has('settings.value')"
+            :error-message="errors.get('settings.value')">
         </ui-input-group>
     </div>
 </template>
@@ -16,13 +16,7 @@
     import fieldtype from '@/mixins/fieldtype'
 
     export default {
-        name: 'input-fieldtype-settings',
-
-        data() {
-            return {
-                placeholder: this.value.placeholder || ''
-            }
-        },
+        name: 'hidden-fieldtype-settings',
 
         mixins: [fieldtype]
     }

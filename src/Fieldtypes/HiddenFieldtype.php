@@ -28,7 +28,7 @@ class HiddenFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
-        'placeholder' => '',
+        'value' => '',
     ];
 
     /**

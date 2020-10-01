@@ -16,7 +16,7 @@
     import fieldtype from '@/mixins/fieldtype'
 
     export default {
-        name: 'input-fieldtype-settings',
+        name: 'email-fieldtype-settings',
 
         data() {
             return {

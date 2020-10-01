@@ -7,7 +7,7 @@
         @honeypot
     @endif
 
-    @foreach ($form->fieldset->fields as $field)
+    @foreach ($form->blueprint->fields as $field)
         @includeIf('forms.fields.'.$field->type, compact('field'))
     @endforeach
 

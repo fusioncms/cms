@@ -7,7 +7,7 @@ class PhoneFieldtype extends Fieldtype
     /**
      * @var string
      */
-    public $name = 'URL';
+    public $name = 'Phone';
 
     /**
      * @var string
@@ -17,7 +17,7 @@ class PhoneFieldtype extends Fieldtype
     /**
      * @var string
      */
-    public $description = 'URL input field.';
+    public $description = 'Phone number input field.';
 
     /**
      * @var string

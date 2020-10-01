@@ -84,26 +84,4 @@ class ValidationTest extends TestCase
             	'type' => 'Fieldtype not found in registry. [fake]'
             ]);
     }
-
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
-    public function a_new_field_requires_a_valid_validation_value()
-    {
-    	$this
-    		->be($this->owner, 'api')
-            ->json('POST', '/api/fields/validate', [
-            	'name'       => 'Input',
-            	'handle'     => 'input',
-            	'type'       => ['handle' => 'input'],
-            	'validation' => 123
-            ])
-            ->assertStatus(422)
-            ->assertJsonValidationErrors([
-            	'validation' => 'The validation must be a string'
-            ]);
-    }
 }

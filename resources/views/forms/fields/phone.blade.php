@@ -4,7 +4,7 @@
     </label>
 
     <input
-    	type="{{ $field->type }}"
+    	type="tel"
     	name="{{ $field->handle }}"
     	id="{{ $field->handle }}"
     	class="form__control"

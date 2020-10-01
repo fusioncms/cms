@@ -59,10 +59,9 @@ class FieldRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'       => 'required|regex:/^[A-z]/i',
-            'type'       => 'required',
-            'handle'     => ['required', 'not_regex:/[^a-z0-9_]/i', new NotAReservedKeyword()],
-            'validation' => 'sometimes|string'
+            'name'   => 'required|regex:/^[A-z]/i',
+            'type'   => 'required',
+            'handle' => ['required', 'not_regex:/[^a-z0-9_]/i', new NotAReservedKeyword()],
         ] + $this->fieldtype->rules;
     }
 

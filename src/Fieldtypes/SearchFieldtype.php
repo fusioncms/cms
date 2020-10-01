@@ -7,7 +7,7 @@ class SearchFieldtype extends Fieldtype
     /**
      * @var string
      */
-    public $name = 'URL';
+    public $name = 'Search';
 
     /**
      * @var string
@@ -17,7 +17,7 @@ class SearchFieldtype extends Fieldtype
     /**
      * @var string
      */
-    public $description = 'URL input field.';
+    public $description = 'Search input field.';
 
     /**
      * @var string

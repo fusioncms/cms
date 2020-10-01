@@ -16,7 +16,7 @@
     import fieldtype from '@/mixins/fieldtype'
 
     export default {
-        name: 'input-fieldtype-settings',
+        name: 'search-fieldtype-settings',
 
         data() {
             return {

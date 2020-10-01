@@ -14,7 +14,7 @@ class EmailFieldtype extends Fieldtype
     /**
      * @var string
      */
-    public $icon = 'envelope-open-text';
+    public $icon = 'at';
 
     /**
      * @var string

@@ -1,22 +1,21 @@
 <template>
     <ui-input-group
+        type="hidden"
         :name="field.handle"
-        :label="field.name"
-        :help="field.help"
-        :placeholder="field.settings.placeholder"
-        :value="value"
-        :has-error="hasError"
-        :error-message="errorMessage"
-        @input="$emit('input', $event)">
+        :value="value">
     </ui-input-group>
 </template>
 
 <script>
-    import FieldMixin from '@/mixins/fieldtypes/field'
+	import FieldMixin from '@/mixins/fieldtypes/field'
 
     export default {
-        name: 'input-fieldtype',
+        name: 'hidden-fieldtype',
 
         mixins: [FieldMixin],
+
+        created() {
+        	this.$emit('input', this.field.settings.value)
+        }
     }
 </script>

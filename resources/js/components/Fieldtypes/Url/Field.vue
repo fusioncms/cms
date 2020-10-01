@@ -16,7 +16,7 @@
     import FieldMixin from '@/mixins/fieldtypes/field'
 
     export default {
-        name: 'input-fieldtype',
+        name: 'url-fieldtype',
 
         mixins: [FieldMixin],
     }

@@ -16,7 +16,7 @@
     import fieldtype from '@/mixins/fieldtype'
 
     export default {
-        name: 'input-fieldtype-settings',
+        name: 'password-fieldtype-settings',
 
         data() {
             return {
