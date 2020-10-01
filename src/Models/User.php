@@ -6,6 +6,7 @@ use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasDynamicRelationships;
 use Fusion\Concerns\HasRoles;
 use Fusion\Concerns\MustVerifyEmail as UserMustVerifyEmail;
+use Fusion\Concerns\PasswordCanExpire;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasActivity;
     use CausesActivity;
     use CanResetPassword;
+    use PasswordCanExpire;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -81,6 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'logged_in_at',
         'invalidly_logged_in_at',
         'password_changed_at',
+        'welcomed_at',
     ];
 
     /**
@@ -131,16 +134,6 @@ class User extends Authenticatable implements MustVerifyEmail
         $email = md5($this->email);
 
         return "//www.gravatar.com/avatar/{$email}?s={$size}";
-    }
-
-    /**
-     * Determine if the user has verified their email address.
-     *
-     * @return bool
-     */
-    public function getVerifiedAttribute()
-    {
-        return $this->hasVerifiedEmail();
     }
 
     /**

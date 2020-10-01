@@ -2,13 +2,13 @@
 
 @section('content')
     <div class="w-full container max-w-xs">
-        <form method="POST" action="{{ route('password.update') }}" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form method="POST" action="{{ route('password.set') }}" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             @csrf
 
             <input type="hidden" name="token" value="{{ $token }}">
 
             <div class="flex flex-col items-center leading-none mb-6">
-                <h2>{{ __('Set Password') }}</h2>
+                <h2>Please Set Your Password</h2>
             </div>
 
             <div class="mb-6">
@@ -66,7 +66,7 @@
                     type="password"
                     id="password_confirmation"
                     name="password_confirmation"
-                    class="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded px-3 py-1 leading-loose focus:outline-none focus:shadow {{ $errors->has('email') ? 'border-red-500 border-2' : '' }}"
+                    class="appearance-none block w-full bg-white text-grey-darker border border-grey-light rounded px-3 py-1 leading-loose focus:outline-none focus:shadow {{ $errors->has('password') ? 'border-red-500 border-2' : '' }}"
                     required
                 />
             </div>

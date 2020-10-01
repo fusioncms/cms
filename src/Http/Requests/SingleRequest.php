@@ -36,6 +36,7 @@ class SingleRequest extends FormRequest
     {
         $this->merge([
             'matrix_id' => $this->matrix->id,
+            'status'    => $this->status ?? true,
         ]);
     }
 
