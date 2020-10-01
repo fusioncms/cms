@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="backup-page">
 		<portal to="title">
 			<page-title icon="save">Backups</page-title>
 		</portal>
@@ -11,49 +11,34 @@
 			<ui-button @click.prevent v-modal:confirm-form variant="primary">Backup Now</ui-button>
 		</portal>
 
-		<ui-card no-body>
-			<div class="card__body text-center" v-if="! ready">
-				<fa-icon :icon="['fas', 'circle-notch']" class="fa-spin mr-3"></fa-icon> Loading backups...
-			</div>
+		<ui-card>
+            <ui-card-body>
+            	<ui-table :key="'backups'" class="backup-table" id="backups" :endpoint="endpoint" sort-by="name" :per-page="50">
+                    <template slot="actions" slot-scope="table">
+                        <ui-table-actions :id="'backup_' + table.record.id + '_actions'" :key="'backup_' + table.record.id + '_actions'">
+							<ui-dropdown-link
+								@click.prevent
+								v-modal:restore-form="table.record">
+								Restore
+							</ui-dropdown-link>
 
-			<div v-else>
-				<table v-for="destination in destinations" :key="destination.name">
-					<thead>
-						<th>Name</th>
-						<th>Created</th>
-						<th>Size</th>
-						<th></th>
-					</thead>
+							<ui-dropdown-link
+								@click.prevent="download(table.record.name)">
+								Download
+							</ui-dropdown-link>
 
-					<tbody>
-						<tr v-for="backup in destination.backups" :key="backup.name">
-							<td>{{ backup.name }}</td>
-							<td>{{ backup.happened }}</td>
-							<td>{{ backup.size }}</td>
-							<td class="text-right">
-								<ui-dropdown right>
-									<fa-icon :icon="['fas', 'bars']"></fa-icon>
+							<ui-dropdown-link
+								v-if="! table.record.isLatest"
+								@click.prevent
+								v-modal:delete-form="table.record">
+								Delete
+							</ui-dropdown-link>
+                        </ui-table-actions>
+                    </template>
+                </ui-table>
+            </ui-card-body>
+        </ui-card>
 
-									<template slot="options">
-										<ui-dropdown-item @click.prevent v-modal:restore-form="backup">
-											Restore
-										</ui-dropdown-item>
-
-										<ui-dropdown-item @click="download(backup.name)">
-											Download
-										</ui-dropdown-item>
-
-										<ui-dropdown-item v-if="! backup.isNewest" @click.prevent v-modal:delete-form="backup">
-											Delete
-										</ui-dropdown-item>
-									</template>
-								</ui-dropdown>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</ui-card>
 
         <portal to="modals">
             <settings-modal handle="backups"></settings-modal>
@@ -66,8 +51,8 @@
         			Create a backup before restoring
         		</ui-checkbox>
 
-                <template slot="footer" slot-scope="form">
-                    <ui-button v-modal:restore-form @click="restore(form.data.name)" variant="primary" class="ml-3">Restore</ui-button>
+                <template slot="footer" slot-scope="backup">
+                    <ui-button v-modal:restore-form @click="restore(backup.data.name)" variant="primary" class="ml-3">Restore</ui-button>
                     <ui-button v-modal:restore-form>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -86,8 +71,8 @@
 			<ui-modal name="delete-form" title="Delete Backup" key="delete_form">
                 <p>Are you sure you want to permenantly delete this backup?</p>
 
-                <template slot="footer" slot-scope="form">
-                    <ui-button v-modal:delete-form @click="destroy(form.data.name)" variant="danger" class="ml-3">Delete</ui-button>
+                <template slot="footer" slot-scope="backup">
+                    <ui-button v-modal:delete-form @click="destroy(backup.data.name)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-form>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -119,23 +104,12 @@
 
 		data() {
 			return {
-				destinations: [],
-				ready: false,
+				endpoint: '/datatable/backups',
 				saveBackup: true,
 			}
 		},
 
 		methods: {
-            refresh() {
-            	this.ready = false
-
-            	axios.get('/api/backups').then(response => {
-            		this.destinations = response.data.data
-            		this.ready        = true
-            		this.saveBackup   = true
-            	})
-            },
-
             upload(files) {
             	if (typeof files == 'undefined') {
             		return;
@@ -150,7 +124,7 @@
 					toast('Backup successfully uploaded!', 'success')
 
 					this.$refs.upload.remove()
-					this.refresh()
+					bus().$emit('refresh-datatable-backups')
 				})
             },
 
@@ -162,7 +136,7 @@
 				axios.post(`/api/backups/restore/${backup}`, { saveBackup: this.saveBackup }).then(response => {
 					toast('Backup successfully restored!', 'success')
 
-					this.refresh()
+					bus().$emit('refresh-datatable-backups')
 				})
 			},
 
@@ -170,7 +144,7 @@
 				axios.post('/api/backups').then(response => {
 					toast('Backup successfully created!', 'success')
 
-					this.refresh()
+					bus().$emit('refresh-datatable-backups')
 				})
 			},
 
@@ -178,15 +152,9 @@
 				axios.delete(`/api/backups/${backup}`).then((response) => {
                     toast('Backp successfully deleted!', 'success')
 
-                    this.refresh()
+                    bus().$emit('refresh-datatable-backups')
                 })
 			}
-		},
-
-		beforeRouteEnter(to, from, next) {
-			next(function(vm) {
-				vm.refresh()
-			})
 		}
 	}
 </script>

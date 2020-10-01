@@ -5,6 +5,7 @@ namespace Fusion\Http\Controllers\API\Backups;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\BackupResource;
 use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Models\Backup as BackupModel;
 use Illuminate\Http\Request;
 use Spatie\Backup\BackupDestination\Backup;
 
@@ -21,7 +22,9 @@ class BackupController extends Controller
     {
         $this->authorize('backups.viewAny');
 
-        return new BackupResource([]);
+        $backups = BackupModel::all();
+
+        return BackupResource::collection($backups);
     }
 
     /**
