@@ -5,16 +5,25 @@
 		</portal>
 
 		<portal to="actions">
-			<ui-button v-modal:settings class="mr-1">Settings</ui-button>
-			<ui-button v-modal:upload class="mr-3">Upload</ui-button>
+			<ui-button v-modal:settings class="mr-1" :disabled="isBusy">Settings</ui-button>
+			<ui-button v-modal:upload class="mr-1" :disabled="isBusy">Upload</ui-button>
 
-			<ui-button @click.prevent v-modal:confirm-form variant="primary">Backup Now</ui-button>
+			<ui-button v-if="isBusy" variant="primary" disabled>
+				<fa-icon icon="sync" class="fa-spin"></fa-icon>
+				<span class="sr-only">Working</span>
+			</ui-button>
+
+			<ui-button
+				v-else
+				v-modal:confirm-form
+				@click.prevent
+				variant="primary">Backup Now</ui-button>
 		</portal>
 
 		<ui-card>
             <ui-card-body>
-            	<ui-table :key="'backups'" class="backup-table" id="backups" :endpoint="endpoint" sort-by="name" :per-page="50">
-                    <template slot="actions" slot-scope="table">
+            	<ui-table :key="'backups'" class="backup-table" id="backups" :endpoint="endpoint" sort-by="name" sort-in="desc" :per-page="50">
+                    <template v-if="!isBusy" slot="actions" slot-scope="table">
                         <ui-table-actions :id="'backup_' + table.record.id + '_actions'" :key="'backup_' + table.record.id + '_actions'">
 							<ui-dropdown-link
 								@click.prevent
@@ -106,6 +115,16 @@
 			return {
 				endpoint: '/datatable/backups',
 				saveBackup: true,
+				isBusy: false
+			}
+		},
+
+		watch: {
+			isBusy(value) {
+				this.$store.commit('form/setPreventNavigation', value)
+
+				if (!value)
+					bus().$emit('refresh-datatable-backups')
 			}
 		},
 
@@ -133,19 +152,36 @@
             },
 
 			restore(backup) {
-				axios.post(`/api/backups/restore/${backup}`, { saveBackup: this.saveBackup }).then(response => {
-					toast('Backup successfully restored!', 'success')
+				this.isBusy = true
 
-					bus().$emit('refresh-datatable-backups')
-				})
+				axios.post(`/api/backups/restore/${backup}`, { saveBackup: this.saveBackup })
+					.then(response => {
+						this.isBusy = false
+						
+						toast('Backup successfully restored!', 'success')
+						
+					})
+					.catch(response => {
+						this.isBusy = false
+
+						toast(response.response.data.message, 'failed')
+					})
 			},
 
 			backup() {
-				axios.post('/api/backups').then(response => {
-					toast('Backup successfully created!', 'success')
+				this.isBusy = true
 
-					bus().$emit('refresh-datatable-backups')
-				})
+				axios.post('/api/backups')
+					.then(response => {
+						this.isBusy = false
+						
+						toast('Backup successfully created!', 'success')
+					})
+					.catch(response => {
+						this.isBusy = false
+
+						toast(response.response.data.message, 'failed')
+					})
 			},
 
 			destroy(backup) {
