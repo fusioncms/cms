@@ -7,6 +7,7 @@ use Fusion\Http\Resources\BackupResource;
 use Fusion\Jobs\Backups\BackupRun;
 use Fusion\Models\Backup as BackupModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Backup\BackupDestination\Backup;
 
 class BackupController extends Controller
@@ -45,12 +46,18 @@ class BackupController extends Controller
      * Remove the specified backup from disk.
      *
      * @param Request $request
+     * @param string  $disk
+     * @param string  $name
      *
      * @return void
      */
-    public function destroy(Backup $backup)
+    public function destroy(Request $request, $disk, $name)
     {
         $this->authorize('backups.delete');
+
+        $disk   = Storage::disk($disk);
+        $path   = preg_replace('/\s+/', '-', config('backup.backup.name'))."/{$name}.zip";
+        $backup = new Backup($disk, $path);
 
         $backup->delete();
     }

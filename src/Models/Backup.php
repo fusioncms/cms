@@ -39,7 +39,7 @@ class Backup extends Model
             ->flatMap(function (BackupDestinationStatus $status) {
                 $i = 0;
 
-                return $status->backupDestination()->backups()
+                return $status->backupDestination()->fresh()->backups()
                     ->map(function($backup) use ($status, &$i) {
                         $backup = [
                             'name'        => basename($backup->path(), '.zip'),

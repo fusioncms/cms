@@ -144,12 +144,15 @@ class BackupTest extends TestCase
      */
     public function a_user_without_permissions_cannot_delete_existing_backups()
     {
-        $this->newBackup(function ($ev, $backup) {
+        $this->newBackup(function ($ev, $destination) {
             $this->expectException(AuthorizationException::class);
+
+            $disk = $destination->diskName();
+            $name = basename($destination->newestBackup()->path(), '.zip');
 
             $this
                 ->be($this->user, 'api')
-                ->json('DELETE', '/api/backups/'.basename($backup->path(), '.zip'));
+                ->json('DELETE', "/api/backups/{$disk}/{$name}");
         });
     }
 
@@ -162,12 +165,15 @@ class BackupTest extends TestCase
      */
     public function a_user_without_permissions_cannot_restore_from_existing_backups()
     {
-        $this->newBackup(function ($ev, $backup) {
+        $this->newBackup(function ($ev, $destination) {
             $this->expectException(AuthorizationException::class);
+
+            $disk = $destination->diskName();
+            $name = basename($destination->newestBackup()->path(), '.zip');
 
             $this
                 ->be($this->user, 'api')
-                ->json('POST', '/api/backups/restore/'.basename($backup->path(), '.zip'));
+                ->json('POST', "/api/backups/restore/{$disk}/{$name}");
         });
     }
 
@@ -179,10 +185,10 @@ class BackupTest extends TestCase
      */
     public function a_request_to_backup_will_first_clean_then_create_a_backup()
     {
-        $this->newBackup(function ($ev, $backup) {
+        $this->newBackup(function ($ev, $destination) {
             Event::assertDispatched(CleanupWasSuccessful::class);
 
-            return Storage::disk('public')->assertExists($backup->path());
+            return Storage::disk('public')->assertExists($destination->newestBackup()->path());
         });
     }
 
@@ -194,7 +200,8 @@ class BackupTest extends TestCase
      */
     public function a_request_to_backup_will_save_env_variables_with_the_backup_zip()
     {
-        $this->newBackup(function ($ev, $backup) {
+        $this->newBackup(function ($ev, $destination) {
+            $backup     = $destination->newestBackup();
             $backupPath = Storage::disk('public')->path($backup->path());
             $zipArchive = new ZipArchive();
 
@@ -224,7 +231,8 @@ class BackupTest extends TestCase
      */
     public function a_request_to_restore_from_backup_will_restore_files()
     {
-        $this->newBackup(function ($ev, $backup) {
+        $this->newBackup(function ($ev, $destination) {
+            $backup = $destination->newestBackup();
 
             // Alter storage setup..
             Storage::disk('public')->append('files/testing-file1.txt', 'more content');
@@ -261,7 +269,8 @@ class BackupTest extends TestCase
      */
     public function a_request_to_restore_from_backup_will_restore_env_variables()
     {
-        $this->newBackup(function ($ev, $backup) {
+        $this->newBackup(function ($ev, $destination) {
+            $backup = $destination->newestBackup();
 
             // Alter .env.testing file and save..
             $envContents = File::get(app()->environmentFilePath());
@@ -335,7 +344,7 @@ class BackupTest extends TestCase
         (new \Fusion\Jobs\Backups\BackupRun())->handle();
 
         Event::assertDispatched(BackupWasSuccessful::class, function ($ev) use ($closure) {
-            return $closure($ev, $ev->backupDestination->newestBackup());
+            return $closure($ev, $ev->backupDestination);
         });
     }
 }

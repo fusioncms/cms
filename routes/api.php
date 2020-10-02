@@ -10,9 +10,13 @@ Route::get('structures', 'StructureController@index');
 /**
  * API - Backup Routes.
  */
-Route::post('backups/upload', 'Backups\BackupUploadController@index');
-Route::post('backups/restore/{backup}', 'Backups\BackupRestoreController@index');
-Route::apiResource('backups', 'Backups\BackupController')->except(['show', 'update']);
+Route::prefix('backups')->group(function () {
+    Route::get('', 'Backups\BackupController@index');
+    Route::post('', 'Backups\BackupController@store');
+    Route::delete('{disk}/{name}', 'Backups\BackupController@destroy');
+    Route::post('upload', 'Backups\BackupUploadController@index');
+    Route::post('restore/{disk}/{name}', 'Backups\BackupRestoreController@index');
+});
 
 /**
  * API - Collection Routes.

@@ -365,14 +365,6 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerRouteBindings()
     {
-        Route::bind('backup', function ($filename) {
-            // TODO: point to correct disk if it changes from local storage
-            $disk = Storage::disk('public');
-            $path = preg_replace('/\s+/', '-', config('backup.backup.name'))."/{$filename}.zip";
-
-            return new \Spatie\Backup\BackupDestination\Backup($disk, $path);
-        });
-
         Route::bind('addon', function ($slug) {
             return \Fusion\Facades\Addon::where('slug', $slug)->first();
         });

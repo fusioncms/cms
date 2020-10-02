@@ -56,12 +56,12 @@
             <ui-modal name="restore-form" title="Restore Backup" key="restore_form">
                 <p>Restoring a backup will <b>replace all files and the database with the contents of the backup.</b> Unless you specify to create a new backup during this process, there will be no way to undo your changes if you change your mind.</p>
 
-        		<ui-checkbox name="saveBackup" v-model="saveBackup">
+        		<ui-checkbox id="saveBackup" name="saveBackup" v-model="saveBackup">
         			Create a backup before restoring
         		</ui-checkbox>
 
                 <template slot="footer" slot-scope="backup">
-                    <ui-button v-modal:restore-form @click="restore(backup.data.name)" variant="primary" class="ml-3">Restore</ui-button>
+                    <ui-button v-modal:restore-form @click="restore(backup.data)" variant="primary" class="ml-3">Restore</ui-button>
                     <ui-button v-modal:restore-form>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -81,7 +81,7 @@
                 <p>Are you sure you want to permenantly delete this backup?</p>
 
                 <template slot="footer" slot-scope="backup">
-                    <ui-button v-modal:delete-form @click="destroy(backup.data.name)" variant="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-form @click="destroy(backup.data)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-form>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -139,12 +139,13 @@
 				formData.append('_method', 'POST')
 				formData.append('file-upload', files)
 
-				axios.post('/api/backups/upload', formData).then(() => {
-					toast('Backup successfully uploaded!', 'success')
+				axios.post('/api/backups/upload', formData)
+					.then(() => {
+						toast('Backup successfully uploaded!', 'success')
 
-					this.$refs.upload.remove()
-					bus().$emit('refresh-datatable-backups')
-				})
+						this.$refs.upload.remove()
+						bus().$emit('refresh-datatable-backups')
+					})
             },
 
             download(backup) {
@@ -154,12 +155,11 @@
 			restore(backup) {
 				this.isBusy = true
 
-				axios.post(`/api/backups/restore/${backup}`, { saveBackup: this.saveBackup })
+				axios.post(`/api/backups/restore/${backup.disk}/${backup.name}`, { saveBackup: this.saveBackup })
 					.then(response => {
 						this.isBusy = false
 						
 						toast('Backup successfully restored!', 'success')
-						
 					})
 					.catch(response => {
 						this.isBusy = false
@@ -185,11 +185,12 @@
 			},
 
 			destroy(backup) {
-				axios.delete(`/api/backups/${backup}`).then((response) => {
-                    toast('Backp successfully deleted!', 'success')
+				axios.delete(`/api/backups/${backup.disk}/${backup.name}`)
+					.then((response) => {
+	                    toast('Backp successfully deleted!', 'success')
 
-                    bus().$emit('refresh-datatable-backups')
-                })
+	                    bus().$emit('refresh-datatable-backups')
+	                })
 			}
 		}
 	}
