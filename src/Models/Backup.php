@@ -37,15 +37,16 @@ class Backup extends Model
     {
         return Factory::createForMonitorConfig(config('backup.monitor_backups'))
             ->flatMap(function (BackupDestinationStatus $status) {
+                $destination = $status->backupDestination()->fresh();
                 $i = 0;
 
-                return $status->backupDestination()->fresh()->backups()
-                    ->map(function($backup) use ($status, &$i) {
+                return $destination->backups()
+                    ->map(function($backup) use ($status, $destination, &$i) {
                         $backup = [
                             'name'        => basename($backup->path(), '.zip'),
-                            'disk'        => $status->backupDestination()->diskName(),
+                            'disk'        => $destination->diskName(),
                             'size'        => human_filesize($backup->size()),
-                            'isReachable' => $status->backupDestination()->isReachable(),
+                            'isReachable' => $destination->isReachable(),
                             'isHealthy'   => $status->isHealthy(),
                             'isLatest'    => ($i++ == 0),
                             'created_at'  => $backup->date()->diffForHumans(),
