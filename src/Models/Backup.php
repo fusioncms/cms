@@ -4,7 +4,7 @@ namespace Fusion\Models;
 
 use Carbon\Carbon;
 use Fusion\Concerns\HasLocalEloquentData;
-use Fusion\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory as Factory;
 
