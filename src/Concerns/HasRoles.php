@@ -28,13 +28,25 @@ trait HasRoles
     }
 
     /**
+     * Check the users current level. If their level is below or equal to
+     * the level check, return true.
+     *
+     * @param  integer  $levelCheck
+     * @return bool
+     */
+    public function level($levelCheck)
+    {
+        return $this->role->level <= $levelCheck;
+    }
+
+    /**
      * Owner role check.
      *
      * @return bool
      */
     public function isOwner()
     {
-        return $this->hasRole('owner');
+        return $this->hasRole('Owner');
     }
 
     /**

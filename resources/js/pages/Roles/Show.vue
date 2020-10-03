@@ -1,7 +1,7 @@
 <template>
     <div class="roles-page">
         <portal to="title">
-            <page-title icon="user-shield">Role - {{ role.label }}</page-title>
+            <page-title icon="user-shield">Role - {{ role.name }}</page-title>
         </portal>
 
         <portal to="actions">
@@ -9,7 +9,7 @@
             <ui-button v-if="!isOwner && $can('roles.update')" key="edit-role-btn" :to="{ name: 'roles.edit', params: {role: role.id} }" variant="primary">Edit Role</ui-button>
         </portal>
 
-        <section-card :title="role.label" :description="role.description">
+        <section-card :title="role.name" :description="role.description">
             <dl class="detail-list">
                 <dt>Created</dt>
                 <dd>{{ $moment(role.created_at).format('Y-MM-DD, hh:mm a') }}</dd>
@@ -18,7 +18,7 @@
             </dl>
         </section-card>
 
-        <section-card :title="role.label + ' Permissions'" description="Current permissions assigned to this role.">
+        <section-card :title="role.name + ' Permissions'" description="Current permissions assigned to this role.">
             <!-- <ui-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions-table" show-page-status show-page-numbers show-page-nav show-page-ends>
                 <template slot="name" slot-scope="table">
                     <code>{{ table.record.name }}</code>
@@ -48,7 +48,7 @@
                     </template>
 
                     <template slot="role" slot-scope="table">
-                        <ui-badge>{{ table.record.role.label }}</ui-badge>
+                        <ui-badge>{{ table.record.role.name }}</ui-badge>
                     </template>
 
                     <template slot="created_at" slot-scope="table">
@@ -72,7 +72,7 @@
         head: {
             title() {
                 return {
-                    inner: this.role.label || 'Loading...'
+                    inner: this.role.name || 'Loading...'
                 }
             }
         },
@@ -111,11 +111,11 @@
             },
 
             isOwner() {
-                return this.role.id && this.role.id === 4
+                return this.role.id && this.role.id === 1
             },
 
             isGuest() {
-                return this.role.id && this.role.id === 1
+                return this.role.id && this.role.id === 2
             }
         }
     }

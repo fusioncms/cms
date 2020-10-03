@@ -1,7 +1,7 @@
 <template>
     <div class="user-page">
         <portal to="title">
-            <page-title icon="users">Users - {{ current ? current.label : '' }}</page-title>
+            <page-title icon="users">Users - {{ current ? current.name : '' }}</page-title>
         </portal>
 
         <portal to="actions">
@@ -22,7 +22,7 @@
                                     <ui-dropdown-divider></ui-dropdown-divider>
 
                                     <ui-dropdown-link v-for="role in filteredRoles" :key="role.name" :to="{ name: 'users.role', params: { role: role.name } }" exact>
-                                        {{ role.label }}
+                                        {{ role.name }}
                                     </ui-dropdown-link>
                                 </template>
                             </ui-dropdown>
@@ -42,7 +42,8 @@
                     </template>
 
                     <template slot="role" slot-scope="table">
-                        <ui-badge>{{ table.record.role.label }}</ui-badge>
+                        <router-link :to="{ name: 'roles.show', params: {role: table.record.role.id} }" v-if="$can('roles.view')">{{ table.record.role.name }}</router-link>
+                        <span v-else>{{ table.record.role.name }}</span>
                     </template>
 
                     <template slot="created_at" slot-scope="table">
@@ -58,26 +59,26 @@
                         <ui-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
                             <ui-dropdown-link :to="{ name: 'users.show', params: {user: table.record.id} }" v-if="$can('users.view')">View</ui-dropdown-link>
 
-                            <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }" v-if="$can('users.update')">Edit</ui-dropdown-link>
+                            <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }" v-if="$can('users.update', table.record.role.level)">Edit</ui-dropdown-link>
 
-                            <ui-dropdown-divider></ui-dropdown-divider>
+                            <ui-dropdown-divider v-if="$can('users.update', table.record.role.level)"></ui-dropdown-divider>
 
                             <ui-dropdown-link
-                                v-if="$can('users.update')"
+                                v-if="$can('users.update', table.record.role.level)"
                                 @click.prevent
                                 v-modal:verify-user="table.record">
                                 Resend Verification
                             </ui-dropdown-link>
 
                             <ui-dropdown-link
-                                v-if="$can('users.update')"
+                                v-if="$can('users.update', table.record.role.level)"
                                 @click.prevent
                                 v-modal:password-user="table.record">
                                 Reset Password
                             </ui-dropdown-link>
 
                             <ui-dropdown-link
-                                v-if="table.record.id != $user.id && $can('users.delete')"
+                                v-if="table.record.id != $user.id && $can('users.delete', table.record.role.level)"
                                 @click.prevent
                                 v-modal:delete-user="table.record"
                                 class="danger">
@@ -166,7 +167,6 @@
                     name: 'all',
                     label: 'All'
                 }
-
             }
         },
 

@@ -25,7 +25,8 @@ class RoleRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'name' => $this->name ?? Str::slug($this->label),
+            'name'   => $this->name,
+            'handle' => $this->handle ?? Str::snake($this->name),
         ]);
     }
 
@@ -36,11 +37,16 @@ class RoleRequest extends FormRequest
      */
     public function rules()
     {
+        $level = auth()->user()->role->level;
+
+        if ($level < 1) $level = 1;
+
         return [
             'name'        => 'required',
-            'label'       => 'required',
+            'handle'      => 'required',
             'guard_name'  => 'sometimes',
             'description' => 'sometimes',
+            'level'       => 'sometimes|nullable|integer|between:'.$level.',99',
         ];
     }
 }

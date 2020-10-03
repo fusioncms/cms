@@ -107,7 +107,7 @@
             <ui-modal name="verify-user" title="Verification Email" key="verify_user">
                 <p>Are you sure you want to re-send the verification email to this user?</p>
 
-                <template slot="footer" slot-scope="user">
+                <template slot="footer">
                     <ui-button v-modal:verify-user @click="emailVerification" class="ml-3">Confirm</ui-button>
                     <ui-button v-modal:verify-user>Cancel</ui-button>
                 </template>
@@ -116,7 +116,7 @@
             <ui-modal name="password-user" title="Password Reset" key="password_user">
                 <p>Are you sure you want to send this user a password reset notification?</p>
 
-                <template slot="footer" slot-scope="user">
+                <template slot="footer">
                     <ui-button v-modal:password-user @click="passwordReset" class="ml-3">Confirm</ui-button>
                     <ui-button v-modal:password-user>Cancel</ui-button>
                 </template>
@@ -125,7 +125,7 @@
             <ui-modal name="delete-user" title="Delete User" key="delete_user">
                 <p>Are you sure you want to permenantly delete this user?</p>
 
-                <template slot="footer" slot-scope="user">
+                <template slot="footer">
                     <ui-button v-modal:delete-user @click="destroy" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-user>Cancel</ui-button>
                 </template>
@@ -160,12 +160,12 @@
 
         computed: {
             roleOptions() {
-                const roles = _.filter(this.roles, (role) => this.isAssignable(role.name))
+                const roles = _.filter(this.roles, (role) => this.isAssignable(role.name, role.level))
 
                 return _.map(roles, (role) => {
                     return {
-                        label: role.label,
-                        value: role.name
+                        label: role.name,
+                        value: role.handle
                     }
                 })
             },
