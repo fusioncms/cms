@@ -14,19 +14,11 @@ class FileUploadRequest extends FormRequest
     protected $maxFileSize;
 
     /**
-     * Accepted file extensions.
-     *
-     * @var string
-     */
-    protected $acceptedMimes;
-
-    /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->maxFileSize   = setting('files.file_size_upload_limit');
-        $this->acceptedMimes = setting('files.accepted_files');
+        $this->maxFileSize = setting('files.file_size_upload_limit');
     }
 
     /**
@@ -47,10 +39,9 @@ class FileUploadRequest extends FormRequest
     public function rules()
     {
         $maxKb = byte_converter($this->maxFileSize, 'MB', 'KB');
-        $mimes = implode(',', $this->acceptedMimes);
 
         return [
-            'file'         => "required|file|max:{$maxKb}|mimes:{$mimes}",
+            'file'         => "required|file|max:{$maxKb}",
             'directory_id' => 'sometimes',
         ];
     }
