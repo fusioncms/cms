@@ -21,7 +21,7 @@ class ScheduleServiceProvider extends ServiceProvider
     public function boot()
     {
         collect($this->tasks)->each(function($task) {
-            resolve($task)
+            resolve($task);
         });
     }
 }
