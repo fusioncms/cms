@@ -8,18 +8,18 @@ class Backup extends Task
 {
     /**
      * Schedule Task.
-     * 
+     *
      * @return void
      */
     protected function handle()
     {
         $this->schedule
-            ->job(new BackupRun)
+            ->job(new BackupRun())
             ->daily()
             ->timezone(setting('system.time_zone'))
             ->withoutOverlapping()
             ->environments(['production'])
-            ->when(function() {
+            ->when(function () {
                 return setting('backups.scheduled_backups', 'disabled') == 'enabled';
             });
     }

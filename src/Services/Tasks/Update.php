@@ -8,7 +8,7 @@ class Update extends Task
 {
     /**
      * Schedule Task.
-     * 
+     *
      * @return void
      */
     protected function handle()
@@ -19,7 +19,7 @@ class Update extends Task
             ->timezone(setting('system.time_zone'))
             ->withoutOverlapping()
             ->environments(['production'])
-            ->when(function() {
+            ->when(function () {
                 return Version::isAutoUpdateEnabled() &&
                        Version::hasUpdate();
             });

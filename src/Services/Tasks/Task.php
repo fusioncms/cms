@@ -13,7 +13,7 @@ abstract class Task
 
     /**
      * Create new task.
-     * 
+     *
      * @param \Illuminate\Console\Scheduling\Schedule $schedule
      */
     public function __construct(Schedule $schedule)
