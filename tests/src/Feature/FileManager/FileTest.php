@@ -209,50 +209,6 @@ class FileTest extends TestCase
      * @group feature
      * @group file
      */
-    public function a_valid_file_must_abide_by_acceptable_file_type_settings()
-    {
-        setting(['files.accepted_files' => ['jpg', 'png', 'gif']]);
-        setting(['files.file_size_upload_limit' => 1]);
-
-        $this
-            ->be($this->owner, 'api')
-            ->json('POST', '/api/files', [
-                'file' => UploadedFile::fake()->createWithContent('foobar.txt', $this->faker->paragraphs(3, true)),
-            ])
-            ->assertStatus(422)
-            ->assertJsonValidationErrors([
-                'file'  => 'The file must be a file of type: '.implode(', ', setting('files.accepted_files')),
-            ]);
-    }
-
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
-    public function a_valid_file_must_abide_by_acceptable_file_size_settings()
-    {
-        setting(['files.accepted_files' => ['pdf']]);
-        setting(['files.file_size_upload_limit' => 1]);
-
-        $this
-            ->be($this->owner, 'api')
-            ->json('POST', '/api/files', [
-                'file' => UploadedFile::fake()->create('test.pdf', 2000, 'application/pdf'),
-            ])
-            ->assertStatus(422)
-            ->assertJsonValidationErrors([
-                'file'  => 'The file cannot be larger than '.setting('files.file_size_upload_limit').'MB',
-            ]);
-    }
-
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
     public function a_user_with_permissions_can_update_files()
     {
         $file = factory(File::class)->states('document')->create();
