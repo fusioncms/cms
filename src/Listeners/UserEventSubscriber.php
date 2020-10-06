@@ -2,12 +2,10 @@
 
 namespace Fusion\Listeners;
 
-use Fusion\Events\UserWelcomed;
-use Fusion\Mail\WelcomeNewUser;
+use Fusion\Jobs\Onboard;
 use Fusion\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Mail;
 
 class UserEventSubscriber
 {
@@ -64,26 +62,7 @@ class UserEventSubscriber
                 event(new Verified($event->user));
             }
         } else {
-            event(new UserWelcomed($event->user));
-        }
-    }
-
-    /**
-     * Handle 'user welcome' event.
-     *
-     * @param \Fusion\Events\UserWelcomed $event
-     *
-     * @return void
-     */
-    public function handleUserWelcome($event)
-    {
-        if (is_null($event->user->welcomed_at)) {
-            $event->user->forceFill(['welcomed_at' => now()])->save();
-
-            if (setting('users.user_email_welcome') === 'enabled') {
-                Mail::to($event->user)
-                    ->send(new WelcomeNewUser($event->user));
-            }
+            Onboard::dispatch($event->user);
         }
     }
 
@@ -133,7 +112,7 @@ class UserEventSubscriber
      */
     public function handleUserVerification($event)
     {
-        event(new UserWelcomed($event->user));
+        Onboard::dispatch($event->user);
     }
 
     /**
@@ -158,11 +137,6 @@ class UserEventSubscriber
         $events->listen(
             'Illuminate\Auth\Events\Registered',
             [UserEventSubscriber::class, 'handleUserRegistration']
-        );
-
-        $events->listen(
-            'Fusion\Events\UserWelcomed',
-            [UserEventSubscriber::class, 'handleUserWelcome']
         );
 
         $events->listen(

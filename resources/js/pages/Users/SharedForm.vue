@@ -97,6 +97,12 @@
             </div>
 
             <div class="mb-4">
+                <span class="label">Expire Password</span>
+                <p class="help mb-2">Force the user to reset their password upon next login attempt.</p>
+                <ui-button variant="secondary" v-modal:expire-password>Expire Password</ui-button>
+            </div>
+
+            <div class="mb-4">
                 <span class="label">Delete User</span>
                 <p class="help mb-2">Once you delete this user, there is no going back. Please be certain.</p>
                 <ui-button variant="danger" v-modal:delete-user>Delete User</ui-button>
@@ -119,6 +125,15 @@
                 <template slot="footer">
                     <ui-button v-modal:password-user @click="passwordReset" class="ml-3">Confirm</ui-button>
                     <ui-button v-modal:password-user>Cancel</ui-button>
+                </template>
+            </ui-modal>
+
+            <ui-modal name="expire-password" title="Expire Password" key="password_expire">
+                <p>Are you sure you want to force user to reset their password upon next login?</p>
+
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:expire-password @click="passwordExpire" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:expire-password>Cancel</ui-button>
                 </template>
             </ui-modal>
 
@@ -202,6 +217,15 @@
                 axios.post(`/api/users/${this.user.id}/reset-password`)
                     .then((response) => {
                         toast('Password reset notification has been sent to user.', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
+            },
+
+            passwordExpire() {
+                axios.post(`/api/users/${this.user.id}/expire-password`)
+                    .then((response) => {
+                        toast('User password has been set as expired.', 'success')
                     }).catch((response) => {
                         toast(response.response.data.message, 'failed')
                     })

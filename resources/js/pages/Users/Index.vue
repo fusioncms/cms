@@ -78,7 +78,18 @@
                             </ui-dropdown-link>
 
                             <ui-dropdown-link
+<<<<<<< HEAD
                                 v-if="table.record.id != $user.id && $can('users.delete', table.record.role.level)"
+=======
+                                v-if="$can('users.update')"
+                                @click.prevent
+                                v-modal:expire-password="table.record">
+                                Expire Password
+                            </ui-dropdown-link>
+
+                            <ui-dropdown-link
+                                v-if="table.record.id != $user.id && $can('users.delete')"
+>>>>>>> 47009e7006ad50da2fa1ac406d6ecb2022658ffb
                                 @click.prevent
                                 v-modal:delete-user="table.record"
                                 class="danger">
@@ -106,6 +117,15 @@
                 <template slot="footer" slot-scope="user">
                     <ui-button v-modal:password-user @click="passwordReset(user.data.id)" variant="primary" class="ml-3">Confirm</ui-button>
                     <ui-button v-modal:password-user variant="secondary">Cancel</ui-button>
+                </template>
+            </ui-modal>
+
+            <ui-modal name="expire-password" title="Expire Password">
+                <p>Are you sure you want to force user to reset their password upon next login?</p>
+
+                <template slot="footer" slot-scope="user">
+                    <ui-button v-modal:expire-password @click="passwordExpire(user.data.id)" variant="primary" class="ml-3">Confirm</ui-button>
+                    <ui-button v-modal:expire-password variant="secondary">Cancel</ui-button>
                 </template>
             </ui-modal>
 
@@ -209,6 +229,15 @@
                 axios.post(`/api/users/${id}/reset-password`)
                     .then((response) => {
                         toast('Password reset notification has been sent to user.', 'success')
+                    }).catch((response) => {
+                        toast(response.response.data.message, 'failed')
+                    })
+            },
+
+            passwordExpire(id) {
+                axios.post(`/api/users/${id}/expire-password`)
+                    .then((response) => {
+                        toast('User password has been set as expired.', 'success')
                     }).catch((response) => {
                         toast(response.response.data.message, 'failed')
                     })

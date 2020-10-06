@@ -2,7 +2,7 @@
 
 namespace Fusion\Tests\Feature\Auth;
 
-use Fusion\Events\UserWelcomed;
+use Fusion\Jobs\Onboard;
 use Fusion\Mail\WelcomeNewUser;
 use Fusion\Models\User;
 use Fusion\Tests\TestCase;
@@ -11,6 +11,7 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -192,9 +193,9 @@ class RegisterTest extends TestCase
      * @group fusioncms
      * @group auth
      */
-    public function verified_registration_will_fire_user_welcomed_event()
+    public function verified_registration_will_dispatch_onboard_job()
     {
-        Event::fake([UserWelcomed::class]);
+        Bus::fake();
 
         setting([
             'users.user_email_verification' => 'disabled',
@@ -202,7 +203,7 @@ class RegisterTest extends TestCase
 
         $user = $this->makeUserRegistration();
 
-        Event::assertDispatched(UserWelcomed::class, function ($event) use ($user) {
+        Bus::assertDispatched(Onboard::class, function ($event) use ($user) {
             return $event->user->id === $user->id;
         });
     }

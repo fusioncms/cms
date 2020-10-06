@@ -89,16 +89,14 @@
                 const fileSize = file.size
                 const fileType = file.name.split('.').pop()
                 
-                let acceptedTypes = this.getSetting('files.accepted_files')
-                let maxSize       = this.getSetting('files.file_size_upload_limit')
+                // validation
+                let maxSize = this.getSetting('files.file_size_upload_limit')
 
                 // convert to bytes
                 maxSize = _.toNumber(maxSize) * Math.pow(1024, 2)
 
                 if (fileSize > maxSize)
                     done('File size exceeds max file size.')
-                else if (_.indexOf(acceptedTypes, fileType) == -1)
-                    done('File type not accepted.')
                 else
                     done()
             },

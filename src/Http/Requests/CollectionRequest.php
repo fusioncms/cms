@@ -36,7 +36,7 @@ class CollectionRequest extends FormRequest
     {
         $this->merge([
             'matrix_id' => $this->matrix->id,
-            'status'    => $this->status ?? 1,
+            'status'    => $this->status ?? true,
         ]);
     }
 
