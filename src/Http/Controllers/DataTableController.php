@@ -37,10 +37,12 @@ abstract class DataTableController extends Controller
     public function index(Request $request)
     {
         return response()->json([
-            'displayable'  => array_values($this->getDisplayableColumns()),
-            'sortable'     => array_values($this->getSortable()),
-            'column_names' => $this->getCustomColumnNames(),
-            'records'      => $this->getRecords($request),
+            'displayable'         => array_values($this->getDisplayableColumns()),
+            'sortable'            => array_values($this->getSortable()),
+            'column_names'        => $this->getCustomColumnNames(),
+            'records'             => $this->getRecords($request),
+            'bulk_actions'        => $this->getBulkActions(),
+            'bulk_actions_exempt' => $this->getExemptFromBulkActions(),
         ]);
     }
 
@@ -53,6 +55,26 @@ abstract class DataTableController extends Controller
     public function destroy($id, Request $request)
     {
         $this->builder()->find($id)->delete();
+    }
+
+    /**
+     * Get the available bulk actions.
+     *
+     * @return array
+     */
+    protected function getBulkActions()
+    {
+        return [];
+    }
+
+    /**
+     * Get the rows that should be exempt from bulk actions.
+     *
+     * @return array
+     */
+    public function getExemptFromBulkActions()
+    {
+        return [];
     }
 
     /**
@@ -161,7 +183,7 @@ abstract class DataTableController extends Controller
     {
         try {
             /**
-             * Using Swpatie's `laravel-query-builder` package.
+             * Using Spatie's `laravel-query-builder` package.
              * https://docs.spatie.be/laravel-query-builder/v2/introduction/.
              */
             return QueryBuilder::for($this->builder())

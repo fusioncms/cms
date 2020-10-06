@@ -15,12 +15,16 @@
     }
 
     &__header {
-        @apply flex flex-row flex-wrap items-center justify-between mb-0 mr-2;
+        @apply flex flex-row flex-wrap items-center justify-between mb-3 mr-2;
         min-height: rem(50px);
+
+        @screen lg {
+            max-width: calc(100% - 300px);
+        }
     }
 
     &__actions {
-        @apply flex items-center flex-shrink-0 mb-0;
+        @apply flex flex-shrink-0 mb-3 ml-auto;
         min-height: rem(50px);
 
         .button { @apply mb-0; }

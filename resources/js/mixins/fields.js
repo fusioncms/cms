@@ -14,7 +14,7 @@ export default {
 
         computedValue: {
             get() {
-                return this.value
+                return this.checked || this.value
             },
 
             set(value) {

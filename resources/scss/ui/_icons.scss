@@ -26,6 +26,12 @@
         @apply text-white bg-danger-500;
     }
 
+    &--xxs {
+        width: rem(16px);
+        height: rem(16px);
+        font-size: rem(10px);
+    }
+
     &--xs {
         width: rem(18px);
         height: rem(18px);

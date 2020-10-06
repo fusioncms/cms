@@ -11,6 +11,7 @@
             <div class="row">
                 <div class="col w-full lg:w-1/2">
                     <ui-input-group
+                        id="matrix-name"
                         name="name"
                         label="Name"
                         help="What should this matrix be called?"
@@ -24,6 +25,7 @@
                 </div>
                 <div class="col w-full lg:w-1/2">
                     <ui-slug-group
+                        id="matrix-handle"
                         name="handle"
                         label="Handle"
                         help="A developer-friendly identifier."
@@ -40,6 +42,7 @@
             </div>
 
             <ui-textarea-group
+                id="matrix-description"
                 name="description"
                 label="Description"
                 help="Give a short description of what this matrix will manage and store."
@@ -51,6 +54,7 @@
 
 
             <ui-select-group
+                id="matrix-type"
                 name="type"
                 label="Type"
                 help="What type of matrix will this be?"
@@ -70,6 +74,7 @@
             </ui-select-group>
 
             <ui-select-group
+                id="matrix-parent-id"
                 name="parent_id"
                 label="Parent Matrix"
                 help="Should this matrix belong to another?"
@@ -80,6 +85,7 @@
             </ui-select-group>
 
             <ui-toggle
+                id="matrix-status"
                 name="status"
                 label="Status"
                 :help="form.status ? 'Toggle to disable this matrix.' : 'Toggle to enable this matrix.'"
@@ -91,6 +97,7 @@
 
         <section-card title="Customizations" description="Configure the various customizations options.">
             <ui-input-group
+                id="matrix-name-label"
                 name="name_label"
                 label="Name Label"
                 placeholder="Name"
@@ -101,6 +108,7 @@
             </ui-input-group>
 
             <ui-input-group
+                id="matrix-reference-singular"
                 name="reference_singular"
                 label="Singular Reference"
                 :placeholder="singularReference"
@@ -111,6 +119,7 @@
             </ui-input-group>
 
             <ui-input-group
+                id="matrix-reference-plural"
                 name="reference_plural"
                 label="Plural Reference"
                 :placeholder="pluralReference"
@@ -122,6 +131,7 @@
 
             <ui-toggle
                 v-if="form.type == 'collection'"
+                id="matrix-show-name-field"
                 name="show_name_field"
                 label="Show name field"
                 :help="!form.show_name_field ? 'Auto-generate a name using the format in the field below.' : 'Include a name field on this matrix.'"
@@ -133,6 +143,7 @@
             <ui-input-group
                 v-if="!form.show_name_field"
                 monospaced
+                id="matrix-name-format"
                 name="name_format"
                 label="Name Format"
                 help="What format would you like your generated names and slugs to follow?"
@@ -144,6 +155,7 @@
 
         <section-card title="Appearance" description="Choose where to show this matrix and how to represent it.">
             <icon-picker
+                id="matrix-icon"
                 name="icon"
                 label="Icon"
                 placeholder="Search icons..."
@@ -155,6 +167,7 @@
             </icon-picker>
 
             <ui-toggle
+                id="matrix-sidebar"
                 name="sidebar"
                 label="Show in Sidebar"
                 v-model="form.sidebar"
@@ -163,6 +176,7 @@
             </ui-toggle>
 
             <ui-toggle
+                id="matrix-quicklink"
                 name="quicklink"
                 label="Show as Quicklink"
                 v-model="form.quicklink"
@@ -173,6 +187,7 @@
 
         <section-card title="Routing" description="Configure how entries within the collection will be accessed on the frontend.">
             <ui-input-group
+                id="matrix-route"
                 name="route"
                 label="Route"
                 help="When the URI matches this pattern..."
@@ -184,6 +199,7 @@
             </ui-input-group>
 
             <ui-input-group
+                id="matrix-template"
                 name="template"
                 label="Template"
                 help="Render this template"

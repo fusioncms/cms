@@ -87,7 +87,20 @@
                 <!-- Table Head -->
                 <thead>
                     <tr>
+                        <th v-if="hasBulkActions" width="50px">
+                            <div class="table__select-all">
+                                <ui-checkbox
+                                    name="toggle-select-all"
+                                    id="toggle-select-all"
+                                    :checked="selectable.length === selected.length"
+                                    @input="toggleSelectAll"
+                                    :indeterminate="selected.length > 0 && (selectable.length !== selected.length)"
+                                ></ui-checkbox>
+                            </div>
+                        </th>
+
                         <th v-for="(column, index) in displayable"
+                            v-show="! hasSelections"
                             :class="{'sortable': isSortable(column), 'active': (sort.key === column)}"
                             :key="column[primaryKey] || index">
                             <a href="#" v-if="isSortable(column)" class="table__heading table__heading--link" @click.prevent="isSortable(column) && sortRecordsBy(column)" :aria-label="'Sort by ' + column_names[column] || column">
@@ -105,23 +118,51 @@
                             </span>
                         </th>
 
-                        <th v-if="hasActions" class="w-20">&nbsp;</th>
+                        <th v-show="hasSelections" :colspan="displayable.length">
+                            <span class="table__heading">
+                                {{ this.selected.length }} record{{ this.selected.length > 1 ? 's' : '' }} selected
+                            </span>
+                        </th>
+
+                        <th v-show="hasSelections" class="w-48">
+                            <div class="bulk-actions">
+                                <select name="bulk-actions" id="bulk-actions" class="field-select field-select--sm field-select--bordered" v-model="action" @change="showBulkActionConfirmation = true">
+                                    <option selected disabled :value="null">Bulk Actions</option>
+
+                                    <option v-for="(action, index) in allowedBulkActions" :key="action.name" :value="index">{{ action.name }}</option>
+                                </select>
+                            </div>
+                        </th>
+
+                        <th v-show="hasActions && ! hasSelections" class="w-48">&nbsp;</th>
                     </tr>
                 </thead>
 
                 <!-- Table Body -->
                 <tbody>
                     <tr v-for="(record, index) in records" :key="record[primaryKey] || index">
+                        <td v-if="hasBulkActions">
+                            <div class="flex flex-1">
+                                <ui-checkbox
+                                    v-if="isSelectable(record[primaryKey])"
+                                    :name="'select-' + record[primaryKey] || index"
+                                    :id="'select-' + record[primaryKey] || index"
+                                    :native-value="record[primaryKey]"
+                                    v-model="selected"
+                                ></ui-checkbox>
+                            </div>
+                        </td>
+
                         <td v-for="column in displayable"
                             :key="column">
                             <span class="column-label">{{ column_names[column] || column }}</span>
-        
+
                             <slot :name="column" :record="record">
                                 {{ record[column] }}
                             </slot>
                         </td>
 
-                        <td class="table__actions" v-if="hasActions">
+                        <td class="table__actions w-20" v-if="hasActions">
                             <slot name="actions" :record="record"></slot>
                         </td>
                     </tr>
@@ -132,7 +173,7 @@
         <!-- Pagination -->
         <div class="pagination-group" v-if="this.pagination.totalPages > 1">
             <div v-if="showPageStatus" class="pagination-group__item">
-                <ui-pagination-status 
+                <ui-pagination-status
                     :total="this.pagination.totalPages"
                     :value="this.pagination.currentPage">
                 </ui-pagination-status>
@@ -165,6 +206,17 @@
                 <p>No results found.</p>
             </slot>
         </div>
+
+        <portal to="modals">
+            <ui-modal v-if="action !== null" name="confirm-bulk-action" :title="'Confirm Bulk ' + this.allowedBulkActions[action].name" v-model="showBulkActionConfirmation">
+                <p>Are you sure you want to perform this action against <b>{{ this.selected.length }}</b> record{{this.selected.length > 1 ? 's' : '' }}?</p>
+
+                <template slot="footer">
+                    <ui-button @click.prevent="confirmBulkAction" :loading="working" class="ml-3" variant="primary">Confirm</ui-button>
+                    <ui-button @click.prevent="cancelBulkAction" v-if="! working" variant="secondary">Cancel</ui-button>
+                </template>
+            </ui-modal>
+        </portal>
     </div>
 </template>
 
@@ -180,6 +232,10 @@
             id: {
                 required: true,
                 type: String
+            },
+            bulk: {
+                type: Boolean,
+                default: false
             },
             noRecords: {
                 type: String,
@@ -207,7 +263,8 @@
             },
             primaryKey: {
                 required: false,
-                type: String
+                type: String,
+                default: 'id'
             },
             showPageStatus: {
                 type: Boolean,
@@ -237,10 +294,15 @@
 
         data() {
             return {
+                action: null,
+                showBulkActionConfirmation: false,
                 initialLoad: true,
                 loading: true,
+                working: false,
                 displayable: [],
                 column_names: [],
+                bulk_actions: [],
+                bulk_actions_exempt: [],
                 sortable: [],
                 records: [],
                 search: '',
@@ -260,6 +322,7 @@
                     key: this.sortBy,
                     order: this.sortIn,
                 },
+                selected: [],
             }
         },
 
@@ -276,11 +339,47 @@
             hasActions() {
                 return !!this.$slots.actions || !!this.$scopedSlots.actions
             },
+
+            hasBulkActions() {
+                if (! this.bulk) return false
+                if (! this.selectable.length > 0) return false
+                if (! this.allowedBulkActions.length > 0) return false
+
+                return true
+            },
+
+            hasSelections() {
+                return this.selected.length > 0
+            },
+
+            selectable() {
+                let vm = this
+
+                return _.filter(this.records, (record) => {
+                    return ! vm.bulk_actions_exempt.includes(record[vm.primaryKey])
+                })
+            },
+
+            allowedBulkActions() {
+                let vm = this
+
+                return _.filter(this.bulk_actions, (action) => {
+                    if (!action.permission) return true
+
+                    return vm.$can(action.permission)
+                })
+            },
         },
 
         watch: {
             endpoint() {
                 this.getRecords()
+            },
+
+            showBulkActionConfirmation(value) {
+                if (value == false) {
+                    this.action = null
+                }
             },
 
             search: _.debounce(function(value) {
@@ -291,6 +390,43 @@
         },
 
         methods: {
+            cancelBulkAction() {
+                this.showBulkActionConfirmation = false
+                this.action = null
+            },
+
+            confirmBulkAction() {
+                let vm = this
+
+                this.working = true
+
+                axios.post(`${this.bulk_actions[this.action].route}`, {
+                    records: this.selected
+                }).then((response) => {
+                    toast('Bulk action completed successfully.', 'success')
+
+                    vm.getRecords()
+
+                    vm.showBulkActionConfirmation = false
+                    vm.selected = []
+                    vm.action = null
+                    vm.working = false
+                })
+            },
+
+            isSelectable(id) {
+                return ! this.bulk_actions_exempt.includes(id)
+            },
+
+            toggleSelectAll() {
+                if (this.selected.length > 0) {
+                    this.selected = []
+                    return
+                }
+
+                this.selected = _.map(this.selectable, 'id')
+            },
+
             getRecords() {
                 this.loading = true
 
@@ -299,6 +435,8 @@
                     this.displayable = response.data.displayable
                     this.sortable = response.data.sortable
                     this.column_names = response.data.column_names
+                    this.bulk_actions = response.data.bulk_actions
+                    this.bulk_actions_exempt = response.data.bulk_actions_exempt
                     this.pagination.totalRecords = response.data.records.total
                     this.pagination.totalPages = response.data.records.last_page
 

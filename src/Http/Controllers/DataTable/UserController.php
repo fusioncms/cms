@@ -4,6 +4,7 @@ namespace Fusion\Http\Controllers\DataTable;
 
 use Fusion\Http\Controllers\DataTableController;
 use Fusion\Models\User;
+use Illuminate\Support\Facades\Password;
 
 class UserController extends DataTableController
 {
@@ -16,6 +17,54 @@ class UserController extends DataTableController
         } else {
             return User::query();
         }
+    }
+
+    /**
+     * Get the available bulk actions.
+     *
+     * @return array
+     */
+    public function getBulkActions()
+    {
+        return [
+            [
+                'name'       => 'Enable',
+                'permission' => 'users.update',
+                'route'      => '/datatable/users/actions/enable',
+            ],
+            [
+                'name'       => 'Disable',
+                'permission' => 'users.update',
+                'route'      => '/datatable/users/actions/disable',
+            ],
+            [
+                'name'       => 'Resend Email Verification',
+                'permission' => 'users.update',
+                'route'      => '/datatable/users/actions/verify-email',
+            ],
+            [
+                'name'       => 'Reset Password',
+                'permission' => 'users.update',
+                'route'      => '/datatable/users/actions/reset-password',
+            ],
+            [
+                'name'       => 'Delete',
+                'permission' => 'users.delete',
+                'route'      => '/datatable/users/actions/delete',
+            ],
+        ];
+    }
+
+    /**
+     * Owners are exempt from bulk actions.
+     *
+     * @return array
+     */
+    public function getExemptFromBulkActions()
+    {
+        return User::whereHas('roles', function ($query) {
+            $query->where('name', 'Owner');
+        })->get()->pluck('id');
     }
 
     public function getDisplayableColumns()
@@ -47,5 +96,56 @@ class UserController extends DataTableController
             'created_at'        => 'Created',
             'email_verified_at' => 'Verified',
         ];
+    }
+
+    public function getFilterable()
+    {
+        return [
+            'name',
+            'email',
+        ];
+    }
+
+    public function enableAction()
+    {
+        foreach (request()->get('records') as $record) {
+            User::find($record)->update([
+                'status' => true,
+            ]);
+        }
+    }
+
+    public function disableAction()
+    {
+        foreach (request()->get('records') as $record) {
+            User::find($record)->update([
+                'status' => false,
+            ]);
+        }
+    }
+
+    public function deleteAction()
+    {
+        foreach (request()->get('records') as $record) {
+            User::find($record)->delete();
+        }
+    }
+
+    public function verifyEmailAction()
+    {
+        foreach (request()->get('records') as $record) {
+            User::find($record)->sendEmailVerificationNotification();
+        }
+    }
+
+    public function resetPasswordAction()
+    {
+        foreach (request()->get('records') as $record) {
+            $user = User::find($record);
+
+            $user->sendPasswordResetNotification(
+                Password::broker()->createToken($user)
+            );
+        }
     }
 }

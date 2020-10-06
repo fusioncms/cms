@@ -31,9 +31,9 @@
 
             &:hover,
             &:active,
-            &:focus { 
+            &:focus {
                 color: inherit;
-                z-index: 1; 
+                z-index: 1;
             }
         }
     }
@@ -46,6 +46,10 @@
         }
 
         .dropdown__menu { @apply w-40; }
+    }
+
+    &__select-all {
+        @apply pl-4 flex items-center;
     }
 
     thead {
@@ -107,4 +111,8 @@
 
 .column-stat {
     @screen md { @apply text-right; }
+}
+
+.bulk-actions {
+    @apply flex justify-end mr-4;
 }

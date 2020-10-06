@@ -12,9 +12,20 @@
 */
 
 Route::get('/activities', 'ActivityController@index');
-Route::get('/users', 'UserController@index');
-Route::get('/users/{role}', 'UserController@index');
-Route::get('/users/{user}/activities', 'UserActivityController@index');
+
+Route::prefix('users')->group(function () {
+    Route::get('/', 'UserController@index');
+    Route::get('/{role}', 'UserController@index');
+    Route::get('/{user}/activities', 'UserActivityController@index');
+
+    // Bulk Actions
+    Route::post('/actions/enable', 'UserController@enableAction');
+    Route::post('/actions/disable', 'UserController@disableAction');
+    Route::post('/actions/delete', 'UserController@deleteAction');
+    Route::post('/actions/verify-email', 'UserController@verifyEmailAction');
+    Route::post('/actions/reset-password', 'UserController@resetPasswordAction');
+});
+
 Route::get('/roles', 'RoleController@index');
 Route::get('/roles/{role}/permissions', 'RolePermissionController@index');
 Route::get('/permissions', 'PermissionController@index');

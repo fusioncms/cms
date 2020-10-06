@@ -23,6 +23,8 @@ class CollectionController extends DataTableController
         return [
             'name',
             'slug',
+            'created_at',
+            'updated_at',
         ];
     }
 
@@ -31,6 +33,8 @@ class CollectionController extends DataTableController
         return [
             'name',
             'slug',
+            'created_at',
+            'updated_at',
         ];
     }
 
@@ -39,14 +43,18 @@ class CollectionController extends DataTableController
         return [
             'name',
             'slug',
+            'created_at',
+            'updated_at',
         ];
     }
 
     public function getCustomColumnNames()
     {
         return [
-            'name'   => 'Name',
-            'slug'   => 'Slug',
+            'name'       => 'Name',
+            'slug'       => 'Slug',
+            'created_at' => 'Created',
+            'updated_at' => 'Updated',
         ];
     }
 }

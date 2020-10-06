@@ -1,9 +1,6 @@
 <template>
     <ui-modal v-model="open" title="Move to directory" name="select directory" no-footer>
-        <ui-treeview
-            v-model="selectedDirectory"
-            :items="directories">
-        </ui-treeview>
+        <ui-treeview :nodes="directories" v-model="selectedDirectory"></ui-treeview>
 
         <div class="text-right">
             <ui-button @click="close">Cancel</ui-button>

@@ -2,17 +2,19 @@
 
 namespace Fusion\Listeners;
 
-use Fusion\Events\FullyRegistered;
-use Fusion\Mail\WelcomeNewUser;
+use Fusion\Jobs\Onboard;
 use Fusion\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Mail;
 
 class UserEventSubscriber
 {
     /**
      * Handle the user failed login event.
+     *
+     * @param \Illuminate\Auth\Events\Failed $event
+     *
+     * @return void
      */
     public function handleUserFailedLogin($event)
     {
@@ -24,6 +26,10 @@ class UserEventSubscriber
 
     /**
      * Handle the user login event.
+     *
+     * @param \Illuminate\Auth\Events\Login $event
+     *
+     * @return void
      */
     public function handleUserLogin($event)
     {
@@ -56,28 +62,7 @@ class UserEventSubscriber
                 event(new Verified($event->user));
             }
         } else {
-            event(new FullyRegistered($event->user));
-        }
-    }
-
-    /**
-     * Handle 'user fully registered' event.
-     *
-     * @param \Fusion\Events\FullyRegistered $event
-     *
-     * @return void
-     */
-    public function handleUserFullRegistration($event)
-    {
-        if (is_null($event->user->fully_registered_at)) {
-            $event->user->forceFill([
-                'fully_registered_at' => now(),
-            ])->save();
-
-            if (setting('users.user_email_welcome') === 'enabled') {
-                Mail::to($event->user)
-                    ->send(new WelcomeNewUser($event->user));
-            }
+            Onboard::dispatch($event->user);
         }
     }
 
@@ -92,6 +77,9 @@ class UserEventSubscriber
     {
         // Log the activity
         $event->user->logPasswordChange();
+
+        // remove password expiration..
+        $event->user->removePasswordExpiration();
 
         // auto-matically verify user email..
         if ($event->user instanceof MustVerifyEmail) {
@@ -124,7 +112,7 @@ class UserEventSubscriber
      */
     public function handleUserVerification($event)
     {
-        event(new FullyRegistered($event->user));
+        Onboard::dispatch($event->user);
     }
 
     /**
@@ -149,11 +137,6 @@ class UserEventSubscriber
         $events->listen(
             'Illuminate\Auth\Events\Registered',
             [UserEventSubscriber::class, 'handleUserRegistration']
-        );
-
-        $events->listen(
-            'Fusion\Events\FullyRegistered',
-            [UserEventSubscriber::class, 'handleUserFullRegistration']
         );
 
         $events->listen(
