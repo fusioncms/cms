@@ -1,6 +1,7 @@
 <template>
     <ui-modal name="move-file" title="Move file(s) to directory">
-        <ui-treeview :items="directories" v-model="directory"><i class="fas fa-folder-open"></i>
+        <ui-treeview :nodes="directories" v-model="directory">
+            <i class="fas fa-folder-open"></i>
             <template slot="prepend" slot-scope="{ node, open }">
                 <fa-icon v-if="open" :icon="['fas', 'folder-open']" class="mr-2" :class="{'fill-current text-info-500': node.isCurrent}"></fa-icon>
                 <fa-icon v-else :icon="['fas', 'folder']" class="mr-2" :class="{'fill-current text-info-500': node.isCurrent}"></fa-icon>
