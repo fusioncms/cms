@@ -156,6 +156,7 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(MenuServiceProvider::class);
         $this->app->register(SettingServiceProvider::class);
         $this->app->register(ThemeServiceProvider::class);
+        $this->app->register(ScheduleServiceProvider::class);
 
         // Not sure why Laravel doesn't register this against
         // the class name as well ¯\_(ツ)_/¯
