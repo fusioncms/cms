@@ -1,10 +1,11 @@
 <?php
 
-namespace Fusion\Services\Tasks;
+namespace Fusion\Services\Tasks\Backups;
 
+use Fusion\Services\Tasks\Task;
 use Fusion\Jobs\Backups\BackupRun;
 
-class Backup extends Task
+class Run extends Task
 {
     /**
      * Schedule Task.
