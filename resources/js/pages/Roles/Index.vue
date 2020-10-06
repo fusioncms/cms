@@ -16,7 +16,7 @@
                         <span v-else>{{ table.record.name }}</span>
                     </template>
 
-                    <template slot="level" slot-scope="table">
+                    <template slot="level" slot-scope="table" class="w-10">
                         <ui-badge>{{ table.record.level }}</ui-badge>
                     </template>
 

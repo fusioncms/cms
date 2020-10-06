@@ -100,7 +100,7 @@
             },
 
             disableSetLevel() {
-                if (! this.role.id) return false
+                if (! this.role) return false
 
                 if (this.role.id === this.$user.role.id) return true
 
