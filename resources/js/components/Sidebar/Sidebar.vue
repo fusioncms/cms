@@ -1,12 +1,12 @@
 <template>
-    <scrollactive class="sticky-sidebar" :offset="offset" :scrollOffset="60" :alwaysTrack="true" scrollContainerSelector=".layout-admin__wrapper" v-on:itemchanged="itemChanged">
+    <scrollactive class="sidebar" :offset="offset" :scrollOffset="offset - 55" :alwaysTrack="true" scrollContainerSelector=".layout-admin__wrapper" v-on:itemchanged="itemChanged">
         <slot></slot>
     </scrollactive>
 </template>
 
 <script>
     export default {
-        name: 'sticky-sidebar',
+        name: 'sidebar',
 
         data () {
             return {
@@ -20,7 +20,7 @@
             },
             
             getOffset() {
-                return this.offset = document.querySelector('.layout-admin__wrapper').clientHeight / 2
+                return this.offset = Math.round(document.querySelector('.layout-admin__wrapper').clientHeight / 2)
             }
         },
 

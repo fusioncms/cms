@@ -6,32 +6,36 @@
             <nav-menu :active="isNavOpen" :greeting="greeting"></nav-menu>
 
             <main id="main-content" class="main-content">
-                <portal-target name="sidebar-left" multiple slim></portal-target>
+                <div class="main-content__header">
+                    <div class="main-content__title">
+                        <portal-target name="title" slim></portal-target>
+                    </div>
+
+                    <div class="main-content__actions">
+                        <portal-target name="actions" multiple slim></portal-target>
+                    </div>
+                </div>
 
                 <div class="main-content__container">
-                    <div class="flex flex-row flex-wrap justify-between mb-6">
-                        <div class="main-content__header">
-                            <portal-target name="title" slim></portal-target>
-                        </div>
-
-                        <div class="main-content__actions">
-                            <portal-target name="actions" multiple slim></portal-target>
-                        </div>
+                    <div class="main-content__sidebar left-sidebar">
+                        <portal-target name="sidebar-left" multiple slim></portal-target>
                     </div>
 
                     <div class="main-content__body">
                         <slot></slot>
                     </div>
-                </div>
 
-                <portal-target name="sidebar-right" multiple slim></portal-target>
+                    <div class="main-content__sidebar right-sidebar">
+                        <portal-target name="sidebar-right" multiple slim></portal-target>
+                    </div>
+                </div>
             </main>
 
             <layout-footer :environment="environment" :version="version"></layout-footer>
 
             <ui-toast></ui-toast>
             <confirm-modal></confirm-modal>
-            <portal-target name="modals" multiple></portal-target>
+            <portal-target name="modals" multiple slim></portal-target>
         </div>
     </div>
 </template>

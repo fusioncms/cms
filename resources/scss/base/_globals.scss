@@ -12,7 +12,7 @@ div {
 }
 
 .admin {
-    @apply flex flex-col min-h-screen font-sans tracking-wide leading-loose;
+    @apply flex flex-col min-h-screen font-sans tracking-wide leading-normal;
 
     &.prevent-scroll { overflow: hidden; }
 

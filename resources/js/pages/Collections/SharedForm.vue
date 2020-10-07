@@ -2,19 +2,46 @@
     <div class="collection-page">
         <portal to="actions">
             <div class="buttons">
-                <ui-button v-if="collection.slug" :to="{ name: 'collection.index', params: {collection: collection.slug} }" variant="secondary">Go Back</ui-button>
+                <ui-button v-if="collection.slug && $mq != 'sm'" :to="{ name: 'collection.index', params: {collection: collection.slug} }" variant="secondary">Go Back</ui-button>
+
                 <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
-        <portal to="sidebar-left">
-            <page-sidebar>
-                <sticky-sidebar v-if="collection">
-                    <sticky-sidebar-link :href="'#' + collection.handle + '_name_panel'" v-if="collection.show_name_field">Name</sticky-sidebar-link>
-                    <sticky-sidebar-link v-for="section in sections.body" :key="section.handle" :href="'#' + section.handle + '_panel'">{{ section.name }}</sticky-sidebar-link>
-                    <sticky-sidebar-link :href="'#' + collection.handle + '_settings_panel'">Settings</sticky-sidebar-link>
-                </sticky-sidebar>
-            </page-sidebar>
+        <portal to="sidebar-right">
+            <sidebar v-if="collection">
+                <sidebar-section>
+                    <ui-toggle
+                        name="status"
+                        label="Status"
+                        :help="form.status ? 'Toggle to disable this entry.' : 'Toggle to enable this entry.'"
+                        v-model="form.status"
+                        :true-value="1"
+                        :false-value="0">
+                    </ui-toggle>
+                </sidebar-section>
+
+                <sidebar-section v-for="(section) in sections.sidebar" :key="section.handle" :title="section.name" :description="section.description">
+                    <component
+                        v-for="field in section.fields"
+                        :key="field.handle"
+                        :is="field.type.id + '-fieldtype'"
+                        :field="field"
+                        :has-error="form.errors.has(field.handle)"
+                        :error-message="form.errors.get(field.handle)"
+                        v-model="form[field.handle]">
+                    </component>
+                </sidebar-section>
+
+                <sidebar-section v-if="entry">
+                    <div class="flex items-center">
+                        <ui-status :value="entry.status"></ui-status>
+                        <p class="inline-block ml-2">{{ entry.status ? 'Enabled' : 'Disabled' }}</span>
+                    </div>
+                    <p v-if="entry" class="text-sm mb-0">Created on {{ $moment(entry.created_at).format('Y-MM-DD') }}.</p> 
+                    <p v-if="entry" class="text-sm mb-0">Last updated {{ $moment(entry.updated_at).format('Y-MM-DD') }}.</p>
+                </sidebar-section>
+            </sidebar>
         </portal>
 
         <ui-card :id="collection.handle + '_name_panel'" v-if="collection.show_name_field" tabindex="-1">
@@ -86,39 +113,6 @@
                 :is="field.type.id + '-fieldtype'"
                 :field="field"
                 :errors="form.errors"
-                v-model="form[field.handle]">
-            </component>
-        </section-card>
-
-        <section-card :id="collection.handle + '_settings_panel'" title="Settings" description="Settings and configurations for this entry." tabindex="-1">
-            <ui-toggle
-                name="status"
-                label="Status"
-                :help="form.status ? 'Toggle to disable this entry.' : 'Toggle to enable this entry.'"
-                v-model="form.status"
-                :true-value="1"
-                :false-value="0">
-            </ui-toggle>
-
-            <hr v-if="entry">
-
-            <dl v-if="entry" class="detail-list">
-                <dt>Created</dt>
-                <dd><ui-datetime :timestamp="entry.created_at"></ui-datetime></dd>
-
-                <dt>Last Updated</dt>
-                <dd><ui-datetime :timestamp="entry.updated_at"></ui-datetime></dd>
-            </dl>
-        </section-card>
-
-        <section-card v-for="(section) in sections.sidebar" :key="section.handle" :title="section.name" :description="section.description" tabindex="-1">
-            <component
-                v-for="field in section.fields"
-                :key="field.handle"
-                :is="field.type.id + '-fieldtype'"
-                :field="field"
-                :has-error="form.errors.has(field.handle)"
-                :error-message="form.errors.get(field.handle)"
                 v-model="form[field.handle]">
             </component>
         </section-card>

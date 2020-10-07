@@ -1,12 +1,12 @@
 <template>
-    <a ref="link" class="sticky-sidebar__link scrollactive-item" @click="focusItem">
+    <a ref="link" class="sidebar__link scrollactive-item" @click="focusItem">
         <slot></slot>
     </a>
 </template>
 
 <script>
     export default {
-        name: 'sticky-sidebar-link',
+        name: 'sidebar-link',
 
         methods: {
             focusItem() {

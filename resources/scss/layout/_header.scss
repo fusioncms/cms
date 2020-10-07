@@ -11,7 +11,7 @@
 
     &__container {
         @apply flex flex-row justify-between items-center w-full px-3;
-        height: 55px;
+        height: $header-height;
     }
 
     &__logo {
@@ -32,7 +32,7 @@
 
 .site-body {
     @apply  flex flex-col flex-1;
-    margin-top: 55px;
+    margin-top: $header-height;
     transition: padding 0.5s $transition-effect;
 
     @screen lg {

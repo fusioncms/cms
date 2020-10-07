@@ -1,12 +1,9 @@
 .nav {
-    @apply fixed overflow-y-auto w-full;
-    background: #2d323b;
-    color: #ffffff;
+    @apply fixed overflow-y-auto text-white w-full z-20;
     right: 100%;
-    top: 55px;
-    height: calc(100vh - 55px);
+    top: $header-height;
+    height: calc(100% - #{$header-height});
     transition: right 0.5s $transition-effect, left 0.5s $transition-effect;
-    z-index: 5;
 
     background: #2d323b;
     background: linear-gradient(180deg, #191b1f 0%, #2d323b 33%, #363e4e 66%, #445d6d 100%);

@@ -2,6 +2,12 @@
     @apply leading-normal box-border clear-both text-left relative w-full mb-6;
 
     &__messages { @apply block w-full mt-1; }
+
+    &--toggle {
+        @apply flex flex-wrap justify-between items-center;
+        width: 250px;
+        max-width: 100%;
+    }
 }
 
 .input-group {
