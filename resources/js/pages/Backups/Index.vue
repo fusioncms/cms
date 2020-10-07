@@ -30,7 +30,7 @@
 							</ui-dropdown-link>
 
 							<ui-dropdown-link
-								@click.prevent="download(table.record.name)">
+								@click.prevent="download(table.record.id)">
 								Download
 							</ui-dropdown-link>
 
@@ -59,7 +59,7 @@
         		</ui-checkbox>
 
                 <template slot="footer" slot-scope="backup">
-                    <ui-button v-modal:restore-form @click="restore(backup.data)" variant="primary" class="ml-3">Restore</ui-button>
+                    <ui-button v-modal:restore-form @click="restore(backup.data.id)" variant="primary" class="ml-3">Restore</ui-button>
                     <ui-button v-modal:restore-form>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -79,7 +79,7 @@
                 <p>Are you sure you want to permenantly delete this backup?</p>
 
                 <template slot="footer" slot-scope="backup">
-                    <ui-button v-modal:delete-form @click="destroy(backup.data)" variant="danger" class="ml-3">Delete</ui-button>
+                    <ui-button v-modal:delete-form @click="destroy(backup.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-form>Cancel</ui-button>
                 </template>
             </ui-modal>
@@ -171,7 +171,7 @@
 			restore(backup) {
 				this.inProgress = true
 
-				axios.post(`/api/backups/restore/${backup.disk}/${backup.name}`, { saveBackup: this.saveBackup })
+				axios.post(`/api/backups/restore/${backup}`, { saveBackup: this.saveBackup })
 					.then(response => {
 						this.inProgress = false
 						
@@ -201,7 +201,7 @@
 			},
 
 			destroy(backup) {
-				axios.delete(`/api/backups/${backup.disk}/${backup.name}`)
+				axios.delete(`/api/backups/${backup}`)
 					.then((response) => {
 	                    toast('Backp successfully deleted!', 'success')
 

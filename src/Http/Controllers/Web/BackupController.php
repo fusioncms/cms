@@ -3,8 +3,8 @@
 namespace Fusion\Http\Controllers\Web;
 
 use Fusion\Http\Controllers\Controller;
-use Spatie\Backup\BackupDestination\Backup;
-use Storage;
+use Fusion\Models\Backup;
+use Illuminate\Support\Facades\Storage;
 
 class BackupController extends Controller
 {
@@ -16,6 +16,7 @@ class BackupController extends Controller
             abort('404', 'File does not exist.');
         }
 
-        return Storage::disk('public')->response($backup->path());
+        return Storage::disk($backup->disk)
+        	->response($backup->location);
     }
 }

@@ -18,9 +18,10 @@ class BackupEventSubscriber
         $newestBackup = $event->backupDestination->newestBackup();
 
         $backup = Backup::create([
-            'name' => basename($newestBackup->path(), '.zip'),
-            'disk' => $event->backupDestination->diskName(),
-            'size' => $newestBackup->size(),
+            'name'     => basename($newestBackup->path(), '.zip'),
+            'disk'     => $event->backupDestination->diskName(),
+            'size'     => $newestBackup->size(),
+            'location' => $newestBackup->path()
         ]);
 
         Log::channel('backups')->info('Backup Successful.', $backup->toArray());

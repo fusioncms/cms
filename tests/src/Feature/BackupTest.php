@@ -124,6 +124,23 @@ class BackupTest extends TestCase
      * @group fusioncms
      * @group feature
      * @group backups
+     */
+    public function a_user_with_permission_can_upload_new_backup()
+    {
+        
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/backups/upload', [
+                'file-upload' => new UploadedFile($backupPath, 'test-backup', 'application/zip', null, true)
+            ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
      * @group permissions
      */
     public function a_user_without_permissions_cannot_create_new_backups()

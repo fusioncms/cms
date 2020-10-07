@@ -6,6 +6,7 @@ use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\BackupUploadRequest;
 use Fusion\Models\Backup;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class BackupUploadController extends Controller
 {
@@ -19,17 +20,19 @@ class BackupUploadController extends Controller
     public function index(BackupUploadRequest $request)
     {
         $attributes = $request->validated();
-        $upload     = $attributes['file-upload'];
+        $file       = $attributes['file-upload'];
 
         foreach (config('backup.backup.destination.disks') as $disk) {
-            $name  = Carbon::now()->format('Y-m-d-H-i-s');
-            $bytes = $upload->getSize();
-
-            if ($upload->storeAs('backups', "{$name}.zip", [$disk])) {
+            $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);            
+            $size = $file->getSize();
+            $path = preg_replace('/[^a-zA-Z0-9.]/', '-', config('backup.backup.name'));
+            
+            if ($location = Storage::disk($disk)->putFileAs($path, $file, $name)) {
                 Backup::create([
-                    'name' => $name,
-                    'disk' => $disk,
-                    'size' => $bytes,
+                    'name'     => $name,
+                    'disk'     => $disk,
+                    'size'     => $size,
+                    'location' => $location,
                 ]);
             }
         }

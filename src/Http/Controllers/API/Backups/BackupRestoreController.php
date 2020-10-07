@@ -5,22 +5,20 @@ namespace Fusion\Http\Controllers\API\Backups;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Jobs\Backups\BackupRun;
 use Fusion\Jobs\Backups\RestoreFromBackup;
+use Fusion\Models\Backup;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Spatie\Backup\BackupDestination\Backup;
 
 class BackupRestoreController extends Controller
 {
     /**
      * Handle the incoming request.
      *
-     * @param Request $request
-     * @param string  $disk
-     * @param string  $name
+     * @param \Illuminate\Http\Request  $request
+     * @param \Fusion\Models\Backup     $backup
      *
      * @return void
      */
-    public function index(Request $request, $disk, $name)
+    public function index(Request $request, Backup $backup)
     {
         $this->authorize('backups.restore');
 
@@ -28,11 +26,6 @@ class BackupRestoreController extends Controller
             BackupRun::dispatch();
         }
         
-        // restore
-        $disk   = Storage::disk($disk);
-        $path   = preg_replace('/\s+/', '-', config('backup.backup.name'))."/{$name}.zip";
-        $backup = new Backup($disk, $path);
-
-        RestoreFromBackup::dispatch($backup);
+        RestoreFromBackup::dispatch($backup->backup());
     }
 }
