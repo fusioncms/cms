@@ -2,6 +2,7 @@
 
 namespace Fusion\Listeners;
 
+use Fusion\Models\Backup;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 
@@ -16,18 +17,13 @@ class BackupEventSubscriber
     {
         $newestBackup = $event->backupDestination->newestBackup();
 
-        // $backup = Backup::create([
-        //     'name'       => basename($newestBackup->path(), '.zip'),
-        //     'size'       => $newestBackup->size(),
-        //     'created_at' => $newestBackup->date(),
-        // ]);
-
-        Log::channel('backups')->info('Backup Successful.', [
-            'disk' => $event->backupDestination->diskName(),
+        $backup = Backup::create([
             'name' => basename($newestBackup->path(), '.zip'),
+            'disk' => $event->backupDestination->diskName(),
             'size' => $newestBackup->size(),
-            'date' => $newestBackup->date()
         ]);
+
+        Log::channel('backups')->info('Backup Successful.', $backup->toArray());
     }
 
     /**
@@ -54,11 +50,13 @@ class BackupEventSubscriber
          * Include `.env` variables
          *   from `config/backup.php`.
          */
-        File::put("{$event->manifest->path()}/env.json",
-            collect(config('backup.backup.source.env'))
+        $dir  = pathinfo($event->manifest->path(), PATHINFO_DIRNAME);
+        $json = collect(config('backup.backup.source.env'))
             ->mapWithKeys(function ($item) {
                 return [$item => env($item)];
-            })->toJson());
+            })->toJson();
+
+        File::put("{$dir}/env.json", $json);
     }
 
     /**
