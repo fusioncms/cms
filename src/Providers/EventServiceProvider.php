@@ -23,6 +23,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $subscribe = [
         'Fusion\Listeners\UserEventSubscriber',
+        'Fusion\Listeners\BackupEventSubscriber',
     ];
 
     /**

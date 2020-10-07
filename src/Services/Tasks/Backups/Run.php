@@ -2,22 +2,21 @@
 
 namespace Fusion\Services\Tasks\Backups;
 
-use Fusion\Services\Tasks\Task;
-use Fusion\Jobs\Backups\BackupRun;
+use Illuminate\Console\Scheduling\Schedule;
 
-class Run extends Task
+class Run
 {
     /**
      * Schedule Task.
      *
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
-    protected function handle()
+    public function handle(Schedule $schedule)
     {
-        $this->schedule
-            ->job(new BackupRun())
-            ->daily()
-            ->timezone(setting('system.time_zone'))
+        $schedule
+            ->command('backup:run')
+            ->dailyAt('1:00')
             ->withoutOverlapping()
             ->environments(['production'])
             ->when(function () {

@@ -1,11 +1,10 @@
 <?php
 
-namespace Fusion\Services\Tasks;
+namespace Fusion\Services\Tasks\Backups;
 
-use Fusion\Facades\Version;
 use Illuminate\Console\Scheduling\Schedule;
 
-class Update
+class Clean
 {
     /**
      * Schedule Task.
@@ -16,14 +15,12 @@ class Update
     public function handle(Schedule $schedule)
     {
         $schedule
-            ->command('fusion:update')
+            ->command('backup:clean')
             ->daily()
-            ->timezone(setting('system.time_zone'))
             ->withoutOverlapping()
             ->environments(['production'])
             ->when(function () {
-                return Version::isAutoUpdateEnabled() &&
-                       Version::hasUpdate();
+                return setting('backups.scheduled_backups', 'disabled') == 'enabled';
             });
     }
 }
