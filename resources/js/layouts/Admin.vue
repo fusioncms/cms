@@ -35,7 +35,7 @@
 
             <ui-toast></ui-toast>
             <confirm-modal></confirm-modal>
-            <portal-target name="modals" multiple slim></portal-target>
+            <portal-target name="modals" multiple></portal-target>
         </div>
     </div>
 </template>

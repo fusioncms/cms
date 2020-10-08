@@ -18,6 +18,7 @@
 
 <script>
     export default {
+        name: 'section-card',
         props: {
             title: {
                 type: String

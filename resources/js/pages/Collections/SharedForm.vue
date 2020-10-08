@@ -33,14 +33,8 @@
                     </component>
                 </sidebar-section>
 
-                <sidebar-section v-if="entry">
-                    <div class="flex items-center">
-                        <ui-status :value="entry.status"></ui-status>
-                        <p class="inline-block ml-2">{{ entry.status ? 'Enabled' : 'Disabled' }}</span>
-                    </div>
-                    <p v-if="entry" class="text-sm mb-0">Created on {{ $moment(entry.created_at).format('Y-MM-DD') }}.</p> 
-                    <p v-if="entry" class="text-sm mb-0">Last updated {{ $moment(entry.updated_at).format('Y-MM-DD') }}.</p>
-                </sidebar-section>
+                <status-card v-if="entry" :entry="entry">
+                </status-card>
             </sidebar>
         </portal>
 

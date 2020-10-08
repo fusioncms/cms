@@ -7,8 +7,23 @@
         @apply py-6;
     }
 
-    &__subtitle {
+    &__text {
         @apply text-gray-600 leading-5 text-sm mb-0;
+    }
+}
+
+.status-card {
+    @apply text-gray-600 leading-5 text-sm;
+
+    &__status {
+        @apply flex items-center;
+    }
+
+    &__date {
+        span {
+            display: block;
+            font-weight: bold;
+        }
     }
 }
 

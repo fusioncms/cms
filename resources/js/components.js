@@ -26,12 +26,13 @@ Vue.component('nav-item', require('@/components/Navigation/NavigationItem').defa
 Vue.component('nav-toggle', require('@/components/Navigation/NavigationToggle').default)
 Vue.component('option-builder', require('@/components/OptionBuilder').default)
 Vue.component('page-title', require('@/components/PageTitle').default)
-Vue.component('section-card', require('@/components/SectionCard').default)
+Vue.component('section-card', require('@/components/Cards/SectionCard').default)
 Vue.component('select-directory-modal', require('@/components/Modals/SelectDirectoryModal').default)
 Vue.component('settings-modal', require('@/components/Modals/SettingsModal').default)
 Vue.component('sidebar', require('@/components/Sidebar/Sidebar').default)
 Vue.component('sidebar-link', require('@/components/Sidebar/SidebarLink').default)
 Vue.component('sidebar-section', require('@/components/Sidebar/SidebarSection').default)
+Vue.component('status-card', require('@/components/Cards/StatusCard').default)
 
 // Interfaces
 Vue.component('analytics-overview', require('@/interfaces/Analytics/AnalyticsOverview').default)
