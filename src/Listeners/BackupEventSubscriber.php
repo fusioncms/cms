@@ -47,27 +47,29 @@ class BackupEventSubscriber
      */
     public function handleBackupManifestCreated($event)
     {
-        /**
-         * Include `.env` variables
-         *   from `config/backup.php`.
-         */
-        $dir  = pathinfo($event->manifest->path(), PATHINFO_DIRNAME);
-        $json = collect(config('backup.backup.source.env'))
-            ->mapWithKeys(function ($item) {
-                return [$item => env($item)];
-            })->toJson();
-
-        File::put("{$dir}/env.json", $json);
+        //
     }
 
     /**
+     * Add ENV variables to backup zip.
+     * 
      * @param \Spatie\Backup\Events\BackupZipWasCreated $event
      *
      * @return void
      */
     public function handleBackupZipCreated($event)
     {
-        //
+        $zipArchive = new \ZipArchive();
+
+        if ($zipArchive->open($event->pathToZip) === true) {
+            $zipArchive->addFromString('fusion-dumps/env.json',
+                collect(config('backup.backup.source.env'))
+                    ->mapWithKeys(function ($item) {
+                        return [$item => env($item)];
+                    })->toJson());
+        }
+
+        $zipArchive->close();
     }
 
     /**

@@ -53,7 +53,6 @@ class BackupController extends Controller
     {
         $this->authorize('backups.delete');
 
-        $backup->backup()->delete();
         $backup->delete();
     }
 }

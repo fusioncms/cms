@@ -13,7 +13,7 @@ class BackupUploadRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->authorize('backups.create');
+        return $this->user()->can('backups.create');
     }
 
     /**

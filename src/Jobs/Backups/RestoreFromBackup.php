@@ -3,12 +3,12 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
+use Fusion\Models\Backup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Log;
-use Spatie\Backup\BackupDestination\Backup;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
-use Storage;
 
 class RestoreFromBackup
 {
@@ -16,16 +16,14 @@ class RestoreFromBackup
     use Queueable;
 
     /**
-     * Backup file to restore from.
-     *
-     * @var Backup
+     * @var \Fusion\Models\Backup
      */
     protected $backup;
 
     /**
      * Constructor.
      *
-     * @param Backup $backup
+     * @param \Fusion\Models\Backup $backup
      */
     public function __construct(Backup $backup)
     {
@@ -39,8 +37,7 @@ class RestoreFromBackup
      */
     public function handle()
     {
-        $backupPath       = Storage::disk('public')->path($this->backup->path());
-        $extractionPath   = Storage::disk('temp')->path('restore-temp');
+        $extractionPath   = Storage::disk('public')->path('app/restore-temp');
         $restoreDirectory = (new TemporaryDirectory($extractionPath))
                 ->name('temp')
                 ->force()
@@ -49,10 +46,10 @@ class RestoreFromBackup
 
         $jobs = [
             'Enter maintenance mode...'       => new \Fusion\Console\Actions\EnterMaintenanceMode(),
-            'Unzip backup for processing....' => new \Fusion\Jobs\Backups\UnzipBackup($restoreDirectory, $backupPath),
-            'Restore database from backup...' => new \Fusion\Jobs\Backups\RestoreDatabase($restoreDirectory),
+            'Unzip backup for processing....' => new \Fusion\Jobs\Backups\UnzipBackup($restoreDirectory, $this->backup->fullPath),
+            // 'Restore database from backup...' => new \Fusion\Jobs\Backups\RestoreDatabase($restoreDirectory),
             'Restore files from backup...'    => new \Fusion\Jobs\Backups\RestoreFiles($restoreDirectory),
-            'Restore .env variables...'       => new \Fusion\Jobs\Backups\RestoreEnvVariables(),
+            'Restore .env variables...'       => new \Fusion\Jobs\Backups\RestoreEnvVariables($restoreDirectory),
             'Exit maintenance mode...'        => new \Fusion\Console\Actions\ExitMaintenanceMode(),
         ];
 

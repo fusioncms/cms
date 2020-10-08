@@ -30,6 +30,16 @@ class Backup extends Model
     }
 
     /**
+     * Get full path to backup.
+     * 
+     * @return string
+     */
+    public function getFullPathAttribute()
+    {
+        return Storage::disk($this->disk)->path($this->location);
+    }
+
+    /**
      * Get Spatie\Backup\BackupDestination\Backup.
      * 
      * @return \Spatie\Backup\BackupDestination\Backup

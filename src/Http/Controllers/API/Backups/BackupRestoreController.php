@@ -26,6 +26,6 @@ class BackupRestoreController extends Controller
             BackupRun::dispatch();
         }
         
-        RestoreFromBackup::dispatch($backup->backup());
+        RestoreFromBackup::dispatch($backup);
     }
 }

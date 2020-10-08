@@ -12,7 +12,7 @@ Route::get('structures', 'StructureController@index');
  */
 Route::post('backups/upload', 'Backups\BackupUploadController@index');
 Route::post('backups/restore/{backup}', 'Backups\BackupRestoreController@index');
-Route::apiResource('{backup}', 'Backups\BackupController')->except(['show', 'update']);
+Route::apiResource('backups', 'Backups\BackupController')->except(['show', 'update']);
 
 /**
  * API - Collection Routes.
