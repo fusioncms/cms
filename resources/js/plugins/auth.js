@@ -22,13 +22,13 @@ function AuthPlugin(Vue) {
         methods: {
             $can(permission, level = false) {
                 let meetsPermissionRequirement = this.$user.permitted.indexOf(permission) !== -1
-                let meetsLevelRequirement = level !== false ? this.$user.role.level <= level : true
+                let meetsLevelRequirement = level !== false ? (this.$user.role.level === 0 ? true : this.$user.role.level < level) : true
 
                 return meetsPermissionRequirement && meetsLevelRequirement
             },
 
             $level(level) {
-                return this.$user.role.level <= level
+                return this.$user.role.level === 0 ? true : this.$user.role.level < level
             }
         },
 
