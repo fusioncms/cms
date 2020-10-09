@@ -26,8 +26,9 @@
         data() {
             return {
                 form: new Form({
-                    label: '',
+                    name: '',
                     description: '',
+                    level: null,
                     permissions: []
                 }, true)
             }

@@ -15,7 +15,8 @@ class RoleController extends DataTableController
     public function getDisplayableColumns()
     {
         return [
-            'label',
+            'name',
+            'level',
             'description',
         ];
     }
@@ -23,7 +24,8 @@ class RoleController extends DataTableController
     public function getCustomColumnNames()
     {
         return [
-            'label'       => 'Name',
+            'name'        => 'Name',
+            'level'       => 'Level',
             'description' => 'Description',
         ];
     }
@@ -31,14 +33,16 @@ class RoleController extends DataTableController
     public function getFilterable()
     {
         return [
-            'label',
+            'name',
+            'level',
         ];
     }
 
     public function getSortable()
     {
         return [
-            'label',
+            'name',
+            'level',
         ];
     }
 }

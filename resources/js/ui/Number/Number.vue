@@ -15,7 +15,7 @@
         :step="step"
         :min="min"
         :max="max"
-        :aria-required="required" 
+        :aria-required="required"
         :aria-describedby="message ? formattedId + '_message' : null"
         v-model="inputValue"
         @blur="emitValue($event.target.value)"
@@ -30,7 +30,7 @@
                 <span class="sr-only">Decrease</span>
             </slot>
         </button>
-        
+
         <button v-if="!hideButtons" class="field-number__button field-number__button--increase button button--icon" @click.prevent="increase" :disabled="disabled || increaseDisabled">
             <slot name="increase">
                 <fa-icon icon="plus" class="fa-fw"></fa-icon>
@@ -141,7 +141,7 @@
                 let oldValue = this.inputValue
                 newValue = Number(newValue)
 
-                if (oldValue === newValue || typeof this.value !== 'number') {
+                if (oldValue === newValue) {
                     return
                 }
 
@@ -161,13 +161,21 @@
 
             formatNumber(num, decimals) {
                 let regex = new RegExp('^-?\\d+(?:\.\\d{0,' + (decimals || -1) + '})?')
-                
+
+                if (num === null) {
+                    num = 0
+                }
+
                 return Number(num.toString().match(regex)[0]).toFixed(decimals)
             },
 
             increase() {
                 if (this.disabled || this.increaseDisabled) {
                     return
+                }
+
+                if (this.inputValue == null) {
+                    this.inputValue == 0
                 }
 
                 let newValue = Number(this.inputValue) + Number(1 * this.step)
@@ -179,6 +187,10 @@
             decrease() {
                 if (this.disabled || this.decreaseDisabled) {
                     return
+                }
+
+                if (this.inputValue == null) {
+                    this.inputValue == 0
                 }
 
                 let newValue = Number(this.inputValue) + Number(-1 * this.step)

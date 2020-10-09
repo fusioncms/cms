@@ -14,15 +14,15 @@
         <section-card title="General Information" description="General information about this role and what it can manage.">
             <ui-input-group
                 id="roles-name"
-                name="label"
+                name="name"
                 label="Name"
                 description="What should this role be called?"
                 autocomplete="off"
                 autofocus
                 required
-                :has-error="form.errors.has('label')"
-                :error-message="form.errors.get('label')"
-                v-model="form.label"
+                :has-error="form.errors.has('name')"
+                :error-message="form.errors.get('name')"
+                v-model="form.name"
                 :readonly="isOwner">
             </ui-input-group>
 
@@ -37,6 +37,16 @@
                 :readonly="isOwner"
                 :rows="2">
             </ui-textarea-group>
+        </section-card>
+
+        <section-card title="Access Control" description="Roles may manage other roles and their associated users with a level equal to or greater than their own. Owners have an ACL of 0.">
+            <ui-input-group
+                name="level"
+                label="Level"
+                v-model="form.level"
+                :disabled="disableSetLevel"
+                :help="levelHelp">
+            </ui-input-group>
         </section-card>
 
         <section-card title="Permissions" description="Permissions allow you to restrict which areas of the controle panel this user can access." v-if="hasPermissions(form.name)">
@@ -81,6 +91,22 @@
 		},
 
         computed: {
+            levelHelp() {
+                if (this.disableSetLevel) {
+                    return "You can not edit your own role's level.";
+                }
+
+                return 'Enter a number between ' + this.$user.role.level + ' and 99.'
+            },
+
+            disableSetLevel() {
+                if (! this.role) return false
+
+                if (this.role.id === this.$user.role.id) return true
+
+                return false;
+            },
+
             permissions: {
                 get() {
                     return this.form.permissions
@@ -92,12 +118,14 @@
             },
 
             isOwner() {
-                return this.role.id && this.role.id === 4
+                if (! this.role) return false
+
+                return this.role.id && this.role.id === 1
             }
         },
 
         methods: {
-            
+
             // toggle(name, ev) {
             //     const token  = _.head(_.split(name, '.'))
             //     const items  = this.$refs.permissions.records

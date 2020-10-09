@@ -5,8 +5,8 @@ use Fusion\Models\Role;
 
 $factory->define(Role::class, function (Faker $faker) {
     return [
-        'name'        => ($name = $faker->word),
-        'label'       => ucfirst($name),
+        'handle'      => ($handle = $faker->word),
+        'name'        => ucfirst($handle),
         'guard_name'  => '*',
         'description' => $faker->sentence,
     ];

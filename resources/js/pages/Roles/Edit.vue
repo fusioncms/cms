@@ -18,7 +18,7 @@
         head: {
             title() {
                 return {
-                    inner: this.role.label || 'Loading...'
+                    inner: this.role.name || 'Loading...'
                 }
             }
         },
@@ -70,8 +70,9 @@
         axios.get('/api/roles/' + id).then((response) => {
             let role = response.data.data
             let fields = {
-                label: role.label,
+                name: role.name,
                 description: role.description,
+                level: role.level,
                 permissions: role.permissions,
             }
 

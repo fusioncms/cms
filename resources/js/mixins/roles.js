@@ -1,11 +1,11 @@
 export default {
 	methods: {
-		isAssignable(name) {
-			return ! _.includes(['guest'], name)
+		isAssignable(name, level) {
+			return ! _.includes(['guest'], name) && this.$level(level)
 		},
 
-		isRemovable(name) {
-			return ! _.includes(['owner', 'admin', 'user', 'guest'], name);
+		isRemovable(name, level) {
+			return !_.includes(['owner', 'user', 'guest'], name) && this.$level(level)
 		},
 
 		hasPermissions(name) {
