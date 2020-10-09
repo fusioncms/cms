@@ -3,12 +3,13 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
-use File;
 use Fusion\Events\Backups\FileRestoreFailed;
 use Fusion\Events\Backups\FileRestoreSuccessful;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Log;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 use Spatie\Backup\Tasks\Backup\Manifest;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Symfony\Component\Process\Process;
@@ -46,27 +47,16 @@ class RestoreFiles
      */
     public function handle()
     {
-        $includes    = config('backup.backup.source.files.include');
-        $filesToCopy = $this->fetchFileToRestore();
+        $files = $this->fetchFilesToRestore();
 
         try {
-            // Clean out old files..
-            foreach ($includes as $include) {
-                if (File::isDirectory($include)) {
-                    File::cleanDirectory($include);
-                } else {
-                    File::delete($include);
-                }
-            }
+            $this->cleanupExistingFiles();
 
-            // Restore backed up files..
-            foreach ($filesToCopy as $fileToCopy) {
-                File::copy($fileToCopy['path'], $fileToCopy['target']);
-            }
+            $this->restoreBackupFiles($files);
 
-            event(new FileRestoreSuccessful($filesToCopy));
+            event(new FileRestoreSuccessful($files));
         } catch (Exception $exception) {
-            event(new FileRestoreFailed($exception, $filesToCopy));
+            event(new FileRestoreFailed($exception, $files));
 
             Log::error('There was an error restoring files in backup: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
         }
@@ -89,19 +79,53 @@ class RestoreFiles
      *
      * @return array
      */
-    private function fetchFileToRestore()
+    private function fetchFilesToRestore()
     {
         $files = [];
 
         foreach ($this->manifest->files() as $file) {
-            if (pathinfo($file, PATHINFO_EXTENSION) !== 'sql') {
+            if (Str::startsWith($file, 'db-dumps')) {
+                // continue..
+            } elseif (Str::startsWith($file, 'fusion-dumps')) {
+                // continue..
+            } else {
                 $files[] = [
                     'path'   => $this->tempDirectory->path($file),
-                    'target' => '/'.$file,
+                    'target' => '/'.ltrim($file,'/'),
                 ];
             }
         }
 
         return $files;
+    }
+
+    /**
+     * Clear included files before restoring.
+     * 
+     * @return void
+     */
+    private function cleanupExistingFiles()
+    {
+        foreach (config('backup.backup.source.files.include') as $path) {
+            if (File::isDirectory($path)) {
+                File::cleanDirectory($path);
+            } else {
+                File::delete($path);
+            }
+        }
+    }
+
+    /**
+     * Restore backed up files from manifest.
+     *
+     * @param array $files
+     * 
+     * @return void
+     */
+    private function restoreBackupFiles(array $files)
+    {
+        foreach ($files as $file) {
+            File::copy($file['path'], $file['target']);
+        }
     }
 }

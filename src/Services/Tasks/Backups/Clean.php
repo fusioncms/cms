@@ -1,22 +1,22 @@
 <?php
 
-namespace Fusion\Services\Tasks;
+namespace Fusion\Services\Tasks\Backups;
 
-use Fusion\Jobs\Backups\BackupRun;
+use Illuminate\Console\Scheduling\Schedule;
 
-class Backup extends Task
+class Clean
 {
     /**
      * Schedule Task.
      *
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
-    protected function handle()
+    public function handle(Schedule $schedule)
     {
-        $this->schedule
-            ->job(new BackupRun())
+        $schedule
+            ->command('backup:clean')
             ->daily()
-            ->timezone(setting('system.time_zone'))
             ->withoutOverlapping()
             ->environments(['production'])
             ->when(function () {

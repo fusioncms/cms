@@ -125,7 +125,7 @@ class RestoreDatabase
             escapeshellarg($dbDumpPath)
         );
 
-        $process = new Process($command);
+        $process = Process::fromShellCommandline($command);
         $process->run();
 
         if (!$process->isSuccessful()) {
@@ -147,7 +147,7 @@ class RestoreDatabase
         $dbName  = config('database.connections.'.$default.'.database');
         $command = "sqlite3 {$dbName} < {$dbDumpPath}";
 
-        $process = new Process($command);
+        $process = Process::fromShellCommandline($command);
         $process->run();
 
         if (!$process->isSuccessful()) {

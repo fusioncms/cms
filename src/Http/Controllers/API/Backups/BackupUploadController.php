@@ -3,8 +3,9 @@
 namespace Fusion\Http\Controllers\API\Backups;
 
 use Fusion\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Fusion\Http\Requests\BackupUploadRequest;
+use Fusion\Models\Backup;
+use Illuminate\Support\Facades\Storage;
 
 class BackupUploadController extends Controller
 {
@@ -15,24 +16,24 @@ class BackupUploadController extends Controller
      *
      * @return void
      */
-    public function index(Request $request)
+    public function index(BackupUploadRequest $request)
     {
-        $this->authorize('backups.create');
+        $attributes = $request->validated();
+        $file       = $attributes['file-upload'];
 
-        // Validation parameters..
-        $acceptedMimes = ['zip'];
-
-        // Validate..
-        $attributes = $request->validate([
-            'file-upload' => 'required|file|mimes:'.implode(',', $acceptedMimes),
-        ]);
-
-        $file     = $attributes['file-upload'];
-        $filename = Carbon::now()->format('Y-m-d-H-i-s').'.zip';
-
-        // Save to backup destination disks..
         foreach (config('backup.backup.destination.disks') as $disk) {
-            $file->storeAs('backups', $filename, [$disk]);
+            $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);            
+            $size = $file->getSize();
+            $path = preg_replace('/[^a-zA-Z0-9.]/', '-', config('backup.backup.name'));
+            
+            if ($location = Storage::disk($disk)->putFileAs($path, $file, $name)) {
+                Backup::create([
+                    'name'     => $name,
+                    'disk'     => $disk,
+                    'size'     => $size,
+                    'location' => $location,
+                ]);
+            }
         }
 
         return response()->json([], 201);
