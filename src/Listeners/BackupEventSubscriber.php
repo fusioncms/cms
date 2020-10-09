@@ -2,12 +2,64 @@
 
 namespace Fusion\Listeners;
 
+use Carbon\Carbon;
 use Fusion\Models\Backup;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 
 class BackupEventSubscriber
 {
+    // ------------------------------------------------
+    // BACKUP
+    // ------------------------------------------------
+
+    /**
+     * @param \Fusion\Events\Backups\BackupStarted $event
+     *
+     * @return void
+     */
+    public function handleBackupStarted($event)
+    {
+        $disks    = is_null($event->disks) ? config('backup.backup.destination.disks') : [$event->disks];
+        $filename = basename($event->filename, '.zip');
+
+        foreach ($disks as $disk) {
+            $backup = Backup::create([
+                'name'  => $filename,
+                'disk'  => $disk,
+                'state' => Backup::IN_PROGRESS,
+            ]);
+
+            Log::channel('backups')
+                ->info('Backup Started.', $backup->toArray());
+        }
+    }
+
+    /**
+     * @param \Fusion\Events\Backups\BackupFinished $event
+     *
+     * @return void
+     */
+    public function handleBackupFinished($event)
+    {
+        $disks    = is_null($event->disks) ? config('backup.backup.destination.disks') : [$event->disks];
+        $filename = basename($event->filename, '.zip');
+
+        foreach ($disks as $disk) {
+            $backup = Backup::firstOrCreate([
+                'name' => $filename,
+                'disk' => $disk
+            ]);
+
+            if ($backup->state == Backup::IN_PROGRESS) {
+                $backup->update(['state' => Backup::FAILURE]);
+            }
+
+            Log::channel('backups')
+                ->info('Backup Finished.', $backup->fresh()->toArray());
+        }
+    }
+
     /**
      * @param \Spatie\Backup\Events\BackupWasSuccessful $event
      *
@@ -16,15 +68,22 @@ class BackupEventSubscriber
     public function handleBackupSuccessful($event)
     {
         $newestBackup = $event->backupDestination->newestBackup();
+        $filename     = basename($newestBackup->path(), '.zip');
+        $diskName     = $event->backupDestination->diskName();
 
-        $backup = Backup::create([
-            'name'     => basename($newestBackup->path(), '.zip'),
-            'disk'     => $event->backupDestination->diskName(),
-            'size'     => $newestBackup->size(),
-            'location' => $newestBackup->path()
+        $backup = Backup::updateOrCreate([
+            'name' => $filename,
+            'disk' => $diskName,
         ]);
 
-        Log::channel('backups')->info('Backup Successful.', $backup->toArray());
+        $backup->update([
+            'size'     => $newestBackup->size(),
+            'location' => $newestBackup->path(),
+            'state'    => Backup::SUCCESS,
+        ]);
+
+        Log::channel('backups')
+            ->info('Backup Successful.', $backup->toArray());
     }
 
     /**
@@ -35,7 +94,7 @@ class BackupEventSubscriber
     public function handleBackupFailed($event)
     {
         Log::channel('backups')->error('Backup Failed.', [
-            'disk'    => $event->backupDestination->diskName(),
+            'disk'    => optional($event->backupDestination)->diskName(),
             'message' => $event->exception->getMessage(),
         ]);
     }
@@ -72,6 +131,10 @@ class BackupEventSubscriber
         $zipArchive->close();
     }
 
+    // ------------------------------------------------
+    // CLEANUP
+    // ------------------------------------------------
+
     /**
      * @param \Spatie\Backup\Events\CleanupWasSuccessful $event
      *
@@ -107,6 +170,12 @@ class BackupEventSubscriber
      */
     public function subscribe($events)
     {
+        $events->listen('Fusion\Events\Backups\BackupStarted',
+            [BackupEventSubscriber::class, 'handleBackupStarted']);
+
+        $events->listen('Fusion\Events\Backups\BackupFinished',
+            [BackupEventSubscriber::class, 'handleBackupFinished']);
+
         $events->listen('Spatie\Backup\Events\BackupWasSuccessful',
             [BackupEventSubscriber::class, 'handleBackupSuccessful']);
 

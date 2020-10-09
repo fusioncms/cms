@@ -27,6 +27,20 @@ class BackupController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param \Fusion\Models\Backup $backup
+     *
+     * @return \Fusion\Http\Resources\BackupResource
+     */
+    public function show(Backup $backup)
+    {
+        $this->authorize('forms.view');
+
+        return new BackupResource($form);
+    }
+
+    /**
      * Create new backup to be saved on disk.
      *
      * @param \Illuminate\Http\Request  $request
@@ -38,6 +52,25 @@ class BackupController extends Controller
         $this->authorize('backups.create');
 
         BackupRun::dispatch();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request  $request
+     * @param \Fusion\Models\Backup     $backup
+     *
+     * @return \Fusion\Http\Resources\BackupResource
+     */
+    public function update(Request $request, Backup $backup)
+    {
+        $attributes = $request->validate($request->all(), [
+            'name' => 'required|string'
+        ]);
+
+        $backup->update($attributes);
+
+        return new BackupResource($backup);
     }
 
     /**

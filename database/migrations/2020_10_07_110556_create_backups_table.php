@@ -19,6 +19,7 @@ class CreateBackupsTable extends Migration
             $table->string('disk');
             $table->float('size', 8, 2);
             $table->string('location');
+            $table->string('state');
             $table->timestamps();
         });
     }
