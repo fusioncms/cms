@@ -78,18 +78,7 @@
                             </ui-dropdown-link>
 
                             <ui-dropdown-link
-<<<<<<< HEAD
                                 v-if="table.record.id != $user.id && $can('users.delete', table.record.role.level)"
-=======
-                                v-if="$can('users.update')"
-                                @click.prevent
-                                v-modal:expire-password="table.record">
-                                Expire Password
-                            </ui-dropdown-link>
-
-                            <ui-dropdown-link
-                                v-if="table.record.id != $user.id && $can('users.delete')"
->>>>>>> 47009e7006ad50da2fa1ac406d6ecb2022658ffb
                                 @click.prevent
                                 v-modal:delete-user="table.record"
                                 class="danger">
