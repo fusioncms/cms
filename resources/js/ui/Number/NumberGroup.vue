@@ -125,6 +125,18 @@
                 type: Boolean,
                 default: false
             }
+        },
+
+        watch: {
+            computedValue(value) {
+                this.computedValue = value
+            }
+        },
+
+        mounted() {
+            this.computedValue = this.value
+
+            console.log(this.computedValue)
         }
     }
 </script>

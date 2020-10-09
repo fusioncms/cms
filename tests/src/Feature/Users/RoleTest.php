@@ -49,22 +49,14 @@ class RoleTest extends TestCase
         $role        = factory(Role::class)->create();
         $permissions = factory(Permission::class, 3)->create();
 
-        // update ----
-        $attributes = [
-            'label'        => $role->label,
-            'description'  => 'New Description',
-        ];
-
         $this
             ->be($this->owner, 'api')
             ->json(
                 'PATCH',
                 '/api/roles/'.$role->id,
-                $attributes + ['permissions' => $permissions->pluck('name')]
+                ['permissions' => $permissions->pluck('name')]
             )
             ->assertStatus(200);
-
-        $this->assertDatabaseHas('roles', $attributes);
 
         $permissions->each(function ($permission) use ($role) {
             $this->assertDatabaseHas('role_has_permissions', [
@@ -186,7 +178,7 @@ class RoleTest extends TestCase
             ->be($this->owner, 'api')
             ->json('POST', '/api/roles', [])
             ->assertStatus(422)
-            ->assertJsonValidationErrors(['label']);
+            ->assertJsonValidationErrors(['name', 'handle']);
     }
 
     /**
@@ -220,8 +212,7 @@ class RoleTest extends TestCase
      */
     public function only_the_owner_may_reassign_the_owner_role()
     {
-        // grant access
-        $this->admin->givePermissionTo('users.update');
+        $this->expectException(AuthorizationException::class);
 
         $this
             ->be($this->admin, 'api')
@@ -229,10 +220,23 @@ class RoleTest extends TestCase
                 'name'  => $this->admin->name,
                 'email' => $this->admin->email,
                 'role'  => 'owner',
-            ])
-            ->assertStatus(422)
-            ->assertJsonValidationErrors([
-                'role' => 'The selected role is invalid.',
+            ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group password
+     */
+    public function an_administrator_can_not_update_the_owner_role()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->admin, 'api')
+            ->json('PATCH', "/api/roles/{$this->owner->role->id}", [
+                'name' => 'Not Owner Anymore',
             ]);
     }
 }

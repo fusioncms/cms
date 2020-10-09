@@ -15,8 +15,11 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('users.'.
-            ($this->method() === 'POST' ? 'create' : 'update'));
+        if ($this->method() === 'POST') {
+            return $this->user()->can('users.create');
+        }
+
+        return $this->user()->can('users.update') and $this->user()->level($this->user->role->level);
     }
 
     /**
@@ -26,11 +29,13 @@ class UserRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $this->merge([
-            'status' => $this->status ?? true,
-            'role'   => $this->role ? $this->role :
-                setting('users.default_user_role', 'user'),
-        ]);
+        if ($this->method() == 'POST') {
+            $this->merge([
+                'status' => $this->status ?? true,
+                'role'   => $this->role ? $this->role :
+                    setting('users.default_user_role', 'user'),
+            ]);
+        }
     }
 
     /**
@@ -43,11 +48,21 @@ class UserRequest extends FormRequest
         $id = $this->user->id ?? null;
 
         $rules = [
-            'name'   => 'required',
-            'email'  => 'required|email|unique:users,email,'.$id,
-            'role'   => ['sometimes', 'exists:roles,name'],
-            'status' => 'sometimes|boolean',
+            'name'   => [],
+            'email'  => ['email', 'unique:users,email,'.$id],
+            'role'   => ['sometimes', 'exists:roles,handle'],
+            'status' => ['sometimes', 'boolean'],
         ];
+
+        if ($this->method() == 'POST') {
+            $rules['name'][]  = 'required';
+            $rules['email'][]  = 'required';
+        }
+
+        if ($this->method() == 'PATCH') {
+            $rules['name'][]  = 'sometimes';
+            $rules['email'][]  = 'sometimes';
+        }
 
         /**
          *  `Owner` role can only be assigned by user with
