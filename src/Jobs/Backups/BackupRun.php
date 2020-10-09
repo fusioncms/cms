@@ -16,7 +16,7 @@ class BackupRun implements ShouldQueue
 
     /**
      * Backup disk (optional).
-     * 
+     *
      * @var string
      */
     protected $disk;

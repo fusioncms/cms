@@ -2,10 +2,10 @@
 
 namespace Fusion\Providers;
 
-use Fusion\Services\Tasks\Update;
 use Fusion\Services\Tasks\Backups;
-use Illuminate\Support\ServiceProvider;
+use Fusion\Services\Tasks\Update;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\ServiceProvider;
 
 class ScheduleServiceProvider extends ServiceProvider
 {
@@ -17,13 +17,13 @@ class ScheduleServiceProvider extends ServiceProvider
 
     /**
      * Schedule tasks.
-     * 
+     *
      * @return void
      */
     public function boot()
     {
-        $this->callAfterResolving(Schedule::class, function(Schedule $schedule) {
-            collect($this->tasks)->each(function($task) use ($schedule) {
+        $this->callAfterResolving(Schedule::class, function (Schedule $schedule) {
+            collect($this->tasks)->each(function ($task) use ($schedule) {
                 resolve($task)->handle($schedule);
             });
         });
