@@ -13,6 +13,12 @@
     import SharedForm from './SharedForm'
 
     export default {
+        auth() {
+            return {
+                permission: 'navigation.update',
+            }
+        },
+
         head: {
             title() {
                 return {

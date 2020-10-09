@@ -24,6 +24,12 @@
     import SharedForm from './SharedForm.vue'
 
     export default {
+        auth() {
+            return {
+                permission: 'settings.update',
+            }
+        },
+
         head: {
             title() {
                 return {

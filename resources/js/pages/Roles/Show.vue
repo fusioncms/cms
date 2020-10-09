@@ -6,7 +6,7 @@
 
         <portal to="actions">
             <ui-button key="go-back-btn" :to="{ name: 'roles' }" variant="secondary">Go Back</ui-button>
-            <ui-button v-if="!isOwner && $can('roles.update')" key="edit-role-btn" :to="{ name: 'roles.edit', params: {role: role.id} }" variant="primary">Edit Role</ui-button>
+            <ui-button v-if="canEdit" key="edit-role-btn" :to="{ name: 'roles.edit', params: {role: role.id} }" variant="primary">Edit Role</ui-button>
         </portal>
 
         <section-card :title="role.name" :description="role.description">
@@ -67,7 +67,11 @@
 
 <script>
     export default {
-        permission: 'roles.view',
+        auth() {
+            return {
+                permission: 'roles.view',
+            }
+        },
 
         head: {
             title() {
@@ -116,6 +120,10 @@
 
             isGuest() {
                 return this.role.id && this.role.id === 2
+            },
+
+            canEdit() {
+                return this.$can('roles.update', this.role.level ? this.role.level : 0)
             }
         }
     }

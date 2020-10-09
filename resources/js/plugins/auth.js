@@ -3,12 +3,20 @@ import { mapGetters } from 'vuex'
 
 function AuthPlugin(Vue) {
     function initialize() {
-        let permission = this.$options.permission
+        let self = this
 
-        if (!permission) return
+        let auth = (typeof self.$options.auth === 'function') ? self.$options.auth.bind(self)() : self.$options.auth
 
-        if (!this.$can(permission)) {
-            this.$router.replace({ path: '/403' })
+        if (!auth) return
+
+        if (auth.permission && !self.$can(auth.permission)) {
+            self.$router.replace({ path: '/403' })
+        }
+
+        if (typeof auth.level !== 'undefined' && auth.level === false) return
+
+        if (typeof auth.level !== 'undefined' && !self.$level(auth.level)) {
+            self.$router.replace({ path: '/403' })
         }
     }
 
@@ -34,7 +42,15 @@ function AuthPlugin(Vue) {
 
         mounted: function() {
             initialize.call(this)
-        }
+        },
+
+        created: function() {
+            let self = this
+
+            self.$on('updateAuth', function() {
+                initialize.call(this)
+            })
+        },
     })
 }
 

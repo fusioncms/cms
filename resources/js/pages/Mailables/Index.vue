@@ -42,6 +42,12 @@
 
 <script>
 	export default {
+        auth() {
+            return {
+                permission: 'mailables.view',
+            }
+        },
+
 		head: {
             title() {
                 return {

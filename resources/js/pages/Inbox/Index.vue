@@ -39,6 +39,12 @@
     import FilterSidebar from './FilterSidebar.vue'
 
     export default {
+        auth() {
+            return {
+                permission: 'responses.viewAny',
+            }
+        },
+
         head: {
             title() {
                 return {

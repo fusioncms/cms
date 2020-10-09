@@ -36,7 +36,7 @@
         </div>
 
         <portal to="actions">
-            <router-link :to="{ name: 'themes.settings' }" class="button">Go Back</router-link>
+            <router-link :to="{ name: 'dashboard' }" class="button">Go Back</router-link>
         </portal>
 
         <ui-modal name="confirm" title="Confirm override" key="confirm_modal" v-model="confirmModal">

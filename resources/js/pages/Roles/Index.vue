@@ -61,7 +61,11 @@
     import _ from 'lodash'
 
     export default {
-        permission: 'roles.viewAny',
+        auth() {
+            return {
+                permission: 'roles.viewAny',
+            }
+        },
 
         head: {
             title() {

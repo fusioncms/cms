@@ -132,7 +132,11 @@
 
 <script>
     export default {
-        permission: 'users.viewAny',
+        auth() {
+            return {
+                permission: 'users.viewAny',
+            }
+        },
 
         head: {
             title() {
