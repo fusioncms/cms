@@ -7,9 +7,9 @@ use Fusion\Events\Backups\FileRestoreFailed;
 use Fusion\Events\Backups\FileRestoreSuccessful;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Spatie\Backup\Tasks\Backup\Manifest;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Symfony\Component\Process\Process;
@@ -91,7 +91,7 @@ class RestoreFiles
             } else {
                 $files[] = [
                     'path'   => $this->tempDirectory->path($file),
-                    'target' => '/'.ltrim($file,'/'),
+                    'target' => '/'.ltrim($file, '/'),
                 ];
             }
         }
@@ -101,7 +101,7 @@ class RestoreFiles
 
     /**
      * Clear included files before restoring.
-     * 
+     *
      * @return void
      */
     private function cleanupExistingFiles()
@@ -119,7 +119,7 @@ class RestoreFiles
      * Restore backed up files from manifest.
      *
      * @param array $files
-     * 
+     *
      * @return void
      */
     private function restoreBackupFiles(array $files)

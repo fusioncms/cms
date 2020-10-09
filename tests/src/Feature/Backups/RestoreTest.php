@@ -3,14 +3,13 @@
 namespace Fusion\Tests\Feature\Backups;
 
 use Fusion\Events\Backups\FileRestoreSuccessful;
-use Fusion\Models\Backup;
 use Fusion\Jobs\Backups\RestoreFromBackup;
-use Fusion\Tests\TestCase;
+use Fusion\Models\Backup;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -20,7 +19,7 @@ class RestoreTest extends TestBase
     // RESTORE REQUEST
     // ------------------------------------------------
 
-	/**
+    /**
      * @test
      * @group fusioncms
      * @group feature
@@ -40,7 +39,7 @@ class RestoreTest extends TestBase
         Bus::assertDispatched(RestoreFromBackup::class);
     }
 
-	/**
+    /**
      * @test
      * @group fusioncms
      * @group feature
@@ -48,7 +47,7 @@ class RestoreTest extends TestBase
      */
     public function a_user_without_permission_cannot_restore_from_existing_backups()
     {
-    	Bus::fake();
+        Bus::fake();
 
         $this->expectException(AuthorizationException::class);
 
@@ -72,7 +71,7 @@ class RestoreTest extends TestBase
         Bus::fake();
 
         $this->expectException(AuthenticationException::class);
-        
+
         $backup = $this->newBackup();
 
         $this->json('POST', "/api/backups/restore/{$backup->id}");
@@ -125,18 +124,18 @@ class RestoreTest extends TestBase
 
         // Alter .env.testing file and save..
         $envContents = File::get(app()->environmentFilePath());
-dump('before', File::get(app()->environmentFilePath()));
+        dump('before', File::get(app()->environmentFilePath()));
         foreach (config('backup.backup.source.env') as $key) {
             $envContents = preg_replace("/^({$key})=([^\r\n]*)$/m", '$1='.Str::random(), $envContents);
         }
-dd($envContents);
+        dd($envContents);
 //         File::put(app()->environmentFilePath(), $envContents);
 // dump('after', File::get(app()->environmentFilePath()));
 //         // --
 
 //         // Restore backup..
 //         (new RestoreFromBackup($backup))->handle();
-        
+
 //         $envUpdated = File::get(app()->environmentFilePath());
 //         $matches    = [];
 // dd($envUpdated);

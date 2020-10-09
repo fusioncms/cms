@@ -13,8 +13,8 @@ class BackupRestoreController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param \Illuminate\Http\Request  $request
-     * @param \Fusion\Models\Backup     $backup
+     * @param \Illuminate\Http\Request $request
+     * @param \Fusion\Models\Backup    $backup
      *
      * @return void
      */
@@ -25,7 +25,7 @@ class BackupRestoreController extends Controller
         if ($request->input('saveBackup')) {
             BackupRun::dispatch();
         }
-        
+
         RestoreFromBackup::dispatch($backup);
     }
 }

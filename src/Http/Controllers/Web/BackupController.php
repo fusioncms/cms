@@ -17,6 +17,6 @@ class BackupController extends Controller
         }
 
         return Storage::disk($backup->disk)
-        	->response($backup->location);
+            ->response($backup->location);
     }
 }

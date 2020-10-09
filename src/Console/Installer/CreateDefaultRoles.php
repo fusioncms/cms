@@ -23,10 +23,10 @@ class CreateDefaultRoles
             'description' => 'All non-logged, visiting users automatically assume this role.',
         ],
         'user' => [
-            'name'       => 'User',
+            'name'          => 'User',
             'handle'        => 'user',
-            'level'       => 5,
-            'description' => 'Default role assigned to new users after creating an account.',
+            'level'         => 5,
+            'description'   => 'Default role assigned to new users after creating an account.',
         ],
         'admin' => [
             'name'        => 'Administrator',

@@ -48,7 +48,9 @@ class RoleRequest extends FormRequest
 
         // Cannot assign a level lower than 1,
         // 0 is reserved for the owner role.
-        if ($level < 1) $level = 1;
+        if ($level < 1) {
+            $level = 1;
+        }
 
         $rules = [
             'name'        => 'sometimes',

@@ -5,9 +5,8 @@ namespace Fusion\Jobs\Backups;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class RestoreEnvVariables
@@ -38,7 +37,7 @@ class RestoreEnvVariables
     public function handle()
     {
         $envPath = $this->tempDirectory->path('fusion-dumps/env.json');
-        
+
         if (File::exists($envPath)) {
             // Setup..
             $envContents  = File::get(app()->environmentFilePath());

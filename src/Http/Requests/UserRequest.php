@@ -55,12 +55,12 @@ class UserRequest extends FormRequest
         ];
 
         if ($this->method() == 'POST') {
-            $rules['name'][]  = 'required';
+            $rules['name'][]   = 'required';
             $rules['email'][]  = 'required';
         }
 
         if ($this->method() == 'PATCH') {
-            $rules['name'][]  = 'sometimes';
+            $rules['name'][]   = 'sometimes';
             $rules['email'][]  = 'sometimes';
         }
 

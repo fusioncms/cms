@@ -2,18 +2,16 @@
 
 namespace Fusion\Tests\Feature\Backups;
 
-use Fusion\Tests\TestCase;
-use Fusion\Models\Backup;
 use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Models\Backup;
+use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
-use Spatie\Backup\Events\BackupWasSuccessful;
-use Spatie\Backup\Events\CleanupWasSuccessful;
+use Illuminate\Support\Facades\Storage;
 
 class TestBase extends TestCase
 {
-	use RefreshDatabase;
+    use RefreshDatabase;
 
     public function setUp(): void
     {
@@ -32,8 +30,7 @@ class TestBase extends TestCase
 
         // Establish backup `backup-temp`..
         config([
-            'backup.backup.temporary_directory' =>
-                Storage::disk('public')->path('app/backup-temp')
+            'backup.backup.temporary_directory' => Storage::disk('public')->path('app/backup-temp'),
         ]);
 
         // Establish backup destination disks

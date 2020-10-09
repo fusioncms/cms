@@ -2,9 +2,8 @@
 
 namespace Fusion\Tests\Feature\Backups;
 
-use Fusion\Models\Backup;
 use Fusion\Jobs\Backups\BackupRun;
-use Fusion\Tests\TestCase;
+use Fusion\Models\Backup;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Bus;
@@ -13,11 +12,11 @@ use ZipArchive;
 
 class BackupTest extends TestBase
 {
-	// ------------------------------------------------
+    // ------------------------------------------------
     // VIEW BACKUPS
     // ------------------------------------------------
 
-	/**
+    /**
      * @test
      * @group fusioncms
      * @group feature
@@ -31,7 +30,7 @@ class BackupTest extends TestBase
             ->assertStatus(200);
     }
 
-	/**
+    /**
      * @test
      * @group fusioncms
      * @group feature
@@ -65,7 +64,6 @@ class BackupTest extends TestBase
             ->json('POST', '/api/backups')
             ->assertStatus(200);
 
-
         Bus::assertDispatched(BackupRun::class);
     }
 
@@ -77,9 +75,9 @@ class BackupTest extends TestBase
      */
     public function newly_created_backup_zip_will_be_created()
     {
-    	$backup = $this->newBackup();
+        $backup = $this->newBackup();
 
-    	Storage::disk('public')->assertExists($backup->location);
+        Storage::disk('public')->assertExists($backup->location);
     }
 
     /**
@@ -90,14 +88,14 @@ class BackupTest extends TestBase
      */
     public function newly_created_backup_will_be_recorded_in_database()
     {
-		$backup = $this->newBackup();
+        $backup = $this->newBackup();
 
-		foreach (config('backup.backup.destination.disks') as $disk) {
-			$this->assertDatabaseHas('backups', [
-				'name' => $backup->name,
-				'disk' => $disk,
-			]);
-		}
+        foreach (config('backup.backup.destination.disks') as $disk) {
+            $this->assertDatabaseHas('backups', [
+                'name' => $backup->name,
+                'disk' => $disk,
+            ]);
+        }
     }
 
     /**
@@ -125,7 +123,7 @@ class BackupTest extends TestBase
      */
     public function a_user_without_permission_cannot_create_new_backups()
     {
-    	Bus::fake();
+        Bus::fake();
 
         $this->expectException(AuthorizationException::class);
 
@@ -148,7 +146,7 @@ class BackupTest extends TestBase
      */
     public function deleted_backup_will_be_removed_from_storage()
     {
-    	$backup = $this->newBackup();
+        $backup = $this->newBackup();
 
         $this
             ->be($this->owner, 'api')
@@ -166,14 +164,14 @@ class BackupTest extends TestBase
      */
     public function deleted_backup_will_be_removed_from_database()
     {
-		$backup = $this->newBackup();
+        $backup = $this->newBackup();
 
-    	$this
+        $this
             ->be($this->owner, 'api')
             ->json('DELETE', "/api/backups/{$backup->id}")
             ->assertStatus(200);
 
-		$this->assertDatabaseMissing('backups', ['id' => $backup->id]);
+        $this->assertDatabaseMissing('backups', ['id' => $backup->id]);
     }
 
     /**
@@ -205,17 +203,17 @@ class BackupTest extends TestBase
      */
     public function backup_zip_will_save_env_variables_from_config()
     {
-    	$backup    = $this->newBackup();
+        $backup     = $this->newBackup();
         $zipArchive = new ZipArchive();
 
         $envFile = 'fusion-dumps/env.json';
 
         if ($zipArchive->open($backup->fullPath) === true) {
-			$contents  = $zipArchive->getFromName($envFile);
-			$variables = json_decode($contents, true);
+            $contents  = $zipArchive->getFromName($envFile);
+            $variables = json_decode($contents, true);
 
             foreach (config('backup.backup.source.env') as $key) {
-            	$this->assertEquals($variables[$key], env($key));
+                $this->assertEquals($variables[$key], env($key));
             }
         }
     }
@@ -228,20 +226,20 @@ class BackupTest extends TestBase
      */
     public function backup_zip_will_save_files_included_in_config()
     {
-    	$backup    = $this->newBackup();
+        $backup     = $this->newBackup();
         $zipArchive = new ZipArchive();
 
         $file1 = Storage::disk($backup->disk)->path('files/testing-file1.txt');
         $file2 = Storage::disk($backup->disk)->path('files/testing-file2.txt');
 
         if ($zipArchive->open($backup->fullPath) === true) {
-        	$this->assertNotFalse($zipArchive->statName(
-        		ltrim($file1, '/')
-        	));
+            $this->assertNotFalse($zipArchive->statName(
+                ltrim($file1, '/')
+            ));
 
-        	$this->assertNotFalse($zipArchive->statName(
-        		ltrim($file2, '/')
-        	));
+            $this->assertNotFalse($zipArchive->statName(
+                ltrim($file2, '/')
+            ));
         }
     }
 
@@ -253,15 +251,15 @@ class BackupTest extends TestBase
      */
     public function backup_zip_will_save_database_dumps_in_config()
     {
-    	$backup    = $this->newBackup();
+        $backup     = $this->newBackup();
         $zipArchive = new ZipArchive();
 
         $dbDump = 'db-dumps/sqlite-sqlite-database.sql';
 
         if ($zipArchive->open($backup->fullPath) === true) {
-        	$this->assertNotFalse(
-        		$zipArchive->statName($dbDump)
-        	);
+            $this->assertNotFalse(
+                $zipArchive->statName($dbDump)
+            );
         }
     }
 }

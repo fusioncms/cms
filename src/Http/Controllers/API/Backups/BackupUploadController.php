@@ -22,10 +22,10 @@ class BackupUploadController extends Controller
         $file       = $attributes['file-upload'];
 
         foreach (config('backup.backup.destination.disks') as $disk) {
-            $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);            
+            $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $size = $file->getSize();
             $path = preg_replace('/[^a-zA-Z0-9.]/', '-', config('backup.backup.name'));
-            
+
             if ($location = Storage::disk($disk)->putFileAs($path, $file, $name)) {
                 Backup::create([
                     'name'     => $name,
