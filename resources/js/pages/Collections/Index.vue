@@ -37,7 +37,7 @@
                             <ui-dropdown-link :to="{ name: 'collection.edit', params: {collection: collection.slug, id: table.record.id} }">Edit</ui-dropdown-link>
 
                             <ui-dropdown-divider></ui-dropdown-divider>
-                            
+
                             <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-entry="table.record"

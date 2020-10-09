@@ -17,6 +17,12 @@
     import SharedForm from './SharedForm'
 
     export default {
+        auth() {
+            return {
+                permission: 'forms.update',
+            }
+        },
+
         head: {
             title() {
                 return {

@@ -55,6 +55,12 @@
 
 <script>
     export default {
+        auth() {
+            return {
+                permission: 'navigation.viewAny',
+            }
+        },
+
         head: {
             title() {
                 return {

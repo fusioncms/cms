@@ -22,6 +22,12 @@
     import store from '../../store'
 
     export default {
+        auth() {
+            return {
+                permission: 'matrices.update',
+            }
+        },
+
         head: {
             title() {
                 return {

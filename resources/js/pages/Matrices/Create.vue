@@ -19,6 +19,12 @@
     import SharedForm from './SharedForm'
 
     export default {
+        auth() {
+            return {
+                permission: 'matrices.create',
+            }
+        },
+
         head: {
             title() {
                 return {

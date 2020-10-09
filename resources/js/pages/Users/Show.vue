@@ -81,7 +81,11 @@
 
 <script>
     export default {
-        permission: 'users.view',
+        auth() {
+            return {
+                permission: 'users.view',
+            }
+        },
 
         computed: {
             endpoint() {
@@ -99,7 +103,11 @@
             },
 
             canEdit() {
-                return this.$can('users.update', this.user.role ? this.user.role.level : 0)
+                if (this.$user.id == this.user.id) return true
+
+                if (this.user.role) return this.$can('users.update', this.user.role ? this.user.role.level : 0)
+
+                return false
             }
         },
 

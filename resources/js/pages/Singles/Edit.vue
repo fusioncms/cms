@@ -19,8 +19,6 @@
     import _ from 'lodash'
 
     export default {
-        name: 'edit-single',
-
         head: {
             title() {
                 return {

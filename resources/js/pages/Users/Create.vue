@@ -13,7 +13,11 @@
     import SharedForm from './SharedForm'
 
     export default {
-        permission: 'users.create',
+        auth() {
+            return {
+                permission: 'users.create',
+            }
+        },
 
         head: {
             title() {

@@ -30,6 +30,12 @@
     import { mapGetters } from 'vuex'
 
     export default {
+        auth() {
+            return {
+                permission: 'settings.viewAny',
+            }
+        },
+
         head: {
             title() {
                 return {
