@@ -5,7 +5,6 @@ namespace Fusion\Http\Controllers\API\Backups;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\BackupUploadRequest;
 use Fusion\Models\Backup;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class BackupUploadController extends Controller

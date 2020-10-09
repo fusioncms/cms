@@ -7,7 +7,6 @@ use Fusion\Http\Resources\BackupResource;
 use Fusion\Jobs\Backups\BackupRun;
 use Fusion\Models\Backup;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class BackupController extends Controller
 {
