@@ -16,6 +16,10 @@ use Illuminate\Support\Str;
 
 class RestoreTest extends TestBase
 {
+    // ------------------------------------------------
+    // RESTORE REQUEST
+    // ------------------------------------------------
+
 	/**
      * @test
      * @group fusioncms
@@ -63,7 +67,7 @@ class RestoreTest extends TestBase
      * @group feature
      * @group backups
      */
-    public function a_guest_cannot_not_create_a_backup()
+    public function a_guest_cannot_restore_from_existing_backups()
     {
         Bus::fake();
 
@@ -75,6 +79,10 @@ class RestoreTest extends TestBase
 
         Bus::assertNotDispatched(RestoreFromBackup::class);
     }
+
+    // ------------------------------------------------
+    // RESTORE PROCESS
+    // ------------------------------------------------
 
     /**
      * @test
@@ -111,12 +119,6 @@ class RestoreTest extends TestBase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
     public function restored_backup_will_recover_altered_env_variables()
     {
         $backup = $this->newBackup();

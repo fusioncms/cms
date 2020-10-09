@@ -208,8 +208,10 @@ class BackupTest extends TestBase
     	$backup    = $this->newBackup();
         $zipArchive = new ZipArchive();
 
+        $envFile = 'fusion-dumps/env.json';
+
         if ($zipArchive->open($backup->fullPath) === true) {
-			$contents  = $zipArchive->getFromName('env.json');
+			$contents  = $zipArchive->getFromName($envFile);
 			$variables = json_decode($contents, true);
 
             foreach (config('backup.backup.source.env') as $key) {

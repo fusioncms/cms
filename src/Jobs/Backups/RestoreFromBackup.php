@@ -47,7 +47,7 @@ class RestoreFromBackup
         $jobs = [
             'Enter maintenance mode...'       => new \Fusion\Console\Actions\EnterMaintenanceMode(),
             'Unzip backup for processing....' => new \Fusion\Jobs\Backups\UnzipBackup($restoreDirectory, $this->backup->fullPath),
-            // 'Restore database from backup...' => new \Fusion\Jobs\Backups\RestoreDatabase($restoreDirectory),
+            'Restore database from backup...' => new \Fusion\Jobs\Backups\RestoreDatabase($restoreDirectory),
             'Restore files from backup...'    => new \Fusion\Jobs\Backups\RestoreFiles($restoreDirectory),
             'Restore .env variables...'       => new \Fusion\Jobs\Backups\RestoreEnvVariables($restoreDirectory),
             'Exit maintenance mode...'        => new \Fusion\Console\Actions\ExitMaintenanceMode(),
