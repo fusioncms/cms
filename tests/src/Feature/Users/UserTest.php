@@ -29,7 +29,7 @@ class UserTest extends TestCase
         $this->attributes = [
             'name'   => $this->faker->name,
             'email'  => $this->faker->unique()->safeEmail,
-            'role'   => $this->faker->randomElement(['user', 'guest']),
+            'role'   => 'user',
             'status' => $this->faker->boolean,
         ];
 
@@ -315,6 +315,41 @@ class UserTest extends TestCase
      * @test
      * @group fusioncms
      * @group feature
+     */
+    public function an_administrator_can_not_update_the_owner()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->admin, 'api')
+            ->json('PATCH', "/api/users/{$this->owner->id}", [
+                'name' => 'Gollum',
+            ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     */
+    public function an_administrator_can_update_a_user()
+    {
+        $this->withoutExceptionHandling();
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', "/api/users/{$this->user->id}", [
+                'name'  => 'Frodo Baggins',
+                'email' => 'frodo.baggins@theshire.com',
+            ]);
+
+        $this->assertEquals('Frodo Baggins', $this->user->fresh()->name);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
      * @group password
      */
     public function password_updates_will_be_recorded_in_the_database()
@@ -428,11 +463,11 @@ class UserTest extends TestCase
      * @group feature
      * @group user
      */
-    public function name_and_email_fields_are_always_required()
+    public function name_and_email_fields_are_always_required_when_creating_user_accounts()
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', "/api/users/{$this->user->id}", [])
+            ->json('POST', '/api/users', [])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
                 'name'  => 'The name field is required.',

@@ -91,6 +91,12 @@
     import Form from '@/services/Form'
 
 	export default {
+        auth() {
+            return {
+                permission: 'mailables.update',
+            }
+        },
+
 		head: {
             title() {
                 return {

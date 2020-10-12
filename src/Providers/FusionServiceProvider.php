@@ -9,7 +9,6 @@ use Fusion\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -366,12 +365,6 @@ class FusionServiceProvider extends ServiceProvider
      */
     private function registerRouteBindings()
     {
-        // Note: route binding for backup removal
-        // TODO: point to correct disk if it changes from local storage
-        Route::bind('backup', function ($filename) {
-            return new \Spatie\Backup\BackupDestination\Backup(Storage::disk('public'), "backups/{$filename}.zip");
-        });
-
         Route::bind('addon', function ($slug) {
             return \Fusion\Facades\Addon::where('slug', $slug)->first();
         });

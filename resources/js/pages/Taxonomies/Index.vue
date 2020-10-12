@@ -62,6 +62,12 @@
     import store from '../../store'
 
     export default {
+        auth() {
+            return {
+                permission: 'taxonomies.viewAny',
+            }
+        },
+
         head: {
             title() {
                 return {

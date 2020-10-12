@@ -14,8 +14,7 @@ const router = new Router({
             name: 'dashboard',
             meta: {
                 requiresAuth: true,
-                layout: 'admin',
-                permission: 'access.controlPanel'
+                layout: 'admin'
             }
         },
 

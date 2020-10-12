@@ -108,44 +108,64 @@ class UserController extends DataTableController
 
     public function enableAction()
     {
-        foreach (request()->get('records') as $record) {
-            User::find($record)->update([
-                'status' => true,
-            ]);
-        }
+        activity()->withoutLogs(function () {
+            foreach (request()->get('records') as $record) {
+                User::find($record)->update([
+                    'status' => true,
+                ]);
+            }
+        });
+
+        activity()->log('Bulk enabled users.');
     }
 
     public function disableAction()
     {
-        foreach (request()->get('records') as $record) {
-            User::find($record)->update([
-                'status' => false,
-            ]);
-        }
+        activity()->withoutLogs(function () {
+            foreach (request()->get('records') as $record) {
+                User::find($record)->update([
+                    'status' => false,
+                ]);
+            }
+        });
+
+        activity()->log('Bulk disabled users.');
     }
 
     public function deleteAction()
     {
-        foreach (request()->get('records') as $record) {
-            User::find($record)->delete();
-        }
+        activity()->withoutLogs(function () {
+            foreach (request()->get('records') as $record) {
+                User::find($record)->delete();
+            }
+        });
+
+        activity()->log('Bulk deleted users.');
     }
 
     public function verifyEmailAction()
     {
-        foreach (request()->get('records') as $record) {
-            User::find($record)->sendEmailVerificationNotification();
-        }
+        activity()->withoutLogs(function () {
+            foreach (request()->get('records') as $record) {
+                User::find($record)->sendEmailVerificationNotification();
+            }
+        });
+
+        activity()->log('Bulk sent verification emails to users.');
     }
 
     public function resetPasswordAction()
     {
-        foreach (request()->get('records') as $record) {
-            $user = User::find($record);
+        activity()->withoutLogs(function () {
+            foreach (request()->get('records') as $record) {
+                $user = User::find($record);
 
-            $user->sendPasswordResetNotification(
-                Password::broker()->createToken($user)
-            );
-        }
+                $user->sendPasswordResetNotification(
+                    Password::broker()->createToken($user)
+                );
+            }
+        });
+
+        activity()->log('Bulk reset user passwords.');
     }
 }

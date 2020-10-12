@@ -5,29 +5,31 @@ namespace Fusion\Http\Controllers\API\Backups;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\BackupResource;
 use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Models\Backup;
 use Illuminate\Http\Request;
-use Spatie\Backup\BackupDestination\Backup;
 
 class BackupController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      *
-     * @return JsonResponse
+     * @return \Fusion\Http\Resources\BackupResource
      */
     public function index(Request $request)
     {
         $this->authorize('backups.viewAny');
 
-        return new BackupResource([]);
+        $backups = Backup::all();
+
+        return BackupResource::collection($backups);
     }
 
     /**
      * Create new backup to be saved on disk.
      *
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return void
      */
@@ -41,11 +43,12 @@ class BackupController extends Controller
     /**
      * Remove the specified backup from disk.
      *
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
+     * @param \Fusion\Models\Backup    $backup
      *
      * @return void
      */
-    public function destroy(Backup $backup)
+    public function destroy(Request $request, Backup $backup)
     {
         $this->authorize('backups.delete');
 

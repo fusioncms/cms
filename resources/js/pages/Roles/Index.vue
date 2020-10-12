@@ -10,10 +10,14 @@
 
         <ui-card>
             <ui-card-body>
-                <ui-table key="roles" class="roles-table" id="roles" :endpoint="endpoint" sort-by="label" show-page-status show-page-numbers show-page-nav show-page-ends>
-                    <template slot="label" slot-scope="table">
-                        <router-link :to="{ name: 'roles.show', params: {role: table.record.id} }" v-if="$can('roles.view')">{{ table.record.label }}</router-link>
-                        <span v-else>{{ table.record.label }}</span>
+                <ui-table key="roles" class="roles-table" id="roles" :endpoint="endpoint" sort-by="level" show-page-status show-page-numbers show-page-nav show-page-ends>
+                    <template slot="name" slot-scope="table">
+                        <router-link :to="{ name: 'roles.show', params: {role: table.record.id} }" v-if="$can('roles.view')">{{ table.record.name }}</router-link>
+                        <span v-else>{{ table.record.name }}</span>
+                    </template>
+
+                    <template slot="level" slot-scope="table" class="w-10">
+                        <ui-badge>{{ table.record.level }}</ui-badge>
                     </template>
 
                     <template slot="description" slot-scope="table">
@@ -24,12 +28,12 @@
                         <ui-table-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
                             <ui-dropdown-link :to="{ name: 'roles.show', params: {role: table.record.id} }" v-if="$can('roles.view')">View</ui-dropdown-link>
 
-                            <ui-dropdown-link v-if="! isOwner(table.record.id) && $can('roles.update')" @click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">Edit</ui-dropdown-link>
+                            <ui-dropdown-link v-if="! isOwner(table.record.id) && $can('roles.update', table.record.level)" @click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">Edit</ui-dropdown-link>
 
-                            <ui-dropdown-divider v-if="isRemovable(table.record.name) && $can('roles.delete')"></ui-dropdown-divider>
+                            <ui-dropdown-divider v-if="isRemovable(table.record.name) && $can('roles.delete', table.record.level)"></ui-dropdown-divider>
 
                             <ui-dropdown-link
-                                v-if="isRemovable(table.record.name) && $can('roles.delete')"
+                                v-if="isRemovable(table.record.name) && $can('roles.delete', table.record.level)"
                                 @click.prevent v-modal:delete-role="table.record"
                                 classes="danger">
                                 Delete
@@ -57,7 +61,11 @@
     import _ from 'lodash'
 
     export default {
-        permission: 'roles.viewAny',
+        auth() {
+            return {
+                permission: 'roles.viewAny',
+            }
+        },
 
         head: {
             title() {
@@ -87,7 +95,7 @@
             },
 
             isOwner(id) {
-                return id && id === 4
+                return id && id === 1
             }
         }
     }

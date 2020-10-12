@@ -3,6 +3,7 @@
 namespace Fusion\Console\Installer;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class CreateDirectories
 {
@@ -26,6 +27,11 @@ class CreateDirectories
         if (!File::exists(storage_path('app/themes'))) {
             File::makeDirectory(storage_path('app/themes'));
             File::put(storage_path('app/themes/.gitignore'), "*\n!.gitignore");
+        }
+
+        // File Manager
+        if (!Storage::disk('public')->exists('files')) {
+            Storage::disk('public')->makeDirectory('files');
         }
     }
 }

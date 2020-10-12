@@ -57,6 +57,12 @@
     import pluralize from 'pluralize'
 
     export default {
+        auth() {
+            return {
+                permission: 'terms.viewAny',
+            }
+        },
+
         head: {
             title() {
                 return {

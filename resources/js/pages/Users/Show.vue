@@ -6,7 +6,7 @@
 
         <portal to="actions">
             <ui-button key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
-            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary" v-if="$can('users.update')">Edit User</ui-button>
+            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary" v-if="canEdit">Edit User</ui-button>
         </portal>
 
         <section-card title="User Information" description="General information about this user.">
@@ -16,7 +16,7 @@
                 <dt>Email</dt>
                 <dd>{{ user.email }}</dd>
                 <dt>Role</dt>
-                <dd>{{ user.roles ? user.roles[0].label : 'Loading...' }}</dd>
+                <dd>{{ user.role ? user.role.name : 'Loading...' }}</dd>
                 <dt>Status</dt>
                 <dd class="flex"><ui-status :value="user.status" class="mr-2"></ui-status> {{ user.status ? 'Enabled' : 'Disabled' }}</dd>
             </dl>
@@ -81,7 +81,11 @@
 
 <script>
     export default {
-        permission: 'users.view',
+        auth() {
+            return {
+                permission: 'users.view',
+            }
+        },
 
         computed: {
             endpoint() {
@@ -97,6 +101,14 @@
 
                 return false
             },
+
+            canEdit() {
+                if (this.$user.id == this.user.id) return true
+
+                if (this.user.role) return this.$can('users.update', this.user.role ? this.user.role.level : 0)
+
+                return false
+            }
         },
 
         head: {
@@ -157,7 +169,7 @@
                 name: user.name,
                 email: user.email,
                 status: user.status,
-                role: user.roles[0].name,
+                role: user.role.name,
                 password: '',
                 password_confirmation: '',
             })

@@ -3,16 +3,31 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
-use File;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Log;
-use Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class RestoreEnvVariables
 {
     use Dispatchable;
     use Queueable;
+
+    /**
+     * @var TemporaryDirectory
+     */
+    protected $tempDirectory;
+
+    /**
+     * Constructor.
+     *
+     * @param Backup $backup
+     */
+    public function __construct(TemporaryDirectory $tempDirectory)
+    {
+        $this->tempDirectory = $tempDirectory;
+    }
 
     /**
      * Execute the job.
@@ -21,10 +36,12 @@ class RestoreEnvVariables
      */
     public function handle()
     {
-        if (Storage::disk('temp')->exists('env.json')) {
+        $envPath = $this->tempDirectory->path('fusion-dumps/env.json');
+
+        if (File::exists($envPath)) {
             // Setup..
             $envContents  = File::get(app()->environmentFilePath());
-            $varsContents = Storage::disk('temp')->get('env.json');
+            $varsContents = File::get($envPath);
             $variables    = collect(json_decode($varsContents));
 
             // Perform surgery..
@@ -34,9 +51,6 @@ class RestoreEnvVariables
 
             // Override .env file with updated variables
             File::put(app()->environmentFilePath(), $envContents);
-
-            // Dispose of temp env variables file
-            Storage::disk('temp')->delete('env.json');
         }
     }
 

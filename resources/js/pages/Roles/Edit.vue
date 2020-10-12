@@ -13,12 +13,17 @@
     import SharedForm from './SharedForm'
 
     export default {
-        permission: 'roles.update',
+        auth() {
+            return {
+                permission: 'roles.update',
+                level: this.getAuthLevel(),
+            }
+        },
 
         head: {
             title() {
                 return {
-                    inner: this.role.label || 'Loading...'
+                    inner: this.role.name || 'Loading...'
                 }
             }
         },
@@ -44,6 +49,16 @@
                     toast(response.response.data.message, 'failed')
                 })
             },
+
+            getAuthLevel() {
+                console.log(this.role.level)
+
+                if (this.role.level) return this.role.level
+
+                console.log('false')
+
+                return false
+            },
         },
 
         beforeRouteEnter(to, from, next) {
@@ -60,6 +75,7 @@
                         vm.form = new Form(fields, true)
 
                         vm.$emit('updateHead')
+                        vm.$emit('updateAuth')
                     })
                 }
             })
@@ -70,8 +86,9 @@
         axios.get('/api/roles/' + id).then((response) => {
             let role = response.data.data
             let fields = {
-                label: role.label,
+                name: role.name,
                 description: role.description,
+                level: role.level,
                 permissions: role.permissions,
             }
 

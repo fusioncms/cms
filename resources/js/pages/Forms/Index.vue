@@ -60,6 +60,12 @@
 
 <script>
     export default {
+        auth() {
+            return {
+                permission: 'forms.viewAny',
+            }
+        },
+
         head: {
             title() {
                 return {

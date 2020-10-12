@@ -3,17 +3,20 @@
 namespace Fusion\Services\Tasks;
 
 use Fusion\Facades\Version;
+use Illuminate\Console\Scheduling\Schedule;
 
-class Update extends Task
+class Update
 {
     /**
      * Schedule Task.
      *
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
+     *
      * @return void
      */
-    protected function handle()
+    public function handle(Schedule $schedule)
     {
-        $this->schedule
+        $schedule
             ->command('fusion:update')
             ->daily()
             ->timezone(setting('system.time_zone'))

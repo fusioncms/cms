@@ -13,7 +13,12 @@
     import SharedForm from './SharedForm'
 
     export default {
-        permission: 'users.update',
+        auth() {
+            return {
+                permission: 'users.update',
+                level: this.getAuthLevel(),
+            }
+        },
 
         head: {
             title() {
@@ -43,6 +48,14 @@
         },
 
         methods: {
+            getAuthLevel() {
+                if (this.$user.id == this.user.id) return false
+
+                if (this.user.role) return this.user.role.level
+
+                return false
+            },
+
             submit() {
                 this.form.patch(`/api/users/${this.user.id}`).then((response) => {
                     toast('User successfully updated', 'success')
@@ -69,6 +82,7 @@
                         vm.form = new Form(fields, true)
 
                         vm.$emit('updateHead')
+                        vm.$emit('updateAuth')
                     })
                 }
             })
@@ -88,7 +102,7 @@
                 name: user.name,
                 email: user.email,
                 status: user.status,
-                role: user.roles[0].name,
+                role: user.role.name,
                 password: '',
                 password_confirmation: '',
             })

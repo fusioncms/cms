@@ -14,7 +14,11 @@ class RoleRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('roles.'.($this->method() === 'POST' ? 'create' : 'update'));
+        if ($this->method() === 'POST') {
+            return $this->user()->can('roles.create');
+        }
+
+        return $this->user()->can('roles.update') and $this->user()->level($this->role->level);
     }
 
     /**
@@ -24,9 +28,12 @@ class RoleRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $this->merge([
-            'name' => $this->name ?? Str::slug($this->label),
-        ]);
+        if ($this->method() == 'POST') {
+            $this->merge([
+                'name'   => $this->name,
+                'handle' => $this->handle ?? Str::snake($this->name),
+            ]);
+        }
     }
 
     /**
@@ -36,11 +43,28 @@ class RoleRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name'        => 'required',
-            'label'       => 'required',
+        // Fetch the user's current level.
+        $level = auth()->user()->role->level;
+
+        // Cannot assign a level lower than 1,
+        // 0 is reserved for the owner role.
+        if ($level < 1) {
+            $level = 1;
+        }
+
+        $rules = [
+            'name'        => 'sometimes',
+            'handle'      => 'sometimes',
             'guard_name'  => 'sometimes',
             'description' => 'sometimes',
+            'level'       => 'sometimes|nullable|integer|between:'.$level.',99',
         ];
+
+        if ($this->method() == 'POST') {
+            $rules['name']   = 'required';
+            $rules['handle'] = 'required';
+        }
+
+        return $rules;
     }
 }

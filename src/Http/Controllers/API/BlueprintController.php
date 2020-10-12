@@ -11,7 +11,7 @@ class BlueprintController extends Controller
 {
     public function index()
     {
-        $this->authorize('blueprints.show');
+        $this->authorize('blueprints.viewAny');
 
         $blueprints = Blueprint::orderBy('name')->get();
 
@@ -27,7 +27,7 @@ class BlueprintController extends Controller
      */
     public function show(Blueprint $blueprint)
     {
-        $this->authorize('blueprints.show');
+        $this->authorize('blueprints.view');
 
         return new BlueprintResource($blueprint);
     }

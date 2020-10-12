@@ -95,7 +95,10 @@ class UserController extends Controller
         }
 
         $user->update($attributes);
-        $user->syncRoles($attributes['role']);
+
+        if (isset($attributes['role'])) {
+            $user->syncRoles($attributes['role']);
+        }
 
         // handle role setting..
         $this->assureOwnerRoleLimit($user);

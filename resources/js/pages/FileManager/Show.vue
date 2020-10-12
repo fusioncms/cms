@@ -160,6 +160,12 @@
     import { mapActions, mapGetters } from 'vuex'
 
     export default {
+        auth() {
+            return {
+                permission: 'files.view',
+            }
+        },
+
         head: {
             title() {
                 return {

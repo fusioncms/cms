@@ -68,6 +68,12 @@
     import store from '../../store'
 
     export default {
+        auth() {
+            return {
+                permission: 'matrices.viewAny',
+            }
+        },
+
         head: {
             title() {
                 return {
