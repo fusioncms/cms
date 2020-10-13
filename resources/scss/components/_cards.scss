@@ -39,7 +39,7 @@
 
     &__header {
         @screen xl {
-            @apply border-r col-span-1;
+            @apply border-r col-span-1 pr-5;
         }
     }
 
