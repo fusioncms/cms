@@ -1,6 +1,6 @@
 <template>
     <ui-field-group
-        class="flex flex-wrap items-center"
+        class="form-group--toggle"
         :label="label"
         :name="name"
         :fieldId="formattedId"

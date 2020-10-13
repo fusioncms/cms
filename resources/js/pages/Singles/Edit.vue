@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="single-page">
         <portal to="title">
             <page-title :icon="single.icon || 'pencil-alt'" :subtitle="single.description">Edit {{ single.reference_singular }}</page-title>
         </portal>

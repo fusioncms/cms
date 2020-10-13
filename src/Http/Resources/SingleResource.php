@@ -18,9 +18,12 @@ class SingleResource extends JsonResource
         $resource = [
             'matrix'   => new MatrixResource($this->matrix),
             'single'   => [
-                'name'   => $this->name ?? $this->matrix->name,
-                'slug'   => $this->slug ?? $this->matrix->slug,
-                'status' => $this->status,
+                'name'       => $this->name ?? $this->matrix->name,
+                'slug'       => $this->slug ?? $this->matrix->slug,
+                'status'     => $this->status,
+
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at
             ],
         ];
 

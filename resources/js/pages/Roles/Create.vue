@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="roles-page">
         <portal to="title">
             <page-title icon="user-shield">Create Role</page-title>
         </portal>

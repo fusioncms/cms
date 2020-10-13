@@ -10,14 +10,30 @@
     &--sm,
     &--xs,
     &--xxs {
-        @apply tracking-wide leading-normal mb-4;
+        @apply text-gray-800 tracking-wide leading-normal mb-4;
     }
 
-    &--xl { font-size: rem(22px); }
+    &--xl { 
+        font-size: rem(18px); 
+        font-weight: 500;
 
-    &--lg { font-size: rem(20px); }
+        @screen sm {font-size: rem(22px); }
 
-    &--md { font-size: rem(17px); }
+    }
+
+    &--lg { 
+        font-size: rem(17px); 
+        font-weight: 500;
+
+        @screen md {font-size: rem(20px); }
+    }
+
+    &--md { 
+        font-size: rem(16px); 
+        font-weight: 500;
+
+        @screen lg { font-size: rem(17px); }
+    }
 
     &--sm {
         font-size: rem(16px);
@@ -34,6 +50,10 @@
         font-weight: 600;
         text-transform: uppercase;
     }
+}
+
+.caption {
+    @apply text-gray-600 text-sm leading-normal;
 }
 
 h1 { @extend .text-heading--xl; }

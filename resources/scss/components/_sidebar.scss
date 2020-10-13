@@ -1,0 +1,39 @@
+.sidebar {
+    width: 100%;
+    flex-shrink: 0;
+
+    @screen lg { width: $sidebar-width-desktop; }
+
+    .left-sidebar & {
+        @apply px-4;
+
+        @screen lg { @apply pl-4 pr-0; }
+
+        @screen xl { @apply pl-6; }
+    }
+
+    .right-sidebar & {
+        @apply px-4;
+
+        @screen lg { @apply pr-4 pl-0; }
+        
+        @screen xl { @apply pr-6; }
+    }
+
+    &__section {
+        @apply bg-white border-gray-300 border rounded py-2 px-4;
+    }
+
+    &__link {
+        @apply py-2 px-4 text-sm text-gray-700 items-center flex;
+
+        &:hover,
+        &:focus {
+            @apply text-gray-800 bg-gray-100;
+        }
+
+        &.is-active {
+            @apply bg-gray-200 text-gray-800;
+        }
+    }
+}

@@ -1,13 +1,63 @@
 <template>
-    <div class="matrix-page">
+    <div>
         <portal to="actions">
             <div class="buttons">
-                <ui-button :to="{ name: 'matrices' }" variant="secondary">Go Back</ui-button>
+                <ui-button v-if="$mq != 'sm'" :to="{ name: 'matrices' }" variant="secondary">Go Back</ui-button>
                 <ui-button type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
-        <section-card title="General Information" description="General information about your collection and what it manages.">
+        <portal to="sidebar-right">
+            <sidebar id="matrix-sidebar">
+                <sidebar-section id="matrix_panel_status" tabindex="-1">
+                    <ui-toggle
+                        id="matrix-status"
+                        name="status"
+                        label="Status"
+                        :help="form.status ? 'Toggle to disable this matrix.' : 'Toggle to enable this matrix.'"
+                        v-model="form.status"
+                        :true-value="1"
+                        :false-value="0">
+                    </ui-toggle>
+                </sidebar-section>
+
+                <sidebar-section id="matrix_panel_appearance" title="Appearance" description="Choose where to show this matrix and how to represent it." tabindex="-1">
+                    <ui-toggle
+                        id="matrix-sidebar-show"
+                        name="sidebar"
+                        label="Show in Sidebar"
+                        v-model="form.sidebar"
+                        :true-value="1"
+                        :false-value="0">
+                    </ui-toggle>
+
+                    <ui-toggle
+                        id="matrix-quicklink-show"
+                        name="quicklink"
+                        label="Show as Quicklink"
+                        v-model="form.quicklink"
+                        :true-value="1"
+                        :false-value="0">
+                    </ui-toggle>
+
+                    <icon-picker
+                        id="matrix-icon"
+                        name="icon"
+                        label="Icon"
+                        placeholder="Search icons..."
+                        help="Choose an icon that best represents your matrix."
+                        :has-error="form.errors.has('icon')"
+                        :error-message="form.errors.get('icon')"
+                        required
+                        v-model="form.icon">
+                    </icon-picker>
+                </sidebar-section>
+
+                <status-card v-if="matrix" :entry="matrix" id="matrix_panel_status_card" tabindex="-1"></status-card>
+            </sidebar>
+        </portal>
+
+        <section-card id="matrix_panel_general" title="General Information" description="General information about your collection and what it manages." tabindex="-1">
             <div class="row">
                 <div class="col w-full lg:w-1/2">
                     <ui-input-group
@@ -83,19 +133,9 @@
                 :error-message="form.errors.get('parent_id')"
                 v-model="form.parent_id">
             </ui-select-group>
-
-            <ui-toggle
-                id="matrix-status"
-                name="status"
-                label="Status"
-                :help="form.status ? 'Toggle to disable this matrix.' : 'Toggle to enable this matrix.'"
-                v-model="form.status"
-                :true-value="1"
-                :false-value="0">
-            </ui-toggle>
         </section-card>
 
-        <section-card title="Customizations" description="Configure the various customizations options.">
+        <section-card id="matrix_panel_customizations" title="Customizations" description="Configure the various customizations options." tabindex="-1">
             <ui-input-group
                 id="matrix-name-label"
                 name="name_label"
@@ -147,45 +187,14 @@
                 name="name_format"
                 label="Name Format"
                 help="What format would you like your generated names and slugs to follow?"
+                required
                 :has-error="form.errors.has('name_format')"
                 :error-message="form.errors.get('name_format')"
                 v-model="form.name_format">
             </ui-input-group>
         </section-card>
 
-        <section-card title="Appearance" description="Choose where to show this matrix and how to represent it.">
-            <icon-picker
-                id="matrix-icon"
-                name="icon"
-                label="Icon"
-                placeholder="Search icons..."
-                help="Choose an icon that best represents your matrix."
-                :has-error="form.errors.has('icon')"
-                :error-message="form.errors.get('icon')"
-                required
-                v-model="form.icon">
-            </icon-picker>
-
-            <ui-toggle
-                id="matrix-sidebar"
-                name="sidebar"
-                label="Show in Sidebar"
-                v-model="form.sidebar"
-                :true-value="1"
-                :false-value="0">
-            </ui-toggle>
-
-            <ui-toggle
-                id="matrix-quicklink"
-                name="quicklink"
-                label="Show as Quicklink"
-                v-model="form.quicklink"
-                :true-value="1"
-                :false-value="0">
-            </ui-toggle>
-        </section-card>
-
-        <section-card title="Routing" description="Configure how entries within the collection will be accessed on the frontend.">
+        <section-card id="matrix_panel_routing" title="Routing" description="Configure how entries within the collection will be accessed on the frontend." tabindex="-1">
             <ui-input-group
                 id="matrix-route"
                 name="route"
@@ -211,7 +220,7 @@
             </ui-input-group>
         </section-card>
 
-        <section-card title="Blueprint" description="Configure this matrix' blueprint.">
+        <section-card id="matrix_panel_blueprint" title="Blueprint" description="Configure this matrix' blueprint." tabindex="-1">
             <section-builder v-model="form.sections"></section-builder>
         </section-card>
     </div>

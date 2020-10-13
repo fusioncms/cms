@@ -7,8 +7,10 @@
 }
 
 .button {
-    @apply inline-block appearance-none bg-white border border-gray-300 rounded leading-normal text-gray-700 no-underline cursor-pointer px-3 py-2;
+    @apply text-sm inline-block appearance-none bg-white border border-gray-300 rounded leading-normal text-gray-700 no-underline cursor-pointer px-2 py-1;
     transition: all 0.2s $transition-effect;
+
+    @screen md { @apply text-base px-3 py-2; }
 
     * { pointer-events: none; }
 
@@ -41,12 +43,22 @@
     &--icon {
         @apply justify-center items-center flex;
 
-        width: rem(42px);
-        height: rem(42px);
+        width: rem(31px);
+        height: rem(31px);
+
+        @screen md {
+            width: rem(42px);
+            height: rem(42px);
+        }
 
         &.button--small {
-            width: rem(35px);
-            height: rem(35px);
+            width: rem(25px);
+            height: rem(25px);
+
+            @screen md {
+                width: rem(35px);
+                height: rem(35px);
+            }
         }
 
         &.button--large {

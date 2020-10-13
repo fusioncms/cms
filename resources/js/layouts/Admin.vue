@@ -1,107 +1,42 @@
 <template>
     <div class="layout-admin" :class="{'nav-active' : isNavOpen}">
-        <header class="header">
-            <div class="header__container relative">
-                <div class="header__toggle">
-                    <nav-toggle></nav-toggle>
-                </div>
+        <div class="layout-admin__wrapper">
+            <layout-header :greeting="greeting"></layout-header>
 
-                <div class="header__logo">
-                    <router-link to="/" class="nav-logo" @click.native="onClick()">
-                        <span class="nav-logo__image"></span>
-                        <span class="nav-logo__text">
-                            Fusion<span class="font-bold">CMS</span>
-                        </span>
-                    </router-link>
-                </div>
+            <nav-menu :active="isNavOpen" :greeting="greeting"></nav-menu>
 
-                <div class="header__account">
-                    <renderless-dropdown id="account-menu-button">
-                        <div class="dropdown dropdown--right" slot-scope="props" :class="{'dropdown--open': props.isOpen}" v-click-outside="props.close">
-                            <button class="nav-button nav-button--full" @click.prevent="props.toggle()">
-                                <mq-layout mq="xl+">
-                                    <span>{{ greeting }}, <strong>{{ $user.name }}</strong></span>
-                                </mq-layout>
-
-                                <mq-layout mq="xl+">
-                                    <fa-icon icon="chevron-down" class="hidden lg:inline-block fa-fw ml-2"></fa-icon>
-                                </mq-layout>
-
-                                <mq-layout :mq="['sm', 'md', 'lg']">
-                                    <span class="sr-only">User Menu</span>
-                                    <fa-icon icon="ellipsis-v" class="inline-block lg:hidden fa-fw fa-lg"></fa-icon>
-                                </mq-layout>
-                            </button>
-
-                            <div class="dropdown__menu">
-                                <mq-layout :mq="['sm', 'md', 'lg']">
-                                    <ui-dropdown-item>
-                                        <p class="mb-0">
-                                            {{ greeting }}, <strong>{{ $user.name }}</strong>
-                                        </p>
-                                    </ui-dropdown-item>
-                                </mq-layout>
-
-                                <ui-dropdown-link href="/" target="_blank" @click.native="onClick()">
-                                    <fa-icon icon="eye" class="icon"></fa-icon>
-                                    View website
-                                </ui-dropdown-link>
-
-                                <ui-dropdown-divider />
-
-                                <ui-dropdown-link :to="'/users/' + $user.id" @click.native="onClick()">
-                                    <fa-icon icon="id-card" class="icon"></fa-icon>
-                                    View Profile
-                                </ui-dropdown-link>
-
-                                <ui-dropdown-link :to="'/users/' + $user.id + '/edit'" @click.native="onClick()">
-                                    <fa-icon icon="user-cog" class="icon"></fa-icon>
-                                    Edit Profile
-                                </ui-dropdown-link>
-
-                                <ui-dropdown-divider />
-
-                                <ui-dropdown-link href="/logout">
-                                    <fa-icon icon="sign-out-alt" class="icon"></fa-icon>
-                                    Log out
-                                </ui-dropdown-link>
-                            </div>
-                        </div>
-                    </renderless-dropdown>
-                </div>
-            </div>
-        </header>
-
-        <nav-menu :active="isNavOpen" :greeting="greeting"></nav-menu>
-
-        <main id="main-content" class="main-content w-full flex-auto">
-            <!-- Content -->
-            <div class="main-content__container">
-                <div class="flex flex-row flex-wrap justify-between mb-6">
-                    <div class="main-content__header">
+            <main id="main-content" class="main-content">
+                <div class="main-content__header">
+                    <div class="main-content__title">
                         <portal-target name="title" slim></portal-target>
                     </div>
 
                     <div class="main-content__actions">
-                        <portal-target name="actions" multiple></portal-target>
+                        <portal-target name="actions" multiple slim></portal-target>
                     </div>
                 </div>
 
-                <div class="main-content__body">
-                    <slot></slot>
+                <div class="main-content__container">
+                    <div class="main-content__sidebar left-sidebar">
+                        <portal-target name="sidebar-left" multiple slim></portal-target>
+                    </div>
+
+                    <div class="main-content__body">
+                        <slot></slot>
+                    </div>
+
+                    <div class="main-content__sidebar right-sidebar">
+                        <portal-target name="sidebar-right" multiple slim></portal-target>
+                    </div>
                 </div>
+            </main>
 
-                <portal-target name="modals" multiple></portal-target>
-            </div>
-        </main>
+            <layout-footer :environment="environment" :version="version"></layout-footer>
 
-        <footer class="page-footer mt-auto">
-            <p class="mb-0">Built with <fa-icon :icon="['fas', 'heart']" class="text-primary-500"></fa-icon> & <fa-icon :icon="['fas', 'coffee']" class="text-gray-900"></fa-icon> by the efelle team</p>
-            <p class="mb-0"><span v-if="environment == 'local'">Local Dev Environment - </span>{{ version }}</p>
-        </footer>
-
-        <ui-toast></ui-toast>
-        <confirm-modal></confirm-modal>
+            <ui-toast></ui-toast>
+            <confirm-modal></confirm-modal>
+            <portal-target name="modals" multiple></portal-target>
+        </div>
     </div>
 </template>
 

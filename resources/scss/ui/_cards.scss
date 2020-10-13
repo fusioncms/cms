@@ -1,32 +1,29 @@
 .card {
-    @apply bg-white border border-gray-300 rounded relative mb-4;
+    @apply bg-white border rounded relative mb-4;
 
     @screen xl { @apply mb-6; }
+
+    &--dark {
+        @apply bg-gray-500 border-gray-500 text-white;
+    }
 
     &__body {
         @apply p-4;
         @extend %no-bottom;
-
-        .tab__list {
-            @apply -mx-6 px-6;
-        }
     }
 
     &__header {
-        @apply border-b border-gray-300 px-4 py-2;
+        @apply border-b px-4 py-2;
     }
 
     &__title { 
         @apply text-base m-0; 
     }
 
-    &__subtitle {
+    &__subtitle { @apply mb-0; }
+
+    &__subtitle,
+    &__text {
         @apply text-gray-600 leading-5 text-sm;
-    }
-
-    &--dark {
-        @apply text-gray-400 bg-gray-900;
-
-        .card__body, p { @apply text-gray-100; }
     }
 }
