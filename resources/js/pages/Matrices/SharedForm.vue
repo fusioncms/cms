@@ -1,5 +1,5 @@
 <template>
-    <div class="matrix-page">
+    <div>
         <portal to="actions">
             <div class="buttons">
                 <ui-button v-if="$mq != 'sm'" :to="{ name: 'matrices' }" variant="secondary">Go Back</ui-button>

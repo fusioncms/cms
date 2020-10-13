@@ -5,13 +5,13 @@
         </portal>
 
         <portal to="actions">
-            <ui-button key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
+            <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
             <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary" v-if="canEdit">Edit User</ui-button>
         </portal>
 
         <portal to="sidebar-right">
             <sidebar>
-                <status-card v-if="user" id="user_panel_status_card" :entry="user" user tabindex="-1"></status-card>
+                <status-card v-if="user" id="user_panel_status_card" :entry="user" :user="true" tabindex="-1"></status-card>
             </sidebar>
         </portal>
 

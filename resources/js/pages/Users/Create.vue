@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="user-page">
         <portal to="title">
             <page-title icon="user-alt">Create User</page-title>
         </portal>

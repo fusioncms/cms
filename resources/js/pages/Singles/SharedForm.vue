@@ -1,5 +1,5 @@
 <template>
-    <div class="single-page">
+    <div>
         <portal to="actions">
             <div class="buttons">
                 <ui-button v-if="$mq != 'sm'" :to="{ name: 'dashboard' }" variant="secondary">Go Back</ui-button>

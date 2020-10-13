@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="matrix-page">
         <portal to="title">
             <page-title icon="layer-group">Create Matrix</page-title>
         </portal>

@@ -1,22 +1,19 @@
 <template>
     <div class="roles-page">
         <portal to="title">
-            <page-title icon="user-shield">Role - {{ role.name }}</page-title>
+            <page-title icon="user-shield" :subtitle="role.description">Role - {{ role.name }}</page-title>
         </portal>
 
         <portal to="actions">
-            <ui-button key="go-back-btn" :to="{ name: 'roles' }" variant="secondary">Go Back</ui-button>
+            <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'roles' }" variant="secondary">Go Back</ui-button>
             <ui-button v-if="canEdit" key="edit-role-btn" :to="{ name: 'roles.edit', params: {role: role.id} }" variant="primary">Edit Role</ui-button>
         </portal>
 
-        <section-card id="roles_panel_general" :title="role.name" :description="role.description" tabindex="-1">
-            <dl class="detail-list">
-                <dt>Created</dt>
-                <dd>{{ $moment(role.created_at).format('Y-MM-DD @ h:mm:ss a') }}</dd>
-                <dt>Last Updated</dt>
-                <dd>{{ $moment(role.updated_at).format('Y-MM-DD @ h:mm:ss a') }}</dd>
-            </dl>
-        </section-card>
+        <portal to="sidebar-right">
+            <sidebar>
+                <status-card id="role_panel_status_card" :entry="role" tabindex="-1"></status-card>
+            </sidebar>
+        </portal>
 
         <section-card id="roles_panel_permissions" :title="role.name + ' Permissions'" description="Current permissions assigned to this role." tabindex="-1">
             <!-- <ui-table ref="permissions" id="permissions" endpoint="/datatable/permissions" sort-by="name" no-actions key="permissions-table" show-page-status show-page-numbers show-page-nav show-page-ends>
@@ -28,6 +25,7 @@
                     <p>{{ table.record.description }}</p>
                 </template>
             </ui-table> -->
+            <p>Permissions list coming soon...</p>
         </section-card>
 
         <section-card id="roles_panel_users" :grid="false" title="Assigned Users" description="Users currently assigned to this role." tabindex="-1">

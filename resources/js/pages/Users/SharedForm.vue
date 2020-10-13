@@ -1,5 +1,5 @@
 <template>
-    <div class="user-page">
+    <div>
         <portal to="actions">
             <div class="buttons">
                 <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>

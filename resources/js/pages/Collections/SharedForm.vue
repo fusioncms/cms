@@ -1,9 +1,8 @@
 <template>
-    <div class="collection-page">
+    <div>
         <portal to="actions">
             <div class="buttons">
                 <ui-button v-if="collection.slug && $mq != 'sm'" :to="{ name: 'collection.index', params: {collection: collection.slug} }" variant="secondary">Go Back</ui-button>
-
                 <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>

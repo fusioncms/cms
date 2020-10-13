@@ -1,7 +1,7 @@
 <template>
-    <ui-card v-if="grid" class="section-card">
-        <ui-card-body class="card-col">
-            <div class="section-card__header card-col__header">
+    <ui-card class="section-card">
+        <ui-card-body :class="{ 'card-col': grid }">
+            <div class="section-card__header" :class="{ 'card-col__header': grid }">
                 <h2 v-if="title" class="mb-0">{{ title }}</h2>
 
                 <p v-if="description" class="section-card__text">
@@ -9,23 +9,7 @@
                 </p>
             </div>
 
-            <div class="section-card__body card-col__body">
-                <slot></slot>
-            </div>
-        </ui-card-body>
-    </ui-card>
-
-    <ui-card v-else class="section-card">
-        <ui-card-body>
-            <div class="section-card__header">
-                <h2 v-if="title" class="mb-0">{{ title }}</h2>
-
-                <p v-if="description" class="section-card__text">
-                    {{ description }}
-                </p>
-            </div>
-
-            <div class="section-card__body">
+            <div class="section-card__body" :class="{ 'card-col__body': grid }">
                 <slot></slot>
             </div>
         </ui-card-body>
