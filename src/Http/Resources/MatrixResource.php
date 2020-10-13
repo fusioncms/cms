@@ -50,7 +50,7 @@ class MatrixResource extends JsonResource
             'children'           => MatrixResource::collection($this->whenLoaded('children')),
 
             'created_at'         => $this->created_at,
-            'updated_at'         => $this->updated_at
+            'updated_at'         => $this->updated_at,
         ];
 
         return $resource;
