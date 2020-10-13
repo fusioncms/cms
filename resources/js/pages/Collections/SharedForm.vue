@@ -9,8 +9,8 @@
         </portal>
 
         <portal to="sidebar-right">
-            <sidebar v-if="collection" id="collection_panel_status">
-                <sidebar-section>
+            <sidebar v-if="collection" id="collection-sidebar">
+                <sidebar-section id="collection_panel_status" tabindex="-1">
                     <ui-toggle
                         name="status"
                         label="Status"
@@ -33,11 +33,11 @@
                     </component>
                 </sidebar-section>
 
-                <status-card v-if="entry" id="collection_panel_status_card" :entry="entry"></status-card>
+                <status-card v-if="entry" id="collection_panel_status_card" :entry="entry" tabindex="-1"></status-card>
             </sidebar>
         </portal>
 
-        <ui-card v-if="collection.show_name_field" :id="'collection_panel_' + single.handle" tabindex="-1">
+        <ui-card v-if="collection.show_name_field" :id="'collection_panel_' + collection.handle" tabindex="-1">
             <ui-card-body>
                 <ui-title-group
                     class="mb-0"

@@ -15,14 +15,16 @@
 .status-card {
     @apply text-gray-600 leading-5 text-sm;
 
-    &__status {
-        @apply flex items-center;
-    }
+    &__item {
+        @apply mb-2;
 
-    &__date {
         span {
             display: block;
             font-weight: bold;
+        }
+
+        &--inline {
+            @apply flex items-center;
         }
     }
 }

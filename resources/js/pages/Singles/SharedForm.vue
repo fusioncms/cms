@@ -2,14 +2,14 @@
     <div class="single-page">
         <portal to="actions">
             <div class="buttons">
-                <ui-button :to="{ name: 'dashboard' }" variant="secondary">Go Back</ui-button>
+                <ui-button v-if="$mq != 'sm'" :to="{ name: 'dashboard' }" variant="secondary">Go Back</ui-button>
                 <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
         <portal to="sidebar-right">
-            <sidebar v-if="single">
-                <sidebar-section id="single_panel_status">
+            <sidebar v-if="single" id="single-sidebar">
+                <sidebar-section id="single_panel_status" tabindex="-1">
                     <ui-toggle
                         name="status"
                         label="Status"
@@ -32,7 +32,7 @@
                     </component>
                 </sidebar-section>
 
-                <status-card v-if="entry" :entry="entry" id="single_panel_status_card"></status-card>
+                <status-card v-if="entry" :entry="entry" id="single_panel_status_card" tabindex="-1"></status-card>
             </sidebar>
         </portal>
 
