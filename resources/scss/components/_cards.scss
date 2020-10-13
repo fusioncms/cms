@@ -16,16 +16,15 @@
     @apply text-gray-600 leading-5 text-sm;
 
     &__item {
-        @apply mb-2;
-
-        span {
-            display: block;
-            font-weight: bold;
-        }
+        @apply mb-3;
 
         &--inline {
             @apply flex items-center;
         }
+    }
+
+    &__label {
+        @apply block mr-3 font-bold;
     }
 }
 
