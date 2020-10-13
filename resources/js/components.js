@@ -30,7 +30,6 @@ Vue.component('section-card', require('@/components/Cards/SectionCard').default)
 Vue.component('select-directory-modal', require('@/components/Modals/SelectDirectoryModal').default)
 Vue.component('settings-modal', require('@/components/Modals/SettingsModal').default)
 Vue.component('sidebar', require('@/components/Sidebar/Sidebar').default)
-Vue.component('sidebar-link', require('@/components/Sidebar/SidebarLink').default)
 Vue.component('sidebar-section', require('@/components/Sidebar/SidebarSection').default)
 Vue.component('status-card', require('@/components/Cards/StatusCard').default)
 

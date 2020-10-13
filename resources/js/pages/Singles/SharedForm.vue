@@ -7,7 +7,36 @@
             </div>
         </portal>
 
-        <ui-card>
+        <portal to="sidebar-right">
+            <sidebar v-if="single">
+                <sidebar-section id="single_panel_status">
+                    <ui-toggle
+                        name="status"
+                        label="Status"
+                        :help="form.status ? 'Toggle to disable this entry.' : 'Toggle to enable this entry.'"
+                        v-model="form.status"
+                        :true-value="1"
+                        :false-value="0">
+                    </ui-toggle>
+                </sidebar-section>
+
+                <sidebar-section v-for="(section) in sections.sidebar" :key="section.handle" :id="'single_panel_' + section.handle" :title="section.name" :description="section.description" tabindex="-1">
+                    <component
+                        v-for="field in section.fields"
+                        :key="field.handle"
+                        :is="field.type.id + '-fieldtype'"
+                        :field="field"
+                        :has-error="form.errors.has(field.handle)"
+                        :error-message="form.errors.get(field.handle)"
+                        v-model="form[field.handle]">
+                    </component>
+                </sidebar-section>
+
+                <status-card v-if="entry" :entry="entry" id="single_panel_status_card"></status-card>
+            </sidebar>
+        </portal>
+
+        <ui-card v-if="single.show_name_field" :id="'single_panel_' + single.handle" tabindex="-1">
             <ui-card-body>
                 <ui-title-group
                     class="mb-0"
@@ -69,45 +98,12 @@
             </ui-card-body>
         </ui-card>
 
-        <section-card v-for="section in sections.body" :key="section.handle" :title="section.name" :description="section.description">
+        <section-card v-for="section in sections.body" :key="section.handle" :id="'single_panel_' + section.handle" :title="section.name" :description="section.description" tabindex="-1">
             <component v-for="field in section.fields"
                 :key="field.handle"
                 :is="field.type.id + '-fieldtype'"
                 :field="field"
                 :errors="form.errors"
-                v-model="form[field.handle]">
-            </component>
-        </section-card>
-
-        <section-card title="Settings" description="Settings and configurations for this entry.">
-            <ui-toggle
-                name="status"
-                label="Status"
-                :help="form.status ? 'Toggle to disable this entry.' : 'Toggle to enable this entry.'"
-                v-model="form.status"
-                :true-value="1"
-                :false-value="0">
-            </ui-toggle>
-
-            <hr v-if="entry">
-
-            <dl v-if="entry" class="detail-list">
-                <dt>Created</dt>
-                <dd><ui-datetime :timestamp="entry.created_at"></ui-datetime></dd>
-
-                <dt>Last Updated</dt>
-                <dd><ui-datetime :timestamp="entry.updated_at"></ui-datetime></dd>
-            </dl>
-        </section-card>
-
-        <section-card v-for="(section) in sections.sidebar" :key="section.handle" :title="section.name" :description="section.description">
-            <component
-                v-for="field in section.fields"
-                :key="field.handle"
-                :is="field.type.id + '-fieldtype'"
-                :field="field"
-                :has-error="form.errors.has(field.handle)"
-                :error-message="form.errors.get(field.handle)"
                 v-model="form[field.handle]">
             </component>
         </section-card>

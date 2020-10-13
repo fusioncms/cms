@@ -9,7 +9,7 @@
         </portal>
 
         <portal to="sidebar-right">
-            <sidebar v-if="collection">
+            <sidebar v-if="collection" id="collection_panel_status">
                 <sidebar-section>
                     <ui-toggle
                         name="status"
@@ -21,7 +21,7 @@
                     </ui-toggle>
                 </sidebar-section>
 
-                <sidebar-section v-for="(section) in sections.sidebar" :key="section.handle" :title="section.name" :description="section.description">
+                <sidebar-section v-for="(section) in sections.sidebar" :key="section.handle" :id="'collection_panel_' + section.handle" :title="section.name" :description="section.description" tabindex="-1">
                     <component
                         v-for="field in section.fields"
                         :key="field.handle"
@@ -33,12 +33,11 @@
                     </component>
                 </sidebar-section>
 
-                <status-card v-if="entry" :entry="entry">
-                </status-card>
+                <status-card v-if="entry" id="collection_panel_status_card" :entry="entry"></status-card>
             </sidebar>
         </portal>
 
-        <ui-card :id="collection.handle + '_name_panel'" v-if="collection.show_name_field" tabindex="-1">
+        <ui-card v-if="collection.show_name_field" :id="'collection_panel_' + single.handle" tabindex="-1">
             <ui-card-body>
                 <ui-title-group
                     class="mb-0"
@@ -101,7 +100,7 @@
             </ui-card-body>
         </ui-card>
 
-        <section-card v-for="section in sections.body" :key="section.handle" :id="section.handle + '_panel'" :title="section.name" :description="section.description" tabindex="-1">
+        <section-card v-for="section in sections.body" :key="section.handle" :id="'collection_panel_' + section.handle" :title="section.name" :description="section.description" tabindex="-1">
             <component v-for="field in section.fields"
                 :key="field.handle"
                 :is="field.type.id + '-fieldtype'"
