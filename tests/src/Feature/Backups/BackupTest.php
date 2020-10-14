@@ -9,15 +9,15 @@ use Fusion\Jobs\Backups\Backup\BackupRun;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 
 class BackupTest extends TestBase
 {
 	// ------------------------------------------------
-    // VIEW ALL BACKUPS
+    // VIEW ALL
     // ------------------------------------------------
 
 	/**
@@ -49,8 +49,21 @@ class BackupTest extends TestBase
             ->json('GET', '/api/backups');
     }
 
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     */
+    public function a_guest_cannot_view_any_backups()
+    {
+        $this->expectException(AuthenticationException::class);
+
+        $this->json('GET', '/api/backups');
+    }
+
     // ------------------------------------------------
-    // VIEW BACKUPS
+    // VIEW
     // ------------------------------------------------
 
     /**
@@ -61,11 +74,11 @@ class BackupTest extends TestBase
      */
     public function a_user_with_permission_can_view_a_backup()
     {
-        $backup = $this->newBackup();
+        $backups = $this->newBackup();
 
         $this
             ->be($this->owner, 'api')
-            ->json('GET', "/api/backups/{$backup->id}")
+            ->json('GET', "/api/backups/{$backups->first()->id}")
             ->assertStatus(200);
     }
 
@@ -79,15 +92,15 @@ class BackupTest extends TestBase
     {
         $this->expectException(AuthorizationException::class);
 
-        $backup = $this->newBackup();
+        $backups = $this->newBackup();
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', "/api/backups/{$backup->id}");
+            ->json('GET', "/api/backups/{$backups->first()->id}");
     }
 
     // ------------------------------------------------
-    // CREATE BACKUPS
+    // CREATE
     // ------------------------------------------------
 
     /**
@@ -96,16 +109,16 @@ class BackupTest extends TestBase
      * @group feature
      * @group backups
      */
-    public function a_user_with_permission_can_create_a_backup()
+    public function newly_created_backup_will_be_pushed_to_queue()
     {
-        Bus::fake();
+        Queue::fake();
 
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/backups')
-            ->assertStatus(200);
+            ->assertOk();
 
-        Bus::assertDispatched(BackupRun::class);
+        Queue::assertPushedOn('backups', BackupRun::class);
     }
 
     /**
@@ -118,9 +131,7 @@ class BackupTest extends TestBase
     {
         Event::fake([Started::class, Finished::class]);
 
-        $this
-            ->be($this->owner, 'api')
-            ->json('POST', '/api/backups');
+        $backups = $this->newBackup();
 
         Event::assertDispatched(Started::class);
         Event::assertDispatched(Finished::class);
@@ -132,11 +143,28 @@ class BackupTest extends TestBase
      * @group feature
      * @group backups
      */
-    public function newly_created_backup_zip_will_be_created()
+    public function newly_created_backup_will_generate_zip_file()
     {
-    	$backup = $this->newBackup();
+    	$backups = $this->newBackup();
 
-    	Storage::disk('public')->assertExists($backup->location);
+        foreach ($backups as $backup) {
+            Storage::disk($backup->disk)->assertExists($backup->location);
+        }
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     */
+    public function newly_created_backups_will_generate_log_file()
+    {
+        $backups = $this->newBackup();
+
+        foreach ($backups as $backup) {
+            Storage::disk($backup->disk)->assertExists($backup->log_path);
+        }
     }
 
     /**
@@ -147,14 +175,16 @@ class BackupTest extends TestBase
      */
     public function newly_created_backup_will_be_recorded_in_database()
     {
-		$backup = $this->newBackup('test-backup');
+        $name    = 'test-backup';
+        $disks   = config('backup.backup.destination.disks');
+		$backups = $this->newBackup($name);
 
-		foreach (config('backup.backup.destination.disks') as $disk) {
+		foreach ($disks as $disk) {
 			$this->assertDatabaseHas('backups', [
-				'name'     => 'test-backup',
+				'name'     => $name,
 				'disk'     => $disk,
-                'state'    => Backup::SUCCESS,
-                'location' => config('backup.backup.name').'/test-backup.zip',
+                'location' => "backups/{$name}.zip",
+                'log_path' => "logs/backups/{$name}.log",
 			]);
 		}
     }
@@ -167,13 +197,13 @@ class BackupTest extends TestBase
      */
     public function a_guest_cannot_not_create_a_backup()
     {
-        Bus::fake();
+        Queue::fake();
 
         $this->expectException(AuthenticationException::class);
 
         $this->json('POST', '/api/backups', []);
 
-        Bus::assertNotDispatched(BackupRun::class);
+        Queue::assertNotPushed(BackupRun::class);
     }
 
     /**
@@ -184,7 +214,7 @@ class BackupTest extends TestBase
      */
     public function a_user_without_permission_cannot_create_new_backups()
     {
-    	Bus::fake();
+    	Queue::fake();
 
         $this->expectException(AuthorizationException::class);
 
@@ -192,7 +222,7 @@ class BackupTest extends TestBase
             ->be($this->user, 'api')
             ->json('POST', '/api/backups', []);
 
-        Bus::assertNotDispatched(BackupRun::class);
+        Queue::assertNotPushed(BackupRun::class);
     }
 
     // ------------------------------------------------
@@ -205,34 +235,14 @@ class BackupTest extends TestBase
      * @group feature
      * @group backups
      */
-    public function deleted_backup_will_be_removed_from_storage()
+    public function a_user_with_permission_can_delete_a_backup()
     {
-    	$backup = $this->newBackup();
+        list($b1, $b2) = $this->newBackup()->take(2);
 
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', "/api/backups/{$backup->id}")
+            ->json('DELETE', "/api/backups/{$b1->id}")
             ->assertStatus(200);
-
-        Storage::disk($backup->disk)->assertMissing($backup->location);
-    }
-
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
-    public function deleted_backup_will_be_removed_from_database()
-    {
-		$backup = $this->newBackup();
-
-    	$this
-            ->be($this->owner, 'api')
-            ->json('DELETE', "/api/backups/{$backup->id}")
-            ->assertStatus(200);
-
-		$this->assertDatabaseMissing('backups', ['id' => $backup->id]);
     }
 
     /**
@@ -245,11 +255,80 @@ class BackupTest extends TestBase
     {
         $this->expectException(AuthorizationException::class);
 
-        $backup = $this->newBackup();
+        list($b1, $b2) = $this->newBackup()->take(2);
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', "/api/backups/{$backup->id}");
+            ->json('DELETE', "/api/backups/{$b1->id}");
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     */
+    public function a_guest_cannot_not_delete_a_backup()
+    {
+        $this->expectException(AuthenticationException::class);
+
+        list($b1, $b2) = $this->newBackup()->take(2);
+
+        $this->json('DELETE', "/api/backups/{$b1->id}");
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     */
+    public function deleted_backup_will_clean_up_backup_zip_file()
+    {
+    	list($b1, $b2) = $this->newBackup()->take(2);
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('DELETE', "/api/backups/{$b1->id}");
+
+        Storage::disk($b1->disk)->assertMissing($b1->location);
+        Storage::disk($b2->disk)->assertExists($b2->location);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     */
+    public function deleted_backup_will_clean_up_log_file()
+    {
+        list($b1, $b2) = $this->newBackup()->take(2);
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('DELETE', "/api/backups/{$b1->id}");
+
+        Storage::disk($b1->disk)->assertMissing($b1->log_path);
+        Storage::disk($b2->disk)->assertExists($b2->log_path);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     */
+    public function deleted_backup_will_be_removed_from_database()
+    {
+		list($b1, $b2) = $this->newBackup()->take(2);
+
+    	$this
+            ->be($this->owner, 'api')
+            ->json('DELETE', "/api/backups/{$b1->id}");
+
+		$this->assertDatabaseMissing('backups', ['id' => $b1->id]);
+        $this->assertDatabaseHas('backups', ['id' => $b2->id]);
     }
 
     // ------------------------------------------------
@@ -264,7 +343,7 @@ class BackupTest extends TestBase
      */
     public function backup_zip_will_save_env_variables_from_config()
     {
-    	$backup    = $this->newBackup();
+    	$backup     = $this->newBackup('test-backup', 'public')->first();
         $zipArchive = new ZipArchive();
 
         $envFile = 'fusion-dumps/env.json';
@@ -287,7 +366,7 @@ class BackupTest extends TestBase
      */
     public function backup_zip_will_save_files_included_in_config()
     {
-    	$backup    = $this->newBackup();
+    	$backup     = $this->newBackup('test-backup', 'public')->first();
         $zipArchive = new ZipArchive();
 
         $file1 = Storage::disk($backup->disk)->path('files/testing-file1.txt');
@@ -312,7 +391,7 @@ class BackupTest extends TestBase
      */
     public function backup_zip_will_save_database_dumps_in_config()
     {
-    	$backup    = $this->newBackup();
+    	$backup     = $this->newBackup('test-backup', 'public')->first();
         $zipArchive = new ZipArchive();
 
         $dbDump = 'db-dumps/sqlite-sqlite-database.sql';

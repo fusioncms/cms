@@ -4,12 +4,15 @@ namespace Fusion\Jobs\Backups\Backup;
 
 use Carbon\Carbon;
 use Exception;
-use Fusion\Events\Backups\Backup;
+use Fusion\Events\Backups\Backup\Started as BackupStarted;
+use Fusion\Events\Backups\Backup\Finished as BackupFinished;
+use Fusion\Models\Backup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class BackupRun implements ShouldQueue
@@ -17,14 +20,19 @@ class BackupRun implements ShouldQueue
     use Dispatchable;
     use Queueable;
 
-    public const FILENAME_FORMAT = 'Y-m-d-H-i-s';
-
     /**
      * Backup identifier.
      * 
      * @var string
      */
-    public $filename;
+    public $name;
+
+    /**
+     * Backup command options.
+     * 
+     * @var array
+     */
+    public $options;
 
     /**
      * Backup disks.
@@ -34,15 +42,15 @@ class BackupRun implements ShouldQueue
     public $disks;
 
     /**
-     * Constructor.
+     * Creates new instance.
      *
-     * @param string $filename
-     * @param string $disk
+     * @param mixed  $name - backup identifier
+     * @param string $disk - specific disk|all
      */
-    public function __construct($filename = null)
+    public function __construct($name = null, $disk = null)
     {
-        $this->filename = Str::finish($filename ?? Carbon::now()->format(static::FILENAME_FORMAT), '.zip');
-        $this->disks    = config('backup.backup.destination.disks');
+        $this->name = Str::finish($name ?? Carbon::now()->format(Backup::FILENAME_FORMAT), '.zip');
+        $this->disk = $disk;
     }
 
     /**
@@ -52,21 +60,20 @@ class BackupRun implements ShouldQueue
      */
     public function handle()
     {
-        event(new Backup\Started(
-            $this->filename, $this->disks));
-
+        event(new BackupStarted($this->name,
+            $this->backupDestinationDisks()));
         // --
 
         Artisan::call('backup:run', [
-            '--filename'       => $this->filename,
+            '--filename'       => $this->name,
+            '--only-to-disk'   => $this->disk,
             '--no-interaction' => true,
             '--quiet'          => true,
         ]);
 
         // --
-        
-        event(new Backup\Finished(
-            $this->filename, $this->disks));
+        event(new BackupFinished($this->name,
+            $this->backupDestinationDisks()));
     }
 
     /**
@@ -79,5 +86,19 @@ class BackupRun implements ShouldQueue
     public function failed(Exception $exception)
     {
         Log::error('There was an error trying to backup FusionCMS: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
+    }
+
+    /**
+     * Backup destination disks.
+     * 
+     * @return array
+     */
+    private function backupDestinationDisks()
+    {
+        if (is_null($this->disk)) {
+            return config('backup.backup.destination.disks');
+        }
+
+        return Arr::wrap($this->disk);
     }
 }

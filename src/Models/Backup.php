@@ -9,10 +9,19 @@ class Backup extends Model
 {
     /**
      * Backup states. 
+     *
+     * @var string
      */
     public const SUCCESS      = 'success';
     public const FAILURE      = 'failure';
     public const IN_PROGRESS  = 'in-progress';
+
+    /**
+     * File name format.
+     * 
+     * @var string
+     */
+    public const FILENAME_FORMAT = 'Y-m-d-H-i-s';
 
     /**
      * The attributes that are fillable via mass assignment.

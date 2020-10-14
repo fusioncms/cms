@@ -24,18 +24,17 @@ class BackupEventSubscriber
     public function handleBackupStarted($event)
     {
         $name = basename($event->filename, '.zip');
-        $path = "logs/backups/{$name}.log";
 
         foreach ($event->disks as $disk) {
             $backup = Backup::create([
                 'name'     => $name,
                 'disk'     => $disk,
                 'state'    => Backup::IN_PROGRESS,
-                'log_path' => $path,
+                'log_path' => ($path = "logs/backups/{$name}.log"),
             ]);
 
             $this
-                ->logToFile($path)
+                ->logToFile($path, $disk)
                 ->info('Backup Started.', $backup->toArray());
         }
     }
@@ -57,7 +56,7 @@ class BackupEventSubscriber
                 $backup->update(['state' => Backup::FAILURE]);
 
                 $this
-                    ->logToFile($backup->log_path)
+                    ->logToFile($backup->log_path, $disk)
                     ->info('Backup has failed.', $backup->toArray());
             }
         }
@@ -84,7 +83,7 @@ class BackupEventSubscriber
         ]);
 
         $this
-            ->logToFile($backup->log_path)
+            ->logToFile($backup->log_path, $disk)
             ->info('Backup was successful.', $backup->toArray());
     }
 

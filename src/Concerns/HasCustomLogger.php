@@ -14,21 +14,23 @@ trait HasCustomLogger
     /**
      * Custom log file instance.
      *
-     * @param string $path
+     * @param string $file
+     * @param mixed  $disk
      *
      * @return Monolog\Logger
      */
-    protected function logToFile($path)
+    protected function logToFile($file, $disk = null)
     {
-        $fullpath = Storage::path($path);
+        $disk     = $disk ?? config('filesystems.default');
+        $fullPath = Storage::disk($disk)->path($file);
 
         File::ensureDirectoryExists(
-            File::dirname($fullpath));
+            File::dirname($fullPath));
 
-        $stream = new StreamHandler($fullpath);
+        $stream = new StreamHandler($fullPath);
         $stream->setFormatter(new JsonFormatter());
 
         return new Logger(
-            File::basename($fullpath), [$stream]);
+            File::basename($fullPath), [$stream]);
     }
 }

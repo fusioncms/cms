@@ -2,10 +2,12 @@
 
 namespace Fusion\Tests\Feature\Backups;
 
+use Carbon\Carbon;
 use Fusion\Tests\TestCase;
 use Fusion\Models\Backup;
 use Fusion\Jobs\Backups\Backup\BackupRun;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Backup\Events\BackupWasSuccessful;
@@ -33,11 +35,11 @@ class TestBase extends TestCase
         // Establish backup `backup-temp`..
         config([
             'backup.backup.temporary_directory' =>
-                Storage::disk('public')->path('app/backup-temp')
+                Storage::disk('public')->path('backup-temp')
         ]);
 
         // Establish backup destination disks
-        config(['backup.backup.destination.disks' => ['public']]);
+        config(['backup.backup.destination.disks' => ['public','temp']]);
 
         // Establish backup source env variables
         config(['backup.backup.source.env' => ['APP_KEY']]);
@@ -53,17 +55,20 @@ class TestBase extends TestCase
     }
 
     /**
-     * Run backup, return backup.
+     * Run backup, return backup(s).
      * [Helper].
      *
      * @param  string $name
+     * @param  string $disk
      * 
-     * @return void
+     * @return Collection
      */
-    protected function newBackup($name = null)
+    protected function newBackup($name = null, $disk = null)
     {
-        (new BackupRun($name))->handle();
+        $name = $name ?? Carbon::now()->format(Backup::FILENAME_FORMAT);
 
-        return Backup::latest()->first();
+        (new BackupRun($name, $disk))->handle();
+
+        return Backup::where(['name' => $name])->get();
     }
 }
