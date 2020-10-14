@@ -14,6 +14,10 @@ Vue.component('error-layout', require('@/layouts/Error').default)
 
 // Components
 Vue.component('app', require('@/components/App').default)
+Vue.component('blueprint', require('@/components/Blueprints/Blueprint').default)
+Vue.component('blueprint-area', require('@/components/Blueprints/BlueprintArea').default)
+Vue.component('blueprint-editor', require('@/components/Blueprints/BlueprintEditor').default)
+Vue.component('blueprint-section', require('@/components/Blueprints/BlueprintSection').default)
 Vue.component('confirm-modal', require('@/components/Modals/ConfirmModal').default)
 Vue.component('edit-directory-modal', require('@/components/Modals/EditDirectoryModal').default) // TODO
 Vue.component('fieldtype-picker', require('@/components/FieldtypePicker').default)

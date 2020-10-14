@@ -1,0 +1,9 @@
+.blueprint {
+    @apply mb-6;
+}
+
+.blueprint-area {
+    &__btn {
+        @apply w-full;
+    }
+}

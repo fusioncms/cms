@@ -220,8 +220,8 @@
             </ui-input-group>
         </section-card>
 
-        <section-card id="matrix_panel_blueprint" title="Blueprint" description="Configure this matrix' blueprint." tabindex="-1">
-            <section-builder v-model="form.sections"></section-builder>
+        <section-card id="matrix_panel_blueprint" :grid="false" title="Blueprint" description="Configure this matrix' blueprint." tabindex="-1">
+            <blueprint v-model="form.sections"></blueprint>
         </section-card>
     </div>
 </template>
