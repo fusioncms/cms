@@ -24,6 +24,7 @@ class Backup extends Model
         'disk',
         'size',
         'location',
+        'log_path',
         'state'
     ];
 

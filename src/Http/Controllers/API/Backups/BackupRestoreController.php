@@ -3,7 +3,7 @@
 namespace Fusion\Http\Controllers\API\Backups;
 
 use Fusion\Http\Controllers\Controller;
-use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Jobs\Backups\Backup\BackupRun;
 use Fusion\Jobs\Backups\RestoreFromBackup;
 use Fusion\Models\Backup;
 use Illuminate\Http\Request;

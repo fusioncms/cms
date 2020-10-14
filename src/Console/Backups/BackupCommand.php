@@ -2,7 +2,7 @@
 
 namespace Fusion\Console\Backups;
 
-use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Jobs\Backups\Backup\BackupRun;
 use Illuminate\Console\Command;
 
 class BackupCommand extends Command

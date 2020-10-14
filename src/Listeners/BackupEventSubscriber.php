@@ -3,12 +3,15 @@
 namespace Fusion\Listeners;
 
 use Carbon\Carbon;
+use Fusion\Concerns\HasCustomLogger;
 use Fusion\Models\Backup;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 
 class BackupEventSubscriber
 {
+    use HasCustomLogger;
+
     // ------------------------------------------------
     // BACKUP
     // ------------------------------------------------
@@ -20,17 +23,19 @@ class BackupEventSubscriber
      */
     public function handleBackupStarted($event)
     {
-        $disks    = is_null($event->disks) ? config('backup.backup.destination.disks') : [$event->disks];
-        $filename = basename($event->filename, '.zip');
+        $name = basename($event->filename, '.zip');
+        $path = "logs/backups/{$name}.log";
 
-        foreach ($disks as $disk) {
+        foreach ($event->disks as $disk) {
             $backup = Backup::create([
-                'name'  => $filename,
-                'disk'  => $disk,
-                'state' => Backup::IN_PROGRESS,
+                'name'     => $name,
+                'disk'     => $disk,
+                'state'    => Backup::IN_PROGRESS,
+                'log_path' => $path,
             ]);
 
-            Log::channel('backups')
+            $this
+                ->logToFile($path)
                 ->info('Backup Started.', $backup->toArray());
         }
     }
@@ -42,21 +47,19 @@ class BackupEventSubscriber
      */
     public function handleBackupFinished($event)
     {
-        $disks    = is_null($event->disks) ? config('backup.backup.destination.disks') : [$event->disks];
-        $filename = basename($event->filename, '.zip');
-
-        foreach ($disks as $disk) {
-            $backup = Backup::firstOrCreate([
-                'name' => $filename,
+        foreach ($event->disks as $disk) {
+            $backup = Backup::where([
+                'name' => basename($event->filename, '.zip'),
                 'disk' => $disk
-            ]);
+            ])->firstOrFail();
 
             if ($backup->state == Backup::IN_PROGRESS) {
                 $backup->update(['state' => Backup::FAILURE]);
-            }
 
-            Log::channel('backups')
-                ->info('Backup Finished.', $backup->fresh()->toArray());
+                $this
+                    ->logToFile($backup->log_path)
+                    ->info('Backup has failed.', $backup->toArray());
+            }
         }
     }
 
@@ -68,13 +71,11 @@ class BackupEventSubscriber
     public function handleBackupSuccessful($event)
     {
         $newestBackup = $event->backupDestination->newestBackup();
-        $filename     = basename($newestBackup->path(), '.zip');
-        $diskName     = $event->backupDestination->diskName();
 
-        $backup = Backup::updateOrCreate([
-            'name' => $filename,
-            'disk' => $diskName,
-        ]);
+        $backup = Backup::where([
+            'name' => basename($newestBackup->path(), '.zip'),
+            'disk' => $event->backupDestination->diskName()
+        ])->firstOrFail();
 
         $backup->update([
             'size'     => $newestBackup->size(),
@@ -82,8 +83,9 @@ class BackupEventSubscriber
             'state'    => Backup::SUCCESS,
         ]);
 
-        Log::channel('backups')
-            ->info('Backup Successful.', $backup->toArray());
+        $this
+            ->logToFile($backup->log_path)
+            ->info('Backup was successful.', $backup->toArray());
     }
 
     /**
@@ -93,7 +95,7 @@ class BackupEventSubscriber
      */
     public function handleBackupFailed($event)
     {
-        Log::channel('backups')->error('Backup Failed.', [
+        Log::error('Backup has failed.', [
             'disk'    => optional($event->backupDestination)->diskName(),
             'message' => $event->exception->getMessage(),
         ]);
@@ -142,7 +144,7 @@ class BackupEventSubscriber
      */
     public function handleCleanupSuccessful($event)
     {
-        Log::channel('backups')->error('Cleanup Successful.', [
+        Log::info('Backup cleanup was successfully.', [
             'disk'        => $event->backupDestination->diskName(),
             'usedStorage' => $event->backupDestination->usedStorage(),
         ]);
@@ -155,8 +157,8 @@ class BackupEventSubscriber
      */
     public function handleCleanupFailed($event)
     {
-        Log::channel('backups')->error('Cleanup Failed.', [
-            'disk'    => $event->backupDestination->diskName(),
+        Log::error('Backup cleanup has failed.', [
+            'disk'    => optional($event->backupDestination)->diskName(),
             'message' => $event->exception->getMessage(),
         ]);
     }
@@ -170,10 +172,10 @@ class BackupEventSubscriber
      */
     public function subscribe($events)
     {
-        $events->listen('Fusion\Events\Backups\BackupStarted',
+        $events->listen('Fusion\Events\Backups\Backup\Started',
             [BackupEventSubscriber::class, 'handleBackupStarted']);
 
-        $events->listen('Fusion\Events\Backups\BackupFinished',
+        $events->listen('Fusion\Events\Backups\Backup\Finished',
             [BackupEventSubscriber::class, 'handleBackupFinished']);
 
         $events->listen('Spatie\Backup\Events\BackupWasSuccessful',

@@ -1,11 +1,10 @@
 <?php
 
-namespace Fusion\Jobs\Backups;
+namespace Fusion\Jobs\Backups\Backup;
 
 use Carbon\Carbon;
 use Exception;
-use Fusion\Events\Backups\BackupStarted;
-use Fusion\Events\Backups\BackupFinished;
+use Fusion\Events\Backups\Backup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -25,14 +24,14 @@ class BackupRun implements ShouldQueue
      * 
      * @var string
      */
-    protected $filename;
+    public $filename;
 
     /**
-     * Backup disk (optional).
+     * Backup disks.
      * 
-     * @var string
+     * @var array
      */
-    protected $disks;
+    public $disks;
 
     /**
      * Constructor.
@@ -40,10 +39,10 @@ class BackupRun implements ShouldQueue
      * @param string $filename
      * @param string $disk
      */
-    public function __construct($filename = null, $disks = null)
+    public function __construct($filename = null)
     {
         $this->filename = Str::finish($filename ?? Carbon::now()->format(static::FILENAME_FORMAT), '.zip');
-        $this->disks    = $disks;
+        $this->disks    = config('backup.backup.destination.disks');
     }
 
     /**
@@ -53,20 +52,21 @@ class BackupRun implements ShouldQueue
      */
     public function handle()
     {
-        event(new BackupStarted($this->filename, $this->disks));
+        event(new Backup\Started(
+            $this->filename, $this->disks));
 
         // --
 
         Artisan::call('backup:run', [
             '--filename'       => $this->filename,
-            '--only-to-disk'   => $this->disks,
             '--no-interaction' => true,
             '--quiet'          => true,
         ]);
 
         // --
         
-        event(new BackupFinished($this->filename, $this->disks));
+        event(new Backup\Finished(
+            $this->filename, $this->disks));
     }
 
     /**

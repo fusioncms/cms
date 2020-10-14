@@ -3,18 +3,21 @@
 namespace Fusion\Tests\Feature\Backups;
 
 use Fusion\Models\Backup;
-use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Events\Backups\Backup\Started;
+use Fusion\Events\Backups\Backup\Finished;
+use Fusion\Jobs\Backups\Backup\BackupRun;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 
 class BackupTest extends TestBase
 {
 	// ------------------------------------------------
-    // VIEW BACKUPS
+    // VIEW ALL BACKUPS
     // ------------------------------------------------
 
 	/**
@@ -23,7 +26,7 @@ class BackupTest extends TestBase
      * @group feature
      * @group backups
      */
-    public function a_user_with_permission_can_view_backups()
+    public function a_user_with_permission_can_view_all_backups()
     {
         $this
             ->be($this->owner, 'api')
@@ -47,6 +50,43 @@ class BackupTest extends TestBase
     }
 
     // ------------------------------------------------
+    // VIEW BACKUPS
+    // ------------------------------------------------
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     */
+    public function a_user_with_permission_can_view_a_backup()
+    {
+        $backup = $this->newBackup();
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('GET', "/api/backups/{$backup->id}")
+            ->assertStatus(200);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     */
+    public function a_user_without_permission_cannot_view_a_backup()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $backup = $this->newBackup();
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', "/api/backups/{$backup->id}");
+    }
+
+    // ------------------------------------------------
     // CREATE BACKUPS
     // ------------------------------------------------
 
@@ -65,8 +105,25 @@ class BackupTest extends TestBase
             ->json('POST', '/api/backups')
             ->assertStatus(200);
 
-
         Bus::assertDispatched(BackupRun::class);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group backups
+     */
+    public function custom_events_will_fire_at_beginning_and_end_of_backup()
+    {
+        Event::fake([Started::class, Finished::class]);
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/backups');
+
+        Event::assertDispatched(Started::class);
+        Event::assertDispatched(Finished::class);
     }
 
     /**
@@ -90,12 +147,14 @@ class BackupTest extends TestBase
      */
     public function newly_created_backup_will_be_recorded_in_database()
     {
-		$backup = $this->newBackup();
+		$backup = $this->newBackup('test-backup');
 
 		foreach (config('backup.backup.destination.disks') as $disk) {
 			$this->assertDatabaseHas('backups', [
-				'name' => $backup->name,
-				'disk' => $disk,
+				'name'     => 'test-backup',
+				'disk'     => $disk,
+                'state'    => Backup::SUCCESS,
+                'location' => config('backup.backup.name').'/test-backup.zip',
 			]);
 		}
     }

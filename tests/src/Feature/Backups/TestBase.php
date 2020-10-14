@@ -4,7 +4,7 @@ namespace Fusion\Tests\Feature\Backups;
 
 use Fusion\Tests\TestCase;
 use Fusion\Models\Backup;
-use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Jobs\Backups\Backup\BackupRun;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
@@ -56,12 +56,14 @@ class TestBase extends TestCase
      * Run backup, return backup.
      * [Helper].
      *
+     * @param  string $name
+     * 
      * @return void
      */
-    protected function newBackup()
+    protected function newBackup($name = null)
     {
-        (new BackupRun())->handle();
+        (new BackupRun($name))->handle();
 
-        return Backup::latest('id')->first();
+        return Backup::latest()->first();
     }
 }

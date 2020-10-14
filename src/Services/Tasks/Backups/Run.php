@@ -2,7 +2,7 @@
 
 namespace Fusion\Services\Tasks\Backups;
 
-use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Jobs\Backups\Backup\BackupRun;
 use Illuminate\Console\Scheduling\Schedule;
 
 class Run
@@ -16,7 +16,7 @@ class Run
     public function handle(Schedule $schedule)
     {
         $schedule
-            ->job(new BackupRun)
+            ->job(new BackupRun, 'backups', 'database')
             ->dailyAt('1:00')
             ->withoutOverlapping()
             ->environments(['production'])

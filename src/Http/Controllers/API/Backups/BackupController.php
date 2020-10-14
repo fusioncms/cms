@@ -4,7 +4,7 @@ namespace Fusion\Http\Controllers\API\Backups;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\BackupResource;
-use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Jobs\Backups\Backup\BackupRun;
 use Fusion\Models\Backup;
 use Illuminate\Http\Request;
 
@@ -35,9 +35,9 @@ class BackupController extends Controller
      */
     public function show(Backup $backup)
     {
-        $this->authorize('forms.view');
+        $this->authorize('backups.view');
 
-        return new BackupResource($form);
+        return new BackupResource($backup);
     }
 
     /**
@@ -51,7 +51,9 @@ class BackupController extends Controller
     {
         $this->authorize('backups.create');
 
-        BackupRun::dispatch();
+        BackupRun::dispatch()
+            ->onConnection('database')
+            ->onQueue('backups');
     }
 
     /**
@@ -64,6 +66,8 @@ class BackupController extends Controller
      */
     public function update(Request $request, Backup $backup)
     {
+        $this->authorize('backups.update');
+
         $attributes = $request->validate($request->all(), [
             'name' => 'required|string'
         ]);
