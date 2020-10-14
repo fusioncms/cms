@@ -3,7 +3,7 @@
         <!-- Select Button -->
         <button
             class="field field-select"
-            :class="{ 'field-select--open': isOpen, 'field-select--readonly': readonly, 'field--danger': hasError, 'field--success': hasSuccess}" 
+            :class="{ 'field-select--open': isOpen, 'field-select--readonly': readonly, 'field--danger': hasError, 'field--success': hasSuccess}"
             type="button"
             ref="button"
             :disabled="disabled || readonly"
@@ -12,14 +12,14 @@
             @keydown.up.prevent="highlightPrevious"
             @keydown.enter="selectHighlighted"
             @keydown.esc="close">
-            
+
             <!-- Selected Item/Items -->
             <div v-if="selectedOptions.length > 0" class="field-select__selected" :class="{'field-select__selected--multiple': multiple}">
                 <ul v-if="multiple" class="field-select__list">
                     <li v-for="(option, index) in selectedOptions" :key="index" class="field-select__item">
-                        <ui-tag 
-                            :value="option.label || option" 
-                            :label="'Unselect' + option.label || option" 
+                        <ui-tag
+                            :value="option.label || option"
+                            :label="'Unselect' + option.label || option"
                             @click="removeSelection(index)">
                         </ui-tag>
                     </li>
@@ -35,9 +35,9 @@
             </div>
         </button>
 
-        <!-- <ui-input 
-            :id="formattedId" 
-            type="text" 
+        <!-- <ui-input
+            :id="formattedId"
+            type="text"
             :required="required"
             :value="selectedOptions">
         </ui-input> -->
@@ -68,10 +68,10 @@
 
             <div class="field-dropdown__group" v-if="filteredOptions.length > 0">
                 <!-- Multi-select -->
-                <ui-checkbox-group 
-                    ref="options" 
-                    class="field-dropdown__options field-dropdown__options--check" 
-                    :aria-describedby="formattedId + '_controls'" 
+                <ui-checkbox-group
+                    ref="options"
+                    class="field-dropdown__options field-dropdown__options--check"
+                    :aria-describedby="formattedId + '_controls'"
                     v-if="multiple">
                     <ui-checkbox
                         v-for="(option, index) in filteredOptions"
@@ -242,6 +242,14 @@
         },
 
         watch: {
+            value(value) {
+                if (_.isString(this.value)) {
+                    this.selection = this.value.split(',')
+                } else if (_.isNumber(this.value)) {
+                    this.selection = [ _.toString(this.value) ]
+                }
+            },
+
             selection(value) {
                 this.$emit('input', _.isArray(value) ? _.join(value, ',') : value)
             },

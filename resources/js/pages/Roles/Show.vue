@@ -5,8 +5,10 @@
         </portal>
 
         <portal to="actions">
-            <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'roles' }" variant="secondary">Go Back</ui-button>
-            <ui-button v-if="canEdit" key="edit-role-btn" :to="{ name: 'roles.edit', params: {role: role.id} }" variant="primary">Edit Role</ui-button>
+            <div class="buttons">
+                <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'roles' }" variant="secondary">Go Back</ui-button>
+                <ui-button v-if="canEdit" key="edit-role-btn" :to="{ name: 'roles.edit', params: {role: role.id} }" variant="primary">Edit Role</ui-button>
+            </div>
         </portal>
 
         <portal to="sidebar-right">
