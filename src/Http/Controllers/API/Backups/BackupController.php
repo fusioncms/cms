@@ -6,7 +6,7 @@ use Fusion\Events\Backups\Backup\Updated as BackupUpdated;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\BackupResource;
 use Fusion\Http\Requests\Backups\UpdateRequest;
-use Fusion\Jobs\Backups\Backup\BackupRun;
+use Fusion\Jobs\Backups\BackupRun;
 use Fusion\Models\Backup;
 use Illuminate\Http\Request;
 

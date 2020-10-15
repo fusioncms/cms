@@ -5,7 +5,7 @@ namespace Fusion\Tests\Feature\Backups;
 use Carbon\Carbon;
 use Fusion\Tests\TestCase;
 use Fusion\Models\Backup;
-use Fusion\Jobs\Backups\Backup\BackupRun;
+use Fusion\Jobs\Backups\BackupRun;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Notification;

@@ -2,7 +2,7 @@
 
 namespace Fusion\Services\Tasks\Backups;
 
-use Fusion\Jobs\Backups\Backup\BackupRun;
+use Fusion\Jobs\Backups\BackupRun;
 use Illuminate\Console\Scheduling\Schedule;
 
 class Run

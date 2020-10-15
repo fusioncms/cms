@@ -4,7 +4,7 @@ namespace Fusion\Jobs;
 
 use Exception;
 use Fusion\Facades\Composer;
-use Fusion\Jobs\Backups\Backup\BackupRun;
+use Fusion\Jobs\Backups\BackupRun;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Artisan;

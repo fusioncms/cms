@@ -35,4 +35,16 @@ class UpdateRequest extends FormRequest
             ],
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'name.unique' => 'The name & disk combination has already been taken.'
+        ];
+    }
 }
