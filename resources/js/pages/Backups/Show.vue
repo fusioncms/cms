@@ -11,11 +11,10 @@
             </div>
         </portal>
 
-        <section-card title="Backup Information" description="General information about this backup.">
+        <section-card v-if="form" title="Backup Information" description="General information about this backup.">
             <dl class="detail-list">
 
                 <ui-input-group
-                    v-if="form"
                     id="user-name"
                     name="name"
                     label="Name"
@@ -48,7 +47,7 @@
             </dl>
         </section-card>
 
-        <section-card title="Actions" description="Management actions that can be performed for this backup.">
+        <section-card v-if="form" title="Actions" description="Management actions that can be performed for this backup.">
             <div class="mb-4">
                 <span class="label">Restore Backup</span>
                 <p class="help mb-2">Restore FusionCMS to this backup.</p>
@@ -98,8 +97,8 @@
             <ui-modal name="delete-backup" title="Delete Backup" key="delete_backup">
                 <p>Are you sure you want to permenantly delete this backup?</p>
 
-                <template slot="footer" slot-scope="backup">
-                    <ui-button v-modal:delete-backup @click="destroyBackup(backup.data.id)" variant="danger" class="ml-3">Delete</ui-button>
+                <template slot="footer">
+                    <ui-button v-modal:delete-backup @click="destroyBackup(backup.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-backup>Cancel</ui-button>
                 </template>
             </ui-modal>
