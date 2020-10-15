@@ -467,7 +467,7 @@ class UserTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('POST', "/api/users", [])
+            ->json('POST', '/api/users', [])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
                 'name'  => 'The name field is required.',

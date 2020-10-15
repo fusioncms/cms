@@ -1,5 +1,7 @@
 .page-title {
-    h1 { @apply flex items-center mb-0; }
+    h1 { 
+        @apply flex items-center mb-0; 
+    }
 
     &__icon {
         @apply flex flex-shrink-0 items-center justify-center bg-primary-500 text-lg text-white rounded-full w-8 h-8 mr-2;

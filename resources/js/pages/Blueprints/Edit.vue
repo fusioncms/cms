@@ -17,6 +17,12 @@
     import SharedForm from './SharedForm'
 
     export default {
+        auth() {
+            return {
+                permission: 'blueprints.update',
+            }
+        },
+
         head: {
             title() {
                 return {

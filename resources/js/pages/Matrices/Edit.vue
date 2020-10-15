@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="matrix-page">
         <portal to="title">
             <page-title icon="layer-group">Edit Matrix</page-title>
         </portal>
@@ -22,6 +22,12 @@
     import store from '../../store'
 
     export default {
+        auth() {
+            return {
+                permission: 'matrices.update',
+            }
+        },
+
         head: {
             title() {
                 return {

@@ -5,11 +5,19 @@
         </portal>
 
         <portal to="actions">
-            <ui-button key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
-            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary" v-if="canEdit">Edit User</ui-button>
+            <div class="buttons">
+                <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
+                <ui-button v-if="canEdit" key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary">Edit User</ui-button>
+            </div>
         </portal>
 
-        <section-card title="User Information" description="General information about this user.">
+        <portal to="sidebar-right">
+            <sidebar>
+                <status-card v-if="user" id="user_panel_status_card" :entry="user" :user="true" tabindex="-1"></status-card>
+            </sidebar>
+        </portal>
+
+        <section-card id="user_panel_info" title="User Information" description="General information about this user.">
             <dl class="detail-list">
                 <dt>Name</dt>
                 <dd>{{ user.name }}</dd>
@@ -17,43 +25,10 @@
                 <dd>{{ user.email }}</dd>
                 <dt>Role</dt>
                 <dd>{{ user.role ? user.role.name : 'Loading...' }}</dd>
-                <dt>Status</dt>
-                <dd class="flex"><ui-status :value="user.status" class="mr-2"></ui-status> {{ user.status ? 'Enabled' : 'Disabled' }}</dd>
             </dl>
         </section-card>
 
-        <section-card title="Account Activity" description="Information on user account activity and stats.">
-            <dl class="detail-list">
-                <dt>Registered</dt>
-                <dd><ui-datetime :timestamp="user.created_at"></ui-datetime></dd>
-
-                <dt>Verified</dt>
-                <dd>
-                    <ui-datetime :timestamp="user.email_verified_at" v-if="verified"></ui-datetime>
-                    <span v-else>No</span>
-                </dd>
-
-                <dt>Last Updated</dt>
-                <dd><ui-datetime :timestamp="user.updated_at"></ui-datetime></dd>
-
-                <dt>Last Login</dt>
-                <dd>
-                    <ui-datetime :timestamp="user.logged_in_at" v-if="user.logged_in_at"></ui-datetime>
-                    <span v-else>Never</span>
-                </dd>
-
-                <dt>Invalid Login Attempts</dt>
-                <dd>{{ user.invalid_logins }}</dd>
-
-                <dt v-if="user.invalidly_logged_in_at">Last Invalid Login</dt>
-                <dd v-if="user.invalidly_logged_in_at"><ui-datetime :timestamp="user.invalidly_logged_in_at"></ui-datetime></dd>
-
-                <dt v-if="user.password_changed_at">Password Changed</dt>
-                <dd v-if="user.password_changed_at"><ui-datetime :timestamp="user.password_changed_at"></ui-datetime></dd>
-            </dl>
-        </section-card>
-
-        <section-card title="User Activity Feed" description="See what this user has been doing around the site.">
+        <section-card id="user_panel_activity" title="User Activity" description="See what this user has been doing around the site." tabindex="-1">
             <ui-table :key="'activities-' + user.id" class="activities-table" id="activities" :endpoint="endpoint" sort-by="created_at" sort-in="desc" :per-page="10" v-if="user.id">
                 <template slot="description" slot-scope="table">
                     <div class="flex items-center">
@@ -81,7 +56,11 @@
 
 <script>
     export default {
-        permission: 'users.view',
+        auth() {
+            return {
+                permission: 'users.view',
+            }
+        },
 
         computed: {
             endpoint() {
@@ -99,7 +78,15 @@
             },
 
             canEdit() {
-                return this.$can('users.update', this.user.role ? this.user.role.level : 0)
+                if (this.$user.id == this.user.id) {
+                    return true
+                }
+
+                if (this.user.role) {
+                    return this.$can('users.update', this.user.role ? this.user.role.level : 0)
+                }
+
+                return false
             }
         },
 

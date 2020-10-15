@@ -1,0 +1,55 @@
+.section-card {
+    &__header {
+        h1,h2,h3,h4 { @apply mb-0; }
+    }
+
+    &__body {
+        @apply py-6;
+    }
+
+    &__text {
+        @apply text-gray-600 leading-5 text-sm mb-0;
+    }
+}
+
+.status-card {
+    @apply text-gray-600 leading-5 text-sm;
+
+    &__item {
+        @apply mb-3;
+
+        &--inline {
+            @apply flex items-center;
+        }
+    }
+
+    &__label {
+        @apply block mr-3 font-bold;
+    }
+}
+
+.card-col {
+    @screen xl {
+        @apply grid grid-cols-3 gap-6;
+    }
+
+    @screen xxl {
+        @apply grid-cols-4;
+    }
+
+    &__header {
+        @screen xl {
+            @apply border-r col-span-1 pr-5;
+        }
+    }
+
+    &__body {
+        @screen xl {
+            @apply col-span-2;
+        }
+
+        @screen xxl {
+            @apply col-span-3;
+        }
+    }
+}

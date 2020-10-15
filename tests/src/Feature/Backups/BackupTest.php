@@ -20,7 +20,7 @@ class BackupTest extends TestBase
     // VIEW ALL
     // ------------------------------------------------
 
-	/**
+    /**
      * @test
      * @group fusioncms
      * @group feature
@@ -34,7 +34,7 @@ class BackupTest extends TestBase
             ->assertStatus(200);
     }
 
-	/**
+    /**
      * @test
      * @group fusioncms
      * @group feature
@@ -349,11 +349,11 @@ class BackupTest extends TestBase
         $envFile = 'fusion-dumps/env.json';
 
         if ($zipArchive->open($backup->fullPath) === true) {
-			$contents  = $zipArchive->getFromName($envFile);
-			$variables = json_decode($contents, true);
+            $contents  = $zipArchive->getFromName($envFile);
+            $variables = json_decode($contents, true);
 
             foreach (config('backup.backup.source.env') as $key) {
-            	$this->assertEquals($variables[$key], env($key));
+                $this->assertEquals($variables[$key], env($key));
             }
         }
     }
@@ -373,13 +373,13 @@ class BackupTest extends TestBase
         $file2 = Storage::disk($backup->disk)->path('files/testing-file2.txt');
 
         if ($zipArchive->open($backup->fullPath) === true) {
-        	$this->assertNotFalse($zipArchive->statName(
-        		ltrim($file1, '/')
-        	));
+            $this->assertNotFalse($zipArchive->statName(
+                ltrim($file1, '/')
+            ));
 
-        	$this->assertNotFalse($zipArchive->statName(
-        		ltrim($file2, '/')
-        	));
+            $this->assertNotFalse($zipArchive->statName(
+                ltrim($file2, '/')
+            ));
         }
     }
 
@@ -397,9 +397,9 @@ class BackupTest extends TestBase
         $dbDump = 'db-dumps/sqlite-sqlite-database.sql';
 
         if ($zipArchive->open($backup->fullPath) === true) {
-        	$this->assertNotFalse(
-        		$zipArchive->statName($dbDump)
-        	);
+            $this->assertNotFalse(
+                $zipArchive->statName($dbDump)
+            );
         }
     }
 }

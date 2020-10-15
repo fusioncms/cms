@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="matrix-page">
         <portal to="title">
             <page-title icon="layer-group">Create Matrix</page-title>
         </portal>
@@ -19,6 +19,12 @@
     import SharedForm from './SharedForm'
 
     export default {
+        auth() {
+            return {
+                permission: 'matrices.create',
+            }
+        },
+
         head: {
             title() {
                 return {

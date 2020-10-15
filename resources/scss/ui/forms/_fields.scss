@@ -1,6 +1,8 @@
 .field {
-    @apply appearance-none bg-white border border-gray-300 rounded text-gray-700 leading-normal outline-none w-full px-3 py-2;
+    @apply text-sm appearance-none bg-white border border-gray-300 rounded text-gray-700 leading-normal outline-none w-full px-2 py-1;
     transition: all 0.3s $transition-effect;
+
+    @screen md { @apply text-base px-3 py-2; }
 
     @include input-placeholder {
         @apply text-gray-500;
@@ -310,16 +312,12 @@
     }
 }
 
+
+// TO-DO: Toggle component
 .field__toggle {
-    @apply
-        cursor-pointer
-        opacity-0
-        absolute
-        w-full
-        h-full
-        z-10
-    ;
+    @apply cursor-pointer opacity-0 absolute w-full h-full z-10;
 }
+
 .toggle {
     &__wrap {
         @apply

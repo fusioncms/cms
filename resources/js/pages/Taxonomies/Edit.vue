@@ -19,6 +19,12 @@
     import SharedForm from './SharedForm'
 
     export default {
+        auth() {
+            return {
+                permission: 'taxonomies.update',
+            }
+        },
+
         head: {
             title() {
                 return {

@@ -2,23 +2,38 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
-class RoleRequest extends FormRequest
+class RoleRequest extends Request
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make a POST request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePost()
     {
-        if ($this->method() === 'POST') {
-            return $this->user()->can('roles.create');
-        }
+        return $this->user()->can('roles.create');
+    }
 
+    /**
+     * Determine if the user is authorized to make a PATCH request.
+     *
+     * @return bool
+     */
+    public function authorizePatch()
+    {
         return $this->user()->can('roles.update') and $this->user()->level($this->role->level);
+    }
+
+    /**
+     * Determine if the user is authorized to make a DELETE request.
+     *
+     * @return bool
+     */
+    public function authorizeDelete()
+    {
+        return $this->user()->can('roles.delete') and $this->user()->level($this->role->level);
     }
 
     /**
@@ -48,7 +63,9 @@ class RoleRequest extends FormRequest
 
         // Cannot assign a level lower than 1,
         // 0 is reserved for the owner role.
-        if ($level < 1) $level = 1;
+        if ($level < 1) {
+            $level = 1;
+        }
 
         $rules = [
             'name'        => 'sometimes',

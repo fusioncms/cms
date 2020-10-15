@@ -39,8 +39,8 @@ class Backup extends Model
 
     /**
      * Physical backup file exists?
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function exists()
     {
@@ -49,7 +49,7 @@ class Backup extends Model
 
     /**
      * Get full path to backup.
-     * 
+     *
      * @return string
      */
     public function getFullPathAttribute()
@@ -59,12 +59,14 @@ class Backup extends Model
 
     /**
      * Get Spatie\Backup\BackupDestination\Backup.
-     * 
+     *
      * @return \Spatie\Backup\BackupDestination\Backup
      */
     public function backup()
     {
         return new \Spatie\Backup\BackupDestination\Backup(
-            Storage::disk($this->disk), $this->location);
+            Storage::disk($this->disk),
+            $this->location
+        );
     }
 }

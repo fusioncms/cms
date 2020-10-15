@@ -1,6 +1,5 @@
 .main-content { 
-    @apply bg-gray-100;
-    margin-top: 55px;
+    @apply w-full flex flex-col items-center flex-auto pb-6;
     
     @screen lg {
         transition: padding 0.5s $transition-effect;
@@ -8,14 +7,23 @@
         .nav-active & { padding-left: $nav-width-desktop; }
     }
 
-    &__container {
-        @apply py-6 px-4;
+    &__header,
+    &__body {
+        @apply px-4;
 
-        @screen xl { @apply p-6; }
+        @screen xl { @apply px-6; }
     }
 
     &__header {
-        @apply flex flex-row flex-wrap items-center justify-between mb-3 mr-2;
+        @apply sticky top-0 z-10 bg-gray-300 flex flex-row justify-between py-1 w-full;
+
+        @screen sm {
+            @apply relative top-auto py-3;
+        }
+    }
+
+    &__title {
+        @apply flex flex-row flex-wrap items-center justify-between mr-2;
         min-height: rem(50px);
 
         @screen lg {
@@ -24,44 +32,26 @@
     }
 
     &__actions {
-        @apply flex flex-shrink-0 mb-3 ml-auto;
+        @apply flex flex-shrink-0 items-center mb-0 ml-auto;
         min-height: rem(50px);
 
         .button { @apply mb-0; }
     }
 
-    &__body {}
-}
+    &__container {
+        @apply flex flex-col justify-center w-full pt-4;
 
-.form-container {
-    @extend .row;
-
-    @screen xl { @apply flex-no-wrap; }
-
-    &__content {
-        @extend .col;
-        width: 100%;
-        transition: width 0.5s $transition-effect;
-
-        @screen xl { flex: 1 1 auto; }
-    }
-
-    &__sidebar {
-        @extend .col;
-        width: 100%;
-        transition: width 0.5s $transition-effect;
-
-        @screen xl { 
-            @apply flex-shrink-0;
-            width: 400px;
-
-            .nav-active & { width: 300px; }
-        }
-
-        @screen xxl {  
-            .nav-active & { width: 400px; }
+        @screen lg { 
+            @apply flex-row pt-6; 
         }
     }
+
+    &__body {
+        width: 100%;
+        max-width: 1300px;
+    }
+
+    &__sidebar {}
 }
 
 .sidebar-container {

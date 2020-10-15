@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Fusion\Concerns\HasCustomLogger;
 use Fusion\Models\Backup;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\File;
 
 class BackupEventSubscriber
 {
@@ -126,7 +125,7 @@ class BackupEventSubscriber
 
     /**
      * Add ENV variables to backup zip.
-     * 
+     *
      * @param \Spatie\Backup\Events\BackupZipWasCreated $event
      *
      * @return void
@@ -136,11 +135,13 @@ class BackupEventSubscriber
         $zipArchive = new \ZipArchive();
 
         if ($zipArchive->open($event->pathToZip) === true) {
-            $zipArchive->addFromString('fusion-dumps/env.json',
+            $zipArchive->addFromString(
+                'fusion-dumps/env.json',
                 collect(config('backup.backup.source.env'))
                     ->mapWithKeys(function ($item) {
                         return [$item => env($item)];
-                    })->toJson());
+                    })->toJson()
+            );
         }
 
         $zipArchive->close();

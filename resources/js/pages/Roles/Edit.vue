@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="roles-page">
         <portal to="title">
             <page-title icon="user-shield">Edit Role</page-title>
         </portal>
@@ -13,7 +13,12 @@
     import SharedForm from './SharedForm'
 
     export default {
-        permission: 'roles.update',
+        auth() {
+            return {
+                permission: 'roles.update',
+                level: this.getAuthLevel(),
+            }
+        },
 
         head: {
             title() {
@@ -44,6 +49,16 @@
                     toast(response.response.data.message, 'failed')
                 })
             },
+
+            getAuthLevel() {
+                console.log(this.role.level)
+
+                if (this.role.level) return this.role.level
+
+                console.log('false')
+
+                return false
+            },
         },
 
         beforeRouteEnter(to, from, next) {
@@ -60,6 +75,7 @@
                         vm.form = new Form(fields, true)
 
                         vm.$emit('updateHead')
+                        vm.$emit('updateAuth')
                     })
                 }
             })

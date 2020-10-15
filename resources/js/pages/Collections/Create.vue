@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="collection-page">
         <portal to="title">
             <page-title :icon="collection.icon || 'pencil-alt'" :subtitle="collection.description">Create {{ collection.reference_singular }}</page-title>
         </portal>

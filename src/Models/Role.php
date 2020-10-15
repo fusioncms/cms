@@ -2,16 +2,16 @@
 
 namespace Fusion\Models;
 
-use Spatie\Permission\Guard;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Traits\HasPermissions;
-use Spatie\Permission\Exceptions\RoleDoesNotExist;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\Permission\Contracts\Role as RoleContract;
 use Spatie\Permission\Exceptions\GuardDoesNotMatch;
 use Spatie\Permission\Exceptions\RoleAlreadyExists;
-use Spatie\Permission\Contracts\Role as RoleContract;
+use Spatie\Permission\Exceptions\RoleDoesNotExist;
+use Spatie\Permission\Guard;
+use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model implements RoleContract
 {
@@ -85,12 +85,12 @@ class Role extends Model implements RoleContract
     /**
      * Find a role by its name and guard name.
      *
-     * @param string $name
+     * @param string      $name
      * @param string|null $guardName
      *
-     * @return \Spatie\Permission\Contracts\Role|\Spatie\Permission\Models\Role
-     *
      * @throws \Spatie\Permission\Exceptions\RoleDoesNotExist
+     *
+     * @return \Spatie\Permission\Contracts\Role|\Spatie\Permission\Models\Role
      */
     public static function findByHandle(string $handle, $guardName = null): RoleContract
     {
@@ -98,7 +98,7 @@ class Role extends Model implements RoleContract
 
         $role = static::where('handle', $handle)->where('guard_name', $guardName)->first();
 
-        if (! $role) {
+        if (!$role) {
             throw RoleDoesNotExist::named($handle);
         }
 
@@ -111,7 +111,7 @@ class Role extends Model implements RoleContract
 
         $role = static::where('id', $id)->where('guard_name', $guardName)->first();
 
-        if (! $role) {
+        if (!$role) {
             throw RoleDoesNotExist::withId($id);
         }
 
@@ -121,7 +121,7 @@ class Role extends Model implements RoleContract
     /**
      * Find or create role by its name (and optionally guardName).
      *
-     * @param string $name
+     * @param string      $name
      * @param string|null $guardName
      *
      * @return \Spatie\Permission\Contracts\Role
@@ -132,7 +132,7 @@ class Role extends Model implements RoleContract
 
         $role = static::where('handle', $handle)->where('guard_name', $guardName)->first();
 
-        if (! $role) {
+        if (!$role) {
             return static::query()->create(['handle' => $handle, 'guard_name' => $guardName]);
         }
 
@@ -144,9 +144,9 @@ class Role extends Model implements RoleContract
      *
      * @param string|Permission $permission
      *
-     * @return bool
-     *
      * @throws \Spatie\Permission\Exceptions\GuardDoesNotMatch
+     *
+     * @return bool
      */
     public function hasPermissionTo($permission): bool
     {
@@ -164,7 +164,7 @@ class Role extends Model implements RoleContract
             $permission = $permissionClass->findById($permission, $this->getDefaultGuardName());
         }
 
-        if (! $this->getGuardNames()->contains($permission->guard_name)) {
+        if (!$this->getGuardNames()->contains($permission->guard_name)) {
             throw GuardDoesNotMatch::create($permission->guard_name, $this->getGuardNames());
         }
 

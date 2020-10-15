@@ -18,6 +18,12 @@
 
 <script>
     export default {
+        auth() {
+            return {
+                permission: 'blueprints.viewAny',
+            }
+        },
+
         head: {
             title() {
                 return {

@@ -10,11 +10,10 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use ZipArchive;
 
 class UploadTest extends TestBase
 {
-	/**
+    /**
      * @test
      * @group fusioncms
      * @group feature
@@ -22,19 +21,18 @@ class UploadTest extends TestBase
      */
     public function a_user_with_permission_can_upload_new_backup()
     {
-    	$this->generateBackup('test-upload', function($path, $name) {
+        $this->generateBackup('test-upload', function ($path, $name) {
             $this
                 ->be($this->owner, 'api')
                 ->json('POST', '/api/backups/upload', [
-                    'file-upload' => new UploadedFile($path, $name, 'application/zip', null, true)
+                    'file-upload' => new UploadedFile($path, $name, 'application/zip', null, true),
                 ])
                 ->assertStatus(201);
 
             Storage::disk('public')->assertExists(
                 Backup::latest('id')->first()->location
             );
-    	});
-
+        });
     }
 
     /**
@@ -45,11 +43,11 @@ class UploadTest extends TestBase
      */
     public function newly_uploaded_backup_will_be_recorded_in_the_database()
     {
-        $this->generateBackup('test-upload', function($path, $name) {
+        $this->generateBackup('test-upload', function ($path, $name) {
             $this
                 ->be($this->owner, 'api')
                 ->json('POST', '/api/backups/upload', [
-                    'file-upload' => new UploadedFile($path, $name, 'application/zip', null, true)
+                    'file-upload' => new UploadedFile($path, $name, 'application/zip', null, true),
                 ]);
 
             foreach (config('backup.backup.destination.disks') as $disk) {
@@ -100,7 +98,7 @@ class UploadTest extends TestBase
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/backups/upload', [
-            	'file-upload' => UploadedFile::fake()->image('backup.png')
+                'file-upload' => UploadedFile::fake()->image('backup.png'),
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
@@ -112,25 +110,28 @@ class UploadTest extends TestBase
     // ------------------------------------------------
     //
 
-	/**
+    /**
      * Generates new `backup zip` testing..
      * [helper].
      *
-     * @param  string   $name
-     * @param  Closure  $closure
+     * @param string  $name
+     * @param Closure $closure
+     *
      * @return array
      */
     private function generateBackup($name, Closure $closure)
     {
-    	$backup = $this->newBackup();
+        $backup = $this->newBackup();
 
-    	// setup
-		File::move($backup->fullPath,
-            $uploadPath = Storage::disk('temp')->path("{$name}.zip"));
-    	
+        // setup
+        File::move(
+            $backup->fullPath,
+            $uploadPath = Storage::disk('temp')->path("{$name}.zip")
+        );
+
         DB::table('backups')->delete();
-     	
-     	$closure($uploadPath, $name);
+
+        $closure($uploadPath, $name);
 
         // clean up
         File::delete($uploadPath);

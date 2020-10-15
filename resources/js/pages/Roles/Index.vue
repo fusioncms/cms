@@ -45,12 +45,24 @@
         </ui-card>
 
         <portal to="modals">
-            <ui-modal name="delete-role" title="Delete Role">
-                <p>Are you sure you want to permenantly delete this role?</p>
+            <ui-modal name="delete-role" title="Delete Role" v-model="showDeleteModal" no-close-button no-esc-close>
+                <template slot-scope="role">
+                    <p>Please select another role to move users to.</p>
+
+                    <ui-select-group
+                        v-if="role.data"
+                        id="move-role"
+                        name="move_role"
+                        label="Transfer to Role"
+                        :options="roleOptions(role.data.handle)"
+                        autocomplete="off"
+                        v-model="transfer">
+                    </ui-select-group>
+                </template>
 
                 <template slot="footer" slot-scope="role">
-                    <ui-button v-modal:delete-role @click="destroy(role.data.id)" variant="danger" class="ml-3">Delete</ui-button>
-                    <ui-button v-modal:delete-role variant="secondary">Cancel</ui-button>
+                    <ui-button @click="destroy(role.data.id)" variant="danger" class="ml-3" :disabled="transfer.length == 0">Delete</ui-button>
+                    <ui-button @click.prevent="cancelDestroy" variant="secondary">Cancel</ui-button>
                 </template>
             </ui-modal>
         </portal>
@@ -61,7 +73,11 @@
     import _ from 'lodash'
 
     export default {
-        permission: 'roles.viewAny',
+        auth() {
+            return {
+                permission: 'roles.viewAny',
+            }
+        },
 
         head: {
             title() {
@@ -78,21 +94,70 @@
         data() {
             return {
                 endpoint: '/datatable/roles',
+                showDeleteModal: false,
+                transfer: '',
+                roles: [],
             }
         },
 
         methods: {
+            roleOptions(currentRole) {
+                const roles = _.filter(this.roles, (role) => currentRole != role.handle)
+
+                return _.map(roles, (role) => {
+                    return {
+                        label: role.name,
+                        value: role.handle
+                    }
+                })
+            },
+
             destroy(id) {
-                axios.delete('/api/roles/' + id).then((response) => {
+                axios.delete('/api/roles/' + id, {data: {
+                    transfer: this.transfer
+                }}).then((response) => {
+                    this.transfer = ''
+                    this.showDeleteModal = false
+
                     toast('Role successfully deleted.', 'success')
 
                     bus().$emit('refresh-datatable-roles')
                 })
             },
 
+            cancelDestroy() {
+                this.showDeleteModal = false
+                this.transfer = ''
+            },
+
             isOwner(id) {
                 return id && id === 1
             }
-        }
+        },
+
+        beforeRouteEnter(to, from, next) {
+            getRoles((error, roles) => {
+                if (error) {
+                    next((vm) => {
+                        toast(error.toString(), 'danger')
+                    })
+                } else {
+                    next((vm) => {
+                        vm.roles = roles
+                    })
+                }
+            })
+        },
+    }
+
+    export function getRoles(callback) {
+        axios.all([
+            axios.get('/api/roles'),
+        ])
+        .then(axios.spread((roles) => {
+            roles = roles.data.data
+
+            callback(null, roles)
+        }))
     }
 </script>

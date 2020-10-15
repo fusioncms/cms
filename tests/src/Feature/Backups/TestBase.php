@@ -8,14 +8,12 @@ use Fusion\Models\Backup;
 use Fusion\Jobs\Backups\Backup\BackupRun;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
-use Spatie\Backup\Events\BackupWasSuccessful;
-use Spatie\Backup\Events\CleanupWasSuccessful;
+use Illuminate\Support\Facades\Storage;
 
 class TestBase extends TestCase
 {
-	use RefreshDatabase;
+    use RefreshDatabase;
 
     public function setUp(): void
     {

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="roles-page">
         <portal to="title">
             <page-title icon="user-shield">Create Role</page-title>
         </portal>
@@ -13,7 +13,11 @@
     import SharedForm from './SharedForm'
 
     export default {
-        permission: 'roles.create',
+        auth() {
+            return {
+                permission: 'roles.create',
+            }
+        },
 
         head: {
             title() {

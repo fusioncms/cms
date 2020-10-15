@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Jobs\Backups\Backup;
+namespace Fusion\Jobs\Backups;
 
 use Carbon\Carbon;
 use Exception;

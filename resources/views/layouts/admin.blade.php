@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-grey-lighter">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,6 +27,5 @@
         <script src="{{ mix('js/gravity.js', 'vendor/fusion') }}"></script>
 
         @assets('js')
-
     </body>
 </html>

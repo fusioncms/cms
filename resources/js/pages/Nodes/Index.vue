@@ -167,6 +167,12 @@
     import Form from '../../services/Form'
 
     export default {
+        auth() {
+            return {
+                permission: 'nodes.viewAny',
+            }
+        },
+
         head: {
             title() {
                 return {

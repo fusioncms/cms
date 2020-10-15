@@ -45,7 +45,7 @@ class BackupController extends Controller
     /**
      * Create new backup to be saved on disk.
      *
-     * @param \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return void
      */
@@ -78,8 +78,8 @@ class BackupController extends Controller
     /**
      * Remove the specified backup from disk.
      *
-     * @param \Illuminate\Http\Request  $request
-     * @param \Fusion\Models\Backup     $backup
+     * @param \Illuminate\Http\Request $request
+     * @param \Fusion\Models\Backup    $backup
      *
      * @return void
      */

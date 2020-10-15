@@ -31,7 +31,8 @@ trait HasRoles
      * Check the users current level. If their level is below or equal to
      * the level check, return true.
      *
-     * @param  integer  $levelCheck
+     * @param int $levelCheck
+     *
      * @return bool
      */
     public function level($levelCheck)
@@ -67,7 +68,8 @@ trait HasRoles
      * Determine if the model has (one of) the given role(s).
      *
      * @param string|int|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
-     * @param string|null $guard
+     * @param string|null                                                                       $guard
+     *
      * @return bool
      */
     public function hasRole($roles, string $guard = null): bool

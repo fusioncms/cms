@@ -53,13 +53,14 @@
     &__link {
         @apply text-gray-700 items-center flex;
 
-        &:hover {
-            @apply text-gray-800 bg-gray-200;
+        &:hover,
+        &:focus {
+            @apply text-gray-800 bg-gray-100;
         }
 
         &.router-link-exact-active,
         &.active {
-            @apply bg-primary-500 text-white;
+            @apply bg-gray-200 text-gray-800;
         }
     }
 

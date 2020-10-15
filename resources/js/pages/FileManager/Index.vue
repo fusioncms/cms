@@ -12,6 +12,12 @@
     import { mapActions } from 'vuex'
 
     export default {
+        auth() {
+            return {
+                permission: 'files.viewAny',
+            }
+        },
+
         head: {
             title() {
                 return {

@@ -1,13 +1,55 @@
 <template>
-    <div class="user-page">
+    <div>
         <portal to="actions">
             <div class="buttons">
-                <ui-button key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
+                <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
                 <ui-button key="save-btn" variant="primary" @click.prevent="submit" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
-        <section-card title="General Information" description="General information about this user.">
+        <portal to="sidebar-right">
+            <sidebar id="users-sidebar">
+                <sidebar-section id="users_panel_status" tabindex="-1">
+                    <ui-toggle
+                        id="user-status"
+                        name="status"
+                        label="Status"
+                        :help="form.status ? 'Toggle to disable this user.' : 'Toggle to enable this user.'"
+                        v-model="form.status"
+                        :true-value="1"
+                        :false-value="0">
+                    </ui-toggle>
+                </sidebar-section>
+
+                <sidebar-section v-if="user" title="Actions" description="Management actions that can be performed for this user." tabindex="-1">
+                    <div class="mb-4">
+                        <span class="label">Verification Email</span>
+                        <p class="help mb-2">Re-send the verification email to this user.</p>
+                        <ui-button size="small" variant="secondary" v-modal:verify-user>Send Verification</ui-button>
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="label">Password Reset</span>
+                        <p class="help mb-2">Re-send password reset email to this user.</p>
+                        <ui-button size="small" variant="secondary" v-modal:password-user>Reset Password</ui-button>
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="label">Expire Password</span>
+                        <p class="help mb-2">Force the user to reset their password upon next login attempt.</p>
+                        <ui-button size="small" variant="secondary" v-modal:expire-password>Expire Password</ui-button>
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="label">Delete User</span>
+                        <p class="help mb-2">Once you delete this user, there is no going back. Please be certain.</p>
+                        <ui-button size="small" variant="danger" v-modal:delete-user>Delete User</ui-button>
+                    </div>
+                </sidebar-section>
+            </sidebar>
+        </portal>
+
+        <section-card id="user_panel_general" title="General Information" description="General information about this user." tabindex="-1">
             <ui-input-group
                 id="user-name"
                 name="name"
@@ -31,25 +73,15 @@
                 required
                 v-model="form.email">
             </ui-input-group>
-
-            <ui-toggle
-                id="user-status"
-                name="status"
-                label="Status"
-                v-model="form.status"
-                :true-value="1"
-                :false-value="0">
-            </ui-toggle>
         </section-card>
 
-        <section-card title="Permissions" description="Select the role to determine which areas of the website this user can access.">
+        <section-card id="user_panel_permissions" title="Permissions" description="Select the role to determine which areas of the website this user can access." tabindex="-1">
             <ui-select-group
                 id="user-role"
                 name="role"
                 label="Role"
                 :options="roleOptions"
                 autocomplete="off"
-                :value="form.role"
                 :has-error="form.errors.has('role')"
                 :error-message="form.errors.get('role')"
                 required
@@ -57,7 +89,7 @@
             </ui-select-group>
         </section-card>
 
-        <section-card v-if="canEditPassword" title="Security" description="Configure this user's security details.">
+        <section-card v-if="canEditPassword" id="user_panel_security" title="Security" description="Configure this user's security details." tabindex="-1">
             <ui-fieldset :help="user ? 'Only fill out the password fields below if you intend to update the user account password.' : null">
                 <ui-password-group
                     id="user-password"
@@ -83,39 +115,13 @@
             </ui-fieldset>
         </section-card>
 
-        <section-card v-if="user" title="Actions" description="Management actions that can be performed for this user.">
-            <div class="mb-4">
-                <span class="label">Verification Email</span>
-                <p class="help mb-2">Re-send the verification email to this user.</p>
-                <ui-button variant="secondary" v-modal:verify-user>Send Verification</ui-button>
-            </div>
-
-            <div class="mb-4">
-                <span class="label">Password Reset</span>
-                <p class="help mb-2">Re-send password reset email to this user.</p>
-                <ui-button variant="secondary" v-modal:password-user>Reset Password</ui-button>
-            </div>
-
-            <div class="mb-4">
-                <span class="label">Expire Password</span>
-                <p class="help mb-2">Force the user to reset their password upon next login attempt.</p>
-                <ui-button variant="secondary" v-modal:expire-password>Expire Password</ui-button>
-            </div>
-
-            <div class="mb-4">
-                <span class="label">Delete User</span>
-                <p class="help mb-2">Once you delete this user, there is no going back. Please be certain.</p>
-                <ui-button variant="danger" v-modal:delete-user>Delete User</ui-button>
-            </div>
-        </section-card>
-
         <portal to="modals">
             <ui-modal name="verify-user" title="Verification Email" key="verify_user">
                 <p>Are you sure you want to re-send the verification email to this user?</p>
 
                 <template slot="footer">
-                    <ui-button v-modal:verify-user @click="emailVerification" class="ml-3">Confirm</ui-button>
-                    <ui-button v-modal:verify-user>Cancel</ui-button>
+                    <ui-button v-modal:verify-user @click="emailVerification" class="ml-3" variant="primary">Confirm</ui-button>
+                    <ui-button v-modal:verify-user variant="secondary">Cancel</ui-button>
                 </template>
             </ui-modal>
 
@@ -123,8 +129,8 @@
                 <p>Are you sure you want to send this user a password reset notification?</p>
 
                 <template slot="footer">
-                    <ui-button v-modal:password-user @click="passwordReset" class="ml-3">Confirm</ui-button>
-                    <ui-button v-modal:password-user>Cancel</ui-button>
+                    <ui-button v-modal:password-user @click="passwordReset" class="ml-3" variant="primary">Confirm</ui-button>
+                    <ui-button v-modal:password-user variant="secondary">Cancel</ui-button>
                 </template>
             </ui-modal>
 
@@ -132,8 +138,8 @@
                 <p>Are you sure you want to force user to reset their password upon next login?</p>
 
                 <template slot="footer" slot-scope="user">
-                    <ui-button v-modal:expire-password @click="passwordExpire" class="ml-3">Confirm</ui-button>
-                    <ui-button v-modal:expire-password>Cancel</ui-button>
+                    <ui-button v-modal:expire-password @click="passwordExpire" class="ml-3" variant="primary">Confirm</ui-button>
+                    <ui-button v-modal:expire-password variant="secondary">Cancel</ui-button>
                 </template>
             </ui-modal>
 
@@ -142,7 +148,7 @@
 
                 <template slot="footer">
                     <ui-button v-modal:delete-user @click="destroy" variant="danger" class="ml-3">Delete</ui-button>
-                    <ui-button v-modal:delete-user>Cancel</ui-button>
+                    <ui-button v-modal:delete-user variant="secondary">Cancel</ui-button>
                 </template>
             </ui-modal>
         </portal>
