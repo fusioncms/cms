@@ -84,9 +84,17 @@ class RoleController extends Controller
      *
      * @return void
      */
-    public function destroy(Role $role)
+    public function destroy(RoleRequest $request, Role $role)
     {
-        $this->authorize('roles.delete');
+        if (! $request->has('transfer')) {
+            return response()->json([
+                'error' => 'Role transfer not specified.',
+            ], 400);
+        }
+
+        $role->users->each(function($user) use ($request) {
+            $user->syncRoles($request->get('transfer'));
+        });
 
         $role->delete();
     }
