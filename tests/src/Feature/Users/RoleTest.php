@@ -150,10 +150,6 @@ class RoleTest extends TestCase
 
     /**
      * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     * @group permissions
      */
     public function a_user_without_permissions_cannot_delete_existing_roles()
     {
@@ -164,6 +160,45 @@ class RoleTest extends TestCase
         $this
             ->be($this->user, 'api')
             ->json('DELETE', '/api/roles/'.$role->id);
+    }
+
+    /**
+     * @test
+     */
+    public function an_admin_can_only_delete_roles_below_their_level()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $role = factory(Role::class)->create();
+
+        $this->be($this->admin, 'api');
+
+        $response = $this->json('DELETE', '/api/roles/'.$this->owner->role->id, [
+            'transfer' => $this->user->role->id,
+        ]);
+    }
+
+    /**
+     * @test
+     * @group fusioncms
+     * @group feature
+     * @group role
+     * @group permissions
+     */
+    public function a_role_to_transfer_users_must_be_supplied_when_deleting_roles()
+    {
+        $role = factory(Role::class)->create();
+
+        $this->be($this->owner, 'api');
+
+        $this->json('DELETE', '/api/roles/'.$this->admin->role->id)
+            ->assertStatus(400);
+
+        $this->json('DELETE', '/api/roles/'.$this->admin->role->id, [
+            'transfer' => $this->user->role->id,
+        ])->assertStatus(200);
+
+        $this->assertEquals($this->admin->fresh()->role->id, $this->user->role->id);
     }
 
     /**
