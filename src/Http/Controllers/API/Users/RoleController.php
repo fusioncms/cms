@@ -86,13 +86,13 @@ class RoleController extends Controller
      */
     public function destroy(RoleRequest $request, Role $role)
     {
-        if (! $request->has('transfer')) {
+        if (!$request->has('transfer')) {
             return response()->json([
                 'error' => 'Role transfer not specified.',
             ], 400);
         }
 
-        $role->users->each(function($user) use ($request) {
+        $role->users->each(function ($user) use ($request) {
             $user->syncRoles($request->get('transfer'));
         });
 

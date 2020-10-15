@@ -15,10 +15,10 @@ class Updated
      * Create new instance.
      *
      * @param \Fusion\Models\Backup $backup
-     * @param array  $disks
+     * @param array                 $disks
      */
     public function __construct(Backup $backup)
     {
-    	$this->backup = $backup;
+        $this->backup = $backup;
     }
 }

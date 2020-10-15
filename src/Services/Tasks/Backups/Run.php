@@ -17,7 +17,7 @@ class Run
     public function handle(Schedule $schedule)
     {
         $schedule
-            ->job(new BackupRun, 'backups', 'database')
+            ->job(new BackupRun(), 'backups', 'database')
             ->dailyAt('1:00')
             ->withoutOverlapping()
             ->environments(['production'])

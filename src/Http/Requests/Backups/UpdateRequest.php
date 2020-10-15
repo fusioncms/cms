@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Requests\Backups;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
 {
@@ -31,7 +31,7 @@ class UpdateRequest extends FormRequest
                     ->where(function ($query) {
                         $query->where('disk', $this->backup->disk);
                     })
-                    ->ignore($this->backup)
+                    ->ignore($this->backup),
             ],
         ];
     }
@@ -44,7 +44,7 @@ class UpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.unique' => 'The name & disk combination has already been taken.'
+            'name.unique' => 'The name & disk combination has already been taken.',
         ];
     }
 }

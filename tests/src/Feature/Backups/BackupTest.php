@@ -2,12 +2,11 @@
 
 namespace Fusion\Tests\Feature\Backups;
 
-use Fusion\Models\Backup;
 use Fusion\Events\Backups\Backup\Finished as BackupFinished;
 use Fusion\Events\Backups\Backup\Started as BackupStarted;
 use Fusion\Events\Backups\Backup\Updated as BackupUpdated;
 use Fusion\Jobs\Backups\BackupRun;
-use Fusion\Tests\TestCase;
+use Fusion\Models\Backup;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Event;
@@ -17,7 +16,7 @@ use ZipArchive;
 
 class BackupTest extends TestBase
 {
-	// ------------------------------------------------
+    // ------------------------------------------------
     // VIEW ALL
     // ------------------------------------------------
 
@@ -97,7 +96,7 @@ class BackupTest extends TestBase
     {
         Event::fake([
             BackupStarted::class,
-            BackupFinished::class
+            BackupFinished::class,
         ]);
 
         $backups = $this->newBackup();
@@ -109,7 +108,7 @@ class BackupTest extends TestBase
     /** @test */
     public function newly_created_backup_will_generate_zip_file()
     {
-    	$backups = $this->newBackup();
+        $backups = $this->newBackup();
 
         foreach ($backups as $backup) {
             Storage::disk($backup->disk)->assertExists($backup->location);
@@ -131,16 +130,16 @@ class BackupTest extends TestBase
     {
         $name    = 'test-backup';
         $disks   = config('backup.backup.destination.disks');
-		$backups = $this->newBackup($name);
+        $backups = $this->newBackup($name);
 
-		foreach ($disks as $disk) {
-			$this->assertDatabaseHas('backups', [
-				'name'     => $name,
-				'disk'     => $disk,
+        foreach ($disks as $disk) {
+            $this->assertDatabaseHas('backups', [
+                'name'     => $name,
+                'disk'     => $disk,
                 'location' => "backups/{$name}.zip",
                 'log_path' => "logs/backups/{$name}.log",
-			]);
-		}
+            ]);
+        }
     }
 
     /** @test */
@@ -158,7 +157,7 @@ class BackupTest extends TestBase
     /** @test */
     public function a_user_without_permission_cannot_create_new_backups()
     {
-    	Queue::fake();
+        Queue::fake();
 
         $this->expectException(AuthorizationException::class);
 
@@ -182,18 +181,18 @@ class BackupTest extends TestBase
         $this
             ->be($this->owner, 'api')
             ->json('PATCH', "/api/backups/{$backupId}", [
-                'name' => 'updated-name'
+                'name' => 'updated-name',
             ])
             ->assertStatus(200);
 
         $this->assertDatabaseHas('backups', [
             'id'   => $backupId,
-            'name' => 'updated-name'
+            'name' => 'updated-name',
         ]);
 
         $this->assertDatabaseMissing('backups', [
             'id'   => $backupId,
-            'name' => 'new-backup'
+            'name' => 'new-backup',
         ]);
     }
 
@@ -207,7 +206,7 @@ class BackupTest extends TestBase
         $this
             ->be($this->owner, 'api')
             ->json('PATCH', "/api/backups/{$backups->first()->id}", [
-                'name' => 'updated-name'
+                'name' => 'updated-name',
             ]);
 
         Event::assertDispatched(BackupUpdated::class);
@@ -244,14 +243,12 @@ class BackupTest extends TestBase
         $this
             ->be($this->owner, 'api')
             ->json('PATCH', "/api/backups/{$backupOne->id}", [
-                'name' => 'second-backup'
+                'name' => 'second-backup',
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
                 'name' => 'The name & disk combination has already been taken.',
             ]);
-
-
     }
 
     // ------------------------------------------------
@@ -294,7 +291,7 @@ class BackupTest extends TestBase
     /** @test */
     public function deleted_backup_will_clean_up_backup_zip_file()
     {
-    	list($b1, $b2) = $this->newBackup()->take(2);
+        list($b1, $b2) = $this->newBackup()->take(2);
 
         $this
             ->be($this->owner, 'api')
@@ -320,13 +317,13 @@ class BackupTest extends TestBase
     /** @test */
     public function deleted_backup_will_be_removed_from_database()
     {
-		list($b1, $b2) = $this->newBackup()->take(2);
+        list($b1, $b2) = $this->newBackup()->take(2);
 
-    	$this
+        $this
             ->be($this->owner, 'api')
             ->json('DELETE', "/api/backups/{$b1->id}");
 
-		$this->assertDatabaseMissing('backups', ['id' => $b1->id]);
+        $this->assertDatabaseMissing('backups', ['id' => $b1->id]);
         $this->assertDatabaseHas('backups', ['id' => $b2->id]);
     }
 
@@ -337,7 +334,7 @@ class BackupTest extends TestBase
     /** @test */
     public function backup_zip_will_save_env_variables_from_config()
     {
-    	$backup     = $this->newBackup('test-backup', 'public')->first();
+        $backup     = $this->newBackup('test-backup', 'public')->first();
         $zipArchive = new ZipArchive();
 
         $envFile = 'fusion-dumps/env.json';
@@ -355,7 +352,7 @@ class BackupTest extends TestBase
     /** @test */
     public function backup_zip_will_save_files_included_in_config()
     {
-    	$backup     = $this->newBackup('test-backup', 'public')->first();
+        $backup     = $this->newBackup('test-backup', 'public')->first();
         $zipArchive = new ZipArchive();
 
         $file1 = Storage::disk($backup->disk)->path('files/testing-file1.txt');
@@ -375,7 +372,7 @@ class BackupTest extends TestBase
     /** @test */
     public function backup_zip_will_save_database_dumps_in_config()
     {
-    	$backup     = $this->newBackup('test-backup', 'public')->first();
+        $backup     = $this->newBackup('test-backup', 'public')->first();
         $zipArchive = new ZipArchive();
 
         $dbDump = 'db-dumps/sqlite-sqlite-database.sql';

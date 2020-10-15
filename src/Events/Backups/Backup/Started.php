@@ -22,7 +22,7 @@ class Started
      */
     public function __construct($filename, array $disks = [])
     {
-    	$this->filename = $filename;
-    	$this->disks    = $disks;
+        $this->filename = $filename;
+        $this->disks    = $disks;
     }
 }

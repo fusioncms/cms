@@ -4,8 +4,8 @@ namespace Fusion\Http\Controllers\API\Backups;
 
 use Fusion\Events\Backups\Backup\Updated as BackupUpdated;
 use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\BackupResource;
 use Fusion\Http\Requests\Backups\UpdateRequest;
+use Fusion\Http\Resources\BackupResource;
 use Fusion\Jobs\Backups\BackupRun;
 use Fusion\Models\Backup;
 use Illuminate\Http\Request;
@@ -61,8 +61,8 @@ class BackupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Fusion\Http\Requests\Backups\UpdateRequest  $request
-     * @param \Fusion\Models\Backup     $backup
+     * @param \Fusion\Http\Requests\Backups\UpdateRequest $request
+     * @param \Fusion\Models\Backup                       $backup
      *
      * @return \Fusion\Http\Resources\BackupResource
      */

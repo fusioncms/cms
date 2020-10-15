@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 class Backup extends Model
 {
     /**
-     * Backup states. 
+     * Backup states.
      *
      * @var string
      */
@@ -18,7 +18,7 @@ class Backup extends Model
 
     /**
      * File name format.
-     * 
+     *
      * @var string
      */
     public const FILENAME_FORMAT = 'Y-m-d-H-i-s';
@@ -34,7 +34,7 @@ class Backup extends Model
         'size',
         'location',
         'log_path',
-        'state'
+        'state',
     ];
 
     /**
