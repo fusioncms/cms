@@ -5,9 +5,10 @@
 		</portal>
 
 		<portal to="actions">
-			<ui-button v-modal:settings class="mr-1">Settings</ui-button>
-			<ui-button v-modal:upload-backup class="mr-1">Upload</ui-button>
-			<ui-button v-modal:confirm-backup @click.prevent variant="primary">Backup Now</ui-button>
+			<div class="buttons">
+				<ui-button v-modal:upload-backup class="mr-1">Upload</ui-button>
+				<ui-button v-modal:confirm-backup @click.prevent variant="primary">Backup Now</ui-button>
+			</div>
 		</portal>
 
 		<ui-card>
@@ -63,7 +64,6 @@
 
 
         <portal to="modals">
-            <settings-modal handle="backups"></settings-modal>
             <restore-backup-modal></restore-backup-modal>
 
             <!-- Run manual backup process -->

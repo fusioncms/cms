@@ -5,8 +5,10 @@
         </portal>
 
         <portal to="actions">
-            <ui-button key="go-back-btn" :to="{ name: 'backups' }" variant="secondary">Go Back</ui-button>
-            <ui-button key="save-btn" variant="primary" @click.prevent="submit" :disabled="!form.hasChanges">Save</ui-button>
+            <div class="buttons">
+                <ui-button key="go-back-btn" :to="{ name: 'backups' }" variant="secondary">Go Back</ui-button>
+                <ui-button key="save-btn" variant="primary" @click.prevent="submit" :disabled="!form.hasChanges">Save</ui-button>
+            </div>
         </portal>
 
         <section-card title="Backup Information" description="General information about this backup.">
