@@ -17,7 +17,7 @@ class BackupEventSubscriber
     // ------------------------------------------------
 
     /**
-     * @param \Fusion\Events\Backups\BackupStarted $event
+     * @param \Fusion\Events\Backups\Backup\Started $event
      *
      * @return void
      */
@@ -40,7 +40,7 @@ class BackupEventSubscriber
     }
 
     /**
-     * @param \Fusion\Events\Backups\BackupFinished $event
+     * @param \Fusion\Events\Backups\Backup\Finished $event
      *
      * @return void
      */
@@ -60,6 +60,20 @@ class BackupEventSubscriber
                     ->info('Backup has failed.', $backup->toArray());
             }
         }
+    }
+
+    /**
+     * @param \Fusion\Events\Backups\Backup\Updated $event
+     *
+     * @return void
+     */
+    public function handleBackupUpdated($event)
+    {
+        $backup = $event->backup;
+
+        $this
+            ->logToFile($backup->log_path, $backup->disk)
+            ->info("Backup name updated [{$backup->name}].", []);
     }
 
     /**
@@ -176,6 +190,9 @@ class BackupEventSubscriber
 
         $events->listen('Fusion\Events\Backups\Backup\Finished',
             [BackupEventSubscriber::class, 'handleBackupFinished']);
+
+        $events->listen('Fusion\Events\Backups\Backup\Updated',
+            [BackupEventSubscriber::class, 'handleBackupUpdated']);
 
         $events->listen('Spatie\Backup\Events\BackupWasSuccessful',
             [BackupEventSubscriber::class, 'handleBackupSuccessful']);
