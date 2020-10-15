@@ -12,9 +12,9 @@ return [
     | you a variety of powerful log handlers / formatters to utilize.
     |
     */
-   
+
     'channels' => [
-        
+
         'composer' => [
             'driver' => 'single',
             'tap'    => [Fusion\Logging\ComposerFormatter::class],

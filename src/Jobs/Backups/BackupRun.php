@@ -4,15 +4,15 @@ namespace Fusion\Jobs\Backups;
 
 use Carbon\Carbon;
 use Exception;
-use Fusion\Events\Backups\Backup\Started as BackupStarted;
 use Fusion\Events\Backups\Backup\Finished as BackupFinished;
+use Fusion\Events\Backups\Backup\Started as BackupStarted;
 use Fusion\Models\Backup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class BackupRun implements ShouldQueue
@@ -22,21 +22,21 @@ class BackupRun implements ShouldQueue
 
     /**
      * Backup identifier.
-     * 
+     *
      * @var string
      */
     public $name;
 
     /**
      * Backup command options.
-     * 
+     *
      * @var array
      */
     public $options;
 
     /**
      * Backup disks.
-     * 
+     *
      * @var array
      */
     public $disks;
@@ -60,8 +60,10 @@ class BackupRun implements ShouldQueue
      */
     public function handle()
     {
-        event(new BackupStarted($this->name,
-            $this->backupDestinationDisks()));
+        event(new BackupStarted(
+            $this->name,
+            $this->backupDestinationDisks()
+        ));
         // --
 
         Artisan::call('backup:run', [
@@ -72,8 +74,10 @@ class BackupRun implements ShouldQueue
         ]);
 
         // --
-        event(new BackupFinished($this->name,
-            $this->backupDestinationDisks()));
+        event(new BackupFinished(
+            $this->name,
+            $this->backupDestinationDisks()
+        ));
     }
 
     /**
@@ -90,7 +94,7 @@ class BackupRun implements ShouldQueue
 
     /**
      * Backup destination disks.
-     * 
+     *
      * @return array
      */
     private function backupDestinationDisks()
