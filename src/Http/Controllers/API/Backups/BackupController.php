@@ -2,8 +2,10 @@
 
 namespace Fusion\Http\Controllers\API\Backups;
 
+use Fusion\Events\Backups\Backup\Updated as BackupUpdated;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\BackupResource;
+use Fusion\Http\Requests\Backups\UpdateRequest;
 use Fusion\Jobs\Backups\BackupRun;
 use Fusion\Models\Backup;
 use Illuminate\Http\Request;
@@ -27,6 +29,20 @@ class BackupController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param \Fusion\Models\Backup $backup
+     *
+     * @return \Fusion\Http\Resources\BackupResource
+     */
+    public function show(Backup $backup)
+    {
+        $this->authorize('backups.view');
+
+        return new BackupResource($backup);
+    }
+
+    /**
      * Create new backup to be saved on disk.
      *
      * @param \Illuminate\Http\Request $request
@@ -37,7 +53,26 @@ class BackupController extends Controller
     {
         $this->authorize('backups.create');
 
-        BackupRun::dispatch();
+        BackupRun::dispatch()
+            ->onConnection('database')
+            ->onQueue('backups');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Fusion\Http\Requests\Backups\UpdateRequest  $request
+     * @param \Fusion\Models\Backup     $backup
+     *
+     * @return \Fusion\Http\Resources\BackupResource
+     */
+    public function update(UpdateRequest $request, Backup $backup)
+    {
+        $backup->update($request->validated());
+
+        event(new BackupUpdated($backup));
+
+        return new BackupResource($backup);
     }
 
     /**

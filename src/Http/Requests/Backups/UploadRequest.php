@@ -1,10 +1,10 @@
 <?php
 
-namespace Fusion\Http\Requests;
+namespace Fusion\Http\Requests\Backups;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BackupUploadRequest extends FormRequest
+class UploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

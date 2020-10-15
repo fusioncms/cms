@@ -3,6 +3,7 @@
 namespace Fusion\Observers;
 
 use Fusion\Models\Backup;
+use Illuminate\Support\Facades\Storage;
 
 class BackupObserver
 {
@@ -15,6 +16,10 @@ class BackupObserver
      */
     public function deleted(Backup $backup)
     {
+        // remove backup
         $backup->backup()->delete();
+
+        // remove log file
+        Storage::disk($backup->disk)->delete($backup->log_path);
     }
 }

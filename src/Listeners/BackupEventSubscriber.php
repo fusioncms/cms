@@ -2,11 +2,79 @@
 
 namespace Fusion\Listeners;
 
+use Carbon\Carbon;
+use Fusion\Concerns\HasCustomLogger;
 use Fusion\Models\Backup;
 use Illuminate\Support\Facades\Log;
 
 class BackupEventSubscriber
 {
+    use HasCustomLogger;
+
+    // ------------------------------------------------
+    // BACKUP
+    // ------------------------------------------------
+
+    /**
+     * @param \Fusion\Events\Backups\Backup\Started $event
+     *
+     * @return void
+     */
+    public function handleBackupStarted($event)
+    {
+        $name = basename($event->filename, '.zip');
+
+        foreach ($event->disks as $disk) {
+            $backup = Backup::create([
+                'name'     => $name,
+                'disk'     => $disk,
+                'state'    => Backup::IN_PROGRESS,
+                'log_path' => ($path = "logs/backups/{$name}.log"),
+            ]);
+
+            $this
+                ->logToFile($path, $disk)
+                ->info('Backup Started.', $backup->toArray());
+        }
+    }
+
+    /**
+     * @param \Fusion\Events\Backups\Backup\Finished $event
+     *
+     * @return void
+     */
+    public function handleBackupFinished($event)
+    {
+        foreach ($event->disks as $disk) {
+            $backup = Backup::where([
+                'name' => basename($event->filename, '.zip'),
+                'disk' => $disk
+            ])->firstOrFail();
+
+            if ($backup->state == Backup::IN_PROGRESS) {
+                $backup->update(['state' => Backup::FAILURE]);
+
+                $this
+                    ->logToFile($backup->log_path, $disk)
+                    ->info('Backup has failed.', $backup->toArray());
+            }
+        }
+    }
+
+    /**
+     * @param \Fusion\Events\Backups\Backup\Updated $event
+     *
+     * @return void
+     */
+    public function handleBackupUpdated($event)
+    {
+        $backup = $event->backup;
+
+        $this
+            ->logToFile($backup->log_path, $backup->disk)
+            ->info("Backup name updated [{$backup->name}].", []);
+    }
+
     /**
      * @param \Spatie\Backup\Events\BackupWasSuccessful $event
      *
@@ -16,14 +84,20 @@ class BackupEventSubscriber
     {
         $newestBackup = $event->backupDestination->newestBackup();
 
-        $backup = Backup::create([
-            'name'     => basename($newestBackup->path(), '.zip'),
-            'disk'     => $event->backupDestination->diskName(),
+        $backup = Backup::where([
+            'name' => basename($newestBackup->path(), '.zip'),
+            'disk' => $event->backupDestination->diskName()
+        ])->firstOrFail();
+
+        $backup->update([
             'size'     => $newestBackup->size(),
             'location' => $newestBackup->path(),
+            'state'    => Backup::SUCCESS,
         ]);
 
-        Log::channel('backups')->info('Backup Successful.', $backup->toArray());
+        $this
+            ->logToFile($backup->log_path, $disk)
+            ->info('Backup was successful.', $backup->toArray());
     }
 
     /**
@@ -33,8 +107,8 @@ class BackupEventSubscriber
      */
     public function handleBackupFailed($event)
     {
-        Log::channel('backups')->error('Backup Failed.', [
-            'disk'    => $event->backupDestination->diskName(),
+        Log::error('Backup has failed.', [
+            'disk'    => optional($event->backupDestination)->diskName(),
             'message' => $event->exception->getMessage(),
         ]);
     }
@@ -73,6 +147,10 @@ class BackupEventSubscriber
         $zipArchive->close();
     }
 
+    // ------------------------------------------------
+    // CLEANUP
+    // ------------------------------------------------
+
     /**
      * @param \Spatie\Backup\Events\CleanupWasSuccessful $event
      *
@@ -80,7 +158,7 @@ class BackupEventSubscriber
      */
     public function handleCleanupSuccessful($event)
     {
-        Log::channel('backups')->error('Cleanup Successful.', [
+        Log::info('Backup cleanup was successfully.', [
             'disk'        => $event->backupDestination->diskName(),
             'usedStorage' => $event->backupDestination->usedStorage(),
         ]);
@@ -93,8 +171,8 @@ class BackupEventSubscriber
      */
     public function handleCleanupFailed($event)
     {
-        Log::channel('backups')->error('Cleanup Failed.', [
-            'disk'    => $event->backupDestination->diskName(),
+        Log::error('Backup cleanup has failed.', [
+            'disk'    => optional($event->backupDestination)->diskName(),
             'message' => $event->exception->getMessage(),
         ]);
     }
@@ -108,34 +186,31 @@ class BackupEventSubscriber
      */
     public function subscribe($events)
     {
-        $events->listen(
-            'Spatie\Backup\Events\BackupWasSuccessful',
-            [BackupEventSubscriber::class, 'handleBackupSuccessful']
-        );
+        $events->listen('Fusion\Events\Backups\Backup\Started',
+            [BackupEventSubscriber::class, 'handleBackupStarted']);
 
-        $events->listen(
-            'Spatie\Backup\Events\BackupHasFailed',
-            [BackupEventSubscriber::class, 'handleBackupFailed']
-        );
+        $events->listen('Fusion\Events\Backups\Backup\Finished',
+            [BackupEventSubscriber::class, 'handleBackupFinished']);
 
-        $events->listen(
-            'Spatie\Backup\Events\BackupManifestWasCreated',
-            [BackupEventSubscriber::class, 'handleBackupManifestCreated']
-        );
+        $events->listen('Fusion\Events\Backups\Backup\Updated',
+            [BackupEventSubscriber::class, 'handleBackupUpdated']);
 
-        $events->listen(
-            'Spatie\Backup\Events\BackupZipWasCreated',
-            [BackupEventSubscriber::class, 'handleBackupZipCreated']
-        );
+        $events->listen('Spatie\Backup\Events\BackupWasSuccessful',
+            [BackupEventSubscriber::class, 'handleBackupSuccessful']);
 
-        $events->listen(
-            'Spatie\Backup\Events\CleanupWasSuccessful',
-            [BackupEventSubscriber::class, 'handleCleanupSuccessful']
-        );
+        $events->listen('Spatie\Backup\Events\BackupHasFailed',
+            [BackupEventSubscriber::class, 'handleBackupFailed']);
 
-        $events->listen(
-            'Spatie\Backup\Events\CleanupHasFailed',
-            [BackupEventSubscriber::class, 'handleCleanupFailed']
-        );
+        $events->listen('Spatie\Backup\Events\BackupManifestWasCreated',
+            [BackupEventSubscriber::class, 'handleBackupManifestCreated']);
+    
+        $events->listen('Spatie\Backup\Events\BackupZipWasCreated',
+            [BackupEventSubscriber::class, 'handleBackupZipCreated']);
+
+        $events->listen('Spatie\Backup\Events\CleanupWasSuccessful',
+            [BackupEventSubscriber::class, 'handleCleanupSuccessful']);
+    
+        $events->listen('Spatie\Backup\Events\CleanupHasFailed',
+            [BackupEventSubscriber::class, 'handleCleanupFailed']);
     }
 }
