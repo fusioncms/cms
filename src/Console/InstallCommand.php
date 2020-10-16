@@ -2,12 +2,12 @@
 
 namespace Fusion\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Fusion\Console\Actions\CheckServerRequirements;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class InstallCommand extends Command
 {
@@ -136,8 +136,7 @@ class InstallCommand extends Command
         $this->container['db_host']      = $this->ask('Please enter the database host', $this->get('db_host'));
         $this->container['db_database']  = $this->ask('Please enter the database name', $this->get('db_database'));
         $this->container['db_username']  = $this->ask('Please enter the database username', $this->get('db_username'));
-        $this->container['db_password'] = $this->secret('Please enter the database password');
-
+        $this->container['db_password']  = $this->secret('Please enter the database password');
 
         $this->container['db_charset']   = $this->ask('Please enter the database charset', $this->get('db_charset'));
         $this->container['db_collation'] = $this->ask('Please enter the database collation', $this->get('db_collation'));
