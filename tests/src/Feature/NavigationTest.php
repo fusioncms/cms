@@ -16,12 +16,7 @@ class NavigationTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group navigation
-     * @group permissions
-     */
+    /** @test */
     public function only_admins_can_request_control_panel_navigation()
     {
         $this->expectException(AuthorizationException::class);

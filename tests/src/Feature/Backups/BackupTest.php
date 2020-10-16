@@ -16,12 +16,7 @@ class BackupTest extends TestBase
     // VIEW BACKUPS
     // ------------------------------------------------
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_user_with_permission_can_view_backups()
     {
         $this
@@ -30,12 +25,7 @@ class BackupTest extends TestBase
             ->assertStatus(200);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_user_without_permission_cannot_view_any_backups()
     {
         $this->expectException(AuthorizationException::class);
@@ -49,12 +39,7 @@ class BackupTest extends TestBase
     // CREATE BACKUPS
     // ------------------------------------------------
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_user_with_permission_can_create_a_backup()
     {
         Bus::fake();
@@ -67,12 +52,7 @@ class BackupTest extends TestBase
         Bus::assertDispatched(BackupRun::class);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function newly_created_backup_zip_will_be_created()
     {
         $backup = $this->newBackup();
@@ -80,12 +60,7 @@ class BackupTest extends TestBase
         Storage::disk('public')->assertExists($backup->location);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function newly_created_backup_will_be_recorded_in_database()
     {
         $backup = $this->newBackup();
@@ -98,12 +73,7 @@ class BackupTest extends TestBase
         }
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_guest_cannot_not_create_a_backup()
     {
         Bus::fake();
@@ -115,12 +85,7 @@ class BackupTest extends TestBase
         Bus::assertNotDispatched(BackupRun::class);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_user_without_permission_cannot_create_new_backups()
     {
         Bus::fake();
@@ -138,12 +103,7 @@ class BackupTest extends TestBase
     // DELETE BACKUPS
     // ------------------------------------------------
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function deleted_backup_will_be_removed_from_storage()
     {
         $backup = $this->newBackup();
@@ -156,12 +116,7 @@ class BackupTest extends TestBase
         Storage::disk($backup->disk)->assertMissing($backup->location);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function deleted_backup_will_be_removed_from_database()
     {
         $backup = $this->newBackup();
@@ -174,12 +129,7 @@ class BackupTest extends TestBase
         $this->assertDatabaseMissing('backups', ['id' => $backup->id]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_user_without_permission_cannot_delete_existing_backups()
     {
         $this->expectException(AuthorizationException::class);
@@ -195,12 +145,7 @@ class BackupTest extends TestBase
     // BACKUP ZIP
     // ------------------------------------------------
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function backup_zip_will_save_env_variables_from_config()
     {
         $backup     = $this->newBackup();
@@ -218,12 +163,7 @@ class BackupTest extends TestBase
         }
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function backup_zip_will_save_files_included_in_config()
     {
         $backup     = $this->newBackup();
@@ -243,12 +183,7 @@ class BackupTest extends TestBase
         }
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function backup_zip_will_save_database_dumps_in_config()
     {
         $backup     = $this->newBackup();

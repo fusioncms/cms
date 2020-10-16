@@ -26,12 +26,7 @@ class FileTest extends TestCase
         Storage::fake('public');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_user_with_permissions_can_create_files()
     {
         $this
@@ -52,13 +47,7 @@ class FileTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     * @group permissions
-     */
+    /** @test */
     public function a_guest_cannot_create_new_files()
     {
         $this->expectException(AuthenticationException::class);
@@ -66,13 +55,7 @@ class FileTest extends TestCase
         $this->json('POST', '/api/files', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_any_files()
     {
         $this->expectException(AuthorizationException::class);
@@ -82,13 +65,7 @@ class FileTest extends TestCase
             ->json('GET', '/api/files');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_a_file()
     {
         $this->expectException(AuthorizationException::class);
@@ -100,12 +77,7 @@ class FileTest extends TestCase
             ->json('GET', '/api/files/'.$file->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_create_new_files()
     {
         $this->expectException(AuthorizationException::class);
@@ -115,13 +87,7 @@ class FileTest extends TestCase
             ->json('POST', '/api/files', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_update_existing_files()
     {
         $this->expectException(AuthorizationException::class);
@@ -133,13 +99,7 @@ class FileTest extends TestCase
             ->json('PATCH', '/api/files/'.$file->id, []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_delete_existing_files()
     {
         $this->expectException(AuthorizationException::class);
@@ -151,13 +111,7 @@ class FileTest extends TestCase
             ->json('DELETE', '/api/files/'.$file->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_download_files()
     {
         $this->expectException(AuthorizationException::class);
@@ -169,12 +123,7 @@ class FileTest extends TestCase
             ->json('GET', "/api/files/{$file->uuid}/download");
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_file_is_required_for_uploads()
     {
         $this
@@ -186,12 +135,7 @@ class FileTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_valid_file_is_required_for_uploads()
     {
         $this
@@ -203,12 +147,7 @@ class FileTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_user_with_permissions_can_update_files()
     {
         $file = factory(File::class)->states('document')->create();
@@ -239,12 +178,7 @@ class FileTest extends TestCase
         Storage::disk('public')->assertExists("files/{$uuid}-{$name}.{$extn}");
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_user_with_permissions_can_delete_files()
     {
         $file = factory(File::class)->states('audio')->create();
@@ -259,12 +193,7 @@ class FileTest extends TestCase
         Storage::disk('public')->assertMissing($file->location);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_name_must_be_provided_with_an_update_request()
     {
         $file = factory(File::class)->states('image')->create();
@@ -278,12 +207,7 @@ class FileTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_user_with_permissions_can_get_a_file()
     {
         $file    = factory(File::class)->states('image')->create();
@@ -296,12 +220,7 @@ class FileTest extends TestCase
         $this->assertEquals($payload->name, $file->name);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_get_a_file()
     {
         $this->expectException(AuthorizationException::class);
@@ -313,12 +232,7 @@ class FileTest extends TestCase
             ->json('GET', '/api/files/'.$file->uuid);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_user_with_permissions_can_download_files()
     {
         $file = factory(File::class)->states('document')->create();
@@ -332,12 +246,7 @@ class FileTest extends TestCase
         $this->assertTrue($response->headers->get('content-disposition') === "attachment; filename={$file->name}.{$file->extension}");
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_user_with_permissions_can_replace_existing_files()
     {
         $file = factory(File::class)->states('image')->create();
@@ -362,12 +271,7 @@ class FileTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function a_user_with_permissions_can_move_files()
     {
         $file      = factory(File::class)->states('image')->create();
@@ -389,12 +293,7 @@ class FileTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function files_can_be_searched_by_keywords()
     {
         $this->actingAs($this->owner, 'api');
@@ -428,12 +327,7 @@ class FileTest extends TestCase
         $this->assertCount(1, $data->where('name', 'foo'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function files_can_be_sorted_by_name()
     {
         $this->actingAs($this->owner, 'api');
@@ -458,12 +352,7 @@ class FileTest extends TestCase
         $this->assertSame(['sit', 'lorem', 'ipsum', 'dolor', 'do', 'amet'], $data);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function files_can_be_sorted_by_filesize()
     {
         $this->actingAs($this->owner, 'api');
@@ -488,12 +377,7 @@ class FileTest extends TestCase
         $this->assertSame(['sit', 'do', 'lorem', 'dolor', 'amet', 'ipsum'], $data);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function files_can_be_sorted_by_last_modified_timestamp()
     {
         $this->actingAs($this->owner, 'api');
@@ -518,12 +402,7 @@ class FileTest extends TestCase
         $this->assertSame(['sit', 'do', 'amet', 'ipsum', 'dolor', 'lorem'], $data);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group file
-     */
+    /** @test */
     public function image_files_can_be_filtered()
     {
         $this->actingAs($this->owner, 'api');

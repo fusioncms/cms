@@ -47,11 +47,7 @@ class BlueprintTest extends TestCase
         $this->fieldBaz  = $this->blueprint->fields->where('name', 'Baz')->first();
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group blueprint
-     */
+    /** @test */
     public function a_blueprint_has_sections()
     {
         $this->assertTrue($this->blueprint->hasSections());
@@ -59,11 +55,7 @@ class BlueprintTest extends TestCase
         $this->assertCount(1, $this->blueprint->sections);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group blueprint
-     */
+    /** @test */
     public function a_blueprint_can_have_many_fields_through_a_section()
     {
         $this->assertTrue($this->blueprint->hasFields());
@@ -71,22 +63,14 @@ class BlueprintTest extends TestCase
         $this->assertCount(3, $this->blueprint->fields);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group blueprint
-     */
+    /** @test */
     public function a_blueprint_can_return_fields_that_generate_database_columns()
     {
         $this->assertInstanceOf('Fusion\Models\Field', $this->blueprint->database()->first());
         $this->assertCount(1, $this->blueprint->database());
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group blueprint
-     */
+    /** @test */
     public function a_blueprint_can_return_fields_that_generate_relationships()
     {
         $this->assertInstanceOf('Fusion\Models\Field', $this->blueprint->relationships()->first());

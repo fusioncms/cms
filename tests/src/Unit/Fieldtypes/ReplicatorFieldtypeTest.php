@@ -34,12 +34,7 @@ class ReplicatorFieldtypeTest extends TestCase
         $this->replicator = Replicator::first();
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group fieldtypes
-     * @group replicator
-     */
+    /** @test */
     public function each_replicator_belongs_to_a_field()
     {
         $this->assertInstanceOf(Field::class, $this->replicator->field);

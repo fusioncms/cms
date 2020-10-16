@@ -7,12 +7,7 @@ use Fusion\Tests\TestCase;
 
 class VersionTest extends TestCase
 {
-    /**
-     * @test
-     * @group unit
-     * @group services
-     * @group version
-     */
+    /** @test */
     public function can_detect_if_new_version_is_available()
     {
         Version::swap(new \Fusion\Services\Version([['title' => FUSION_VERSION]]));
@@ -24,12 +19,7 @@ class VersionTest extends TestCase
         $this->assertTrue(Version::hasUpdate());
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group services
-     * @group version
-     */
+    /** @test */
     public function can_detect_if_auto_update_is_enabled()
     {
         // disabled
@@ -43,12 +33,7 @@ class VersionTest extends TestCase
         $this->assertTrue(Version::isAutoUpdateEnabled());
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group services
-     * @group version
-     */
+    /** @test */
     public function can_standardize_for_semantic_versioning()
     {
         $this->assertEquals('1.0.0', Version::standardize('v1'));

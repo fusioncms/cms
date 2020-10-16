@@ -27,11 +27,7 @@ class ThemeTest extends TestCase
         Storage::fake('themes');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group themes
-     */
+    /** @test */
     public function a_user_with_permission_can_upload_a_theme()
     {
         $this->actingAs($this->owner, 'api');
@@ -47,11 +43,7 @@ class ThemeTest extends TestCase
         )->assertStatus(201);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group themes
-     */
+    /** @test */
     public function a_user_with_permission_can_set_currently_active_theme()
     {
         $this->actingAs($this->owner, 'api');
@@ -63,13 +55,7 @@ class ThemeTest extends TestCase
         $this->assertEquals(setting('system.theme'), 'Test');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group themes
-     * @group auth
-     */
+    /** @test */
     public function a_guest_cannot_not_upload_a_theme()
     {
         $this->expectException(AuthenticationException::class);
@@ -77,13 +63,7 @@ class ThemeTest extends TestCase
         $this->json('POST', '/api/themes');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group themes
-     * @group permission
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_not_view_any_themes()
     {
         $this->expectException(AuthorizationException::class);
@@ -93,13 +73,7 @@ class ThemeTest extends TestCase
             ->json('GET', '/api/themes');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group themes
-     * @group permission
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_not_upload_a_theme()
     {
         $this->expectException(AuthorizationException::class);
@@ -109,11 +83,7 @@ class ThemeTest extends TestCase
             ->json('POST', '/api/themes');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group themes
-     */
+    /** @test */
     public function an_uploaded_theme_must_have_its_required_files()
     {
         $this->actingAs($this->owner, 'api');
@@ -131,11 +101,7 @@ class ThemeTest extends TestCase
         ->assertJsonValidationErrors(['file-upload' => 'A theme requires the following files: theme.json, preview.png.']);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group themes
-     */
+    /** @test */
     public function an_uploaded_theme_cannot_have_the_same_name_as_an_existing_theme()
     {
         $this->actingAs($this->owner, 'api');

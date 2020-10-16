@@ -12,12 +12,7 @@ class SyncSettingsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group console
-     * @group settings
-     */
+    /** @test */
     public function console_command_will_sync_setting_group_records()
     {
         $groups = SettingService::groups();
@@ -65,12 +60,7 @@ class SyncSettingsTest extends TestCase
         $this->assertDatabaseHasTable('settings_foobar');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group console
-     * @group settings
-     */
+    /** @test */
     public function console_command_will_sync_setting_section_records()
     {
         $group     = SettingGroup::where('handle', 'api')->firstOrFail();
@@ -99,12 +89,7 @@ class SyncSettingsTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group console
-     * @group settings
-     */
+    /** @test */
     public function console_command_will_sync_setting_field_records()
     {
         $group   = SettingGroup::where('handle', 'files')->firstOrFail();
