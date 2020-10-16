@@ -38,7 +38,6 @@ class WelcomeNewUser extends Mailable
      */
     public function build()
     {
-
         return $this->markdown('emails.users.welcome');
     }
 }

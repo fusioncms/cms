@@ -3,7 +3,6 @@
 namespace Fusion\Tests\Feature;
 
 use Facades\MatrixFactory;
-use Fusion\Models\Blueprint;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

@@ -45,7 +45,7 @@ class ConfirmNewUser extends Mailable
                 'url' => url(route('password.setForm', [
                     'token' => Password::broker()->createToken($this->user),
                     'email' => $this->user->email,
-                ], false))
+                ], false)),
             ]);
     }
 }
