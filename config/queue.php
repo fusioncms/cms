@@ -29,9 +29,9 @@ return [
 	'connections' => [
 		'database' => [
             'driver' => 'database',
-            'table'  => 'queue',
-            'queue'  => 'default',
-            'expire' => 60,
+            'table' => 'jobs',
+            'queue' => 'default',
+            'retry_after' => 90,
         ],
 	]
 ];

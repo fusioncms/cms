@@ -22,10 +22,7 @@ class QueueEventSubscriber
         // $event->job
         // $event->exception
         // $event->connectionName
-        Log::channel('queue')->error(
-            $event->exception->getMessage(),
-            $event->job->toArray()
-        );
+        Log::channel('queue')->error($event->exception->getMessage(), $event->job->payload());
     }
 
     /**
@@ -37,6 +34,7 @@ class QueueEventSubscriber
     {
         // $event->job
         // $event->connectionName
+        Log::channel('queue')->info('JobProcessed', $event->job->payload());
     }
 
     /**
@@ -47,8 +45,8 @@ class QueueEventSubscriber
     public function handleJobProcessing($event)
     {
         // $event->job
-        // $event->exception
         // $event->connectionName
+        Log::channel('queue')->info('JobProcessing', $event->job->payload());
     }
     
     /**
@@ -61,6 +59,7 @@ class QueueEventSubscriber
         // $event->job
         // $event->exception
         // $event->connectionName
+        Log::channel('queue')->error($event->exception->getMessage(), $event->job->payload());
     }
 
     /**
