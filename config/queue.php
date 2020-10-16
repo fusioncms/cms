@@ -2,7 +2,7 @@
 
 return [
 
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Default Queue Driver
     |--------------------------------------------------------------------------
@@ -12,7 +12,7 @@ return [
     | syntax for each one. Here you may set the default queue driver.
     |
     */
-   
-	'default' => env('QUEUE_DRIVER', 'database'),
-    
+
+    'default' => env('QUEUE_DRIVER', 'database'),
+
 ];
