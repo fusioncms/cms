@@ -2,7 +2,6 @@
 
 namespace Fusion\Tests\Unit;
 
-use Fusion\Models\Navigation;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;

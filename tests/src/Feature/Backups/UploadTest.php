@@ -95,7 +95,7 @@ class UploadTest extends TestBase
     private function generateBackup($name, Closure $closure)
     {
         $backup = $this->newBackup($name, 'public')->first();
-        
+
         // setup ----
         File::move(
             $backupPath = Storage::disk('public')->path($backup->location),

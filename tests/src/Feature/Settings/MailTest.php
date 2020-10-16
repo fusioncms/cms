@@ -5,7 +5,6 @@ namespace Fusion\Tests\Feature\Settings;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mail;
 
 class MailTest extends TestCase
 {
