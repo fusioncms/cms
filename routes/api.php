@@ -4,7 +4,6 @@
 Route::get('admin/navigation', 'AdminNavigationController@index');
 Route::get('activity', 'ActivityController@index');
 Route::get('logs', 'LogsController@index');
-Route::get('mail/test', 'MailController@index');
 Route::get('structures', 'StructureController@index');
 
 /**

@@ -431,26 +431,6 @@ const router = new Router({
         },
 
         {
-            path: '/mailables',
-            component: () => import('@/pages/Mailables/Index'),
-            name: 'mailables',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-
-        {
-            path: '/mailables/:mailable/edit',
-            component: () => import('@/pages/Mailables/Edit'),
-            name: 'mailables.edit',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-
-        {
             path: '/addons',
             component: () => import('@/pages/Addons'),
             name: 'addons',

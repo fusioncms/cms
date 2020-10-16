@@ -4,10 +4,11 @@ namespace Fusion\Mail;
 
 use Fusion\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Password;
 
-class ConfirmNewUser extends DatabaseMailable
+class ConfirmNewUser extends Mailable
 {
     use Queueable;
     use SerializesModels;
@@ -18,13 +19,6 @@ class ConfirmNewUser extends DatabaseMailable
      * @var User
      */
     public $user;
-
-    /**
-     * Default inner template.
-     *
-     * @var string
-     */
-    protected $template = 'emails.templates.confirm';
 
     /**
      * Create a new message instance.
@@ -45,11 +39,13 @@ class ConfirmNewUser extends DatabaseMailable
      */
     public function build()
     {
-        $this->viewData['url'] = url(route('password.setForm', [
-            'token' => Password::broker()->createToken($this->user),
-            'email' => $this->user->email,
-        ], false));
-
-        return parent::build();
+        return $this
+            ->markdown('email.templates.welcome')
+            ->with([
+                'url' => url(route('password.setForm', [
+                    'token' => Password::broker()->createToken($this->user),
+                    'email' => $this->user->email,
+                ], false))
+            ]);
     }
 }

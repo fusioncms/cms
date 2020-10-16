@@ -111,12 +111,5 @@ return [
                 'required'    => true,
             ],
         ],
-        'Test' => [
-            [
-                'name'      => 'Mail Test',
-                'handle'    => 'mail_test_component',
-                'component' => 'settings-mail-test',
-            ],
-        ],
     ],
 ];
