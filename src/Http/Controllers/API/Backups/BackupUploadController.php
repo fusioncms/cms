@@ -2,6 +2,7 @@
 
 namespace Fusion\Http\Controllers\API\Backups;
 
+use Fusion\Concerns\HasCustomLogger;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\Backups\UploadRequest;
 use Fusion\Models\Backup;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 
 class BackupUploadController extends Controller
 {
+    use HasCustomLogger;
+
     /**
      * Handle the incoming request.
      *
@@ -27,12 +30,18 @@ class BackupUploadController extends Controller
             $path = preg_replace('/[^a-zA-Z0-9.]/', '-', config('backup.backup.name'));
 
             if ($location = Storage::disk($disk)->putFileAs($path, $file, $name)) {
-                Backup::create([
+                $backup = Backup::create([
                     'name'     => $name,
                     'disk'     => $disk,
                     'size'     => $size,
                     'location' => $location,
+                    'state'    => Backup::IN_PROGRESS,
+                    'log_path' => ($path = "logs/backups/{$name}.log"),
                 ]);
+
+                $this
+                    ->logToFile($path, $disk)
+                    ->info('Backup Started.', $backup->toArray());
             }
         }
 

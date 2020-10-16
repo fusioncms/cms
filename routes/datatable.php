@@ -30,7 +30,6 @@ Route::get('/roles', 'RoleController@index');
 Route::get('/roles/{role}/permissions', 'RolePermissionController@index');
 Route::get('/permissions', 'PermissionController@index');
 Route::get('/taxonomies', 'TaxonomyController@index');
-Route::get('/mailables', 'MailableController@index');
 Route::get('/forms', 'FormController@index');
 Route::get('/navigation', 'NavigationController@index');
 Route::get('/taxonomies/{taxonomy}', 'TermController@index');

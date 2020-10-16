@@ -80,11 +80,6 @@ Route::prefix('insights')->group(function () {
 });
 
 /**
- * API - Mailable Routes.
- */
-Route::apiResource('mailables', 'MailableController')->except(['index', 'store', 'destroy']);
-
-/**
  * API - Matrix Routes.
  */
 Route::get('matrices/slug/{slug}', 'MatrixController@slug');
