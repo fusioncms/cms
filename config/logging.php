@@ -22,5 +22,11 @@ return [
             'level'  => 'debug',
         ],
 
+        'queue' => [
+            'driver' => 'single',
+            'path'   => storage_path('logs/queue.log'),
+            'level'  => 'debug',
+        ],
+
     ],
 ];
