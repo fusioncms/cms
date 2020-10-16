@@ -53,9 +53,7 @@ class BackupController extends Controller
     {
         $this->authorize('backups.create');
 
-        BackupRun::dispatch()
-            ->onConnection('database')
-            ->onQueue('backups');
+        BackupRun::dispatch();
     }
 
     /**
