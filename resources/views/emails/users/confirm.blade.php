@@ -1,3 +1,5 @@
+@component('mail::message')
+
 # New Account Confirmation
 
 You are receiving this email because a new account has been created for you.
@@ -14,3 +16,5 @@ If you did not request a password reset, no further action is required.
 
 Thanks,<br>
 {{ config('app.name') }}
+
+@endcomponent

@@ -5,7 +5,6 @@ namespace Fusion\Tests\Feature\Settings;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mail;
 
 class MailTest extends TestCase
 {
@@ -65,26 +64,5 @@ class MailTest extends TestCase
         $this->assertDatabaseHas('settings_api', [
             'personal_access_tokens' => 'enabled',
         ]);
-    }
-
-    /** @test */
-    public function a_user_with_permissions_can_send_a_test_email()
-    {
-        Mail::fake();
-
-        $this->actingAs($this->owner, 'api');
-        $this->json('GET', 'api/mail/test', []);
-
-        Mail::assertSent(\Fusion\Mail\WelcomeNewUser::class, function ($mail) {
-            return $mail->user->id === $this->owner->id;
-        });
-    }
-
-    /** @test */
-    public function a_user_without_permissions_can_not_send_a_test_email()
-    {
-        $this->expectException(AuthenticationException::class);
-
-        $this->json('GET', 'api/settings/mail', []);
     }
 }

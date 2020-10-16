@@ -24,7 +24,7 @@ class RestoreTest extends TestBase
     {
         Bus::fake();
 
-        $backup = $this->newBackup();
+        $backup = $this->newBackup()->first();
 
         $this
             ->be($this->owner, 'api')
@@ -41,7 +41,7 @@ class RestoreTest extends TestBase
 
         $this->expectException(AuthorizationException::class);
 
-        $backup = $this->newBackup();
+        $backup = $this->newBackup()->first();
 
         $this
             ->be($this->user, 'api')
@@ -57,7 +57,7 @@ class RestoreTest extends TestBase
 
         $this->expectException(AuthenticationException::class);
 
-        $backup = $this->newBackup();
+        $backup = $this->newBackup()->first();
 
         $this->json('POST', "/api/backups/restore/{$backup->id}");
 
@@ -73,7 +73,7 @@ class RestoreTest extends TestBase
     {
         Event::fake([FileRestoreSuccessful::class]);
 
-        $backup = $this->newBackup();
+        $backup = $this->newBackup()->first();
 
         // Alter storage setup..
         Storage::disk('public')->append('files/testing-file1.txt', 'more content');
@@ -100,7 +100,7 @@ class RestoreTest extends TestBase
 
     public function restored_backup_will_recover_altered_env_variables()
     {
-        $backup = $this->newBackup();
+        $backup = $this->newBackup()->first();
 
         // Alter .env.testing file and save..
         $envContents = File::get(app()->environmentFilePath());
