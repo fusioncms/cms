@@ -27,12 +27,7 @@ class TaxonomyTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group taxonomy
-     */
+    /** @test */
     public function a_user_with_permissions_can_create_a_new_taxonomy()
     {
         $attributes = [
@@ -50,13 +45,7 @@ class TaxonomyTest extends TestCase
         $this->assertDatabaseHas('taxonomies', $attributes);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group taxonomy
-     * @group auth
-     */
+    /** @test */
     public function a_user_without_permissions_can_not_create_a_new_taxonomy()
     {
         $this->expectException(AuthenticationException::class);
@@ -64,13 +53,7 @@ class TaxonomyTest extends TestCase
         $response = $this->json('POST', '/api/taxonomies', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group taxonomy
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_any_taxonomies()
     {
         $this->expectException(AuthorizationException::class);
@@ -80,13 +63,7 @@ class TaxonomyTest extends TestCase
             ->json('GET', '/api/taxonomies');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group taxonomy
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_a_taxonomy()
     {
         $this->expectException(AuthorizationException::class);
@@ -98,13 +75,7 @@ class TaxonomyTest extends TestCase
             ->json('GET', '/api/taxonomies/'.$taxonomy->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group taxonomy
-     * @group permission
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_create_new_taxonomies()
     {
         $this->expectException(AuthorizationException::class);
@@ -114,13 +85,7 @@ class TaxonomyTest extends TestCase
             ->json('POST', '/api/taxonomies', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group taxonomy
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_update_existing_taxonomies()
     {
         $this->expectException(AuthorizationException::class);
@@ -132,13 +97,7 @@ class TaxonomyTest extends TestCase
             ->json('PATCH', '/api/taxonomies/'.$taxonomy->id, []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group taxonomy
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_delete_existing_taxonomies()
     {
         $this->expectException(AuthorizationException::class);
@@ -150,12 +109,7 @@ class TaxonomyTest extends TestCase
             ->json('DELETE', '/api/taxonomies/'.$taxonomy->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group taxonomy
-     */
+    /** @test */
     public function a_user_with_permissions_can_update_an_existing_taxonomy()
     {
         $taxonomy = factory(Taxonomy::class)->create();
@@ -176,12 +130,7 @@ class TaxonomyTest extends TestCase
         $this->assertDatabaseHas('taxonomies', $attributes);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group taxonomy
-     */
+    /** @test */
     public function each_taxonomy_must_have_a_valid_handle()
     {
         $attributes = [
@@ -200,12 +149,7 @@ class TaxonomyTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group taxonomy
-     */
+    /** @test */
     public function each_taxonomy_must_have_a_unique_slug_and_handle()
     {
         $taxonomy       = factory(Taxonomy::class)->create()->toArray();
@@ -218,12 +162,7 @@ class TaxonomyTest extends TestCase
             ->assertJsonValidationErrors(['slug', 'handle']);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group validation
-     * @group taxonomy
-     */
+    /** @test */
     public function taxonomy_handle_must_not_be_a_reserved_keyword()
     {
         $this->actingAs($this->owner, 'api');
@@ -247,11 +186,7 @@ class TaxonomyTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group taxonomy
-     */
+    /** @test */
     public function when_a_taxonomy_is_created_an_associated_blueprint_should_also_be_created()
     {
         $this->actingAs($this->owner, 'api');

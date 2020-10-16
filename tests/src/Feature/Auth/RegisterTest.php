@@ -32,11 +32,7 @@ class RegisterTest extends TestCase
         Notification::fake();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function an_authenticated_user_cannot_visit_registration_form()
     {
         $this
@@ -45,11 +41,7 @@ class RegisterTest extends TestCase
             ->assertRedirect('/home');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_guest_can_visit_registration_form()
     {
         $this
@@ -57,11 +49,7 @@ class RegisterTest extends TestCase
             ->assertViewIs('auth.register');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function registration_form_requires_an_valid_email()
     {
         // Generate new user attributes..
@@ -85,11 +73,7 @@ class RegisterTest extends TestCase
         $this->assertGuest();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function registration_form_requires_matching_password_fields()
     {
         // Generate new user attributes..
@@ -113,11 +97,7 @@ class RegisterTest extends TestCase
         $this->assertGuest();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function successful_registration_will_immediately_authenticate_user()
     {
         $this->assertAuthenticatedAs(
@@ -125,11 +105,7 @@ class RegisterTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function successful_registration_will_null_password_expiration()
     {
         $user = $this->makeUserRegistration();
@@ -137,11 +113,7 @@ class RegisterTest extends TestCase
         $this->assertFalse($user->passwordHasExpired());
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function successful_registration_will_fire_registrated_event()
     {
         Event::fake([Registered::class]);
@@ -151,11 +123,7 @@ class RegisterTest extends TestCase
         Event::assertDispatched(Registered::class);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function successful_registration_will_send_verified_email_if_setting_enabled()
     {
         setting([
@@ -167,11 +135,7 @@ class RegisterTest extends TestCase
         Notification::assertSentToTimes($user, VerifyEmail::class, 1);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function successful_registration_will_forgo_email_verification_if_setting_disabled()
     {
         Event::fake([Verified::class]);
@@ -188,11 +152,7 @@ class RegisterTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function verified_registration_will_dispatch_onboard_job()
     {
         Bus::fake();
@@ -208,11 +168,7 @@ class RegisterTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function verified_registration_will_send_welcome_email_if_setting_enabled()
     {
         setting([
@@ -227,11 +183,7 @@ class RegisterTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function verified_registration_will_forgo_sending_welcome_email_if_setting_disabled()
     {
         setting([

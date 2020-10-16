@@ -13,11 +13,7 @@ class RoleTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @group unit
-     * @group roles
-     */
+    /** @test */
     public function each_role_can_have_one_or_many_permissions()
     {
         $role = Role::where('name', 'User')->first();
@@ -27,11 +23,7 @@ class RoleTest extends TestCase
         $this->assertInstanceOf(Permission::class, $role->permissions->first());
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group roles
-     */
+    /** @test */
     public function each_role_can_have_one_or_many_users()
     {
         $role = Role::where('name', 'User')->first();
@@ -40,11 +32,7 @@ class RoleTest extends TestCase
         $this->assertInstanceOf(User::class, $role->users->first());
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group roles
-     */
+    /** @test */
     public function each_role_has_a_level()
     {
         $role = Role::where('name', 'User')->first();

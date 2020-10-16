@@ -20,12 +20,7 @@ class ActivityTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group activity
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_activities()
     {
         $this->expectException(AuthorizationException::class);
@@ -35,11 +30,7 @@ class ActivityTest extends TestCase
             ->json('GET', '/api/activity');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group activity
-     */
+    /** @test */
     public function models_with_activity_logging_will_log_created_event()
     {
         $attributes = factory(Matrix::class)->make()->toArray();
@@ -57,11 +48,7 @@ class ActivityTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group activity
-     */
+    /** @test */
     public function models_with_activity_logging_will_log_updated_event()
     {
         $matrix = factory(Matrix::class)->create();
@@ -81,11 +68,7 @@ class ActivityTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group activity
-     */
+    /** @test */
     public function activity_log_will_store_pertenant_info_for_the_dashboard()
     {
         $this->actingAs($this->owner, 'api');
@@ -107,11 +90,7 @@ class ActivityTest extends TestCase
         $this->assertEquals($activity->properties['link'], "matrices/{$matrix->id}/edit");
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group activity
-     */
+    /** @test */
     public function hosting_model_can_ask_for_all_activities_recorded_by_it()
     {
         $matrix = factory(Matrix::class)->create();
@@ -121,11 +100,7 @@ class ActivityTest extends TestCase
         $this->assertCount(1, $matrix->activities);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group activity
-     */
+    /** @test */
     public function a_deleted_model_will_delete_its_own_logged_activities()
     {
         $matrix = factory(Matrix::class)->create();

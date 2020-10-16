@@ -13,11 +13,7 @@ class SettingTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @group unit
-     * @group settings
-     */
+    /** @test */
     public function each_setting_must_have_a_unique_handle()
     {
         $this->expectException(QueryException::class);
@@ -29,31 +25,19 @@ class SettingTest extends TestCase
         DB::table('settings')->insert($attributes);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group settings
-     */
+    /** @test */
     public function each_setting_group_will_have_one_blueprint()
     {
         $this->assertInstanceOf(Blueprint::class, Setting::first()->blueprint);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group settings
-     */
+    /** @test */
     public function each_setting_group_will_have_one_settings_builder_class()
     {
         $this->assertInstanceOf('Fusion\Models\Settings\Api', Setting::first()->getBuilder());
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group settings
-     */
+    /** @test */
     public function each_settings_builder_will_link_back_to_its_group()
     {
         $group   = Setting::first();
@@ -62,11 +46,7 @@ class SettingTest extends TestCase
         $this->assertInstanceOf(Setting::class, $setting->group);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group settings
-     */
+    /** @test */
     public function settings_will_be_imported_to_the_database_upon_install()
     {
         $this->assertDatabaseHas('settings', ['name' => 'API']);

@@ -15,11 +15,7 @@ class NavigationTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /**
-     * @test
-     * @group unit
-     * @group navigation
-     */
+    /** @test */
     public function each_navigation_must_have_a_unique_handle()
     {
         $this->expectException(QueryException::class);

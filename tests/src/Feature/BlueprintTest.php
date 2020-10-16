@@ -11,11 +11,7 @@ class BlueprintTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group blueprint
-     */
+    /** @test */
     public function when_created_all_fields_should_generate_database_columns()
     {
         $matrix   = MatrixFactory::create();
@@ -26,11 +22,7 @@ class BlueprintTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group blueprint
-     */
+    /** @test */
     public function when_a_field_is_added_a_database_column_should_be_generated()
     {
         $matrix = MatrixFactory::withName('Posts')->withSections([
@@ -59,11 +51,7 @@ class BlueprintTest extends TestCase
         $this->assertDatabaseTableHasColumn($table, 'content');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group blueprint
-     */
+    /** @test */
     public function when_a_field_is_removed_the_associated_database_column_should_be_removed()
     {
         $matrix = MatrixFactory::withName('Posts')->withSections([
@@ -93,11 +81,7 @@ class BlueprintTest extends TestCase
         $this->assertDatabaseTableDoesNotHaveColumn($table, 'content');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group blueprint
-     */
+    /** @test */
     public function when_a_field_is_renamed_the_associated_database_column_should_also_be_renamed()
     {
         $matrix = MatrixFactory::withName('Posts')->withSections([
@@ -130,11 +114,7 @@ class BlueprintTest extends TestCase
         $this->assertDatabaseTableHasColumn($table, 'story');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group blueprint
-     */
+    /** @test */
     public function when_a_fields_fieldtype_is_changed_the_associated_database_columns_type_should_also_change()
     {
         $matrix = MatrixFactory::withName('Posts')->withSections([
@@ -170,11 +150,7 @@ class BlueprintTest extends TestCase
         $this->assertDatabaseTableColumnHasType($table, 'content', 'text');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group blueprint
-     */
+    /** @test */
     public function when_a_field_is_retyped_the_associated_database_column_should_also_be_retyped()
     {
         $matrix = MatrixFactory::withName('Posts')->withSections([
@@ -220,11 +196,7 @@ class BlueprintTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group blueprint
-     */
+    /** @test */
     public function when_a_field_is_renamed_and_new_field_created_in_its_name_database_should_have_both_columns()
     {
         $matrix = MatrixFactory::withName('Posts')->withSections([

@@ -13,11 +13,7 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @group unit
-     * @group user
-     */
+    /** @test */
     public function each_user_must_have_a_unique_email()
     {
         $this->expectException(QueryException::class);
@@ -29,11 +25,7 @@ class UserTest extends TestCase
         DB::table('users')->insert($attributes);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group user
-     */
+    /** @test */
     public function each_user_can_have_one_or_many_roles()
     {
         $this->assertInstanceOf(Collection::class, $this->user->roles);

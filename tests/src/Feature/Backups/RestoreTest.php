@@ -19,12 +19,7 @@ class RestoreTest extends TestBase
     // RESTORE REQUEST
     // ------------------------------------------------
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_user_with_permission_can_restore_from_existing_backups()
     {
         Bus::fake();
@@ -39,12 +34,7 @@ class RestoreTest extends TestBase
         Bus::assertDispatched(RestoreFromBackup::class);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_user_without_permission_cannot_restore_from_existing_backups()
     {
         Bus::fake();
@@ -60,12 +50,7 @@ class RestoreTest extends TestBase
         Bus::assertNotDispatched(RestoreFromBackup::class);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_guest_cannot_restore_from_existing_backups()
     {
         Bus::fake();
@@ -83,12 +68,7 @@ class RestoreTest extends TestBase
     // RESTORE PROCESS
     // ------------------------------------------------
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function restored_backup_will_recover_altered_files()
     {
         Event::fake([FileRestoreSuccessful::class]);

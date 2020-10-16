@@ -20,11 +20,7 @@ class ForgetPasswordTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function an_unauthenticated_user_can_access_password_reset_page()
     {
         $this
@@ -32,11 +28,7 @@ class ForgetPasswordTest extends TestCase
             ->assertViewIs('auth.passwords.email');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function an_authenticated_user_can_access_password_reset_page()
     {
         $this
@@ -44,11 +36,7 @@ class ForgetPasswordTest extends TestCase
             ->assertViewIs('auth.passwords.email');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function forget_password_form_requires_a_valid_email()
     {
         $this
@@ -60,11 +48,7 @@ class ForgetPasswordTest extends TestCase
         $this->assertTrue(session()->hasOldInput('email'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function an_invalid_user_cannot_request_email_with_password_reset_link()
     {
         $this
@@ -78,11 +62,7 @@ class ForgetPasswordTest extends TestCase
         $this->assertTrue(session()->hasOldInput('email'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_valid_user_can_request_email_with_password_reset_link()
     {
         Notification::fake();

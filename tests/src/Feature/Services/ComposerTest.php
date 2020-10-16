@@ -37,12 +37,7 @@ class ComposerTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group services
-     * @group composer
-     */
+    /** @test */
     public function composer_service_caches_list_of_installed_packages()
     {
         $this->assertCount(1, Composer::installed());
@@ -53,34 +48,19 @@ class ComposerTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group services
-     * @group composer
-     */
+    /** @test */
     public function composer_service_can_check_for_installed_package_by_name()
     {
         $this->assertTrue(Composer::has('test/package-a'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group services
-     * @group composer
-     */
+    /** @test */
     public function composer_service_can_check_for_installed_package_version()
     {
         $this->assertEquals('1.1.0', Composer::version('test/package-a'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group services
-     * @group composer
-     */
+    /** @test */
     public function composer_service_can_get_installed_package_path()
     {
         $this->assertEquals(
@@ -89,12 +69,7 @@ class ComposerTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group services
-     * @group composer
-     */
+    /** @test */
     public function composer_service_can_install_a_new_package()
     {
         // package doesn't exist yet..
@@ -112,12 +87,7 @@ class ComposerTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group services
-     * @group composer
-     */
+    /** @test */
     public function composer_service_can_install_a_specific_package_version()
     {
         Composer::require('test/package-b:2.0.0');
@@ -125,12 +95,7 @@ class ComposerTest extends TestCase
         $this->assertEquals('2.0.0', Composer::version('test/package-b'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group services
-     * @group composer
-     */
+    /** @test */
     public function composer_service_can_update_package_to_latest_version()
     {
         $this->setPackageVersion('test/package-a', '1.2.0');
@@ -140,12 +105,7 @@ class ComposerTest extends TestCase
         $this->assertEquals('1.2.0', Composer::version('test/package-a'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group services
-     * @group composer
-     */
+    /** @test */
     public function composer_service_can_remove_a_package()
     {
         Composer::remove('test/package-a');

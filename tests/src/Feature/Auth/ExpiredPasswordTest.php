@@ -19,12 +19,7 @@ class ExpiredPasswordTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     * @group password
-     */
+    /** @test */
     public function a_guest_cannot_visit_expired_password_form()
     {
         $this->withExceptionHandling();
@@ -34,12 +29,7 @@ class ExpiredPasswordTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     * @group password
-     */
+    /** @test */
     public function an_authenticated_user_with_valid_password_cannot_visit_expired_password_form()
     {
         $this->withExceptionHandling();
@@ -50,12 +40,7 @@ class ExpiredPasswordTest extends TestCase
             ->assertRedirect('/');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     * @group password
-     */
+    /** @test */
     public function a_newly_authenticated_user_with_expired_password_will_be_redirected_to_set_password()
     {
         $this->user->markPasswordAsExpired();
@@ -74,12 +59,7 @@ class ExpiredPasswordTest extends TestCase
         $this->assertTrue($this->user->passwordHasExpired());
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     * @group password
-     */
+    /** @test */
     public function a_returning_authenticated_user_with_expired_password_will_be_redirected_to_set_password()
     {
         $this->user->markPasswordAsExpired();
@@ -90,12 +70,7 @@ class ExpiredPasswordTest extends TestCase
             ->assertRedirect(route('password.expiredForm'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     * @group password
-     */
+    /** @test */
     public function a_user_with_expired_password_can_reset_password()
     {
         $this->user->markPasswordAsExpired();
@@ -115,12 +90,7 @@ class ExpiredPasswordTest extends TestCase
         $this->assertTrue(Hash::check('new-password', $user->password));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     * @group password
-     */
+    /** @test */
     public function setting_password_will_fire_password_reset_event()
     {
         Event::fake([PasswordReset::class]);
@@ -140,12 +110,7 @@ class ExpiredPasswordTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     * @group password
-     */
+    /** @test */
     public function password_set_form_requires_a_valid_password()
     {
         $this->user->markPasswordAsExpired();
@@ -161,12 +126,7 @@ class ExpiredPasswordTest extends TestCase
             ->assertSessionHasErrors('password');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     * @group password
-     */
+    /** @test */
     public function password_set_form_requires_confirming_password()
     {
         $this->user->markPasswordAsExpired();
@@ -182,12 +142,7 @@ class ExpiredPasswordTest extends TestCase
             ->assertSessionHasErrors('password');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     * @group password
-     */
+    /** @test */
     public function password_set_form_requires_fresh_password()
     {
         $this->user->markPasswordAsExpired();

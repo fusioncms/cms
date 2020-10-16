@@ -12,11 +12,7 @@ class FileTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @group unit
-     * @group file
-     */
+    /** @test */
     public function each_file_must_have_a_unique_uuid()
     {
         $this->expectException(QueryException::class);
