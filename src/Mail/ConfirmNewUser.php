@@ -40,7 +40,7 @@ class ConfirmNewUser extends Mailable
     public function build()
     {
         return $this
-            ->markdown('email.templates.welcome')
+            ->markdown('email.users.welcome')
             ->with([
                 'url' => url(route('password.setForm', [
                     'token' => Password::broker()->createToken($this->user),
