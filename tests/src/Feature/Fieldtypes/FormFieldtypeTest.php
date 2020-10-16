@@ -38,12 +38,7 @@ class FormFieldtypeTest extends TestCase
         $this->forms     = factory(Form::class, 3)->create();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function assigning_forms_to_a_matrix_will_populate_its_pivot_table()
     {
         $attributes = [
@@ -81,12 +76,7 @@ class FormFieldtypeTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function number_of_forms_assigned_to_matrix_can_be_limited_through_validation()
     {
         // add validation
@@ -110,12 +100,7 @@ class FormFieldtypeTest extends TestCase
             ->assertJsonValidationErrors(['form' => 'The Form must contain 2 items.']);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function user_can_access_assigned_form_as_a_relationship()
     {
         $attributes = [

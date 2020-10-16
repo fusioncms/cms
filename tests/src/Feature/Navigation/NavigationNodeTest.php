@@ -43,12 +43,7 @@ class NavigationNodeTest extends TestCase
         $this->model = (new \Fusion\Services\Builders\Navigation($this->navigation->handle))->make();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_with_permissions_can_create_a_new_navigation_node()
     {
         $attributes = [
@@ -64,12 +59,7 @@ class NavigationNodeTest extends TestCase
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function an_order_is_generated_with_every_node()
     {
         \Illuminate\Database\Eloquent\Model::clearBootedModels();
@@ -92,12 +82,7 @@ class NavigationNodeTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_create_new_navigation_node()
     {
         $this->expectException(AuthorizationException::class);
@@ -107,13 +92,7 @@ class NavigationNodeTest extends TestCase
             ->json('POST', '/api/navigation/'.$this->navigation->id.'/nodes', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_a_navigation_node()
     {
         $this->expectException(AuthorizationException::class);
@@ -128,13 +107,7 @@ class NavigationNodeTest extends TestCase
             ->json('GET', '/api/navigation/'.$this->navigation->id.'/nodes/'.$node->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_create_new_navigation_nodes()
     {
         $this->expectException(AuthorizationException::class);
@@ -144,13 +117,7 @@ class NavigationNodeTest extends TestCase
             ->json('POST', '/api/navigation', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_update_existing_navigation_nodes()
     {
         $this->expectException(AuthorizationException::class);
@@ -165,13 +132,7 @@ class NavigationNodeTest extends TestCase
             ->json('PATCH', '/api/navigation/'.$this->navigation->id.'/nodes/'.$node->id, []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_delete_existing_navigation_nodes()
     {
         $this->expectException(AuthorizationException::class);
@@ -186,12 +147,7 @@ class NavigationNodeTest extends TestCase
             ->json('DELETE', '/api/navigation/'.$this->navigation->id.'/nodes/'.$node->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_with_permissions_can_update_an_existing_navigation_nodes()
     {
         list($node, $attributes) = $this->newNavigationNode([
@@ -211,12 +167,7 @@ class NavigationNodeTest extends TestCase
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_with_permissions_can_delete_an_existing_navigation_node()
     {
         list($node, $attributes) = $this->newNavigationNode();

@@ -12,11 +12,7 @@ class DirectoryTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @group unit
-     * @group directories
-     */
+    /** @test */
     public function each_directory_must_have_a_unique_parent_id_and_slug_combination()
     {
         $this->expectException(QueryException::class);
@@ -29,11 +25,7 @@ class DirectoryTest extends TestCase
         DB::table('directories')->insert($directory);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group directories
-     */
+    /** @test */
     public function directories_can_have_non_unique_parent_id_or_slug_seperately()
     {
         $directory = DirectoryFactory::withName('lorem')->create();

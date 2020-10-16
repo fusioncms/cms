@@ -29,11 +29,7 @@ class EmailVerificationTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_guest_cannot_see_the_verification_notice()
     {
         $this->withExceptionHandling();
@@ -43,11 +39,7 @@ class EmailVerificationTest extends TestCase
             ->assertRedirect('/login');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function an_unverified_user_will_see_verification_notice()
     {
         $this
@@ -57,11 +49,7 @@ class EmailVerificationTest extends TestCase
             ->assertViewIs('auth.verify');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function an_unverified_user_will_not_see_verification_notice_if_user_email_verification_setting_disabled()
     {
         setting([
@@ -75,11 +63,7 @@ class EmailVerificationTest extends TestCase
             ->assertRedirect('/');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_verified_user_will_not_see_verification_notice()
     {
         $this
@@ -88,11 +72,7 @@ class EmailVerificationTest extends TestCase
             ->assertRedirect('/');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_guest_cannot_visit_verification_verify_route()
     {
         $this->withExceptionHandling();
@@ -109,11 +89,7 @@ class EmailVerificationTest extends TestCase
             ->assertRedirect('/login');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_user_cannot_verify_another_user()
     {
         $this->withExceptionHandling();
@@ -136,11 +112,7 @@ class EmailVerificationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_verification_is_forbidden_for_invalid_signature()
     {
         $this->withExceptionHandling();
@@ -163,11 +135,7 @@ class EmailVerificationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_user_can_verify_themselves()
     {
         $this->assertTrue(
@@ -177,11 +145,7 @@ class EmailVerificationTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_newly_verified_user_will_receive_welcome_email_if_setting_enabled()
     {
         setting([
@@ -195,11 +159,7 @@ class EmailVerificationTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_newly_verified_user_will_not_receive_welcome_email_if_setting_disabled()
     {
         setting([
@@ -211,11 +171,7 @@ class EmailVerificationTest extends TestCase
         Mail::assertNotSent(WelcomeNewUser::class);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_guest_cannot_resend_verification_email()
     {
         $this->withExceptionHandling();
@@ -225,11 +181,7 @@ class EmailVerificationTest extends TestCase
             ->assertRedirect('/login');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function an_already_verified_user_will_be_redirected()
     {
         $this
@@ -238,11 +190,7 @@ class EmailVerificationTest extends TestCase
             ->assertRedirect('/');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function an_unverified_user_can_resend_verification_email()
     {
         Notification::fake();

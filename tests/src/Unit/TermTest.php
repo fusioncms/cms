@@ -40,12 +40,7 @@ class TermTest extends TestCase
             ->create();
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group taxonomy
-     * @group term
-     */
+    /** @test */
     public function terms_have_a_relationship_with_a_taxonomy()
     {
         $term = $this->taxonomy->terms->first();
@@ -53,12 +48,7 @@ class TermTest extends TestCase
         $this->assertInstanceOf(Taxonomy::class, $term->taxonomy);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group taxonomy
-     * @group term
-     */
+    /** @test */
     public function the_database_table_is_renamed_when_renaming_a_taxonomy()
     {
         $this->taxonomy->name   = 'Tags';
@@ -70,12 +60,7 @@ class TermTest extends TestCase
         $this->assertDatabaseHasTable($term->getTable());
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group taxonomy
-     * @group term
-     */
+    /** @test */
     public function each_term_in_a_taxonomy_must_have_a_unique_slug()
     {
         $term = $this->taxonomy->terms->first();

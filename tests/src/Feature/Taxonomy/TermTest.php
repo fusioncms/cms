@@ -43,12 +43,7 @@ class TermTest extends TestCase
         $this->model        = (new \Fusion\Services\Builders\Taxonomy($this->taxonomy->handle))->make();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group term
-     */
+    /** @test */
     public function a_user_with_permissions_can_create_a_new_term()
     {
         $this->actingAs($this->owner, 'api');
@@ -68,13 +63,7 @@ class TermTest extends TestCase
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group term
-     * @group auth
-     */
+    /** @test */
     public function a_guest_cannot_create_new_terms()
     {
         $this->expectException(AuthenticationException::class);
@@ -82,13 +71,7 @@ class TermTest extends TestCase
         $this->json('POST', '/api/taxonomies/'.$this->taxonomy->id.'/terms', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group term
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_any_terms()
     {
         $this->expectException(AuthorizationException::class);
@@ -98,13 +81,7 @@ class TermTest extends TestCase
             ->json('GET', '/api/taxonomies/'.$this->taxonomy->id.'/terms');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group term
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_a_term()
     {
         $this->expectException(AuthorizationException::class);
@@ -116,13 +93,7 @@ class TermTest extends TestCase
             ->json('GET', '/api/taxonomies/'.$this->taxonomy->id.'/terms/'.$term->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group term
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_create_new_terms()
     {
         $this->expectException(AuthorizationException::class);
@@ -132,13 +103,7 @@ class TermTest extends TestCase
             ->json('POST', '/api/taxonomies/'.$this->taxonomy->id.'/terms', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group term
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_update_existing_terms()
     {
         $this->expectException(AuthorizationException::class);
@@ -150,13 +115,7 @@ class TermTest extends TestCase
             ->json('PATCH', '/api/taxonomies/'.$this->taxonomy->id.'/terms/'.$term->id, []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group term
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_delete_existing_terms()
     {
         $this->expectException(AuthorizationException::class);
@@ -168,12 +127,7 @@ class TermTest extends TestCase
             ->json('DELETE', '/api/taxonomies/'.$this->taxonomy->id.'/terms/'.$term->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group term
-     */
+    /** @test */
     public function a_user_with_permissions_can_update_an_existing_term()
     {
         list($term, $attributes) = $this->newTerm([
@@ -193,12 +147,7 @@ class TermTest extends TestCase
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group term
-     */
+    /** @test */
     public function a_user_with_permissions_can_delete_an_existing_term()
     {
         list($term, $attributes) = $this->newTerm();
@@ -211,12 +160,7 @@ class TermTest extends TestCase
         $this->assertDatabaseMissing($this->model->getTable(), ['id' => $term->id]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group feature
-     * @group term
-     */
+    /** @test */
     public function each_term_must_have_a_unique_slug()
     {
         list($term, $attributes) = $this->newTerm();

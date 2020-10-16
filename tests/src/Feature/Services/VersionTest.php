@@ -8,12 +8,7 @@ use Illuminate\Support\Facades\Bus;
 
 class VersionTest extends TestCase
 {
-    /**
-     * @test
-     * @group fusioncms
-     * @group services
-     * @group version
-     */
+    /** @test */
     public function version_service_can_update_to_latest()
     {
         Bus::fake();

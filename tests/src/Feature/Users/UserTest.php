@@ -38,12 +38,7 @@ class UserTest extends TestCase
         Notification::fake();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     */
+    /** @test */
     public function a_user_with_permissions_can_create_a_user()
     {
         $this
@@ -64,13 +59,7 @@ class UserTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     * @group password
-     */
+    /** @test */
     public function a_newly_created_user_will_receive_password_set_notification()
     {
         $this
@@ -93,12 +82,7 @@ class UserTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     */
+    /** @test */
     public function new_user_creations_will_be_recorded_in_activity_log()
     {
         $this
@@ -117,12 +101,7 @@ class UserTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     */
+    /** @test */
     public function a_user_without_control_panel_access_cannot_create_new_users()
     {
         $this->expectException(AuthenticationException::class);
@@ -130,13 +109,7 @@ class UserTest extends TestCase
         $this->json('POST', '/api/users', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_any_users()
     {
         $this->expectException(AuthorizationException::class);
@@ -146,13 +119,7 @@ class UserTest extends TestCase
             ->json('GET', '/api/users');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_a_user()
     {
         $this->expectException(AuthorizationException::class);
@@ -164,13 +131,7 @@ class UserTest extends TestCase
             ->json('GET', '/api/users/'.$user->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_create_new_users()
     {
         $this->expectException(AuthorizationException::class);
@@ -180,13 +141,7 @@ class UserTest extends TestCase
             ->json('POST', '/api/users', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_update_existing_users()
     {
         $this->expectException(AuthorizationException::class);
@@ -198,13 +153,7 @@ class UserTest extends TestCase
             ->json('PATCH', '/api/users/'.$user->id, []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_delete_existing_users()
     {
         $this->expectException(AuthorizationException::class);
@@ -216,12 +165,7 @@ class UserTest extends TestCase
             ->json('DELETE', '/api/users/'.$user->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     */
+    /** @test */
     public function a_user_with_permissions_can_update_a_user_profile()
     {
         $attributes = [
@@ -247,12 +191,7 @@ class UserTest extends TestCase
         $this->assertTrue($user->hasRole('admin'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group password
-     */
+    /** @test */
     public function password_fields_are_not_required_when_updating_user_profile()
     {
         $this
@@ -267,12 +206,7 @@ class UserTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group password
-     */
+    /** @test */
     public function a_user_with_permissions_cannot_update_the_password_of_another_user()
     {
         $this
@@ -289,12 +223,7 @@ class UserTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group password
-     */
+    /** @test */
     public function a_user_with_permissions_can_update_their_own_password()
     {
         $this
@@ -311,11 +240,7 @@ class UserTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     */
+    /** @test */
     public function an_administrator_can_not_update_the_owner()
     {
         $this->expectException(AuthorizationException::class);
@@ -327,11 +252,7 @@ class UserTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     */
+    /** @test */
     public function an_administrator_can_update_a_user()
     {
         $this->withoutExceptionHandling();
@@ -346,12 +267,7 @@ class UserTest extends TestCase
         $this->assertEquals('Frodo Baggins', $this->user->fresh()->name);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group password
-     */
+    /** @test */
     public function password_updates_will_be_recorded_in_the_database()
     {
         $lastChanged = $this->owner->password_changed_at;
@@ -369,12 +285,7 @@ class UserTest extends TestCase
             $this->owner->fresh()->password_changed_at);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group password
-     */
+    /** @test */
     public function password_confirmation_field_is_required_when_updating_a_password()
     {
         $this
@@ -390,12 +301,7 @@ class UserTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group password
-     */
+    /** @test */
     public function new_passwords_must_be_at_least_6_characters_long()
     {
         $this
@@ -412,12 +318,7 @@ class UserTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     */
+    /** @test */
     public function user_updates_will_be_recorded_in_activity_log()
     {
         $this
@@ -436,12 +337,7 @@ class UserTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     */
+    /** @test */
     public function a_user_cannot_be_assigned_invalid_role()
     {
         $this
@@ -457,12 +353,7 @@ class UserTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     */
+    /** @test */
     public function name_and_email_fields_are_always_required_when_creating_user_accounts()
     {
         $this
@@ -475,12 +366,7 @@ class UserTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     */
+    /** @test */
     public function each_user_must_have_a_unique_email()
     {
         $user       = factory(User::class)->create()->toArray();
@@ -495,12 +381,7 @@ class UserTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     */
+    /** @test */
     public function existing_user_cannot_use_an_already_taken_email()
     {
         $this
@@ -515,12 +396,7 @@ class UserTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     */
+    /** @test */
     public function a_user_with_permission_can_resend_email_verification_to_another_user()
     {
         setting([
@@ -537,12 +413,7 @@ class UserTest extends TestCase
         Notification::assertSentTo($this->user, VerifyEmail::class);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group user
-     */
+    /** @test */
     public function a_user_with_permission_can_send_user_reset_password_notification()
     {
         $this

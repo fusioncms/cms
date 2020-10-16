@@ -15,11 +15,7 @@ class MailableTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /**
-     * @test
-     * @group unit
-     * @group mailable
-     */
+    /** @test */
     public function each_mailable_must_have_a_unique_handle()
     {
         $this->expectException(QueryException::class);
@@ -38,11 +34,7 @@ class MailableTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group mailable
-     */
+    /** @test */
     public function a_request_to_register_mailables_will_update_the_database()
     {
         $this->assertDatabaseHas('mailables', [
@@ -52,11 +44,7 @@ class MailableTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group mailable
-     */
+    /** @test */
     public function a_request_can_be_made_to_resolve_the_mailable_class()
     {
         $model = Mailable::where('handle', 'welcome_new_user')->firstOrFail();
@@ -64,11 +52,7 @@ class MailableTest extends TestCase
         $this->assertInstanceOf($model->namespace, $model->mailable);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group mailable
-     */
+    /** @test */
     public function a_request_can_be_made_to_generate_a_set_of_placeholders_for_the_mailable_class()
     {
         $model        = Mailable::where('handle', 'welcome_new_user')->firstOrFail();

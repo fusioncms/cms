@@ -20,11 +20,7 @@ class ResetPasswordTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_valid_user_can_visit_password_reset_form()
     {
         $validToken = Password::broker()->createToken($this->user);
@@ -36,11 +32,7 @@ class ResetPasswordTest extends TestCase
             ->assertViewHas('token', $validToken);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function an_authenticated_user_can_visit_password_reset_form()
     {
         $validToken = Password::broker()->createToken($this->user);
@@ -52,11 +44,7 @@ class ResetPasswordTest extends TestCase
             ->assertViewHas('token', $validToken);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_valid_user_can_reset_password_with_a_valid_token()
     {
         Event::fake([PasswordReset::class]);
@@ -82,11 +70,7 @@ class ResetPasswordTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_valid_user_cannot_reset_password_with_an_invalid_token()
     {
         $invalidToken = 'invalid-token';
@@ -106,11 +90,7 @@ class ResetPasswordTest extends TestCase
         $this->assertGuest();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function password_reset_form_requires_a_valid_email()
     {
         $validToken = Password::broker()->createToken($this->user);
@@ -134,11 +114,7 @@ class ResetPasswordTest extends TestCase
         $this->assertGuest();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function password_reset_form_requires_a_valid_password()
     {
         $validToken = Password::broker()->createToken($this->user);

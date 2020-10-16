@@ -9,7 +9,6 @@ use Fusion\Facades\Addon;
 use Fusion\Facades\Theme;
 use Fusion\Models\User;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 
 trait InstallsFusion
 {
@@ -56,11 +55,7 @@ trait InstallsFusion
      */
     protected function uninstall()
     {
-        File::deleteDirectory(storage_path('backups'));
-        File::deleteDirectory(storage_path('uploads'));
-
-        File::delete(storage_path('app/addons.json'));
-
+        dispatch_now(new \Fusion\Console\Uninstaller\DeleteAddonCache());
         dispatch_now(new \Fusion\Console\Uninstaller\DeleteModelFiles());
     }
 

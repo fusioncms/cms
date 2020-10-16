@@ -14,11 +14,7 @@ class MatrixTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @group unit
-     * @group matrix
-     */
+    /** @test */
     public function a_matrix_should_have_a_blueprint()
     {
         $matrix = factory(Matrix::class)->create();
@@ -26,11 +22,7 @@ class MatrixTest extends TestCase
         $this->assertInstanceOf(Blueprint::class, $matrix->blueprint);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group matrix
-     */
+    /** @test */
     public function a_matrix_can_have_a_parent()
     {
         $parent = factory(Matrix::class)->create();
@@ -42,11 +34,7 @@ class MatrixTest extends TestCase
         $this->assertInstanceOf(Matrix::class, $matrix->parent);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group matrix
-     */
+    /** @test */
     public function a_matrix_can_have_children()
     {
         $matrix = factory(Matrix::class)->create();
@@ -58,11 +46,7 @@ class MatrixTest extends TestCase
         $this->assertInstanceOf(Matrix::class, $matrix->children->first());
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group matrix
-     */
+    /** @test */
     public function a_database_table_is_created_with_a_matrix()
     {
         MatrixFactory::withName('Posts')
@@ -71,11 +55,7 @@ class MatrixTest extends TestCase
         $this->assertDatabaseHasTable('mx_posts');
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group matrix
-     */
+    /** @test */
     public function the_database_table_is_renamed_when_renaming_a_collection()
     {
         $collection = MatrixFactory::withName('Blog')
@@ -90,11 +70,7 @@ class MatrixTest extends TestCase
         $this->assertDatabaseHasTable('mx_posts');
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group matrix
-     */
+    /** @test */
     public function each_matrix_must_have_a_unique_handle()
     {
         $this->expectException(QueryException::class);
@@ -108,11 +84,7 @@ class MatrixTest extends TestCase
         DB::table('matrices')->insert($matrix);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group matrix
-     */
+    /** @test */
     public function each_matrix_must_have_a_unique_slug()
     {
         $this->expectException(QueryException::class);

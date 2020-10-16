@@ -26,11 +26,7 @@ class AddonTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group addon
-     */
+    /** @test */
     public function addons_are_registered_with_fusion()
     {
         $addons = Addon::all();
@@ -38,11 +34,7 @@ class AddonTest extends TestCase
         $this->assertCount(1, $addons);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group addon
-     */
+    /** @test */
     public function a_user_with_permissions_can_upload_an_addon()
     {
         list($addonPath, $addonName) = $this->generateAddon('Omega');
@@ -61,11 +53,7 @@ class AddonTest extends TestCase
         File::deleteDirectory(addon_path('Omega'));
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group module
-     */
+    /** @test */
     public function an_uploaded_addon_can_be_installed()
     {
         list($addonPath, $addonName) = $this->generateAddon('Omega');
@@ -90,11 +78,7 @@ class AddonTest extends TestCase
         File::deleteDirectory(addon_path('Omega'));
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group addon
-     */
+    /** @test */
     public function an_installed_addon_can_be_uninstalled()
     {
         Bus::fake();
@@ -124,13 +108,7 @@ class AddonTest extends TestCase
         File::deleteDirectory(addon_path('Omega'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group addon
-     * @group auth
-     */
+    /** @test */
     public function a_guest_cannot_upload_an_addon()
     {
         $this->expectException(AuthenticationException::class);
@@ -138,13 +116,7 @@ class AddonTest extends TestCase
         $this->json('POST', '/api/addons/upload', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group addon
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_upload_an_addon()
     {
         $this->expectException(AuthorizationException::class);
@@ -154,13 +126,7 @@ class AddonTest extends TestCase
             ->json('POST', '/api/addons/upload', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group addon
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_install_an_addon()
     {
         $this->expectException(AuthorizationException::class);
@@ -170,13 +136,7 @@ class AddonTest extends TestCase
             ->json('POST', '/api/addons/foobar/install', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group addon
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_uninstall_existing_addons()
     {
         $this->expectException(AuthorizationException::class);
@@ -186,13 +146,7 @@ class AddonTest extends TestCase
             ->json('POST', '/api/addons/foobar/uninstall', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group addon
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_enable_existing_addons()
     {
         $this->expectException(AuthorizationException::class);
@@ -202,13 +156,7 @@ class AddonTest extends TestCase
             ->json('POST', '/api/addons/foobar/enable', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group addon
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_disable_existing_addons()
     {
         $this->expectException(AuthorizationException::class);
@@ -218,11 +166,7 @@ class AddonTest extends TestCase
             ->json('POST', '/api/addons/foobar/disable', []);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group addon
-     */
+    /** @test */
     public function a_newly_uploaded_addon_has_file_requirements()
     {
         list($addonPath, $addonName) = $this->generateAddon('Invalid', false);
@@ -238,11 +182,7 @@ class AddonTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group addon
-     */
+    /** @test */
     public function an_enabled_addon_can_be_disabled()
     {
         Addon::enable('Foobar');
@@ -255,11 +195,7 @@ class AddonTest extends TestCase
         $this->assertTrue(Addon::isNotEnabled('Foobar'));
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group addon
-     */
+    /** @test */
     public function a_disabled_addon_can_be_enabled()
     {
         Addon::disable('Foobar');

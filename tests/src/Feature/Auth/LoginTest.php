@@ -18,11 +18,7 @@ class LoginTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_guest_can_visit_the_login_page()
     {
         $this
@@ -31,11 +27,7 @@ class LoginTest extends TestCase
             ->assertViewIs('auth.login');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_logged_in_user_cannot_visit_the_login_page()
     {
         $this
@@ -44,11 +36,7 @@ class LoginTest extends TestCase
             ->assertRedirect('/home');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_guest_can_login_with_valid_credentials()
     {
         $this
@@ -62,12 +50,7 @@ class LoginTest extends TestCase
         $this->assertAuthenticatedAs($this->user);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     * @group activity
-     */
+    /** @test */
     public function a_successful_login_will_be_tracked_in_activity_log()
     {
         $this
@@ -86,11 +69,7 @@ class LoginTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_successful_login_will_clear_failed_login_attempts()
     {
         $this
@@ -104,11 +83,7 @@ class LoginTest extends TestCase
         $this->assertNull($this->owner->invalidly_logged_in_at);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function login_form_requires_a_valid_email()
     {
         $this
@@ -125,11 +100,7 @@ class LoginTest extends TestCase
         $this->assertGuest();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_guest_cannot_login_with_invalid_credentials()
     {
         $this
@@ -146,11 +117,7 @@ class LoginTest extends TestCase
         $this->assertGuest();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_failed_login_attempt_will_record_invalid_attempts()
     {
         $this
@@ -166,11 +133,7 @@ class LoginTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_spammer_cannot_throttle_login()
     {
         for ($i = 0; $i <= 5; $i++) {
@@ -199,11 +162,7 @@ class LoginTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_logged_in_user_can_opt_to_be_remembered()
     {
         $response = $this
@@ -227,11 +186,7 @@ class LoginTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_logged_in_user_can_logout()
     {
         $this
