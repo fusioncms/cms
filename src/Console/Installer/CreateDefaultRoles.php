@@ -40,7 +40,6 @@ class CreateDefaultRoles
                 'files.viewAny', 'files.view', 'files.create', 'files.update', 'files.delete', 'files.download',
                 'blueprints.viewAny', 'blueprints.view', 'blueprints.create', 'blueprints.update', 'blueprints.delete',
                 'forms.viewAny', 'forms.view', 'forms.create', 'forms.update', 'forms.delete',
-                'mailables.view', 'mailables.update',
                 'matrices.viewAny', 'matrices.view', 'matrices.create', 'matrices.update', 'matrices.delete',
                 'navigation.viewAny', 'navigation.view', 'navigation.create', 'navigation.update', 'navigation.delete',
                 'nodes.viewAny', 'nodes.view', 'nodes.create', 'nodes.update', 'nodes.delete',

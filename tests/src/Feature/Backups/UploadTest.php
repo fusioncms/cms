@@ -40,12 +40,10 @@ class UploadTest extends TestBase
                     'file-upload' => new UploadedFile($path, $name, 'application/zip', null, true),
                 ]);
 
-            foreach (config('backup.backup.destination.disks') as $disk) {
-                $this->assertDatabaseHas('backups', [
-                    'name' => 'test-upload',
-                    'disk' => $disk,
-                ]);
-            }
+            $this->assertDatabaseHas('backups', [
+                'name' => 'test-upload',
+                'disk' => 'public',
+            ]);
         });
     }
 
@@ -96,15 +94,16 @@ class UploadTest extends TestBase
      */
     private function generateBackup($name, Closure $closure)
     {
-        $backup = $this->newBackup();
-
-        // setup
+        $backup = $this->newBackup($name, 'public')->first();
+        
+        // setup ----
         File::move(
-            $backup->fullPath,
+            $backupPath = Storage::disk('public')->path($backup->location),
             $uploadPath = Storage::disk('temp')->path("{$name}.zip")
         );
 
         DB::table('backups')->delete();
+        // setup ----
 
         $closure($uploadPath, $name);
 

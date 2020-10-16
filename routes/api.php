@@ -4,7 +4,6 @@
 Route::get('admin/navigation', 'AdminNavigationController@index');
 Route::get('activity', 'ActivityController@index');
 Route::get('logs', 'LogsController@index');
-Route::get('mail/test', 'MailController@index');
 Route::get('structures', 'StructureController@index');
 
 /**
@@ -79,11 +78,6 @@ Route::prefix('insights')->group(function () {
     Route::get('referrers', 'Insights\ReferrersController@index');
     Route::get('browsers', 'Insights\BrowsersController@index');
 });
-
-/**
- * API - Mailable Routes.
- */
-Route::apiResource('mailables', 'MailableController')->except(['index', 'store', 'destroy']);
 
 /**
  * API - Matrix Routes.

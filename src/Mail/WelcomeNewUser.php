@@ -4,9 +4,10 @@ namespace Fusion\Mail;
 
 use Fusion\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class WelcomeNewUser extends DatabaseMailable
+class WelcomeNewUser extends Mailable
 {
     use Queueable;
     use SerializesModels;
@@ -19,13 +20,6 @@ class WelcomeNewUser extends DatabaseMailable
     public $user;
 
     /**
-     * Default inner template.
-     *
-     * @var string
-     */
-    protected $template = 'emails.templates.welcome';
-
-    /**
      * Create a new message instance.
      *
      * @param User $user
@@ -35,5 +29,16 @@ class WelcomeNewUser extends DatabaseMailable
     public function __construct(User $user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+
+        return $this->markdown('emails.users.welcome');
     }
 }
