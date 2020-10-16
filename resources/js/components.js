@@ -26,6 +26,7 @@ Vue.component('nav-item', require('@/components/Navigation/NavigationItem').defa
 Vue.component('nav-toggle', require('@/components/Navigation/NavigationToggle').default)
 Vue.component('option-builder', require('@/components/OptionBuilder').default)
 Vue.component('page-title', require('@/components/PageTitle').default)
+Vue.component('restore-backup-modal', require('@/components/Modals/RestoreBackupModal').default)
 Vue.component('section-card', require('@/components/Cards/SectionCard').default)
 Vue.component('select-directory-modal', require('@/components/Modals/SelectDirectoryModal').default)
 Vue.component('settings-modal', require('@/components/Modals/SettingsModal').default)

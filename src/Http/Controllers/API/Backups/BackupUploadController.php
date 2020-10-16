@@ -3,7 +3,7 @@
 namespace Fusion\Http\Controllers\API\Backups;
 
 use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Requests\BackupUploadRequest;
+use Fusion\Http\Requests\Backups\UploadRequest;
 use Fusion\Models\Backup;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,11 +12,11 @@ class BackupUploadController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param Request $request
+     * @param \Fusion\Http\Requests\Backups\UploadRequest $request
      *
-     * @return void
+     * @return JsonResponse
      */
-    public function index(BackupUploadRequest $request)
+    public function index(UploadRequest $request)
     {
         $attributes = $request->validated();
         $file       = $attributes['file-upload'];

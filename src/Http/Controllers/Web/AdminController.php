@@ -6,6 +6,8 @@ use Fusion\Http\Controllers\Controller;
 
 class AdminController extends Controller
 {
+    use \Fusion\Concerns\HasCustomLogger;
+
     /**
      * Show the admin dashboard.
      *

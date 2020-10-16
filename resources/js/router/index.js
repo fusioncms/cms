@@ -421,6 +421,16 @@ const router = new Router({
         },
 
         {
+            path: '/backups/:backup',
+            component: () => import('@/pages/Backups/Show'),
+            name: 'backups.show',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+
+        {
             path: '/mailables',
             component: () => import('@/pages/Mailables/Index'),
             name: 'mailables',
