@@ -1,7 +1,8 @@
 <template>
     <div class="blueprint-area" @dragover.prevent @dragenter.prevent>
-        <div v-for="(section, index) in sections" class="blueprint-area__draggable" 
-            :key="section.name" 
+        <div v-for="(section, index) in sections" 
+            class="blueprint-area__draggable"
+            :key="`${area}-${index}`"
             :draggable="!! move"
             @dragstart="onDragStart(index)"
             @dragend="onDragEnd(index)"
@@ -9,22 +10,22 @@
             @dragleave="onDragLeave(index)"
             @drop="onDrop(index)">
 
-            <div :class="{ 'bg-gray-300': section.isDropzone }">
-                <blueprint-section
-                    :key="area + '-' + index"
-                    :name="section.name"
-                    :subtitle="`${section.placement}, ${ fieldCount(section.fields.length)}`"
-                    :remove="sections.length > 1 ? remove : null">
+            <blueprint-section
+                :key="`${area}-${index}-section`"
+                :id="`${area}-${index}-section`"
+                :parent-index="index"
+                :section="section"
+                :subtitle="`${section.placement}, ${ fieldCount(section.fields.length)}`"
+                :remove="remove">
 
-                    <!-- <blueprint-editor
-                        :section="section"
-                        :sections="sections">
-                    </blueprint-editor> -->
-                </blueprint-section>
-            </div>
+                <blueprint-editor
+                    :section="section"
+                    :sections="sections">
+                </blueprint-editor>
+            </blueprint-section>
         </div>
 
-        <ui-button class="blueprint-area__btn" @click.prevent="add(area)" size="large">Add Section <fa-icon icon="plus" class="ml-3"></fa-icon></ui-button>
+        <ui-button class="blueprint-area__btn" @click.prevent="add(area)" size="large">Add {{ area }} section <fa-icon icon="plus" class="ml-3"></fa-icon></ui-button>
     </div>
 </template>
 

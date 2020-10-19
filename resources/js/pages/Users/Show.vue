@@ -5,8 +5,10 @@
         </portal>
 
         <portal to="actions">
-            <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
-            <ui-button key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary" v-if="canEdit">Edit User</ui-button>
+            <div class="buttons">
+                <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
+                <ui-button v-if="canEdit" key="edit-user-btn" :to="{ name: 'users.edit', params: {user: user.id} }" variant="primary">Edit User</ui-button>
+            </div>
         </portal>
 
         <portal to="sidebar-right">
@@ -76,9 +78,13 @@
             },
 
             canEdit() {
-                if (this.$user.id == this.user.id) return true
+                if (this.$user.id == this.user.id) {
+                    return true
+                }
 
-                if (this.user.role) return this.$can('users.update', this.user.role ? this.user.role.level : 0)
+                if (this.user.role) {
+                    return this.$can('users.update', this.user.role ? this.user.role.level : 0)
+                }
 
                 return false
             }

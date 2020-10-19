@@ -82,7 +82,6 @@
                 label="Role"
                 :options="roleOptions"
                 autocomplete="off"
-                :value="form.role"
                 :has-error="form.errors.has('role')"
                 :error-message="form.errors.get('role')"
                 required
