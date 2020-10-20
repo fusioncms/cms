@@ -13,12 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UploadTest extends TestBase
 {
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_user_with_permission_can_upload_new_backup()
     {
         $this->generateBackup('test-upload', function ($path, $name) {
@@ -35,12 +30,7 @@ class UploadTest extends TestBase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function newly_uploaded_backup_will_be_recorded_in_the_database()
     {
         $this->generateBackup('test-upload', function ($path, $name) {
@@ -50,21 +40,14 @@ class UploadTest extends TestBase
                     'file-upload' => new UploadedFile($path, $name, 'application/zip', null, true),
                 ]);
 
-            foreach (config('backup.backup.destination.disks') as $disk) {
-                $this->assertDatabaseHas('backups', [
-                    'name' => 'test-upload',
-                    'disk' => $disk,
-                ]);
-            }
+            $this->assertDatabaseHas('backups', [
+                'name' => 'test-upload',
+                'disk' => 'public',
+            ]);
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_user_without_permission_cannot_upload_new_backups()
     {
         $this->expectException(AuthorizationException::class);
@@ -74,12 +57,7 @@ class UploadTest extends TestBase
             ->json('POST', '/api/backups/upload', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_guest_cannot_not_upload_a_backup()
     {
         $this->expectException(AuthenticationException::class);
@@ -87,12 +65,7 @@ class UploadTest extends TestBase
         $this->json('POST', '/api/backups/upload', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function backup_file_upload_must_be_a_zip_file_type()
     {
         $this
@@ -121,15 +94,16 @@ class UploadTest extends TestBase
      */
     private function generateBackup($name, Closure $closure)
     {
-        $backup = $this->newBackup();
+        $backup = $this->newBackup($name, 'public')->first();
 
-        // setup
+        // setup ----
         File::move(
-            $backup->fullPath,
+            $backupPath = Storage::disk('public')->path($backup->location),
             $uploadPath = Storage::disk('temp')->path("{$name}.zip")
         );
 
         DB::table('backups')->delete();
+        // setup ----
 
         $closure($uploadPath, $name);
 

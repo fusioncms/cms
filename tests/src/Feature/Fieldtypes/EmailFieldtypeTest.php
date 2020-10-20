@@ -37,12 +37,7 @@ class EmailFieldtypeTest extends TestCase
         $this->model = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function email_fieldtype_will_always_require_a_valid_email()
     {
         $this
@@ -58,12 +53,7 @@ class EmailFieldtypeTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function email_fieldtype_will_accept_a_valid_email()
     {
         $this

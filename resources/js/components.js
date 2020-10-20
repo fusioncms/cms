@@ -29,6 +29,7 @@ Vue.component('nav-item', require('@/components/Navigation/NavigationItem').defa
 Vue.component('nav-toggle', require('@/components/Navigation/NavigationToggle').default)
 Vue.component('option-builder', require('@/components/OptionBuilder').default)
 Vue.component('page-title', require('@/components/PageTitle').default)
+Vue.component('restore-backup-modal', require('@/components/Modals/RestoreBackupModal').default)
 Vue.component('section-card', require('@/components/Cards/SectionCard').default)
 Vue.component('select-directory-modal', require('@/components/Modals/SelectDirectoryModal').default)
 Vue.component('settings-modal', require('@/components/Modals/SettingsModal').default)
@@ -52,4 +53,3 @@ Vue.component('rename-file-modal', require('@/interfaces/FileManager/Modals/Rena
 Vue.component('replace-file-modal', require('@/interfaces/FileManager/Modals/ReplaceFileModal').default)
 Vue.component('delete-file-modal', require('@/interfaces/FileManager/Modals/DeleteFileModal').default)
 Vue.component('settings-cache', require('@/interfaces/Settings/Cache').default)
-Vue.component('settings-mail-test', require('@/interfaces/Settings/MailTest').default)

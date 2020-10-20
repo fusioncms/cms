@@ -10,12 +10,7 @@ class SyncPermissionsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group console
-     * @group permissions
-     */
+    /** @test */
     public function console_command_can_create_new_records()
     {
         (new SyncPermissions())->sync([
@@ -30,12 +25,7 @@ class SyncPermissionsTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group console
-     * @group permissions
-     */
+    /** @test */
     public function console_command_will_parse_condensed_form()
     {
         (new SyncPermissions())->sync([
@@ -55,12 +45,7 @@ class SyncPermissionsTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group console
-     * @group permissions
-     */
+    /** @test */
     public function console_command_can_update_existing_records()
     {
         (new SyncPermissions())->sync([
@@ -81,12 +66,7 @@ class SyncPermissionsTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group console
-     * @group permissions
-     */
+    /** @test */
     public function console_command_will_remove_undiscovered_records()
     {
         (new SyncPermissions())->sync([

@@ -22,11 +22,7 @@ class UserSettingsTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_visitor_can_not_access_account_settings()
     {
         $this->expectException(AuthenticationException::class);
@@ -34,11 +30,7 @@ class UserSettingsTest extends TestCase
         $this->get('/account/settings');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function an_unverified_user_cannot_access_account_settings_if_verficiation_enabled()
     {
         setting(['users.user_email_verification' => 'enabled']);
@@ -50,11 +42,7 @@ class UserSettingsTest extends TestCase
             ->assertRedirect('/email/verify');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function an_unverified_user_can_access_account_settings_if_verficiation_disabled()
     {
         setting(['users.user_email_verification' => 'disabled']);
@@ -65,11 +53,7 @@ class UserSettingsTest extends TestCase
             ->assertStatus(200);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_verified_user_can_access_account_settings()
     {
         $this
@@ -78,11 +62,7 @@ class UserSettingsTest extends TestCase
             ->assertStatus(200);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_user_can_update_their_personal_information()
     {
         $attributes = [
@@ -101,11 +81,7 @@ class UserSettingsTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_user_will_need_to_verify_an_updated_email_if_setting_enabled()
     {
         Notification::fake();
@@ -126,11 +102,7 @@ class UserSettingsTest extends TestCase
         Notification::assertSentTo($this->user, VerifyEmail::class);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function email_verification_will_be_forgoed_when_for_email_updates_if_setting_disabled()
     {
         Notification::fake();
@@ -151,11 +123,7 @@ class UserSettingsTest extends TestCase
         Notification::assertNothingSent($this->user, VerifyEmail::class);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function name_and_email_fields_are_required_to_update()
     {
         $this->expectException(ValidationException::class);
@@ -170,11 +138,7 @@ class UserSettingsTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_user_can_update_their_own_password()
     {
         $this->withoutMiddleware([
@@ -198,11 +162,7 @@ class UserSettingsTest extends TestCase
         $this->assertFalse(Hash::check($oldPassword, $user->password));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group auth
-     */
+    /** @test */
     public function a_user_will_need_to_confirm_their_password_before_updating_their_password()
     {
         $this->user->update([

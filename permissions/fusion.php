@@ -3,13 +3,12 @@
 return [
     // core permissions
     // --
-    'backups'     => ['viewAny', 'create', 'delete', 'restore'],
+    'backups'     => ['viewAny', 'view', 'create', 'update', 'delete', 'restore'],
     'directories' => ['viewAny', 'view', 'create', 'update', 'delete'],
     'entries'     => ['viewAny', 'view', 'create', 'update', 'delete'],
     'files'       => ['viewAny', 'view', 'create', 'update', 'delete', 'download'],
     'blueprints'  => ['viewAny', 'view', 'create', 'update', 'delete'],
     'forms'       => ['viewAny', 'view', 'create', 'update', 'delete'],
-    'mailables'   => ['view', 'update'],
     'matrices'    => ['viewAny', 'view', 'create', 'update', 'delete'],
     'navigation'  => ['viewAny', 'view', 'create', 'update', 'delete'],
     'addons'      => ['viewAny', 'create', 'update', 'delete'],

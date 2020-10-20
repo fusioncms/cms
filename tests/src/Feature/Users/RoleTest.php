@@ -20,12 +20,7 @@ class RoleTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     */
+    /** @test */
     public function a_user_with_permissions_can_create_a_role()
     {
         $role = factory(Role::class)->make()->toArray();
@@ -38,12 +33,7 @@ class RoleTest extends TestCase
         $this->assertDatabaseHas('roles', $role);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     */
+    /** @test */
     public function roles_can_be_assigned_zero_to_many_permissions()
     {
         $role        = factory(Role::class)->create();
@@ -66,13 +56,7 @@ class RoleTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     * @group auth
-     */
+    /** @test */
     public function a_guest_cannot_not_create_a_role()
     {
         $this->expectException(AuthenticationException::class);
@@ -80,13 +64,7 @@ class RoleTest extends TestCase
         $this->json('POST', '/api/roles', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_any_roles()
     {
         $this->expectException(AuthorizationException::class);
@@ -96,13 +74,7 @@ class RoleTest extends TestCase
             ->json('GET', '/api/roles');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_a_role()
     {
         $this->expectException(AuthorizationException::class);
@@ -114,13 +86,7 @@ class RoleTest extends TestCase
             ->json('GET', '/api/roles/'.$role->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_create_new_roles()
     {
         $this->expectException(AuthorizationException::class);
@@ -130,13 +96,7 @@ class RoleTest extends TestCase
             ->json('POST', '/api/roles', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_update_existing_roles()
     {
         $this->expectException(AuthorizationException::class);
@@ -148,13 +108,7 @@ class RoleTest extends TestCase
             ->json('PATCH', '/api/roles/'.$role->id, []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_delete_existing_roles()
     {
         $this->expectException(AuthorizationException::class);
@@ -166,12 +120,38 @@ class RoleTest extends TestCase
             ->json('DELETE', '/api/roles/'.$role->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     */
+    /** @test */
+    public function an_admin_can_only_delete_roles_below_their_level()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $role = factory(Role::class)->create();
+
+        $this->be($this->admin, 'api');
+
+        $response = $this->json('DELETE', '/api/roles/'.$this->owner->role->id, [
+            'transfer' => $this->user->role->id,
+        ]);
+    }
+
+    /** @test */
+    public function a_role_to_transfer_users_must_be_supplied_when_deleting_roles()
+    {
+        $role = factory(Role::class)->create();
+
+        $this->be($this->owner, 'api');
+
+        $this->json('DELETE', '/api/roles/'.$this->admin->role->id)
+            ->assertStatus(400);
+
+        $this->json('DELETE', '/api/roles/'.$this->admin->role->id, [
+            'transfer' => $this->user->role->id,
+        ])->assertStatus(200);
+
+        $this->assertEquals($this->admin->fresh()->role->id, $this->user->role->id);
+    }
+
+    /** @test */
     public function a_user_cannot_create_a_role_without_required_fields()
     {
         $this
@@ -181,12 +161,7 @@ class RoleTest extends TestCase
             ->assertJsonValidationErrors(['name', 'handle']);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     */
+    /** @test */
     public function only_one_user_may_be_assigned_owner_at_a_time()
     {
         $this
@@ -204,12 +179,7 @@ class RoleTest extends TestCase
         $this->assertTrue($newOwner->hasRole('owner'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     */
+    /** @test */
     public function only_the_owner_may_reassign_the_owner_role()
     {
         $this->expectException(AuthorizationException::class);
@@ -223,12 +193,7 @@ class RoleTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group password
-     */
+    /** @test */
     public function an_administrator_can_not_update_the_owner_role()
     {
         $this->expectException(AuthorizationException::class);

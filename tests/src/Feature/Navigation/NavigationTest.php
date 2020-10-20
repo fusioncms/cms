@@ -20,12 +20,7 @@ class NavigationTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_with_permissions_can_create_a_navigation()
     {
         $navigation = factory(Navigation::class)->make()->toArray();
@@ -41,12 +36,7 @@ class NavigationTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function when_a_navigation_is_created_an_associated_blueprint_should_also_be_created()
     {
         $this->actingAs($this->owner, 'api');
@@ -59,12 +49,7 @@ class NavigationTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_guest_cannot_create_a_new_navigation()
     {
         $this->expectException(AuthenticationException::class);
@@ -72,12 +57,7 @@ class NavigationTest extends TestCase
         $this->json('POST', '/api/navigation', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_any_navigation()
     {
         $this->expectException(AuthorizationException::class);
@@ -87,12 +67,7 @@ class NavigationTest extends TestCase
             ->json('GET', '/api/navigation');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_a_navigation()
     {
         $this->expectException(AuthorizationException::class);
@@ -105,12 +80,7 @@ class NavigationTest extends TestCase
             ->json('GET', '/api/navigation/'.$navigation->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_create_a_new_navigation()
     {
         $this->expectException(AuthorizationException::class);
@@ -120,12 +90,7 @@ class NavigationTest extends TestCase
             ->json('POST', '/api/navigation', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_update_existing_navigation()
     {
         $this->expectException(AuthorizationException::class);
@@ -138,12 +103,7 @@ class NavigationTest extends TestCase
             ->json('PATCH', '/api/navigation/'.$navigation->id, []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_delete_existing_navigation()
     {
         $this->expectException(AuthorizationException::class);
@@ -156,12 +116,7 @@ class NavigationTest extends TestCase
             ->json('DELETE', '/api/navigation/'.$navigation->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_with_permissions_can_update_an_existing_navigation()
     {
         $this->actingAs($this->owner, 'api');
@@ -181,12 +136,7 @@ class NavigationTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_with_permissions_can_delete_an_existing_navigation()
     {
         $this->actingAs($this->owner, 'api');
@@ -202,12 +152,7 @@ class NavigationTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_with_permissions_can_move_a_navigation_node_before_another()
     {
         $this->actingAs($this->owner, 'api');
@@ -239,12 +184,7 @@ class NavigationTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function a_user_with_permissions_can_move_a_navigation_node_after_another()
     {
         $this->actingAs($this->owner, 'api');
@@ -283,12 +223,7 @@ class NavigationTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function navigation_nodes_can_be_refreshed()
     {
         $this->actingAs($this->owner, 'api');
@@ -328,12 +263,7 @@ class NavigationTest extends TestCase
         $this->assertDatabaseHas($navigation->table, ['name' => $nodeThree->name, 'order' => 3]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group navigation
-     */
+    /** @test */
     public function each_navigation_must_have_a_unique_handle()
     {
         $this->actingAs($this->owner, 'api');
@@ -347,12 +277,7 @@ class NavigationTest extends TestCase
             ->assertJsonValidationErrors(['handle']);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group validation
-     * @group navigation
-     */
+    /** @test */
     public function navigation_handle_must_not_be_a_reserved_keyword()
     {
         $this->actingAs($this->owner, 'api');

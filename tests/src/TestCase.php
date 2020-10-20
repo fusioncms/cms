@@ -118,6 +118,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
         $app['config']->set('database.default', 'sqlite');
 
+        $app['config']->set('filesystems.default', 'public');
+
         $app['config']->set('database.connections.sqlite', [
             'driver'   => 'sqlite',
             'database' => ':memory:',

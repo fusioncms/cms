@@ -10,11 +10,7 @@ class SettingTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
+    /** @test */
     public function a_setting_can_be_set_at_runtime()
     {
         $this->assertTrue(setting('system.website_title') === 'My FusionCMS Website');
@@ -29,11 +25,7 @@ class SettingTest extends TestCase
         $this->assertTrue(setting('system.website_slogan') === 'An awesome website!');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
+    /** @test */
     public function a_malformed_setting_will_be_ignored()
     {
         setting(['system'  => [
@@ -44,11 +36,7 @@ class SettingTest extends TestCase
         $this->assertNull(setting('system'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
+    /** @test */
     public function a_non_existent_setting_will_be_ignored()
     {
         setting(['system.foo' => 'bar']);
@@ -56,22 +44,14 @@ class SettingTest extends TestCase
         $this->assertNull(setting('system.foo'));
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
+    /** @test */
     public function a_request_for_setting_can_be_loaded_by_full_address()
     {
         $this->assertTrue(setting('mail.mail_default') === 'smtp');
         $this->assertTrue(setting('mail.mail_server') === 'server@example.com');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
+    /** @test */
     public function a_request_for_settings_without_parameters_will_load_all_settings()
     {
         $settings = setting();
@@ -82,11 +62,7 @@ class SettingTest extends TestCase
         $this->assertArrayHasKey('date_time.date_format', $settings);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
+    /** @test */
     public function settings_facade_request_for_all_settings_will_load_all_settings()
     {
         $settings = Setting::all();
@@ -97,11 +73,7 @@ class SettingTest extends TestCase
         $this->assertArrayHasKey('date_time.date_format', $settings);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
+    /** @test */
     public function settings_facade_can_update_one_or_more_settings_at_runtime()
     {
         $this->assertTrue(Setting::get('system.website_title') === 'My FusionCMS Website');
@@ -116,11 +88,7 @@ class SettingTest extends TestCase
         $this->assertTrue(Setting::get('system.website_slogan') === 'An awesome website!');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
+    /** @test */
     public function settings_facade_can_handle_requests_for_setting_existence()
     {
         $this->assertTrue(Setting::has('system.website_title'));
@@ -133,11 +101,7 @@ class SettingTest extends TestCase
 
     // ---------------
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group settings
-     */
+    /** @test */
     public function settings_with_override_will_override_laravel_config_properties()
     {
         // update two `overridding` settings

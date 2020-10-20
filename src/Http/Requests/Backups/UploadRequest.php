@@ -1,10 +1,10 @@
 <?php
 
-namespace Fusion\Http\Requests;
+namespace Fusion\Http\Requests\Backups;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MailableRequest extends FormRequest
+class UploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class MailableRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('mailables.update');
+        return $this->user()->can('backups.create');
     }
 
     /**
@@ -23,12 +23,8 @@ class MailableRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->mailable->id ?? null;
-
         return [
-            'name'     => 'required',
-            'handle'   => 'required|unique:mailables,id,'.$id,
-            'markdown' => 'required',
+            'file-upload' => 'required|file|mimes:zip',
         ];
     }
 }

@@ -2,75 +2,37 @@
 
 namespace Fusion\Concerns;
 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Storage;
 
 trait HasCustomLogger
 {
     /**
-     * @var Monolog\Logger
-     */
-    protected $logger;
-
-    /**
-     * @var string
-     */
-    protected $logPath;
-
-    /**
-     * Set logger instance.
+     * Custom log file instance.
      *
-     * @param string $logPath
+     * @param string $file
+     * @param mixed  $disk
      *
-     * @return void
+     * @return Monolog\Logger
      */
-    protected function createLogger($logPath)
+    protected function logToFile($file, $disk = null)
     {
-        $stream = new StreamHandler(Storage::path($logPath));
+        $disk     = $disk ?? config('filesystems.default');
+        $fullPath = Storage::disk($disk)->path($file);
+
+        File::ensureDirectoryExists(
+            File::dirname($fullPath)
+        );
+
+        $stream = new StreamHandler($fullPath);
         $stream->setFormatter(new JsonFormatter());
 
-        $this->logPath = $logPath;
-        $this->logger  = new Logger(basename($logPath), [$stream]);
-    }
-
-    /**
-     * Record info message w/ context.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    protected function info($message, array $context = [])
-    {
-        $this->logger->log('info', $message, $context);
-    }
-
-    /**
-     * Record notice message w/ context.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    protected function notice($message, array $context = [])
-    {
-        $this->logger->log('notice', $message, $context);
-    }
-
-    /**
-     * Record error message w/ context.
-     *
-     * @param string $message
-     * @param arra   $context
-     *
-     * @return void
-     */
-    protected function error($message, array $context = [])
-    {
-        $this->logger->log('error', $message, $context);
+        return new Logger(
+            File::basename($fullPath),
+            [$stream]
+        );
     }
 }

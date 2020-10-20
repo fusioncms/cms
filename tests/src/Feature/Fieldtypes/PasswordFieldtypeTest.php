@@ -37,12 +37,7 @@ class PasswordFieldtypeTest extends TestCase
         $this->model = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function password_fieldtype_will_always_require_a_secure_password()
     {
         $this
@@ -58,12 +53,7 @@ class PasswordFieldtypeTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function fieldtype_will_accept_a_secure_password()
     {
         $this

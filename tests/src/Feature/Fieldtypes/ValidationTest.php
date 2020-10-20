@@ -18,12 +18,7 @@ class ValidationTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function a_user_without_control_panel_access_cannot_validate_a_fieldtype()
     {
         $this->expectException(AuthenticationException::class);
@@ -31,12 +26,7 @@ class ValidationTest extends TestCase
         $this->json('POST', '/api/fields/validate', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_validate_a_fieldtype()
     {
         $this->expectException(AuthorizationException::class);
@@ -46,12 +36,7 @@ class ValidationTest extends TestCase
             ->json('POST', '/api/fields/validate', ['type' => ['handle' => 'input']]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function a_user_with_permissions_can_validate_a_fieldtype()
     {
         $this
@@ -64,12 +49,7 @@ class ValidationTest extends TestCase
             ->assertStatus(200);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function a_new_field_requires_a_valid_fieldtype()
     {
         $this

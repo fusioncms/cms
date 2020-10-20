@@ -39,12 +39,7 @@ class FileFieldtypeTest extends TestCase
         $this->model = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function assigning_file_to_a_matrix_will_populate_its_pivot_table()
     {
         Storage::fake('public');
@@ -88,12 +83,7 @@ class FileFieldtypeTest extends TestCase
         Storage::disk('public')->assertExists($file->location);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     */
+    /** @test */
     public function user_can_access_assigned_file_as_a_relationship()
     {
         $attributes = [

@@ -14,11 +14,7 @@ class FormTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /**
-     * @test
-     * @group unit
-     * @group forms
-     */
+    /** @test */
     public function each_form_must_have_a_unique_handle()
     {
         $this->expectException(QueryException::class);
@@ -37,11 +33,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group unit
-     * @group forms
-     */
+    /** @test */
     public function each_form_must_have_a_unique_slug()
     {
         $this->expectException(QueryException::class);

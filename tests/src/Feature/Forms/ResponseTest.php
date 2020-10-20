@@ -28,13 +28,7 @@ class ResponseTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group response
-     * @group auth
-     */
+    /** @test */
     public function a_guest_cannot_create_a_response()
     {
         $this->expectException(AuthenticationException::class);
@@ -42,13 +36,7 @@ class ResponseTest extends TestCase
         $this->json('POST', "/api/forms/{$this->form->slug}/responses", []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group response
-     * @group auth
-     */
+    /** @test */
     public function a_user_without_permission_cannot_view_any_responses()
     {
         $this->expectException(AuthorizationException::class);
@@ -58,13 +46,7 @@ class ResponseTest extends TestCase
             ->json('GET', "/api/forms/{$this->form->slug}/responses");
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group response
-     * @group auth
-     */
+    /** @test */
     public function a_user_without_permission_cannot_view_a_response()
     {
         $this->expectException(AuthorizationException::class);
@@ -76,13 +58,7 @@ class ResponseTest extends TestCase
             ->json('GET', "/api/forms/{$this->form->slug}/responses/{$response->id}");
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group response
-     * @group auth
-     */
+    /** @test */
     public function a_user_without_permission_cannot_create_a_response()
     {
         $this->expectException(AuthorizationException::class);
@@ -92,13 +68,7 @@ class ResponseTest extends TestCase
             ->json('POST', "/api/forms/{$this->form->slug}/responses", []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group response
-     * @group auth
-     */
+    /** @test */
     public function a_user_without_permission_cannot_update_any_responses()
     {
         $this->expectException(AuthorizationException::class);
@@ -110,13 +80,7 @@ class ResponseTest extends TestCase
             ->json('PATCH', "/api/forms/{$this->form->slug}/responses/{$response->id}", []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group response
-     * @group auth
-     */
+    /** @test */
     public function a_user_without_permission_cannot_delete_any_responses()
     {
         $this->expectException(AuthorizationException::class);

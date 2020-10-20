@@ -19,11 +19,7 @@ class FormTest extends TestCase
         $this->handleValidationExceptions();
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     */
+    /** @test */
     public function a_user_with_permissions_can_create_a_form()
     {
         $attributes = factory(Form::class)->make()->toArray();
@@ -40,11 +36,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     */
+    /** @test */
     public function a_newly_created_form_should_create_associated_tables()
     {
         $this
@@ -65,13 +57,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group form
-     * @group permissions
-     */
+    /** @test */
     public function a_guest_cannot_create_new_forms()
     {
         $this->expectException(AuthenticationException::class);
@@ -79,13 +65,7 @@ class FormTest extends TestCase
         $this->json('POST', '/api/forms', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group form
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_any_forms()
     {
         $this->expectException(AuthorizationException::class);
@@ -95,13 +75,7 @@ class FormTest extends TestCase
             ->json('GET', '/api/forms');
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group role
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_view_a_form()
     {
         $this->expectException(AuthorizationException::class);
@@ -113,13 +87,7 @@ class FormTest extends TestCase
             ->json('GET', '/api/forms/'.$form->id);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group form
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_create_new_forms()
     {
         $this->expectException(AuthorizationException::class);
@@ -129,13 +97,7 @@ class FormTest extends TestCase
             ->json('POST', '/api/forms', []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group form
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_update_existing_formss()
     {
         $this->expectException(AuthorizationException::class);
@@ -147,13 +109,7 @@ class FormTest extends TestCase
             ->json('PATCH', '/api/forms/'.$form->id, []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group form
-     * @group permissions
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_delete_existing_forms()
     {
         $this->expectException(AuthorizationException::class);
@@ -165,11 +121,7 @@ class FormTest extends TestCase
             ->json('DELETE', '/api/forms/'.$form->id);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     */
+    /** @test */
     public function a_user_with_permissions_can_update_an_existing_form()
     {
         $this->actingAs($this->owner, 'api');
@@ -190,11 +142,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     */
+    /** @test */
     public function an_updated_form_request_will_also_update_associated_blueprint_name()
     {
         $this->actingAs($this->owner, 'api');
@@ -222,11 +170,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     */
+    /** @test */
     public function a_user_with_permissions_can_delete_an_existing_form()
     {
         $this->actingAs($this->owner, 'api');
@@ -242,11 +186,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     */
+    /** @test */
     public function a_deleted_form_request_will_also_delete_associated_tables()
     {
         $this->actingAs($this->owner, 'api');
@@ -267,13 +207,7 @@ class FormTest extends TestCase
         $this->assertDatabaseDoesNotHaveTable($form->table);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     * @group activity
-     * @group response
-     */
+    /** @test */
     public function a_form_response_will_be_recorded_in_the_activity_log()
     {
         $this->actingAs($this->owner, 'api');
@@ -293,12 +227,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     * @group response
-     */
+    /** @test */
     public function forms_do_not_collect_ips_on_default()
     {
         $this->actingAs($this->owner, 'api');
@@ -315,12 +244,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     * @group response
-     */
+    /** @test */
     public function a_form_can_be_set_to_collect_ips()
     {
         $this->actingAs($this->owner, 'api');
@@ -336,12 +260,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     * @group response
-     */
+    /** @test */
     public function a_form_can_be_set_to_collect_emails()
     {
         $this->markTestIncomplete();
@@ -359,12 +278,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     * @group response
-     */
+    /** @test */
     public function forms_redirect_to_default_confirmation_page_on_default()
     {
         $this->actingAs($this->owner, 'api');
@@ -377,12 +291,7 @@ class FormTest extends TestCase
             ->assertRedirect($form->redirect_url);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     * @group response
-     */
+    /** @test */
     public function a_form_can_be_set_to_redirect_to_custom_page()
     {
         $this->actingAs($this->owner, 'api');
@@ -395,24 +304,13 @@ class FormTest extends TestCase
             ->assertRedirect($form->redirect_url);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     * @group response
-     * @group notification
-     */
+    /** @test */
     public function a_new_form_response_will_notify_all_subscribers()
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group validation
-     * @group form
-     */
+    /** @test */
     public function each_form_must_have_a_unique_slug()
     {
         $this->actingAs($this->owner, 'api');
@@ -427,12 +325,7 @@ class FormTest extends TestCase
             ->assertJsonValidationErrors(['slug']);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group validation
-     * @group form
-     */
+    /** @test */
     public function each_form_must_have_a_unique_handle()
     {
         $this->actingAs($this->owner, 'api');
@@ -447,12 +340,7 @@ class FormTest extends TestCase
             ->assertJsonValidationErrors(['handle']);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group validation
-     * @group form
-     */
+    /** @test */
     public function form_handle_must_not_be_a_reserved_keyword()
     {
         $this->actingAs($this->owner, 'api');
@@ -476,12 +364,7 @@ class FormTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     * @group activity
-     */
+    /** @test */
     public function a_newly_created_form_should_be_logged_as_an_activity()
     {
         $this
@@ -498,12 +381,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     * @group activity
-     */
+    /** @test */
     public function an_updated_form_should_be_logged_as_an_activity()
     {
         $this->actingAs($this->owner, 'api');
@@ -523,12 +401,7 @@ class FormTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     * @group feature
-     * @group form
-     * @group activity
-     */
+    /** @test */
     public function activities_will_be_cleaned_up_for_form_when_it_is_deleted()
     {
         $this->actingAs($this->owner, 'api');

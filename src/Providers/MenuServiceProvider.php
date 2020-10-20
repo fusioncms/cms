@@ -116,7 +116,6 @@ class MenuServiceProvider extends ServiceProvider
                 'children' => [
                     'blueprints' => ['title' => 'Blueprints', 'to' => '/blueprints'],
                     'forms'      => ['title' => 'Forms',      'to' => '/forms'],
-                    'mailables'  => ['title' => 'Mailables',  'to' => '/mailables'],
                     'matrices'   => ['title' => 'Matrix',     'to' => '/matrices'],
                     'navigation' => ['title' => 'Navigation', 'to' => '/navigation'],
                     'taxonomies' => ['title' => 'Taxonomy',   'to' => '/taxonomies'],

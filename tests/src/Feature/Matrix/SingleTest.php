@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class PageTest extends TestCase
+class SingleTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
@@ -54,13 +54,7 @@ class PageTest extends TestCase
         $this->model = (new \Fusion\Services\Builders\Collection($this->matrix->handle))->make();
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group matrix
-     * @group single
-     */
+    /** @test */
     public function a_user_with_permissions_can_update_a_single()
     {
         $attributes = [
@@ -79,13 +73,7 @@ class PageTest extends TestCase
         $this->assertDatabaseHas('mx_single', $attributes);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group matrix
-     * @group single
-     */
+    /** @test */
     public function a_user_without_control_panel_access_cannot_update_a_single()
     {
         $this->expectException(AuthenticationException::class);
@@ -93,13 +81,7 @@ class PageTest extends TestCase
         $this->json('PATCH', '/api/singles/'.$this->matrix->id, []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group matrix
-     * @group single
-     */
+    /** @test */
     public function a_user_without_permissions_cannot_update_a_single()
     {
         $this->expectException(AuthorizationException::class);
@@ -109,13 +91,7 @@ class PageTest extends TestCase
             ->json('PATCH', '/api/singles/'.$this->matrix->id, []);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group matrix
-     * @group single
-     */
+    /** @test */
     public function a_user_cannot_create_a_single_without_required_fields()
     {
         $this
@@ -125,13 +101,7 @@ class PageTest extends TestCase
             ->assertJsonValidationErrors(['name', 'slug']);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group matrix
-     * @group single
-     */
+    /** @test */
     public function a_guest_can_visit_a_newly_created_single()
     {
         list($single, $attributes) = $this->newSingle();
@@ -141,13 +111,7 @@ class PageTest extends TestCase
             ->assertStatus(200);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group matrix
-     * @group single
-     */
+    /** @test */
     public function a_user_without_admin_settings_can_view_an_enabled_single()
     {
         list($single, $attributes) = $this->newSingle();
@@ -158,13 +122,7 @@ class PageTest extends TestCase
             ->assertStatus(200);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group matrix
-     * @group single
-     */
+    /** @test */
     public function a_user_without_admin_settings_cannot_view_a_disabled_single()
     {
         $this->expectException(NotFoundHttpException::class);
@@ -176,13 +134,7 @@ class PageTest extends TestCase
             ->get($single->slug);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group matrix
-     * @group single
-     */
+    /** @test */
     public function a_user_with_admin_settings_cannot_view_a_disabled_single()
     {
         $this->expectException(NotFoundHttpException::class);
@@ -194,13 +146,7 @@ class PageTest extends TestCase
             ->get($single->slug);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group matrix
-     * @group single
-     */
+    /** @test */
     public function a_user_with_admin_settings_can_preview_a_disabled_single()
     {
         list($single, $attributes) = $this->newSingle(['status' => false]);
@@ -211,13 +157,7 @@ class PageTest extends TestCase
             ->assertStatus(200);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group matrix
-     * @group single
-     */
+    /** @test */
     public function a_user_without_admin_settings_cannot_preview_a_disabled_single()
     {
         $this->expectException(NotFoundHttpException::class);

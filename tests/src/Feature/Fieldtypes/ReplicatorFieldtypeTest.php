@@ -45,13 +45,7 @@ class ReplicatorFieldtypeTest extends TestCase
         ]]);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     * @group replicator
-     */
+    /** @test */
     public function creating_a_replicator_field_will_auto_generate_tables()
     {
         // create replicator..
@@ -90,13 +84,7 @@ class ReplicatorFieldtypeTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     * @group replicator
-     */
+    /** @test */
     public function updating_a_replicator_field_will_auto_update_tables()
     {
         // create replicator..
@@ -154,13 +142,7 @@ class ReplicatorFieldtypeTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     * @group replicator
-     */
+    /** @test */
     public function deleting_a_replicator_field_will_auto_update_tables()
     {
         // create replicator..
@@ -200,13 +182,7 @@ class ReplicatorFieldtypeTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     * @group replicator
-     */
+    /** @test */
     public function persisting_entry_with_replicator_field_will_persist_to_database()
     {
         // new entry..
@@ -237,13 +213,7 @@ class ReplicatorFieldtypeTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group fieldtypes
-     * @group replicator
-     */
+    /** @test */
     public function updating_replicants_for_replicator_field_will_persist_to_database()
     {
         // new entry..

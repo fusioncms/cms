@@ -421,19 +421,9 @@ const router = new Router({
         },
 
         {
-            path: '/mailables',
-            component: () => import('@/pages/Mailables/Index'),
-            name: 'mailables',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-
-        {
-            path: '/mailables/:mailable/edit',
-            component: () => import('@/pages/Mailables/Edit'),
-            name: 'mailables.edit',
+            path: '/backups/:backup',
+            component: () => import('@/pages/Backups/Show'),
+            name: 'backups.show',
             meta: {
                 requiresAuth: true,
                 layout: 'admin'

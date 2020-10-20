@@ -19,17 +19,12 @@ class RestoreTest extends TestBase
     // RESTORE REQUEST
     // ------------------------------------------------
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_user_with_permission_can_restore_from_existing_backups()
     {
         Bus::fake();
 
-        $backup = $this->newBackup();
+        $backup = $this->newBackup()->first();
 
         $this
             ->be($this->owner, 'api')
@@ -39,19 +34,14 @@ class RestoreTest extends TestBase
         Bus::assertDispatched(RestoreFromBackup::class);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_user_without_permission_cannot_restore_from_existing_backups()
     {
         Bus::fake();
 
         $this->expectException(AuthorizationException::class);
 
-        $backup = $this->newBackup();
+        $backup = $this->newBackup()->first();
 
         $this
             ->be($this->user, 'api')
@@ -60,19 +50,14 @@ class RestoreTest extends TestBase
         Bus::assertNotDispatched(RestoreFromBackup::class);
     }
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function a_guest_cannot_restore_from_existing_backups()
     {
         Bus::fake();
 
         $this->expectException(AuthenticationException::class);
 
-        $backup = $this->newBackup();
+        $backup = $this->newBackup()->first();
 
         $this->json('POST', "/api/backups/restore/{$backup->id}");
 
@@ -83,17 +68,12 @@ class RestoreTest extends TestBase
     // RESTORE PROCESS
     // ------------------------------------------------
 
-    /**
-     * @test
-     * @group fusioncms
-     * @group feature
-     * @group backups
-     */
+    /** @test */
     public function restored_backup_will_recover_altered_files()
     {
         Event::fake([FileRestoreSuccessful::class]);
 
-        $backup = $this->newBackup();
+        $backup = $this->newBackup()->first();
 
         // Alter storage setup..
         Storage::disk('public')->append('files/testing-file1.txt', 'more content');
@@ -120,7 +100,7 @@ class RestoreTest extends TestBase
 
     public function restored_backup_will_recover_altered_env_variables()
     {
-        $backup = $this->newBackup();
+        $backup = $this->newBackup()->first();
 
         // Alter .env.testing file and save..
         $envContents = File::get(app()->environmentFilePath());
