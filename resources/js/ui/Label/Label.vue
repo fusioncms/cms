@@ -9,7 +9,6 @@
         name: 'ui-label',
 
         props: {
-            label: String,
             hideLabel: {
                 type: Boolean,
                 required: false,

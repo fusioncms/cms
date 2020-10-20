@@ -51,6 +51,16 @@
             height: rem(42px);
         }
 
+        &.button--xsmall {
+            width: rem(20px);
+            height: rem(20px);
+
+            @screen md {
+                width: rem(25px);
+                height: rem(25px);
+            }
+        }
+
         &.button--small {
             width: rem(25px);
             height: rem(25px);

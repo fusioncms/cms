@@ -1,11 +1,10 @@
 <template>
     <renderless-dropdown>
-        <div
-            class="dropdown"
+        <div class="dropdown"
             slot-scope="props"
             :class="{'dropdown--open': props.isOpen, 'dropdown--right': right, 'dropdown--up': up}"
             v-click-outside="props.close">
-            <button :id="id" class="button z-0" @click="props.toggle" :class="{'button--icon': icon}" aria-haspopup="true" :aria-expanded="props.isOpen ? 'true' : 'false'">
+            <button :id="id" class="button z-0" :class="[{ 'button--icon': icon }, sizeClass]" @click="props.toggle" aria-haspopup="true" :aria-expanded="props.isOpen ? 'true' : 'false'">
                 <slot></slot>
                 <fa-icon v-if="! noArrow" icon="angle-down" class="dropdown__arrow"></fa-icon>
             </button>
@@ -45,6 +44,32 @@
                 type: Boolean,
                 default: false,
                 required: false,
+            },
+            size: String
+        },
+
+        data() {
+            return {
+                sizeClass: null,
+                sizes: {
+                    large: 'large',
+                    small: 'small',
+                    xsmall: 'xsmall'
+                }
+            }
+        },
+
+        methods: {
+            getSize() {
+                return _.has(this.sizes, this.size) ? _.get(this.sizes, this.size) : null
+            }
+        },
+
+        mounted() {
+            let size = this.getSize()
+
+            if (size) {
+                this.sizeClass = `button--${size}`
             }
         }
     }

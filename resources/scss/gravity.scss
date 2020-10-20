@@ -11,12 +11,6 @@
 @import "base/globals";
 @import "base/typography";
 
-@import "components/animations";
-@import "components/cards";
-@import "components/page-title";
-@import "components/sidebar";
-@import "components/quicklinks";
-
 @import "ui/alerts";
 @import "ui/badges";
 @import "ui/breadcrumbs";
@@ -49,6 +43,13 @@
 @import "layout/layouts";
 @import "layout/navigation";
 @import "layout/section";
+
+@import "components/animations";
+@import "components/blueprints";
+@import "components/cards";
+@import "components/page-title";
+@import "components/sidebar";
+@import "components/quicklinks";
 
 @import "pages/analytics";
 @import "pages/collection-single";

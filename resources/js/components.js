@@ -14,6 +14,9 @@ Vue.component('error-layout', require('@/layouts/Error').default)
 
 // Components
 Vue.component('app', require('@/components/App').default)
+Vue.component('blueprint', require('@/components/Blueprints/Blueprint').default)
+Vue.component('blueprint-area', require('@/components/Blueprints/BlueprintArea').default)
+Vue.component('blueprint-section', require('@/components/Blueprints/BlueprintSection').default)
 Vue.component('confirm-modal', require('@/components/Modals/ConfirmModal').default)
 Vue.component('edit-directory-modal', require('@/components/Modals/EditDirectoryModal').default) // TODO
 Vue.component('fieldtype-picker', require('@/components/FieldtypePicker').default)
@@ -41,8 +44,6 @@ Vue.component('recent-activity', require('@/interfaces/Dashboard/RecentActivity'
 Vue.component('recent-news', require('@/interfaces/Dashboard/RecentNews').default)
 Vue.component('field-builder', require('@/interfaces/Fieldsets/FieldBuilder').default)
 Vue.component('field-editor', require('@/interfaces/Fieldsets/FieldEditor').default)
-Vue.component('section-builder', require('@/interfaces/Fieldsets/SectionBuilder').default)
-Vue.component('section-editor', require('@/interfaces/Fieldsets/SectionEditor').default)
 Vue.component('file-manager', require('@/interfaces/FileManager/FileManager').default)
 Vue.component('delete-file-modal', require('@/interfaces/FileManager/Modals/DeleteFileModal').default)
 Vue.component('delete-selected-files-modal', require('@/interfaces/FileManager/Modals/DeleteSelectedFilesModal').default)
