@@ -95,7 +95,7 @@ class BackupEventSubscriber
         ]);
 
         $this
-            ->logToFile($backup->log_path, $disk)
+            ->logToFile($backup->log_path, $backup->disk)
             ->info('Backup was successful.', $backup->toArray());
     }
 

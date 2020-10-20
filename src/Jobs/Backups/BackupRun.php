@@ -100,7 +100,9 @@ class BackupRun implements ShouldQueue
     private function backupDestinationDisks()
     {
         if (is_null($this->disk)) {
-            return config('backup.backup.destination.disks');
+            return array_unique(
+                config('backup.backup.destination.disks')
+            );
         }
 
         return Arr::wrap($this->disk);
