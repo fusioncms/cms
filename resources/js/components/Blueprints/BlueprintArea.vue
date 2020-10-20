@@ -18,10 +18,11 @@
                 :subtitle="`${section.placement}, ${ fieldCount(section.fields.length)}`"
                 :remove="remove">
 
-                <blueprint-editor
-                    :section="section"
-                    :sections="sections">
-                </blueprint-editor>
+                <field-builder
+                    v-model="section.fields"
+                    :sections="sections"
+                    :sectionHandle="section.handle">
+                </field-builder>
             </blueprint-section>
         </div>
 

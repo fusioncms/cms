@@ -1,4 +1,28 @@
 .blueprint {
+    &__row { 
+        @screen xl {
+            @apply flex-no-wrap;
+        }
+    }
+
+    &__col {
+        &--body {
+            @apply w-full;
+
+            @screen xl {
+                @apply w-auto flex-auto;
+            }
+        }
+
+        &--sidebar {
+            @apply w-full;
+
+            @screen xl {
+                @apply flex-shrink-0;
+                width: 300px;
+            }
+        }
+    }
 }
 
 .blueprint-area {
@@ -12,16 +36,14 @@
 .blueprint-section {
     &__header {
         @apply flex items-center;
-
-        .button { @apply flex-shrink-0; }
     }
 
     &__grip {
-        @apply text-gray-400 mr-3;
+        @apply text-gray-400 mr-2 -ml-2;
     }
 
     &__actions {
-        @apply ml-auto flex items-center -mr-1;
+        @apply ml-auto flex flex-shrink-0 items-center -mr-1;
 
         .button {
             @apply text-gray-500 border-0 px-0 mb-0 mr-0;

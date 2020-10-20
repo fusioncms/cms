@@ -1,10 +1,7 @@
 <template>
     <ui-card class="blueprint-section">
         <div class="blueprint-section__header card__header">
-            <fa-icon class="blueprint-section__grip" icon="grip-vertical"></fa-icon>
-
-            {{ section.name }}
-
+            <fa-icon class="blueprint-section__grip" icon="grip-vertical"></fa-icon> {{ section.name }}
             <div class="blueprint-section__actions buttons">
                 <ui-button icon size="small" @click.prevent="remove(parentIndex)" class="mr-1">
                     <span class="sr-only">Delete Section</span>
@@ -15,7 +12,7 @@
                     <fa-icon icon="edit"></fa-icon>
                 </ui-button>
                 <ui-button icon size="small" @click.prevent="move(section.placement)">
-                    <span class="sr-only">Move to {{ section.placement === 'body' ? 'Sidebar' : 'Body' }}</span>
+                    <span class="sr-only">Move to {{ section.placement === 'body' ? 'sidebar' : 'body' }}</span>
                     <fa-icon icon="exchange-alt"></fa-icon>
                 </ui-button>
             </div>
@@ -44,7 +41,7 @@
                         label="Section Handle"
                         :id="`${id}-section-handle`"
                         autocomplete="off"
-                        delimiter="-"
+                        delimiter="_"
                         :force-watch="section.prototype"
                         :watch="section.name"
                         v-model="section.handle"
@@ -62,13 +59,14 @@
                         v-model="section.description">
                     </ui-input>
                 </div>
+
                 <select class="hidden" name="section-placement" v-model="section.placement">
-                    <option value="body">Body</option>
-                    <option value="sidebar">Sidebar</option>
+                    <option v-for="placement in placements" :value="placement.value">{{ placement.label }}</option>
                 </select>
             </div>
 
             <slot></slot>
+
         </ui-card-body>
     </ui-card>
 </template>
@@ -77,11 +75,17 @@
     export default {
         name: 'blueprint-section',
 
+        components: {
+            'field-builder': require('../../interfaces/Fieldsets/FieldBuilder').default
+        },
+
         data() {
             return {
                 isActive: this.active,
-                isDragging: false,
-                isDropzone: false,
+                placements: [
+                    { label: 'Body',    value: 'body'    },
+                    { label: 'Sidebar', value: 'sidebar' }
+                ]
             }
         },
 
@@ -116,12 +120,6 @@
             }
         },
 
-        computed: {
-            hash() {
-                return '#' + this.name.toLowerCase().replace(/ /g, '-')
-            },
-        },
-
         methods: {
             activate() {
                 this.isActive = true
@@ -132,9 +130,6 @@
 
             deactivate() {
                 this.isActive = false
-                // this.$nextTick(function() {
-                //     this.$refs.edit.focus()
-                // });
             },
 
             move(placement) {

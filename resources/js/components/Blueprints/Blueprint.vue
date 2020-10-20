@@ -1,12 +1,12 @@
 <template>
     <div class="blueprint">
-        <div class="row">
-            <div class="col w-full md:w-1/2 lg:w-full xl:w-2/3">
+        <div class="blueprint__row row">
+            <div class="blueprint__col blueprint__col--body col">
                 <h5>Body</h5>
                 <blueprint-area :sections="body" :remove="remove" :add="add" :move="move" area="body"></blueprint-area>
             </div>
 
-            <div class="col w-full md:w-1/2 lg:w-full xl:w-1/3">
+            <div class="blueprint__col blueprint__col--sidebar col">
                 <h5>Sidebar</h5>
                 <blueprint-area :sections="sidebar" :remove="remove" :add="add" :move="move" area="sidebar"></blueprint-area>
             </div>

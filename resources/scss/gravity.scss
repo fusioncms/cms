@@ -36,13 +36,6 @@
 @import "ui/forms/fields";
 @import "ui/forms/groups";
 
-@import "components/animations";
-@import "components/blueprints";
-@import "components/cards";
-@import "components/page-title";
-@import "components/sidebar";
-@import "components/quicklinks";
-
 @import "layout/columns";
 @import "layout/containers";
 @import "layout/footer";
@@ -50,6 +43,13 @@
 @import "layout/layouts";
 @import "layout/navigation";
 @import "layout/section";
+
+@import "components/animations";
+@import "components/blueprints";
+@import "components/cards";
+@import "components/page-title";
+@import "components/sidebar";
+@import "components/quicklinks";
 
 @import "pages/analytics";
 @import "pages/collection-single";
