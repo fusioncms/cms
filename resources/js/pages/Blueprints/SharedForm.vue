@@ -2,10 +2,16 @@
 	<form-container>
 		<portal to="actions">
 			<div class="buttons">
-				<router-link :to="{ name: 'blueprints' }" class="button">Go Back</router-link>
-				<button type="submit" @click.prevent="$parent.submit" class="button button--primary" :class="{'button--disabled': !form.hasChanges}" :disabled="!form.hasChanges">Save</button>
+				<ui-button v-if="$mq != 'sm'" :to="{ name: 'blueprints' }" variant="secondary">Go Back</ui-button>
+				<ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
 			</div>
 		</portal>
+
+        <portal to="sidebar-right">
+            <sidebar id="blueprint-sidebar">
+                <status-card v-if="resource" :entry="resource" id="blueprint_panel_status_card" tabindex="-1"></status-card>
+            </sidebar>
+        </portal>
 
 		<div class="card">
             <div class="card__body">
@@ -17,30 +23,26 @@
                     v-model="form.name">
                 </ui-title-group>
 
-				<section-builder class="mt-6" v-model="form.sections"></section-builder>
+                <blueprint>
+                    <blueprint-area v-model="form.sections" :placements="placements" area="body" title="Body"></blueprint-area>
+                    <blueprint-area v-model="form.sections" class="blueprint__col--sidebar" :placements="placements" area="sidebar" title="Sidebar"></blueprint-area>
+                </blueprint>
 			</div>
 		</div>
-
-		<template v-slot:sidebar>
-			<ui-definition-list v-if="resource">
-                <ui-definition name="Group">
-                    {{ resource.group }}
-                </ui-definition>
-
-                <ui-definition name="Created At">
-                    {{ $moment(resource.created_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-
-                <ui-definition name="Updated At">
-                    {{ $moment(resource.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-            </ui-definition-list>
-		</template>
 	</form-container>
 </template>
 
 <script>
     export default {
+        data() {
+            return {
+                placements: [
+                    { label: 'Body',    value: 'body'    },
+                    { label: 'Sidebar', value: 'sidebar' }
+                ]
+            }
+        },
+
         props: {
             resource: {
                 type: Object,

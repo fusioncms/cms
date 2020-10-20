@@ -11,10 +11,6 @@
                     <span class="sr-only">Edit Section</span>
                     <fa-icon icon="edit"></fa-icon>
                 </ui-button>
-                <ui-button icon size="small" @click.prevent="move(section.placement)">
-                    <span class="sr-only">Move to {{ section.placement === 'body' ? 'sidebar' : 'body' }}</span>
-                    <fa-icon icon="exchange-alt"></fa-icon>
-                </ui-button>
             </div>
         </div>
 
@@ -61,7 +57,7 @@
                 </div>
 
                 <select class="hidden" name="section-placement" v-model="section.placement">
-                    <option v-for="placement in placements" :value="placement.value">{{ placement.label }}</option>
+                    <option :key="placement.label" v-for="placement in placements" :value="placement.value">{{ placement.label }}</option>
                 </select>
             </div>
 
@@ -81,11 +77,7 @@
 
         data() {
             return {
-                isActive: this.active,
-                placements: [
-                    { label: 'Body',    value: 'body'    },
-                    { label: 'Sidebar', value: 'sidebar' }
-                ]
+                isActive: this.active
             }
         },
 
@@ -97,11 +89,6 @@
 
             id: {
                 type: String
-            },
-
-            subtitle: {
-                type: String,
-                default: '',
             },
 
             remove: {
@@ -117,8 +104,18 @@
 
             parentIndex: {
                 type: Number
+            },
+
+            placements: {
+                type: Array
             }
         },
+
+        computed: {
+            placement(value) {
+                return this.section.placement
+            }
+        }, 
 
         methods: {
             activate() {
@@ -130,14 +127,6 @@
 
             deactivate() {
                 this.isActive = false
-            },
-
-            move(placement) {
-                if(this.section.placement === 'body') {
-                    this.section.placement = 'sidebar'
-                } else {
-                    this.section.placement = 'body'
-                }
             }
         }
     }

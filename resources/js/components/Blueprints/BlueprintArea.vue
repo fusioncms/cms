@@ -1,30 +1,34 @@
 <template>
-    <div class="blueprint-area" @dragover.prevent @dragenter.prevent>
-        <div v-for="(section, index) in sections" 
-            class="blueprint-area__draggable"
-            :key="`${area}-${index}`"
-            :draggable="!! move"
-            @dragstart="onDragStart(index)"
-            @dragend="onDragEnd(index)"
-            @dragenter="onDragEnter(index)"
-            @dragleave="onDragLeave(index)"
-            @drop="onDrop(index)">
+    <div class="blueprint-area blueprint__col col" @dragover.prevent @dragenter.prevent>
+        <h5 v-if="title">{{ title }}</h5>
+        <template v-for="(section, index) in sections">
+            <div v-if="section.placement === area"
+                class="blueprint-area__draggable"
+                :key="`${area}-${index}`"
+                :draggable="!! move"
+                @dragstart="onDragStart(index)"
+                @dragend="onDragEnd(index)"
+                @dragenter="onDragEnter(index)"
+                @dragleave="onDragLeave(index)"
+                @drop="onDrop(index)">
 
-            <blueprint-section
-                :key="`${area}-${index}-section`"
-                :id="`${area}-${index}-section`"
-                :parent-index="index"
-                :section="section"
-                :subtitle="`${section.placement}, ${ fieldCount(section.fields.length)}`"
-                :remove="remove">
+                <blueprint-section
+                    :key="`${area}-${index}-section`"
+                    :id="`${area}-${index}-section`"
+                    :parent-index="index"
+                    :section="section"
+                    :subtitle="`${section.placement}, ${ fieldCount(section.fields.length)}`"
+                    :remove="remove"
+                    :placements="placements">
 
-                <field-builder
-                    v-model="section.fields"
-                    :sections="sections"
-                    :sectionHandle="section.handle">
-                </field-builder>
-            </blueprint-section>
-        </div>
+                    <field-builder
+                        v-model="section.fields"
+                        :sections="sections"
+                        :sectionHandle="section.handle">
+                    </field-builder>
+                </blueprint-section>
+            </div>
+        </template>
 
         <ui-button class="blueprint-area__btn" @click.prevent="add(area)" size="large">Add {{ area }} section <fa-icon icon="plus" class="ml-3"></fa-icon></ui-button>
     </div>
@@ -41,13 +45,13 @@
         },
 
         props: {
-            sections: {
-                type: [Object,Array]
+            value: {
+                type: Array,
+                default: () => []
             },
 
-            replace: {
-                type: Boolean,
-                default: false
+            title: {
+                type: String
             },
 
             area: {
@@ -55,25 +59,27 @@
                 default: 'body'
             },
 
-            add: {
-                type: [Function,Boolean],
-                default: false
-            },
-
-            move: {
-                type: [Function,Boolean],
-                default: false
-            },
-            
-            remove: {
-                type: [Function,Boolean],
-                default: false
+            placements: {
+                type: Array
             }
         },
 
         computed: {
+            sections() {
+                return this.value
+            },
+
             dragSection() {
                 return this.sections.find((section) => section.isDragging)
+            }
+        },
+
+        watch: {
+            sections: {
+                deep: true,
+                handler(value) {
+                    this.$emit('input', value)
+                }
             }
         },
 
@@ -103,9 +109,48 @@
                 }
             },
 
+            add(area, name = 'Section', prototype = true) {
+                name = this.uniqName(name)
+
+                this.sections.push({
+                    name: name,
+                    handle: _.snakeCase(name),
+                    description: '',
+                    placement: this.area ? this.area : 'body',
+                    fields: [],
+                    prototype: prototype
+                })
+            },
+
+            uniqName(orig, count = 0) {
+                let name  = orig + (count ? ` ${count}` : '')
+                let index = _.findIndex(this.sections, (item) => item.name == name)
+
+                if (index != -1) {
+                    return this.uniqName(orig, ++count)
+                }
+
+                return name
+            },
+
+            move(fromIndex, toIndex) {
+                this.sections.splice(toIndex, 0,
+                    this.sections.splice(fromIndex, 1)[0])
+            },
+
+            remove(index) {
+                if (this.sections.length > 0)
+                    this.sections.splice(index, 1)
+            },
+
             fieldCount(count) {
                 return `${count >= 0 ? count : 1} field`
             }
+        },
+
+         mounted() {
+            if (this.value.length == 0)
+                this.add('General')
         }
     }
 </script>

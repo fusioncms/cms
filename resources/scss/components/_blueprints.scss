@@ -6,19 +6,15 @@
     }
 
     &__col {
-        &--body {
-            @apply w-full;
+        @apply w-full;
 
-            @screen xl {
-                @apply w-auto flex-auto;
-            }
+        @screen xl {
+            @apply w-auto flex-auto;
         }
 
         &--sidebar {
-            @apply w-full;
-
             @screen xl {
-                @apply flex-shrink-0;
+                @apply flex-initial flex-shrink-0;
                 width: 300px;
             }
         }
