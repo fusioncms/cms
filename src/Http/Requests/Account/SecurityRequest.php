@@ -3,9 +3,9 @@
 namespace Fusion\Http\Requests\Account;
 
 use Fusion\Rules\SecurePassword;
-use Illuminate\Foundation\Http\FormRequest;
+use Fusion\Http\Requests\Request;
 
-class SecurityRequest extends FormRequest
+class SecurityRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

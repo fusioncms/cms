@@ -2,9 +2,9 @@
 
 namespace Fusion\Http\Requests\Account;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Fusion\Http\Requests\Request;
 
-class TokenRequest extends FormRequest
+class TokenRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

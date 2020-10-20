@@ -2,20 +2,29 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
-class DirectoryRequest extends FormRequest
+class DirectoryRequest extends Request
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make a POST request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePost()
     {
-        return $this->user()->can('directories.'.($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('directories.create');
+    }
+
+    /**
+     * Determine if the user is authorized to make a PATCH request.
+     *
+     * @return bool
+     */
+    public function authorizePatch()
+    {
+        return $this->user()->can('directories.update');
     }
 
     /**

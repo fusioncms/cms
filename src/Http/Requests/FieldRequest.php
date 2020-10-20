@@ -5,10 +5,10 @@ namespace Fusion\Http\Requests;
 use Exception;
 use Fusion\Rules\NotAReservedKeyword;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Validation\ValidationException;
 
-class FieldRequest extends FormRequest
+class FieldRequest extends Request
 {
     /**
      * @var \Fusion\Models\Field
@@ -20,7 +20,7 @@ class FieldRequest extends FormRequest
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function __construct(Request $request)
+    public function __construct(HttpRequest $request)
     {
         try {
             $this->fieldtype = fieldtypes()->get($request->type['handle']);
@@ -30,11 +30,21 @@ class FieldRequest extends FormRequest
     }
 
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make a POST request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePost()
+    {
+        return $this->user()->can('blueprints.create');
+    }
+
+    /**
+     * Determine if the user is authorized to make a PATCH request.
+     *
+     * @return bool
+     */
+    public function authorizePatch()
     {
         return $this->user()->can('blueprints.update');
     }

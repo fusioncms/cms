@@ -3,8 +3,8 @@
 namespace Fusion\Http\Controllers\API\FileManager;
 
 use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Requests\FileUpdateRequest;
-use Fusion\Http\Requests\FileUploadRequest;
+use Fusion\Http\Requests\FileRequest;
+use Fusion\Http\Requests\UploadFileRequest;
 use Fusion\Http\Resources\FileResource;
 use Fusion\Models\File;
 use Illuminate\Http\Request;
@@ -55,11 +55,11 @@ class FileController extends Controller
     /**
      * Persist a new resource in storage.
      *
-     * @param \Fusion\Http\Requests\FileUploadRequest $request
+     * @param \Fusion\Http\Requests\UploadFileRequest $request
      *
      * @return \Fusion\Http\Resources\FileResource
      */
-    public function store(FileUploadRequest $request)
+    public function store(UploadFileRequest $request)
     {
         $upload    = $request->file('file');
         $directory = $request->input('directory_id', 0);
@@ -102,12 +102,12 @@ class FileController extends Controller
     /**
      * Update an existing resource in storage.
      *
-     * @param \Fusion\Http\Requests\FileUpdateRequest $request
+     * @param \Fusion\Http\Requests\FileRequest $request
      * @param \Fusion\Models\File                     $file
      *
      * @return \Fusion\Http\Resources\FileResource
      */
-    public function update(FileUpdateRequest $request, File $file)
+    public function update(FileRequest $request, File $file)
     {
         $file->update($request->validated());
 

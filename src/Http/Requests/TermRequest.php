@@ -3,10 +3,9 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Services\Builders\Taxonomy as Builder;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
-class TermRequest extends FormRequest
+class TermRequest extends Request
 {
     public function __construct()
     {
@@ -18,13 +17,23 @@ class TermRequest extends FormRequest
     }
 
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make a POST request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePost()
     {
-        return $this->user()->can('terms.'.($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('terms.create');
+    }
+
+    /**
+     * Determine if the user is authorized to make a PATCH request.
+     *
+     * @return bool
+     */
+    public function authorizePatch()
+    {
+        return $this->user()->can('terms.update');
     }
 
     /**

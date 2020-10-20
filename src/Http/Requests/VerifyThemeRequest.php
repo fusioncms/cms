@@ -4,9 +4,8 @@ namespace Fusion\Http\Requests;
 
 use Fusion\Rules\UniqueThemeName;
 use Fusion\Rules\ValidTheme;
-use Illuminate\Foundation\Http\FormRequest;
 
-class VerifyThemeRequest extends FormRequest
+class VerifyThemeRequest extends Request
 {
     /**
      * @var array
