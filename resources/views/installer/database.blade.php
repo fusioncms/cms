@@ -18,19 +18,19 @@
 		/>
 
 		<x-installer.input
-			name="db_name"
+			name="db_database"
 			label="Database Name"
 			value="{{ $data['db_database'] ?? 'fusioncms' }}"
 		/>
 
 		<x-installer.input
-			name="db_user"
+			name="db_username"
 			label="Username"
 			value="{{ $data['db_username'] ?? 'homestead' }}"
 		/>
 
 		<x-installer.input
-			name="db_pass"
+			name="db_password"
 			type="password"
 			label="Password"
 			value="{{ $data['db_password'] ?? 'secret' }}"
