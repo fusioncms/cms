@@ -4,8 +4,7 @@ namespace Fusion\Jobs\Backups;
 
 use DB;
 use Exception;
-use Fusion\Events\Backups\DatabaseRestoreFailed;
-use Fusion\Events\Backups\DatabaseRestoreSuccessful;
+use Fusion\Events\Backups\Restore;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Log;
@@ -57,12 +56,12 @@ class RestoreDatabase
                     $this->restoreFromSqliteFile($dbDumpPath);
                 }
 
-                event(new DatabaseRestoreSuccessful($dbDumpPath));
+                event(new Restore\DatabaseRestoreSuccessful($dbDumpPath));
             } else {
                 throw new Exception('Failed to locate database dump from backup.');
             }
         } catch (Exception $exception) {
-            event(new DatabaseRestoreFailed($exception, $dbDumpPath));
+            event(new Restore\DatabaseRestoreFailed($exception, $dbDumpPath));
 
             Log::error('There was an error restoring database backup: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
         }
@@ -144,7 +143,7 @@ class RestoreDatabase
      */
     private function restoreFromSqliteFile($dbDumpPath)
     {
-        $dbName  = config('database.connections.'.$default.'.database');
+        $dbName  = config('database.connections.sqlite.database');
         $command = "sqlite3 {$dbName} < {$dbDumpPath}";
 
         $process = Process::fromShellCommandline($command);

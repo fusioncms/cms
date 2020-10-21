@@ -7,6 +7,7 @@ use Fusion\Jobs\Backups\BackupRun;
 use Fusion\Jobs\Backups\RestoreFromBackup;
 use Fusion\Models\Backup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 
 class BackupRestoreController extends Controller
 {
@@ -23,9 +24,12 @@ class BackupRestoreController extends Controller
         $this->authorize('backups.restore');
 
         if ($request->input('saveBackup')) {
-            BackupRun::dispatch();
+            Bus::chain([
+                new BackupRun,
+                new RestoreFromBackup($backup)
+            ])->onConnection('sync')->dispatch();
+        } else {
+            RestoreFromBackup::dispatchSync($backup);
         }
-
-        RestoreFromBackup::dispatch($backup);
     }
 }

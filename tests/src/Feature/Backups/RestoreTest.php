@@ -2,9 +2,11 @@
 
 namespace Fusion\Tests\Feature\Backups;
 
-use Fusion\Events\Backups\FileRestoreSuccessful;
+use Fusion\Events\Backups\Restore\FileRestoreSuccessful;
 use Fusion\Jobs\Backups\RestoreFromBackup;
+use Fusion\Jobs\Backups\BackupRun;
 use Fusion\Models\Backup;
+use Fusion\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Bus;
@@ -16,15 +18,16 @@ use Illuminate\Support\Str;
 class RestoreTest extends TestBase
 {
     // ------------------------------------------------
-    // RESTORE REQUEST
+    // RESTORE
     // ------------------------------------------------
 
     /** @test */
     public function a_user_with_permission_can_restore_from_existing_backups()
     {
-        Bus::fake();
-
         $backup = $this->newBackup()->first();
+
+        // ----
+        Bus::fake();
 
         $this
             ->be($this->owner, 'api')
@@ -37,11 +40,12 @@ class RestoreTest extends TestBase
     /** @test */
     public function a_user_without_permission_cannot_restore_from_existing_backups()
     {
-        Bus::fake();
-
         $this->expectException(AuthorizationException::class);
 
         $backup = $this->newBackup()->first();
+
+        // ----
+        Bus::fake();
 
         $this
             ->be($this->user, 'api')
@@ -53,15 +57,32 @@ class RestoreTest extends TestBase
     /** @test */
     public function a_guest_cannot_restore_from_existing_backups()
     {
-        Bus::fake();
-
         $this->expectException(AuthenticationException::class);
 
         $backup = $this->newBackup()->first();
 
-        $this->json('POST', "/api/backups/restore/{$backup->id}");
+        // ----
+        Bus::fake();
 
+        $this->json('POST', "/api/backups/restore/{$backup->id}");
+        
         Bus::assertNotDispatched(RestoreFromBackup::class);
+    }
+
+    /** @test */
+    public function a_backup_can_be_requested_before_restoring_an_existing_backup()
+    {
+        $backup = $this->newBackup()->first();
+
+        // ----
+        Bus::fake();
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/backups/restore/{$backup->id}", ['saveBackup' => true])
+            ->assertStatus(200);
+
+        Bus::assertDispatched(BackupRun::class);
     }
 
     // ------------------------------------------------
@@ -69,18 +90,18 @@ class RestoreTest extends TestBase
     // ------------------------------------------------
 
     /** @test */
-    public function restored_backup_will_recover_altered_files()
+    public function restored_backup_will_recover_any_altered_files()
     {
-        Event::fake([FileRestoreSuccessful::class]);
+        $backup = $this->newBackup('new-backup', 'public')->first();
 
-        $backup = $this->newBackup()->first();
-
-        // Alter storage setup..
+        // Alter some files..
         Storage::disk('public')->append('files/testing-file1.txt', 'more content');
         Storage::disk('public')->delete('files/testing-file2.txt');
+        
+        // ----
+        Event::fake([FileRestoreSuccessful::class]);
 
-        // Restore from backup..
-        (new RestoreFromBackup($backup))->handle();
+        RestoreFromBackup::dispatchNow($backup);
 
         Event::assertDispatched(FileRestoreSuccessful::class, function ($ev) use ($backup) {
             foreach ($ev->filesToCopy as $file) {
@@ -98,59 +119,58 @@ class RestoreTest extends TestBase
         });
     }
 
+    /** @test */
     public function restored_backup_will_recover_altered_env_variables()
     {
-        $backup = $this->newBackup()->first();
+        $backup  = $this->newBackup()->first();
+        $envPath = app()->environmentFilePath();
 
-        // Alter .env.testing file and save..
-        $envContents = File::get(app()->environmentFilePath());
-        dump('before', File::get(app()->environmentFilePath()));
+        // Alter .env values
+        $envContents = File::get($envPath);
+
         foreach (config('backup.backup.source.env') as $key) {
             $envContents = preg_replace("/^({$key})=([^\r\n]*)$/m", '$1='.Str::random(), $envContents);
         }
-        dd($envContents);
-//         File::put(app()->environmentFilePath(), $envContents);
-// dump('after', File::get(app()->environmentFilePath()));
-//         // --
 
-//         // Restore backup..
-//         (new RestoreFromBackup($backup))->handle();
+        File::put($envPath, $envContents);
 
-//         $envUpdated = File::get(app()->environmentFilePath());
-//         $matches    = [];
-// dd($envUpdated);
-        // foreach (config('backup.backup.source.env') as $key) {
-        //     preg_match("/^({$key})=([^\r\n]*)$/m", $envUpdated, $matches);
+        // ----
+        RestoreFromBackup::dispatchNow($backup);
 
-        //     if (!isset($matches[2]) or ($matches[2] != env($key))) {
-        //         return false;
-        //     }
-        // }
+        $envUpdated = File::get($envPath);
+        $matches    = [];
 
-        // return true;
+        foreach (config('backup.backup.source.env') as $key) {
+            preg_match("/^({$key})=([^\r\n]*)$/m", $envUpdated, $matches);
+
+            if (!isset($matches[2]) or ($matches[2] != env($key))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    //TODO: unable to dump sql database for testing
+    // TODO: not able to dump :memory: to test this
+    // https://spatie.be/docs/laravel-backup/v6/installation-and-setup#custom-database-dumpers
     public function a_request_to_restore_from_backup_will_restore_database()
     {
+        $backup = $this->newBackup()->first();
+
         // \Spatie\DbDumper\Databases\Sqlite::create()
-        //  ->setDbName(Storage::disk('public')->path('database.sqlite'))
-        //  ->dumpToFile(Storage::disk('public')->path('database.sql'));
+        // ->setDbName(config('database.connections.sqlite.database'))
+        // ->dumpToFile(config('backup.backup.temporary_directory').'/temp/db-dumps/sqlite-sqlite-database.sql');
 
-        //TODO: need `$backup` to restore from
+        // ------------------------
+        // Alter database
+        $id = $this->user->id;
+        $this->user->delete();
 
-        // \Fusion\Models\User::find(2)->delete();
-        // $this->assertDatabaseMissing('users', ['email' => 'guest@example.com']);
+        $this->assertDatabaseMissing('users', ['id' =>  $id]);
+        // ------------------------
 
-        // // Restore from backup...
-        // (new RestoreFromBackup($backup))->handle();
+        RestoreFromBackup::dispatchNow($backup);
 
-        // // ...assert cleanup was successful.
-        // Event::assertDispatched(\Fusion\Events\Backups\RestoreManifestWasCreated::class);
-        // Event::assertDispatched(\Fusion\Events\Backups\BackupExtractionSuccessful::class);
-        // Event::assertDispatched(\Fusion\Events\Backups\DatabaseRestoreSuccessful::class);
-        // Event::assertDispatched(\Fusion\Events\Backups\FileRestoreSuccessful::class);
-
-        // $this->assertDatabaseHas('users', ['email' => 'guest@example.com']);
+        $this->assertDatabaseHas('users', ['id' => $id]);
     }
 }

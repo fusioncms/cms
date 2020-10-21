@@ -117,7 +117,7 @@ class BackupEventSubscriber
      *
      * @return void
      */
-    public function handleBackupManifestCreated($event)
+    public function handleManifestCreated($event)
     {
         //
     }
@@ -212,7 +212,7 @@ class BackupEventSubscriber
 
         $events->listen(
             'Spatie\Backup\Events\BackupManifestWasCreated',
-            [BackupEventSubscriber::class, 'handleBackupManifestCreated']
+            [BackupEventSubscriber::class, 'handleManifestCreated']
         );
 
         $events->listen(

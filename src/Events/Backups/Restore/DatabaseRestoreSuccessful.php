@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Events\Backups;
+namespace Fusion\Events\Backups\Restore;
 
 class DatabaseRestoreSuccessful
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Fusion\Events\Backups;
+namespace Fusion\Events\Backups\Restore;
 
-class BackupExtractionSuccessful
+class UnzipSuccessful
 {
     /**
      * @var string

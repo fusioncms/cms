@@ -1,10 +1,10 @@
 <?php
 
-namespace Fusion\Events\Backups;
+namespace Fusion\Events\Backups\Restore;
 
 use Spatie\Backup\Tasks\Backup\Manifest;
 
-class RestoreManifestWasCreated
+class ManifestWasCreated
 {
     /**
      * @var Manifest

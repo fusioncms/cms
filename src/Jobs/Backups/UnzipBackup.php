@@ -3,9 +3,7 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
-use Fusion\Events\Backups\BackupExtractionFailed;
-use Fusion\Events\Backups\BackupExtractionSuccessful;
-use Fusion\Events\Backups\RestoreManifestWasCreated;
+use Fusion\Events\Backups\Restore;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Spatie\Backup\Tasks\Backup\Manifest;
@@ -61,12 +59,12 @@ class UnzipBackup
                 $this->zipFile->extractTo($this->tempDirectory->path());
                 $this->zipFile->close();
 
-                event(new BackupExtractionSuccessful($this->tempDirectory->path()));
+                event(new Restore\UnzipSuccessful($this->tempDirectory->path()));
             } else {
                 throw new Exception('Unable to locate and unzip backup file.');
             }
         } catch (Exception $exception) {
-            event(new BackupExtractionFailed($exception, $this->tempDirectory->path()));
+            event(new Restore\UnzipFailed($exception, $this->tempDirectory->path()));
 
             Log::error('There was an error extracting the backup: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
         }
@@ -94,7 +92,7 @@ class UnzipBackup
         $manifest = Manifest::create($this->tempDirectory->path('manifest.txt'))
             ->addFiles($this->filesToRestore());
 
-        event(new RestoreManifestWasCreated($manifest));
+        event(new Restore\ManifestWasCreated($manifest));
 
         return $manifest;
     }

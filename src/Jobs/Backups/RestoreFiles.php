@@ -3,8 +3,7 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
-use Fusion\Events\Backups\FileRestoreFailed;
-use Fusion\Events\Backups\FileRestoreSuccessful;
+use Fusion\Events\Backups\Restore;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\File;
@@ -54,9 +53,9 @@ class RestoreFiles
 
             $this->restoreBackupFiles($files);
 
-            event(new FileRestoreSuccessful($files));
+            event(new Restore\FileRestoreSuccessful($files));
         } catch (Exception $exception) {
-            event(new FileRestoreFailed($exception, $files));
+            event(new Restore\FileRestoreFailed($exception, $files));
 
             Log::error('There was an error restoring files in backup: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
         }
