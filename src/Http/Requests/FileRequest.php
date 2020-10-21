@@ -2,17 +2,16 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Storage;
 
-class FileUpdateRequest extends FormRequest
+class FileRequest extends Request
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make a PATCH request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePatch()
     {
         return $this->user()->can('files.update');
     }

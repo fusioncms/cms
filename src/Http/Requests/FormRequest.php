@@ -2,20 +2,29 @@
 
 namespace Fusion\Http\Requests;
 
-use Fusion\Rules\NotAReservedKeyword;
-use Illuminate\Foundation\Http\FormRequest as BaseFormRequest;
 use Illuminate\Support\Str;
+use Fusion\Rules\NotAReservedKeyword;
 
-class FormRequest extends BaseFormRequest
+class FormRequest extends Request
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make a POST request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePost()
     {
-        return $this->user()->can('forms.'.($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('forms.create');
+    }
+
+    /**
+     * Determine if the user is authorized to make a PATCH request.
+     *
+     * @return bool
+     */
+    public function authorizePatch()
+    {
+        return $this->user()->can('forms.update');
     }
 
     /**
