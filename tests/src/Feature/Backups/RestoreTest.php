@@ -107,23 +107,128 @@ class RestoreTest extends TestBase
     }
 
     /** @test */
-    public function custom_events_will_fire_when_unzipping_backup_fails()
+    public function custom_events_will_fire_when_restore_successful()
     {
-        $backup = $this->newBackup('failed-backup', 'public')->first();
-        $backup->update(['disk' => 'temp']);
+        $backup = $this->newBackup('new-backup', 'public')->first();
 
         //--
         Event::fake([
-            Restore\UnzipFailed::class,
-            Restore\HasFailed::class
+            Restore\UnzipSuccessful::class,
+            Restore\ManifestWasCreated::class,
+            Restore\DatabaseSuccessful::class,
+            Restore\FileSuccessful::class,
+            Restore\WasSuccessful::class
         ]);
 
         RestoreFromBackup::dispatchNow($backup);
 
-        Event::assertDispatched(Restore\UnzipFailed::class);
-        Event::assertDispatched(function (Restore\HasFailed $event) {
+        Event::assertDispatched(Restore\DatabaseSuccessful::class);
+        Event::assertDispatched(Restore\ManifestWasCreated::class);
+        Event::assertDispatched(Restore\DatabaseSuccessful::class);
+        Event::assertDispatched(Restore\FileSuccessful::class);
+        Event::assertDispatched(Restore\WasSuccessful::class);
+    }
+
+    /** @test */
+    public function custom_events_will_fire_when_restore_fails()
+    {
+        $backup = $this->newBackup('new-backup', 'public')->first();
+
+        // invalidate
+        app()->useEnvironmentPath('fake-path');
+
+        //--
+        Event::fake([
+            Restore\HasFailed::class,
+            Restore\RestoreFiles::class
+        ]);
+
+        RestoreFromBackup::dispatchNow($backup);
+
+        Event::assertDispatched(function(Restore\HasFailed $event) {
+            return $event->exception->getMessage() === 'File does not exist at path fake-path/.env.testing.';
+        });
+
+        // assert process aborted..
+        Event::assertNotDispatched(Restore\RestoreFiles::class);
+    }
+
+    /** @test */
+    public function custom_events_will_fire_when_unzipping_backup_fails()
+    {
+        $backup = $this->newBackup('new-backup', 'public')->first();
+        
+        // invalidate
+        $backup->update(['location' => 'backups/invalid-backup.zip']);
+
+        //--
+        Event::fake([
+            Restore\UnzipFailed::class,
+            Restore\RestoreEnvVariables::class
+        ]);
+
+        RestoreFromBackup::dispatchNow($backup);
+
+        Event::assertDispatched(function(Restore\UnzipFailed $event) {
             return $event->exception->getMessage() === 'Unable to locate and unzip backup file.';
         });
+
+        // assert process aborted..
+        Event::assertNotDispatched(Restore\RestoreEnvVariables::class);
+    }
+
+    /** @test */
+    public function custom_events_will_fire_when_database_restore_fails()
+    {
+        $backup = $this->newBackup('new-backup', 'public')->first();
+        
+        // invalidate
+        config(['database.default' => 'mysql']);
+
+        //--
+        Event::fake([Restore\DatabaseFailed::class]);
+
+        RestoreFromBackup::dispatchNow($backup);
+
+        Event::assertDispatched(function (Restore\DatabaseFailed $event) {
+            return $event->exception->getMessage() === 'Unable to restore database dump from backup.';
+        });
+    }
+
+    // ------------------------------------------------
+    // LOGS
+    // ------------------------------------------------
+
+    /** @test */
+    public function backup_log_will_be_updated_when_file_restore_fails()
+    {
+        $backup = $this->newBackup('new-backup', 'public')->first();
+        
+        // invalidate
+        config(['backup.backup.source.files.include' => null]);
+
+        //--
+        RestoreFromBackup::dispatchNow($backup);
+
+        // assert log..
+        $this->assertStringContainsString('Filesystem restore failed.',
+            Storage::disk($backup->disk)->get($backup->log_path));
+    }
+
+    /** @test */
+    public function backup_log_will_be_updated_when_database_restore_fails()
+    {
+        $backup = $this->newBackup('new-backup', 'public')->first();
+        
+        // invalidate
+        config(['database.default' => 'mysql']);
+
+        //--
+        RestoreFromBackup::dispatchNow($backup);
+
+        // assert log..
+        $this->assertStringContainsString('Database restore failed.',
+            Storage::disk($backup->disk)->get($backup->log_path));
     }
 
     // ------------------------------------------------
@@ -140,20 +245,22 @@ class RestoreTest extends TestBase
         Storage::disk('public')->delete('files/testing-file2.txt');
         
         // ----
-        Event::fake([Restore\FileRestoreSuccessful::class]);
+        Event::fake([Restore\FileSuccessful::class]);
 
         RestoreFromBackup::dispatchNow($backup);
 
-        Event::assertDispatched(Restore\FileRestoreSuccessful::class, function ($ev) use ($backup) {
-            foreach ($ev->filesToCopy as $file) {
-                if (Storage::disk($backup->disk)->exists('files/'.basename($file['target']))) {
-                    $expected = 'dummy content';
-                    $actual   = Storage::disk('public')->get('files/'.basename($file['target']));
+        Event::assertDispatched(Restore\FileSuccessful::class, function ($ev) use ($backup) {
+            // file1 test..
+            $expected = 'dummy content';
+            $actual   = Storage::disk('public')->get('files/testing-file1.txt');
 
-                    if ($expected !== $actual) {
-                        return false;
-                    }
-                }
+            if ($expected != $actual) {
+                return false;
+            }
+
+            // file2 test..
+            if (!Storage::disk($backup->disk)->exists('files/testing-file2.txt')) {
+                return false;
             }
 
             return true;

@@ -3,6 +3,7 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
+use Fusion\Console\Actions;
 use Fusion\Events\Backups\Restore;
 use Fusion\Models\Backup;
 use Illuminate\Bus\Queueable;
@@ -25,11 +26,11 @@ class RestoreFromBackup
     protected $backup;
 
     /**
-     * Temp restore directory.
+     * Temporary restore directory.
      * 
      * @var \Spatie\TemporaryDirectory\TemporaryDirectory
      */
-    protected $restoreDirectory;
+    protected $tempDirectory;
 
     /**
      * Constructor.
@@ -48,29 +49,27 @@ class RestoreFromBackup
      */
     public function handle()
     {
-        $this->before();
+        $this->setup();
+        // --
 
-        $jobs = [
-            // new \Fusion\Console\Actions\EnterMaintenanceMode,
-            new \Fusion\Jobs\Backups\UnzipBackup($this->restoreDirectory, $this->backup),
-            new \Fusion\Jobs\Backups\RestoreDatabase($this->restoreDirectory),
-            new \Fusion\Jobs\Backups\RestoreFiles($this->restoreDirectory),
-            new \Fusion\Jobs\Backups\RestoreEnvVariables($this->restoreDirectory),
-            // new \Fusion\Console\Actions\ExitMaintenanceMode,
-        ];
+            $jobs = [
+                new \Fusion\Jobs\Backups\UnzipBackup($this->backup, $this->tempDirectory),
+                new \Fusion\Jobs\Backups\RestoreEnvVariables($this->backup, $this->tempDirectory),
+                new \Fusion\Jobs\Backups\RestoreFiles($this->backup, $this->tempDirectory),
+                new \Fusion\Jobs\Backups\RestoreDatabase($this->backup, $this->tempDirectory),
+            ];
 
-        foreach ($jobs as $job) {
-            try {
-                dispatch($job);
-            } catch(Throwable $exception) {
-                $this->failure($exception);
-                $this->after();
-                return;
-            };
-        }
+            foreach ($jobs as $job) {
+                try {
+                    dispatch($job);
+                } catch(Throwable $exception) {
+                    $this->hasFailed($exception);
+                    return;
+                };
+            }
 
-        $this->success();
-        $this->after();
+        // --
+        $this->wasSuccessful();
     }
 
     /**
@@ -79,20 +78,20 @@ class RestoreFromBackup
      * 
      * @return void
      */
-    private function before()
+    private function setup()
     {
         event(new Restore\HasStarted($this->backup));
 
         $disk = Storage::disk($this->backup->disk);
         $path = $disk->path('app/restore-temp');
 
-        $this->restoreDirectory = (new TemporaryDirectory($path))
+        $this->tempDirectory = (new TemporaryDirectory($path))
                 ->name('temp')
                 ->force()
                 ->create()
                 ->empty();
 
-        Artisan::call('down');
+        Actions\EnterMaintenanceMode::dispatch();
     }
 
     /**
@@ -101,34 +100,38 @@ class RestoreFromBackup
      * 
      * @return void
      */
-    private function after()
+    private function teardown()
     {
-        Artisan::call('up');
+        Actions\ExitMaintenanceMode::dispatch();
 
-        $this->restoreDirectory->delete();
+        $this->tempDirectory->delete();
     }
 
     /**
-     * Restoration failed.
+     * Handle failed case.
      *
      * @param \Throwable $exception
      *
      * @return void
      */
-    private function failure(Throwable $exception)
+    private function hasFailed(Throwable $exception)
     {
+        $this->teardown();
+
         event(new Restore\HasFailed($this->backup, $exception));
 
         Log::error("There was an error trying to restore from a backup: {$exception->getMessage()}", (array) $exception->getTrace()[0]);
     }
 
     /**
-     * Restoration successful.
+     * Handle successful case.
      *
      * @return void
      */
-    private function success()
+    private function wasSuccessful()
     {
+        $this->teardown();
+
         event(new Restore\WasSuccessful($this->backup));
     }
 }

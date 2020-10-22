@@ -71,6 +71,7 @@ class RestoreEventSubscriber
     public function handleUnzipFailed($event)
     {
         // $event->backup
+        // $event->exception
     }
 
     /**
@@ -89,43 +90,61 @@ class RestoreEventSubscriber
     }
 
     /**
-     * @param \Fusion\Events\Backups\Restore\FileRestoreSuccessful $event
+     * @param \Fusion\Events\Backups\Restore\FileSuccessful $event
      *
      * @return void
      */
-    public function handleFileRestoreSuccessful($event)
+    public function handleFileSuccessful($event)
     {
-        //
+        $backup = $event->backup;
+
+        $this
+            ->logToFile($backup->log_path, $backup->disk)
+            ->info('Filesystem successfully restored.', []);
     }
     
     /**
-     * @param \Fusion\Events\Backups\Restore\FileRestoreFailed $event
+     * @param \Fusion\Events\Backups\Restore\FileFailed $event
      *
      * @return void
      */
-    public function handleFileRestoreFailed($event)
+    public function handleFileFailed($event)
     {
-        //
+        $backup    = $event->backup;
+        $exception = $event->exception;
+
+        $this
+            ->logToFile($backup->log_path, $backup->disk)
+            ->info('Filesystem restore failed.', []);
     }
 
     /**
-     * @param \Fusion\Events\Backups\Restore\DatabaseRestoreSuccessful $event
+     * @param \Fusion\Events\Backups\Restore\DatabaseSuccessful $event
      *
      * @return void
      */
-    public function handleDatabaseRestoreSuccessful($event)
+    public function handleDatabaseSuccessful($event)
     {
-        //
+        $backup = $event->backup;
+
+        $this
+            ->logToFile($backup->log_path, $backup->disk)
+            ->info('Database successfully restored.', []);
     }
     
     /**
-     * @param \Fusion\Events\Backups\Restore\DatabaseRestoreFailed $event
+     * @param \Fusion\Events\Backups\Restore\DatabaseFailed $event
      *
      * @return void
      */
-    public function handleDatabaseRestoreFailed($event)
+    public function handleDatabaseFailed($event)
     {
-        //
+        $backup    = $event->backup;
+        $exception = $event->exception;
+
+        $this
+            ->logToFile($backup->log_path, $backup->disk)
+            ->info('Database restore failed.', []);
     }
 
     /**
@@ -162,19 +181,19 @@ class RestoreEventSubscriber
             [RestoreEventSubscriber::class, 'handleManifestCreated']);
 
         $events->listen(
-            'Fusion\Events\Backups\Restore\FileRestoreSuccessful',
-            [RestoreEventSubscriber::class, 'handleFileRestoreSuccessful']);
+            'Fusion\Events\Backups\Restore\FileSuccessful',
+            [RestoreEventSubscriber::class, 'handleFileSuccessful']);
 
         $events->listen(
-            'Fusion\Events\Backups\Restore\FileRestoreFailed',
-            [RestoreEventSubscriber::class, 'handleFileRestoreFailed']);
+            'Fusion\Events\Backups\Restore\FileFailed',
+            [RestoreEventSubscriber::class, 'handleFileFailed']);
 
         $events->listen(
-            'Fusion\Events\Backups\Restore\DatabaseRestoreSuccessful',
-            [RestoreEventSubscriber::class, 'handleDatabaseRestoreSuccessful']);
+            'Fusion\Events\Backups\Restore\DatabaseSuccessful',
+            [RestoreEventSubscriber::class, 'handleDatabaseSuccessful']);
 
         $events->listen(
-            'Fusion\Events\Backups\Restore\DatabaseRestoreFailed',
-            [RestoreEventSubscriber::class, 'handleDatabaseRestoreFailed']);
+            'Fusion\Events\Backups\Restore\DatabaseFailed',
+            [RestoreEventSubscriber::class, 'handleDatabaseFailed']);
     }
 }

@@ -5,13 +5,13 @@ namespace Fusion\Events\Backups\Restore;
 use Fusion\Models\Backup;
 use Throwable;
 
-class UnzipFailed
+class DatabaseFailed
 {
     /**
      * @var \Fusion\Models\Backup
      */
     public $backup;
-
+    
     /**
      * @var \Throwable
      */

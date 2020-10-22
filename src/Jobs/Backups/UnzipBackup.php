@@ -18,14 +18,14 @@ class UnzipBackup
     use Queueable;
 
     /**
-     * @var TemporaryDirectory
-     */
-    protected $tempDirectory;
-
-    /**
      * @var \Fusion\Models\Backup
      */
     protected $backup;
+
+    /**
+     * @var TemporaryDirectory
+     */
+    protected $tempDirectory;
 
     /**
      * @var ZipArchive
@@ -35,19 +35,21 @@ class UnzipBackup
     /**
      * Constructor.
      *
-     * @param \Spatie\TemporaryDirectory\TemporaryDirectory $tempDirectory
      * @param \Fusion\Models\Backup                         $backup
+     * @param \Spatie\TemporaryDirectory\TemporaryDirectory $tempDirectory
      */
-    public function __construct(TemporaryDirectory $tempDirectory, Backup $backup)
+    public function __construct(Backup $backup, TemporaryDirectory $tempDirectory)
     {
-        $this->tempDirectory = $tempDirectory;
         $this->backup        = $backup;
+        $this->tempDirectory = $tempDirectory;
         $this->zipFile       = new ZipArchive();
     }
 
     /**
      * Execute the job.
      *
+     * @throws Exception
+     * 
      * @return void
      */
     public function handle()
@@ -63,9 +65,8 @@ class UnzipBackup
 
             event(new Restore\UnzipSuccessful($this->backup));
         } else {
-            event(new Restore\UnzipFailed($this->backup));
-
-            throw new Exception('Unable to locate and unzip backup file.');
+            $this->hasFailed(
+                new Exception('Unable to locate and unzip backup file.'));
         }
     }
 
@@ -98,5 +99,19 @@ class UnzipBackup
         }
 
         return $files;
+    }
+
+    /**
+     * Handle failed case.
+     *
+     * @param \Throwable $exception
+     *
+     * @return void
+     */
+    private function hasFailed(Throwable $exception)
+    {
+        event(new Restore\UnzipFailed($this->backup, $exception));
+
+        throw $exception;
     }
 }

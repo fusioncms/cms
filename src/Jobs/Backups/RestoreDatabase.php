@@ -2,21 +2,26 @@
 
 namespace Fusion\Jobs\Backups;
 
-use DB;
 use Exception;
+use Fusion\Models\Backup;
 use Fusion\Events\Backups\Restore;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Log;
 use Spatie\Backup\Tasks\Backup\Manifest;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use Throwable;
 
 class RestoreDatabase
 {
     use Dispatchable;
     use Queueable;
+
+    /**
+     * @var \Fusion\Models\Backup
+     */
+    protected $backup;
 
     /**
      * @var TemporaryDirectory
@@ -31,10 +36,12 @@ class RestoreDatabase
     /**
      * Constructor.
      *
-     * @param Backup $backup
+     * @param \Fusion\Models\Backup                         $backup
+     * @param \Spatie\TemporaryDirectory\TemporaryDirectory $tempDirectory
      */
-    public function __construct(TemporaryDirectory $tempDirectory)
+    public function __construct(Backup $backup, TemporaryDirectory $tempDirectory)
     {
+        $this->backup        = $backup;
         $this->tempDirectory = $tempDirectory;
         $this->manifest      = new Manifest($tempDirectory->path('manifest.txt'));
     }
@@ -48,35 +55,29 @@ class RestoreDatabase
      */
     public function handle()
     {
-        try {
-            if ($dbDumpPath = $this->fetchDBDump()) {
-                if (config('database.default') == 'mysql') {
-                    $this->restoreFromMySqlFile($dbDumpPath);
-                } elseif (config('database.default') == 'sqlite') {
-                    $this->restoreFromSqliteFile($dbDumpPath);
-                }
+        if (! $dbDumpPath = $this->fetchDBDump()) {
+            $this->hasFailed(
+                new Exception('Failed to locate database dump from backup.'));
+        }
 
-                event(new Restore\DatabaseRestoreSuccessful($dbDumpPath));
-            } else {
-                throw new Exception('Failed to locate database dump from backup.');
+        try {
+            switch (config('database.default')) {
+                case 'mysql':
+                    $this->restoreFromMySqlFile($dbDumpPath);
+                    break;
+                case 'sqlite':
+                    $this->restoreFromSqliteFile($dbDumpPath);
+                    break;
+                default:
+                    $this->hasFailed(
+                        new Exception('Unsupported database connection: '.config('database.default')));
             }
         } catch (Exception $exception) {
-            event(new Restore\DatabaseRestoreFailed($exception, $dbDumpPath));
-
-            Log::error('There was an error restoring database backup: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
+            $this->hasFailed(
+                new Exception('Unable to restore database dump from backup.'));
         }
-    }
 
-    /**
-     * The job failed to process.
-     *
-     * @param Exception $exception
-     *
-     * @return void
-     */
-    public function failed(Exception $exception)
-    {
-        Log::error('There was an error trying to restore from a backup: ', $exception->getMessage(), (array) $exception->getTrace()[0]);
+        event(new Restore\DatabaseSuccessful($this->backup));
     }
 
     /**
@@ -100,7 +101,7 @@ class RestoreDatabase
      *
      * @throws ProcessFailedException
      *
-     * @return bool
+     * @return void
      */
     private function restoreFromMySqlFile($dbDumpPath)
     {
@@ -130,8 +131,6 @@ class RestoreDatabase
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
-
-        return true;
     }
 
     /**
@@ -139,7 +138,7 @@ class RestoreDatabase
      *
      * @throws ProcessFailedException
      *
-     * @return bool
+     * @return void
      */
     private function restoreFromSqliteFile($dbDumpPath)
     {
@@ -152,7 +151,19 @@ class RestoreDatabase
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
+    }
 
-        return true;
+    /**
+     * Handle failed case.
+     * 
+     * @param \Throwable $exception
+     *
+     * @return void
+     */
+    private function hasFailed(Throwable $exception)
+    {
+        event(new Restore\DatabaseFailed($this->backup, $exception));
+
+        throw $exception;
     }
 }
