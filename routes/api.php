@@ -9,8 +9,8 @@ Route::get('structures', 'StructureController@index');
 /**
  * API - Backup Routes.
  */
-Route::post('backups/upload', 'Backups\BackupUploadController@index');
-Route::post('backups/restore/{backup}', 'Backups\BackupRestoreController@index');
+Route::post('backups/upload', 'Backups\UploadController@index');
+Route::post('backups/restore/{backup}', 'Backups\RestoreController@index');
 Route::apiResource('backups', 'Backups\BackupController');
 
 /**

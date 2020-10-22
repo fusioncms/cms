@@ -11,13 +11,56 @@ class RestoreEventSubscriber
     use HasCustomLogger;
 
     /**
+     * @param \Fusion\Events\Backups\Restore\HasStarted $event
+     *
+     * @return void
+     */
+    public function handleRestoreStarted($event)
+    {
+        $backup = $event->backup;
+
+        $this
+            ->logToFile($backup->log_path, $backup->disk)
+            ->info('Restore has been requested.', []);
+    }
+
+    /**
+     * @param \Fusion\Events\Backups\Restore\WasSuccessful $event
+     *
+     * @return void
+     */
+    public function handleRestoreSuccessful($event)
+    {
+        $backup = $event->backup;
+
+        $this
+            ->logToFile($backup->log_path, $backup->disk)
+            ->info('Restore was successful.', []);
+    }
+
+    /**
+     * @param \Fusion\Events\Backups\Restore\HasFailed $event
+     *
+     * @return void
+     */
+    public function handleRestoreFailed($event)
+    {
+        $backup    = $event->backup;
+        $exception = $event->exception;
+
+        $this
+            ->logToFile($backup->log_path, $backup->disk)
+            ->info("Restore has failed: {$exception->getMessage()}", (array) $exception->getTrace()[0]);
+    }
+
+    /**
      * @param \Fusion\Events\Backups\Restore\UnzipSuccesful $event
      *
      * @return void
      */
     public function handleUnzipSuccesful($event)
     {
-        //
+        // $event->backup
     }
 
     /**
@@ -27,7 +70,7 @@ class RestoreEventSubscriber
      */
     public function handleUnzipFailed($event)
     {
-        //
+        // $event->backup
     }
 
     /**
@@ -37,7 +80,12 @@ class RestoreEventSubscriber
      */
     public function handleManifestCreated($event)
     {
-        //
+        $backup   = $event->backup;
+        $manifest = $event->manifest;
+
+        $this
+            ->logToFile($backup->log_path, $backup->disk)
+            ->info('Restore manifest created.', []);
     }
 
     /**
@@ -89,6 +137,18 @@ class RestoreEventSubscriber
      */
     public function subscribe($events)
     {
+        $events->listen(
+            'Fusion\Events\Backups\Restore\HasStarted',
+            [RestoreEventSubscriber::class, 'handleRestoreStarted']);
+
+        $events->listen(
+            'Fusion\Events\Backups\Restore\WasSuccessful',
+            [RestoreEventSubscriber::class, 'handleRestoreSuccessful']);
+
+        $events->listen(
+            'Fusion\Events\Backups\Restore\HasFailed',
+            [RestoreEventSubscriber::class, 'handleRestoreFailed']);
+
         $events->listen(
             'Fusion\Events\Backups\Restore\UnzipSuccesful',
             [RestoreEventSubscriber::class, 'handleUnzipSuccesful']);

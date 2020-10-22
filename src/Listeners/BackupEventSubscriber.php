@@ -15,7 +15,7 @@ class BackupEventSubscriber
     // ------------------------------------------------
 
     /**
-     * @param \Fusion\Events\Backups\Backup\Started $event
+     * @param \Fusion\Events\Backups\Backup\HasStarted $event
      *
      * @return void
      */
@@ -38,7 +38,7 @@ class BackupEventSubscriber
     }
 
     /**
-     * @param \Fusion\Events\Backups\Backup\Finished $event
+     * @param \Fusion\Events\Backups\Backup\HasFinished $event
      *
      * @return void
      */
@@ -61,7 +61,7 @@ class BackupEventSubscriber
     }
 
     /**
-     * @param \Fusion\Events\Backups\Backup\Updated $event
+     * @param \Fusion\Events\Backups\Backup\WasUpdated $event
      *
      * @return void
      */
@@ -186,17 +186,17 @@ class BackupEventSubscriber
     public function subscribe($events)
     {
         $events->listen(
-            'Fusion\Events\Backups\Backup\Started',
+            'Fusion\Events\Backups\Backup\HasStarted',
             [BackupEventSubscriber::class, 'handleBackupStarted']
         );
 
         $events->listen(
-            'Fusion\Events\Backups\Backup\Finished',
+            'Fusion\Events\Backups\Backup\HasFinished',
             [BackupEventSubscriber::class, 'handleBackupFinished']
         );
 
         $events->listen(
-            'Fusion\Events\Backups\Backup\Updated',
+            'Fusion\Events\Backups\Backup\WasUpdated',
             [BackupEventSubscriber::class, 'handleBackupUpdated']
         );
 

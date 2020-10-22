@@ -2,15 +2,22 @@
 
 namespace Fusion\Events\Backups\Restore;
 
+use Fusion\Models\Backup;
+
 class UnzipSuccessful
 {
     /**
-     * @var string
+     * @var \Fusion\Models\Backup
      */
-    public $extractionPath;
+    public $backup;
 
-    public function __construct(string $extractionPath)
+    /**
+     * Create new instance.
+     *
+     * @param \Fusion\Models\Backup $backup
+     */
+    public function __construct(Backup $backup)
     {
-        $this->extractionPath = $extractionPath;
+        $this->backup = $backup;
     }
 }

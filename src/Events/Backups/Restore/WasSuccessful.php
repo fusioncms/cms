@@ -1,10 +1,10 @@
 <?php
 
-namespace Fusion\Events\Backups\Backup;
+namespace Fusion\Events\Backups\Restore;
 
 use Fusion\Models\Backup;
 
-class Updated
+class WasSuccessful
 {
     /**
      * @var \Fusion\Models\Backup
@@ -15,7 +15,6 @@ class Updated
      * Create new instance.
      *
      * @param \Fusion\Models\Backup $backup
-     * @param array                 $disks
      */
     public function __construct(Backup $backup)
     {

@@ -4,6 +4,7 @@ namespace Fusion\Jobs\Backups;
 
 use Exception;
 use Fusion\Events\Backups\Restore;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\File;
@@ -15,6 +16,7 @@ use Symfony\Component\Process\Process;
 
 class RestoreFiles
 {
+    use Batchable;
     use Dispatchable;
     use Queueable;
 

@@ -3,6 +3,7 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\File;
@@ -11,6 +12,7 @@ use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class RestoreEnvVariables
 {
+    use Batchable;
     use Dispatchable;
     use Queueable;
 

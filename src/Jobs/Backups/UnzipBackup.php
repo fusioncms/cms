@@ -4,10 +4,12 @@ namespace Fusion\Jobs\Backups;
 
 use Exception;
 use Fusion\Events\Backups\Restore;
+use Fusion\Models\Backup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Spatie\Backup\Tasks\Backup\Manifest;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
+use Throwable;
 use ZipArchive;
 
 class UnzipBackup
@@ -21,9 +23,9 @@ class UnzipBackup
     protected $tempDirectory;
 
     /**
-     * @var string
+     * @var \Fusion\Models\Backup
      */
-    protected $backupPath;
+    protected $backup;
 
     /**
      * @var ZipArchive
@@ -33,13 +35,13 @@ class UnzipBackup
     /**
      * Constructor.
      *
-     * @param TemporaryDirectory $tempDirectory
-     * @param string             $backupPath
+     * @param \Spatie\TemporaryDirectory\TemporaryDirectory $tempDirectory
+     * @param \Fusion\Models\Backup                         $backup
      */
-    public function __construct(TemporaryDirectory $tempDirectory, string $backupPath)
+    public function __construct(TemporaryDirectory $tempDirectory, Backup $backup)
     {
         $this->tempDirectory = $tempDirectory;
-        $this->backupPath    = $backupPath;
+        $this->backup        = $backup;
         $this->zipFile       = new ZipArchive();
     }
 
@@ -50,36 +52,21 @@ class UnzipBackup
      */
     public function handle()
     {
-        try {
-            if ($this->zipFile->open($this->backupPath) === true) {
-                // Create restoration manifest..
-                $this->createRestorationManifest();
+        if ($this->zipFile->open($this->backup->fullPath) === true) {
 
-                // Extract files from zip to temp folder..
-                $this->zipFile->extractTo($this->tempDirectory->path());
-                $this->zipFile->close();
+            // Create restoration manifest..
+            $manifest = $this->createRestorationManifest();
 
-                event(new Restore\UnzipSuccessful($this->tempDirectory->path()));
-            } else {
-                throw new Exception('Unable to locate and unzip backup file.');
-            }
-        } catch (Exception $exception) {
-            event(new Restore\UnzipFailed($exception, $this->tempDirectory->path()));
+            // Extract files from zip to temp folder..
+            $this->zipFile->extractTo($this->tempDirectory->path());
+            $this->zipFile->close();
 
-            Log::error('There was an error extracting the backup: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
+            event(new Restore\UnzipSuccessful($this->backup));
+        } else {
+            event(new Restore\UnzipFailed($this->backup));
+
+            throw new Exception('Unable to locate and unzip backup file.');
         }
-    }
-
-    /**
-     * The job failed to process.
-     *
-     * @param Exception $exception
-     *
-     * @return void
-     */
-    public function failed(Exception $exception)
-    {
-        Log::error('There was an error trying to restore from a backup: ', $exception->getMessage(), (array) $exception->getTrace()[0]);
     }
 
     /**
@@ -92,7 +79,7 @@ class UnzipBackup
         $manifest = Manifest::create($this->tempDirectory->path('manifest.txt'))
             ->addFiles($this->filesToRestore());
 
-        event(new Restore\ManifestWasCreated($manifest));
+        event(new Restore\ManifestWasCreated($this->backup, $manifest));
 
         return $manifest;
     }

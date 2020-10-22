@@ -4,7 +4,7 @@ namespace Fusion\Events\Backups\Restore;
 
 use Fusion\Models\Backup;
 
-class UnzipFailed
+class HasStarted
 {
     /**
      * @var \Fusion\Models\Backup

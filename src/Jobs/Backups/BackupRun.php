@@ -4,8 +4,8 @@ namespace Fusion\Jobs\Backups;
 
 use Carbon\Carbon;
 use Exception;
-use Fusion\Events\Backups\Backup\Finished as BackupFinished;
-use Fusion\Events\Backups\Backup\Started as BackupStarted;
+use Fusion\Events\Backups\Backup\HasFinished;
+use Fusion\Events\Backups\Backup\HasStarted;
 use Fusion\Models\Backup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -60,7 +60,7 @@ class BackupRun implements ShouldQueue
      */
     public function handle()
     {
-        event(new BackupStarted(
+        event(new HasStarted(
             $this->name,
             $this->backupDestinationDisks()
         ));
@@ -74,7 +74,7 @@ class BackupRun implements ShouldQueue
         ]);
 
         // --
-        event(new BackupFinished(
+        event(new HasFinished(
             $this->name,
             $this->backupDestinationDisks()
         ));

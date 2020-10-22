@@ -8,7 +8,7 @@ use Fusion\Http\Requests\Backups\UploadRequest;
 use Fusion\Models\Backup;
 use Illuminate\Support\Facades\Storage;
 
-class BackupUploadController extends Controller
+class UploadController extends Controller
 {
     use HasCustomLogger;
 
@@ -41,7 +41,7 @@ class BackupUploadController extends Controller
 
                 $this
                     ->logToFile($path, $disk)
-                    ->info('Backup Started.', $backup->toArray());
+                    ->info('Backup Uploaded.', $backup->toArray());
             }
         }
 

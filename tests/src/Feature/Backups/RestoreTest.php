@@ -2,7 +2,7 @@
 
 namespace Fusion\Tests\Feature\Backups;
 
-use Fusion\Events\Backups\Restore\FileRestoreSuccessful;
+use Fusion\Events\Backups\Restore;
 use Fusion\Jobs\Backups\RestoreFromBackup;
 use Fusion\Jobs\Backups\BackupRun;
 use Fusion\Models\Backup;
@@ -86,7 +86,48 @@ class RestoreTest extends TestBase
     }
 
     // ------------------------------------------------
-    // RESTORE PROCESS
+    // EVENTS
+    // ------------------------------------------------
+
+    /** @test */
+    public function custom_events_will_fire_at_beginning_and_end_of_restore()
+    {
+        $backup = $this->newBackup()->first();
+
+        // ----
+        Event::fake([
+            Restore\HasStarted::class,
+            Restore\WasSuccessful::class,
+        ]);
+
+        RestoreFromBackup::dispatchNow($backup);
+
+        Event::assertDispatched(Restore\HasStarted::class);
+        Event::assertDispatched(Restore\WasSuccessful::class);
+    }
+
+    /** @test */
+    public function custom_events_will_fire_when_unzipping_backup_fails()
+    {
+        $backup = $this->newBackup('failed-backup', 'public')->first();
+        $backup->update(['disk' => 'temp']);
+
+        //--
+        Event::fake([
+            Restore\UnzipFailed::class,
+            Restore\HasFailed::class
+        ]);
+
+        RestoreFromBackup::dispatchNow($backup);
+
+        Event::assertDispatched(Restore\UnzipFailed::class);
+        Event::assertDispatched(function (Restore\HasFailed $event) {
+            return $event->exception->getMessage() === 'Unable to locate and unzip backup file.';
+        });
+    }
+
+    // ------------------------------------------------
+    // PROCESS
     // ------------------------------------------------
 
     /** @test */
@@ -99,11 +140,11 @@ class RestoreTest extends TestBase
         Storage::disk('public')->delete('files/testing-file2.txt');
         
         // ----
-        Event::fake([FileRestoreSuccessful::class]);
+        Event::fake([Restore\FileRestoreSuccessful::class]);
 
         RestoreFromBackup::dispatchNow($backup);
 
-        Event::assertDispatched(FileRestoreSuccessful::class, function ($ev) use ($backup) {
+        Event::assertDispatched(Restore\FileRestoreSuccessful::class, function ($ev) use ($backup) {
             foreach ($ev->filesToCopy as $file) {
                 if (Storage::disk($backup->disk)->exists('files/'.basename($file['target']))) {
                     $expected = 'dummy content';

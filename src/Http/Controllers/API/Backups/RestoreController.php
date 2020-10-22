@@ -9,7 +9,7 @@ use Fusion\Models\Backup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 
-class BackupRestoreController extends Controller
+class RestoreController extends Controller
 {
     /**
      * Handle the incoming request.

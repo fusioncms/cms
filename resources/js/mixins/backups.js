@@ -7,7 +7,7 @@ export default {
         runBackup() {
             axios.post('/api/backups')
                 .then(response =>
-                    toast('Backup successfully created!', 'success'))
+                    toast('Backup request added to queue!', 'success'))
                 .catch(response =>
                     toast(response.response.data.message, 'failed'))
         },
