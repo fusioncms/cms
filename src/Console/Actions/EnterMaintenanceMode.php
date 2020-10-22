@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Artisan;
 class EnterMaintenanceMode
 {
     use Dispatchable;
-	use Queueable;
+    use Queueable;
 
     /**
      * Execute the command.

@@ -49,7 +49,7 @@ class UnzipBackup
      * Execute the job.
      *
      * @throws Exception
-     * 
+     *
      * @return void
      */
     public function handle()
@@ -66,7 +66,8 @@ class UnzipBackup
             event(new Restore\UnzipSuccessful($this->backup));
         } else {
             $this->hasFailed(
-                new Exception('Unable to locate and unzip backup file.'));
+                new Exception('Unable to locate and unzip backup file.')
+            );
         }
     }
 

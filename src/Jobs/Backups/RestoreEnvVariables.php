@@ -4,13 +4,10 @@ namespace Fusion\Jobs\Backups;
 
 use Exception;
 use Fusion\Models\Backup;
-use Fusion\Events\Backups\Restore;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
-use Throwable;
 
 class RestoreEnvVariables
 {
@@ -43,7 +40,7 @@ class RestoreEnvVariables
      * Execute the job.
      *
      * @throws Exception
-     * 
+     *
      * @return void
      */
     public function handle()

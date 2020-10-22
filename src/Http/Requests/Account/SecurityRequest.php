@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Requests\Account;
 
-use Fusion\Rules\SecurePassword;
 use Fusion\Http\Requests\Request;
+use Fusion\Rules\SecurePassword;
 
 class SecurityRequest extends Request
 {

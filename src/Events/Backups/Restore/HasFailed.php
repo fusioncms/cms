@@ -20,8 +20,8 @@ class HasFailed
     /**
      * Create new instance.
      *
-     * @param \Fusion\Models\Backup  $backup
-     * @param \Throwable             $exception
+     * @param \Fusion\Models\Backup $backup
+     * @param \Throwable            $exception
      */
     public function __construct(Backup $backup, Throwable $exception)
     {

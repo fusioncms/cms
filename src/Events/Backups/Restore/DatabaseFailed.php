@@ -11,7 +11,7 @@ class DatabaseFailed
      * @var \Fusion\Models\Backup
      */
     public $backup;
-    
+
     /**
      * @var \Throwable
      */
@@ -20,8 +20,8 @@ class DatabaseFailed
     /**
      * Create new instance.
      *
-     * @param \Fusion\Models\Backup  $backup
-     * @param \Throwable             $exception
+     * @param \Fusion\Models\Backup $backup
+     * @param \Throwable            $exception
      */
     public function __construct(Backup $backup, Throwable $exception)
     {

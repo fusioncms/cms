@@ -4,7 +4,6 @@ namespace Fusion\Listeners;
 
 use Fusion\Concerns\HasCustomLogger;
 use Fusion\Models\Backup;
-use Illuminate\Support\Facades\Log;
 
 class RestoreEventSubscriber
 {
@@ -102,7 +101,7 @@ class RestoreEventSubscriber
             ->logToFile($backup->log_path, $backup->disk)
             ->info('Filesystem successfully restored.', []);
     }
-    
+
     /**
      * @param \Fusion\Events\Backups\Restore\FileFailed $event
      *
@@ -131,7 +130,7 @@ class RestoreEventSubscriber
             ->logToFile($backup->log_path, $backup->disk)
             ->info('Database successfully restored.', []);
     }
-    
+
     /**
      * @param \Fusion\Events\Backups\Restore\DatabaseFailed $event
      *
@@ -158,42 +157,52 @@ class RestoreEventSubscriber
     {
         $events->listen(
             'Fusion\Events\Backups\Restore\HasStarted',
-            [RestoreEventSubscriber::class, 'handleRestoreStarted']);
+            [RestoreEventSubscriber::class, 'handleRestoreStarted']
+        );
 
         $events->listen(
             'Fusion\Events\Backups\Restore\WasSuccessful',
-            [RestoreEventSubscriber::class, 'handleRestoreSuccessful']);
+            [RestoreEventSubscriber::class, 'handleRestoreSuccessful']
+        );
 
         $events->listen(
             'Fusion\Events\Backups\Restore\HasFailed',
-            [RestoreEventSubscriber::class, 'handleRestoreFailed']);
+            [RestoreEventSubscriber::class, 'handleRestoreFailed']
+        );
 
         $events->listen(
             'Fusion\Events\Backups\Restore\UnzipSuccesful',
-            [RestoreEventSubscriber::class, 'handleUnzipSuccesful']);
+            [RestoreEventSubscriber::class, 'handleUnzipSuccesful']
+        );
 
         $events->listen(
             'Fusion\Events\Backups\Restore\UnzipFailed',
-            [RestoreEventSubscriber::class, 'handleUnzipFailed']);
+            [RestoreEventSubscriber::class, 'handleUnzipFailed']
+        );
 
         $events->listen(
             'Fusion\Events\Backups\Restore\ManifestWasCreated',
-            [RestoreEventSubscriber::class, 'handleManifestCreated']);
+            [RestoreEventSubscriber::class, 'handleManifestCreated']
+        );
 
         $events->listen(
             'Fusion\Events\Backups\Restore\FileSuccessful',
-            [RestoreEventSubscriber::class, 'handleFileSuccessful']);
+            [RestoreEventSubscriber::class, 'handleFileSuccessful']
+        );
 
         $events->listen(
             'Fusion\Events\Backups\Restore\FileFailed',
-            [RestoreEventSubscriber::class, 'handleFileFailed']);
+            [RestoreEventSubscriber::class, 'handleFileFailed']
+        );
 
         $events->listen(
             'Fusion\Events\Backups\Restore\DatabaseSuccessful',
-            [RestoreEventSubscriber::class, 'handleDatabaseSuccessful']);
+            [RestoreEventSubscriber::class, 'handleDatabaseSuccessful']
+        );
 
         $events->listen(
             'Fusion\Events\Backups\Restore\DatabaseFailed',
-            [RestoreEventSubscriber::class, 'handleDatabaseFailed']);
+            [RestoreEventSubscriber::class, 'handleDatabaseFailed']
+        );
     }
 }

@@ -3,10 +3,9 @@
 namespace Fusion\Tests\Feature\Backups;
 
 use Fusion\Events\Backups\Restore;
-use Fusion\Jobs\Backups\RestoreFromBackup;
 use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Jobs\Backups\RestoreFromBackup;
 use Fusion\Models\Backup;
-use Fusion\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Bus;
@@ -65,7 +64,7 @@ class RestoreTest extends TestBase
         Bus::fake();
 
         $this->json('POST', "/api/backups/restore/{$backup->id}");
-        
+
         Bus::assertNotDispatched(RestoreFromBackup::class);
     }
 
@@ -117,7 +116,7 @@ class RestoreTest extends TestBase
             Restore\ManifestWasCreated::class,
             Restore\DatabaseSuccessful::class,
             Restore\FileSuccessful::class,
-            Restore\WasSuccessful::class
+            Restore\WasSuccessful::class,
         ]);
 
         RestoreFromBackup::dispatchNow($backup);
@@ -140,12 +139,12 @@ class RestoreTest extends TestBase
         //--
         Event::fake([
             Restore\HasFailed::class,
-            Restore\RestoreFiles::class
+            Restore\RestoreFiles::class,
         ]);
 
         RestoreFromBackup::dispatchNow($backup);
 
-        Event::assertDispatched(function(Restore\HasFailed $event) {
+        Event::assertDispatched(function (Restore\HasFailed $event) {
             return $event->exception->getMessage() === 'File does not exist at path fake-path/.env.testing.';
         });
 
@@ -157,19 +156,19 @@ class RestoreTest extends TestBase
     public function custom_events_will_fire_when_unzipping_backup_fails()
     {
         $backup = $this->newBackup('new-backup', 'public')->first();
-        
+
         // invalidate
         $backup->update(['location' => 'backups/invalid-backup.zip']);
 
         //--
         Event::fake([
             Restore\UnzipFailed::class,
-            Restore\RestoreEnvVariables::class
+            Restore\RestoreEnvVariables::class,
         ]);
 
         RestoreFromBackup::dispatchNow($backup);
 
-        Event::assertDispatched(function(Restore\UnzipFailed $event) {
+        Event::assertDispatched(function (Restore\UnzipFailed $event) {
             return $event->exception->getMessage() === 'Unable to locate and unzip backup file.';
         });
 
@@ -181,7 +180,7 @@ class RestoreTest extends TestBase
     public function custom_events_will_fire_when_database_restore_fails()
     {
         $backup = $this->newBackup('new-backup', 'public')->first();
-        
+
         // invalidate
         config(['database.default' => 'mysql']);
 
@@ -203,7 +202,7 @@ class RestoreTest extends TestBase
     public function backup_log_will_be_updated_when_file_restore_fails()
     {
         $backup = $this->newBackup('new-backup', 'public')->first();
-        
+
         // invalidate
         config(['backup.backup.source.files.include' => null]);
 
@@ -211,15 +210,17 @@ class RestoreTest extends TestBase
         RestoreFromBackup::dispatchNow($backup);
 
         // assert log..
-        $this->assertStringContainsString('Filesystem restore failed.',
-            Storage::disk($backup->disk)->get($backup->log_path));
+        $this->assertStringContainsString(
+            'Filesystem restore failed.',
+            Storage::disk($backup->disk)->get($backup->log_path)
+        );
     }
 
     /** @test */
     public function backup_log_will_be_updated_when_database_restore_fails()
     {
         $backup = $this->newBackup('new-backup', 'public')->first();
-        
+
         // invalidate
         config(['database.default' => 'mysql']);
 
@@ -227,8 +228,10 @@ class RestoreTest extends TestBase
         RestoreFromBackup::dispatchNow($backup);
 
         // assert log..
-        $this->assertStringContainsString('Database restore failed.',
-            Storage::disk($backup->disk)->get($backup->log_path));
+        $this->assertStringContainsString(
+            'Database restore failed.',
+            Storage::disk($backup->disk)->get($backup->log_path)
+        );
     }
 
     // ------------------------------------------------
@@ -243,7 +246,7 @@ class RestoreTest extends TestBase
         // Alter some files..
         Storage::disk('public')->append('files/testing-file1.txt', 'more content');
         Storage::disk('public')->delete('files/testing-file2.txt');
-        
+
         // ----
         Event::fake([Restore\FileSuccessful::class]);
 

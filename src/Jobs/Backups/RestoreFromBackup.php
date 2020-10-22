@@ -2,14 +2,11 @@
 
 namespace Fusion\Jobs\Backups;
 
-use Exception;
 use Fusion\Console\Actions;
 use Fusion\Events\Backups\Restore;
 use Fusion\Models\Backup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
@@ -27,7 +24,7 @@ class RestoreFromBackup
 
     /**
      * Temporary restore directory.
-     * 
+     *
      * @var \Spatie\TemporaryDirectory\TemporaryDirectory
      */
     protected $tempDirectory;
@@ -52,21 +49,22 @@ class RestoreFromBackup
         $this->setup();
         // --
 
-            $jobs = [
-                new \Fusion\Jobs\Backups\UnzipBackup($this->backup, $this->tempDirectory),
-                new \Fusion\Jobs\Backups\RestoreEnvVariables($this->backup, $this->tempDirectory),
-                new \Fusion\Jobs\Backups\RestoreFiles($this->backup, $this->tempDirectory),
-                new \Fusion\Jobs\Backups\RestoreDatabase($this->backup, $this->tempDirectory),
-            ];
+        $jobs = [
+            new \Fusion\Jobs\Backups\UnzipBackup($this->backup, $this->tempDirectory),
+            new \Fusion\Jobs\Backups\RestoreEnvVariables($this->backup, $this->tempDirectory),
+            new \Fusion\Jobs\Backups\RestoreFiles($this->backup, $this->tempDirectory),
+            new \Fusion\Jobs\Backups\RestoreDatabase($this->backup, $this->tempDirectory),
+        ];
 
-            foreach ($jobs as $job) {
-                try {
-                    dispatch($job);
-                } catch(Throwable $exception) {
-                    $this->hasFailed($exception);
-                    return;
-                };
+        foreach ($jobs as $job) {
+            try {
+                dispatch($job);
+            } catch (Throwable $exception) {
+                $this->hasFailed($exception);
+
+                return;
             }
+        }
 
         // --
         $this->wasSuccessful();
@@ -74,8 +72,8 @@ class RestoreFromBackup
 
     /**
      * Setup
-     * [helper]
-     * 
+     * [helper].
+     *
      * @return void
      */
     private function setup()
@@ -96,8 +94,8 @@ class RestoreFromBackup
 
     /**
      * Tear down
-     * [helper]
-     * 
+     * [helper].
+     *
      * @return void
      */
     private function teardown()
