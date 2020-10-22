@@ -2,7 +2,7 @@
 
 namespace Fusion\Events\Backups\Backup;
 
-class Finished
+class HasFinished
 {
     /**
      * @var string

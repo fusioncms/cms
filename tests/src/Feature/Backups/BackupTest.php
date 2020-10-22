@@ -2,9 +2,9 @@
 
 namespace Fusion\Tests\Feature\Backups;
 
-use Fusion\Events\Backups\Backup\Finished as BackupFinished;
-use Fusion\Events\Backups\Backup\Started as BackupStarted;
-use Fusion\Events\Backups\Backup\Updated as BackupUpdated;
+use Fusion\Events\Backups\Backup\HasFinished;
+use Fusion\Events\Backups\Backup\HasStarted;
+use Fusion\Events\Backups\Backup\WasUpdated;
 use Fusion\Jobs\Backups\BackupRun;
 use Fusion\Models\Backup;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -88,21 +88,21 @@ class BackupTest extends TestBase
             ->json('POST', '/api/backups')
             ->assertOk();
 
-        Queue::assertPushedOn('default', BackupRun::class);
+        Queue::assertPushed(BackupRun::class);
     }
 
     /** @test */
     public function custom_events_will_fire_at_beginning_and_end_of_backup()
     {
         Event::fake([
-            BackupStarted::class,
-            BackupFinished::class,
+            HasStarted::class,
+            HasFinished::class,
         ]);
 
         $backups = $this->newBackup();
 
-        Event::assertDispatched(BackupStarted::class);
-        Event::assertDispatched(BackupFinished::class);
+        Event::assertDispatched(HasStarted::class);
+        Event::assertDispatched(HasFinished::class);
     }
 
     /** @test */
@@ -199,7 +199,7 @@ class BackupTest extends TestBase
     /** @test */
     public function custom_event_will_fire_after_update_of_backup()
     {
-        Event::fake([BackupUpdated::class]);
+        Event::fake([WasUpdated::class]);
 
         $backups = $this->newBackup();
 
@@ -209,7 +209,7 @@ class BackupTest extends TestBase
                 'name' => 'updated-name',
             ]);
 
-        Event::assertDispatched(BackupUpdated::class);
+        Event::assertDispatched(WasUpdated::class);
     }
 
     /** @test */

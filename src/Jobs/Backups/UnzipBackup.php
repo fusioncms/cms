@@ -3,13 +3,13 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
-use Fusion\Events\Backups\BackupExtractionFailed;
-use Fusion\Events\Backups\BackupExtractionSuccessful;
-use Fusion\Events\Backups\RestoreManifestWasCreated;
+use Fusion\Events\Backups\Restore;
+use Fusion\Models\Backup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Spatie\Backup\Tasks\Backup\Manifest;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
+use Throwable;
 use ZipArchive;
 
 class UnzipBackup
@@ -18,14 +18,14 @@ class UnzipBackup
     use Queueable;
 
     /**
+     * @var \Fusion\Models\Backup
+     */
+    protected $backup;
+
+    /**
      * @var TemporaryDirectory
      */
     protected $tempDirectory;
-
-    /**
-     * @var string
-     */
-    protected $backupPath;
 
     /**
      * @var ZipArchive
@@ -35,53 +35,39 @@ class UnzipBackup
     /**
      * Constructor.
      *
-     * @param TemporaryDirectory $tempDirectory
-     * @param string             $backupPath
+     * @param \Fusion\Models\Backup                         $backup
+     * @param \Spatie\TemporaryDirectory\TemporaryDirectory $tempDirectory
      */
-    public function __construct(TemporaryDirectory $tempDirectory, string $backupPath)
+    public function __construct(Backup $backup, TemporaryDirectory $tempDirectory)
     {
+        $this->backup        = $backup;
         $this->tempDirectory = $tempDirectory;
-        $this->backupPath    = $backupPath;
         $this->zipFile       = new ZipArchive();
     }
 
     /**
      * Execute the job.
      *
+     * @throws Exception
+     * 
      * @return void
      */
     public function handle()
     {
-        try {
-            if ($this->zipFile->open($this->backupPath) === true) {
-                // Create restoration manifest..
-                $this->createRestorationManifest();
+        if ($this->zipFile->open($this->backup->fullPath) === true) {
 
-                // Extract files from zip to temp folder..
-                $this->zipFile->extractTo($this->tempDirectory->path());
-                $this->zipFile->close();
+            // Create restoration manifest..
+            $manifest = $this->createRestorationManifest();
 
-                event(new BackupExtractionSuccessful($this->tempDirectory->path()));
-            } else {
-                throw new Exception('Unable to locate and unzip backup file.');
-            }
-        } catch (Exception $exception) {
-            event(new BackupExtractionFailed($exception, $this->tempDirectory->path()));
+            // Extract files from zip to temp folder..
+            $this->zipFile->extractTo($this->tempDirectory->path());
+            $this->zipFile->close();
 
-            Log::error('There was an error extracting the backup: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
+            event(new Restore\UnzipSuccessful($this->backup));
+        } else {
+            $this->hasFailed(
+                new Exception('Unable to locate and unzip backup file.'));
         }
-    }
-
-    /**
-     * The job failed to process.
-     *
-     * @param Exception $exception
-     *
-     * @return void
-     */
-    public function failed(Exception $exception)
-    {
-        Log::error('There was an error trying to restore from a backup: ', $exception->getMessage(), (array) $exception->getTrace()[0]);
     }
 
     /**
@@ -94,7 +80,7 @@ class UnzipBackup
         $manifest = Manifest::create($this->tempDirectory->path('manifest.txt'))
             ->addFiles($this->filesToRestore());
 
-        event(new RestoreManifestWasCreated($manifest));
+        event(new Restore\ManifestWasCreated($this->backup, $manifest));
 
         return $manifest;
     }
@@ -113,5 +99,19 @@ class UnzipBackup
         }
 
         return $files;
+    }
+
+    /**
+     * Handle failed case.
+     *
+     * @param \Throwable $exception
+     *
+     * @return void
+     */
+    private function hasFailed(Throwable $exception)
+    {
+        event(new Restore\UnzipFailed($this->backup, $exception));
+
+        throw $exception;
     }
 }

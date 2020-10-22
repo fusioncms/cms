@@ -2,7 +2,7 @@
 
 namespace Fusion\Http\Controllers\API\Backups;
 
-use Fusion\Events\Backups\Backup\Updated as BackupUpdated;
+use Fusion\Events\Backups\Backup\WasUpdated;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\Backups\UpdateRequest;
 use Fusion\Http\Resources\BackupResource;
@@ -68,7 +68,7 @@ class BackupController extends Controller
     {
         $backup->update($request->validated());
 
-        event(new BackupUpdated($backup));
+        event(new WasUpdated($backup));
 
         return new BackupResource($backup);
     }

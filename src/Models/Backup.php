@@ -12,9 +12,9 @@ class Backup extends Model
      *
      * @var string
      */
-    public const SUCCESS      = 'success';
-    public const FAILURE      = 'failure';
-    public const IN_PROGRESS  = 'in-progress';
+    public const SUCCESS     = 'success';
+    public const FAILURE     = 'failure';
+    public const IN_PROGRESS = 'in-progress';
 
     /**
      * File name format.

@@ -3,16 +3,24 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
+use Fusion\Models\Backup;
+use Fusion\Events\Backups\Restore;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
+use Throwable;
 
 class RestoreEnvVariables
 {
     use Dispatchable;
     use Queueable;
+
+    /**
+     * @var \Fusion\Models\Backup
+     */
+    protected $backup;
 
     /**
      * @var TemporaryDirectory
@@ -22,16 +30,20 @@ class RestoreEnvVariables
     /**
      * Constructor.
      *
-     * @param Backup $backup
+     * @param \Fusion\Models\Backup                         $backup
+     * @param \Spatie\TemporaryDirectory\TemporaryDirectory $tempDirectory
      */
-    public function __construct(TemporaryDirectory $tempDirectory)
+    public function __construct(Backup $backup, TemporaryDirectory $tempDirectory)
     {
+        $this->backup        = $backup;
         $this->tempDirectory = $tempDirectory;
     }
 
     /**
      * Execute the job.
      *
+     * @throws Exception
+     * 
      * @return void
      */
     public function handle()
@@ -51,18 +63,8 @@ class RestoreEnvVariables
 
             // Override .env file with updated variables
             File::put(app()->environmentFilePath(), $envContents);
+        } else {
+            throw new Exception('Unable to locate backup env.json file.');
         }
-    }
-
-    /**
-     * The job failed to process.
-     *
-     * @param Exception $exception
-     *
-     * @return void
-     */
-    public function failed(Exception $exception)
-    {
-        Log::error('There was an error trying to restore from a backup: ', $exception->getMessage(), (array) $exception->getTrace()[0]);
     }
 }

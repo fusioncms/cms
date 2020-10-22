@@ -3,8 +3,8 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
-use Fusion\Events\Backups\FileRestoreFailed;
-use Fusion\Events\Backups\FileRestoreSuccessful;
+use Fusion\Models\Backup;
+use Fusion\Events\Backups\Restore;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\File;
@@ -13,11 +13,17 @@ use Illuminate\Support\Str;
 use Spatie\Backup\Tasks\Backup\Manifest;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Symfony\Component\Process\Process;
+use Throwable;
 
 class RestoreFiles
 {
     use Dispatchable;
     use Queueable;
+
+    /**
+     * @var \Fusion\Models\Backup
+     */
+    protected $backup;
 
     /**
      * @var TemporaryDirectory
@@ -32,10 +38,12 @@ class RestoreFiles
     /**
      * Constructor.
      *
-     * @param Backup $backup
+     * @param \Fusion\Models\Backup                         $backup
+     * @param \Spatie\TemporaryDirectory\TemporaryDirectory $tempDirectory
      */
-    public function __construct(TemporaryDirectory $tempDirectory)
+    public function __construct(Backup $backup, TemporaryDirectory $tempDirectory)
     {
+        $this->backup        = $backup;
         $this->tempDirectory = $tempDirectory;
         $this->manifest      = new Manifest($tempDirectory->path('manifest.txt'));
     }
@@ -47,31 +55,17 @@ class RestoreFiles
      */
     public function handle()
     {
-        $files = $this->fetchFilesToRestore();
-
         try {
+            $files = $this->fetchFilesToRestore();
+
             $this->cleanupExistingFiles();
-
+            
             $this->restoreBackupFiles($files);
-
-            event(new FileRestoreSuccessful($files));
         } catch (Exception $exception) {
-            event(new FileRestoreFailed($exception, $files));
-
-            Log::error('There was an error restoring files in backup: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
+            $this->hasFailed($exception);
         }
-    }
 
-    /**
-     * The job failed to process.
-     *
-     * @param Exception $exception
-     *
-     * @return void
-     */
-    public function failed(Exception $exception)
-    {
-        Log::error('There was an error trying to restore from a backup: ', $exception->getMessage(), (array) $exception->getTrace()[0]);
+        event(new Restore\FileSuccessful($this->backup));
     }
 
     /**
@@ -127,5 +121,19 @@ class RestoreFiles
         foreach ($files as $file) {
             File::copy($file['path'], $file['target']);
         }
+    }
+
+    /**
+     * Handle failed case.
+     * 
+     * @param \Throwable $exception
+     *
+     * @return void
+     */
+    private function hasFailed(Throwable $exception)
+    {
+        event(new Restore\FileFailed($this->backup, $exception));
+
+        throw $exception;
     }
 }
