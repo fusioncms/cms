@@ -6,6 +6,11 @@
                 <span>{{ entry.status ? 'Enabled' : 'Disabled' }}</span>
             </div>
 
+            <div v-if="entry.group" class="status-card__item">
+                <span class="status-card__label">Group</span>
+                {{ entry.group }}
+            </div>
+
             <div v-if="entry.table" class="status-card__item">
                 <span class="status-card__label">Database Table</span>
                 <code>{{ entry.table }}</code>

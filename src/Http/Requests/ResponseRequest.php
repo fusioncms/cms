@@ -3,9 +3,8 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Models\Form;
-use Illuminate\Foundation\Http\FormRequest;
 
-class ResponseRequest extends FormRequest
+class ResponseRequest extends Request
 {
     public function __construct()
     {

@@ -2,10 +2,10 @@
 
 namespace Fusion\Http\Requests\Backups;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Fusion\Http\Requests\Request;
 use Illuminate\Validation\Rule;
 
-class UpdateRequest extends FormRequest
+class UpdateRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

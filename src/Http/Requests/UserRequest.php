@@ -3,22 +3,29 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Rules\SecurePassword;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UserRequest extends FormRequest
+class UserRequest extends Request
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make a POST request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePost()
     {
-        if ($this->method() === 'POST') {
-            return $this->user()->can('users.create');
-        }
+        return $this->user()->can('users.create');
 
+        return $this->user()->can('users.update') and $this->user()->level($this->user->role->level);
+    }
+
+    /**
+     * Determine if the user is authorized to make a PATCH request.
+     *
+     * @return bool
+     */
+    public function authorizePatch()
+    {
         return $this->user()->can('users.update') and $this->user()->level($this->user->role->level);
     }
 

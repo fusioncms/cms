@@ -2,9 +2,7 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class FileUploadRequest extends FormRequest
+class UploadFileRequest extends Request
 {
     /**
      * Max file size upload limit.
@@ -22,11 +20,11 @@ class FileUploadRequest extends FormRequest
     }
 
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make a POST request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePost()
     {
         return $this->user()->can('files.create');
     }

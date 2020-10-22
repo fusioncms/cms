@@ -88,7 +88,7 @@ class BackupTest extends TestBase
             ->json('POST', '/api/backups')
             ->assertOk();
 
-        Queue::assertPushed(BackupRun::class);
+        Queue::assertPushedOn('default', BackupRun::class);
     }
 
     /** @test */

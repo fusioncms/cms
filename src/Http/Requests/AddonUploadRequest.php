@@ -3,10 +3,9 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Rules\ValidAddon;
-use Illuminate\Foundation\Http\FormRequest;
 use ZipArchive;
 
-class AddonUploadRequest extends FormRequest
+class AddonUploadRequest extends Request
 {
     /**
      * @var \ZipArchive
@@ -33,7 +32,7 @@ class AddonUploadRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePost()
     {
         return $this->user()->can('addons.create');
     }

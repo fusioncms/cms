@@ -4,9 +4,8 @@ namespace Fusion\Http\Requests;
 
 use Fusion\Models\Matrix;
 use Fusion\Services\Builders\Collection;
-use Illuminate\Foundation\Http\FormRequest;
 
-class CollectionRequest extends FormRequest
+class CollectionRequest extends Request
 {
     public function __construct()
     {
@@ -18,13 +17,23 @@ class CollectionRequest extends FormRequest
     }
 
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make a POST request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePost()
     {
-        return $this->user()->can('entries.'.($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('entries.create');
+    }
+
+    /**
+     * Determine if the user is authorized to make a PATCH request.
+     *
+     * @return bool
+     */
+    public function authorizePatch()
+    {
+        return $this->user()->can('entries.update');
     }
 
     /**

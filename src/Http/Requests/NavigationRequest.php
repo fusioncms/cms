@@ -3,18 +3,27 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Rules\NotAReservedKeyword;
-use Illuminate\Foundation\Http\FormRequest;
 
-class NavigationRequest extends FormRequest
+class NavigationRequest extends Request
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make a POST request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePost()
     {
-        return $this->user()->can('navigation.'.($this->method() === 'POST' ? 'create' : 'update'));
+        return $this->user()->can('navigation.create');
+    }
+
+    /**
+     * Determine if the user is authorized to make a PATCH request.
+     *
+     * @return bool
+     */
+    public function authorizePatch()
+    {
+        return $this->user()->can('navigation.update');
     }
 
     /**

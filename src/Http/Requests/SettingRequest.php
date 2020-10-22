@@ -2,16 +2,14 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class SettingRequest extends FormRequest
+class SettingRequest extends Request
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make a PATCH request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorizePatch()
     {
         return $this->user()->can('settings.update');
     }
