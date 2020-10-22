@@ -3,16 +3,14 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
-use Fusion\Models\Backup;
 use Fusion\Events\Backups\Restore;
+use Fusion\Models\Backup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Spatie\Backup\Tasks\Backup\Manifest;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
-use Symfony\Component\Process\Process;
 use Throwable;
 
 class RestoreFiles
@@ -59,7 +57,7 @@ class RestoreFiles
             $files = $this->fetchFilesToRestore();
 
             $this->cleanupExistingFiles();
-            
+
             $this->restoreBackupFiles($files);
         } catch (Exception $exception) {
             $this->hasFailed($exception);
@@ -125,7 +123,7 @@ class RestoreFiles
 
     /**
      * Handle failed case.
-     * 
+     *
      * @param \Throwable $exception
      *
      * @return void

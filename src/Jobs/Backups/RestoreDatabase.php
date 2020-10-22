@@ -3,8 +3,8 @@
 namespace Fusion\Jobs\Backups;
 
 use Exception;
-use Fusion\Models\Backup;
 use Fusion\Events\Backups\Restore;
+use Fusion\Models\Backup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Spatie\Backup\Tasks\Backup\Manifest;
@@ -55,9 +55,10 @@ class RestoreDatabase
      */
     public function handle()
     {
-        if (! $dbDumpPath = $this->fetchDBDump()) {
+        if (!$dbDumpPath = $this->fetchDBDump()) {
             $this->hasFailed(
-                new Exception('Failed to locate database dump from backup.'));
+                new Exception('Failed to locate database dump from backup.')
+            );
         }
 
         try {
@@ -70,11 +71,13 @@ class RestoreDatabase
                     break;
                 default:
                     $this->hasFailed(
-                        new Exception('Unsupported database connection: '.config('database.default')));
+                        new Exception('Unsupported database connection: '.config('database.default'))
+                    );
             }
         } catch (Exception $exception) {
             $this->hasFailed(
-                new Exception('Unable to restore database dump from backup.'));
+                new Exception('Unable to restore database dump from backup.')
+            );
         }
 
         event(new Restore\DatabaseSuccessful($this->backup));
@@ -155,7 +158,7 @@ class RestoreDatabase
 
     /**
      * Handle failed case.
-     * 
+     *
      * @param \Throwable $exception
      *
      * @return void

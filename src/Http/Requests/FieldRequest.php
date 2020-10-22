@@ -4,7 +4,6 @@ namespace Fusion\Http\Requests;
 
 use Exception;
 use Fusion\Rules\NotAReservedKeyword;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Validation\ValidationException;
 

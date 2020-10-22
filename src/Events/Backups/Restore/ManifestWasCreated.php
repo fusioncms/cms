@@ -7,7 +7,7 @@ use Spatie\Backup\Tasks\Backup\Manifest;
 
 class ManifestWasCreated
 {
-	/**
+    /**
      * @var \Fusion\Models\Backup
      */
     public $backup;
@@ -25,7 +25,7 @@ class ManifestWasCreated
      */
     public function __construct(Backup $backup, Manifest $manifest)
     {
-    	$this->backup   = $backup;
+        $this->backup   = $backup;
         $this->manifest = $manifest;
     }
 }

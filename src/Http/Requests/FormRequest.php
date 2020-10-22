@@ -2,8 +2,8 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Support\Str;
 use Fusion\Rules\NotAReservedKeyword;
+use Illuminate\Support\Str;
 
 class FormRequest extends Request
 {

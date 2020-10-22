@@ -103,7 +103,7 @@ class FileController extends Controller
      * Update an existing resource in storage.
      *
      * @param \Fusion\Http\Requests\FileRequest $request
-     * @param \Fusion\Models\File                     $file
+     * @param \Fusion\Models\File               $file
      *
      * @return \Fusion\Http\Resources\FileResource
      */

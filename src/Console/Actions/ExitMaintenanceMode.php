@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Artisan;
 class ExitMaintenanceMode
 {
     use Dispatchable;
-	use Queueable;
-	
+    use Queueable;
+
     /**
      * Execute the command.
      *

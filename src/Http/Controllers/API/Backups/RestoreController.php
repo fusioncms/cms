@@ -25,8 +25,8 @@ class RestoreController extends Controller
 
         if ($request->input('saveBackup')) {
             Bus::chain([
-                new BackupRun,
-                new RestoreFromBackup($backup)
+                new BackupRun(),
+                new RestoreFromBackup($backup),
             ])->onConnection('sync')->dispatch();
         } else {
             RestoreFromBackup::dispatchSync($backup);
