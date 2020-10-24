@@ -383,4 +383,18 @@ class BackupTest extends TestBase
             );
         }
     }
+
+    // ------------------------------------------------
+    // NOTIFICATIONS
+    // ------------------------------------------------
+
+    /** @test */
+    public function successful_backup_will_notify_user_with_valid_mail_settings()
+    {
+        $backup = $this->newBackup();
+
+        \Notification::assertSentTo(
+            app(config('backup.notifications.notifiable')),
+            'Spatie\Backup\Notifications\Notifications\BackupWasSuccessful');
+    }
 }
