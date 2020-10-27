@@ -24,7 +24,7 @@ class CleanupTest extends TestBase
     public function successful_cleanup_will_fire_event()
     {
         Event::fake([
-            CleanupWasSuccessful::class
+            CleanupWasSuccessful::class,
         ]);
 
         $this->artisan('backup:clean');
@@ -36,7 +36,7 @@ class CleanupTest extends TestBase
     public function failed_cleanup_will_fire_event()
     {
         Event::fake([
-            CleanupHasFailed::class
+            CleanupHasFailed::class,
         ]);
 
         // invalidate..
@@ -63,7 +63,7 @@ class CleanupTest extends TestBase
     {
         // invalidate..
         config(['backup.backup.destination.disks' => ['fake-disk']]);
-        
+
         $this->artisan('backup:clean');
 
         \Notification::assertSentTo(
