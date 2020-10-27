@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 use Spatie\Backup\BackupDestination\BackupDestination;
 use Throwable;
 
-
 class BackupSync
 {
     use Dispatchable;
@@ -39,8 +38,8 @@ class BackupSync
     {
         $disk = $this->backupDestination->diskName();
 
-        Backup::where(['disk' => $disk])->each(function($backup) {
-            if (! $backup->exists()) {
+        Backup::where(['disk' => $disk])->each(function ($backup) {
+            if (!$backup->exists()) {
                 $backup->delete();
             }
         });

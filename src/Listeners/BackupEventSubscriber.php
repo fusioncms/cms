@@ -3,8 +3,8 @@
 namespace Fusion\Listeners;
 
 use Fusion\Concerns\HasCustomLogger;
-use Fusion\Models\Backup;
 use Fusion\Jobs\Backups\BackupSync;
+use Fusion\Models\Backup;
 use Illuminate\Support\Facades\Log;
 
 class BackupEventSubscriber
@@ -167,7 +167,7 @@ class BackupEventSubscriber
             BackupSync::dispatchNow($destination);
         } else {
             Log::error('Backup cleanup has failed.', [
-                'message' => $event->exception->getMessage()
+                'message' => $event->exception->getMessage(),
             ]);
         }
     }
