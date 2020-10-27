@@ -153,8 +153,7 @@ class BackupEventSubscriber
      */
     public function handleCleanupSuccessful($event)
     {
-        BackupSync::dispatchNow(
-            $event->backupDestination->diskName());
+        BackupSync::dispatchNow($event->backupDestination);
     }
 
     /**
@@ -164,8 +163,8 @@ class BackupEventSubscriber
      */
     public function handleCleanupFailed($event)
     {
-        if ($disk = $event->backupDestination->diskName()) {
-            BackupSync::dispatchNow($disk);
+        if ($destination = $event->backupDestination) {
+            BackupSync::dispatchNow($destination);
         } else {
             Log::error('Backup cleanup has failed.', [
                 'message' => $event->exception->getMessage()

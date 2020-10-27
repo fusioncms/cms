@@ -3,6 +3,7 @@
 namespace Fusion\Jobs\Backups;
 
 use Fusion\Models\Backup;
+use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Log;
 use Spatie\Backup\BackupDestination\BackupDestination;
@@ -12,6 +13,7 @@ use Throwable;
 class BackupSync
 {
     use Dispatchable;
+    use Queueable;
 
     /**
      * @var \Spatie\Backup\BackupDestination\BackupDestination
@@ -35,12 +37,13 @@ class BackupSync
      */
     public function handle()
     {
-        Backup::where(['disk' => $this->backupDestination->diskName()])
-            ->each(function($backup) {
-                if (! $backup->exists()) {
-                    $backup->delete();
-                }
-            });
+        $disk = $this->backupDestination->diskName();
+
+        Backup::where(['disk' => $disk])->each(function($backup) {
+            if (! $backup->exists()) {
+                $backup->delete();
+            }
+        });
     }
 
     /**
@@ -52,6 +55,6 @@ class BackupSync
      */
     public function failed(Throwable $exception)
     {
-        Log::error('There was an error trying to sync backups: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
+        Log::error('There was an error trying to sync `backups` table: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
     }
 }
