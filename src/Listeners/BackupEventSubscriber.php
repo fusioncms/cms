@@ -5,7 +5,6 @@ namespace Fusion\Listeners;
 use Fusion\Concerns\HasCustomLogger;
 use Fusion\Models\Backup;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class BackupEventSubscriber
 {
@@ -183,40 +182,49 @@ class BackupEventSubscriber
     {
         $events->listen(
             'Fusion\Events\Backups\Backup\HasStarted',
-            [BackupEventSubscriber::class, 'handleBackupStarted']);
+            [BackupEventSubscriber::class, 'handleBackupStarted']
+        );
 
         $events->listen(
             'Fusion\Events\Backups\Backup\HasFinished',
-            [BackupEventSubscriber::class, 'handleBackupFinished']);
+            [BackupEventSubscriber::class, 'handleBackupFinished']
+        );
 
         $events->listen(
             'Fusion\Events\Backups\Backup\WasUpdated',
-            [BackupEventSubscriber::class, 'handleBackupUpdated']);
+            [BackupEventSubscriber::class, 'handleBackupUpdated']
+        );
 
         $events->listen(
             'Spatie\Backup\Events\BackupWasSuccessful',
-            [BackupEventSubscriber::class, 'handleBackupSuccessful']);
+            [BackupEventSubscriber::class, 'handleBackupSuccessful']
+        );
 
         $events->listen(
             'Spatie\Backup\Events\BackupHasFailed',
-            [BackupEventSubscriber::class, 'handleBackupFailed']);
+            [BackupEventSubscriber::class, 'handleBackupFailed']
+        );
 
         $events->listen(
             'Spatie\Backup\Events\BackupManifestWasCreated',
-            [BackupEventSubscriber::class, 'handleManifestCreated']);
+            [BackupEventSubscriber::class, 'handleManifestCreated']
+        );
 
         $events->listen(
             'Spatie\Backup\Events\BackupZipWasCreated',
-            [BackupEventSubscriber::class, 'handleBackupZipCreated']);
+            [BackupEventSubscriber::class, 'handleBackupZipCreated']
+        );
 
         // --
 
         $events->listen(
             'Spatie\Backup\Events\CleanupWasSuccessful',
-            [BackupEventSubscriber::class, 'handleCleanupSuccessful']);
+            [BackupEventSubscriber::class, 'handleCleanupSuccessful']
+        );
 
         $events->listen(
             'Spatie\Backup\Events\CleanupHasFailed',
-            [BackupEventSubscriber::class, 'handleCleanupFailed']);
+            [BackupEventSubscriber::class, 'handleCleanupFailed']
+        );
     }
 }

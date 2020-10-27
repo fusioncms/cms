@@ -3,7 +3,6 @@
 namespace Fusion\Jobs\Backups;
 
 use Carbon\Carbon;
-use Exception;
 use Fusion\Events\Backups\Backup\HasFinished;
 use Fusion\Events\Backups\Backup\HasStarted;
 use Fusion\Models\Backup;
