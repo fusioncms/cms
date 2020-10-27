@@ -65,8 +65,18 @@ class Backup extends Model
     public function backup()
     {
         return new \Spatie\Backup\BackupDestination\Backup(
-            Storage::disk($this->disk),
-            $this->location
-        );
+            Storage::disk($this->disk), $this->location);
+    }
+
+    /**
+     * Resolves Backup Model.
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * 
+     * @return \Fusion\Models\Backup
+     */
+    public static function resolve($name, $disk)
+    {
+        return static::where(['name' => $name, 'disk' => $disk])->firstOrFail();
     }
 }

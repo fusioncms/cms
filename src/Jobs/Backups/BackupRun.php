@@ -14,6 +14,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Throwable;
 
 class BackupRun implements ShouldQueue
 {
@@ -83,11 +84,11 @@ class BackupRun implements ShouldQueue
     /**
      * The job failed to process.
      *
-     * @param Exception $exception
+     * @param \Throwable $exception
      *
      * @return void
      */
-    public function failed(Exception $exception)
+    public function failed(Throwable $exception)
     {
         Log::error('There was an error trying to backup FusionCMS: '.$exception->getMessage(), (array) $exception->getTrace()[0]);
     }

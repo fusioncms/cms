@@ -121,7 +121,7 @@ class RestoreTest extends TestBase
 
         RestoreFromBackup::dispatchNow($backup);
 
-        Event::assertDispatched(Restore\DatabaseSuccessful::class);
+        Event::assertDispatched(Restore\UnzipSuccessful::class);
         Event::assertDispatched(Restore\ManifestWasCreated::class);
         Event::assertDispatched(Restore\DatabaseSuccessful::class);
         Event::assertDispatched(Restore\FileSuccessful::class);
