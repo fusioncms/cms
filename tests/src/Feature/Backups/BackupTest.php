@@ -395,6 +395,7 @@ class BackupTest extends TestBase
 
         \Notification::assertSentTo(
             app(config('backup.notifications.notifiable')),
-            'Spatie\Backup\Notifications\Notifications\BackupWasSuccessful');
+            'Spatie\Backup\Notifications\Notifications\BackupWasSuccessful'
+        );
     }
 }
