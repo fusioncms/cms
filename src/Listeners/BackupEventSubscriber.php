@@ -4,6 +4,7 @@ namespace Fusion\Listeners;
 
 use Fusion\Concerns\HasCustomLogger;
 use Fusion\Models\Backup;
+use Fusion\Jobs\Backups\BackupSync;
 use Illuminate\Support\Facades\Log;
 
 class BackupEventSubscriber
@@ -152,10 +153,8 @@ class BackupEventSubscriber
      */
     public function handleCleanupSuccessful($event)
     {
-        Log::info('Backup cleanup was successfully.', [
-            'disk'        => $event->backupDestination->diskName(),
-            'usedStorage' => $event->backupDestination->usedStorage(),
-        ]);
+        BackupSync::dispatchNow(
+            $event->backupDestination->diskName());
     }
 
     /**
@@ -165,10 +164,13 @@ class BackupEventSubscriber
      */
     public function handleCleanupFailed($event)
     {
-        Log::error('Backup cleanup has failed.', [
-            'disk'    => optional($event->backupDestination)->diskName(),
-            'message' => $event->exception->getMessage(),
-        ]);
+        if ($disk = $event->backupDestination->diskName()) {
+            BackupSync::dispatchNow($disk);
+        } else {
+            Log::error('Backup cleanup has failed.', [
+                'message' => $event->exception->getMessage()
+            ]);
+        }
     }
 
     /**
