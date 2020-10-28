@@ -53,6 +53,7 @@ return [
         \Fusion\Fieldtypes\ColorPickerFieldtype::class,
         \Fusion\Fieldtypes\CountryFieldtype::class,
         \Fusion\Fieldtypes\DateTimeFieldtype::class,
+        \Fusion\Fieldtypes\DictionaryFieldtype::class,
         \Fusion\Fieldtypes\DividerFieldtype::class,
         \Fusion\Fieldtypes\EmailFieldtype::class,
         \Fusion\Fieldtypes\FileFieldtype::class,

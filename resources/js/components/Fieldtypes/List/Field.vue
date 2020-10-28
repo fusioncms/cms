@@ -93,9 +93,7 @@
             value: {
                 required: false,
                 type: Array,
-                default: function() {
-                    return []
-                },
+                default: () => []
             },
         },
 

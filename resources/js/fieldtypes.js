@@ -28,6 +28,10 @@ Vue.component('country-fieldtype-settings', () => import('./components/Fieldtype
 Vue.component('datetime-fieldtype', () => import('./components/Fieldtypes/DateTime/Field'))
 Vue.component('datetime-fieldtype-settings', () => import('./components/Fieldtypes/DateTime/Settings'))
 
+// Dictionary
+Vue.component('dictionary-fieldtype', () => import('./components/Fieldtypes/Dictionary/Field'))
+Vue.component('dictionary-fieldtype-settings', () => import('./components/Fieldtypes/Dictionary/Settings'))
+
 // Divider
 Vue.component('divider-fieldtype', () => import('./components/Fieldtypes/Divider/Field'))
 Vue.component('divider-fieldtype-settings', () => import('./components/Fieldtypes/Divider/Settings'))
