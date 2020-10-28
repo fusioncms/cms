@@ -126,8 +126,11 @@
             </ui-input-group>
         </section-card>
 
-        <section-card title="Blueprint" description="Configure this forms blueprint.">
-            <section-builder v-model="form.sections"></section-builder>
+        <section-card id="form_panel_blueprint" :grid="false" title="Blueprint" description="Create the content blueprint for this form by adding panel sections and fields to either the page body or page sidebar." tabindex="-1">
+            <blueprint>
+                <blueprint-area v-model="form.sections" :placements="placements" area="body" title="Body"></blueprint-area>
+                <blueprint-area v-model="form.sections" class="blueprint__col--sidebar" :placements="placements" area="sidebar" title="Sidebar"></blueprint-area>
+            </blueprint>
         </section-card>
 
         <template v-slot:sidebar>
@@ -179,6 +182,10 @@
             return {
                 ready: false,
                 fieldtype: {},
+                placements: [
+                    { label: 'Body',    value: 'body'    },
+                    { label: 'Sidebar', value: 'sidebar' }
+                ]
             }
         },
 
@@ -196,7 +203,7 @@
         },
 
         watch: {
-            'form.collect_email_addresses': function(value) {
+            'form.collect_email_addresses'(value) {
                 if (this.ready) {
                     if (value === false) {
                         this.form.response_receipt = false
@@ -207,13 +214,27 @@
                     }
                 }
             },
+
+            'form.sections': {
+                deep: true,
+                handler(value) {
+                    this.form.collect_email_addresses = this.hasIdentifiableEmailField
+                }
+            }
+        },
+
+        computed: {
+            hasIdentifiableEmailField() {
+                return _.findIndex(this.form.sections[0].fields,
+                    (field) => field.settings.identifiable) != -1
+            }
         },
 
         methods: {
             addIdentifiableEmailField() {
                 bus().$emit(`add-field-${this.form.sections[0].handle}`, {
                     type: this.fieldtype,
-                    settings: { type: 'email', identifiable: true }
+                    settings: { identifiable: true }
                 })
             },
 
@@ -225,7 +246,7 @@
 
         created() {
             axios.all([
-                axios.get('/api/fieldtypes/input'),
+                axios.get('/api/fieldtypes/email'),
             ]).then(axios.spread((fieldtype) => {
                 this.fieldtype = fieldtype.data
                 this.ready = true
