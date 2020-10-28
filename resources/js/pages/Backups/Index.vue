@@ -13,7 +13,7 @@
 
 		<ui-card>
             <ui-card-body>
-            	<ui-table :key="'backups'" class="backup-table" id="backups" :endpoint="endpoint" sort-by="name" sort-in="desc" :per-page="50">
+            	<ui-table :refresh="5000" :key="'backups'" class="backup-table" id="backups" :endpoint="endpoint" sort-by="name" sort-in="desc" :per-page="50">
             		<template slot="name" slot-scope="table">
                         <ui-status :value="table.record.state == 'success'" class="mr-2"></ui-status>
 
@@ -102,43 +102,44 @@
 </template>
 
 <script>
-	export default {
-		head: {
+    export default {
+        head: {
             title() {
                 return {
                     inner: 'Backups'
                 }
             }
-		},
+        },
 
-		mixins: [
-			require('../../mixins/backups').default,
-			require('../../mixins/filehelper').default,
-		],
+        mixins: [
+            require('../../mixins/backups').default,
+            require('../../mixins/filehelper').default,
+        ],
 
-		data() {
-			return {
-				endpoint: '/datatable/backups'
-			}
-		},
-
-		methods: {
-            upload(files) {
-            	if (typeof files == 'undefined') return
-
-				const formData = new FormData()
-
-				formData.append('_method', 'POST')
-				formData.append('file-upload', files)
-
-				axios.post('/api/backups/upload', formData)
-					.then(() => {
-						toast('Backup successfully uploaded!', 'success')
-
-						this.$refs.upload.remove()
-						bus().$emit('refresh-datatable-backups')
-					})
+        data() {
+            return {
+                endpoint: '/datatable/backups'
             }
-		}
+        },
+
+    	methods: {
+            upload(files) {
+                if (typeof files == 'undefined') return
+
+                const formData = new FormData()
+
+                formData.append('_method', 'POST')
+                formData.append('file-upload', files)
+
+                axios.post('/api/backups/upload', formData)
+                    .then(() => {
+                        toast('Backup successfully uploaded!', 'success')
+
+                        this.$refs.upload.remove()
+
+                        bus().$emit('refresh-datatable-backups')
+                    })
+                },
+    	}
 	}
 </script>

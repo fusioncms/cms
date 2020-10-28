@@ -237,6 +237,10 @@
                 type: Boolean,
                 default: false
             },
+            refresh: {
+                type: Number|Boolean,
+                default: false
+            },
             noRecords: {
                 type: String,
                 default: 'No records to display'
@@ -442,6 +446,10 @@
 
                     this.loading = false
                     this.initialLoad = false
+
+                    if (this.refresh && ! self._timer) {
+                        this._timer = setTimeout(() => this.getRecords(), this.refresh)
+                    }
                 })
             },
 
@@ -505,6 +513,10 @@
         created() {
             this.getRecords()
             this.listenForEvents()
+        },
+
+        destroyed() {
+            clearTimeout(this._timer)
         }
     }
 </script>
