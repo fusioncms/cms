@@ -75,11 +75,11 @@
         computed: {
             computedValue: {
                 get() {
-                    return this.newValue
+                    return this.model
                 },
 
                 set(value) {
-                    this.newValue = value
+                    this.model = value
                     this.$emit('input', value)
                 }
             }
@@ -87,7 +87,7 @@
 
         watch: {
             value(value) {
-                this.newValue = value
+                this.model = value
             }
         }
     }
