@@ -17,12 +17,7 @@
         :max="max"
         :aria-required="required"
         :aria-describedby="message ? formattedId + '_message' : null"
-        v-model="inputValue"
-        @blur="emitValue($event.target.value)"
-        @keydown.esc="emitValue($event.target.value)"
-        @keydown.enter="emitValue($event.target.value)"
-        @keydown.up.prevent="increase"
-        @keydown.down.prevent="decrease">
+        v-model="model">
 
         <button v-if="!hideButtons" class="field-number__button field-number__button--decrease button button--icon" @click.prevent="decrease" :disabled="disabled || decreaseDisabled">
             <slot name="decrease">
@@ -122,49 +117,30 @@
             }
         },
 
-        data() {
-            return {
-                inputValue: this.value,
-                increaseDisabled: false,
-                decreaseDisabled: false
-            }
-        },
+        computed: {
+            model: {
+                get() {
+                    return this.value || 0
+                },
 
-        watch: {
-            inputValue(value) {
-                this.inputValue = value
-            }
+                set(value) {
+                    this.$emit('input',
+                        this.formatNumber(Number(value), this.decimals))
+                }
+            },
+
+            decreaseDisabled() {
+                return this.model <= this.min
+            },
+            
+            increaseDisabled() {
+                return this.model >= this.max
+            },
         },
 
         methods: {
-            emitValue(newValue) {
-                let oldValue = this.inputValue
-                newValue = Number(newValue)
-
-                if (oldValue === newValue) {
-                    return
-                }
-
-                if (newValue <= this.min) {
-                    newValue = this.min
-                    this.decreaseDisabled = true
-                }
-
-                if (newValue >= this.max) {
-                    newValue = this.max
-                    this.increaseDisabled = true
-                }
-
-                this.inputValue = this.formatNumber(newValue, this.decimals)
-                this.$emit('input', newValue)
-            },
-
             formatNumber(num, decimals) {
                 let regex = new RegExp('^-?\\d+(?:\.\\d{0,' + (decimals || -1) + '})?')
-
-                if (num === null) {
-                    num = 0
-                }
 
                 return Number(num.toString().match(regex)[0]).toFixed(decimals)
             },
@@ -174,14 +150,7 @@
                     return
                 }
 
-                if (this.inputValue == null) {
-                    this.inputValue == 0
-                }
-
-                let newValue = Number(this.inputValue) + Number(1 * this.step)
-                this.decreaseDisabled = false
-
-                this.emitValue(newValue)
+                this.model = Math.min(this.model + this.step, this.max)
             },
 
             decrease() {
@@ -189,26 +158,7 @@
                     return
                 }
 
-                if (this.inputValue == null) {
-                    this.inputValue == 0
-                }
-
-                let newValue = Number(this.inputValue) + Number(-1 * this.step)
-                this.increaseDisabled = false
-
-                this.emitValue(newValue)
-            }
-        },
-
-        mounted() {
-            this.inputValue = this.value
-
-            if (this.inputValue <= this.min) {
-                this.decreaseDisabled = true
-            }
-
-            if (this.inputValue >= this.max) {
-                this.increaseDisabled = true
+                this.model = Math.max(this.model - this.step, this.min)
             }
         }
     }

@@ -89,6 +89,10 @@ Vue.component('phone-fieldtype-settings', () => import('./components/Fieldtypes/
 Vue.component('radio-fieldtype', () => import('./components/Fieldtypes/Radio/Field'))
 Vue.component('radio-fieldtype-settings', () => import('./components/Fieldtypes/Radio/Settings'))
 
+// Range
+Vue.component('range-fieldtype', () => import('./components/Fieldtypes/Range/Field'))
+Vue.component('range-fieldtype-settings', () => import('./components/Fieldtypes/Range/Settings'))
+
 // Redactor
 Vue.component('redactor-fieldtype', () => import('./components/Fieldtypes/Redactor/Field'))
 Vue.component('redactor-fieldtype-settings', () => import('./components/Fieldtypes/Redactor/Settings'))
