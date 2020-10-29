@@ -7,7 +7,7 @@
     import fieldtype from '@/mixins/fieldtype'
 
     export default {
-        name: 'list-fieldtype-settings',
+        name: 'dictionary-fieldtype-settings',
 
         mixins: [fieldtype],
     }

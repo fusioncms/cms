@@ -67,6 +67,7 @@ return [
         \Fusion\Fieldtypes\NumberFieldtype::class,
         \Fusion\Fieldtypes\PasswordFieldtype::class,
         \Fusion\Fieldtypes\PhoneFieldtype::class,
+        \Fusion\Fieldtypes\RangeFieldtype::class,
         \Fusion\Fieldtypes\RadioFieldtype::class,
         \Fusion\Fieldtypes\RedactorFieldtype::class,
         \Fusion\Fieldtypes\ReplicatorFieldtype::class,
