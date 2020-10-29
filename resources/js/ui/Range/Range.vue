@@ -1,5 +1,5 @@
 <template>
-    <div class="field-number input-group">
+    <div class="input-group">
         <input
             type="range"
             class="field-number__input field p-3"
@@ -18,23 +18,14 @@
             :aria-describedby="message ? id + '_message' : null"
             v-model="model">
 
-        <label class="field-number__button button">
-            <span>{{ model }}</span>
-        </label>
-
-        <button class="field-number__button field-number__button--decrease button button--icon" @click.prevent="decrease">
-            <slot name="decrease">
-                <fa-icon icon="minus" class="fa-fw"></fa-icon>
-                <span class="sr-only">Decrease</span>
-            </slot>
-        </button>
-
-        <button class="field-number__button field-number__button--increase button button--icon" @click.prevent="increase">
-            <slot name="increase">
-                <fa-icon icon="plus" class="fa-fw"></fa-icon>
-                <span class="sr-only">Increase</span>
-            </slot>
-        </button>
+        <ui-number
+            class="w-1/3 rounded-none"
+            :name="`${name}-value`"
+            :disabled="disabled"
+            :min="min"
+            :max="max"
+            v-model="model">
+        </ui-number>
     </div>
 </template>
 
@@ -109,16 +100,6 @@
                 type: Boolean,
                 default: false,
             }
-        },
-
-        methods: {
-            increase() {
-                this.model = Math.min(this.model+this.step, this.max)
-            },
-
-            decrease() {
-                this.model = Math.max(this.model-this.step, this.min)
-            },
         }
     }
 </script>
