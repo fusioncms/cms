@@ -26,6 +26,8 @@ Route::prefix('users')->group(function () {
     Route::post('/actions/reset-password', 'UserController@resetPasswordAction');
 });
 
+Route::get('/files/{type}', 'FileController@index');
+
 Route::get('/roles', 'RoleController@index');
 Route::get('/roles/{role}/permissions', 'RolePermissionController@index');
 Route::get('/permissions', 'PermissionController@index');
