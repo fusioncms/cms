@@ -74,6 +74,7 @@ return [
         \Fusion\Fieldtypes\ReplicatorFieldtype::class,
         \Fusion\Fieldtypes\SearchFieldtype::class,
         \Fusion\Fieldtypes\SelectFieldtype::class,
+        \Fusion\Fieldtypes\TableFieldtype::class,
         \Fusion\Fieldtypes\TaxonomyFieldtype::class,
         \Fusion\Fieldtypes\TextareaFieldtype::class,
         \Fusion\Fieldtypes\ToggleFieldtype::class,
