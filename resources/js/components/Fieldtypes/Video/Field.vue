@@ -25,7 +25,7 @@
 
                 <ui-button icon v-modal:selection-modal>
                     <fa-icon :icon="['fas', 'plus-circle']"></fa-icon>
-                    <span class="sr-only">Choose an existing audio file</span>
+                    <span class="sr-only">Choose an existing video file</span>
                 </ui-button>
 
                 <ui-button icon @click="clear">
@@ -35,14 +35,14 @@
             </div>
         </ui-field-group>
 
-        <audio
+        <video
             v-if="model"
             controls
             :src="model">
-        </audio>
+        </video>
 
-        <ui-modal name="selection-modal" title="Choose an existing audio file">
-            <ui-table :endpoint="endpoint" id="audio-files" sort-by="name" sort-in="desc" :per-page="10">
+        <ui-modal name="selection-modal" title="Choose an existing video file">
+            <ui-table :endpoint="endpoint" id="video-files" sort-by="name" sort-in="desc" :per-page="10">
                 <template slot="name" slot-scope="table">
                     <ui-radio
                         :id="`selection-${table.record.id}`"
@@ -74,13 +74,13 @@
     import FileHelper from '@/mixins/filehelper'
 
 	export default {
-		name: 'audio-fieldtype',
+		name: 'video-fieldtype',
 
         mixins: [FieldMixin, FileHelper],
 
         data() {
             return {
-                endpoint: '/datatable/files/audio'
+                endpoint: '/datatable/files/video'
             }
         },
 

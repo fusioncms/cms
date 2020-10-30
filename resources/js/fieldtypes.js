@@ -138,3 +138,7 @@ Vue.component('us-state-fieldtype-settings', () => import('./components/Fieldtyp
 // User
 Vue.component('user-fieldtype', () => import('./components/Fieldtypes/User/Field'))
 Vue.component('user-fieldtype-settings', () => import('./components/Fieldtypes/User/Settings'))
+
+// Video
+Vue.component('video-fieldtype', () => import('./components/Fieldtypes/Video/Field'))
+Vue.component('video-fieldtype-settings', () => import('./components/Fieldtypes/Video/Settings'))
