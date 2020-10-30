@@ -35,6 +35,11 @@
             </div>
         </ui-field-group>
 
+        <audio
+            controls
+            :src="model">
+        </audio>
+
         <ui-modal name="selection-modal" title="Choose an existing audio file">
             <ui-table :endpoint="endpoint" id="audio-files" sort-by="name" sort-in="desc" :per-page="10">
                 <template slot="name" slot-scope="table">

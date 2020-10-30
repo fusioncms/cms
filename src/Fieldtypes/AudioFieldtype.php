@@ -37,22 +37,4 @@ class AudioFieldtype extends Fieldtype
     public $column = [
         'type' => 'string',
     ];
-
-    /**
-     * Get custom rules when saving field.
-     *
-     * @param Field $field
-     * @param mixed $value
-     *
-     * @return array
-     */
-    // public function rules(Field $field, $value = null)
-    // {
-    //     $validation = explode('|', $field->validation ?: 'sometimes');
-    //     $validation = array_merge($validation, ['url']);
-
-    //     return [
-    //         $field->handle => $validation,
-    //     ];
-    // }
 }
