@@ -6,38 +6,29 @@
             v-html="field.name">
         </label>
 
-        <ui-tabs>
-            <ui-tab name="Markdown">
-                <textarea
-                    :ref="field.handle"
-                    :name="field.handle"
-                    cols="30"
-                    rows="12"
-                    v-model="value"
-                    autofocus>
-                </textarea>
-            </ui-tab>
-            <ui-tab name="Preview">
-                <div v-html="preview" class="markdown-body"></div>
-            </ui-tab>
-        </ui-tabs>
+        <textarea
+            :ref="field.handle"
+            :name="field.handle"
+            cols="30"
+            rows="12"
+            v-model="value"
+            autofocus>
+        </textarea>
     </div>
 </template>
 
 <script>
-    require('codemirror/mode/gfm/gfm')
-    require('codemirror/keymap/sublime')
-    require('codemirror/addon/display/placeholder')
-
-    import CodeMirror from 'codemirror'
-    import marked     from 'marked'
+    import EasyMDE from 'easymde'
+    import marked from 'marked'
 
     export default {
         name: 'markdown-fieldtype',
 
         data() {
             return {
-                codemirror: null,
+                config: {},
+                easymde: null,
+                valueUpdated: false,
             }
         },
 
@@ -51,39 +42,107 @@
                 required: false,
                 default: '',
             },
+
+            // config: {
+            //     required: false,
+            //     type: Object,
+            //     default() {
+            //         return {}
+            //     }
+            // }
         },
 
         computed: {
-            preview() {
-                const tokens = marked.lexer(this.value || '')
-                const html   = marked.parser(tokens)
-                
-                return html
-            },
-
             el() {
                 return this.$refs[this.field.handle]
             },
         },
 
-        mounted() {
-            this.codemirror = CodeMirror.fromTextArea(this.el, {
-                theme: 'fusion',
-                mode: {
-                    name: 'gfm',
-                    highlightFormatting: true,
-                    fencedCodeBlockHighlighting: true,
-                },
-                lineWrapping: true,
-                viewportMargin: Infinity,
-                keyMap: 'sublime',
-            })
+        methods: {
+            initialize() {
+                const config = Object.assign({
+                    element: this.el,
+                    initialValue: this.value,
+                    previewRender: this.previewRender,
+                    renderingConfig: {
+                        codeSyntaxHighlighting: true,
+                    },
+                }, this.config)
 
-            setTimeout(() => { this.codemirror.refresh() }, 1)
+                if (config.initialValue) {
+                    this.$emit('input', config.initialValue)
+                }
 
-            this.codemirror.on('change', (instance) => {
-                this.$emit('input', instance.getValue())
-            })
+                marked.setOptions({
+                    sanitize: false
+                })
+
+                this.easymde = new EasyMDE(config)
+
+                this.bindEvents()
+
+                this.$nextTick(() => {
+                    this.$emit('initialized', this.easymde)
+                })
+            },
+
+            bindEvents() {
+                this.easymde.codemirror.on('change', (instance, change) => {
+                    if (change.origin === 'setValue') {
+                        return
+                    }
+
+                    const value = this.easymde.value()
+
+                    this.handleInput(value)
+                })
+
+                this.easymde.codemirror.on('blur', () => {
+                    const value = this.easymde.value()
+
+                    this.handleBlur(value)
+                })
+            },
+
+            handleInput(value) {
+                this.valueUpdated = true
+                this.$emit('input', value)
+            },
+
+            handleBlur(value) {
+                this.valueUpdated = true
+                this.$emit('blur', value)
+            }
         },
+
+        watch: {
+            value(value) {
+                if (this.valueUpdated) {
+                    this.valueUpdated = false
+                } else {
+                    this.easymde.value(value)
+                }
+            }
+        },
+
+        mounted() {
+            this.initialize()
+        },
+
+        deactivated() {
+            const editor = this.easymde
+
+            if (! editor) return
+
+            const isFullscreen = editor.codemirror.getOpen('fullScreen')
+
+            if (isFullscreen) {
+                editor.toggleFullScreen()
+            }
+        },
+
+        destroyed() {
+            this.easymde = null
+        }
     }
 </script>
