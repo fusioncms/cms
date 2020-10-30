@@ -3,7 +3,7 @@
         :name="field.handle"
         :fieldId="`${field.handle}-field`"
         :label="field.name"
-        :required="field.srequired"
+        :required="field.required"
         :help="field.help"
         :hasError="hasError"
         :errorMessage="errorMessage">

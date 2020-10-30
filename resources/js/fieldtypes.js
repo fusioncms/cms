@@ -8,6 +8,11 @@ Vue.component('address-fieldtype-settings', () => import('./components/Fieldtype
 Vue.component('asset-fieldtype', () => import('./components/Fieldtypes/Asset/Field'))
 Vue.component('asset-fieldtype-settings', () => import('./components/Fieldtypes/Asset/Settings'))
 
+// Audio
+Vue.component('audio-fieldtype', () => import('./components/Fieldtypes/Audio/Field'))
+Vue.component('audio-fieldtype-settings', () => import('./components/Fieldtypes/Audio/Settings'))
+
+
 // Checkbox
 Vue.component('checkbox-fieldtype', () => import('./components/Fieldtypes/Checkbox/Field'))
 Vue.component('checkbox-fieldtype-settings', () => import('./components/Fieldtypes/Checkbox/Settings'))

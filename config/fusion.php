@@ -48,6 +48,7 @@ return [
 
         \Fusion\Fieldtypes\AddressFieldtype::class,
         \Fusion\Fieldtypes\AssetFieldtype::class,
+        \Fusion\Fieldtypes\AudioFieldtype::class,
         \Fusion\Fieldtypes\CheckboxFieldtype::class,
         \Fusion\Fieldtypes\CodeFieldtype::class,
         \Fusion\Fieldtypes\ColorPickerFieldtype::class,
