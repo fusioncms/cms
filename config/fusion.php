@@ -80,6 +80,7 @@ return [
         \Fusion\Fieldtypes\UrlFieldtype::class,
         \Fusion\Fieldtypes\USStateFieldtype::class,
         \Fusion\Fieldtypes\UserFieldtype::class,
+        \Fusion\Fieldtypes\VideoFieldtype::class,
 
     ],
 
