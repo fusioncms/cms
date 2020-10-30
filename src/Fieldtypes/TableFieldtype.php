@@ -28,7 +28,24 @@ class TableFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
+        'initRows' => 1,
+        'initCols' => 2,
+    ];
 
+    /**
+     * @var array
+     */
+    public $rules = [
+        'settings.initRows' => 'nullable|numeric',
+        'settings.initCols' => 'nullable|numeric',
+    ];
+
+    /**
+     * @var array
+     */
+    public $attributes = [
+        'settings.initRows' => 'rows',
+        'settings.initCols' => 'columns',
     ];
 
     /**
