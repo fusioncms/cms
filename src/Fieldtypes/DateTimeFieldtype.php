@@ -2,6 +2,9 @@
 
 namespace Fusion\Fieldtypes;
 
+use Carbon\Carbon;
+use Fusion\Models\Field;
+
 class DateTimeFieldtype extends Fieldtype
 {
     /**
@@ -28,8 +31,9 @@ class DateTimeFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
-        'format' => 'Y-m-d',
-        'time'   => false,
+        'placeholder' => '',
+        'format'      => 'Y-m-d',
+        'time'        => 0,
     ];
 
     /**
@@ -50,6 +54,34 @@ class DateTimeFieldtype extends Fieldtype
      * @var array
      */
     public $column = [
-        'type' => 'dateTime',
+        'type' => 'datetime',
     ];
+
+    /**
+     * Get custom rules when saving field.
+     *
+     * @param Field $field
+     * @param mixed $value
+     *
+     * @return array
+     */
+    public function rules(Field $field, $value = null)
+    {
+        $validation = explode('|', $field->validation ?: 'nullable');
+        $validation = array_merge($validation, ['date_format:Y-m-d H:i:s']);
+
+        return [
+            $field->handle => $validation,
+        ];
+    }
+
+    /**
+     * Returns resource object of field.
+     *
+     * @return JsonResource
+     */
+    public function getResource($model, Field $field)
+    {
+        return optional($this->getValue($model, $field))->toDateTimeString();
+    }
 }

@@ -1,34 +1,50 @@
 <template>
-    <div>
-        <ui-select-group
-            name="settings.time"
-            label="Time Options"
-            help="Should this also include time?"
-            autocomplete="off"
-            v-model="settings.time"
-            :options="[
-                {
-                    value: false,
-                    label: 'Date Only'
-                },
-                {
-                    value: true,
-                    label: 'Date and Time'
-                }
-            ]"
-            :has-error="errors.has('settings.time')"
-            :error-message="errors.get('settings.time')">
-        </ui-select-group>
+    <div class="row">
+        <div class="col w-1/2">
+            <ui-input-group
+                name="settings.placeholder"
+                label="Placeholder"
+                help="Text that will appear inside the input element's content area when empty."
+                autocomplete="off"
+                v-model="settings.placeholder"
+                :has-error="errors.has('settings.placeholder')"
+                :error-message="errors.get('settings.placeholder')">
+            </ui-input-group>
+        </div>
 
-        <ui-input-group
-            name="settings.format"
-            label="Date Format"
-            help='<a href="https://flatpickr.js.org/formatting/" target="_blank">Flatpickr date format reference</a>'
-            placeholder="Y-m-d"
-            v-model="format"
-            :has-error="errors.has('settings.format')"
-            :error-message="errors.get('settings.format')">
-        </ui-input-group>
+        <div class="col w-1/2">
+            <ui-select-group
+                name="settings.time"
+                label="Enable Time?"
+                help="Should this also include time?"
+                autocomplete="off"
+                v-model="settings.time"
+                :options="[
+                    {
+                        label: 'No',
+                        value: 0
+                    },
+                    {
+                        label: 'Yes',
+                        value: 1
+                    }
+                ]"
+                :has-error="errors.has('settings.time')"
+                :error-message="errors.get('settings.time')">
+            </ui-select-group>
+        </div>
+
+        <div class="col w-1/2">
+            <ui-input-group
+                name="settings.format"
+                label="Display Format"
+                help='<a href="https://flatpickr.js.org/formatting/" target="_blank">Flatpickr date format reference</a>'
+                placeholder="Y-m-d"
+                v-model="format"
+                :has-error="errors.has('settings.format')"
+                :error-message="errors.get('settings.format')">
+            </ui-input-group>
+        </div>
     </div>
 </template>
 
@@ -48,7 +64,7 @@
 
                     if (this.settings.time) {
                         if (! new RegExp(tokens).test(this.settings.format)) {
-                            value = _.trim(this.settings.format) + ' h:i'
+                            value = _.trim(this.settings.format) + ' h:iK'
                         }
                     } else {
                         value = this.settings.format.replace(tokens, '')
