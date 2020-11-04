@@ -19,22 +19,23 @@
 </template>
 
 <script>
-    import fieldtype from '@/mixins/fieldtype'
+    import FieldMixin from '@/mixins/fieldtypes/field'
+    
     export default {
         name: 'radio-fieldtype',
 
-        mixins: [fieldtype],
+        mixins: [FieldMixin],
 
-        props: {
-            field: {
-                type: Object,
-                required: true,
-            },
+        computed: {
+            model: {
+                get() {
+                    return this.value || []
+                },
 
-            value: {
-                required: false,
-                default: null,
-            },
+                set(value) {
+                    this.$emit('input', value)
+                }
+            }
         }
     }
 </script>
