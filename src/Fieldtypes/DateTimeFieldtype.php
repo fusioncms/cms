@@ -2,7 +2,6 @@
 
 namespace Fusion\Fieldtypes;
 
-use Carbon\Carbon;
 use Fusion\Models\Field;
 
 class DateTimeFieldtype extends Fieldtype
