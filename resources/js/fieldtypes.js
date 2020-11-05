@@ -115,6 +115,10 @@ Vue.component('search-fieldtype-settings', () => import('./components/Fieldtypes
 Vue.component('select-fieldtype', () => import('./components/Fieldtypes/Select/Field'))
 Vue.component('select-fieldtype-settings', () => import('./components/Fieldtypes/Select/Settings'))
 
+// Table
+Vue.component('table-fieldtype', () => import('./components/Fieldtypes/Table/Field'))
+Vue.component('table-fieldtype-settings', () => import('./components/Fieldtypes/Table/Settings'))
+
 // Taxonomy
 Vue.component('taxonomy-fieldtype', () => import('./components/Fieldtypes/Taxonomy/Field'))
 Vue.component('taxonomy-fieldtype-settings', () => import('./components/Fieldtypes/Taxonomy/Settings'))
