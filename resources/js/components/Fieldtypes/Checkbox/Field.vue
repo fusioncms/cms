@@ -2,16 +2,19 @@
     <ui-checkbox-group
         :label="field.name"
         :help="field.help"
-        :inline="field.settings.display == 'row'">
-            <ui-checkbox
-                v-for="option in field.settings.options"
-                :key="option.value"
-                :name="field.name"
-                :id="option.value"
-                :native-value="option.value"
-                v-model="model">
-                {{option.label}}
-            </ui-checkbox>
+        :inline="field.settings.display == 'row'"
+        :hasError="hasError(field.handle)"
+        :errorMessage="errorMessage(field.handle)">
+
+        <ui-checkbox
+            v-for="(option, index) in field.settings.options"
+            :key="`${field.handle}.${index}`"
+            :id="`${field.handle}.${index}`"
+            :name="field.handle"
+            :native-value="option.value"
+            v-model="model">
+            {{option.label}}
+        </ui-checkbox>
     </ui-checkbox-group>
 </template>
 
@@ -23,15 +26,9 @@
 
         mixins: [FieldMixin],
 
-        computed: {
-            model: {
-                get() {
-                    return this.value || []
-                },
-
-                set(value) {
-                    this.$emit('input', value)
-                }
+        created() {
+            if (_.isEmpty(this.value)) {
+                this.model = []
             }
         }
     }

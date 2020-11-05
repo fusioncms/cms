@@ -1,7 +1,10 @@
 <template>
-    <ui-fieldset
+    <ui-field-group
+        :name="field.handle"
+        :fieldId="`${field.handle}-field`"
         :label="field.name"
         :help="field.help">
+
             <div class="row">
                 <div class="col md:w-1/2">
                     <ui-input-group
@@ -10,7 +13,9 @@
                         label="Address 1"
                         placeholder="Address 1"
                         hide-label
-                        v-model="model.address1">
+                        v-model="model.address1"
+                        :hasError="hasError(`${field.handle}.address1`)"
+                        :errorMessage="errorMessage(`${field.handle}.address1`)">
                     </ui-input-group>
                 </div>
                 <div class="col md:w-1/2">
@@ -19,7 +24,9 @@
                         hide-label
                         :name="field.handle + '_address2'"
                         placeholder="Address 2"
-                        v-model="model.address2">
+                        v-model="model.address2"
+                        :hasError="hasError(`${field.handle}.address2`)"
+                        :errorMessage="errorMessage(`${field.handle}.address2`)">
                     </ui-input-group>
                 </div>
 
@@ -30,7 +37,9 @@
                         label="City"
                         placeholder="City"
                         hide-label
-                        v-model="model.city">
+                        v-model="model.city"
+                        :hasError="hasError(`${field.handle}.city`)"
+                        :errorMessage="errorMessage(`${field.handle}.city`)">
                     </ui-input-group>
                 </div>
                 <div class="col md:w-1/3">
@@ -40,7 +49,9 @@
                         label="State"
                         placeholder="State"
                         hide-label
-                        v-model="model.state">
+                        v-model="model.state"
+                        :hasError="hasError(`${field.handle}.state`)"
+                        :errorMessage="errorMessage(`${field.handle}.state`)">
                     </ui-input-group>
                 </div>
                 <div class="col md:w-1/3">
@@ -50,16 +61,20 @@
                         label="Zip Code"
                         placeholder="Zip Code"
                         hide-label
-                        v-model="model.zip">
+                        v-model="model.zip"
+                        :hasError="hasError(`${field.handle}.zip`)"
+                        :errorMessage="errorMessage(`${field.handle}.zip`)">
                     </ui-input-group>
                 </div>
-                <div class="col">
+                <div class="col w-full">
                     <ui-input-group
                         label="Country"
                         hide-label
                         :name="field.handle + '_country'"
                         placeholder="Country"
-                        v-model="model.country">
+                        v-model="model.country"
+                        :hasError="hasError(`${field.handle}.country`)"
+                        :errorMessage="errorMessage(`${field.handle}.country`)">
                     </ui-input-group>
                 </div>
             </div>
@@ -73,7 +88,7 @@
                 Once you've obtained one, please visit the <router-link to="/settings/google_maps">Google Maps settings page</router-link> to enter your API key.</p>
             </div>
         </div>
-    </ui-fieldset>
+    </ui-field-group>
 </template>
 
 <script>

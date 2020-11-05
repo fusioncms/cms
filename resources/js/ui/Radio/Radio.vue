@@ -12,7 +12,7 @@
             :true-value="trueValue"
             :false-value="falseValue"
             @click.stop
-            v-model="computedValue">
+            v-model="model">
         <label :for="id" class="field-check__label">
             <slot></slot>
         </label>
@@ -23,12 +23,6 @@
 <script>
     export default {
         name: 'ui-radio',
-
-        data() {
-            return {
-                model: false,
-            }
-        },
 
         props: {
             name: {
@@ -73,21 +67,14 @@
         },
 
         computed: {
-            computedValue: {
+            model: {
                 get() {
-                    return this.model
+                    return this.value || ''
                 },
 
                 set(value) {
-                    this.model = value
                     this.$emit('input', value)
                 }
-            }
-        },
-
-        watch: {
-            value(value) {
-                this.model = value
             }
         }
     }

@@ -18,14 +18,24 @@ export default {
     },
 
     computed: {
-        hasError() {
-            return this.errors &&
-                   this.errors.has(this.field.handle)
+        model: {
+            get() {
+                return this.value
+            },
+
+            set(value) {
+                this.$emit('input', value)
+            }
+        }
+    },
+
+    methods: {
+        hasError(handle) {
+            return this.errors && this.errors.has(handle)
         },
 
-        errorMessage() {
-            return this.errors ?
-                this.errors.get(this.field.handle) : ''
+        errorMessage(handle) {
+            return this.hasError(handle) ? this.errors.get(handle) : ''
         }
-    }
+    },
 }

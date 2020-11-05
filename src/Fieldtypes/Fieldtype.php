@@ -229,16 +229,8 @@ abstract class Fieldtype
      */
     public function rules(Field $field, $value = null)
     {
-        if (is_array($value)) {
-            return $field->validation->mapWithKeys(function($rule, $key) use ($field) {
-                return [
-                    "{$field->handle}.{$key}" => $rule ?: 'sometimes',
-                ];
-            });
-        }
-        
         return [
-            $field->handle => $field->validation->value ?: 'sometimes',
+            $field->handle => $field->validation->get('value') ?: 'sometimes',
         ];
     }
 

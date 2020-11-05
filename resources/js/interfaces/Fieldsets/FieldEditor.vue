@@ -53,16 +53,19 @@
                     name="validation"
                     fieldId="field-validation"
                     label="Validation Rules">
-
-                    <ui-input-group
-                        v-for="(rule, key) in form.validation"
-                        :key="key"
-                        :name="`validation.${key}`"
-                        :placeholder="key"
-                        hide-label
-                        monospaced
-                        v-model="form.validation[key]">
-                    </ui-input-group>
+                    
+                    <div class="row">
+                        <ui-input-group
+                            class="col md:w-1/2"
+                            v-for="(rule, key) in form.validation"
+                            :key="key"
+                            :name="`validation.${key}`"
+                            :placeholder="key"
+                            hide-label
+                            monospaced
+                            v-model="form.validation[key]">
+                        </ui-input-group>
+                    </div>
                 </ui-field-group>
 
                 <hr>
