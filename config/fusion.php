@@ -30,22 +30,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Custom Polymorphic Types
-    |--------------------------------------------------------------------------
-    |
-    | By default, Laravel will use the fully qualified class name to store
-    | the type of the related model. Here, you may define a "morph map"
-    | to instruct Eloquent to use a custom name for each model.
-    |
-    */
-
-    'relationships' => [
-        // 'matrix' => 'Fusion\Models\Matrix',
-        // 'type'   => 'Fusion\Models\Type',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Content Structures
     |--------------------------------------------------------------------------
     |
