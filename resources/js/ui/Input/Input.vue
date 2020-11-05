@@ -8,13 +8,12 @@
         :placeholder="placeholder"
         :readonly="readonly"
         :disabled="disabled"
-        :value="value"
         :autocomplete="autocomplete"
         :autofocus="autofocus"
         :required="required"
         :aria-required="required"
         :aria-describedby="message ? formattedId + '_message' : null"
-        @input="handleInput">
+        v-model="model">
 </template>
 
 <script>
@@ -25,9 +24,15 @@
             require('../../mixins/fields').default
         ],
 
-        data() {
-            return {
-                inputValue: this.value
+        computed: {
+            model: {
+                get() {
+                    return this.value || ''
+                },
+
+                set(value) {
+                    this.$emit('input', value)
+                }
             }
         },
 

@@ -30,4 +30,12 @@ class LinkFieldtype extends Fieldtype
     public $column = [
         'type' => 'text',
     ];
+
+    /**
+     * @var array
+     */
+    public $validation = [
+        'text' => '',
+        'link' => '',
+    ];
 }

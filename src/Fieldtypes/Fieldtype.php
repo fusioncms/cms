@@ -70,6 +70,13 @@ abstract class Fieldtype
     public $field;
 
     /**
+     * @var array
+     */
+    public $validation = [
+        'value' => ''
+    ];
+
+    /**
      * Get the fieldtype name property.
      *
      * @return string
@@ -222,8 +229,16 @@ abstract class Fieldtype
      */
     public function rules(Field $field, $value = null)
     {
+        if (is_array($value)) {
+            return $field->validation->mapWithKeys(function($rule, $key) use ($field) {
+                return [
+                    "{$field->handle}.{$key}" => $rule ?: 'sometimes',
+                ];
+            });
+        }
+        
         return [
-            $field->handle => $field->validation ?: 'sometimes',
+            $field->handle => $field->validation->value ?: 'sometimes',
         ];
     }
 

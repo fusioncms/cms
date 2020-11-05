@@ -49,11 +49,21 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col w-full">
-                        <ui-input-group name="validation" label="Validation Rules" v-model="form.validation" monospaced></ui-input-group>
-                    </div>
-                </div>
+                <ui-field-group
+                    name="validation"
+                    fieldId="field-validation"
+                    label="Validation Rules">
+
+                    <ui-input-group
+                        v-for="(rule, key) in form.validation"
+                        :key="key"
+                        :name="`validation.${key}`"
+                        :placeholder="key"
+                        hide-label
+                        monospaced
+                        v-model="form.validation[key]">
+                    </ui-input-group>
+                </ui-field-group>
 
                 <hr>
 

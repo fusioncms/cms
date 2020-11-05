@@ -17,7 +17,6 @@
             :placeholder="placeholder"
             :readonly="readonly"
             :disabled="disabled"
-            :value="value"
             :autocomplete="autocomplete"
             :autofocus="autofocus"
             :required="required"
@@ -25,7 +24,7 @@
             :hasError="hasError"
             :hasSuccess="hasSuccess"
             :message="hasMessage"
-            v-model="computedValue">
+            v-model="model">
         </ui-input>
     </ui-field-group>
 </template>
@@ -37,6 +36,18 @@
         mixins: [
             require('../../mixins/fields').default
         ],
+
+        computed: {
+            model: {
+                get() {
+                    return this.value || ''
+                },
+
+                set(value) {
+                    this.$emit('input', value)
+                }
+            }
+        },
 
         props: {
             name:  {
