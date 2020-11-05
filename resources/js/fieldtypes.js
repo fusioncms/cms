@@ -98,11 +98,6 @@ Vue.component('radio-fieldtype-settings', () => import('./components/Fieldtypes/
 Vue.component('range-fieldtype', () => import('./components/Fieldtypes/Range/Field'))
 Vue.component('range-fieldtype-settings', () => import('./components/Fieldtypes/Range/Settings'))
 
-// Redactor
-Vue.component('redactor-fieldtype', () => import('./components/Fieldtypes/Redactor/Field'))
-Vue.component('redactor-fieldtype-settings', () => import('./components/Fieldtypes/Redactor/Settings'))
-Vue.component('redactor', require('./components/Fieldtypes/Redactor/Redactor').default)
-
 // Replicator
 Vue.component('replicator-fieldtype', () => import('./components/Fieldtypes/Replicator/Field'))
 Vue.component('replicator-fieldtype-settings', () => import('./components/Fieldtypes/Replicator/Settings'))

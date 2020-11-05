@@ -37,7 +37,7 @@
                 <hr>
 
                 <component
-                    is="replicator-fieldtype-settings"
+                    :is="'replicator-fieldtype-settings'"
                     v-model="form">
                 </component>
             </template>
@@ -45,7 +45,8 @@
             <template v-else>
                 <div class="row mb-6">
                     <div class="col w-full">
-                        <redactor name="field-help" label="Help Instructions" v-model="form.help"></redactor>
+                        <span>Help Instructions WYSIWYG editor here...</span>
+                        <!-- <redactor name="field-help" label="Help Instructions" v-model="form.help"></redactor> -->
                     </div>
                 </div>
 

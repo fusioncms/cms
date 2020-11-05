@@ -1,1 +1,135 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[81],{"9wAk":function(e,t,r){"use strict";var o={data:function(){return{ready:!1,fieldtype:{},placements:[{label:"Body",value:"body"},{label:"Sidebar",value:"sidebar"}]}},props:{form:{type:Object,required:!0},resource:{type:Object,required:!1,default:function(){}}},watch:{"form.collect_email_addresses":function(e){this.ready&&(!1===e?(this.form.response_receipt=!1,this.removeIdentifiableEmailField()):this.addIdentifiableEmailField())},"form.sections":{deep:!0,handler:function(e){this.form.collect_email_addresses=this.hasIdentifiableEmailField}}},computed:{hasIdentifiableEmailField:function(){return-1!=_.findIndex(this.form.sections[0].fields,(function(e){return e.settings.identifiable}))}},methods:{addIdentifiableEmailField:function(){bus().$emit("add-field-".concat(this.form.sections[0].handle),{type:this.fieldtype,settings:{identifiable:!0}})},removeIdentifiableEmailField:function(){bus().$emit("remove-field-".concat(this.form.sections[0].handle),"settings.identifiable",!0)}},created:function(){var e=this;axios.all([axios.get("/api/fieldtypes/email")]).then(axios.spread((function(t){e.fieldtype=t.data,e.ready=!0})))}},s=r("KHd+"),a=Object(s.a)(o,(function(){var e=this,t=e.$createElement,r=e._self._c||t;return r("form-container",{scopedSlots:e._u([{key:"sidebar",fn:function(){return[r("ui-card",[r("ui-card-body",[r("ui-slug-group",{attrs:{name:"form-handle",label:"Handle",autocomplete:"off",monospaced:"",required:"",delimiter:"_",watch:e.form.name,"has-error":e.form.errors.has("handle"),"error-message":e.form.errors.get("handle")},model:{value:e.form.handle,callback:function(t){e.$set(e.form,"handle",t)},expression:"form.handle"}}),e._v(" "),r("ui-toggle",{attrs:{name:"status",label:"Status","true-value":1,"false-value":0},model:{value:e.form.status,callback:function(t){e.$set(e.form,"status",t)},expression:"form.status"}})],1)],1),e._v(" "),e.resource?r("ui-definition-list",[r("ui-definition",{attrs:{name:"Status"}},[r("fa-icon",{staticClass:"fa-fw text-xs",class:{"text-success-500":e.resource.status,"text-danger-500":!e.resource.status},attrs:{icon:["fas","circle"]}}),e._v(" "+e._s(e.resource.status?"Enabled":"Disabled")+"\n            ")],1),e._v(" "),r("ui-definition",{attrs:{name:"Created At"}},[e._v("\n                "+e._s(e.$moment(e.resource.created_at).format("Y-MM-DD, hh:mm a"))+"\n            ")]),e._v(" "),r("ui-definition",{attrs:{name:"Updated At"}},[e._v("\n                "+e._s(e.$moment(e.resource.updated_at).format("Y-MM-DD, hh:mm a"))+"\n            ")])],1):e._e()]},proxy:!0}])},[r("portal",{attrs:{to:"actions"}},[r("div",{staticClass:"buttons"},[r("ui-button",{attrs:{to:{name:"forms"},variant:"secondary"}},[e._v("Go Back")]),e._v(" "),r("ui-button",{attrs:{type:"submit",variant:"primary",disabled:!e.form.hasChanges},on:{click:function(t){return t.preventDefault(),e.$parent.submit(t)}}},[e._v("Save")])],1)]),e._v(" "),r("section-card",{attrs:{title:"General Information",description:"General information about this form and what it collects."}},[r("ui-input-group",{attrs:{name:"name",label:"Name",help:"What should this form be called?",autocomplete:"off",autofocus:"",required:"","has-error":e.form.errors.has("name"),"error-message":e.form.errors.get("name")},model:{value:e.form.name,callback:function(t){e.$set(e.form,"name",t)},expression:"form.name"}}),e._v(" "),r("ui-textarea-group",{attrs:{name:"description",label:"Description",help:"Give a short description of what this form will collect.",autocomplete:"off","has-error":e.form.errors.has("description"),"error-message":e.form.errors.get("description")},model:{value:e.form.description,callback:function(t){e.$set(e.form,"description",t)},expression:"form.description"}})],1),e._v(" "),r("section-card",{attrs:{title:"Privacy",description:"Configure this forms privacy settings."}},[r("ui-fieldset",{attrs:{label:"Privacy Settings"}},[r("ui-checkbox-single",{attrs:{name:"collect_email_addresses",id:"collect_email_addresses"},model:{value:e.form.collect_email_addresses,callback:function(t){e.$set(e.form,"collect_email_addresses",t)},expression:"form.collect_email_addresses"}},[e._v("Collect email addresses")]),e._v(" "),r("ui-checkbox-single",{attrs:{name:"collect_ip_addresses",id:"collect_ip_addresses"},model:{value:e.form.collect_ip_addresses,callback:function(t){e.$set(e.form,"collect_ip_addresses",t)},expression:"form.collect_ip_addresses"}},[e._v("Collect IP addresses")]),e._v(" "),r("ui-checkbox-single",{attrs:{name:"response_receipt",id:"response_receipt",help:"Respondents will receive a copy of their submission.",disabled:!e.form.collect_email_addresses},model:{value:e.form.response_receipt,callback:function(t){e.$set(e.form,"response_receipt",t)},expression:"form.response_receipt"}},[e._v("Response receipts")])],1)],1),e._v(" "),r("section-card",{attrs:{title:"Spam",description:"Configure this forms spam protection settings."}},[r("ui-fieldset",{attrs:{label:"Spam Settings"}},[r("ui-checkbox-single",{attrs:{name:"enable_recaptcha",id:"enable_recaptcha",help:"Be sure to enter your site key and secret key in settings."},model:{value:e.form.enable_recaptcha,callback:function(t){e.$set(e.form,"enable_recaptcha",t)},expression:"form.enable_recaptcha"}},[e._v("Enable Google reCAPTCHA")]),e._v(" "),r("ui-checkbox-single",{attrs:{name:"enable_honeypot",id:"enable_honeypot",help:"A honeypot is a great and native alternative to Google reCAPTCHA. Both options can be safely enabled at the same time."},model:{value:e.form.enable_honeypot,callback:function(t){e.$set(e.form,"enable_honeypot",t)},expression:"form.enable_honeypot"}},[e._v("Enable Honeypot")])],1)],1),e._v(" "),r("section-card",{attrs:{title:"Notifications",description:"Configure who should receive notifications when submissions are made."}},[r("ui-textarea-group",{attrs:{name:"send_to",label:"Send notifications to...",help:"List emails as a comma separated list.",placeholder:"marie.c@example.com, nikola.t@example.com","has-error":e.form.errors.has("send_to"),"error-message":e.form.errors.get("send_to")},model:{value:e.form.send_to,callback:function(t){e.$set(e.form,"send_to",t)},expression:"form.send_to"}}),e._v(" "),r("ui-input-group",{attrs:{name:"reply_to",label:"Reply to...",help:"Replies to the confirmation email will be sent to this e-mail. By default this will reference the default email in system settings.",autocomplete:"off","has-error":e.form.errors.has("reply_to"),"error-message":e.form.errors.get("reply_to")},model:{value:e.form.reply_to,callback:function(t){e.$set(e.form,"reply_to",t)},expression:"form.reply_to"}})],1),e._v(" "),r("section-card",{attrs:{title:"Confirmations",description:"Configure confirmation settings when submissions are made."}},[r("ui-radio-group",{attrs:{inline:"",label:"After submitting the form...","has-error":e.form.errors.has("redirect_on_submission"),"error-message":e.form.errors.get("redirect_on_submission")}},[r("ui-radio",{attrs:{id:"redirect_on_submission_false",name:"redirect_on_submission","native-value":!1},model:{value:e.form.redirect_on_submission,callback:function(t){e.$set(e.form,"redirect_on_submission",t)},expression:"form.redirect_on_submission"}},[e._v("Redirect to default confirmation page...")]),e._v(" "),r("ui-radio",{attrs:{id:"redirect_on_submission_true",name:"redirect_on_submission","native-value":!0},model:{value:e.form.redirect_on_submission,callback:function(t){e.$set(e.form,"redirect_on_submission",t)},expression:"form.redirect_on_submission"}},[e._v("Redirect to custom page...")])],1),e._v(" "),!1===e.form.redirect_on_submission?r("ui-input-group",{attrs:{name:"confirmation_message",label:"Message",help:"This message will be displayed on the confirmation page.",autocomplete:"off","has-error":e.form.errors.has("confirmation_message"),"error-message":e.form.errors.get("confirmation_message"),placeholder:"Thank you! We'll be in touch soon."},model:{value:e.form.confirmation_message,callback:function(t){e.$set(e.form,"confirmation_message",t)},expression:"form.confirmation_message"}}):e._e(),e._v(" "),!0===e.form.redirect_on_submission?r("ui-input-group",{attrs:{name:"redirect_url",label:"URL",help:"The URL to redirect users to after submitting the form.",autocomplete:"off","has-error":e.form.errors.has("redirect_url"),"error-message":e.form.errors.get("redirect_url")},model:{value:e.form.redirect_url,callback:function(t){e.$set(e.form,"redirect_url",t)},expression:"form.redirect_url"}}):e._e()],1),e._v(" "),r("section-card",{attrs:{title:"Templates",description:"Configure this forms template settings."}},[r("ui-input-group",{attrs:{name:"form_template",label:"Form Template",help:"What template is responsible for rendering this form?",autocomplete:"off",monospaced:"","has-error":e.form.errors.has("form_template"),"error-message":e.form.errors.get("form_template")},model:{value:e.form.form_template,callback:function(t){e.$set(e.form,"form_template",t)},expression:"form.form_template"}}),e._v(" "),r("ui-input-group",{attrs:{name:"thankyou_template",label:"Thank You Template",help:"What template is reponsible for thanking respondents?",autocomplete:"off",monospaced:"","has-error":e.form.errors.has("thankyou_template"),"error-message":e.form.errors.get("thankyou_template")},model:{value:e.form.thankyou_template,callback:function(t){e.$set(e.form,"thankyou_template",t)},expression:"form.thankyou_template"}})],1),e._v(" "),r("section-card",{attrs:{id:"form_panel_blueprint",grid:!1,title:"Blueprint",description:"Create the content blueprint for this form by adding panel sections and fields to either the page body or page sidebar.",tabindex:"-1"}},[r("blueprint",[r("blueprint-area",{attrs:{placements:e.placements,area:"body",title:"Body"},model:{value:e.form.sections,callback:function(t){e.$set(e.form,"sections",t)},expression:"form.sections"}}),e._v(" "),r("blueprint-area",{staticClass:"blueprint__col--sidebar",attrs:{placements:e.placements,area:"sidebar",title:"Sidebar"},model:{value:e.form.sections,callback:function(t){e.$set(e.form,"sections",t)},expression:"form.sections"}})],1)],1)],1)}),[],!1,null,null,null);t.a=a.exports},ltnn:function(e,t,r){"use strict";r.r(t),r.d(t,"getForm",(function(){return s}));var o=r("nUVr");function s(e,t){axios.get("/api/forms/"+e).then((function(e){t(null,e.data.data)})).catch((function(e){t(new Error("The requested form could not be found"))}))}var a={auth:function(){return{permission:"forms.update"}},head:{title:function(){return{inner:_.has(this.form,"name")?this.form.name:"Loading..."}}},data:function(){return{id:null,resource:null,form:null}},components:{"shared-form":r("9wAk").a},methods:{submit:function(){var e=this;this.form.patch("/api/forms/".concat(this.id)).then((function(){axios.post("/api/blueprints/".concat(e.resource.blueprint.id,"/sections"),{sections:e.form.sections}).then((function(){toast("Form successfully saved","success")}))})).catch((function(e){toast(e.response.data.message,"failed")}))}},beforeRouteEnter:function(e,t,r){s(e.params.form,(function(e,t){r(e?function(t){t.$router.push("/forms"),toast(e.toString(),"danger")}:function(e){e.id=t.id,e.resource=t,e.form=new o.a({name:t.name,handle:t.handle,description:t.description,sections:t.blueprint.sections,collect_email_addresses:t.collect_email_addresses,collect_ip_addresses:t.collect_ip_addresses,response_receipt:t.response_receipt,confirmation_message:t.confirmation_message,redirect_on_submission:t.redirect_on_submission,redirect_url:t.redirect_url,enable_recaptcha:t.enable_recaptcha,enable_honeypot:t.enable_honeypot,send_to:t.send_to,reply_to:t.reply_to,form_template:t.form_template,thankyou_template:t.thankyou_template,status:t.status},!0),e.$nextTick((function(){e.$emit("updateHead")}))})}))}},i=r("KHd+"),n=Object(i.a)(a,(function(){var e=this.$createElement,t=this._self._c||e;return t("div",[t("portal",{attrs:{to:"title"}},[t("page-title",{attrs:{icon:"paper-plane"}},[this._v("Edit Form")])],1),this._v(" "),this.form?t("shared-form",{attrs:{form:this.form,resource:this.resource}}):this._e()],1)}),[],!1,null,null,null);t.default=n.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[81],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'divider-fieldtype',
+  props: {
+    field: {
+      type: Object,
+      required: true
+    },
+    value: {
+      required: false,
+      "default": ''
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=template&id=35b7855f&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=template&id=35b7855f& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [_c("hr")])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Fieldtypes/Divider/Field.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/Fieldtypes/Divider/Field.vue ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Field_vue_vue_type_template_id_35b7855f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Field.vue?vue&type=template&id=35b7855f& */ "./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=template&id=35b7855f&");
+/* harmony import */ var _Field_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Field.vue?vue&type=script&lang=js& */ "./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Field_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Field_vue_vue_type_template_id_35b7855f___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Field_vue_vue_type_template_id_35b7855f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Fieldtypes/Divider/Field.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Field_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Field.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Field_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=template&id=35b7855f&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=template&id=35b7855f& ***!
+  \*********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Field_vue_vue_type_template_id_35b7855f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Field.vue?vue&type=template&id=35b7855f& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fieldtypes/Divider/Field.vue?vue&type=template&id=35b7855f&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Field_vue_vue_type_template_id_35b7855f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Field_vue_vue_type_template_id_35b7855f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vcmVzb3VyY2VzL2pzL2NvbXBvbmVudHMvRmllbGR0eXBlcy9EaXZpZGVyL0ZpZWxkLnZ1ZSIsIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvY29tcG9uZW50cy9GaWVsZHR5cGVzL0RpdmlkZXIvRmllbGQudnVlP2IyOTYiLCJ3ZWJwYWNrOi8vLy4vcmVzb3VyY2VzL2pzL2NvbXBvbmVudHMvRmllbGR0eXBlcy9EaXZpZGVyL0ZpZWxkLnZ1ZSIsIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvY29tcG9uZW50cy9GaWVsZHR5cGVzL0RpdmlkZXIvRmllbGQudnVlPzkwYzQiLCJ3ZWJwYWNrOi8vLy4vcmVzb3VyY2VzL2pzL2NvbXBvbmVudHMvRmllbGR0eXBlcy9EaXZpZGVyL0ZpZWxkLnZ1ZT82NjI3Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBT0E7QUFDQSwyQkFEQTtBQUdBO0FBQ0E7QUFDQSxrQkFEQTtBQUVBO0FBRkEsS0FEQTtBQU1BO0FBQ0EscUJBREE7QUFFQTtBQUZBO0FBTkE7QUFIQSxHOzs7Ozs7Ozs7Ozs7QUNQQTtBQUFBO0FBQUE7QUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7Ozs7Ozs7Ozs7O0FDZEE7QUFBQTtBQUFBO0FBQUE7QUFBb0Y7QUFDM0I7QUFDTDs7O0FBR3BEO0FBQ21HO0FBQ25HLGdCQUFnQiwyR0FBVTtBQUMxQixFQUFFLDJFQUFNO0FBQ1IsRUFBRSxnRkFBTTtBQUNSLEVBQUUseUZBQWU7QUFDakI7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7O0FBRUE7QUFDQSxJQUFJLEtBQVUsRUFBRSxZQWlCZjtBQUNEO0FBQ2UsZ0Y7Ozs7Ozs7Ozs7OztBQ3RDZjtBQUFBO0FBQUEsd0NBQWlNLENBQWdCLGlQQUFHLEVBQUMsQzs7Ozs7Ozs7Ozs7O0FDQXJOO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSIsImZpbGUiOiJqcy9jaHVua3MvODEuanM/aWQ9YjZkMDJiMTM3NmIwYWRjMmFiODUiLCJzb3VyY2VzQ29udGVudCI6WyI8dGVtcGxhdGU+XG4gICAgPGRpdj5cbiAgICAgICAgPGhyPlxuICAgIDwvZGl2PlxuPC90ZW1wbGF0ZT5cblxuPHNjcmlwdD5cbiAgICBleHBvcnQgZGVmYXVsdCB7XG4gICAgICAgIG5hbWU6ICdkaXZpZGVyLWZpZWxkdHlwZScsXG5cbiAgICAgICAgcHJvcHM6IHtcbiAgICAgICAgICAgIGZpZWxkOiB7XG4gICAgICAgICAgICAgICAgdHlwZTogT2JqZWN0LFxuICAgICAgICAgICAgICAgIHJlcXVpcmVkOiB0cnVlLFxuICAgICAgICAgICAgfSxcblxuICAgICAgICAgICAgdmFsdWU6IHtcbiAgICAgICAgICAgICAgICByZXF1aXJlZDogZmFsc2UsXG4gICAgICAgICAgICAgICAgZGVmYXVsdDogJycsXG4gICAgICAgICAgICB9LFxuICAgICAgICB9LFxuICAgIH1cbjwvc2NyaXB0PlxuXG4iLCJ2YXIgcmVuZGVyID0gZnVuY3Rpb24oKSB7XG4gIHZhciBfdm0gPSB0aGlzXG4gIHZhciBfaCA9IF92bS4kY3JlYXRlRWxlbWVudFxuICB2YXIgX2MgPSBfdm0uX3NlbGYuX2MgfHwgX2hcbiAgcmV0dXJuIF92bS5fbSgwKVxufVxudmFyIHN0YXRpY1JlbmRlckZucyA9IFtcbiAgZnVuY3Rpb24oKSB7XG4gICAgdmFyIF92bSA9IHRoaXNcbiAgICB2YXIgX2ggPSBfdm0uJGNyZWF0ZUVsZW1lbnRcbiAgICB2YXIgX2MgPSBfdm0uX3NlbGYuX2MgfHwgX2hcbiAgICByZXR1cm4gX2MoXCJkaXZcIiwgW19jKFwiaHJcIildKVxuICB9XG5dXG5yZW5kZXIuX3dpdGhTdHJpcHBlZCA9IHRydWVcblxuZXhwb3J0IHsgcmVuZGVyLCBzdGF0aWNSZW5kZXJGbnMgfSIsImltcG9ydCB7IHJlbmRlciwgc3RhdGljUmVuZGVyRm5zIH0gZnJvbSBcIi4vRmllbGQudnVlP3Z1ZSZ0eXBlPXRlbXBsYXRlJmlkPTM1Yjc4NTVmJlwiXG5pbXBvcnQgc2NyaXB0IGZyb20gXCIuL0ZpZWxkLnZ1ZT92dWUmdHlwZT1zY3JpcHQmbGFuZz1qcyZcIlxuZXhwb3J0ICogZnJvbSBcIi4vRmllbGQudnVlP3Z1ZSZ0eXBlPXNjcmlwdCZsYW5nPWpzJlwiXG5cblxuLyogbm9ybWFsaXplIGNvbXBvbmVudCAqL1xuaW1wb3J0IG5vcm1hbGl6ZXIgZnJvbSBcIiEuLi8uLi8uLi8uLi8uLi9ub2RlX21vZHVsZXMvdnVlLWxvYWRlci9saWIvcnVudGltZS9jb21wb25lbnROb3JtYWxpemVyLmpzXCJcbnZhciBjb21wb25lbnQgPSBub3JtYWxpemVyKFxuICBzY3JpcHQsXG4gIHJlbmRlcixcbiAgc3RhdGljUmVuZGVyRm5zLFxuICBmYWxzZSxcbiAgbnVsbCxcbiAgbnVsbCxcbiAgbnVsbFxuICBcbilcblxuLyogaG90IHJlbG9hZCAqL1xuaWYgKG1vZHVsZS5ob3QpIHtcbiAgdmFyIGFwaSA9IHJlcXVpcmUoXCIvVXNlcnMva2FpL0NvZGUvRnVzaW9uQ01TL2Ntcy9ub2RlX21vZHVsZXMvdnVlLWhvdC1yZWxvYWQtYXBpL2Rpc3QvaW5kZXguanNcIilcbiAgYXBpLmluc3RhbGwocmVxdWlyZSgndnVlJykpXG4gIGlmIChhcGkuY29tcGF0aWJsZSkge1xuICAgIG1vZHVsZS5ob3QuYWNjZXB0KClcbiAgICBpZiAoIWFwaS5pc1JlY29yZGVkKCczNWI3ODU1ZicpKSB7XG4gICAgICBhcGkuY3JlYXRlUmVjb3JkKCczNWI3ODU1ZicsIGNvbXBvbmVudC5vcHRpb25zKVxuICAgIH0gZWxzZSB7XG4gICAgICBhcGkucmVsb2FkKCczNWI3ODU1ZicsIGNvbXBvbmVudC5vcHRpb25zKVxuICAgIH1cbiAgICBtb2R1bGUuaG90LmFjY2VwdChcIi4vRmllbGQudnVlP3Z1ZSZ0eXBlPXRlbXBsYXRlJmlkPTM1Yjc4NTVmJlwiLCBmdW5jdGlvbiAoKSB7XG4gICAgICBhcGkucmVyZW5kZXIoJzM1Yjc4NTVmJywge1xuICAgICAgICByZW5kZXI6IHJlbmRlcixcbiAgICAgICAgc3RhdGljUmVuZGVyRm5zOiBzdGF0aWNSZW5kZXJGbnNcbiAgICAgIH0pXG4gICAgfSlcbiAgfVxufVxuY29tcG9uZW50Lm9wdGlvbnMuX19maWxlID0gXCJyZXNvdXJjZXMvanMvY29tcG9uZW50cy9GaWVsZHR5cGVzL0RpdmlkZXIvRmllbGQudnVlXCJcbmV4cG9ydCBkZWZhdWx0IGNvbXBvbmVudC5leHBvcnRzIiwiaW1wb3J0IG1vZCBmcm9tIFwiLSEuLi8uLi8uLi8uLi8uLi9ub2RlX21vZHVsZXMvYmFiZWwtbG9hZGVyL2xpYi9pbmRleC5qcz8/cmVmLS00LTAhLi4vLi4vLi4vLi4vLi4vbm9kZV9tb2R1bGVzL3Z1ZS1sb2FkZXIvbGliL2luZGV4LmpzPz92dWUtbG9hZGVyLW9wdGlvbnMhLi9GaWVsZC52dWU/dnVlJnR5cGU9c2NyaXB0Jmxhbmc9anMmXCI7IGV4cG9ydCBkZWZhdWx0IG1vZDsgZXhwb3J0ICogZnJvbSBcIi0hLi4vLi4vLi4vLi4vLi4vbm9kZV9tb2R1bGVzL2JhYmVsLWxvYWRlci9saWIvaW5kZXguanM/P3JlZi0tNC0wIS4uLy4uLy4uLy4uLy4uL25vZGVfbW9kdWxlcy92dWUtbG9hZGVyL2xpYi9pbmRleC5qcz8/dnVlLWxvYWRlci1vcHRpb25zIS4vRmllbGQudnVlP3Z1ZSZ0eXBlPXNjcmlwdCZsYW5nPWpzJlwiIiwiZXhwb3J0ICogZnJvbSBcIi0hLi4vLi4vLi4vLi4vLi4vbm9kZV9tb2R1bGVzL3Z1ZS1sb2FkZXIvbGliL2xvYWRlcnMvdGVtcGxhdGVMb2FkZXIuanM/P3Z1ZS1sb2FkZXItb3B0aW9ucyEuLi8uLi8uLi8uLi8uLi9ub2RlX21vZHVsZXMvdnVlLWxvYWRlci9saWIvaW5kZXguanM/P3Z1ZS1sb2FkZXItb3B0aW9ucyEuL0ZpZWxkLnZ1ZT92dWUmdHlwZT10ZW1wbGF0ZSZpZD0zNWI3ODU1ZiZcIiJdLCJzb3VyY2VSb290IjoiIn0=
