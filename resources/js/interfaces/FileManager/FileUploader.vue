@@ -11,11 +11,11 @@
                 </div>
             </div>
 
-            <vue-dropzone ref="dropzone_element" id="dropzone" 
+            <vue-dropzone ref="dropzone_element" id="dropzone"
                 :options="dropzoneOptions"
                 @vdropzone-mounted="configureDZ"
                 @vdropzone-drag-leave="setDropzoneVisible(false)"
-                @vdropzone-success="dzUploaded" 
+                @vdropzone-success="dzUploaded"
                 @vdropzone-queue-complete="dzComplete"
                 @vdropzone-file-added="addFileUpload"
                 @vdropzone-files-added="startUpload"
@@ -49,7 +49,6 @@
                 dropzoneOptions: {
                     url: '/api/files',
                     headers: {},
-                    accept: this.fileCheck
                 }
             }
         },
@@ -59,7 +58,6 @@
                 currentDirectory: 'filemanager/getCurrentDirectory',
                 dropzoneVisible: 'filemanager/getDropzoneVisible',
                 fileUploads: 'filemanager/getFileUploads',
-                getSetting: 'settings/getSetting'
             }),
 
             csrf() {
@@ -85,22 +83,6 @@
                 addFile: 'filemanager/addFile',
             }),
 
-            fileCheck(file, done) {
-                const fileSize = file.size
-                const fileType = file.name.split('.').pop()
-                
-                // validation
-                let maxSize = this.getSetting('files.file_size_upload_limit')
-
-                // convert to bytes
-                maxSize = _.toNumber(maxSize) * Math.pow(1024, 2)
-
-                if (fileSize > maxSize)
-                    done('File size exceeds max file size.')
-                else
-                    done()
-            },
-
             openDZ() {
                 document.querySelector('.dz-hidden-input').click()
             },
@@ -109,15 +91,15 @@
                 let dz = this.$refs.dropzone_element
                 dz.options.headers['X-CSRF-TOKEN'] = this.csrf
             },
-            
+
             dzPreSend(file, xhr, formData) {
                 formData.append('directory_id', this.currentDirectory)
             },
-            
+
             dzUploaded(response) {
                 toast(response.name + ' uploaded', 'success')
             },
-            
+
             dzComplete() {
                 this.fetchFilesAndDirectories()
                 this.setUploadProgress(100)
@@ -133,14 +115,14 @@
                 this.setUploadsVisible(true)
                 this.setUploadsMinimized(false)
             },
-            
+
             updateProgress() {
                 let uploaded = _.filter(this.fileUploads, function(file){
                 return file.status == 'success' || file.status == 'error'
                 }).length
                 this.setUploadProgress((uploaded / this.fileUploads.length) * 100)
             },
-            
+
             showError(file, error, xhr) {
                 if(!xhr) {
                     file.error = error

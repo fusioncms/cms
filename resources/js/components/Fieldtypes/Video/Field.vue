@@ -31,11 +31,19 @@
             </div>
         </ui-field-group>
 
-        <video
-            v-if="model"
-            controls
-            :src="model">
-        </video>
+        <div v-if="isEmbeddedVideo">
+            <ui-plyr :options="options">
+                <video controls crossorigin>
+                    <source :src="model" size="576">
+                </video>
+            </ui-plyr>
+        </div>
+
+        <div v-if="isYoutubeVideo">
+            <ui-plyr :options="options">
+                <div data-plyr-provider="youtube" :data-plyr-embed-id="youtube"></div>
+            </ui-plyr>
+        </div>
 
         <ui-modal name="selection-modal" title="Choose an existing video file">
             <ui-table :endpoint="endpoint" id="video-files" sort-by="name" sort-in="desc" :per-page="10">
@@ -68,6 +76,7 @@
 <script>
     import FieldMixin from '@/mixins/fieldtypes/field'
     import FileHelper from '@/mixins/filehelper'
+    import Plyr from 'plyr'
 
 	export default {
 		name: 'video-fieldtype',
@@ -76,7 +85,51 @@
 
         data() {
             return {
-                endpoint: '/datatable/files/video'
+                endpoint: '/datatable/files/video',
+                player: {},
+                options: {
+                    title: 'Preview',
+                    // ratio: '16:9',
+                    controls: [
+                        'play-large',   // The large play button in the center
+                        'restart',      // Restart playback
+                        'play',         // Play/pause playback
+                        'progress',     // The progress bar and scrubber for playback and buffering
+                        'current-time', // The current time of playback
+                        'duration',     // The full duration of the media
+                        'mute',         // Toggle mute
+                        'volume',       // Volume control
+                        'captions',     // Toggle captions
+                        'settings',     // Settings menu
+                        'pip',          // Picture-in-picture (currently Safari only)
+                        'airplay',      // Airplay (currently Safari only)
+                        'fullscreen',   // Toggle fullscreen
+                    ],
+                    settings: ['quality', 'loop'],
+                }
+            }
+        },
+
+        computed: {
+            isEmbeddedVideo() {
+                return Boolean(this.model) && ! this.youtube
+            },
+
+            isYoutubeVideo() {
+                return Boolean(this.model) && this.youtube
+            },
+
+            youtube() {
+                if (this.model) {
+                    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+                    let match = this.model.match(regExp)
+
+                    if (match && match[2].length == 11) {
+                        return match[2]
+                    }
+                }
+
+                return false
             }
         },
 
