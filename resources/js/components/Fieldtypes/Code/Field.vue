@@ -1,113 +1,75 @@
 <template>
-    <div>
-        <div class="form__group">
-          <label :for="field.handle" class="form__label">{{field.name}}</label>
-
-          <textarea :ref="textareaClass" :name="field.handle" :id="field.handle" :value="value" v-show="false"></textarea>
-
-          <div :ref="braceClass" :id="braceClass + '_id'" class="border rounded"></div>
-          <div class="form__control--meta" v-if="field.help">
-            <div class="form__help">
-                <span v-if="help" v-html="help"></span>
-            </div>
-          </div> 
-        </div>
-    </div>
+    <ui-field-group
+        :name="field.handle"
+        :fieldId="field.handle"
+        :label="field.name"
+        :help="field.help"
+        :has-error="hasError(field.handle)"
+        :error-message="errorMessage(field.handle)">
+        
+        <div :ref="braceRef" class="border rounded"></div>
+    </ui-field-group>
 </template>
 
 <script>
     import ace from 'brace'
+    import 'brace/theme/chrome'
+    import 'brace/mode/csharp'
+    import 'brace/mode/css'
+    import 'brace/mode/html'
+    import 'brace/mode/java'
+    import 'brace/mode/javascript'
+    import 'brace/mode/json'
+    import 'brace/mode/lua'
+    import 'brace/mode/markdown'
+    import 'brace/mode/php'
+    import 'brace/mode/python'
+    import 'brace/mode/ruby'
+    import 'brace/mode/scss'
+    import 'brace/mode/sh'
+    import 'brace/mode/text'
+    import 'brace/mode/xml'
+    import 'brace/mode/yaml'
+    import FieldMixin from '@/mixins/fieldtypes/field'
     
     export default {
         name: 'code-fieldtype',
 
-        props: {
-            field: {
-                type: Object,
-                required: true
-            },
-
-            value: {
-                required: false,
-                default: ''
-            },
-        },
+        mixins: [FieldMixin],
 
         data() {
-          return {
-            editor: Object
-          }
+            return {
+                editor: null,
+            }
         },
 
         computed: {
-          braceClass() {
-            return this.field.handle + '-brace'
-          },
+            braceRef() {
+                return `${this.field.handle}-brace`
+            },
 
-          textareaClass() {
-            return this.braceClass + '_textarea'
-          },
-
-          syntax() {
-            return this.field.settings.syntax || 'html'
-          }
+            syntax() {
+                return this.field.settings.syntax || 'text'
+            }
         },
 
         mounted() {
-          let vm = this
+            this.editor = ace.edit(this.$refs[this.braceRef])
+            this.editor.setOptions({
+                showPrintMargin: false,
+                minLines: 5,
+                maxLines: Infinity,
+                theme: 'ace/theme/chrome'
+            })
 
-          // require(`brace/mode/${this.syntax}`) TO-DO
-          vm.loadSyntax(vm.syntax)
+            this.editor.$blockScrolling = Infinity
+            this.editor.setValue(this.value || '', -1)
 
-          require(`brace/theme/chrome`)
-
-          vm.editor = ace.edit(vm.$refs[vm.braceClass])
-          vm.editor.setOptions({
-               showPrintMargin: false,
-               minLines: 5,
-               maxLines: Infinity
-          })
-          vm.editor.setTheme(`ace/theme/chrome`)
-          vm.editor.$blockScrolling = Infinity
-          vm.editor.setValue(vm.value || '', -1)
-          vm.editor.getSession().setUseWrapMode(true)
-          vm.editor.getSession().setMode(`ace/mode/${this.syntax}`)
-
-          vm.editor.getSession().on('change', function() {
-              vm.$refs[vm.textareaClass].value = vm.editor.getSession().getValue()
-              vm.$emit('input', vm.editor.getSession().getValue())
-          })
-        },
-
-        methods: {
-          loadSyntax(syntax) {
-            switch(syntax) {
-              case 'css': 
-                require('brace/mode/css')
-                break;
-              case 'html': 
-                require('brace/mode/html')
-                break;
-              case 'javascript': 
-                require('brace/mode/javascript')
-                break;
-              case 'json': 
-                require('brace/mode/json')
-                break;
-              case 'markdown': 
-                require('brace/mode/markdown')
-                break;
-              case 'python': 
-                require('brace/mode/python')
-                break;
-              case 'xml': 
-                require('brace/mode/xml')
-                break;
-              default: 
-                require('brace/mode/javascript')
-            }
-          }
-
+            this.editor.session.setUseWrapMode(true)
+            this.editor.session.setMode(`ace/mode/${this.syntax}`)
+            this.editor.session.on('change', (d) => {
+                this.$emit('input', this.editor.getValue())
+            })
         }
     }
 </script>

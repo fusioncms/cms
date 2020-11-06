@@ -3,15 +3,14 @@
         :name="field.handle"
         :fieldId="`${field.handle}-field`"
         :label="field.name"
-        :required="field.required"
         :help="field.help"
-        :hasError="hasError"
-        :errorMessage="errorMessage">
+        :hasError="hasError(field.handle)"
+        :errorMessage="errorMessage(field.handle)">
 
-        <table class="table" v-if="items.length">
-            <ui-sortable-list v-model="items" :class="`${field.handle}-sortable-list`">
+        <table class="table" v-if="model">
+            <ui-sortable-list v-model="model" :class="`${field.handle}-sortable-list`">
                 <tbody>
-                    <ui-sortable-item v-for="item in items" :key="item._id">
+                    <ui-sortable-item v-for="item in model" :key="item._id">
                         <tr>
                             <td class="w-2/12">
                                 <ui-sortable-handle class="cursor-move inline-block">
@@ -86,20 +85,8 @@
             }
         },
 
-        computed: {
-            items: {
-                get() {
-                    return this.value || []
-                },
-
-                set(value) {
-                    this.$emit('input', value)
-                }
-            },
-        },
-
         watch: {
-            items: {
+            model: {
                 deep: true,
                 handler(value) {
                     this.$emit('input', value)
@@ -114,7 +101,7 @@
 
             add() {
                 if (this.newKey && this.newValue) {
-                    this.items.push(
+                    this.model.push(
                         this.new(this.newKey, this.newValue))
 
                     // reset..
@@ -124,8 +111,14 @@
             },
 
             remove(id) {
-                this.items = _.filter(this.items, (item) => item._id !== id)
+                this.model = _.filter(this.model, (item) => item._id !== id)
             },
+        },
+
+        created() {
+            if (_.isEmpty(this.value)) {
+                this.model = []
+            }
         }
     }
 </script>

@@ -51,7 +51,7 @@ class PasswordFieldtype extends Fieldtype
      */
     public function rules(Field $field, $value = null)
     {
-        $validation = explode('|', $field->validation ?: 'sometimes');
+        $validation = explode('|', $field->validation->get('value') ?: 'sometimes');
 
         array_push($validation, new SecurePassword());
 

@@ -50,13 +50,14 @@
                 </div>
 
                 <ui-field-group
+                    v-if="form.validation !== false"
                     name="validation"
                     fieldId="field-validation"
                     label="Validation Rules">
                     
                     <div class="row">
                         <ui-input-group
-                            class="col md:w-1/2"
+                            class="col"
                             v-for="(rule, key) in form.validation"
                             :key="key"
                             :name="`validation.${key}`"

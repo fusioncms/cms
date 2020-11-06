@@ -110,16 +110,6 @@
         },
 
         computed: {
-            model: {
-                get() {
-                    return this.value || {}
-                },
-
-                set(value) {
-                    this.$emit('input', value)
-                }
-            },
-
             apiKey() {
                 return this.setting('maps_api_key')
             },

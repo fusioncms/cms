@@ -2,6 +2,8 @@
 
 namespace Fusion\Fieldtypes;
 
+use Fusion\Models\Field;
+
 class DictionaryFieldtype extends Fieldtype
 {
     /**
@@ -30,4 +32,9 @@ class DictionaryFieldtype extends Fieldtype
     public $column = [
         'type' => 'text',
     ];
+
+    /**
+     * @var array
+     */
+    public $validation = false;
 }

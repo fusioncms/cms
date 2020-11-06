@@ -80,18 +80,6 @@
             }
         },
 
-        computed: {
-			model: {
-				get() {
-					return this.value || ''
-				},
-
-				set(value) {
-					this.$emit('input', value)
-				}
-			},
-        },
-
 		methods: {
             clear() {
                 this.model = ''
