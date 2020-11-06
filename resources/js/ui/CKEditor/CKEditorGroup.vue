@@ -11,8 +11,7 @@
         :successMessage="successMessage"
         :help="help">
 
-        <ui-ckeditor :value="value" @input="handleInput"></ui-ckeditor>
-
+        <ui-ckeditor v-model="model" :placeholder="placeholder"></ui-ckeditor>
     </ui-field-group>
 </template>
 
@@ -79,6 +78,18 @@
                 type: Boolean,
                 default: false,
             }
-        }
+        },
+
+        computed: {
+            model: {
+                get() {
+                    return this.value
+                },
+
+                set(value) {
+                    this.$emit('input', value)
+                }
+            }
+        },
     }
 </script>
