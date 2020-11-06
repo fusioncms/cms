@@ -10,7 +10,9 @@
         :hasSuccess="hasSuccess"
         :successMessage="successMessage"
         :help="help">
-        <ui-ckeditor></ui-ckeditor>
+
+        <ui-ckeditor :value="value" @input="handleInput"></ui-ckeditor>
+
     </ui-field-group>
 </template>
 
