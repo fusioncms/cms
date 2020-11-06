@@ -141,3 +141,7 @@ Vue.component('user-fieldtype-settings', () => import('./components/Fieldtypes/U
 // Video
 Vue.component('video-fieldtype', () => import('./components/Fieldtypes/Video/Field'))
 Vue.component('video-fieldtype-settings', () => import('./components/Fieldtypes/Video/Settings'))
+
+// WYSIWYG
+Vue.component('wysiwyg-fieldtype', () => import('./components/Fieldtypes/WYSIWYG/Field'))
+Vue.component('wysiwyg-fieldtype-settings', () => import('./components/Fieldtypes/WYSIWYG/Settings'))
