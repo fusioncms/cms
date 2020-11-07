@@ -1,6 +1,7 @@
 import './apexcharts'
 import './auth'
 import './axios'
+import './ckeditor'
 import './eventbus'
 import './fontawesome'
 import './head'
