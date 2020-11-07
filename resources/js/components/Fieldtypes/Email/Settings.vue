@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col w-1/2">
+        <div class="col md:w-1/2">
             <ui-input-group
                 name="settings.placeholder"
                 label="Placeholder"

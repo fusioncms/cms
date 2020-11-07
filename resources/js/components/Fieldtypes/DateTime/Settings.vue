@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col w-1/2">
+        <div class="col md:w-1/2">
             <ui-input-group
                 name="settings.placeholder"
                 label="Placeholder"
@@ -12,7 +12,7 @@
             </ui-input-group>
         </div>
 
-        <div class="col w-1/2">
+        <div class="col md:w-1/2">
             <ui-select-group
                 name="settings.time"
                 label="Enable Time?"
@@ -34,7 +34,7 @@
             </ui-select-group>
         </div>
 
-        <div class="col w-1/2">
+        <div class="col md:w-1/2">
             <ui-input-group
                 name="settings.format"
                 label="Display Format"

@@ -1,15 +1,17 @@
 <template>
-    <div>
-        <ui-select-group
-            name="settings.syntax"
-            label="Syntax"
-            help="What language should the syntax highlighter use?"
-            autocomplete="off"
-            v-model="settings.syntax"
-            :options="options"
-            :has-error="errors.has('settings.syntax')"
-            :error-message="errors.get('settings.syntax')">
-        </ui-select-group>
+    <div class="row">
+        <div class="col md:w-1/2">
+            <ui-select-group
+                name="settings.syntax"
+                label="Syntax"
+                help="What language should the syntax highlighter use?"
+                autocomplete="off"
+                v-model="settings.syntax"
+                :options="options"
+                :has-error="errors.has('settings.syntax')"
+                :error-message="errors.get('settings.syntax')">
+            </ui-select-group>
+        </div>
     </div>
 </template>
 

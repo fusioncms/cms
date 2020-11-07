@@ -41,16 +41,7 @@ class AssetFieldtype extends Fieldtype
     /**
      * @var array
      */
-    public $rules = [
-
-    ];
-
-    /**
-     * @var array
-     */
-    public $attributes = [
-
-    ];
+    public $validation = false;
 
     /**
      * @var string

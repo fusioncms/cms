@@ -229,8 +229,8 @@
 
 			open() {
 				this.reset()
-				this.setCurrentDirectory(this.field.settings.root_directory)
-        		this.setRootDirectory(this.field.settings.root_directory)
+				this.setCurrentDirectory(this.field.settings.root_directory || 0)
+        		this.setRootDirectory(this.field.settings.root_directory || 0)
 				this.fetchFilesAndDirectories()
 
 				this.selection = [...this.selected]

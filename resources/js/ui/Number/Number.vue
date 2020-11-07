@@ -1,23 +1,23 @@
 <template>
     <div class="field-number input-group">
         <input
-        class="field-number__input field"
-        :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
-        :id="formattedId"
-        :name="name"
-        type="number"
-        :placeholder="placeholder"
-        :readonly="readonly"
-        :disabled="disabled"
-        :autocomplete="autocomplete"
-        :autofocus="autofocus"
-        :required="required"
-        :step="step"
-        :min="min"
-        :max="max"
-        :aria-required="required"
-        :aria-describedby="message ? formattedId + '_message' : null"
-        v-model="model">
+            class="field-number__input field"
+            :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
+            :id="formattedId"
+            :name="name"
+            type="number"
+            :placeholder="placeholder"
+            :readonly="readonly"
+            :disabled="disabled"
+            :autocomplete="autocomplete"
+            :autofocus="autofocus"
+            :required="required"
+            :step="step"
+            :min="min"
+            :max="max"
+            :aria-required="required"
+            :aria-describedby="message ? formattedId + '_message' : null"
+            v-model="model">
 
         <button v-if="!hideButtons" class="field-number__button field-number__button--decrease button button--icon" @click.prevent="decrease" :disabled="disabled || decreaseDisabled">
             <slot name="decrease">
@@ -51,7 +51,7 @@
             id: String,
             placeholder: String,
             value: {
-                type: Number,
+                type: [String, Number],
                 default: 0
             },
             required: {
@@ -120,12 +120,12 @@
         computed: {
             model: {
                 get() {
-                    return this.value || 0
+                    return Number(this.value)
                 },
 
                 set(value) {
                     this.$emit('input',
-                        this.formatNumber(Number(value), this.decimals))
+                        this.formatNumber(value, this.decimals))
                 }
             },
 
