@@ -42,6 +42,8 @@
         "vuex": "^3.0.1"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-build-balloon-block": "^23.1.0",
+        "@ckeditor/ckeditor5-vue": "^1.0.3",
         "@popperjs/core": "^2.0.6",
         "@simonwep/pickr": "^1.2.3",
         "@tailwindcss/ui": "^0.1.2",

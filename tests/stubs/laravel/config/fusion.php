@@ -47,13 +47,13 @@ return [
         \Fusion\Fieldtypes\MarkdownFieldtype::class,
         \Fusion\Fieldtypes\NumberFieldtype::class,
         \Fusion\Fieldtypes\RadioFieldtype::class,
-        \Fusion\Fieldtypes\RedactorFieldtype::class,
         \Fusion\Fieldtypes\SelectFieldtype::class,
         \Fusion\Fieldtypes\TaxonomyFieldtype::class,
         \Fusion\Fieldtypes\TextareaFieldtype::class,
         \Fusion\Fieldtypes\ToggleFieldtype::class,
         \Fusion\Fieldtypes\USStateFieldtype::class,
         \Fusion\Fieldtypes\UserFieldtype::class,
+        \Fusion\Fieldtypes\WYSIWYGFieldtype::class,
 
     ],
 
