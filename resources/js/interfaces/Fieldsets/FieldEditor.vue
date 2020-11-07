@@ -36,17 +36,13 @@
             <template v-if="form.type.id == 'replicator'">
                 <hr>
 
-                <component
-                    :is="'replicator-fieldtype-settings'"
-                    v-model="form">
-                </component>
+                <replicator-fieldtype-settings v-model="form"></replicator-fieldtype-settings>
             </template>
 
             <template v-else>
                 <div class="row mb-6">
                     <div class="col w-full">
-                        <span>Help Instructions WYSIWYG editor here...</span>
-                        <!-- <redactor name="field-help" label="Help Instructions" v-model="form.help"></redactor> -->
+                        <ui-textarea-group name="field-help" label="Help Instructions" v-model="form.help"></ui-textarea-group>
                     </div>
                 </div>
 
