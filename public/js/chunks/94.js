@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[94],{"UzV/":function(e,n,t){"use strict";t.r(n);var s={name:"form-fieldtype-settings"},i=t("KHd+"),l=Object(i.a)(s,(function(){var e=this.$createElement;return(this._self._c||e)("div")}),[],!1,null,null,null);n.default=l.exports}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[94],{x9tg:function(t,e,n){"use strict";n.r(e);var s={name:"list-fieldtype-settings"},i=n("KHd+"),l=Object(i.a)(s,(function(){var t=this.$createElement;return(this._self._c||t)("div")}),[],!1,null,null,null);e.default=l.exports}}]);

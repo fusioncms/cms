@@ -37,4 +37,9 @@ class HiddenFieldtype extends Fieldtype
     public $column = [
         'type' => 'string',
     ];
+
+    /**
+     * @var array
+     */
+    public $validation = false;
 }

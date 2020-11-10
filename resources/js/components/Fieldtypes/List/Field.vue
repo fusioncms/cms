@@ -1,4 +1,62 @@
 <template>
+    <ui-field-group
+        :name="field.handle"
+        :fieldId="`${field.handle}-field`"
+        :label="field.name"
+        :help="field.help"
+        :hasError="hasError(field.handle)"
+        :errorMessage="errorMessage(field.handle)">
+
+        <table class="table" v-if="model && model.length > 0">
+            <ui-sortable-list v-model="model" :class="`${field.handle}-sortable-list`">
+                <tbody>
+                    <ui-sortable-item v-for="item in model" :key="item._id">
+                        <tr>
+                            <td class="w-8">
+                                <ui-sortable-handle class="cursor-move inline-block">
+                                    <fa-icon icon="grip-vertical" class="handle fa-fw text-gray-400 mr-3"></fa-icon>
+                                </ui-sortable-handle>
+                            </td>
+                            <td>
+                                <ui-input-group name="value" v-model="item.value"></ui-input-group>
+                            </td>
+                            <td class="w-16">
+                                <ui-button icon @click.prevent="remove(item._id)">
+                                    <fa-icon icon="times"></fa-icon>
+                                    <span class="sr-only">Destroy</span>
+                                </ui-button>
+                            </td>
+                        </tr>
+                    </ui-sortable-item>
+                </tbody>
+            </ui-sortable-list>
+        </table>
+
+        <div v-else class="help">Your list is empty.</div>
+
+        <table class="table mt-3">
+            <tbody>
+                <tr>
+                    <td class="w-8"></td>
+                    <td>
+                        <ui-input-group
+                            name="value"
+                            placeholder="Add new item..."
+                            @keyup.native.enter="add"
+                            v-model="newItem">
+                        </ui-input-group>
+                    </td>
+                    <td class="w-16">
+                        <ui-button icon @click.prevent="add">
+                            <fa-icon icon="plus"></fa-icon>
+                            <span class="sr-only">Add</span>
+                        </ui-button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ui-field-group>
+<!--
     <div>
         <div class="field">
             <label
@@ -58,82 +116,91 @@
             </div>
         </div>
 
-        <!-- <input type="text"  placeholder="Add an item..." class="field__input -mt-3"> -->
-    </div>
+        <input type="text"  placeholder="Add an item..." class="field__input -mt-3">
+    </div>-->
 </template>
 
 <script>
     import uniqid from 'uniqid'
-    import fieldtype from '@/mixins/fieldtype'
-    import {XIcon, MenuIcon, ListIcon, PlusIcon} from 'vue-feather-icons'
+    import FieldMixin from '@/mixins/fieldtypes/field'
 
     export default {
         name: 'list-fieldtype',
 
-        components: {
-            'x-icon': XIcon,
-            'menu-icon': MenuIcon,
-            'list-icon': ListIcon,
-            'plus-icon': PlusIcon,
-        },
+        mixins: [FieldMixin],
 
         data() {
             return {
-                newItem: '',
-                items: [],
+                newItem: ''
             }
         },
 
-        props: {
-            field: {
-                type: Object,
-                required: true,
-            },
-
-            value: {
-                required: false,
-                type: Array,
-                default: () => []
-            },
-        },
-
-        computed: {
-            normalizedItems() {
-                return _.map(this.items, 'value')
-            },
+        watch: {
+            model: {
+                deep: true,
+                handler(value) {
+                    this.$emit('input', value)
+                }
+            }
         },
 
         methods: {
+            new(value) {
+                return { _id: uniqid(), value }
+            },
+
             add() {
                 if (this.newItem) {
-                    this.items.push(this.new(this.newItem))
-                }
+                    this.model.push(this.new(this.newItem))
 
-                this.$emit('input', this.normalizedItems)
-                this.newItem = ''
+                    // reset..
+                    this.newItem = ''
+                }
             },
 
-            destroy(index) {
-                this.items.splice(index, 1)
-                this.$emit('input', this.normalizedItems)
+            remove(id) {
+                this.model = _.filter(this.model, (item) => item._id !== id)
             },
-
-            new(item) {
-                return {
-                    _id: uniqid(),
-                    value: item
-                }
-            }
         },
 
-        mounted() {
-            if(!this.value) {
-                this.$emit('input', [])
+        created() {
+            if (_.isEmpty(this.value)) {
+                this.model = []
             }
-
-            _.each(this.value, (item) => {
-                this.items.push(this.new(item))
-            })
         }
+
+
+        // methods: {
+        //     add() {
+        //         if (this.newItem) {
+        //             this.items.push(this.new(this.newItem))
+        //         }
+
+        //         this.$emit('input', this.normalizedItems)
+        //         this.newItem = ''
+        //     },
+
+        //     destroy(index) {
+        //         this.items.splice(index, 1)
+        //         this.$emit('input', this.normalizedItems)
+        //     },
+
+        //     new(item) {
+        //         return {
+        //             _id: uniqid(),
+        //             value: item
+        //         }
+        //     }
+        // },
+
+        // mounted() {
+        //     if(!this.value) {
+        //         this.$emit('input', [])
+        //     }
+
+        //     _.each(this.value, (item) => {
+        //         this.items.push(this.new(item))
+        //     })
+        // }
     }
 </script>
