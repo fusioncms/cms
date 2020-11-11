@@ -54,12 +54,12 @@
                     
                     <div class="row">
                         <ui-input-group
-                            class="col"
+                            class="col w-full sm:w-1/2"
                             v-for="(rule, key) in form.validation"
                             :key="key"
                             :name="`validation.${key}`"
-                            :placeholder="key"
-                            hide-label
+                            :hide-label="Object.values(form.validation).length == 1"
+                            :label="key"
                             monospaced
                             v-model="form.validation[key]">
                         </ui-input-group>
