@@ -8,9 +8,9 @@
             :hasError="hasError(field.handle)"
             :errorMessage="errorMessage(field.handle)">
 
-            <ui-button icon v-modal:selection-modal>
-                <fa-icon :icon="['fas', 'plus-circle']"></fa-icon>
-                <span class="sr-only">Browse users...</span>
+            <ui-button v-modal:selection-modal>
+                <fa-icon :icon="['fas', 'tasks']" class="mr-1"></fa-icon>
+                <span>Manage User Selection</span>
             </ui-button>
 
             <table class="table" v-if="model && model.length > 0">
