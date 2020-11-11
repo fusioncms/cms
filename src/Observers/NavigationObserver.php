@@ -2,8 +2,8 @@
 
 namespace Fusion\Observers;
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Fusion\Database\Schema\Blueprint;
 use Fusion\Models\Navigation;
 
 class NavigationObserver
