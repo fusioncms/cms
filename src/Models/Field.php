@@ -29,9 +29,10 @@ class Field extends Model
      * @var array
      */
     protected $casts = [
-        'required' => 'boolean',
-        'settings' => 'collection',
-        'status'   => 'boolean',
+        'required'   => 'boolean',
+        'settings'   => 'collection',
+        'validation' => 'collection',
+        'status'     => 'boolean',
     ];
 
     /**

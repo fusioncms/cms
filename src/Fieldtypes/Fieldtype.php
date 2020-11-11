@@ -70,6 +70,13 @@ abstract class Fieldtype
     public $field;
 
     /**
+     * @var array
+     */
+    public $validation = [
+        'value' => '',
+    ];
+
+    /**
      * Get the fieldtype name property.
      *
      * @return string
@@ -223,7 +230,7 @@ abstract class Fieldtype
     public function rules(Field $field, $value = null)
     {
         return [
-            $field->handle => $field->validation ?: 'sometimes',
+            $field->handle => $field->validation->get('value') ?: 'sometimes',
         ];
     }
 

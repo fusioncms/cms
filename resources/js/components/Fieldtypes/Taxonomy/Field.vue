@@ -7,7 +7,7 @@
                 :name="field.handle"
                 :id="term.id"
                 :native-value="term.id"
-                v-model="values">
+                v-model="model">
                 <template>
                     {{ term.name }}
                 </template>
@@ -35,9 +35,12 @@
 <script>
     import pluralize from 'pluralize'
     import Form from '@/services/Form'
+    import FieldMixin from '@/mixins/fieldtypes/field'
 
     export default {
         name: 'taxonomy-fieldtype',
+
+        mixins: [FieldMixin],
 
         data() {
             return {
@@ -57,31 +60,7 @@
 
             singular() {
                 return pluralize.singular(this.term)
-            },
-
-            values: {
-                get() {
-                    return this.value || []
-                },
-
-                set(value) {
-                    this.$emit('input', value)
-                }
             }
-        },
-
-        props: {
-            field: {
-                type: Object,
-                required: true,
-            },
-
-            value: {
-                required: false,
-                default: function() {
-                    return []
-                },
-            },
         },
 
         methods: {
@@ -115,7 +94,7 @@
             this.fetchTaxonomy()
             this.resetForm()
 
-            this.values = _.map(this.value, 'id') || []
+            this.model = _.map(this.value, 'id') || []
         }
     }
 </script>

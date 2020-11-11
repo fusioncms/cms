@@ -5,8 +5,8 @@
         :label="field.name"
         :required="field.required"
         :help="field.help"
-        :hasError="hasError"
-        :errorMessage="errorMessage">
+        :hasError="hasError(field.handle)"
+            :errorMessage="errorMessage(field.handle)">
 
         <div class="input-group" :id="`flatpickr_${field.handle}`">
             <ui-input
@@ -15,11 +15,8 @@
                 :name="field.handle"
                 :help="field.help"
                 :placeholder="field.settings.placeholder"
-                :required="field.required"
-                :has-error="hasError"
-                :error-message="errorMessage"
-                :aria-required="field.required"
                 :aria-describedby="field.help"
+                :hasError="hasError(field.handle)"
                 v-model="model">
             </ui-input>
 

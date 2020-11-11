@@ -1,23 +1,25 @@
 <template>
 	<div>
-		<label :for="field.handle" class="form__label">{{ field.name }}</label>
+        <ui-field-group
+            :name="field.handle"
+            :fieldId="`${field.handle}-field`"
+            :label="field.name"
+            :help="field.help"
+            :hasError="hasError(field.handle)"
+            :errorMessage="errorMessage(field.handle)">
 
-		<div class="flex items-start justify-between">
-			<div class="w-1/2">
-				<ui-button :disabled="requestOpen" @click="open">
-					<fa-icon :icon="['fas', 'plus-circle']" class="mr-1"></fa-icon> Manage Assets
-				</ui-button>
-			</div>
+            <ui-button :disabled="requestOpen" @click="open">
+                <fa-icon :icon="['fas', 'tasks']" class="mr-1"></fa-icon>
+                <span>Manage Asset Selection</span>
+            </ui-button>
 
-			<file-selection
-				class="w-1/2"
-				:limit="selectionLimit"
-				:hasHeader="false"
-				v-model="selected">
-			</file-selection>
-		</div>
+            <file-selection
+                :limit="selectionLimit"
+                :hasHeader="false"
+                v-model="selected">
+            </file-selection>
+        </ui-field-group>
 
-		<!-- File Manager Modal -->
 		<ui-modal name="file-manager" no-header no-footer extra-large v-model="modalOpen">
 			<file-uploader ref="uploader"></file-uploader>
 
@@ -136,6 +138,7 @@
 		},
 
 		mixins: [
+			require('@/mixins/fieldtypes/field').default,
 			require('@/mixins/fileselector').default,
 			require('@/mixins/filedragdrop').default,
             require('@/mixins/filebrowser').default,
@@ -148,19 +151,6 @@
             	selection: [],
             }
         },
-
-		props: {
-			field: {
-			    type: Object,
-			    required: true,
-			},
-
-			value: {
-				type: Array,
-				required: false,
-				default: () => [],
-			},
-		},
 
 		watch: {
 			loading(isLoading) {
@@ -179,17 +169,9 @@
 			}
 		},
 
+
+
         computed: {
-			selected: {
-				get() {
-					return this.value || []
-				},
-
-				set(value) {
-					this.$emit('input', value)
-				}
-			},
-
 			selectionLimit() {
 				return Number(this.field.settings.limit) || Infinity
 			},
@@ -229,8 +211,8 @@
 
 			open() {
 				this.reset()
-				this.setCurrentDirectory(this.field.settings.root_directory)
-        		this.setRootDirectory(this.field.settings.root_directory)
+				this.setCurrentDirectory(this.field.settings.root_directory || 0)
+        		this.setRootDirectory(this.field.settings.root_directory || 0)
 				this.fetchFilesAndDirectories()
 
 				this.selection = [...this.selected]
@@ -251,6 +233,12 @@
 			accept() {
 				this.selected = this.selection
 				this.close()
+			}
+		},
+
+		created() {
+			if (_.isEmpty(this.value)) {
+				this.selected = []
 			}
 		},
 

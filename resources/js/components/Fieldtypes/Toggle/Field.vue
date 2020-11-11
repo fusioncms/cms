@@ -1,35 +1,23 @@
 <template>
-    <div>
-        <ui-toggle
-            :name="field.handle"
-            :label="field.name"
-            :help="field.help"
-            :value="checked"
-            @input="$emit('input', Boolean($event))"
-        ></ui-toggle>
-    </div>
+    <ui-toggle
+        :name="field.handle"
+        :label="field.name"
+        :help="field.help"
+        v-model="model">
+    </ui-toggle>
 </template>
 
 <script>
+    import FieldMixin from '@/mixins/fieldtypes/field'
+
     export default {
         name: 'toggle-fieldtype',
 
-        props: {
-            field: {
-                type: Object,
-                required: true,
-            },
+        mixins: [FieldMixin],
 
-            value: {
-                type: Boolean,
-                required: false,
-                default: false
-            },
-        },
-
-        computed: {
-            checked() {
-                return this.value || this.field.settings.default
+        created() {
+            if (_.isNull(this.value)) {
+                this.model = this.field.settings.default
             }
         }
     }

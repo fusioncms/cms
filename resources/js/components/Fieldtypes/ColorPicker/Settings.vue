@@ -1,32 +1,23 @@
 <template>
-    <div>
-        <ui-select-group
+    <div class="row">
+        <ui-toggle
+            class="col w-full sm:w-1/2"
             name="settings.transparency"
             label="Transparency"
             help="Should this field allow transparency?"
-            autocomplete="off"
-            v-model="settings.transparency"
-            :options="[
-                {
-                    label: 'Yes',
-                    value: 1
-                },
-                {
-                    label: 'No',
-                    value: 0
-                }
-            ]"
             :has-error="errors.has('settings.transparency')"
-            :error-message="errors.get('settings.transparency')">
-        </ui-select-group>
+            :error-message="errors.get('settings.transparency')"
+            v-model="settings.transparency">
+        </ui-toggle>
 
         <ui-input-group
+            class="col w-full sm:w-1/2"
             name="settings.default"
             label="Default"
             help="Default color value for this field."
-            v-model="settings.default"
             :has-error="errors.has('settings.default')"
-            :error-message="errors.get('settings.default')">
+            :error-message="errors.get('settings.default')"
+            v-model="settings.default">
         </ui-input-group>
     </div>
 </template>

@@ -50,7 +50,7 @@ class EmailFieldtype extends Fieldtype
      */
     public function rules(Field $field, $value = null)
     {
-        $validation = explode('|', $field->validation ?: 'sometimes');
+        $validation = explode('|', $field->validation->get('value') ?: 'sometimes');
         $validation = array_merge($validation, ['email']);
 
         return [

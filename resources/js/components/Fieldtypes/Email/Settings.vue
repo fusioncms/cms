@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <div class="row">
         <ui-input-group
+            class="col w-full sm:w-1/2"
             name="settings.placeholder"
             label="Placeholder"
             help="Text that will appear inside the input element's content area when empty."
@@ -17,12 +18,6 @@
 
     export default {
         name: 'email-fieldtype-settings',
-
-        data() {
-            return {
-                placeholder: this.value.placeholder || ''
-            }
-        },
 
         mixins: [fieldtype]
     }

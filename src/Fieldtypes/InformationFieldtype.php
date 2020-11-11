@@ -28,4 +28,9 @@ class InformationFieldtype extends Fieldtype
      * @var array
      */
     public $column = null;
+
+    /**
+     * @var array
+     */
+    public $validation = false;
 }

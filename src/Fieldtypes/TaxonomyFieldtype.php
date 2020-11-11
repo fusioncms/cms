@@ -91,14 +91,18 @@ class TaxonomyFieldtype extends Fieldtype
     public function persistRelationship($model, Field $field)
     {
         $oldValues = $model->{$field->handle}->pluck('id');
-        $newValues = collect(request()->input($field->handle))->mapWithKeys(function ($id) use ($field) {
-            return [
-                $id => ['field_id' => $field->id],
-            ];
-        });
+        $newValues = collect(request()->input($field->handle))
+            ->mapWithKeys(function ($id) use ($field) {
+                return [
+                    $id => [
+                        'field_id' => $field->id,
+                    ],
+                ];
+            });
 
         $model->{$field->handle}()->detach($oldValues);
         $model->{$field->handle}()->attach($newValues);
+        $model->flush();
     }
 
     /**

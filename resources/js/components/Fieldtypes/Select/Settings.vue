@@ -1,28 +1,28 @@
 <template>
     <div>
-        <ui-select-group
-            name="settings.multiple"
-            label="Multi Select"
-            help="Should this field allow multiple options to be selected?"
-            autocomplete="off"
-            v-model="settings.multiple"
-            :options="[
-                {
-                    label: 'No',
-                    value: 0,
-                },
-                {
-                    label: 'Yes',
-                    value: 1,
-                }
-            ]"
-            :has-error="errors.has('settings.multiple')"
-            :error-message="errors.get('settings.multiple')">
-        </ui-select-group>
+        <div class="row">
+            <ui-toggle
+                class="col w-full sm:w-1/2"
+                name="settings.multiple"
+                label="Multi Select"
+                help="Should this field allow multiple options to be selected?"
+                :has-error="errors.has('settings.multiple')"
+                :error-message="errors.get('settings.multiple')"
+                v-model="settings.multiple">
+            </ui-toggle>
 
-        <div class="col w-full">
-            <option-builder v-model="settings.options"></option-builder>
+            <ui-toggle
+                class="col w-full sm:w-1/2"
+                name="settings.filterable"
+                label="Filterable"
+                help="Should this field offer a search filter?"
+                :has-error="errors.has('settings.filterable')"
+                :error-message="errors.get('settings.filterable')"
+                v-model="settings.filterable">
+            </ui-toggle>
         </div>
+
+        <option-builder v-model="settings.options"></option-builder>
     </div>
 </template>
 

@@ -29,6 +29,7 @@ class RadioFieldtype extends Fieldtype
      */
     public $settings = [
         'display' => 'column',
+        'options' => [],
     ];
 
     /**

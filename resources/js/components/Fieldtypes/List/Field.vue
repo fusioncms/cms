@@ -1,139 +1,110 @@
 <template>
-    <div>
-        <div class="field">
-            <label
-                class="field__label"
-                :for="field.handle"
-                v-if="field.name"
-                v-html="field.name">
-            </label>
+    <ui-field-group
+        :name="field.handle"
+        :fieldId="`${field.handle}-field`"
+        :label="field.name"
+        :help="field.help"
+        :hasError="hasError(field.handle)"
+        :errorMessage="errorMessage(field.handle)">
 
-            <div class="field__control">
-                <ui-sortable-list
-                    v-model="items"
-                    v-if="items.length"
-                    @input="$emit('input', normalizedItems)"
-                >
-                    <div slot-scope="{ items: items }" class="bg-white border border-gray-300 rounded">
-                        <ui-sortable-item v-for="(item, index) in items" :key="item._id">
-                            <div class="flex">
-                                <div class="flex flex-1 items-center">
-                                    <ui-sortable-handle class="cursor-move inline-block ml-2 text-gray-500">
-                                        <menu-icon size=".975x"></menu-icon>
-                                    </ui-sortable-handle>
+        <table class="table" v-if="model && model.length > 0">
+            <ui-sortable-list v-model="model" :class="`${field.handle}-sortable-list`">
+                <tbody>
+                    <ui-sortable-item v-for="item in model" :key="item._id">
+                        <tr>
+                            <td class="w-8">
+                                <ui-sortable-handle class="cursor-move inline-block">
+                                    <fa-icon icon="grip-vertical" class="handle fa-fw text-gray-400 mr-3"></fa-icon>
+                                </ui-sortable-handle>
+                            </td>
+                            <td>
+                                <ui-input-group name="value" v-model="item.value"></ui-input-group>
+                            </td>
+                            <td class="w-16">
+                                <ui-button icon @click.prevent="remove(item._id)">
+                                    <fa-icon icon="times"></fa-icon>
+                                    <span class="sr-only">Destroy</span>
+                                </ui-button>
+                            </td>
+                        </tr>
+                    </ui-sortable-item>
+                </tbody>
+            </ui-sortable-list>
+        </table>
 
-                                    <input
-                                        class="w-full px-3 py-2"
-                                        v-model="items[index].value"
-                                    >
+        <div v-else class="help">Your list is empty.</div>
 
-                                    <button class="p-2 text-gray-500 hover:text-danger-500 focus:outline-none" @click.prevent="destroy(index)">
-                                        <x-icon size=".975x"></x-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        </ui-sortable-item>
-                    </div>
-                </ui-sortable-list>
-
-                <div v-else class="text-sm">
-                    Your list is empty.
-                </div>
-            </div>
-        </div>
-
-        <div class="-mt-3">
-            <div class="flex rounded">
-                <div class="relative flex-grow focus-within:z-10">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <list-icon size=".975x" class="text-gray-400"></list-icon>
-                    </div>
-
-                    <input type="text" @keyup.enter.prevent="add" v-model="newItem" class="field__input block w-full rounded-none rounded-l pl-10 transition ease-in-out duration-150" placeholder="Add an item...">
-                </div>
-
-                <button @click.prevent="add" class="rounded-r -ml-px inline-flex items-center text-gray-500 text-sm border border-gray-300 px-3 py-2 hover:border-gray-400 hover:bg-gray-100 focus:outline-none focus:shadow-focus">
-                    <plus-icon size=".975x"></plus-icon>
-                </button>
-            </div>
-        </div>
-
-        <!-- <input type="text"  placeholder="Add an item..." class="field__input -mt-3"> -->
-    </div>
+        <table class="table mt-3">
+            <tbody>
+                <tr>
+                    <td class="w-8"></td>
+                    <td>
+                        <ui-input-group
+                            name="value"
+                            placeholder="Add new item..."
+                            @keyup.native.enter="add"
+                            v-model="newItem">
+                        </ui-input-group>
+                    </td>
+                    <td class="w-16">
+                        <ui-button icon @click.prevent="add">
+                            <fa-icon icon="plus"></fa-icon>
+                            <span class="sr-only">Add</span>
+                        </ui-button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ui-field-group>
 </template>
 
 <script>
     import uniqid from 'uniqid'
-    import fieldtype from '@/mixins/fieldtype'
-    import {XIcon, MenuIcon, ListIcon, PlusIcon} from 'vue-feather-icons'
+    import FieldMixin from '@/mixins/fieldtypes/field'
 
     export default {
         name: 'list-fieldtype',
 
-        components: {
-            'x-icon': XIcon,
-            'menu-icon': MenuIcon,
-            'list-icon': ListIcon,
-            'plus-icon': PlusIcon,
-        },
+        mixins: [FieldMixin],
 
         data() {
             return {
-                newItem: '',
-                items: [],
+                newItem: ''
             }
         },
 
-        props: {
-            field: {
-                type: Object,
-                required: true,
-            },
-
-            value: {
-                required: false,
-                type: Array,
-                default: () => []
-            },
-        },
-
-        computed: {
-            normalizedItems() {
-                return _.map(this.items, 'value')
-            },
+        watch: {
+            model: {
+                deep: true,
+                handler(value) {
+                    this.$emit('input', value)
+                }
+            }
         },
 
         methods: {
+            new(value) {
+                return { _id: uniqid(), value }
+            },
+
             add() {
                 if (this.newItem) {
-                    this.items.push(this.new(this.newItem))
-                }
+                    this.model.push(this.new(this.newItem))
 
-                this.$emit('input', this.normalizedItems)
-                this.newItem = ''
+                    // reset..
+                    this.newItem = ''
+                }
             },
 
-            destroy(index) {
-                this.items.splice(index, 1)
-                this.$emit('input', this.normalizedItems)
+            remove(id) {
+                this.model = _.filter(this.model, (item) => item._id !== id)
             },
-
-            new(item) {
-                return {
-                    _id: uniqid(),
-                    value: item
-                }
-            }
         },
 
-        mounted() {
-            if(!this.value) {
-                this.$emit('input', [])
+        created() {
+            if (_.isEmpty(this.value)) {
+                this.model = []
             }
-
-            _.each(this.value, (item) => {
-                this.items.push(this.new(item))
-            })
         }
     }
 </script>

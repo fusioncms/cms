@@ -1,15 +1,15 @@
 <template>
     <div class="row">
-    	<div class="col w-1/2">
-			<ui-number name="settings.limit"
-				label="Limit"
-				help="Limit the number of assets selected; leave blank if no limit is desired."
-				placeholder=""
-				v-model="settings.limit"
-                :has-error="errors.has('settings.limit')"
-                :error-message="errors.get('settings.limit')">
-			</ui-number>
-		</div>
+        <ui-number-group
+            class="col w-full sm:w-1/2"
+            name="settings.limit"
+            label="Limit"
+            help="Limit the number of users selected; leave blank if no limit is desired."
+            min="1"
+            :has-error="errors.has('settings.limit')"
+            :error-message="errors.get('settings.limit')"
+            v-model="settings.limit">
+        </ui-number-group>
     </div>
 </template>
 

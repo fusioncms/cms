@@ -1,40 +1,17 @@
 <template>
-    <div class="field" v-html="field.help"></div>
+    <div class="row">
+        <div class="col w-full">
+            <p v-html="field.help"></p>
+        </div>
+    </div>
 </template>
 
 <script>
-    let marked = require('marked')
+    import FieldMixin from '@/mixins/fieldtypes/field'
 
     export default {
         name: 'information-fieldtype',
 
-        props: {
-            field: {
-                type: Object,
-                required: true,
-            },
-
-            value: {
-                required: false,
-                default: '',
-            },
-        },
-
-        computed: {
-            information() {
-                marked.setOptions({
-                    renderer: new marked.Renderer(),
-                    gfm: true,
-                    tables: true,
-                    breaks: true,
-                    pedantic: true,
-                    sanitize: true,
-                    smartLists: true,
-                    smartypants: true,
-                })
-
-                return marked(this.field.settings.information)
-            }
-        }
+        mixins: [FieldMixin],
     }
 </script>

@@ -1,60 +1,35 @@
 <template>
-    <div>
-        <ui-checkbox-group
-            :label="field.name"
-            :help="field.help"
-            :inline="field.settings.display == 'row'">
-                <ui-checkbox
-                    v-for="option in field.settings.options"
-                    :key="option.value"
-                    :name="field.name"
-                    :id="option.value"
-                    :native-value="option.value"
-                    v-model="values"
-                    @input="$emit('input', values)"
-                    >
-                    <template>
-                        {{option.label}}
-                    </template>
-                </ui-checkbox>
-        </ui-checkbox-group>
-    </div>
+    <ui-checkbox-group
+        :label="field.name"
+        :help="field.help"
+        :inline="field.settings.display == 'row'"
+        :hasError="hasError(field.handle)"
+        :errorMessage="errorMessage(field.handle)">
+
+        <ui-checkbox
+            v-for="(option, index) in field.settings.options"
+            :key="`${field.handle}.${index}`"
+            :id="`${field.handle}.${index}`"
+            :name="field.handle"
+            :native-value="option.value"
+            v-model="model">
+            {{option.label}}
+        </ui-checkbox>
+    </ui-checkbox-group>
 </template>
 
 <script>
-    import fieldtype from '@/mixins/fieldtype'
+    import FieldMixin from '@/mixins/fieldtypes/field'
 
     export default {
         name: 'checkbox-fieldtype',
 
-        mixins: [fieldtype],
+        mixins: [FieldMixin],
 
-        props: {
-            field: {
-                type: Object,
-                required: true,
-            },
-
-            value: {
-                required: false,
-                default: function() {
-                    return []
-                },
-            },
-        },
-
-        data() {
-            return {
-                values: []
+        created() {
+            if (_.isEmpty(this.value)) {
+                this.model = []
             }
-        },
-
-        mounted() {
-            if(!this.value) {
-                this.$emit('input', [])
-            }
-
-            this.values = _.cloneDeep(this.value)
         }
     }
 </script>

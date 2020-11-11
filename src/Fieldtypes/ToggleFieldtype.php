@@ -37,4 +37,9 @@ class ToggleFieldtype extends Fieldtype
     public $column = [
         'type' => 'boolean',
     ];
+
+    /**
+     * @var array
+     */
+    public $validation = false;
 }

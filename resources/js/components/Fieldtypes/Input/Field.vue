@@ -4,10 +4,9 @@
         :label="field.name"
         :help="field.help"
         :placeholder="field.settings.placeholder"
-        :value="value"
-        :has-error="hasError"
-        :error-message="errorMessage"
-        @input="$emit('input', $event)">
+        :has-error="hasError(field.handle)"
+        :error-message="errorMessage(field.handle)"
+        v-model="model">
     </ui-input-group>
 </template>
 

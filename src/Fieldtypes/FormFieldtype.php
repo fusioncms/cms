@@ -32,9 +32,7 @@ class FormFieldtype extends Fieldtype
     /**
      * @var array
      */
-    public $settings = [
-        'limit' => null,
-    ];
+    public $settings = [];
 
     /**
      * @var string
@@ -74,16 +72,19 @@ class FormFieldtype extends Fieldtype
     public function persistRelationship($model, Field $field)
     {
         $oldValues = $model->{$field->handle}->pluck('id');
-        $newValues = collect(request()->input($field->handle))->mapWithKeys(function ($item, $key) use ($field) {
-            return [
-                $item['id'] => [
-                    'field_id' => $field->id,
-                    'order'    => $key + 1,
-                ], ];
-        });
+        $newValues = collect(request()->input($field->handle))
+            ->mapWithKeys(function ($id, $key) use ($field) {
+                return [
+                    $id => [
+                        'field_id' => $field->id,
+                        'order'    => $key + 1,
+                    ],
+                ];
+            });
 
         $model->{$field->handle}()->detach($oldValues);
         $model->{$field->handle}()->attach($newValues);
+        $model->flush();
     }
 
     /**

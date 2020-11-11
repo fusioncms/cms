@@ -1,45 +1,13 @@
 <template>
-    <div>
+    <div class="row">
         <ui-select-group
+            class="col w-full sm:w-1/2"
             name="settings.syntax"
             label="Syntax"
             help="What language should the syntax highlighter use?"
             autocomplete="off"
             v-model="settings.syntax"
-            :options="[
-                {
-                     value: 'css',
-                     label: 'CSS'
-                },
-                {
-                     value: 'html',
-                     label: 'HTML'
-                },
-                {
-                     value: 'javascript',
-                     label: 'JavaScript'
-                },
-                {
-                     value: 'json',
-                     label: 'JSON'
-                },
-                {
-                     value: 'markdown',
-                     label: 'Markdown'
-                },
-                {
-                     value: 'python',
-                     label: 'Python'
-                },
-                {
-                     value: 'text',
-                     label: 'Text'
-                },
-                {
-                     value: 'xml',
-                     label: 'XML'
-                }
-            ]"
+            :options="options"
             :has-error="errors.has('settings.syntax')"
             :error-message="errors.get('settings.syntax')">
         </ui-select-group>
@@ -52,12 +20,43 @@
     export default {
         name: 'code-fieldtype-settings',
 
+        mixins: [fieldtype],
+
         data() {
             return {
-                syntax: this.value.type || 'text'
+                modes: [
+                    'CSharp',
+                    'CSS',
+                    'HTML',
+                    'Java',
+                    'JavaScript',
+                    'JSON',
+                    'Lua',
+                    'Markdown',
+                    'PHP',
+                    'Python',
+                    'Ruby',
+                    'SCSS',
+                    'sh',
+                    'Text',
+                    'XML',
+                    'YAML',
+                ]
             }
         },
 
-        mixins: [fieldtype]
+        computed: {
+            options() {
+                return _.map(this.modes, (label) => {
+                    return { value: _.lowerCase(label), label }
+                })
+            }
+        },
+
+        created() {
+            if (_.isEmpty(this.settings.syntax)) {
+                this.settings.syntax = 'text'
+            }
+        }
     }
 </script>

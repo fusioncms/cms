@@ -32,7 +32,7 @@ class DateTimeFieldtype extends Fieldtype
     public $settings = [
         'placeholder' => '',
         'format'      => 'Y-m-d',
-        'time'        => 0,
+        'time'        => false,
     ];
 
     /**
@@ -66,7 +66,7 @@ class DateTimeFieldtype extends Fieldtype
      */
     public function rules(Field $field, $value = null)
     {
-        $validation = explode('|', $field->validation ?: 'nullable');
+        $validation = explode('|', $field->validation->get('value') ?: 'nullable');
         $validation = array_merge($validation, ['date_format:Y-m-d H:i:s']);
 
         return [

@@ -1,14 +1,13 @@
 <template>
     <ui-input-group
-        :name="field.handle"
         type="email"
+        :name="field.handle"
         :label="field.name"
         :help="field.help"
         :placeholder="field.settings.placeholder"
-        :value="value"
-        :has-error="hasError"
-        :error-message="errorMessage"
-        @input="$emit('input', $event)">
+        :hasError="hasError(field.handle)"
+        :errorMessage="errorMessage(field.handle)"
+        v-model="model">
     </ui-input-group>
 </template>
 
