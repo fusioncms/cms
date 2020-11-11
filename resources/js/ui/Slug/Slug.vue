@@ -152,7 +152,7 @@
                     .trim()
                     .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
                     .replace(/&+/gi, 'and')                  // Replace 1 or more & characters with the word 'and'
-                    .replace(/([^\w\s]|_)+/g, ' ')           // Remove all non-word chars
+                    .replace(/(\p{S}|\p{P}|\s)+/gu, ' ')     // Remove all symbols
                     .replace(/\s+/g, this.delimiter)         // Convert spaces with delimiter
                     .replace(d, this.delimiter)              // Replace multiple delimiters with a single one
                     .replace(e, '')                          // Remove first and last floating delimiter if exists
