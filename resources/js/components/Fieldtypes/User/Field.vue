@@ -12,7 +12,7 @@
                 <fa-icon :icon="['fas', 'plus-circle']"></fa-icon>
                 <span class="sr-only">Browse users...</span>
             </ui-button>
-            
+
             <table class="table" v-if="model && model.length > 0">
                 <ui-sortable-list v-model="model" :class="`${field.handle}-sortable-list`">
                     <tbody>
@@ -47,8 +47,8 @@
                     <ui-checkbox
                         :id="`selection-${table.record.id}`"
                         name="selection"
-                        :native-value="table.record"
-                        v-model="model">
+                        :value="isChecked(table.record.id)"
+                        @input="toggle(table.record)">
                         {{ table.record.name }}
                     </ui-checkbox>
                 </template>
@@ -77,6 +77,24 @@
         data() {
             return {
                 endpoint: '/datatable/users'
+            }
+        },
+
+        methods: {
+            isChecked(id) {
+                return !! _.find(this.model, (item) => item.id == id)
+            },
+
+            toggle(record) {
+                if (this.isChecked(record.id)) {
+                    this.remove(record.id)
+                } else {
+                    this.model.push(record)
+                }
+            },
+
+            remove(id) {
+                this.model = _.reject(this.model, (item) => item.id == id)
             }
         },
 

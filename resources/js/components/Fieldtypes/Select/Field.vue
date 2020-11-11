@@ -5,7 +5,7 @@
         :help="field.help"
         :options="options"
         :filterable="!! field.settings.filterable"
-        :multiple="multiple"
+        :multiple="!! field.settings.multiple"
         :has-error="hasError(field.handle)"
         :error-message="errorMessage(field.handle)"
         v-model="model">
@@ -23,10 +23,6 @@
         computed: {
             options() {
                 return this.field.settings.options
-            },
-
-            multiple() {
-                return this.field.settings.multiple == '1'
             }
         }
     }

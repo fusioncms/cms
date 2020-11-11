@@ -1,26 +1,15 @@
 <template>
     <div>
         <div class="row">
-            <ui-select-group
+            <ui-toggle
                 class="col w-full sm:w-1/2"
                 name="settings.multiple"
                 label="Multi Select"
                 help="Should this field allow multiple options to be selected?"
-                autocomplete="off"
-                :options="[
-                    {
-                        label: 'No',
-                        value: 0,
-                    },
-                    {
-                        label: 'Yes',
-                        value: 1,
-                    }
-                ]"
                 :has-error="errors.has('settings.multiple')"
                 :error-message="errors.get('settings.multiple')"
                 v-model="settings.multiple">
-            </ui-select-group>
+            </ui-toggle>
 
             <ui-toggle
                 class="col w-full sm:w-1/2"

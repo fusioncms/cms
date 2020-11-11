@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[95],{"5Ox3":function(n,e,t){"use strict";t.r(e);var i={name:"information-fieldtype-settings"},s=t("KHd+"),l=Object(s.a)(i,(function(){var n=this.$createElement;return(this._self._c||n)("div")}),[],!1,null,null,null);e.default=l.exports}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[95],{"Yqf/":function(e,n,t){"use strict";t.r(n);var i={name:"link-fieldtype-settings"},l=t("KHd+"),s=Object(l.a)(i,(function(){var e=this.$createElement;return(this._self._c||e)("div")}),[],!1,null,null,null);n.default=s.exports}}]);

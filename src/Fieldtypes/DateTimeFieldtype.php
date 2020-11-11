@@ -32,7 +32,7 @@ class DateTimeFieldtype extends Fieldtype
     public $settings = [
         'placeholder' => '',
         'format'      => 'Y-m-d',
-        'time'        => 0,
+        'time'        => false,
     ];
 
     /**
