@@ -2,8 +2,6 @@
 
 namespace Fusion\Fieldtypes;
 
-use Fusion\Models\Field;
-
 class DictionaryFieldtype extends Fieldtype
 {
     /**

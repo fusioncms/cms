@@ -95,7 +95,7 @@ class TaxonomyFieldtype extends Fieldtype
             ->mapWithKeys(function ($id) use ($field) {
                 return [
                     $id => [
-                        'field_id' => $field->id
+                        'field_id' => $field->id,
                     ],
                 ];
             });

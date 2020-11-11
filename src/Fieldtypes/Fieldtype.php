@@ -73,7 +73,7 @@ abstract class Fieldtype
      * @var array
      */
     public $validation = [
-        'value' => ''
+        'value' => '',
     ];
 
     /**

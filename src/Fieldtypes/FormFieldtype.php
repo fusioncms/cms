@@ -78,7 +78,7 @@ class FormFieldtype extends Fieldtype
                     $id => [
                         'field_id' => $field->id,
                         'order'    => $key + 1,
-                    ]
+                    ],
                 ];
             });
 

@@ -49,7 +49,7 @@ class NumberFieldtype extends Fieldtype
      */
     public $attributes = [
         'settings.decimals' => 'decimals',
-        'settings.step'    => 'step',
+        'settings.step'     => 'step',
         'settings.min'      => 'min',
         'settings.max'      => 'max',
     ];
