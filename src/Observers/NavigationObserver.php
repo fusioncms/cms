@@ -2,27 +2,12 @@
 
 namespace Fusion\Observers;
 
-use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 use Fusion\Database\Schema\Blueprint;
 use Fusion\Models\Navigation;
 
 class NavigationObserver
 {
-    /**
-     * @var \Illuminate\Database\Migrations\Migration
-     */
-    protected $migration;
-
-    /**
-     * Create a new NavigationObserver instance.
-     *
-     * @param \Illuminate\Database\Migrations\Migration $migration
-     */
-    public function __construct(Migration $migration)
-    {
-        $this->migration = $migration;
-    }
-
     /**
      * Handle the navigation "created" event.
      *
@@ -32,7 +17,7 @@ class NavigationObserver
      */
     public function created(Navigation $navigation)
     {
-        $this->migration->schema->create($navigation->table, function (Blueprint $table) {
+        Schema::create($navigation->table, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('navigation_id')->index();
             $table->unsignedBigInteger('parent_id')->index()->default(0);
@@ -60,7 +45,7 @@ class NavigationObserver
 
         // Update table if changed
         if ($old->table !== $navigation->table) {
-            $this->migration->schema->rename($old->table, $navigation->table);
+            Schema::rename($old->table, $navigation->table);
         }
     }
 
@@ -73,6 +58,6 @@ class NavigationObserver
      */
     public function deleted(Navigation $navigation)
     {
-        $this->migration->schema->dropIfExists($navigation->table);
+        Schema::dropIfExists($navigation->table);
     }
 }
