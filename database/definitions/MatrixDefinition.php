@@ -31,8 +31,6 @@ $factory->define(Fusion\Models\Matrix::class, function (Faker $faker) {
         'name_format'      => '',
         'route'            => 'test/{slug}',
         'template'         => 'test.'.Str::slug($name),
-        'revision_control' => $faker->boolean(50),
-        'publishable'      => $faker->boolean(50),
         'status'           => $faker->boolean(50),
     ];
 });
