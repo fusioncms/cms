@@ -79,7 +79,7 @@
 
 		methods: {
 			remove(id) {
-				this.selection = _.filter(this.selection, (item) => { return item.id !== id })
+				this.selection = _.reject(this.selection, (item) => item.id == id)
 			}
 		}
 	}
