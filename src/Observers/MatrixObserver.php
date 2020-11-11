@@ -2,7 +2,7 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Database\Migration;
+use Illuminate\Database\Migrations\Migration;
 use Fusion\Database\Schema\Blueprint;
 use Fusion\Models\Matrix;
 use Illuminate\Support\Facades\DB;
@@ -12,14 +12,14 @@ use Spatie\Activitylog\Models\Activity;
 class MatrixObserver
 {
     /**
-     * @var \Fusion\Database\Migration
+     * @var \Illuminate\Database\Migrations\Migration
      */
     protected $migration;
 
     /**
      * Create a new MatrixObserver instance.
      *
-     * @param \Fusion\Database\Migration $migration
+     * @param \Illuminate\Database\Migrations\Migration $migration
      */
     public function __construct(Migration $migration)
     {
@@ -45,6 +45,8 @@ class MatrixObserver
             $table->string('name')->nullable();
             $table->string('slug')->unique()->nullable();
             $table->boolean('status')->default(true);
+            $table->timestamp('publish_at')->useCurrent();
+            $table->timestamp('expire_at')->nullable();
             $table->timestamps();
         });
     }

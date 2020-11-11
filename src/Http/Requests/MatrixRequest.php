@@ -69,9 +69,6 @@ class MatrixRequest extends Request
 
             'route'              => 'sometimes',
             'template'           => 'sometimes',
-
-            'revision_control'   => 'required|boolean',
-            'publishable'        => 'required|boolean',
         ];
     }
 

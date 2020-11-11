@@ -2,7 +2,7 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Database\Migration;
+use Illuminate\Database\Migrations\Migration;
 use Fusion\Database\Schema\Blueprint;
 use Fusion\Models\Setting;
 use Illuminate\Support\Str;
@@ -10,14 +10,14 @@ use Illuminate\Support\Str;
 class SettingObserver
 {
     /**
-     * @var \Fusion\Database\Migration
+     * @var \Illuminate\Database\Migrations\Migration
      */
     protected $migration;
 
     /**
      * Constructor.
      *
-     * @param \Fusion\Database\Migration $migration
+     * @param \Illuminate\Database\Migrations\Migration $migration
      */
     public function __construct(Migration $migration)
     {

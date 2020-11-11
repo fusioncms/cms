@@ -2,7 +2,7 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Database\Migration;
+use Illuminate\Database\Migrations\Migration;
 use Fusion\Database\Schema\Blueprint;
 use Fusion\Models\Field;
 use Fusion\Models\Form;
@@ -10,14 +10,14 @@ use Fusion\Models\Form;
 class FormObserver
 {
     /**
-     * @var \Fusion\Database\Migration
+     * @var \Illuminate\Database\Migrations\Migration
      */
     protected $migration;
 
     /**
      * Create a new FormObserver instance.
      *
-     * @param \Fusion\Database\Migration $migration
+     * @param \Illuminate\Database\Migrations\Migration $migration
      */
     public function __construct(Migration $migration)
     {

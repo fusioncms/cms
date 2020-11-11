@@ -2,21 +2,21 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Database\Migration;
+use Illuminate\Database\Migrations\Migration;
 use Fusion\Database\Schema\Blueprint;
 use Fusion\Models\Taxonomy;
 
 class TaxonomyObserver
 {
     /**
-     * @var \Fusion\Database\Migration
+     * @var \Illuminate\Database\Migrations\Migration
      */
     protected $migration;
 
     /**
      * Create a new TaxonomyObserver instance.
      *
-     * @param \Fusion\Database\Migration $migration
+     * @param \Illuminate\Database\Migrations\Migration $migration
      */
     public function __construct(Migration $migration)
     {
