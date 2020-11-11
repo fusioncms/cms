@@ -7,7 +7,7 @@
             help="Starting rows in a new table."
             autocomplete="off"
             v-model="settings.initRows || 1"
-            min="1"
+            :min="1"
             :has-error="errors.has('settings.initRows')"
             :error-message="errors.get('settings.initRows')">
         </ui-number-group>
@@ -19,7 +19,7 @@
             help="Starting columns in a new table."
             autocomplete="off"
             v-model="settings.initCols || 1"
-            min="1"
+            :min="1"
             :has-error="errors.has('settings.initCols')"
             :error-message="errors.get('settings.initCols')">
         </ui-number-group>
