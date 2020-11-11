@@ -2,31 +2,30 @@
     <div class="row">
         <ui-number-group
             class="col w-full sm:w-1/2"
-            name="settings.decimals"
-            label="Decimal Places"
-            help="The number of decimal places this number will accept."
+            name="settings.step"
+            label="Step Size"
+            help="Stepping interval"
             autocomplete="off"
-            v-model="settings.decimals"
             min="0"
-            max="6"
-            :hide-buttons="true"
-            :has-error="errors.has('settings.decimals')"
-            :error-message="errors.get('settings.decimals')">
+            :decimals="settings.decimals"
+            :hide-buttons="false"
+            :has-error="errors.has('settings.step')"
+            :error-message="errors.get('settings.step')"
+            v-model="settings.step">
         </ui-number-group>
 
         <ui-number-group
             class="col w-full sm:w-1/2"
-            name="settings.steps"
-            label="Step Size"
-            help="Step or increment size of the number"
+            name="settings.decimals"
+            label="Decimal Places"
+            help="The number of decimal places this number will accept."
             autocomplete="off"
-            v-model="settings.steps"
             min="0"
-            :hide-buttons="true"
-            :steps="settings.decimals | pad"
-            :decimals="settings.decimals"
-            :has-error="errors.has('settings.steps')"
-            :error-message="errors.get('settings.steps')">
+            max="6"
+            :hide-buttons="false"
+            :has-error="errors.has('settings.decimals')"
+            :error-message="errors.get('settings.decimals')"
+            v-model="settings.decimals">
         </ui-number-group>
 
         <ui-number-group
@@ -35,12 +34,13 @@
             label="Min Value"
             help="Minimum allowed value"
             autocomplete="off"
-            v-model="settings.min"
-            :hide-buttons="true"
+            :step="settings.step"
             :decimals="settings.decimals"
-            :steps="settings.steps"
+            :max="settings.max"
+            :hide-buttons="false"
             :has-error="errors.has('settings.min')"
-            :error-message="errors.get('settings.min')">
+            :error-message="errors.get('settings.min')"
+            v-model="settings.min">
         </ui-number-group>
 
         <ui-number-group
@@ -49,12 +49,13 @@
             label="Max Value"
             help="Maximum allowed value"
             autocomplete="off"
-            v-model="settings.max"
-            :hide-buttons="true"
+            :step="settings.step"
             :decimals="settings.decimals"
-            :steps="settings.steps"
+            :min="settings.min"
+            :hide-buttons="false"
             :has-error="errors.has('settings.max')"
-            :error-message="errors.get('settings.max')">
+            :error-message="errors.get('settings.max')"
+            v-model="settings.max">
         </ui-number-group>
     </div>
 </template>
@@ -66,11 +67,5 @@
         name: 'number-fieldtype-settings',
 
         mixins: [fieldtype],
-
-        filters: {
-            pad(length) {
-                return _.padStart('1', length, '0')
-            }
-        }
     }
 </script>

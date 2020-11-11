@@ -1,23 +1,23 @@
 <template>
     <div class="field-number input-group">
         <input
-        class="field-number__input field"
-        :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
-        :id="formattedId"
-        :name="name"
-        type="number"
-        :placeholder="placeholder"
-        :readonly="readonly"
-        :disabled="disabled"
-        :autocomplete="autocomplete"
-        :autofocus="autofocus"
-        :required="required"
-        :step="step"
-        :min="min"
-        :max="max"
-        :aria-required="required"
-        :aria-describedby="message ? formattedId + '_message' : null"
-        v-model="model">
+            class="field-number__input field"
+            :class="{'font-mono': monospaced, 'field--danger': hasError, 'field--success': hasSuccess}"
+            :id="formattedId"
+            :name="name"
+            type="number"
+            :placeholder="placeholder"
+            :readonly="readonly"
+            :disabled="disabled"
+            :autocomplete="autocomplete"
+            :autofocus="autofocus"
+            :required="required"
+            :step="step"
+            :min="min"
+            :max="max"
+            :aria-required="required"
+            :aria-describedby="message ? formattedId + '_message' : null"
+            v-model="model">
 
         <button v-if="!hideButtons" class="field-number__button field-number__button--decrease button button--icon" @click.prevent="decrease" :disabled="disabled || decreaseDisabled">
             <slot name="decrease">
@@ -51,7 +51,7 @@
             id: String,
             placeholder: String,
             value: {
-                type: Number,
+                type: [String, Number],
                 default: 0
             },
             required: {
@@ -96,11 +96,11 @@
                 default: false,
             },
             step: {
-                type: Number,
+                type: [String, Number],
                 default: 1
             },
             decimals: {
-                type: Number,
+                type: [String, Number],
                 default: 0
             },
             min: {
@@ -120,12 +120,11 @@
         computed: {
             model: {
                 get() {
-                    return this.value || 0
+                    return Number(this.value)
                 },
 
                 set(value) {
-                    this.$emit('input',
-                        this.formatNumber(Number(value), this.decimals))
+                    this.$emit('input', Number(value).toFixed(this.decimals))
                 }
             },
 
@@ -139,18 +138,12 @@
         },
 
         methods: {
-            formatNumber(num, decimals) {
-                let regex = new RegExp('^-?\\d+(?:\.\\d{0,' + (decimals || -1) + '})?')
-
-                return Number(num.toString().match(regex)[0]).toFixed(decimals)
-            },
-
             increase() {
                 if (this.disabled || this.increaseDisabled) {
                     return
                 }
 
-                this.model = Math.min(this.model + this.step, this.max)
+                this.model = Math.min(this.model + Number(this.step), this.max)
             },
 
             decrease() {
@@ -158,7 +151,7 @@
                     return
                 }
 
-                this.model = Math.max(this.model - this.step, this.min)
+                this.model = Math.max(this.model - Number(this.step), this.min)
             }
         }
     }

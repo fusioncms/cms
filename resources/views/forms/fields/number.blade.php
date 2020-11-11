@@ -9,7 +9,7 @@
       class="form__control"
       min="{{ $field->settings['min'] }}"
       max="{{ $field->settings['max'] }}"
-      step="{{ $field->settings['steps'] }}">
+      step="{{ $field->settings['step'] }}">
 
     @if($field->help)
       @include('forms.components.help', ['field' => $field])

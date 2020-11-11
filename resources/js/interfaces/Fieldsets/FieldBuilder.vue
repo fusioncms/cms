@@ -133,7 +133,7 @@
                     handle:     data.handle || _.snakeCase(name),
                     help:       data.help || '',
                     settings:   data.settings ? _.cloneDeep(data.settings, true) : _.cloneDeep(type.settings, true),
-                    validation: data.validation || '',
+                    validation: data.validation ? _.cloneDeep(data.validation, true) : _.cloneDeep(type.validation, true),
                     prototype:  prototype
                 }
                 

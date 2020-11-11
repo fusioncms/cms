@@ -46,6 +46,10 @@ export default {
 			return filesize(value)
 		},
 
+		filetype(value) {
+			return value.split('/')[0]
+		},
+
 		validExtension(file) {
 			if (_.isEmpty(this.validExtensions)) {
 				return true;

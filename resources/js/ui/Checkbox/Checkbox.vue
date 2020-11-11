@@ -13,7 +13,7 @@
             :true-value="trueValue"
             :false-value="falseValue"
             @click.stop
-            v-model="computedValue">
+            v-model="model">
         <label :for="id" class="field-check__label">
             <slot></slot>
         </label>
@@ -27,12 +27,6 @@
         mixins: [
             require('../../mixins/fields').default
         ],
-
-        data() {
-            return {
-                newValue: this.value,
-            }
-        },
 
         props: {
             name: {
@@ -81,9 +75,15 @@
             }
         },
 
-        watch: {
-            value(value) {
-                this.newValue = value
+        computed: {
+            model: {
+                get() {
+                    return this.value || []
+                },
+
+                set(value) {
+                    this.$emit('input', value)
+                }
             }
         }
     }

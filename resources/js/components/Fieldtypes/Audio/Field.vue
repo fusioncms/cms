@@ -4,10 +4,9 @@
             :name="field.handle"
             :fieldId="`${field.handle}-field`"
             :label="field.name"
-            :required="field.required"
             :help="field.help"
-            :hasError="hasError"
-            :errorMessage="errorMessage">
+            :hasError="hasError(field.handle)"
+            :errorMessage="errorMessage(field.handle)">
 
             <div class="input-group">
                 <ui-input
@@ -15,11 +14,8 @@
                     :id="field.handle"
                     :name="field.handle"
                     :help="field.help"
-                    :required="field.required"
-                    :has-error="hasError"
-                    :error-message="errorMessage"
-                    :aria-required="field.required"
                     :aria-describedby="field.help"
+                    :hasError="hasError(field.handle)"
                     v-model="model">
                 </ui-input>
 
@@ -82,18 +78,6 @@
             return {
                 endpoint: '/datatable/files/audio'
             }
-        },
-
-        computed: {
-			model: {
-				get() {
-					return this.value || ''
-				},
-
-				set(value) {
-					this.$emit('input', value)
-				}
-			},
         },
 
 		methods: {

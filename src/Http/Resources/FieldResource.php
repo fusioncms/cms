@@ -22,7 +22,6 @@ class FieldResource extends JsonResource
             'name'       => $this->name,
             'handle'     => $this->handle,
             'help'       => $this->help,
-            'required'   => $this->required,
 
             'type'       => $fieldtype,
             'placement'  => $this->placement,

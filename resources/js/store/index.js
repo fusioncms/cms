@@ -8,8 +8,6 @@ import settings from './settings'
 import navigation from './navigation'
 import fieldtypes from './fieldtypes'
 import filemanager from './filemanager'
-import formmanager from './form-manager'
-import usermanager from './usermanager'
 
 Vue.use(Vuex)
 
@@ -23,7 +21,5 @@ export default new Vuex.Store({
         navigation,
         fieldtypes,
         filemanager,
-        formmanager,
-        usermanager,
     },
 })

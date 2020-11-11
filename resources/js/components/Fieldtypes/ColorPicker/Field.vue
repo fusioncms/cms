@@ -1,106 +1,77 @@
 <template>
-    <div class="color-picker">
-        <div class="form__group">
-            <label :for="field.handle" class="form__label">{{ field.name }}</label>
+    <ui-field-group
+        :name="field.handle"
+        :fieldId="field.handle"
+        :label="field.name"
+        :help="field.help"
+        :has-error="hasError(field.handle)"
+        :error-message="errorMessage(field.handle)">
 
-            <div class="flex items-end">
-                <div class="flex-grow mr-3">
-                    <label :for="pickrClass + '_hex'" class="text-xs">Picker</label>
-                    <div :class="pickrClass"></div>
-                </div>
-                
-                <div class="mr-3 flex-grow">
-                    <label :for="pickrClass + '_hex'" class="text-xs">Hex</label>
-                    <input :id="pickrClass + '_hex'"
-                        :name="pickrClass + '_hex'"
-                        type="text"
-                        class="form__control" 
-                        v-model="hex">
-                </div>
+        <div class="input-group">
+            <ui-input
+                class="field-input field"
+                :id="field.handle"
+                :name="field.handle"
+                :help="field.help"
+                :aria-describedby="field.help"
+                v-model="model">
+            </ui-input>
 
-                <div class="flex-grow">
-                    <label :for="pickrClass + '_rgba'" class="text-xs">RGBA</label>
-                    <input :id="pickrClass + '_rgba'"
-                        :name="pickrClass + '_rgba'"
-                        type="text" 
-                        class="form__control" 
-                        v-model="rgba">
-                </div>
-            </div>
+            <ui-button icon :class="pickrClass" :style="`color: ${this.model};`">
+                <fa-icon v-if="this.model == ''" :icon="['far', 'square']"></fa-icon>
+                <fa-icon v-else :icon="['fas', 'square']"></fa-icon>
+                <span class="sr-only">Choose an existing audio file</span>
+            </ui-button>
+
+            <ui-button icon @click="clear">
+                <fa-icon :icon="['fas', 'times']" class="mr-1"></fa-icon>
+                <span class="sr-only">Clear field</span>
+            </ui-button>
         </div>
-    </div>
+    </ui-field-group>
 </template>
 
 <script>
     import Pickr from '@simonwep/pickr'
+    import FieldMixin from '@/mixins/fieldtypes/field'
 
     export default {
         name: 'color-picker-fieldtype',
 
+        mixins: [FieldMixin],
+
         data() {
             return {
-                color: {},
-                pickr: {},
-                rgba: '',
-                hex: '',
-                cmyk: '',
-                updating: false,
-                transparency: true
-            }
-        },
-
-        props: {
-            field: {
-                type: Object,
-                required: true,
-            },
-
-            value: {
-                required: false,
-                default: '',
+                pickr: null
             }
         },
 
         computed: {
             pickrClass() {
-                return this.field.handle + '-pickr'
-            },
-        },
-
-        methods: {
-            pickrChanged(color) {
-                this.color = color
-
-                this.hex = this.color ? this.color.toHEXA().toString() : ''
-                this.rgba = this.color ? this.color.toRGBA().toString(0) : ''
-
-                this.$emit('input', this.rgba)
-            },
-
-            changeColor(colorString) {
-                if (this.pickr.setColor(colorString)) {
-                    this.pickr.applyColor()
-                }
+                return `${this.field.handle}-pickr`
             },
         },
 
         watch: {
-            rgba(colorString) {
-                this.changeColor(colorString)
-            },
+            model(value) {
+                if (this.pickr.setColor(value)) {
+                    this.pickr.applyColor()
+                }
+            }
+        },
 
-            hex(colorString) {
-                this.changeColor(colorString)
-            },
+        methods: {
+            clear() {
+                this.model = ''
+            }
         },
 
         mounted() {
-            let defaultColor = this.value === null && this.field.settings.default ? this.field.settings.default : ''
-
             this.pickr = Pickr.create({
-                el: '.' + this.pickrClass,
+                el: `.${this.pickrClass}`,
                 theme: 'monolith',
-                default: this.value && this.value != '' ? this.value : defaultColor,
+                default: _.isNull(this.value) ? this.field.settings.default : this.value,
+                useAsButton: true,
                 swatches: [
                     '#000000',
                     '#FFFFFF',
@@ -127,42 +98,13 @@
                 ],
                 comparison: true,
                 components: {
-                    opacity: this.transparency,
+                    opacity: (this.field.settings.transparency == '1'),
                     hue: true,
-
-                    // interaction: {
-                    //     // hex: true,
-                    //     // rgba: true,
-                    //     // input: true,
-                    //     // clear: true,
-                    // }
                 }
             })
 
-            if (this.value) {
-                this.changeColor(this.value)
-                
-                this.color = this.pickr.getColor()
-                
-                this.pickrChanged(this.color)
-            } else if (defaultColor) {
-                this.changeColor(defaultColor)
-                
-                this.color = this.pickr.getColor()
-                
-                this.pickrChanged(this.color)
-            }
-
-            this.pickr.on('save', (color, instance) => {
-                this.pickrChanged(color)
-            })
-
-            this.pickr.on('change', (color, instance) => {
-                this.pickrChanged(color)
-            })
-
-            this.pickr.on('clear', (instance) => {
-                this.pickrChanged(null)
+            .on('change', (color, instance) => {
+                this.model = color.toHEXA().toString()
             })
         }
     }

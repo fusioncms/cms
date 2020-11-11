@@ -37,6 +37,11 @@ class UserFieldtype extends Fieldtype
     ];
 
     /**
+     * @var array
+     */
+    public $validation = false;
+
+    /**
      * @var string
      */
     public $namespace = 'Fusion\Models\User';

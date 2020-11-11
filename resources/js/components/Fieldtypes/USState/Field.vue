@@ -1,45 +1,29 @@
 <template>
-    <div>
-        <ui-select-group
-            :name="field.handle"
-            :label="field.name"
-            :help="field.help"
-            :value="value"
-            @input="$emit('input', $event)"
-            :options="states"
-            placeholder="Select a state..."
-            :filterable="field.settings.filterable || false"
-        ></ui-select-group>
-    </div>
+    <ui-select-group
+        :name="field.handle"
+        :label="field.name"
+        :help="field.help"
+        :options="options"
+        placeholder="Select a US state..."
+        :filterable="!! field.settings.filterable"
+        :multiple="!! field.settings.multiple"
+        :hasError="hasError(field.handle)"
+        :errorMessage="errorMessage(field.handle)"
+        v-model="model">
+    </ui-select-group>
 </template>
 
 <script>
+    import FieldMixin from '@/mixins/fieldtypes/field'
+
     export default {
         name: 'us-state-fieldtype',
 
-        props: {
-            field: {
-                type: Object,
-                required: true,
-            },
-
-            value: {
-                required: false,
-                default: null,
-            },
-        },
+        mixins: [FieldMixin],
 
         computed: {
-            states() {
+            options() {
                 return Object.values(this.field.type.data)
-            },
-        },
-
-        created() {
-            let index = _.findIndex(this.states, (state) => state.checked == true)
-
-            if (index !== -1 && ! this.states) {
-                this.$emit('input', this.states[index].value)
             }
         }
     }

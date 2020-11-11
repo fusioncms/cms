@@ -29,7 +29,7 @@ class NumberFieldtype extends Fieldtype
      */
     public $settings = [
         'decimals' => 0,
-        'steps'    => 1,
+        'step'     => 1,
         'min'      => null,
         'max'      => null,
     ];
@@ -39,7 +39,7 @@ class NumberFieldtype extends Fieldtype
      */
     public $rules = [
         'settings.decimals' => 'required|integer',
-        'settings.steps'    => 'required|numeric',
+        'settings.step'     => 'required|numeric',
         'settings.min'      => 'nullable|numeric',
         'settings.max'      => 'nullable|numeric',
     ];
@@ -49,7 +49,7 @@ class NumberFieldtype extends Fieldtype
      */
     public $attributes = [
         'settings.decimals' => 'decimals',
-        'settings.steps'    => 'steps',
+        'settings.step'    => 'step',
         'settings.min'      => 'min',
         'settings.max'      => 'max',
     ];

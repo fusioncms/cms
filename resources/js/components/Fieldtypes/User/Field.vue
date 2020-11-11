@@ -1,205 +1,107 @@
 <template>
-	<div>
-		<label :for="field.handle" class="form__label">{{ field.name }}</label>
+    <div>
+        <ui-field-group
+            :name="field.handle"
+            :fieldId="`${field.handle}-field`"
+            :label="field.name"
+            :help="field.help"
+            :hasError="hasError(field.handle)"
+            :errorMessage="errorMessage(field.handle)">
 
-		<div class="flex items-start justify-between">
-			<div class="w-1/2">
-				<ui-button :disabled="requestOpen" @click="open">
-					<fa-icon :icon="['fas', 'plus-circle']" class="mr-1"></fa-icon> Manage Users
-				</ui-button>
-			</div>
+            <ui-button v-modal:selection-modal>
+                <fa-icon :icon="['fas', 'tasks']" class="mr-1"></fa-icon>
+                <span>Manage User Selection</span>
+            </ui-button>
 
-			<user-selection
-				class="w-1/2"
-				:limit="selectionLimit"
-				:hasHeader="false"
-				v-model="selected">
-			</user-selection>
-		</div>
+            <table class="table" v-if="model && model.length > 0">
+                <ui-sortable-list v-model="model" :class="`${field.handle}-sortable-list`">
+                    <tbody>
+                        <ui-sortable-item v-for="item in model" :key="item.id">
+                            <tr>
+                                <td class="w-8">
+                                    <ui-sortable-handle class="cursor-move inline-block">
+                                        <fa-icon icon="grip-vertical" class="handle fa-fw text-gray-400 mr-3"></fa-icon>
+                                    </ui-sortable-handle>
+                                </td>
+                                <td v-text="item.name"></td>
+                                <td v-text="item.email"></td>
+                                <td class="w-16">
+                                    <ui-button icon @click.prevent="remove(item.id)">
+                                        <fa-icon icon="times"></fa-icon>
+                                        <span class="sr-only">Destroy</span>
+                                    </ui-button>
+                                </td>
+                            </tr>
+                        </ui-sortable-item>
+                    </tbody>
+                </ui-sortable-list>
+            </table>
 
-		<!-- User Manager Modal -->
-		<ui-modal name="user-manager" no-header no-footer extra-large v-model="modalOpen">
-			<div class="row">
-				<div class="side-container">
-					<user-selection
-						:limit="selectionLimit"
-						@reject="reject"
-						@accept="accept"
-						v-model="selection">
-					</user-selection>
-			   	</div>
+            <div v-else class="help">Your list is empty.</div>
+        </ui-field-group>
 
-				<div class="content-container">
-					<div class="card">
-						<div class="card__body">
-                    		<div class="toolbar">
-                    			<div class="toolbar__group">
-									<ui-button icon @click.prevent="push">
-										<fa-icon class="icon" icon="arrow-alt-circle-left"></fa-icon>
-									</ui-button>
-                    			</div>
 
-		                        <div class="toolbar__group toolbar__group--grow">
-		                            <search-action></search-action>
-		                        </div>
+        <ui-modal name="selection-modal" title="Browse users">
+            <ui-table :endpoint="endpoint" id="user-items" sort-by="name" sort-in="desc" :per-page="10">
+                <template slot="name" slot-scope="table">
+                    <ui-checkbox
+                        :id="`selection-${table.record.id}`"
+                        name="selection"
+                        :value="isChecked(table.record.id)"
+                        @input="toggle(table.record)">
+                        {{ table.record.name }}
+                    </ui-checkbox>
+                </template>
 
-		                        <div class="toolbar__group">
-		                        	<role-action></role-action>
-		                        	<sort-action></sort-action>
-		                        	<view-action></view-action>
-		                        </div>
-		                    </div>
-						</div>
+                <template slot="role" slot-scope="table">
+                    <router-link :to="{ name: 'roles.show', params: {role: table.record.role.id} }" v-if="$can('roles.view')">{{ table.record.role.name }}</router-link>
+                    <span v-else>{{ table.record.role.name }}</span>
+                </template>
 
-						<div class="gallery-container selectables">
-							<div class="gallery border-b border-gray-200 pb-2">
-								<user-card
-									v-for="user in users"
-									:key="user.id"
-									:user="user"
-									@dblclick="add(user.id)">
-								</user-card>
-							</div>
-						</div>
-            		</div>
-            	</div>
-            </div>
+                <template slot="created_at" slot-scope="table">
+                    <ui-date :timestamp="table.record.created_at"></ui-date>
+                </template>
+            </ui-table>
         </ui-modal>
-	</div>
+    </div>
 </template>
 
 <script>
-	import { mapGetters, mapActions } from 'vuex'
-
-	import UserCard      from '@/interfaces/UserManager/Browse/User.vue'
-	import UserSelection from '@/interfaces/UserManager/Selection.vue'
-
-	import RoleAction    from '@/interfaces/UserManager/Actions/Role.vue'
-	import SearchAction  from '@/interfaces/UserManager/Actions/Search.vue'
-	import SortAction    from '@/interfaces/UserManager/Actions/Sort.vue'
-	import ViewAction    from '@/interfaces/UserManager/Actions/View.vue'
+    import FieldMixin from '@/mixins/fieldtypes/field'
 
 	export default {
 		name: 'user-fieldtype',
 
-		components: {
-			'user-card':      UserCard,
-			'user-selection': UserSelection,
-			'role-action':    RoleAction,
-			'search-action':  SearchAction,
-			'sort-action':    SortAction,
-			'view-action':    ViewAction,
-		},
+        mixins: [FieldMixin],
 
-		mixins: [
-			require('@/mixins/userselector').default,
-        ],
-
-		data() {
+        data() {
             return {
-            	requestOpen: false,
-            	modalOpen: false,
-            	selection: [],
+                endpoint: '/datatable/users'
             }
         },
 
-		props: {
-			field: {
-			    type: Object,
-			    required: true,
-			},
+        methods: {
+            isChecked(id) {
+                return !! _.find(this.model, (item) => item.id == id)
+            },
 
-			value: {
-				type: Array,
-				required: false,
-				default: () => [],
-			},
-		},
+            toggle(record) {
+                if (this.isChecked(record.id)) {
+                    this.remove(record.id)
+                } else {
+                    this.model.push(record)
+                }
+            },
 
-		watch: {
-			loading(isLoading) {
-				this.$nextTick(() => {
-					if (isLoading) {
-						this.destroySelector()
-					} else {
-						this.loadSelector(this.$el.querySelector('.selectables'))
-
-						if (this.requestOpen) {
-							this.modalOpen   = true
-							this.requestOpen = false
-						}
-					}
-				})
-			}
-		},
-
-        computed: {
-        	...mapGetters({
-        		loading:       'usermanager/getLoading',
-        		users:         'usermanager/getUsers',
-        	}),
-
-			selected: {
-				get() {
-					return this.value || []
-				},
-
-				set(value) {
-					this.$emit('input', value)
-				}
-			},
-
-			selectionLimit() {
-				return Number(this.field.settings.limit) || Infinity
-			},
-
-			addLimit() {
-				return this.selectionLimit - this.selection.length
-			}
+            remove(id) {
+                this.model = _.reject(this.model, (item) => item.id == id)
+            }
         },
 
-		methods: {
-			...mapActions({
-				fetchUsers: 'usermanager/fetchUsers',
-			}),
-
-			push() {
-				_.forEach(this.selectedUsers, (id) => this.add(id))
-			},
-
-			add(id) {
-				if (this.addLimit > 0) {
-					let exists = _.find(this.selection, [ 'id', id ])
-					let user   = _.find(this.users, [ 'id', id ])
-
-					if (! exists) {
-						this.selection.push(user)
-					}
-				}
-			},
-
-			open() {
-				this.fetchUsers()
-
-				this.selection = [...this.selected]
-				this.requestOpen = true
-			},
-
-			close() {
-				this.clearSelection()
-
-				this.selection = []
-				this.modalOpen = false
-			},
-
-			reject() {
-				this.close()
-			},
-
-			accept() {
-				this.selected = this.selection
-				this.close()
-			}
-		}
+        created() {
+            if (_.isEmpty(this.value)) {
+                this.model = []
+            }
+        }
 	}
 </script>

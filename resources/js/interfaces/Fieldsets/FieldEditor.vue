@@ -46,11 +46,25 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col w-full">
-                        <ui-input-group name="validation" label="Validation Rules" v-model="form.validation" monospaced></ui-input-group>
+                <ui-field-group
+                    v-if="form.validation !== false"
+                    name="validation"
+                    fieldId="field-validation"
+                    label="Validation Rules">
+                    
+                    <div class="row">
+                        <ui-input-group
+                            class="col w-full sm:w-1/2"
+                            v-for="(rule, key) in form.validation"
+                            :key="key"
+                            :name="`validation.${key}`"
+                            :hide-label="Object.values(form.validation).length == 1"
+                            :label="key"
+                            monospaced
+                            v-model="form.validation[key]">
+                        </ui-input-group>
                     </div>
-                </div>
+                </ui-field-group>
 
                 <hr>
 

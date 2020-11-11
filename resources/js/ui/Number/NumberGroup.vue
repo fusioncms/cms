@@ -28,7 +28,7 @@
             :hasSuccess="hasSuccess"
             :message="hasMessage"
             :hide-buttons="hideButtons"
-            v-model="computedValue">
+            v-model="model">
         </ui-number>
     </ui-field-group>
 </template>
@@ -40,6 +40,18 @@
         mixins: [
             require('../../mixins/fields').default
         ],
+
+        computed: {
+            model: {
+                get() {
+                    return this.value || 0
+                },
+
+                set(value) {
+                    this.$emit('input', value)
+                }
+            }
+        },
 
         props: {
             name:  {
@@ -106,11 +118,11 @@
                 default: false,
             },
             step: {
-                type: Number,
+                type: [String, Number],
                 default: 1
             },
             decimals: {
-                type: Number,
+                type: [String, Number],
                 default: 0
             },
             min: {
@@ -125,18 +137,6 @@
                 type: Boolean,
                 default: false
             }
-        },
-
-        watch: {
-            computedValue(value) {
-                this.computedValue = value
-            }
-        },
-
-        mounted() {
-            this.computedValue = this.value
-
-            console.log(this.computedValue)
         }
     }
 </script>

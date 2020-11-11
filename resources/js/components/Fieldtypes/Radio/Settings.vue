@@ -1,27 +1,29 @@
 <template>
     <div>
-        <ui-select-group
-            name="settings.display"
-            label="Display"
-            help="Choose whether to display options in a horizontal row or vertical column."
-            autocomplete="off"
-            v-model="settings.display"
-            :options="[
-                {
-                    label: 'Column',
-                    value: 'column',
-                },
-                {
-                    label: 'Row',
-                    value: 'row',
-                }
-            ]"
-            :has-error="errors.has('settings.display')"
-            :error-message="errors.get('settings.display')">
-        </ui-select-group>
-        <div class="col w-full">
-            <option-builder v-model="settings.options"></option-builder>
+        <div class="row">
+            <ui-select-group
+                class="col w-full sm:w-1/2"
+                name="settings.display"
+                label="Display"
+                help="Choose whether to display options in a horizontal row or vertical column."
+                autocomplete="off"
+                :options="[
+                    {
+                        label: 'Column',
+                        value: 'column',
+                    },
+                    {
+                        label: 'Row',
+                        value: 'row',
+                    }
+                ]"
+                :has-error="errors.has('settings.display')"
+                :error-message="errors.get('settings.display')"
+                v-model="settings.display">
+            </ui-select-group>
         </div>
+
+        <option-builder v-model="settings.options"></option-builder>
     </div>
 </template>
 

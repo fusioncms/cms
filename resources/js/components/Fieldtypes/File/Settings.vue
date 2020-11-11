@@ -1,18 +1,19 @@
 <template>
-    <div>
+    <div class="row">
         <ui-toggle
-            :name="settings.multiple"
+            class="col w-full sm:w-1/2"
+            name="settings.multiple"
             label="Multi-select"
             help="Should this field allow multiple files to be uploaded?"
             :checked="!! settings.multiple"
             v-model="settings.multiple"
-            class="mr-5 w-full lg:w-2/5"
             :has-error="errors.has('settings.multiple')"
             :error-message="errors.get('settings.multiple')">
         </ui-toggle>
 
         <ui-input-group
-            name="accept"
+            class="col w-full sm:w-1/2"
+            name="settings.accept"
             label="Acceptable file types"
             help="<a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Unique_file_type_specifiers' target='_blank'>Unique file type specifiers</a>"
             v-model="settings.accept"
@@ -23,7 +24,8 @@
         </ui-input-group>
 
         <ui-input-group
-            :name="settings.directory"
+            class="col w-full sm:w-1/2"
+            name="settings.directory"
             label="Directory"
             help="Directory where files will be uploaded to within the File Manager."
             autocomplete="off"

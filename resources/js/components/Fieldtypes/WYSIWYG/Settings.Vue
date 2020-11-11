@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <div class="row">
         <ui-input-group
+            class="col w-full sm:w-1/2"
             name="settings.placeholder"
             label="Placeholder"
             help="Text that will appear inside the WYSIWYG element's content area when empty."
@@ -9,7 +10,7 @@
             :has-error="errors.has('settings.placeholder')"
             :error-message="errors.get('settings.placeholder')">
         </ui-input-group>
-	</div>
+    </div>
 </template>
 
 <script>

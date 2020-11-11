@@ -29,6 +29,7 @@ class CheckboxFieldtype extends Fieldtype
      */
     public $settings = [
         'display' => 'column',
+        'options' => [],
     ];
 
     /**

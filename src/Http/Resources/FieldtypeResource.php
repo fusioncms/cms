@@ -27,6 +27,7 @@ class FieldtypeResource extends JsonResource
             'messages'    => $this->messages,
             'field'       => $this->field,
             'settings'    => $this->settings,
+            'validation'  => $this->validation,
             'data'        => $this->data,
             'structures'  => [],
         ];

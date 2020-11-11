@@ -1,40 +1,29 @@
 <template>
-    <div>
-        <ui-radio-group
-            :name="field.name"
-            :label="field.name"
-            :help="field.help"
-            :inline="field.settings.display == 'row'">
-                <ui-radio :key="field.name + option.label"
-                    v-for="option in field.settings.options"
-                    :name="field.name"
-                    :id="option.value"
-                    :value="option.value"
-                    :checked="option.value == value"
-                    @input="$emit('input', option.value)">
-                    {{option.label}}
-                </ui-radio>
-        </ui-radio-group>
-    </div>
+    <ui-radio-group
+        :label="field.name"
+        :help="field.help"
+        :inline="field.settings.display == 'row'"
+        :hasError="hasError(field.handle)"
+        :errorMessage="errorMessage(field.handle)">
+
+        <ui-radio
+            v-for="(option, index) in field.settings.options"
+            :key="`${field.handle}.${index}`"
+            :id="`${field.handle}.${index}`"
+            :name="field.handle"
+            :native-value="option.value"
+            v-model="model">
+            {{option.label}}
+        </ui-radio>
+    </ui-radio-group>
 </template>
 
 <script>
-    import fieldtype from '@/mixins/fieldtype'
+    import FieldMixin from '@/mixins/fieldtypes/field'
+    
     export default {
         name: 'radio-fieldtype',
 
-        mixins: [fieldtype],
-
-        props: {
-            field: {
-                type: Object,
-                required: true,
-            },
-
-            value: {
-                required: false,
-                default: null,
-            },
-        }
+        mixins: [FieldMixin]
     }
 </script>

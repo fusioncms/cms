@@ -1,14 +1,9 @@
 <template>
-    <div>
-    </div>
+    <div></div>
 </template>
 
 <script>
-    import fieldtype from '@/mixins/fieldtype'
-
     export default {
-        name: 'list-fieldtype-settings',
-
-        mixins: [fieldtype],
+        name: 'list-fieldtype-settings'
     }
 </script>

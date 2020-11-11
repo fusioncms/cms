@@ -28,8 +28,9 @@ class SelectFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
-        'multiple' => 0,
-        'options'  => [],
+        'multiple'   => false,
+        'filterable' => false,
+        'options'    => [],
     ];
 
     /**
