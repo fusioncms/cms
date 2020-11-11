@@ -52,7 +52,7 @@ class LinkFieldtype extends Fieldtype
      */
     public function rules(Field $field, $value = null)
     {
-        return $field->validation->mapWithKeys(function($rule, $key) use ($field) {
+        return $field->validation->mapWithKeys(function ($rule, $key) use ($field) {
             return [
                 "{$field->handle}.{$key}" => $rule ?: 'sometimes',
             ];

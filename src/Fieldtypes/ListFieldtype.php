@@ -30,7 +30,7 @@ class ListFieldtype extends Fieldtype
     public $column = [
         'type' => 'text',
     ];
-    
+
     /**
      * @var array
      */
