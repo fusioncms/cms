@@ -1,13 +1,13 @@
 <template>
-    <div>
+    <div class="row">
         <ui-toggle
+            class="col w-full sm:w-1/2"
             name="settings.default"
             label="Default"
             help="What would you like the default value to be?"
-            :checked="!! settings.default"
-            v-model="settings.default"
             :has-error="errors.has('settings.default')"
-            :error-message="errors.get('settings.default')">
+            :error-message="errors.get('settings.default')"
+            v-model="settings.default">
         </ui-toggle>
     </div>
 </template>

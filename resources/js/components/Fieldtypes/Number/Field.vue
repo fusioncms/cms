@@ -1,35 +1,27 @@
 <template>
-    <div>
-        <ui-number-group
-            :name="field.handle"
-            :label="field.name"
-            :help="field.help"
-            :placeholder="field.settings.placeholder"
-            :value="value"
-            :steps="field.settings.steps"
-            :decimals="field.settings.decimals"
-            :min="Number(field.settings.min)"
-            :max="Number(field.settings.max)">
-        </ui-number-group>
-    </div>
+    <ui-number-group
+        :name="field.handle"
+        :label="field.name"
+        :help="field.help"
+        :value="value"
+        :placeholder="field.settings.placeholder"
+        :step="field.settings.step"
+        :decimals="field.settings.decimals"
+        :min="Number(field.settings.min)"
+        :max="Number(field.settings.max)"
+        :has-error="hasError(field.handle)"
+        :error-message="errorMessage(field.handle)"
+        @input="$emit('input', Number($event))">
+    </ui-number-group>
 </template>
 
 <script>
+    import FieldMixin from '@/mixins/fieldtypes/field'
+
     export default {
         name: 'number-fieldtype',
 
-        props: {
-            field: {
-                type: Object,
-                required: true,
-            },
-
-            value: {
-                type: [String, Number],
-                required: false,
-                default: null,
-            },
-        }
+        mixins: [FieldMixin],
     }
 </script>
 

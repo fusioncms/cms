@@ -1,7 +1,8 @@
 <template>
-    <div class="row">
-        <div class="col md:w-1/2">
+    <div>
+        <div class="row">
             <ui-select-group
+                class="col w-full sm:w-1/2"
                 name="settings.display"
                 label="Display"
                 help="Choose whether to display options in a horizontal row or vertical column."
@@ -22,9 +23,7 @@
             </ui-select-group>
         </div>
         
-        <div class="col w-full">
-            <option-builder v-model="settings.options"></option-builder>
-        </div>
+        <option-builder v-model="settings.options"></option-builder>
     </div>
 </template>
 

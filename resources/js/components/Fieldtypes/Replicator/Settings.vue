@@ -1,9 +1,5 @@
 <template>
-    <div>
-        <section-builder
-            v-model="settings.sections">
-        </section-builder>
-    </div>
+    <section-builder v-model="settings.sections"></section-builder>
 </template>
 
 <script>

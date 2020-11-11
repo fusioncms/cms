@@ -118,11 +118,11 @@
                 default: false,
             },
             step: {
-                type: Number,
+                type: [String, Number],
                 default: 1
             },
             decimals: {
-                type: Number,
+                type: [String, Number],
                 default: 0
             },
             min: {

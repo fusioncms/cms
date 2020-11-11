@@ -4,13 +4,14 @@
         :label="field.name"
         :help="field.help"
         :value="value"
-        :steps="field.settings.steps"
+        :placeholder="field.settings.placeholder"
+        :step="field.settings.step"
         :decimals="field.settings.decimals"
         :min="Number(field.settings.min)"
         :max="Number(field.settings.max)"
-        :has-error="hasError"
-        :error-message="errorMessage"
-        @input="$emit('input', $event)">
+        :has-error="hasError(field.handle)"
+        :error-message="errorMessage(field.handle)"
+        @input="$emit('input', Number($event))">
     </ui-range-group>
 </template>
 

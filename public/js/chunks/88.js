@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[88],{LPmI:function(e,n,t){"use strict";t.r(n);var i={name:"audio-fieldtype-settings"},s=t("KHd+"),l=Object(s.a)(i,(function(){var e=this.$createElement;return(this._self._c||e)("div")}),[],!1,null,null,null);n.default=l.exports}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[88],{gewu:function(e,n,t){"use strict";t.r(n);var s={name:"address-fieldtype-settings"},i=t("KHd+"),l=Object(i.a)(s,(function(){var e=this.$createElement;return(this._self._c||e)("div")}),[],!1,null,null,null);n.default=l.exports}}]);

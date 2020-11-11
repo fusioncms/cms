@@ -96,11 +96,11 @@
                 default: false,
             },
             step: {
-                type: Number,
+                type: [String, Number],
                 default: 1
             },
             decimals: {
-                type: Number,
+                type: [String, Number],
                 default: 0
             },
             min: {
@@ -124,8 +124,7 @@
                 },
 
                 set(value) {
-                    this.$emit('input',
-                        this.formatNumber(value, this.decimals))
+                    this.$emit('input', Number(value).toFixed(this.decimals))
                 }
             },
 
@@ -139,18 +138,12 @@
         },
 
         methods: {
-            formatNumber(num, decimals) {
-                let regex = new RegExp('^-?\\d+(?:\.\\d{0,' + (decimals || -1) + '})?')
-
-                return Number(num.toString().match(regex)[0]).toFixed(decimals)
-            },
-
             increase() {
                 if (this.disabled || this.increaseDisabled) {
                     return
                 }
 
-                this.model = Math.min(this.model + this.step, this.max)
+                this.model = Math.min(this.model + Number(this.step), this.max)
             },
 
             decrease() {
@@ -158,7 +151,7 @@
                     return
                 }
 
-                this.model = Math.max(this.model - this.step, this.min)
+                this.model = Math.max(this.model - Number(this.step), this.min)
             }
         }
     }

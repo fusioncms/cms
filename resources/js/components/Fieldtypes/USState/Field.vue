@@ -5,8 +5,8 @@
         :help="field.help"
         :options="options"
         placeholder="Select a US state..."
-        :filterable="field.settings.filterable == '1'"
-        :multiple="field.settings.multiple == '1'"
+        :filterable="!! field.settings.filterable"
+        :multiple="multiple"
         :hasError="hasError(field.handle)"
         :errorMessage="errorMessage(field.handle)"
         v-model="model">
@@ -24,6 +24,10 @@
         computed: {
             options() {
                 return Object.values(this.field.type.data)
+            },
+
+            multiple() {
+                return this.field.settings.multiple == '1'
             }
         }
     }
