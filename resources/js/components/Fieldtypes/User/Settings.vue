@@ -5,7 +5,7 @@
             name="settings.limit"
             label="Limit"
             help="Limit the number of users selected; leave blank if no limit is desired."
-            min="1"
+            :min="1"
             :has-error="errors.has('settings.limit')"
             :error-message="errors.get('settings.limit')"
             v-model="settings.limit">

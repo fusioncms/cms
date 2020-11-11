@@ -16,7 +16,7 @@
             <file-selection
                 :limit="selectionLimit"
                 :hasHeader="false"
-                v-model="selected">
+                v-model="model">
             </file-selection>
         </ui-field-group>
 
@@ -70,7 +70,11 @@
 						</div>
 
 						<div class="flex items-center border-b border-gray-200 px-3 py-2">
-							<breadcrumb-action></breadcrumb-action>
+                            <ui-breadcrumbs>
+                                <ui-breadcrumb  v-for="(breadcrumb, index) in breadcrumbs" :key="breadcrumb.name" @click="navigate(breadcrumb)" :divider="index > 0">
+                                    {{ breadcrumb.name }}
+                                </ui-breadcrumb>
+                            </ui-breadcrumbs>
 						</div>
 
 						<div class="gallery-container selectables">
@@ -108,10 +112,13 @@
 <script>
 	import { mapActions } from 'vuex'
 
+    import FieldMixin   from '@/mixins/fieldtypes/field'
+    import FileSelector from '@/mixins/fileselector'
+    import FileBrowser  from '@/mixins/filebrowser'
+
 	import FileUploader  from '@/interfaces/FileManager/FileUploader.vue'
 	import FileSelection from '@/interfaces/FileManager/FileSelection.vue'
 
-	import BreadcrumbAction from '@/interfaces/FileManager/Actions/Breadcrumb.vue'
 	import DisplayAction    from '@/interfaces/FileManager/Actions/Display.vue'
 	import SearchAction     from '@/interfaces/FileManager/Actions/Search.vue'
 	import SortAction       from '@/interfaces/FileManager/Actions/Sort.vue'
@@ -123,26 +130,20 @@
 	export default {
 		name: 'asset-fieldtype',
 
-		components: {
+		mixins: [FieldMixin, FileSelector, FileBrowser],
+		
+        components: {
 			'file-uploader':  FileUploader,
 			'file-selection': FileSelection,
 
-			'display-action':    DisplayAction,
-			'breadcrumb-action': BreadcrumbAction,
-			'search-action':     SearchAction,
-			'sort-action':       SortAction,
-			'view-action':       ViewAction,
+			'display-action': DisplayAction,
+			'search-action':  SearchAction,
+			'sort-action':    SortAction,
+			'view-action':    ViewAction,
 
-			'directory': Directory,
-			'file':      File,
+			'directory':      Directory,
+			'file':           File,
 		},
-
-		mixins: [
-			require('@/mixins/fieldtypes/field').default,
-			require('@/mixins/fileselector').default,
-			require('@/mixins/filedragdrop').default,
-            require('@/mixins/filebrowser').default,
-        ],
 
 		data() {
             return {
@@ -168,8 +169,6 @@
 				})
 			}
 		},
-
-
 
         computed: {
 			selectionLimit() {
@@ -210,20 +209,20 @@
 			},
 
 			open() {
-				this.reset()
-				this.setCurrentDirectory(this.field.settings.root_directory || 0)
-        		this.setRootDirectory(this.field.settings.root_directory || 0)
-				this.fetchFilesAndDirectories()
+                this.reset()
+                this.setCurrentDirectory(this.field.settings.root_directory || 0)
+                this.setRootDirectory(this.field.settings.root_directory || 0)
+                this.fetchFilesAndDirectories()
 
-				this.selection = [...this.selected]
-				this.requestOpen = true
+                this.selection = [...this.model]
+                this.requestOpen = true
 			},
 
 			close() {
-				this.reset()
+                this.reset()
 
-				this.selection = []
-				this.modalOpen = false
+                this.selection = []
+                this.modalOpen = false
 			},
 
 			reject() {
@@ -231,14 +230,23 @@
 			},
 
 			accept() {
-				this.selected = this.selection
+                this.model = [...this.selection]
 				this.close()
-			}
+			},
+
+            navigate(directory) {
+                this.reset()
+                
+                this.setCurrentDirectory(directory.id)
+                this.setRootDirectory(this.field.settings.root_directory || 0)
+                
+                this.fetchFilesAndDirectories()
+            }
 		},
 
 		created() {
 			if (_.isEmpty(this.value)) {
-				this.selected = []
+				this.model = []
 			}
 		},
 
