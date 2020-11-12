@@ -58,7 +58,8 @@ class Field extends Model
     /**
      * Get field's validation.
      *
-     * @param  Collection|null  $value
+     * @param Collection|null $value
+     *
      * @return Collection
      */
     public function getValidationAttribute($value)
