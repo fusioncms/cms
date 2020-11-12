@@ -91,6 +91,7 @@ class CollectionController extends Controller
     {
         $matrix = $request->matrix;
         $entry  = $request->model->findOrFail($id);
+
         $entry->update($request->validated());
 
         // persist relationships..

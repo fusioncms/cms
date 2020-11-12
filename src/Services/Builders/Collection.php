@@ -41,7 +41,7 @@ class Collection extends Builder implements BuilderContract
     {
         $className = Str::studly($this->matrix->handle);
         $traits    = [];
-        $fillable  = ['matrix_id', 'parent_id', 'name', 'slug', 'status'];
+        $fillable  = ['matrix_id', 'parent_id', 'name', 'slug', 'publish_at', 'expire_at', 'status'];
         $casts     = ['status' => 'boolean'];
         $fields    = [];
 
@@ -91,5 +91,13 @@ class Collection extends Builder implements BuilderContract
     public function get()
     {
         return $this->model->where('matrix_id', $this->matrix->id)->firstOrCreate(['matrix_id' => $this->matrix->id]);
+    }
+
+    /**
+     * @return array
+     */
+    public function getDates()
+    {
+        return ['created_at', 'updated_at'];
     }
 }
