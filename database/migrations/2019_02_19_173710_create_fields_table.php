@@ -15,7 +15,7 @@ class CreateFieldsTable extends Migration
     {
         Schema::create('fields', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('section_id');
+            $table->morphs('fieldable');
             $table->string('name');
             $table->string('handle');
             $table->text('help')->nullable();
@@ -26,11 +26,11 @@ class CreateFieldsTable extends Migration
             $table->boolean('locked')->default(false);
             $table->timestamps();
 
-            $table->foreign('section_id')
-                ->references('id')->on('sections')
-                ->onDelete('cascade');
-
-            $table->unique(['section_id', 'handle']);
+            $table->unique([
+                'fieldable_id',
+                'fieldable_type',
+                'handle'
+            ]);
         });
     }
 

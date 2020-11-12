@@ -45,8 +45,8 @@ class FormFieldtypeTest extends TestCase
             'name' => 'New Post',
             'slug' => 'new post',
             'form' => [
-                $this->forms->get(0)->toArray(),
-                $this->forms->get(1)->toArray(),
+                $this->forms->get(0)->id,
+                $this->forms->get(1)->id,
             ],
         ];
 
@@ -80,16 +80,16 @@ class FormFieldtypeTest extends TestCase
     public function number_of_forms_assigned_to_matrix_can_be_limited_through_validation()
     {
         // add validation
-        $this->fieldForm->validation = 'array|size:2';
+        $this->fieldForm->validation = ['value' => 'array|size:2'];
         $this->fieldForm->save();
 
         $attributes = [
             'name' => 'New Post',
             'slug' => 'new post',
             'form' => [
-                $this->forms->get(0)->toArray(),
-                $this->forms->get(1)->toArray(),
-                $this->forms->get(2)->toArray(),
+                $this->forms->get(0)->id,
+                $this->forms->get(1)->id,
+                $this->forms->get(2)->id,
             ],
         ];
 
@@ -107,9 +107,9 @@ class FormFieldtypeTest extends TestCase
             'name' => 'New Post',
             'slug' => 'new post',
             'form' => [
-                $this->forms->get(0)->toArray(),
-                $this->forms->get(1)->toArray(),
-                $this->forms->get(2)->toArray(),
+                $this->forms->get(0)->id,
+                $this->forms->get(1)->id,
+                $this->forms->get(2)->id,
             ],
         ];
 

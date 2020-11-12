@@ -1,9 +1,7 @@
 <?php
 
-use Facades\SectionFactory;
 use Fusion\Contracts\Factory;
 use Fusion\Models\Field;
-use Fusion\Models\Section;
 
 class FieldFactory implements Factory
 {
@@ -11,11 +9,6 @@ class FieldFactory implements Factory
      * @var string
      */
     protected $name;
-
-    /**
-     * @var \Fusion\Models\Section
-     */
-    protected $section;
 
     /**
      * @var string
@@ -47,13 +40,8 @@ class FieldFactory implements Factory
             $overrides['settings'] = $this->settings;
         }
 
-        if (!$this->section) {
-            $this->section = SectionFactory::create();
-        }
-
-        $overrides['section_id'] = $this->section->id;
-
         $field = factory(Field::class)->create($overrides);
+
 
         return $field;
     }
@@ -68,20 +56,6 @@ class FieldFactory implements Factory
     public function withName(string $name)
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Create a field with the given section.
-     *
-     * @param \SectionFactory $section
-     *
-     * @return \FieldFactory
-     */
-    public function withSection($section)
-    {
-        $this->section = $section;
 
         return $this;
     }

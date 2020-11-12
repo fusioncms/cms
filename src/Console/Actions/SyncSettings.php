@@ -187,15 +187,15 @@ class SyncSettings
      *
      * @param array $setting
      *
-     * @return string
+     * @return array
      */
-    private function determineValidation($setting): string
+    private function determineValidation($setting): array
     {
         if (!isset($setting['required'])) {
-            return '';
+            return [];
         }
 
-        return $setting['required'] === true ? 'required' : '';
+        return $setting['required'] === true ? ['value' => 'required'] : [];
     }
 
     /**

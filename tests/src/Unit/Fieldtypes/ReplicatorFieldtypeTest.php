@@ -20,8 +20,8 @@ class ReplicatorFieldtypeTest extends TestCase
         $this->markTestIncomplete();
 
         // --
-        $this->section  = \Facades\SectionFactory::times(1)->withoutFields()->create();
-        $this->field    = \Facades\FieldFactory::withName('Replicator')->withType('replicator')->withSection($this->section)->withSettings(['replicator'=>null, 'sections'=>[]])->create();
+        $this->field    = \Facades\FieldFactory::withName('Replicator')->withType('replicator')->withSettings(['replicator'=>null, 'sections'=>[]])->create();
+        $this->section  = \Facades\SectionFactory::times(1)->withFields([$this->field])->create();
         $this->fieldset = \Facades\FieldsetFactory::withSections(collect([$this->section]))->create();
 
         DB::table('replicators')->insert([
