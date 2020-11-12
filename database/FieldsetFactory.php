@@ -1,5 +1,6 @@
 <?php
 
+use Fusion\Models\Section;
 use Fusion\Models\Fieldset;
 use Fusion\Contracts\Factory;
 
@@ -16,6 +17,11 @@ class FieldsetFactory implements Factory
     protected $fields;
 
     /**
+     * @var \Fusion\Models\Section
+     */
+    protected $section;
+
+    /**
      * Create a new Fieldset factory.
      *
      * @return \Fusion\Models\Fieldset
@@ -23,10 +29,19 @@ class FieldsetFactory implements Factory
     public function create()
     {
         $fieldset = factory(Fieldset::class)->create([
-            'name' => $this->name
+            'name'   => $this->name,
+            'handle' => $this->name ? str_handle($this->name) : null,
         ]);
-dd($fieldset);
-        $fieldset->fields()->createMany($this->fields);
+
+        if (!$this->section) {
+            $this->section = SectionFactory::times(1)->create();
+        }
+
+        if (!empty($this->fields)) {
+            $this->section->fields()->createMany($this->fields);
+        }
+
+        $fieldset->sections()->save($this->section);
 
         return $fieldset;
     }
@@ -55,6 +70,20 @@ dd($fieldset);
     public function withFields(array $fields)
     {
         $this->fields = $fields;
+
+        return $this;
+    }
+
+    /**
+     * Create a blueprint with the given sections.
+     *
+     * @param \Fusion\Models\Section $section
+     *
+     * @return \FieldsetFactory
+     */
+    public function withSection(Section $section)
+    {
+        $this->section = $section;
 
         return $this;
     }

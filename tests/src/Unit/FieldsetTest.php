@@ -4,6 +4,7 @@ namespace Fusion\Tests\Unit;
 
 use Facades\FieldFactory;
 use Facades\FieldsetFactory;
+use Facades\SectionFactory;
 use Fusion\Models\Fieldset;
 use Fusion\Models\Field;
 use Fusion\Tests\TestCase;
@@ -18,25 +19,19 @@ class FieldsetTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        
-        $this->emailField = FieldFactory::withName('Email')->withType('email')->withoutSection()->create();
-dd($this->emailField);
-        $this->phoneField = FieldFactory::withName('Phone')->withType('phone')->withoutSection()->create();
+
+        $this->sectionContacts = SectionFactory::times(1)->withFields(
+            factory(Field::class)->create(['name' => 'Email', 'handle' => 'email', 'type' => 'email']),
+            factory(Field::class)->create(['name' => 'Phone', 'handle' => 'phone', 'type' => 'phone']),
+        )->create();
     }
 
     /** @test */
     public function a_fieldset_can_have_multiple_fields()
     {
-dd('foo');
         $fieldset = FieldsetFactory::withName('Contact')
-            ->withFields([
-                [
-                    'name'   => 'Email',
-                    'handle' => 'email',
-                    'type'   => 'email'
-                ]
-            ]);
-dd($fieldset);
+            ->withSection($this->sectionContacts);
+
         $this->assertInstanceOf(Field::class, $fieldset->fields->first());
     }
 

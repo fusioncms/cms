@@ -18,11 +18,6 @@ class FieldFactory implements Factory
     protected $section;
 
     /**
-     * @var boolean
-     */
-    protected $withoutSection = false;
-
-    /**
      * @var string
      */
     protected $type;
@@ -52,15 +47,11 @@ class FieldFactory implements Factory
             $overrides['settings'] = $this->settings;
         }
 
-        if ($this->withoutSection) {
-            $overrides['section_id'] = 0;
-        } else {
-            if (!$this->section) {
-                $this->section = SectionFactory::create();
-            }
-
-            $overrides['section_id'] = $this->section->id;
+        if (!$this->section) {
+            $this->section = SectionFactory::create();
         }
+
+        $overrides['section_id'] = $this->section->id;
 
         $field = factory(Field::class)->create($overrides);
 
@@ -91,18 +82,6 @@ class FieldFactory implements Factory
     public function withSection($section)
     {
         $this->section = $section;
-
-        return $this;
-    }
-
-    /**
-     * Create a field without a section
-     *
-     * @return \FieldFactory
-     */
-    public function withoutSection()
-    {
-        $this->withoutSection = true;
 
         return $this;
     }
