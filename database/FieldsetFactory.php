@@ -1,10 +1,9 @@
 <?php
 
-use Facades\SectionFactory;
+use Fusion\Models\Fieldset;
 use Fusion\Contracts\Factory;
-use Fusion\Models\Blueprint;
 
-class BlueprintFactory implements Factory
+class FieldsetFactory implements Factory
 {
     /**
      * @var string
@@ -12,38 +11,32 @@ class BlueprintFactory implements Factory
     protected $name;
 
     /**
-     * @var \Fusion\Models\Section
+     * @var array
      */
-    protected $sections;
+    protected $fields;
 
     /**
-     * Create a new Blueprint factory.
+     * Create a new Fieldset factory.
      *
-     * @return \Fusion\Models\Blueprint
+     * @return \Fusion\Models\Fieldset
      */
     public function create()
     {
-        $blueprint = factory(Blueprint::class)->create();
+        $fieldset = factory(Fieldset::class)->create([
+            'name' => $this->name
+        ]);
+dd($fieldset);
+        $fieldset->fields()->createMany($this->fields);
 
-        if ($this->name) {
-            $overrides['name']   = $this->name;
-        }
-
-        if (!$this->sections) {
-            $this->sections = SectionFactory::times(3)->create();
-        }
-
-        $blueprint->sections()->saveMany($this->sections);
-
-        return $blueprint;
+        return $fieldset;
     }
 
     /**
-     * Set blueprint name.
+     * Set fieldset name.
      *
      * @param string $name
      *
-     * @return \BlueprintFactory
+     * @return \FieldsetFactory
      */
     public function withName($name)
     {
@@ -53,15 +46,15 @@ class BlueprintFactory implements Factory
     }
 
     /**
-     * Create a blueprint with the given sections.
+     * Create a fieldset with the given fields.
      *
-     * @param array|\Illuminate\Support\Collection $sections
+     * @param array $fields
      *
-     * @return \BlueprintFactory
+     * @return \FieldsetFactory
      */
-    public function withSections($sections)
+    public function withFields(array $fields)
     {
-        $this->sections = $sections;
+        $this->fields = $fields;
 
         return $this;
     }
