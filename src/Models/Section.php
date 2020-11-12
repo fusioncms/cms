@@ -59,7 +59,7 @@ class Section extends Model
      * 
      * @return string
      */
-    public function tablename()
+    public function tableName()
     {
         return $this->blueprint->blueprintable->getTableAttribute();
     }
