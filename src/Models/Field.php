@@ -54,4 +54,15 @@ class Field extends Model
     {
         return fieldtypes()->get($this->type);
     }
+
+    /**
+     * Get field's validation.
+     *
+     * @param  Collection|null  $value
+     * @return Collection
+     */
+    public function getValidationAttribute($value)
+    {
+        return collect($value);
+    }
 }
