@@ -73,6 +73,16 @@ class Form extends Model
         return $builder->make();
     }
 
+    /**
+     * Get the "table" attribute value.
+     *
+     * @return string
+     */
+    public function builderName()
+    {
+        return "form_{$this->handle}";
+    }
+
     public function path($additional = null)
     {
         $path = '/form/'.$this->slug;
@@ -87,16 +97,6 @@ class Form extends Model
     public function thankyouPath()
     {
         return $this->path('thankyou');
-    }
-
-    /**
-     * Get the "table" attribute value.
-     *
-     * @return string
-     */
-    public function getTableAttribute()
-    {
-        return 'form_'.$this->handle;
     }
 
     /**

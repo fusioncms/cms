@@ -33,6 +33,11 @@ Route::prefix('fields')->group(function () {
 });
 
 /**
+ * API - Fieldset Routes.
+ */
+Route::apiResource('fieldsets', 'FieldsetController');
+
+/**
  * API - Fieldtype Routes.
  */
 Route::prefix('fieldtypes')->group(function () {

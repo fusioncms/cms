@@ -1,0 +1,79 @@
+<?php
+
+namespace Fusion\Models\Fieldsets;
+
+use Fusion\Models\Fieldset;
+use Illuminate\Support\Str;
+use Fusion\Concerns\HasActivity;
+use Fusion\Database\Eloquent\Model;
+use Spatie\Activitylog\Models\Activity;
+use Illuminate\Database\Eloquent\Builder;
+
+class {class} extends Model
+{
+    use HasActivity;
+
+	/**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'fx_{handle}';
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = {casts};
+
+    /**
+     * Mass assignment protection.
+     *
+     * @var array
+     */
+    protected $fillable = {fillable};
+
+    /**
+     * Get the Fieldset relationship.
+     *
+     * @return mixed
+     */
+    public function fieldset()
+    {
+        return $this->belongsTo(Fieldset::class);
+    }
+
+    /**
+     * Get all of the fields for the fieldset.
+     */
+    public function getFieldsAttribute()
+    {
+        return $this->fieldset->fields ?? null;
+    }
+
+    {relationships}
+
+    /**
+     * Tap into activity before persisting to database.
+     *
+     * @param  \Spatie\Activitylog\Models\Activity $activity
+     * @param  string   $eventName
+     * @return void
+     */
+    public function tapActivity(Activity $activity, string $eventName)
+    {
+        $entry      = $activity->subject;
+        $fieldset   = $entry->fieldset;
+        $action     = Str::ucfirst($eventName);
+        $modelName  = Str::singular($fieldset->name);
+        $properties = [
+            'link' => "fieldset/{$fieldset->id}/edit",
+            'icon' => 'tasks'
+        ];
+
+        $activity->description = "{$action} {$modelName}";
+        $activity->properties  = $properties;
+
+    }
+}

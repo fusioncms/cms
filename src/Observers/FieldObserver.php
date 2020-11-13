@@ -19,7 +19,7 @@ class FieldObserver
         $fieldtype = fieldtypes()->get($field->type);
         $fieldtype->onSaved($field);
 
-        $tablename = $field->fieldable->tableName();
+        $tablename = $field->fieldable->builderName();
         $column    = $fieldtype->getColumn('type');
         $settings  = $fieldtype->getColumn('settings') ?? [];
 
@@ -58,7 +58,7 @@ class FieldObserver
             'type'   => $field->type,
         ];
 
-        $tablename = $field->fieldable->tableName();
+        $tablename = $field->fieldable->builderName();
 
         if ($old['handle'] !== $new['handle']) {
             $fieldtype = fieldtypes()->get($new['type']);
@@ -111,7 +111,7 @@ class FieldObserver
         $column    = $fieldtype->getColumn('type');
         $settings  = $fieldtype->getColumn('settings') ?? [];
 
-        $tablename = $field->fieldable->tableName();
+        $tablename = $field->fieldable->builderName();
 
         array_unshift($settings, $field->handle);
 

@@ -8,6 +8,7 @@ return [
     'entries'     => ['viewAny', 'view', 'create', 'update', 'delete'],
     'files'       => ['viewAny', 'view', 'create', 'update', 'delete', 'download'],
     'blueprints'  => ['viewAny', 'view', 'create', 'update', 'delete'],
+    'fieldsets'   => ['viewAny', 'view', 'create', 'update', 'delete'],
     'forms'       => ['viewAny', 'view', 'create', 'update', 'delete'],
     'matrices'    => ['viewAny', 'view', 'create', 'update', 'delete'],
     'navigation'  => ['viewAny', 'view', 'create', 'update', 'delete'],

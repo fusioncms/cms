@@ -46,9 +46,9 @@ class Navigation extends Model
      *
      * @return string
      */
-    public function getTableAttribute()
+    public function builderName()
     {
-        return 'navigation_'.$this->handle;
+        return "navigation_{$this->handle}";
     }
 
     /**

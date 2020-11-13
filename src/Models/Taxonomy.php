@@ -62,9 +62,14 @@ class Taxonomy extends Model
         return "taxonomy_{$this->handle}";
     }
 
+    /**
+     * Get admin path.
+     *
+     * @return string
+     */
     public function getAdminPathAttribute()
     {
-        return '/taxonomies/'.$this->id;
+        return "/taxonomies/{$this->id}";
     }
 
     /**

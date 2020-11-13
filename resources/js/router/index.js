@@ -221,6 +221,33 @@ const router = new Router({
             },
         },
         {
+            path: '/fieldsets',
+            component: () => import('@/pages/Fieldsets/Index'),
+            name: 'fieldsets',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin',
+            },
+        },
+        {
+            path: '/fieldsets/create',
+            component: () => import('@/pages/Fieldsets/Create'),
+            name: 'fieldsets.create',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin',
+            },
+        },
+        {
+            path: '/fieldsets/:form/edit',
+            component: () => import('@/pages/Fieldsets/Edit'),
+            name: 'fieldsets.edit',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin',
+            },
+        },
+        {
             path: '/forms',
             component: () => import('@/pages/Forms/Index'),
             name: 'forms',

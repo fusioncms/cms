@@ -20,7 +20,7 @@ class MatrixObserver
      */
     public function created(Matrix $matrix)
     {
-        Schema::create($matrix->table, function (Blueprint $table) use ($matrix) {
+        Schema::create($matrix->builderName(), function (Blueprint $table) use ($matrix) {
             if ($matrix->type === 'collection') {
                 $table->bigIncrements('id');
             }
@@ -49,8 +49,8 @@ class MatrixObserver
         $old = Matrix::find($matrix->id);
 
         // Rename the tables if changed
-        if ($old->table !== $matrix->table) {
-            Schema::rename($old->table, $matrix->table);
+        if ($old->builderName() !== $matrix->builderName()) {
+            Schema::rename($old->builderName(), $matrix->builderName());
 
             $oldClass = 'Fusion\\Models\\Collections\\'.Str::studly($old->handle);
             $newClass = 'Fusion\\Models\\Collections\\'.Str::studly($matrix->handle);
@@ -65,14 +65,14 @@ class MatrixObserver
 
         // Create the ID column if converting from a single to a collection type
         if ($old->type === 'single' and $matrix->type === 'collection') {
-            Schema::table($matrix->table, function (Blueprint $table) {
+            Schema::table($matrix->builderName(), function (Blueprint $table) {
                 $table->bigIncrements('id')->first();
             });
         }
 
         // Drop the ID column if converting from a collection to a single type
         if ($old->type === 'collection' and $matrix->type === 'single') {
-            Schema::table($matrix->table, function (Blueprint $table) {
+            Schema::table($matrix->builderName(), function (Blueprint $table) {
                 $table->dropColumn('id');
             });
         }
@@ -87,18 +87,6 @@ class MatrixObserver
      */
     public function deleted(Matrix $matrix)
     {
-        $this->dropTable($matrix);
-    }
-
-    /**
-     * Drop the matrix database table.
-     *
-     * @param \Fusion\Models\Matrix $matrix
-     *
-     * @return void
-     */
-    protected function dropTable($matrix)
-    {
-        Schema::dropIfExists($matrix->table);
+        Schema::dropIfExists($matrix->builderName());
     }
 }
