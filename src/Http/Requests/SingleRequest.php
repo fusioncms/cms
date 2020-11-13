@@ -36,6 +36,8 @@ class SingleRequest extends Request
         $this->merge([
             'matrix_id' => $this->matrix->id,
             'status'    => $this->status ?? true,
+            'publish_at' => (isset($this->publish_at) and ! empty($this->publish_at)) ? $this->publish_at : now(),
+            'expire_at'  => (isset($this->expire_at) and ! empty($this->expire_at)) ? $this->expire_at : null,
         ]);
     }
 
@@ -47,10 +49,12 @@ class SingleRequest extends Request
     public function rules()
     {
         $rules = [
-            'matrix_id' => 'required',
-            'name'      => 'required',
-            'slug'      => 'required',
-            'status'    => 'required|boolean',
+            'matrix_id'  => 'required',
+            'name'       => 'required',
+            'slug'       => 'required',
+            'publish_at' => 'nullable|date',
+            'expire_at'  => 'nullable|date|after:publish_at',
+            'status'     => 'required|boolean',
         ];
 
         $rules += $this->fields->flatMap(function ($field) {
@@ -70,5 +74,19 @@ class SingleRequest extends Request
         return $this->fields->flatMap(function ($field) {
             return $field->type()->attributes($field, $this->{$field->handle});
         })->toArray();
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'expire_at.after'   => 'The expiry date must be a date after the publish date.',
+            'expire_at.date'    => 'The expiry date must be a valid date.',
+            'publish_at.date'   => 'The publish date must be a valid date.',
+        ];
     }
 }

@@ -203,6 +203,8 @@ abstract class DataTableController extends Controller
                 // Default sortable column
                 ->defaultSort($this->getDefaultSort())
 
+                ->withoutGlobalScopes()
+
                 // Pagination
                 // - perPage (defaults to `PER_PAGE`)
                 // - page    (defaults to `PAGE_NUM`)

@@ -41,7 +41,7 @@ class Single extends Builder implements BuilderContract
     {
         $className = Str::studly($this->matrix->handle);
         $traits    = [];
-        $fillable  = ['name', 'slug', 'matrix_id', 'status'];
+        $fillable  = ['name', 'slug', 'matrix_id', 'publish_at', 'expire_at', 'status'];
         $casts     = [];
 
         if ($this->matrix->blueprint) {
