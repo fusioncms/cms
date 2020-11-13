@@ -26,7 +26,7 @@ class CollectionController extends Controller
 
         $matrix  = Matrix::where('slug', $matrix)->firstOrFail();
         $model   = (new Collection($matrix->handle))->make();
-        $entries = $model->get()->paginate(25);
+        $entries = $model->withoutGlobalScopes()->get()->paginate(25);
 
         return EntryResource::collection($entries);
     }
@@ -44,7 +44,7 @@ class CollectionController extends Controller
 
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
         $model  = (new Collection($matrix->handle))->make();
-        $entry  = $model->findOrFail($id);
+        $entry  = $model->withoutGlobalScopes()->findOrFail($id);
 
         return new EntryResource($entry);
     }
@@ -90,7 +90,8 @@ class CollectionController extends Controller
     public function update(CollectionRequest $request, $matrixSlug, $id)
     {
         $matrix = $request->matrix;
-        $entry  = $request->model->findOrFail($id);
+        $entry  = $request->model->withoutGlobalScopes()->findOrFail($id);
+
         $entry->update($request->validated());
 
         // persist relationships..

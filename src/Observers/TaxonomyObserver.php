@@ -2,27 +2,12 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Database\Migration;
-use Fusion\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Fusion\Models\Taxonomy;
 
 class TaxonomyObserver
 {
-    /**
-     * @var \Fusion\Database\Migration
-     */
-    protected $migration;
-
-    /**
-     * Create a new TaxonomyObserver instance.
-     *
-     * @param \Fusion\Database\Migration $migration
-     */
-    public function __construct(Migration $migration)
-    {
-        $this->migration = $migration;
-    }
-
     /**
      * Handle the taxonomy "created" event.
      *
@@ -32,7 +17,7 @@ class TaxonomyObserver
      */
     public function created(Taxonomy $taxonomy)
     {
-        $this->migration->schema->create($taxonomy->table, function (Blueprint $table) {
+        Schema::create($taxonomy->table, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('taxonomy_id');
             $table->unsignedBigInteger('parent_id')->nullable();
@@ -61,7 +46,7 @@ class TaxonomyObserver
 
         // Rename the tables if changed
         if ($old->table !== $taxonomy->table) {
-            $this->migration->schema->rename($old->table, $taxonomy->table);
+            Schema::rename($old->table, $taxonomy->table);
         }
     }
 
@@ -74,6 +59,6 @@ class TaxonomyObserver
      */
     public function deleted(Taxonomy $taxonomy)
     {
-        $this->migration->schema->dropIfExists($taxonomy->table);
+        Schema::dropIfExists($taxonomy->table);
     }
 }

@@ -24,7 +24,7 @@ class SingleController extends Controller
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
         $single = (new Single($matrix->handle))->make();
 
-        return new SingleResource($single->firstOrCreate(
+        return new SingleResource($single->withoutGlobalScopes()->firstOrCreate(
             [
                 'matrix_id' => $matrix->id,
             ],
@@ -46,7 +46,7 @@ class SingleController extends Controller
      */
     public function update(SingleRequest $request, $id)
     {
-        $single = $request->model->updateOrCreate([
+        $single = $request->model->withoutGlobalScopes()->updateOrCreate([
             'matrix_id' => $id,
         ], $request->validated());
 

@@ -18,6 +18,24 @@
                         :true-value="1"
                         :false-value="0">
                     </ui-toggle>
+
+                    <ui-flatpickr-group
+                        v-model="form.publish_at"
+                        name="publish_at"
+                        id="publish_at"
+                        label="Publish Date"
+                        :has-error="form.errors.has('publish_at')"
+                        :error-message="form.errors.get('publish_at')">
+                    </ui-flatpickr-group>
+
+                    <ui-flatpickr-group
+                        v-model="form.expire_at"
+                        name="expire_at"
+                        id="expire_at"
+                        label="Expiry Date"
+                        :has-error="form.errors.has('expire_at')"
+                        :error-message="form.errors.get('expire_at')">
+                    </ui-flatpickr-group>
                 </sidebar-section>
 
                 <sidebar-section v-for="(section) in sections.sidebar" :key="section.handle" :id="'single_panel_' + section.handle" :title="section.name" :description="section.description" tabindex="-1">
@@ -51,10 +69,10 @@
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
                 </ui-title-group>
-                
+
                 <div class="entry-slug" v-if="form.slug">
                     <div v-if="!editSlug" class="entry-slug__current">
-                        <span class="entry-slug__label">Slug:</span> 
+                        <span class="entry-slug__label">Slug:</span>
 
                         <span class="entry-slug__value">{{ form.slug }}</span>
 

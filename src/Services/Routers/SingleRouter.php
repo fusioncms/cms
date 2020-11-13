@@ -20,8 +20,13 @@ class SingleRouter extends Router
                 continue 1;
             }
 
-            $model = (new Single($matrix->handle))->make();
-            $page  = $model->firstOrFail();
+            $page = (new Single($matrix->handle))->make();
+
+            if (request()->has('preview')) {
+                $page = $page->withoutGlobalScopes();
+            }
+
+            $page = $page->firstOrFail();
 
             if (!$page->status) {
                 if (Gate::denies('access.controlPanel') || !request()->has('preview')) {

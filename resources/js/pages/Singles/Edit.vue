@@ -108,9 +108,11 @@
                 entry   = response.data.data.single
             } else {
                 matrix = response.data.data
-                entry   = {
+                entry  = {
                     name: matrix.name,
                     slug: matrix.slug,
+                    publish_at: null,
+                    expire_at: null,
                     status: 1
                 }
             }
@@ -118,6 +120,8 @@
             let fields = {
                 name: entry.name,
                 slug: entry.slug,
+                publish_at: entry.publish_at,
+                expire_at: entry.expire_at,
                 status: entry.status,
             }
 
