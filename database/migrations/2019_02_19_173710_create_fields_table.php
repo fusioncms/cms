@@ -29,7 +29,7 @@ class CreateFieldsTable extends Migration
             $table->unique([
                 'fieldable_id',
                 'fieldable_type',
-                'handle'
+                'handle',
             ]);
         });
     }

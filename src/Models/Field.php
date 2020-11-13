@@ -41,7 +41,7 @@ class Field extends Model
      */
     protected $attributes = [
         'settings'   => '',
-        'validation' => ''
+        'validation' => '',
     ];
 
     /**

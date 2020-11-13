@@ -42,7 +42,6 @@ class FieldFactory implements Factory
 
         $field = factory(Field::class)->create($overrides);
 
-
         return $field;
     }
 
