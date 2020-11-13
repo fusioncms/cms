@@ -20,7 +20,6 @@ class Field extends Model
         'settings',
         'validation',
         'order',
-        'section_id',
     ];
 
     /**
@@ -36,13 +35,23 @@ class Field extends Model
     ];
 
     /**
-     * A field belongs to a section.
+     * The model's default values for attributes.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @var array
      */
-    public function section()
+    protected $attributes = [
+        'settings'   => '',
+        'validation' => '',
+    ];
+
+    /**
+     * Get owning relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function fieldable()
     {
-        return $this->belongsTo(Section::class);
+        return $this->morphTo();
     }
 
     /**

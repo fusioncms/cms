@@ -42,6 +42,7 @@ class BlueprintTest extends TestCase
         ])->create();
 
         $this->blueprint = $matrix->blueprint;
+
         $this->fieldFoo  = $this->blueprint->fields->where('name', 'Foo')->first();
         $this->fieldBar  = $this->blueprint->fields->where('name', 'Bar')->first();
         $this->fieldBaz  = $this->blueprint->fields->where('name', 'Baz')->first();

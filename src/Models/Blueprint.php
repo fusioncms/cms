@@ -51,7 +51,10 @@ class Blueprint extends Model
      */
     public function fields()
     {
-        return $this->hasManyThrough(Field::class, Section::class)->orderBy('order');
+        return $this
+            ->hasManyThrough(Field::class, Section::class, null, 'fieldable_id')
+            ->where('fieldable_type', Section::class)
+            ->orderBy('order');
     }
 
     /**

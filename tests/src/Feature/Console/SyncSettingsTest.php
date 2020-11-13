@@ -3,6 +3,7 @@
 namespace Fusion\Tests\Feature\Console;
 
 use Fusion\Console\Actions\SyncSettings;
+use Fusion\Models\Section;
 use Fusion\Models\Setting as SettingGroup;
 use Fusion\Services\Setting as SettingService;
 use Fusion\Tests\TestCase;
@@ -120,23 +121,26 @@ class SyncSettingsTest extends TestCase
 
         // test removal..
         $this->assertDatabaseMissing('fields', [
-            'section_id' => $section->id,
-            'name'       => 'Accepted File Types',
-            'handle'     => 'accepted_files',
+            'fieldable_id'   => $section->id,
+            'fieldable_type' => Section::class,
+            'name'           => 'Accepted File Types',
+            'handle'         => 'accepted_files',
         ]);
 
         // test modification..
         $this->assertDatabaseHas('fields', [
-            'section_id' => $section->id,
-            'name'       => 'Baz',
-            'handle'     => 'baz',
+            'fieldable_id'   => $section->id,
+            'fieldable_type' => Section::class,
+            'name'           => 'Baz',
+            'handle'         => 'baz',
         ]);
 
         // test addition..
         $this->assertDatabaseHas('fields', [
-            'section_id' => $section->id,
-            'name'       => 'Foobar',
-            'handle'     => 'foobar',
+            'fieldable_id'   => $section->id,
+            'fieldable_type' => Section::class,
+            'name'           => 'Foobar',
+            'handle'         => 'foobar',
         ]);
     }
 }
