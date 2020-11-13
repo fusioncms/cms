@@ -7,6 +7,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SingleTest extends TestCase
@@ -125,7 +126,7 @@ class SingleTest extends TestCase
     /** @test */
     public function a_user_without_admin_settings_cannot_view_a_disabled_single()
     {
-        $this->expectException(NotFoundHttpException::class);
+        $this->expectException(ModelNotFoundException::class);
 
         list($single, $attributes) = $this->newSingle(['status' => false]);
 
@@ -137,7 +138,7 @@ class SingleTest extends TestCase
     /** @test */
     public function a_user_with_admin_settings_cannot_view_a_disabled_single()
     {
-        $this->expectException(NotFoundHttpException::class);
+        $this->expectException(ModelNotFoundException::class);
 
         list($single, $attributes) = $this->newSingle(['status' => false]);
 

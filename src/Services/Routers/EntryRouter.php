@@ -35,7 +35,13 @@ class EntryRouter extends Router
             }
 
             $model = (new Collection($matrix->handle))->make();
-            $page  = $model->with($relationships)->where('slug', $found->parameter('slug'))->first();
+            $page  = $model->with($relationships)->where('slug', $found->parameter('slug'));
+
+            if (request()->has('preview')) {
+                $page = $page->withoutGlobalScopes();
+            }
+
+            $page = $page->first();
 
             if (is_null($page)) {
                 continue 1;

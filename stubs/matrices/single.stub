@@ -2,6 +2,7 @@
 
 namespace Fusion\Models\Singles;
 
+use Carbon\Carbon;
 use Fusion\Models\Field;
 use Fusion\Models\Matrix;
 use Illuminate\Support\Str;
