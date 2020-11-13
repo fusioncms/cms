@@ -11,7 +11,14 @@ class Section extends Model
      *
      * @var array
      */
-    protected $fillable = ['blueprint_id', 'name', 'handle', 'description', 'placement', 'order'];
+    protected $fillable = [
+        'blueprint_id',
+        'name',
+        'handle',
+        'description',
+        'placement',
+        'order'
+    ];
 
     /**
      * The attributes that should be casted to native types.
@@ -30,11 +37,11 @@ class Section extends Model
     /**
      * Get the fields for the given section.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function fields()
     {
-        return $this->hasMany(Field::class)->orderBy('order');
+        return $this->morphMany(Field::class, 'fieldable')->orderBy('order');
     }
 
     /**
@@ -45,5 +52,15 @@ class Section extends Model
     public function blueprint()
     {
         return $this->belongsTo(Blueprint::class);
+    }
+
+    /**
+     * Returns the Field's tablename.
+     * 
+     * @return string
+     */
+    public function tableName()
+    {
+        return $this->blueprint->blueprintable->getTableAttribute();
     }
 }

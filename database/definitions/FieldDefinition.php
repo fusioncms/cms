@@ -3,7 +3,7 @@
 use Faker\Generator as Faker;
 
 $factory->define(Fusion\Models\Field::class, function (Faker $faker) {
-    $reservedWords = ['id', 'name', 'handle', 'help', 'required', 'type', 'settings', 'order', 'section_id'];
+    $reservedWords = ['id', 'name', 'handle', 'help', 'required', 'type', 'settings', 'order'];
     $name = $faker->unique()->word();
 
     while (in_array($name, $reservedWords)) {
@@ -18,6 +18,5 @@ $factory->define(Fusion\Models\Field::class, function (Faker $faker) {
         'validation' => [],
         'settings'   => [],
         'order'      => 99,
-        'section_id' => 999,
     ];
 });
