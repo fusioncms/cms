@@ -67,12 +67,27 @@ class Matrix extends Model
         return Str::plural(ucfirst($this->type));
     }
 
+    /**
+     * Get the builder instance.
+     *
+     * @return Model
+     */
     public function getBuilder()
     {
         $builder = 'Fusion\\Services\\Builders\\'.Str::studly($this->type);
         $builder = new $builder($this->handle);
 
         return $builder->make();
+    }
+
+    /**
+     * Get the builder's table name.
+     *
+     * @return string
+     */
+    public function builderName()
+    {
+        return "mx_{$this->handle}";
     }
 
     public function getAdminPathAttribute()
@@ -82,16 +97,6 @@ class Matrix extends Model
         } else {
             return '/collection/'.$this->slug;
         }
-    }
-
-    /**
-     * Get the "table" attribute value.
-     *
-     * @return string
-     */
-    public function getTableAttribute()
-    {
-        return 'mx_'.$this->handle;
     }
 
     public function parent()

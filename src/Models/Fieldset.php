@@ -27,6 +27,16 @@ class Fieldset extends Model
     }
 
     /**
+     * Get the builder's table name.
+     *
+     * @return string
+     */
+    public function builderName()
+    {
+        return "fx_{$this->handle}";
+    }
+
+    /**
      * Get the fields for the given section.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -36,23 +46,5 @@ class Fieldset extends Model
         return $this->morphMany(Field::class, 'fieldable')->orderBy('order');
     }
 
-    /**
-     * Get the "table" attribute value.
-     *
-     * @return string
-     */
-    public function getTableAttribute()
-    {
-        return "fx_{$this->handle}";
-    }
-
-    /**
-     * Returns the Field's tablename.
-     *
-     * @return string
-     */
-    public function tableName()
-    {
-        return $this->getTableAttribute();
-    }
+    
 }
