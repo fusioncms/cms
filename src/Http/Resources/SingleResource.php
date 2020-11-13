@@ -21,7 +21,8 @@ class SingleResource extends JsonResource
                 'name'       => $this->name ?? $this->matrix->name,
                 'slug'       => $this->slug ?? $this->matrix->slug,
                 'status'     => $this->status,
-
+                'publish_at' => $this->publish_at,
+                'expire_at'  => $this->expire_at,
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
             ],

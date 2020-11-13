@@ -2,28 +2,13 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Database\Migration;
-use Fusion\Database\Schema\Blueprint;
-use Fusion\Models\Setting;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Fusion\Models\Setting;
 
 class SettingObserver
 {
-    /**
-     * @var \Fusion\Database\Migration
-     */
-    protected $migration;
-
-    /**
-     * Constructor.
-     *
-     * @param \Fusion\Database\Migration $migration
-     */
-    public function __construct(Migration $migration)
-    {
-        $this->migration = $migration;
-    }
-
     /**
      * Handle the setting "created" event.
      *
@@ -33,7 +18,7 @@ class SettingObserver
      */
     public function created(Setting $setting)
     {
-        $this->migration->schema->create($setting->table, function (Blueprint $table) {
+        Schema::create($setting->table, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('setting_id')->index();
             $table->timestamps();
@@ -54,7 +39,7 @@ class SettingObserver
 
         // Rename the tables if changed
         if ($old->table !== $setting->table) {
-            $this->migration->schema->rename($old->table, $setting->table);
+            Schema::rename($old->table, $setting->table);
 
             $oldClass = 'Fusion\\Models\\Settings\\'.Str::studly($old->handle);
             $newClass = 'Fusion\\Models\\Settings\\'.Str::studly($setting->handle);
@@ -82,6 +67,6 @@ class SettingObserver
      */
     protected function dropTable(Setting $setting)
     {
-        $this->migration->schema->dropIfExists($setting->table);
+        Schema::dropIfExists($setting->table);
     }
 }

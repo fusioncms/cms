@@ -48,11 +48,6 @@ class Matrix extends Model
     protected $casts = [
         'sidebar'          => 'boolean',
         'quicklink'        => 'boolean',
-        'revision_control' => 'boolean',
-        'categorizable'    => 'boolean',
-        'creditable'       => 'boolean',
-        'publishable'      => 'boolean',
-        'seoable'          => 'boolean',
         'status'           => 'boolean',
         'show_name_field'  => 'boolean',
     ];

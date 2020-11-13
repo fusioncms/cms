@@ -40,9 +40,6 @@ class MatrixResource extends JsonResource
             'name_label'         => $this->name_label,
             'name_format'        => $this->name_format,
 
-            'revision_control'   => $this->revision_control,
-            'publishable'        => $this->publishable,
-
             'status'             => $this->status,
 
             'blueprint'          => new BlueprintResource($this->blueprint),

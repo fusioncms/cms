@@ -56,6 +56,8 @@
                         let form     = {
                             name: '',
                             slug: '',
+                            publish_at: null,
+                            expire_at: null,
                             status: 1,
                         }
 

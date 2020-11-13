@@ -2,28 +2,13 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Database\Migration;
-use Fusion\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Fusion\Models\Field;
 use Fusion\Models\Form;
 
 class FormObserver
 {
-    /**
-     * @var \Fusion\Database\Migration
-     */
-    protected $migration;
-
-    /**
-     * Create a new FormObserver instance.
-     *
-     * @param \Fusion\Database\Migration $migration
-     */
-    public function __construct(Migration $migration)
-    {
-        $this->migration = $migration;
-    }
-
     /**
      * Handle the form "created" event.
      *
@@ -33,7 +18,7 @@ class FormObserver
      */
     public function created(Form $form)
     {
-        $this->migration->schema->create($form->table, function (Blueprint $table) {
+        Schema::create($form->table, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('form_id');
 
@@ -57,7 +42,7 @@ class FormObserver
 
         // Update table if changed
         if ($old->table !== $form->table) {
-            $this->migration->schema->rename($old->table, $form->table);
+            Schema::rename($old->table, $form->table);
         }
     }
 
@@ -70,7 +55,7 @@ class FormObserver
      */
     public function deleted(Form $form)
     {
-        $this->migration->schema->dropIfExists($form->table);
+        Schema::dropIfExists($form->table);
     }
 
     /**

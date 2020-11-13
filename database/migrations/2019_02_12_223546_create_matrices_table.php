@@ -36,8 +36,6 @@ class CreateMatricesTable extends Migration
             $table->string('route')->nullable();
             $table->string('template')->nullable();
 
-            $table->boolean('revision_control')->default(true);
-            $table->boolean('publishable')->default(true);
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

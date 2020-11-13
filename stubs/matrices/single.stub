@@ -2,12 +2,14 @@
 
 namespace Fusion\Models\Singles;
 
+use Carbon\Carbon;
 use Fusion\Models\Field;
 use Fusion\Models\Matrix;
 use Illuminate\Support\Str;
 use Fusion\Concerns\HasActivity;
 use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Database\Eloquent\Builder;
 
 class {class} extends Model
 {
@@ -57,6 +59,32 @@ class {class} extends Model
      * @var bool
      */
     public $incrementing = false;
+
+        /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope('published', function (Builder $builder) {
+            $builder->where(function($query) {
+                $query->where('publish_at', '<=', Carbon::now())
+                    ->orWhereNull('publish_at');
+            });
+        });
+
+        static::addGlobalScope('expired', function (Builder $builder) {
+            $builder->where(function($query) {
+                $query->where('expire_at', '>', Carbon::now())
+                    ->orWhereNull('expire_at');
+            });
+        });
+
+        static::addGlobalScope('enabled', function (Builder $builder) {
+            $builder->where('status', 1);
+        });
+    }
 
     /**
      * Get the Matrix Type relationship.

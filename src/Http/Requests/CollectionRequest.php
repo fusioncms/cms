@@ -44,8 +44,10 @@ class CollectionRequest extends Request
     protected function prepareForValidation()
     {
         $this->merge([
-            'matrix_id' => $this->matrix->id,
-            'status'    => $this->status ?? true,
+            'matrix_id'  => $this->matrix->id,
+            'status'     => $this->status ?? true,
+            'publish_at' => (isset($this->publish_at) and ! empty($this->publish_at)) ? $this->publish_at : now(),
+            'expire_at'  => (isset($this->expire_at) and ! empty($this->expire_at)) ? $this->expire_at : null,
         ]);
     }
 
@@ -57,9 +59,11 @@ class CollectionRequest extends Request
     public function rules()
     {
         $rules = [
-            'matrix_id' => 'required|integer',
-            'slug'      => 'unique:'.$this->model->getTable().',slug,'.request()->id,
-            'status'    => 'required|boolean',
+            'matrix_id'  => 'required|integer',
+            'slug'       => 'unique:'.$this->model->getTable().',slug,'.request()->id,
+            'publish_at' => 'nullable|date',
+            'expire_at'  => 'nullable|date|after:publish_at',
+            'status'     => 'required|boolean',
         ];
 
         if ($this->matrix->show_name_field) {
@@ -72,6 +76,20 @@ class CollectionRequest extends Request
         })->toArray();
 
         return $rules;
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'expire_at.after'   => 'The expiry date must be a date after the publish date.',
+            'expire_at.date'    => 'The expiry date must be a valid date.',
+            'publish_at.date'   => 'The publish date must be a valid date.',
+        ];
     }
 
     /**

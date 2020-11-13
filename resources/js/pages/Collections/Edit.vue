@@ -97,6 +97,8 @@
                 name: entry.name,
                 slug: entry.slug,
                 status: entry.status,
+                publish_at: entry.publish_at,
+                expire_at: entry.expire_at,
             }
 
             _.forEach(matrix.blueprint.sections, function(section) {
