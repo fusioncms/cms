@@ -17,7 +17,7 @@ class Section extends Model
         'handle',
         'description',
         'placement',
-        'order'
+        'order',
     ];
 
     /**
@@ -56,7 +56,7 @@ class Section extends Model
 
     /**
      * Returns the Field's tablename.
-     * 
+     *
      * @return string
      */
     public function tableName()
