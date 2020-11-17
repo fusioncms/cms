@@ -63,10 +63,12 @@ class FieldObserver
          */
         if ($old['handle'] !== $new['handle']) {
             if (!is_null($new['column'])) {
-                Schema::table($field->fieldable->builderName(),
+                Schema::table(
+                    $field->fieldable->builderName(),
                     function ($table) use ($old, $new) {
                         $table->renameColumn($old['handle'], $new['handle']);
-                    });
+                    }
+                );
             }
         }
 
@@ -75,10 +77,12 @@ class FieldObserver
          */
         if ($old['type'] !== $new['type']) {
             if (!is_null($new['column'])) {
-                Schema::table($field->fieldable->builderName(),
+                Schema::table(
+                    $field->fieldable->builderName(),
                     function ($table) use ($new) {
-                        call_user_func_array([$table, $new['column']], [ $new['handle'] ])->change();
-                    });
+                        call_user_func_array([$table, $new['column']], [$new['handle']])->change();
+                    }
+                );
             }
         }
     }

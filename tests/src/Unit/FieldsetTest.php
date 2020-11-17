@@ -3,7 +3,6 @@
 namespace Fusion\Tests\Unit;
 
 use Facades\FieldsetFactory;
-use Fusion\Models\Fieldset;
 use Fusion\Models\Field;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
@@ -21,7 +20,7 @@ class FieldsetTest extends TestCase
         $this->fieldset = FieldsetFactory::withName('Contacts')
             ->withFields([
                 ['name' => 'Email', 'handle' => 'email', 'type' => 'email'],
-                ['name' => 'Phone', 'handle' => 'phone', 'type' => 'phone']
+                ['name' => 'Phone', 'handle' => 'phone', 'type' => 'phone'],
             ])->create();
     }
 

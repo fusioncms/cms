@@ -21,7 +21,7 @@ class FieldsetTest extends TestCase
         $this->fieldset = FieldsetFactory::withName('Contacts')
             ->withFields([
                 ['name' => 'Email', 'handle' => 'email', 'type' => 'email'],
-                ['name' => 'Phone', 'handle' => 'phone', 'type' => 'phone']
+                ['name' => 'Phone', 'handle' => 'phone', 'type' => 'phone'],
             ])->create();
     }
 
@@ -131,7 +131,7 @@ class FieldsetTest extends TestCase
             ->json('POST', '/api/fieldsets', $fieldset)
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'handle' => 'The handle has already been taken.'
+                'handle' => 'The handle has already been taken.',
             ]);
     }
 
@@ -164,7 +164,9 @@ class FieldsetTest extends TestCase
     {
         $this->fieldset->fields->each(function ($field) {
             $this->assertDatabaseTableHasColumn(
-                $this->fieldset->builderName(), $field->handle);
+                $this->fieldset->builderName(),
+                $field->handle
+            );
         });
     }
 
@@ -179,10 +181,14 @@ class FieldsetTest extends TestCase
             ]);
 
         $this->assertDatabaseTableHasColumn(
-            $this->fieldset->builderName(), 'e_mail');
+            $this->fieldset->builderName(),
+            'e_mail'
+        );
 
         $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->fieldset->builderName(), 'email');
+            $this->fieldset->builderName(),
+            'email'
+        );
     }
 
     /** @test */
@@ -193,6 +199,8 @@ class FieldsetTest extends TestCase
             ->delete();
 
         $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->fieldset->builderName(), 'phone');
+            $this->fieldset->builderName(),
+            'phone'
+        );
     }
 }

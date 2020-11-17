@@ -2,10 +2,10 @@
 
 namespace Fusion\Observers;
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Fusion\Models\Field;
 use Fusion\Models\Form;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class FormObserver
 {

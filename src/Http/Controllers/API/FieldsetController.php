@@ -69,8 +69,8 @@ class FieldsetController extends Controller
     {
         $fieldset->update($request->validated());
 
-        $inserting = collect($request->fields)->reject(function($field) { return isset($field['id']); });
-        $updating  = collect($request->fields)->filter(function($field) { return isset($field['id']); });
+        $inserting = collect($request->fields)->reject(function ($field) { return isset($field['id']); });
+        $updating  = collect($request->fields)->filter(function ($field) { return isset($field['id']); });
         $existing  = $fieldset->fields->pluck('id');
         $deleting  = $existing->diff($updating->pluck('id'));
 
@@ -98,8 +98,8 @@ class FieldsetController extends Controller
     /**
      * Create Fields on Fieldset.
      *
-     * @param \Fusion\Models\Fieldset         $fieldset
-     * @param \Illuminate\Support\Collection  $fields
+     * @param \Fusion\Models\Fieldset        $fieldset
+     * @param \Illuminate\Support\Collection $fields
      *
      * @return void
      */
@@ -121,8 +121,8 @@ class FieldsetController extends Controller
     /**
      * Update Fields on Fieldset.
      *
-     * @param \Fusion\Models\Fieldset         $fieldset
-     * @param \Illuminate\Support\Collection  $fields
+     * @param \Fusion\Models\Fieldset        $fieldset
+     * @param \Illuminate\Support\Collection $fields
      *
      * @return void
      */
@@ -144,8 +144,8 @@ class FieldsetController extends Controller
     /**
      * Remove Fields from Fieldset.
      *
-     * @param \Fusion\Models\Fieldset         $fieldset
-     * @param \Illuminate\Support\Collection  $ids
+     * @param \Fusion\Models\Fieldset        $fieldset
+     * @param \Illuminate\Support\Collection $ids
      *
      * @return void
      */

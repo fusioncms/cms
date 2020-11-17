@@ -2,10 +2,10 @@
 
 namespace Fusion\Observers;
 
+use Fusion\Models\Setting;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Fusion\Models\Setting;
 
 class SettingObserver
 {

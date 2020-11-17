@@ -2,7 +2,6 @@
 
 namespace Fusion\Models;
 
-use Fusion\Contracts\FieldContract;
 use Illuminate\Database\Eloquent\Model;
 
 class Fieldset extends Model
@@ -45,6 +44,4 @@ class Fieldset extends Model
     {
         return $this->morphMany(Field::class, 'fieldable')->orderBy('order');
     }
-
-    
 }
