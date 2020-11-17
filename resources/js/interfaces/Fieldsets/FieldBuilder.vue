@@ -1,39 +1,48 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col mb-6 w-full">
-                <h3>Fields</h3>
-                <p v-if="fields.length == 0">Add a field to get started.</p>
-            </div>
-        </div>
+        <ui-field-group
+            fieldId="field-builder"
+            name="field-builder"
+            label="Fields">
 
-        <div class="row" v-if="fields.length > 0">
-            <ui-sortable-list v-model="fields" class="sortable-list">
-                <div class="col mb-6 w-full">
-                    <ui-sortable-item v-for="(field, index) in fields" :key="field.handle" class="mb-3 w-full">
-                        <div class="section__field">
-                            <div>
-                                <ui-sortable-handle class="cursor-move inline-block">
-                                    <fa-icon icon="grip-vertical" class="handle fa-fw text-gray-400 mr-3"></fa-icon>
-                                </ui-sortable-handle>
+            <table class="table" v-if="fields && fields.length > 0">
+                <ui-sortable-list v-model="fields" class="sortable-list`">
+                    <tbody>
+                        <ui-sortable-item v-for="(field, index) in fields" :key="field.handle">
+                            <tr>
+                                <td class="w-8">
+                                    <ui-sortable-handle class="cursor-move inline-block">
+                                        <fa-icon icon="grip-vertical" class="handle fa-fw text-gray-400 mr-3"></fa-icon>
+                                    </ui-sortable-handle>
+                                </td>
+                                <td class="w-16">
+                                    <fa-icon :icon="['fas', field.type.icon]" class="fa-fw mr-3"></fa-icon>
+                                </td>
+                                <td>
+                                    <strong>{{ field.name }}</strong>
+                                </td>
+                                <td>
+                                    <code>{{ field.handle }}</code>
+                                </td>
+                                <td>
+                                    <span class="font-mono text-xs uppercase">{{ field.type.name }}</span>
+                                </td>
+                                <td class="w-16">
+                                    <ui-table-actions :id="field.handle + '_actions'">
+                                        <ui-dropdown-link @click.prevent="set('edit', index)">Edit</ui-dropdown-link>
+                                        <ui-dropdown-link v-if="sections.length > 1" @click.prevent="set('move', index)">Move to...</ui-dropdown-link>
+                                        <ui-dropdown-divider></ui-dropdown-divider>
+                                        <ui-dropdown-link @click.prevent="remove(index)">Delete</ui-dropdown-link>
+                                    </ui-table-actions>
+                                </td>
+                            </tr>
+                        </ui-sortable-item>
+                    </tbody>
+                </ui-sortable-list>
+            </table>
 
-                                <fa-icon :icon="['fas', field.type.icon]" class="fa-fw mr-3"></fa-icon>
-                                <span class="mr-6 font-bold">{{ field.name }}</span>
-                                <span class="mr-6 font-mono text-xs">{{ field.handle }}</span>
-                                <span class="font-mono text-xs uppercase">{{ field.type.name }}</span>
-                            </div>
-
-                            <ui-table-actions :id="field.handle + '_actions'">
-                                <ui-dropdown-link @click.prevent="set('edit', index)">Edit</ui-dropdown-link>
-                                <ui-dropdown-link v-if="sections.length > 1" @click.prevent="set('move', index)">Move to...</ui-dropdown-link>
-                                <ui-dropdown-divider></ui-dropdown-divider>
-                                <ui-dropdown-link @click.prevent="remove(index)">Delete</ui-dropdown-link>
-                            </ui-table-actions>
-                        </div>
-                    </ui-sortable-item>
-                </div>
-            </ui-sortable-list>
-        </div>
+            <div v-else class="help">Add a field to get started.</div>
+        </ui-field-group>
 
         <div class="row">
             <div class="col w-full">
@@ -51,7 +60,14 @@
             </ui-modal>
 
             <ui-modal name="move-field" title="Move Field" v-model="!! field.move">
-                <ui-select-group name="move_to" label="Move to" hide-label v-model="section" placeholder="Please select a section..." :options="sectionOptions"></ui-select-group>
+                <ui-select-group
+                    name="move_to"
+                    label="Move to"
+                    hide-label
+                    v-model="moveTo"
+                    placeholder="Please select a location..."
+                    :options="moveOptions">
+                </ui-select-group>
 
                 <template slot="footer">
                     <ui-button variant="primary" @click.prevent="move">Move</ui-button>
@@ -74,7 +90,7 @@
 
         data() {
             return {
-                section: false,
+                moveTo: false,
                 field: {                
                     edit: false,
                     add: false,
@@ -90,7 +106,7 @@
                 default: () => []
             },
 
-            sectionHandle: {
+            handle: {
                 type: String,
                 required: true
             },
@@ -98,13 +114,14 @@
             sections: {
                 type: Array,
                 required: false,
+                default: () => []
             }
         },
 
         computed: {
             fields: {
                 get() {
-                    return this.value
+                    return this.value || []
                 },
 
                 set(value) {
@@ -112,15 +129,24 @@
                 }
             },
 
-            sectionOptions() {
-                let options = _.map(this.sections, (section) => {
+            moveOptions() {
+                let options = _.map(this.sections, (item) => {
                     return {
-                        label: section.name,
-                        value: section.handle
+                        label: item.name,
+                        value: item.handle
                     }
                 })
 
-                return _.reject(options, (option) => this.sectionHandle == option.handle)
+                return _.reject(options, (option) => this.handle == option.handle)
+            }
+        },
+
+        watch: {
+            fields: {
+                deep: true,
+                handler(value) {
+                    this.$emit('input', value)
+                }
             }
         },
 
@@ -154,12 +180,12 @@
             },
 
             move() {
-                if (this.section && this.section != this.sectionHandle) {
-                    bus().$emit(`add-field-${this.section}`, this.field.move)
-                    bus().$emit(`remove-field-${this.sectionHandle}`,
+                if (this.moveTo && this.moveTo != this.handle) {
+                    bus().$emit(`add-field-${this.moveTo}`, this.field.move)
+                    bus().$emit(`remove-field-${this.handle}`,
                         'handle', this.field.move.handle)
 
-                    this.section    = false
+                    this.moveTo     = false
                     this.field.move = false
                 }
             },
@@ -196,13 +222,13 @@
         },
 
         created() {
-            bus().$on(`add-field-${this.sectionHandle}`, (field) => {
+            bus().$on(`add-field-${this.handle}`, (field) => {
                 if (this.findBy('handle', field.handle) == -1) {
                     this.add(field.type, field, false)
                 }
             })
 
-            bus().$on(`remove-field-${this.sectionHandle}`, (path, value) => {
+            bus().$on(`remove-field-${this.handle}`, (path, value) => {
                 let index = this.findBy(path, value)
 
                 if (index != -1) {
@@ -212,8 +238,8 @@
         },
 
         beforeDestroy() {
-            bus().$off(`add-field-${this.sectionHandle}`)
-            bus().$off(`remove-field-${this.sectionHandle}`)
+            bus().$off(`add-field-${this.handle}`)
+            bus().$off(`remove-field-${this.handle}`)
         }
     }
 </script>

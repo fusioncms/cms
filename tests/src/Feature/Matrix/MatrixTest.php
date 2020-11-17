@@ -192,7 +192,7 @@ class MatrixTest extends TestCase
         $name = $entry->id.' '.$entry->created_at->format('Y');
         $slug = Str::slug($name);
 
-        $this->assertDatabaseHas($matrix->table, [
+        $this->assertDatabaseHas($matrix->builderName(), [
             'name' => $name,
             'slug' => $slug,
         ]);

@@ -47,7 +47,7 @@ class FormTest extends TestCase
         $form = Form::firstOrFail();
 
         // assert response table exists..
-        $this->assertDatabaseHasTable($form->table);
+        $this->assertDatabaseHasTable($form->builderName());
 
         // assert associated blueprint exists..
         $this->assertDatabaseHas('blueprints', [
@@ -204,7 +204,7 @@ class FormTest extends TestCase
         ]);
 
         // assert response table exists..
-        $this->assertDatabaseDoesNotHaveTable($form->table);
+        $this->assertDatabaseDoesNotHaveTable($form->builderName());
     }
 
     /** @test */
@@ -238,7 +238,7 @@ class FormTest extends TestCase
             ->be($this->guest)
             ->post($form->path());
 
-        $this->assertDatabaseMissing($form->table, [
+        $this->assertDatabaseMissing($form->builderName(), [
             'form_id'                 => $form->id,
             'identifiable_ip_address' => '127.0.0.1',
         ]);
@@ -254,7 +254,7 @@ class FormTest extends TestCase
             ->be($this->guest)
             ->post($form->path());
 
-        $this->assertDatabaseHas($form->table, [
+        $this->assertDatabaseHas($form->builderName(), [
             'form_id'                 => $form->id,
             'identifiable_ip_address' => '127.0.0.1',
         ]);
@@ -272,7 +272,7 @@ class FormTest extends TestCase
             ->be($this->user)
             ->post($form->path(), ['identifiable_email_address' => $this->user->email]);
 
-        $this->assertDatabaseHas($form->table, [
+        $this->assertDatabaseHas($form->builderName(), [
             'form_id'                    => $form->id,
             'identifiable_email_address' => $this->user->email,
         ]);

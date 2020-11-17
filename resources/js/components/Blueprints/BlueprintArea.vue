@@ -24,7 +24,7 @@
                     <field-builder
                         v-model="section.fields"
                         :sections="sections"
-                        :sectionHandle="section.handle">
+                        :handle="section.handle">
                     </field-builder>
                 </blueprint-section>
             </div>

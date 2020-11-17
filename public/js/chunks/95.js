@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[95],{x9tg:function(t,e,n){"use strict";n.r(e);var s={name:"list-fieldtype-settings"},i=n("KHd+"),l=Object(i.a)(s,(function(){var t=this.$createElement;return(this._self._c||t)("div")}),[],!1,null,null,null);e.default=l.exports}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[95],{"5Ox3":function(n,e,t){"use strict";t.r(e);var i={name:"information-fieldtype-settings"},s=t("KHd+"),l=Object(s.a)(i,(function(){var n=this.$createElement;return(this._self._c||n)("div")}),[],!1,null,null,null);e.default=l.exports}}]);

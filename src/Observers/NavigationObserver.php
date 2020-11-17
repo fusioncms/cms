@@ -17,7 +17,7 @@ class NavigationObserver
      */
     public function created(Navigation $navigation)
     {
-        Schema::create($navigation->table, function (Blueprint $table) {
+        Schema::create($navigation->builderName(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('navigation_id')->index();
             $table->unsignedBigInteger('parent_id')->index()->default(0);
@@ -40,12 +40,10 @@ class NavigationObserver
      */
     public function updating(Navigation $navigation)
     {
-        // Fetch our "old" navigation instance
         $old = Navigation::find($navigation->id);
 
-        // Update table if changed
-        if ($old->table !== $navigation->table) {
-            Schema::rename($old->table, $navigation->table);
+        if ($old->builderName() !== $navigation->builderName()) {
+            Schema::rename($old->builderName(), $navigation->builderName());
         }
     }
 
@@ -58,6 +56,6 @@ class NavigationObserver
      */
     public function deleted(Navigation $navigation)
     {
-        Schema::dropIfExists($navigation->table);
+        Schema::dropIfExists($navigation->builderName());
     }
 }

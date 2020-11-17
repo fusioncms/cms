@@ -40,6 +40,11 @@ class Taxonomy extends Model
 
     protected $blueprintGroup = 'Taxonomy';
 
+    /**
+     * Get the builder instance.
+     *
+     * @return Model
+     */
     public function getBuilder()
     {
         $builder = new \Fusion\Services\Builders\Taxonomy($this->handle);
@@ -47,9 +52,24 @@ class Taxonomy extends Model
         return $builder->make();
     }
 
+    /**
+     * Get the builder's table name.
+     *
+     * @return string
+     */
+    public function builderName()
+    {
+        return "taxonomy_{$this->handle}";
+    }
+
+    /**
+     * Get admin path.
+     *
+     * @return string
+     */
     public function getAdminPathAttribute()
     {
-        return '/taxonomies/'.$this->id;
+        return "/taxonomies/{$this->id}";
     }
 
     /**
@@ -60,16 +80,6 @@ class Taxonomy extends Model
     public function getSlugAttribute()
     {
         return Str::slug($this->handle);
-    }
-
-    /**
-     * Get the "table" attribute value.
-     *
-     * @return string
-     */
-    public function getTableAttribute()
-    {
-        return 'taxonomy_'.$this->handle;
     }
 
     /**
