@@ -21,7 +21,7 @@ class BlueprintTest extends TestCase
                 'name'   => 'General',
                 'handle' => 'general',
                 'fields' => [
-                    [ 'name' => 'Content', 'handle' => 'content', 'type' => 'input' ],
+                    ['name' => 'Content', 'handle' => 'content', 'type' => 'input'],
                 ],
             ],
         ])->create();
@@ -32,7 +32,9 @@ class BlueprintTest extends TestCase
     {
         $this->matrix->blueprint->fields->each(function ($field) {
             $this->assertDatabaseTableHasColumn(
-                $this->matrix->builderName(), $field->handle);
+                $this->matrix->builderName(),
+                $field->handle
+            );
         });
     }
 
@@ -42,13 +44,15 @@ class BlueprintTest extends TestCase
         $this->matrix->blueprint->sections->first()
              ->fields()
              ->create([
-                'name'   => 'Excerpt',
-                'handle' => 'excerpt',
-                'type'   => 'textarea'
+                 'name'   => 'Excerpt',
+                 'handle' => 'excerpt',
+                 'type'   => 'textarea',
              ]);
 
         $this->assertDatabaseTableHasColumn(
-            $this->matrix->builderName(), 'excerpt');
+            $this->matrix->builderName(),
+            'excerpt'
+        );
     }
 
     /** @test */
@@ -59,7 +63,9 @@ class BlueprintTest extends TestCase
              ->delete();
 
         $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->matrix->builderName(), 'content');
+            $this->matrix->builderName(),
+            'content'
+        );
     }
 
     /** @test */
@@ -68,40 +74,53 @@ class BlueprintTest extends TestCase
         $this->matrix->blueprint->sections->first()
              ->fields()->where('name', 'Content')->first()
              ->update([
-                'name'   => 'Story',
-                'handle' => 'story',
-            ]);
+                 'name'   => 'Story',
+                 'handle' => 'story',
+             ]);
 
         $this->assertDatabaseTableHasColumn(
-            $this->matrix->builderName(), 'story');
+            $this->matrix->builderName(),
+            'story'
+        );
 
         $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->matrix->builderName(), 'content');
+            $this->matrix->builderName(),
+            'content'
+        );
     }
 
     /** @test */
     public function when_a_fields_fieldtype_is_changed_the_associated_database_columns_type_should_also_change()
     {
         $this->assertDatabaseTableColumnHasType(
-            $this->matrix->builderName(), 'content', 'string');
+            $this->matrix->builderName(),
+            'content',
+            'string'
+        );
 
         $this->matrix->blueprint->sections->first()
              ->fields()->where('name', 'Content')->first()
              ->update([
-                'name'   => 'Content',
-                'handle' => 'content',
-                'type'   => 'textarea',
-            ]);
+                 'name'   => 'Content',
+                 'handle' => 'content',
+                 'type'   => 'textarea',
+             ]);
 
         $this->assertDatabaseTableColumnHasType(
-            $this->matrix->builderName(), 'content', 'text');
+            $this->matrix->builderName(),
+            'content',
+            'text'
+        );
     }
 
     /** @test */
     public function when_field_is_replaced_with_same_name_field_the_database_column_should_update_accordingly()
     {
         $this->assertDatabaseTableColumnHasType(
-            $this->matrix->builderName(), 'content', 'string');
+            $this->matrix->builderName(),
+            'content',
+            'string'
+        );
 
         // Remove old field..
         $this->matrix->blueprint->sections->first()
@@ -112,13 +131,16 @@ class BlueprintTest extends TestCase
         $this->matrix->blueprint->sections->first()
              ->fields()
              ->create([
-                'name'   => 'Content',
-                'handle' => 'content',
-                'type'   => 'textarea',
+                 'name'   => 'Content',
+                 'handle' => 'content',
+                 'type'   => 'textarea',
              ]);
 
         $this->assertDatabaseTableColumnHasType(
-            $this->matrix->builderName(), 'content', 'text');
+            $this->matrix->builderName(),
+            'content',
+            'text'
+        );
     }
 
     /** @test */
@@ -145,7 +167,7 @@ class BlueprintTest extends TestCase
         $this
             ->be($this->owner, 'api')
             ->json('POST', "/api/blueprints/{$blueprint->id}/sections", [
-                'sections' => [$section]
+                'sections' => [$section],
             ]);
 
         // original field - updated

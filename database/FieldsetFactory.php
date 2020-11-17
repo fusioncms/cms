@@ -1,7 +1,7 @@
 <?php
 
-use Fusion\Models\Fieldset;
 use Fusion\Contracts\Factory;
+use Fusion\Models\Fieldset;
 
 class FieldsetFactory implements Factory
 {

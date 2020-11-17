@@ -2,12 +2,12 @@
 
 namespace Fusion\Observers;
 
-use Illuminate\Database\Schema\Blueprint;
-use Spatie\Activitylog\Models\Activity;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Fusion\Models\Matrix;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+use Spatie\Activitylog\Models\Activity;
 
 class MatrixObserver
 {

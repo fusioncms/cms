@@ -86,7 +86,7 @@ class Fieldset extends Builder implements BuilderContract
         return $this->model
             ->where('fieldset_id', $this->fieldset->id)
             ->firstOrCreate([
-                'fieldset_id' => $this->fieldset->id
+                'fieldset_id' => $this->fieldset->id,
             ]);
     }
 }
