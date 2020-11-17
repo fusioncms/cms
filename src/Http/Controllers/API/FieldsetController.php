@@ -52,18 +52,7 @@ class FieldsetController extends Controller
     {
         $fieldset = Fieldset::create($request->validated());
 
-        collect($request->input('fields'))
-            ->each(function ($field, $index) use ($fieldset) {
-                $fieldset->fields()->create([
-                    'name'       => $field['name'],
-                    'handle'     => $field['handle'],
-                    'help'       => $field['help'],
-                    'settings'   => $field['settings'],
-                    'validation' => $field['validation'] ?? '',
-                    'type'       => $field['type']['handle'],
-                    'order'      => ($index + 1),
-                ]);
-            });
+        $this->createFields($fieldset, collect($request->fields));
 
         return new FieldsetResource($fieldset);
     }
@@ -83,7 +72,7 @@ class FieldsetController extends Controller
         $inserting = collect($request->fields)->reject(function($field) { return isset($field['id']); });
         $updating  = collect($request->fields)->filter(function($field) { return isset($field['id']); });
         $existing  = $fieldset->fields->pluck('id');
-        $deleting  = $existing->diff($updating);
+        $deleting  = $existing->diff($updating->pluck('id'));
 
         $this->deleteFields($fieldset, $deleting);
         $this->updateFields($fieldset, $updating);

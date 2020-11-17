@@ -41,7 +41,7 @@
         methods: {
             submit() {
                 this.form.patch(`/api/fieldsets/${this.fieldset.id}`).then((response) => {
-                    store.dispatch('navigation/fetchAdminNavigation')
+                    this.$store.dispatch('navigation/fetchAdminNavigation')
 
                     toast('Fieldset successfully updated', 'success')
 
