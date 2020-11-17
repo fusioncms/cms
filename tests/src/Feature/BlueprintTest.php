@@ -10,210 +10,122 @@ class BlueprintTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->handleValidationExceptions();
+
+        $this->matrix = MatrixFactory::withName('Posts')
+        ->withSections([
+            [
+                'name'   => 'General',
+                'handle' => 'general',
+                'fields' => [
+                    [ 'name' => 'Content', 'handle' => 'content', 'type' => 'input' ],
+                ],
+            ],
+        ])->create();
+    }
+
     /** @test */
     public function when_created_all_fields_should_generate_database_columns()
     {
-        $matrix   = MatrixFactory::create();
-        $table    = $matrix->getBuilder()->getTable();
-
-        $matrix->blueprint->fields->each(function ($field) use ($table) {
-            $this->assertDatabaseTableHasColumn($table, $field->handle);
+        $this->matrix->blueprint->fields->each(function ($field) {
+            $this->assertDatabaseTableHasColumn(
+                $this->matrix->builderName(), $field->handle);
         });
     }
 
     /** @test */
     public function when_a_field_is_added_a_database_column_should_be_generated()
     {
-        $matrix = MatrixFactory::withName('Posts')->withSections([
-            [
-                'name'   => 'General',
-                'handle' => 'general',
-                'fields' => [
-                    [
-                        'name'   => 'Excerpt',
-                        'handle' => 'excerpt',
-                        'type'   => 'input',
-                    ],
-                ],
-            ],
-        ])->create();
+        $this->matrix->blueprint->sections->first()
+             ->fields()
+             ->create([
+                'name'   => 'Excerpt',
+                'handle' => 'excerpt',
+                'type'   => 'textarea'
+             ]);
 
-        $table   = $matrix->getBuilder()->getTable();
-        $section = $matrix->blueprint->sections()->first();
-
-        $section->fields()->create([
-            'name'   => 'Content',
-            'handle' => 'content',
-            'type'   => 'input',
-        ]);
-
-        $this->assertDatabaseTableHasColumn($table, 'content');
+        $this->assertDatabaseTableHasColumn(
+            $this->matrix->builderName(), 'excerpt');
     }
 
     /** @test */
     public function when_a_field_is_removed_the_associated_database_column_should_be_removed()
     {
-        $matrix = MatrixFactory::withName('Posts')->withSections([
-            [
-                'name'   => 'General',
-                'handle' => 'general',
-                'fields' => [
-                    [
-                        'name'   => 'Excerpt',
-                        'handle' => 'excerpt',
-                        'type'   => 'input',
-                    ],
-                    [
-                        'name'   => 'Content',
-                        'handle' => 'content',
-                        'type'   => 'input',
-                    ],
-                ],
-            ],
-        ])->create();
+        $this->matrix->blueprint->sections->first()
+             ->fields()->where('name', 'Content')->first()
+             ->delete();
 
-        $table   = $matrix->getBuilder()->getTable();
-        $section = $matrix->blueprint->sections->first();
-
-        $section->fields()->where('name', 'Content')->first()->delete();
-
-        $this->assertDatabaseTableDoesNotHaveColumn($table, 'content');
+        $this->assertDatabaseTableDoesNotHaveColumn(
+            $this->matrix->builderName(), 'content');
     }
 
     /** @test */
     public function when_a_field_is_renamed_the_associated_database_column_should_also_be_renamed()
     {
-        $matrix = MatrixFactory::withName('Posts')->withSections([
-            [
-                'name'   => 'General',
-                'handle' => 'general',
-                'fields' => [
-                    [
-                        'name'   => 'Excerpt',
-                        'handle' => 'excerpt',
-                        'type'   => 'input',
-                    ],
-                    [
-                        'name'   => 'Content',
-                        'handle' => 'content',
-                        'type'   => 'input',
-                    ],
-                ],
-            ],
-        ])->create();
+        $this->matrix->blueprint->sections->first()
+             ->fields()->where('name', 'Content')->first()
+             ->update([
+                'name'   => 'Story',
+                'handle' => 'story',
+            ]);
 
-        $table   = $matrix->getBuilder()->getTable();
-        $section = $matrix->blueprint->sections->first();
+        $this->assertDatabaseTableHasColumn(
+            $this->matrix->builderName(), 'story');
 
-        $section->fields()->where('name', 'Content')->first()->update([
-            'name'   => 'Story',
-            'handle' => 'story',
-        ]);
-
-        $this->assertDatabaseTableHasColumn($table, 'story');
+        $this->assertDatabaseTableDoesNotHaveColumn(
+            $this->matrix->builderName(), 'content');
     }
 
     /** @test */
     public function when_a_fields_fieldtype_is_changed_the_associated_database_columns_type_should_also_change()
     {
-        $matrix = MatrixFactory::withName('Posts')->withSections([
-            [
-                'name'   => 'General',
-                'handle' => 'general',
-                'fields' => [
-                    [
-                        'name'   => 'Excerpt',
-                        'handle' => 'excerpt',
-                        'type'   => 'input',
-                    ],
-                    [
-                        'name'   => 'Content',
-                        'handle' => 'content',
-                        'type'   => 'input',
-                    ],
-                ],
-            ],
-        ])->create();
+        $this->assertDatabaseTableColumnHasType(
+            $this->matrix->builderName(), 'content', 'string');
 
-        $table   = $matrix->getBuilder()->getTable();
-        $section = $matrix->blueprint->sections->first();
+        $this->matrix->blueprint->sections->first()
+             ->fields()->where('name', 'Content')->first()
+             ->update([
+                'name'   => 'Content',
+                'handle' => 'content',
+                'type'   => 'textarea',
+            ]);
 
-        $this->assertDatabaseTableColumnHasType($table, 'content', 'string');
-
-        $section->fields()->where('name', 'Content')->first()->update([
-            'name'   => 'Content',
-            'handle' => 'content',
-            'type'   => 'textarea',
-        ]);
-
-        $this->assertDatabaseTableColumnHasType($table, 'content', 'text');
+        $this->assertDatabaseTableColumnHasType(
+            $this->matrix->builderName(), 'content', 'text');
     }
 
     /** @test */
-    public function when_a_field_is_retyped_the_associated_database_column_should_also_be_retyped()
+    public function when_field_is_replaced_with_same_name_field_the_database_column_should_update_accordingly()
     {
-        $matrix = MatrixFactory::withName('Posts')->withSections([
-            [
-                'name'   => 'General',
-                'handle' => 'general',
-                'fields' => [
-                    [
-                        'name'   => 'Foobar',
-                        'handle' => 'foobar',
-                        'type'   => 'input',
-                    ],
-                ],
-            ],
-        ])->create();
-
-        $table   = $matrix->getBuilder()->getTable();
-        $section = $matrix->blueprint->sections->first();
-        $field   = $section->fields->first();
-
-        // Assert column & type are correct..
         $this->assertDatabaseTableColumnHasType(
-            $table,
-            $field->handle,
-            $field->type()->cast
-        );
+            $this->matrix->builderName(), 'content', 'string');
 
         // Remove old field..
-        $field->delete();
+        $this->matrix->blueprint->sections->first()
+             ->fields()->where('name', 'Content')->first()
+             ->delete();
 
         // Create new field in it's place..
-        $field = $section->fields()->create([
-            'name'   => 'Foobar',
-            'handle' => 'foobar',
-            'type'   => 'number',
-        ]);
+        $this->matrix->blueprint->sections->first()
+             ->fields()
+             ->create([
+                'name'   => 'Content',
+                'handle' => 'content',
+                'type'   => 'textarea',
+             ]);
 
-        // Assert column & type are correct..
         $this->assertDatabaseTableColumnHasType(
-            $table,
-            $field->handle,
-            $field->type()->cast
-        );
+            $this->matrix->builderName(), 'content', 'text');
     }
 
     /** @test */
     public function when_a_field_is_renamed_and_new_field_created_in_its_name_database_should_have_both_columns()
     {
-        $matrix = MatrixFactory::withName('Posts')->withSections([
-            [
-                'name'   => 'General',
-                'handle' => 'general',
-                'fields' => [
-                    [
-                        'name'   => 'Foo',
-                        'handle' => 'foo',
-                        'type'   => 'input',
-                    ],
-                ],
-            ],
-        ])->create();
-
-        $table     = $matrix->getBuilder()->getTable();
-        $blueprint = $matrix->blueprint;
+        $table     = $this->matrix->builderName();
+        $blueprint = $this->matrix->blueprint;
         $section   = $blueprint->sections->first();
         $fieldA    = $section->fields->first();
 
@@ -223,7 +135,8 @@ class BlueprintTest extends TestCase
         $fieldA->type   = ['handle' => 'textarea'];
 
         // new field - w/ previous name
-        $fieldB = factory(\Fusion\Models\Field::class)->make(['name' => 'Foo', 'handle' => 'foo']);
+        $fieldB = factory(\Fusion\Models\Field::class)
+            ->make(['name' => 'Content', 'handle' => 'content', 'type' => ['handle' => 'input']]);
 
         $section         = $section->fresh();
         $section->fields = [$fieldA, $fieldB];
@@ -231,16 +144,14 @@ class BlueprintTest extends TestCase
         // Save blueprit through API..
         $this
             ->be($this->owner, 'api')
-            ->json(
-                'POST',
-                '/api/blueprints/'.$blueprint->id.'/sections',
-                ['sections' => [$section]]
-            );
+            ->json('POST', "/api/blueprints/{$blueprint->id}/sections", [
+                'sections' => [$section]
+            ]);
 
         // original field - updated
         $this->assertDatabaseTableHasColumn($table, 'bar');
         $this->assertDatabaseTableColumnHasType($table, 'bar', 'text');
-        $this->assertDatabaseTableHasColumn($table, 'foo');
-        $this->assertDatabaseTableColumnHasType($table, 'foo', 'string');
+        $this->assertDatabaseTableHasColumn($table, 'Content');
+        $this->assertDatabaseTableColumnHasType($table, 'content', 'string');
     }
 }

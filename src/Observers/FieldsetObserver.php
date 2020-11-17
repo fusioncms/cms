@@ -2,8 +2,8 @@
 
 namespace Fusion\Observers;
 
-use Fusion\Database\Schema\Blueprint;
 use Fusion\Models\Fieldset;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class FieldsetObserver
