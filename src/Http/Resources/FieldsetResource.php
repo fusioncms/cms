@@ -15,6 +15,10 @@ class FieldsetResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $resource = parent::toArray($request);
+        
+        $resource['fields'] = FieldResource::collection($this->fields);
+
+        return $resource;
     }
 }

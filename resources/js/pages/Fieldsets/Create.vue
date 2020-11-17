@@ -45,7 +45,7 @@
         methods: {
             submit() {
                 this.form.post('/api/fieldsets').then((response) => {
-                    store.dispatch('navigation/fetchAdminNavigation')
+                    this.$store.dispatch('navigation/fetchAdminNavigation')
 
                     toast('Fieldset successfully created', 'success')
 

@@ -239,7 +239,7 @@ const router = new Router({
             },
         },
         {
-            path: '/fieldsets/:form/edit',
+            path: '/fieldsets/:fieldset/edit',
             component: () => import('@/pages/Fieldsets/Edit'),
             name: 'fieldsets.edit',
             meta: {

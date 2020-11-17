@@ -52,7 +52,18 @@ class FieldsetController extends Controller
     {
         $fieldset = Fieldset::create($request->validated());
 
-        $fieldset->fields()->createMany(collect($request->fields));
+        collect($request->input('fields'))
+            ->each(function ($field, $index) use ($fieldset) {
+                $fieldset->fields()->create([
+                    'name'       => $field['name'],
+                    'handle'     => $field['handle'],
+                    'help'       => $field['help'],
+                    'settings'   => $field['settings'],
+                    'validation' => $field['validation'] ?? '',
+                    'type'       => $field['type']['handle'],
+                    'order'      => ($index + 1),
+                ]);
+            });
 
         return new FieldsetResource($fieldset);
     }
