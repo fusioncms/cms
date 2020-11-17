@@ -141,6 +141,15 @@
             }
         },
 
+        watch: {
+            fields: {
+                deep: true,
+                handler(value) {
+                    this.$emit('input', value)
+                }
+            }
+        },
+
         methods: {
             add(type, data = {}, prototype = true) {
                 let name   = data.name || this.uniqName(data.name || type.name)
