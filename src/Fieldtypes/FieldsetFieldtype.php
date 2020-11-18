@@ -62,6 +62,46 @@ class FieldsetFieldtype extends Fieldtype
     public $validation = false;
 
     /**
+     * Get custom attributes for validator errors.
+     *
+     * @param Field $field
+     * @param mixed $value
+     *
+     * @return array
+     */
+    public function attributes(Field $field, $value = null)
+    {
+        $fieldset = Fieldset::findOrFail($field->settings['fieldset']);
+
+        return $fieldset->fields->mapWithKeys(function ($field) use ($fieldset, $value) {
+            $name  = "{$fieldset->handle}.{$field->handle}";
+            $value = $field->type()->attributes($field, $value ? $value[$field->handle] : null);
+
+            return [ $name => $value[$field->handle] ];
+        });
+    }
+
+    /**
+     * Get custom rules when saving field.
+     *
+     * @param Field $field
+     * @param mixed $value
+     *
+     * @return array
+     */
+    public function rules(Field $field, $value = null)
+    {
+        $fieldset = Fieldset::findOrFail($field->settings['fieldset']);
+
+        return $fieldset->fields->mapWithKeys(function ($field) use ($fieldset, $value) {
+            $name = "{$fieldset->handle}.{$field->handle}";
+            $rule = $field->type()->rules($field, $value ? $value[$field->handle] : null);
+
+            return [ $name => $rule[$field->handle] ?: 'sometimes' ];
+        });
+    }
+
+    /**
      * Generate relationship methods for associated Model.
      *
      * @param Fusion\Models\Field $field
@@ -70,8 +110,8 @@ class FieldsetFieldtype extends Fieldtype
      */
     public function generateRelationship($field)
     {
-        $model     = Fieldset::find($field->settings['fieldset']);
-        $namespace = $this->namespace.'\\'.Str::studly($model->handle);
+        $fieldset  = Fieldset::findOrFail($field->settings['fieldset']);
+        $namespace = $this->namespace.'\\'.Str::studly($fieldset->handle);
         $stub      = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
 
         return strtr($stub, [
@@ -92,7 +132,12 @@ class FieldsetFieldtype extends Fieldtype
      */
     public function persistRelationship($model, Field $field)
     {
-        dd($model->{$field->handle});
+        $fieldset = Fieldset::findOrFail($field->settings['fieldset']);
+        $fieldset->getBuilder();
+
+        $model->{$field->handle}()->updateOrCreate([
+            'fieldset_id' => $fieldset->id
+        ], request()->input($field->handle, []));
     }
 
     /**
@@ -101,10 +146,15 @@ class FieldsetFieldtype extends Fieldtype
      * @param Illuminate\Eloquent\Model $model
      * @param Fusion\Models\Field       $field
      *
-     * @return FieldsetResource
+     * @return mixed
      */
     public function getResource($model, Field $field)
     {
-        return new FieldsetResource($this->getValue($model, $field));
+        $fieldset = Fieldset::findOrFail($field->settings['fieldset']);
+        $value    = $this->getValue($model, $field);
+
+        return $fieldset->fields->mapWithKeys(function($field) use ($value) {
+            return [ $field->handle => $value ? $value[$field->handle] : '' ];
+        });
     }
 }

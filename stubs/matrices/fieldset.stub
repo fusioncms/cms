@@ -35,6 +35,13 @@ class {class} extends Model
     protected $fillable = {fillable};
 
     /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * Get the Fieldset relationship.
      *
      * @return mixed
