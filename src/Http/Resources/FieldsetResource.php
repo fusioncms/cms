@@ -19,6 +19,10 @@ class FieldsetResource extends JsonResource
 
         $resource['fields'] = FieldResource::collection($this->fields);
 
+        foreach ($this->fields as $field) {
+            $resource[$field->handle] = $this->resource->{$field->handle};
+        }
+
         return $resource;
     }
 }

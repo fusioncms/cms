@@ -28,12 +28,38 @@ class FieldsetFieldtype extends Fieldtype
     /**
      * @var string
      */
-    public $relationship = 'morphToMany';
+    public $relationship = 'morphOne';
 
     /**
      * @var string
      */
-    public $namespace = 'Fusion\Models\Fieldset';
+    public $namespace = 'Fusion\Models\Fieldsets';
+
+    /**
+     * @var array
+     */
+    public $settings = [
+        'fieldset' => null,
+    ];
+
+    /**
+     * @var array
+     */
+    public $rules = [
+        'settings.fieldset' => 'required',
+    ];
+
+    /**
+     * @var array
+     */
+    public $attributes = [
+        'settings.fieldset' => 'fieldset',
+    ];
+
+    /**
+     * @var array
+     */
+    public $validation = false;
 
     /**
      * Generate relationship methods for associated Model.
@@ -44,16 +70,15 @@ class FieldsetFieldtype extends Fieldtype
      */
     public function generateRelationship($field)
     {
-        $stub = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
+        $model     = Fieldset::find($field->settings['fieldset']);
+        $namespace = $this->namespace.'\\'.Str::studly($model->handle);
+        $stub      = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
 
         return strtr($stub, [
             '{handle}'            => $field->handle,
             '{studly_handle}'     => Str::studly($field->handle),
-            '{related_pivot_key}' => 'fieldset_id',
-            '{related_namespace}' => $this->namespace,
-            '{related_table}'     => 'fieldsets_pivot',
-            '{where_clause}'      => "->where('field_id', {$field->id})",
-            '{order_clause}'      => "->orderBy('order')",
+            '{related_namespace}' => $namespace,
+            '{related_name}'      => 'fieldsetable',
         ]);
     }
 
@@ -67,19 +92,7 @@ class FieldsetFieldtype extends Fieldtype
      */
     public function persistRelationship($model, Field $field)
     {
-        $oldValues = $model->{$field->handle}->pluck('id');
-        $newValues = collect(request()->input($field->handle))
-            ->mapWithKeys(function ($id) use ($field) {
-                return [
-                    $id => [
-                        'field_id' => $field->id,
-                    ],
-                ];
-            });
-
-        $model->{$field->handle}()->detach($oldValues);
-        $model->{$field->handle}()->attach($newValues);
-        $model->flush();
+        dd($model->{$field->handle});
     }
 
     /**
@@ -92,6 +105,6 @@ class FieldsetFieldtype extends Fieldtype
      */
     public function getResource($model, Field $field)
     {
-        return FieldsetResource::collection($this->getValue($model, $field));
+        return new FieldsetResource($this->getValue($model, $field));
     }
 }

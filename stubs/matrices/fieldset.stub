@@ -45,6 +45,14 @@ class {class} extends Model
     }
 
     /**
+     * Get the owning fieldsetable model.
+     */
+    public function fieldsetable()
+    {
+        return $this->morphTo();
+    }
+
+    /**
      * Get all of the fields for the fieldset.
      */
     public function getFieldsAttribute()

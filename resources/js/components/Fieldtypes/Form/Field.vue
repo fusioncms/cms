@@ -4,7 +4,7 @@
         :label="field.name"
         :help="field.help"
         :options="options"
-        placeholder="Select a form..."
+        placeholder="Select a fieldset..."
         :filterable="true"
         :hasError="hasError(field.handle)"
         :errorMessage="errorMessage(field.handle)"
@@ -16,7 +16,7 @@
         import FieldMixin from '@/mixins/fieldtypes/field'
 
         export default {
-        name: 'form-fieldtype',
+        name: 'fieldset-fieldtype',
 
         mixins: [FieldMixin],
 
@@ -47,7 +47,7 @@
         },
 
         created() {
-            axios.get('/api/forms').then((response) => {
+            axios.get('/api/fieldsets').then((response) => {
                 this.options = _.map(response.data.data, (item) => {
                     return {
                         label: item.name,
