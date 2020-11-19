@@ -62,7 +62,7 @@
             axios.all([
                 axios.get('/api/matrices'),
                 axios.get('/api/activity'),
-                axios.get(process.env.MIX_NEWS_FEED || 'https://beta.getfusioncms.com/blog.json', {withCredentials: false}).catch(function() {
+                axios.get('https://beta.getfusioncms.com/blog.json', {withCredentials: false}).catch(function() {
                     return {
                         data: {
                             items: [],

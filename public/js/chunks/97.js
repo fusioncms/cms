@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[97],{"5Ox3":function(n,e,t){"use strict";t.r(e);var i={name:"information-fieldtype-settings"},s=t("KHd+"),l=Object(s.a)(i,(function(){var n=this.$createElement;return(this._self._c||n)("div")}),[],!1,null,null,null);e.default=l.exports}}]);
