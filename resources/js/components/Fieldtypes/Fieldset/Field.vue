@@ -1,13 +1,16 @@
 <template>
-    <div>
-        <component v-for="field in fields"
+    <ui-fieldset
+        :label="field.name"
+        :help="field.help">
+        
+        <component v-for="field in fieldset.fields"
             :key="field.handle"
             :is="field.type.id + '-fieldtype'"
             :field="field"
             :errors="fieldErrors"
             v-model="model[field.handle]">
         </component>
-    </div>
+    </ui-fieldset>
 </template>
 
 <script>
@@ -21,7 +24,7 @@
 
         data() {
             return {
-                fields: {},
+                fieldset: {},
             }
         },
 
@@ -48,7 +51,7 @@
 
         created() {
             axios.get(`/api/fieldsets/${this.field.settings.fieldset}`)
-                .then(response => this.fields = response.data.data.fields)
+                .then(response => this.fieldset = response.data.data)
         }
     }
 </script>

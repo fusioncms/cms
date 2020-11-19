@@ -184,7 +184,14 @@ abstract class Fieldtype
         return null;
     }
 
-    public function getDefault()
+    /**
+     * Get the fieldtype default value.
+     *
+     * @param Field $field
+     * 
+     * @return mixed
+     */
+    public function getDefault(Field $field)
     {
         return $this->default;
     }

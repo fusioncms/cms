@@ -101,6 +101,22 @@ class FieldsetFieldtype extends Fieldtype
     }
 
     /**
+     * Get the fieldtype default value.
+     * 
+     * @param Field $field
+     *
+     * @return mixed
+     */
+    public function getDefault(Field $field)
+    {
+        $fieldset = Fieldset::findOrFail($field->settings['fieldset']);
+
+        return $fieldset->fields->mapWithKeys(function ($field) {
+            return [ $field->handle => '' ];
+        });
+    }
+
+    /**
      * Generate relationship methods for associated Model.
      *
      * @param Fusion\Models\Field $field
@@ -118,6 +134,7 @@ class FieldsetFieldtype extends Fieldtype
             '{studly_handle}'     => Str::studly($field->handle),
             '{related_namespace}' => $namespace,
             '{related_name}'      => 'fieldsetable',
+            '{where_clause}'      => "->where('field_id', {$field->id})",
         ]);
     }
 
@@ -132,8 +149,10 @@ class FieldsetFieldtype extends Fieldtype
     public function persistRelationship($model, Field $field)
     {
         $fieldset = Fieldset::findOrFail($field->settings['fieldset']);
+        $fieldset->getBuilder();
 
         $model->{$field->handle}()->updateOrCreate([
+            'field_id'    => $field->id,
             'fieldset_id' => $fieldset->id,
         ], request()->input($field->handle, []));
     }

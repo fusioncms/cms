@@ -23,7 +23,7 @@ class CollectionResource extends JsonResource
 
         if ($fields) {
             foreach ($fields as $field) {
-                $resource['collection'][$field->handle] = $this->resource['collection']->{$field->handle};
+                $resource['collection'][$field->handle] = $field->type()->getResource($this->resource, $field);
             }
         }
 
