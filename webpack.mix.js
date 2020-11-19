@@ -24,7 +24,7 @@ mix.setPublicPath('public')
         },
         output: {
             publicPath: '/vendor/fusion/',
-            chunkFilename: 'js/chunks/[name].[hash:5].js'
+            chunkFilename: 'js/chunks/[name].js'
         }
     })
     .options({
