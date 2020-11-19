@@ -106,6 +106,14 @@
             submit: {
                 required: true,
             }
+        },
+
+        created() {
+            this.$store.commit('fieldtypes/setExcluded', ['fieldset'])
+        },
+
+        destroyed() {
+            this.$store.commit('fieldtypes/setExcluded', [])
         }
     }
 </script>

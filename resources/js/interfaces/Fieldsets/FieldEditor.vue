@@ -47,6 +47,7 @@
                 </div>
 
                 <field-validation
+                    v-if="form.validation"
                     v-model="form.validation">
                 </field-validation>
 
