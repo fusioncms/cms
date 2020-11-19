@@ -2,10 +2,8 @@
 
 namespace Fusion\Tests\Feature\Fieldtypes;
 
-use Facades\MatrixFactory;
 use Facades\FieldsetFactory;
-use Fusion\Models\Field;
-use Fusion\Models\Fieldset;
+use Facades\MatrixFactory;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -39,7 +37,7 @@ class FieldsetFieldtypeTest extends TestCase
                             'handle'     => 'contacts',
                             'type'       => 'fieldset',
                             'settings'   => ['fieldset' => $this->fieldset->id],
-                            'validation' => ['value' => '']
+                            'validation' => ['value' => ''],
                         ],
                     ],
                 ],
@@ -60,9 +58,9 @@ class FieldsetFieldtypeTest extends TestCase
         $this
             ->be($this->owner, 'api')
             ->json('POST', "/api/collections/{$this->matrix->handle}", [
-                'name'   => ($name = $this->faker->word),
-                'slug'   => Str::slug($name),
-                'status' => true,
+                'name'                  => ($name = $this->faker->word),
+                'slug'                  => Str::slug($name),
+                'status'                => true,
                 $this->fieldset->handle => $fields,
             ])
             ->assertStatus(201);
@@ -87,9 +85,9 @@ class FieldsetFieldtypeTest extends TestCase
         $this
             ->be($this->owner, 'api')
             ->json('POST', "/api/collections/{$this->matrix->handle}", [
-                'name'   => ($name = $this->faker->word),
-                'slug'   => Str::slug($name),
-                'status' => true,
+                'name'                  => ($name = $this->faker->word),
+                'slug'                  => Str::slug($name),
+                'status'                => true,
                 $this->fieldset->handle => $fields,
             ])
             ->assertStatus(422)

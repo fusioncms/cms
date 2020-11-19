@@ -2,9 +2,8 @@
 
 namespace Fusion\Fieldtypes;
 
-use Fusion\Http\Resources\FieldsetResource;
-use Fusion\Models\Fieldset;
 use Fusion\Models\Field;
+use Fusion\Models\Fieldset;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -77,7 +76,7 @@ class FieldsetFieldtype extends Fieldtype
             $name  = "{$fieldset->handle}.{$field->handle}";
             $value = $field->type()->attributes($field, $value ? $value[$field->handle] : null);
 
-            return [ $name => $value[$field->handle] ];
+            return [$name => $value[$field->handle]];
         });
     }
 
@@ -97,7 +96,7 @@ class FieldsetFieldtype extends Fieldtype
             $name = "{$fieldset->handle}.{$field->handle}";
             $rule = $field->type()->rules($field, $value ? $value[$field->handle] : null);
 
-            return [ $name => $rule[$field->handle] ?: 'sometimes' ];
+            return [$name => $rule[$field->handle] ?: 'sometimes'];
         });
     }
 
@@ -135,7 +134,7 @@ class FieldsetFieldtype extends Fieldtype
         $fieldset = Fieldset::findOrFail($field->settings['fieldset']);
 
         $model->{$field->handle}()->updateOrCreate([
-            'fieldset_id' => $fieldset->id
+            'fieldset_id' => $fieldset->id,
         ], request()->input($field->handle, []));
     }
 
@@ -152,8 +151,8 @@ class FieldsetFieldtype extends Fieldtype
         $fieldset = Fieldset::findOrFail($field->settings['fieldset']);
         $value    = $this->getValue($model, $field);
 
-        return $fieldset->fields->mapWithKeys(function($field) use ($value) {
-            return [ $field->handle => $value ? $field->type()->getValue($value, $field) : '' ];
+        return $fieldset->fields->mapWithKeys(function ($field) use ($value) {
+            return [$field->handle => $value ? $field->type()->getValue($value, $field) : ''];
         });
     }
 }
