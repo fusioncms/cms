@@ -6,20 +6,19 @@ const production = process.env.NODE_ENV === 'production'
 const sourceMap = production ? '' : 'inline-source-map'
 
 mix.setPublicPath('public')
-    .js('resources/js/gravity.js', 'public/js')
-    .sass('resources/scss/gravity.scss', 'public/css', { implementation: require('node-sass') })
-    .version()
+    .js('resources/js/gravity.js', 'js')
+    .vue()
+    .sass('resources/scss/gravity.scss', 'css', { implementation: require('node-sass') })
     .webpackConfig({
-        devtool: sourceMap,
-        output: {
-            publicPath: '/vendor/fusion/',
-            chunkFilename: "js/chunks/[name].js?id=[chunkhash]",
-        },
+        // devtool: sourceMap,
         resolve: {
             alias: {
                 '@': path.resolve(__dirname, 'resources/js/'),
             },
         },
+        output: {
+            publicPath: '/vendor/fusion/'
+        }
     })
     .options({
         processCssUrls: false,

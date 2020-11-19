@@ -1,4 +1,18 @@
 {
-    "/js/gravity.js": "/js/gravity.js?id=6496847c2b2da5edc45e",
-    "/css/gravity.css": "/css/gravity.css?id=3b15f921b297ce041a38"
+    "/js/gravity.js": "/js/gravity.js",
+    "/css/gravity.css": "/css/gravity.css",
+    "/img/audio-large.svg": "/img/audio-large.svg",
+    "/img/audio-small.svg": "/img/audio-small.svg",
+    "/img/document-large.svg": "/img/document-large.svg",
+    "/img/document-small.svg": "/img/document-small.svg",
+    "/img/folder.svg": "/img/folder.svg",
+    "/img/icons.sketch": "/img/icons.sketch",
+    "/img/image-large.svg": "/img/image-large.svg",
+    "/img/image-small.svg": "/img/image-small.svg",
+    "/img/logo-light.svg": "/img/logo-light.svg",
+    "/img/logo.svg": "/img/logo.svg",
+    "/img/misc-large.svg": "/img/misc-large.svg",
+    "/img/misc-small.svg": "/img/misc-small.svg",
+    "/img/video-large.svg": "/img/video-large.svg",
+    "/img/video-small.svg": "/img/video-small.svg"
 }

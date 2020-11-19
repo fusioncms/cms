@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[100],{h5eM:function(e,n,t){"use strict";t.r(n);var i={name:"video-fieldtype-settings"},s=t("KHd+"),l=Object(s.a)(i,(function(){var e=this.$createElement;return(this._self._c||e)("div")}),[],!1,null,null,null);n.default=l.exports}}]);
