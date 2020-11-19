@@ -19,8 +19,13 @@ class FieldsetObserver
     {
         Schema::create($fieldset->builderName(), function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('field_id');
             $table->unsignedBigInteger('fieldset_id');
             $table->morphs('fieldsetable');
+
+            $table->foreign('field_id')
+                ->references('id')->on('fields')
+                ->onDelete('cascade');
 
             $table->foreign('fieldset_id')
                 ->references('id')->on('fieldsets')

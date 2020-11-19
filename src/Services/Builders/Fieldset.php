@@ -41,7 +41,7 @@ class Fieldset extends Builder implements BuilderContract
     {
         $className = Str::studly($this->fieldset->handle);
         $traits    = [];
-        $fillable  = ['fieldset_id', 'name', 'handle', 'status'];
+        $fillable  = ['field_id', 'fieldset_id', 'name', 'handle', 'status'];
         $casts     = ['status' => 'boolean'];
         $fields    = [];
 

@@ -44,6 +44,7 @@ class FieldsetFieldtypeTest extends TestCase
             ])
             ->create();
 
+        $this->field = $this->matrix->blueprint->sections->first()->fields()->first();
         $this->model = (new \Fusion\Services\Builders\Collection($this->matrix->handle))->make();
     }
 
@@ -66,6 +67,7 @@ class FieldsetFieldtypeTest extends TestCase
             ->assertStatus(201);
 
         $this->assertDatabaseHas($this->fieldset->builderName(), [
+            'field_id'          => $this->field->id,
             'fieldset_id'       => $this->fieldset->id,
             'fieldsetable_id'   => $this->model->first()->id,
             'fieldsetable_type' => 'Fusion\Models\Collections\\'.Str::studly($this->matrix->handle),

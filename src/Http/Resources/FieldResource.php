@@ -15,6 +15,7 @@ class FieldResource extends JsonResource
      */
     public function toArray($request)
     {
+        $field     = $this->resource;
         $fieldtype = new FieldtypeResource(fieldtypes()->get($this->type));
 
         return [
@@ -28,7 +29,7 @@ class FieldResource extends JsonResource
             'section'    => $this->section ?: 'General',
             'settings'   => $this->settings,
             'validation' => $this->validation,
-            'default'    => $fieldtype->getDefault(),
+            'default'    => $fieldtype->getDefault($this->resource),
 
             'order'     => $this->order,
             'status'    => $this->status,
