@@ -5,7 +5,6 @@
         "dev": "npx mix",
         "production": "npx mix --production",
         "watch": "npx mix watch",
-        "hot": "npx mix --hot",
         "postinstall": "touch ./node_modules/.metadata_never_index"
     },
     "dependencies": {
