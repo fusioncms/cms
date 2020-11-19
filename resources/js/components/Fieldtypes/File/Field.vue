@@ -7,13 +7,21 @@
         :hasError="hasError(field.handle)"
         :errorMessage="errorMessage(field.handle)">
 
-		<input
-			type="file"
-			:id="field.handle"
-			:name="`${field.handle}[]`"
-			:accept="accept"
-			:multiple="multiple"
-            @input="onChange">
+        <div class="flex items-center justify-between">
+    		<input
+                ref="upload"
+    			type="file"
+    			:id="field.handle"
+    			:name="`${field.handle}[]`"
+    			:accept="accept"
+    			:multiple="multiple"
+                @input="onChange">
+
+            <ui-button @click="clear">
+                <fa-icon :icon="['fas', 'times-circle']"></fa-icon>
+                Clear
+            </ui-button>
+        </div>
 
         <table class="table">
             <tbody>
@@ -78,7 +86,12 @@
         methods: {
         	onChange(ev) {
                 this.$emit('input', ev.target.files)
-        	}
+        	},
+
+            clear() {
+                this.$refs.upload.value = ''
+                this.model = []
+            }
         },
 
         mounted() {

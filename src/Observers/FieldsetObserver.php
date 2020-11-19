@@ -20,10 +20,7 @@ class FieldsetObserver
         Schema::create($fieldset->builderName(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('fieldset_id');
-            $table->string('name');
-            $table->string('handle')->unique();
-            $table->boolean('status')->default(true);
-            $table->timestamps();
+            $table->morphs('fieldsetable');
 
             $table->foreign('fieldset_id')
                 ->references('id')->on('fieldsets')

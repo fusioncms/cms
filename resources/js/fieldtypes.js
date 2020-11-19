@@ -45,6 +45,11 @@ Vue.component('divider-fieldtype-settings', () => import('./components/Fieldtype
 Vue.component('email-fieldtype', () => import('./components/Fieldtypes/Email/Field'))
 Vue.component('email-fieldtype-settings', () => import('./components/Fieldtypes/Email/Settings'))
 
+// Fieldset
+Vue.component('fieldset-fieldtype', () => import('./components/Fieldtypes/Fieldset/Field'))
+Vue.component('fieldset-fieldtype-settings', () => import('./components/Fieldtypes/Fieldset/Settings'))
+
+
 // File
 Vue.component('file-fieldtype', () => import('./components/Fieldtypes/File/Field'))
 Vue.component('file-fieldtype-settings', () => import('./components/Fieldtypes/File/Settings'))

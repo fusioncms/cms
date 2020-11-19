@@ -1,0 +1,9 @@
+    /**
+     * A polymorphic many to many "{studly_handle}" relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function {handle}()
+    {
+    	return $this->morphOne('{related_namespace}', '{related_name}');
+    }

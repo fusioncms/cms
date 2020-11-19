@@ -75,7 +75,7 @@ class Fieldset extends Builder implements BuilderContract
 
         File::put($path, $contents);
 
-        return app()->make("Fusion\Models\Fielsets\{$className}");
+        return app()->make('Fusion\Models\Fieldsets\\'.$className);
     }
 
     /**

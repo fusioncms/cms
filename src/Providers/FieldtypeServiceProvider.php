@@ -24,6 +24,7 @@ class FieldtypeServiceProvider extends ServiceProvider
         fieldtypes()->register(\Fusion\Fieldtypes\DictionaryFieldtype::class);
         fieldtypes()->register(\Fusion\Fieldtypes\DividerFieldtype::class);
         fieldtypes()->register(\Fusion\Fieldtypes\EmailFieldtype::class);
+        fieldtypes()->register(\Fusion\Fieldtypes\FieldsetFieldtype::class);
         fieldtypes()->register(\Fusion\Fieldtypes\FileFieldtype::class);
         fieldtypes()->register(\Fusion\Fieldtypes\FormFieldtype::class);
         fieldtypes()->register(\Fusion\Fieldtypes\HiddenFieldtype::class);

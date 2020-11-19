@@ -1,0 +1,1 @@
+(self.webpackChunkfusioncms=self.webpackChunkfusioncms||[]).push([[149],{149:(s,e,t)=>{"use strict";t.r(e),t.d(e,{default:()=>l});const n={name:"list-fieldtype-settings"};const l=(0,t(1900).Z)(n,(function(){var s=this.$createElement;return(this._self._c||s)("div")}),[],!1,null,null,null).exports}}]);
