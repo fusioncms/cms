@@ -1,4 +1,5 @@
 /node_modules
 /vendor
+/public/js/chunks/resources_*.js
 .phpunit.result.cache
 .DS_Store
