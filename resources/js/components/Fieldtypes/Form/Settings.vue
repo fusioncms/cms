@@ -4,6 +4,6 @@
 
 <script>
     export default {
-        name: 'fieldset-fieldtype-settings'
+        name: 'form-fieldtype-settings'
     }
 </script>
