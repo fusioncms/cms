@@ -1,4 +1,5 @@
 /node_modules
 /vendor
+/public/js/resources_*.js
 .phpunit.result.cache
 .DS_Store
