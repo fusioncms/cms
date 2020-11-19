@@ -76,13 +76,7 @@ class MatrixFactory implements Factory
                     'handle' => $data['handle'],
                 ]);
 
-                foreach ($data['fields'] as $field) {
-                    $section->fields()->create([
-                        'name'   => $field['name'],
-                        'handle' => $field['handle'],
-                        'type'   => $field['type'],
-                    ]);
-                }
+                $section->fields()->createMany($data['fields']);
             }
         }
 

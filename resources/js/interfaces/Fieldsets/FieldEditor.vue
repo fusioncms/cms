@@ -46,25 +46,10 @@
                     </div>
                 </div>
 
-                <ui-field-group
-                    v-if="form.validation !== false"
-                    name="validation"
-                    fieldId="field-validation"
-                    label="Validation Rules">
-                    
-                    <div class="row">
-                        <ui-input-group
-                            class="col w-full sm:w-1/2"
-                            v-for="(rule, key) in form.validation"
-                            :key="key"
-                            :name="`validation.${key}`"
-                            :hide-label="Object.values(form.validation).length == 1"
-                            :label="key"
-                            monospaced
-                            v-model="form.validation[key]">
-                        </ui-input-group>
-                    </div>
-                </ui-field-group>
+                <field-validation
+                    v-if="form.validation"
+                    v-model="form.validation">
+                </field-validation>
 
                 <hr>
 
@@ -83,10 +68,15 @@
 </template>
 
 <script>
-    import Form from '../../services/Form'
+    import Form from '@/services/Form'
+    import FieldValidation from '@/interfaces/Fieldsets/FieldValidation.vue'
 
     export default {
         name: 'field-editor',
+
+        components: {
+            'field-validation': FieldValidation
+        },
 
         data() {
             return {

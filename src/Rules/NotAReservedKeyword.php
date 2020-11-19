@@ -32,6 +32,9 @@ class NotAReservedKeyword implements Rule
 
             // common model attributes
             'id', 'name', 'handle', 'slug', 'route', 'template', 'children', 'parent',
+
+            // less common attributes
+            'fieldset',
         ];
     }
 
