@@ -188,7 +188,7 @@ abstract class Fieldtype
      * Get the fieldtype default value.
      *
      * @param Field $field
-     * 
+     *
      * @return mixed
      */
     public function getDefault(Field $field)

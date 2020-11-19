@@ -102,7 +102,7 @@ class FieldsetFieldtype extends Fieldtype
 
     /**
      * Get the fieldtype default value.
-     * 
+     *
      * @param Field $field
      *
      * @return mixed
@@ -112,7 +112,7 @@ class FieldsetFieldtype extends Fieldtype
         $fieldset = Fieldset::findOrFail($field->settings['fieldset']);
 
         return $fieldset->fields->mapWithKeys(function ($field) {
-            return [ $field->handle => '' ];
+            return [$field->handle => ''];
         });
     }
 
