@@ -45,7 +45,11 @@
                     wrap: true,
                     defaultDate: null,
                 })
-            }
+            },
+            withTime: {
+                type: Boolean,
+                default: false,
+            },
         },
 
         computed: {
@@ -63,7 +67,12 @@
         mounted() {
             if (this.instance) return
 
-            this.instance = new Flatpickr(this.$refs['flatpickr'], this.config)
+            let config = {
+                ...this.config,
+                enableTime: this.withTime,
+            }
+
+            this.instance = new Flatpickr(this.$refs['flatpickr'], config)
         }
     }
 </script>

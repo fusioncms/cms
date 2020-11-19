@@ -24,6 +24,7 @@
                         name="publish_at"
                         id="publish_at"
                         label="Publish Date"
+                        :with-time="true"
                         :has-error="form.errors.has('publish_at')"
                         :error-message="form.errors.get('publish_at')">
                     </ui-flatpickr-group>
@@ -33,6 +34,7 @@
                         name="expire_at"
                         id="expire_at"
                         label="Expiry Date"
+                        :with-time="true"
                         :has-error="form.errors.has('expire_at')"
                         :error-message="form.errors.get('expire_at')">
                     </ui-flatpickr-group>

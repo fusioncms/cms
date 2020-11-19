@@ -15,6 +15,7 @@
             :name="name"
             :id="id"
             v-model="model"
+            :with-time="withTime"
         ></ui-flatpickr>
 
     </ui-field-group>
@@ -44,6 +45,11 @@ export default {
         value: {
             required: false,
             default: null,
+        },
+        withTime: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
         label: {
             type: String,
