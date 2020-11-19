@@ -133,7 +133,6 @@ class FieldsetFieldtype extends Fieldtype
     public function persistRelationship($model, Field $field)
     {
         $fieldset = Fieldset::findOrFail($field->settings['fieldset']);
-        $fieldset->getBuilder();
 
         $model->{$field->handle}()->updateOrCreate([
             'fieldset_id' => $fieldset->id
@@ -154,7 +153,7 @@ class FieldsetFieldtype extends Fieldtype
         $value    = $this->getValue($model, $field);
 
         return $fieldset->fields->mapWithKeys(function($field) use ($value) {
-            return [ $field->handle => $value ? $value[$field->handle] : '' ];
+            return [ $field->handle => $value ? $field->type()->getValue($value, $field) : '' ];
         });
     }
 }

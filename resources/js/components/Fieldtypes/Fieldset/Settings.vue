@@ -24,24 +24,24 @@
 
         data() {
             return {
-                fieldsets: []
+                options: []
             }
         },
 
-        computed: {
-            options() {
-                return _.map(this.fieldsets, (fieldset) => {
+        mounted() {
+            axios.get('/api/fieldsets').then((response) => {
+                this.options = _.map(response.data.data, (item) => {
                     return {
-                        label: fieldset.name,
-                        value: fieldset.id
+                        label: item.name,
+                        value: item.id
                     }
                 })
-            }
-        },
 
-        created() {
-            axios.get('/api/fieldsets').then((response) =>
-                this.fieldsets = response.data.data)
+                this.options.unshift({
+                    label: 'None',
+                    value: null
+                })
+            })
         }
     }
 </script>

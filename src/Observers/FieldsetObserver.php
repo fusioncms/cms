@@ -18,6 +18,7 @@ class FieldsetObserver
     public function created(Fieldset $fieldset)
     {
         Schema::create($fieldset->builderName(), function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('fieldset_id');
             $table->morphs('fieldsetable');
 

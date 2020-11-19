@@ -1,6 +1,6 @@
 <template>
     <div>
-        <component v-for="field in fieldset.fields"
+        <component v-for="field in fields"
             :key="field.handle"
             :is="field.type.id + '-fieldtype'"
             :field="field"
@@ -21,7 +21,7 @@
 
         data() {
             return {
-                fieldset: {},
+                fields: {},
             }
         },
 
@@ -30,7 +30,7 @@
                 let errors = {}
 
                 for (const [key, value] of Object.entries(this.errors.errors)) {
-                    errors[key.replace('contacts.','')] = value
+                    errors[key.replace(`${this.field.handle}.`, '')] = value
                 }
 
                 return new Errors(errors)
@@ -48,17 +48,7 @@
 
         created() {
             axios.get(`/api/fieldsets/${this.field.settings.fieldset}`)
-                .then((response) => {
-                    this.fieldset = response.data.data
-                    
-                    let fields = {}
-
-                    _.forEach(this.fieldset.fields, (field) => {
-                        fields[field.handle] = this.fieldset[field.handle] || ''
-                    })
-
-                    this.model = fields
-                })
+                .then(response => this.fields = response.data.data.fields)
         }
     }
 </script>
