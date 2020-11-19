@@ -1,7 +1,7 @@
 <template>
     <ui-fieldset
         :label="field.name"
-        help="Please fill out the following fields.">
+        :help="field.help">
         
         <component v-for="field in fieldset.fields"
             :key="field.handle"

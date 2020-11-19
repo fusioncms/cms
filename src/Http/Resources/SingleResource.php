@@ -28,8 +28,10 @@ class SingleResource extends JsonResource
             ],
         ];
 
-        foreach ($this->fields as $field) {
-            $resource['single'][$field->handle] = $field->type()->getResource($this->resource, $field);
+        if ($this->fields) {
+            foreach ($this->fields as $field) {
+                $resource['single'][$field->handle] = $field->type()->getResource($this->resource, $field);
+            }
         }
 
         return $resource;

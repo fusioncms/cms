@@ -21,8 +21,10 @@ class CollectionResource extends JsonResource
 
         $fields = $this->resource['matrix']->blueprint->fields;
 
-        foreach ($this->fields as $field) {
-            $resource['collection'][$field->handle] = $field->type()->getResource($this->resource, $field);
+        if ($fields) {
+            foreach ($fields as $field) {
+                $resource['collection'][$field->handle] = $field->type()->getResource($this->resource, $field);
+            }
         }
 
         $resource['collection']['status'] = $this->resource['collection']['status'];
