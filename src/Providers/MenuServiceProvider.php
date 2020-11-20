@@ -75,13 +75,13 @@ class MenuServiceProvider extends ServiceProvider
                 'to'    => $item->adminPath,
                 'icon'  => $item->icon ?: 'pencil-alt',
             ]];
-        }); 
+        });
 
         if ($matrices->isNotEmpty()) {
             $items->put('content', ['title' => 'Content', 'divider'  => true]);
             $items = $items->merge($matrices);
         }
-        
+
         // taxnomies
         $taxonomies = Taxonomy::where('sidebar', true)->orderBy('name')->get();
         if ($taxonomies->isNotEmpty()) {
