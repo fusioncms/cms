@@ -63,6 +63,9 @@
                     revision_control: '1',
 
                     seoable: '1',
+                    
+                    order_by: 'name',
+                    order_direction: true,
 
                     status: '1',
                 }, true)

@@ -7,16 +7,33 @@ use Fusion\Models\Matrix;
 
 class CollectionController extends DataTableController
 {
+    protected $matrix;
+    protected $orderBy;
+    protected $orderDirection;
+
     public function builder()
     {
         if (request()->route('collection')) {
-            return Matrix::findOrFail(request()->route('collection'))
-                ->getBuilder()
-                ->query();
+            $matrix = Matrix::findOrFail(request()->route('collection'));
+            
+            $this->orderBy        = $matrix->order_by;
+            $this->orderDirection = $matrix->order_direction;
+
+            return $matrix->getBuilder()->query();
         } else {
             return Matrix::query();
         }
     }
+
+    protected function getDefaultSort()
+    {
+        if (isset($this->matrix)) {
+            return ($this->orderDirection ? '' : '-') . $this->orderBy;
+        } else {
+            return current($this->getSortable());
+        }
+    }
+
 
     public function getDisplayableColumns()
     {

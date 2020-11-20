@@ -102,6 +102,8 @@
                             creditable:         vm.matrix.creditable ? '1' : '0',
                             publishable:        vm.matrix.publishable ? '1' : '0',
                             seoable:            vm.matrix.seoable ? '1' : '0',
+                            order_by:           vm.matrix.order_by,
+                            order_direction:    vm.matrix.order_direction,
                             status:             vm.matrix.status ? '1' : '0'
                         }, true)
 

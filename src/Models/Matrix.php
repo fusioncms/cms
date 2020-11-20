@@ -37,6 +37,8 @@ class Matrix extends Model
         'name_format',
         'route',
         'template',
+        'order_by',
+        'order_direction',
         'status',
     ];
 

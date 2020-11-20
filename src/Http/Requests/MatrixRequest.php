@@ -71,6 +71,9 @@ class MatrixRequest extends Request
 
             'route'              => 'sometimes',
             'template'           => 'sometimes',
+
+            'order_by'           => 'sometimes',
+            'order_direction'    => 'sometimes',
         ];
     }
 

@@ -197,6 +197,36 @@
             </ui-input-group>
         </section-card>
 
+        <section-card v-if="isCollection" id="matrix_panel_sort" title="Default Order" description="Configure how entries within the collection will be ordered by default." tabindex="-1">
+            <ui-select-group
+                id="matrix-order_by"
+                name="order_by"
+                label="Order By Column"
+                help="Should this matrix belong to another?"
+                :options="[
+                    { label: 'ID',           value: 'id'         },
+                    { label: 'Name',         value: 'name'       },
+                    { label: 'Slug',         value: 'slug'       },
+                    { label: 'Publish Date', value: 'publish_at' },
+                    { label: 'Created',      value: 'created_at' },
+                    { label: 'Last Update',  value: 'updated_at' },
+                ]"
+                :has-error="form.errors.has('parent_id')"
+                :error-message="form.errors.get('parent_id')"
+                v-model="form.order_by">
+            </ui-select-group>
+
+            <ui-toggle
+                id="matrix-order_direction"
+                name="order_direction"
+                label="Ascending Order?"
+                help="Should this collection be sorted in ascending order?"
+                :has-error="form.errors.has('order_direction')"
+                :error-message="form.errors.get('order_direction')"
+                v-model="form.order_direction">
+            </ui-toggle>
+        </section-card>
+
         <section-card id="matrix_panel_routing" title="Routing" description="Configure how entries within the collection will be accessed on the frontend." tabindex="-1">
             <ui-input-group
                 id="matrix-route"
