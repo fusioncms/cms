@@ -128,7 +128,8 @@ class Matrix extends Model
     /**
      * Scope a query to only include top-level sidebar items.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSidebar($query)
