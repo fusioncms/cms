@@ -13,10 +13,8 @@
 </template>
 
 <script>
-    import pluralize from 'pluralize'
-    import store from '../../store'
-    import Form from '../../services/Form'
-    import SharedForm from './SharedForm'
+    import Form       from '@/services/Form'
+    import SharedForm from '@/pages/Matrices/SharedForm'
 
     export default {
         auth() {
@@ -77,18 +75,10 @@
 
         methods: {
             submit() {
-                if (this.form.reference_singular == '') {
-                    this.form.reference_singular = pluralize.singular(this.form.name)
-                }
-
-                if (this.form.reference_plural == '') {
-                    this.form.reference_plural = pluralize(this.form.name)
-                }
-
                 this.form.post('/api/matrices').then((response) => {
                     axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
                         .then((response) => {
-                            store.dispatch('navigation/fetchAdminNavigation')
+                            this.$store.dispatch('navigation/fetchAdminNavigation')
 
                             toast('Matrix successfully created', 'success')
 

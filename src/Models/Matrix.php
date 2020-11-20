@@ -124,4 +124,18 @@ class Matrix extends Model
         $activity->description = "{$action} matrix ({$matrix->name})";
         $activity->properties  = $properties;
     }
+
+    /**
+     * Scope a query to only include top-level sidebar items.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSidebar($query)
+    {
+        return $query
+            ->where('sidebar', true)
+            ->where('parent_id', 0)
+            ->orderBy('name');
+    }
 }
