@@ -40,7 +40,15 @@
                     </ui-flatpickr-group>
                 </sidebar-section>
 
-                <sidebar-section v-for="(section) in sections.sidebar" :key="section.handle" :id="'single_panel_' + section.handle" :title="section.name" :description="section.description" tabindex="-1">
+                <sidebar-section
+                    v-for="section in sections.sidebar"
+                    v-if="section.fields.length > 0"
+                    :key="section.handle"
+                    :id="'single_panel_' + section.handle"
+                    :title="section.name"
+                    :description="section.description"
+                    tabindex="-1">
+
                     <component
                         v-for="field in section.fields"
                         :key="field.handle"
@@ -118,7 +126,15 @@
             </ui-card-body>
         </ui-card>
 
-        <section-card v-for="section in sections.body" :key="section.handle" :id="'single_panel_' + section.handle" :title="section.name" :description="section.description" tabindex="-1">
+        <section-card
+            v-for="section in sections.body"
+            v-if="section.fields.length > 0"
+            :key="section.handle"
+            :id="'single_panel_' + section.handle"
+            :title="section.name"
+            :description="section.description"
+            tabindex="-1">
+
             <component v-for="field in section.fields"
                 :key="field.handle"
                 :is="field.type.id + '-fieldtype'"
@@ -198,16 +214,14 @@
             },
 
             slugFocus() {
-                let vm = this
                 this.$nextTick(() => {
-                    vm.$refs.slug.$el.focus()
+                    this.$refs.slug.$el.focus()
                 })
             },
 
             editBtnFocus() {
-                let vm = this
                 this.$nextTick(() => {
-                    vm.$refs.edit.$el.focus()
+                    this.$refs.edit.$el.focus()
                 })
             }
         }

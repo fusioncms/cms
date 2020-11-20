@@ -44,10 +44,12 @@ class CollectionRequest extends Request
     protected function prepareForValidation()
     {
         $this->merge([
-            'matrix_id'  => $this->matrix->id,
-            'status'     => $this->status ?? true,
-            'publish_at' => (isset($this->publish_at) and !empty($this->publish_at)) ? $this->publish_at : now(),
-            'expire_at'  => (isset($this->expire_at) and !empty($this->expire_at)) ? $this->expire_at : null,
+            'matrix_id'          => $this->matrix->id,
+            'reference_singular' => empty($this->reference_singular) ? Str::singular($this->name) : $this->reference_singular,
+            'reference_plural'   => empty($this->reference_plural) ? Str::plural($this->name) : $this->reference_plural,
+            'status'             => $this->status ?? true,
+            'publish_at'         => (isset($this->publish_at) and !empty($this->publish_at)) ? $this->publish_at : now(),
+            'expire_at'          => (isset($this->expire_at) and !empty($this->expire_at)) ? $this->expire_at : null,
         ]);
     }
 
