@@ -7,31 +7,31 @@ use Fusion\Models\Matrix;
 
 class CollectionController extends DataTableController
 {
+    /**
+     * @var \Fusion\Models\Matrix
+     */
     protected $matrix;
-    protected $orderBy;
-    protected $orderDirection;
 
+    /**
+     * Return builder instance.
+     * 
+     * @return Builder
+     */
     public function builder()
     {
-        if (request()->route('collection')) {
-            $matrix = Matrix::findOrFail(request()->route('collection'));
-            
-            $this->orderBy        = $matrix->order_by;
-            $this->orderDirection = $matrix->order_direction;
-
-            return $matrix->getBuilder()->query();
-        } else {
-            return Matrix::query();
-        }
+        $this->matrix = Matrix::findOrFail(request()->route('collection'));
+        
+        return $matrix->getBuilder()->query();
     }
 
+    /**
+     * Returns default order.
+     * 
+     * @return string
+     */
     protected function getDefaultSort()
     {
-        if (isset($this->matrix)) {
-            return ($this->orderDirection ? '' : '-') . $this->orderBy;
-        } else {
-            return current($this->getSortable());
-        }
+        return ($this->matrix->order_direction ? '' : '-') . $this->matrix->order_by;
     }
 
 
