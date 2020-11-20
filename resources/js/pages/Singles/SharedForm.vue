@@ -2,7 +2,7 @@
     <div>
         <portal to="actions">
             <div class="buttons">
-                <ui-button v-if="$mq != 'sm'" :to="{ name: 'dashboard' }" variant="secondary">Go Back</ui-button>
+                <ui-button v-if="$mq != 'sm' && single.slug" :to="{ name: 'single.index', params: { single: single.slug } }" variant="secondary">Go Back</ui-button>
                 <ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
