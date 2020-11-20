@@ -159,6 +159,15 @@ const router = new Router({
         },
         {
             path: '/single/:single',
+            component: () => import('@/pages/Singles/Index'),
+            name: 'single.index',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin',
+            },
+        },
+        {
+            path: '/single/:single/edit',
             component: () => import('@/pages/Singles/Edit'),
             name: 'single.edit',
             meta: {
