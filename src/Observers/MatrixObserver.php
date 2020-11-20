@@ -79,6 +79,18 @@ class MatrixObserver
     }
 
     /**
+     * Handle the "saved" event.
+     *
+     * @param \Fusion\Models\Matrix $matrix
+     *
+     * @return void
+     */
+    public function saved(Matrix $matrix)
+    {
+        $matrix->getBuilder();
+    }
+
+    /**
      * Handle the matrix "deleted" event.
      *
      * @param \Fusion\Models\Matrix $matrix
