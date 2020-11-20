@@ -104,6 +104,7 @@
 
 
             <ui-select-group
+                v-if="id == 0"
                 id="matrix-type"
                 name="type"
                 label="Type"
@@ -118,26 +119,10 @@
                         'value': 'single',
                     },
                 ]"
-                :disabled="children.length > 0"
                 :has-error="form.errors.has('type')"
                 :error-message="form.errors.get('type')"
                 v-model="form.type">
             </ui-select-group>
-
-            <ui-alert v-if="children.length > 0" icon="exclamation-triangle">
-                <p>Matrix type cannot be changed because it is a parent to the following matrices:</p>
-                
-                <ul>
-                    <li>
-                        <router-link
-                            v-for="child in children"
-                            :key="`child-${child.id}`"
-                            :to="{ name: 'matrices.edit', params: {matrix: child.id} }">
-                            {{ child.name }}
-                        </router-link>
-                    </li>
-                </ul>
-            </ui-alert>
 
             <ui-select-group
                 v-if="isCollection"
@@ -298,10 +283,6 @@
 
             isCollection() {
                 return this.form.type == 'collection'
-            },
-
-            children() {
-                return _.defaultTo(this.matrix && this.matrix.children, [])
             },
 
             parentOptions() {

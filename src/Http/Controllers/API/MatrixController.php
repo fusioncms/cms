@@ -37,7 +37,7 @@ class MatrixController extends Controller
     {
         $this->authorize('matrices.view');
 
-        return new MatrixResource($matrix->load('children'));
+        return new MatrixResource($matrix);
     }
 
     /**
