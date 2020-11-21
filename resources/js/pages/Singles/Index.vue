@@ -15,7 +15,15 @@
             <div class="col w-full sm:w-1/2 xl:w-1/3 xxl:w-1/4">
                 <ui-card>
                     <ui-card-body>
-                        Alpha
+                        <div class="analytics">
+                            <div class="analytics__stat">
+                                <div class="analytics__stat-label">
+                                    <h3>Total Page Views</h3>
+                                </div>
+
+                                <span class="analytics__stat-value" aria-labelledby="analytic-visitors">{{ totalPageViews }}</span>
+                            </div>
+                        </div>
                     </ui-card-body>
                 </ui-card>
             </div>
@@ -23,7 +31,15 @@
             <div class="col w-full sm:w-1/2 xl:w-1/3 xxl:w-1/4">
                 <ui-card>
                     <ui-card-body>
-                        Beta
+                        <div class="analytics">
+                            <div class="analytics__stat">
+                                <div class="analytics__stat-label">
+                                    <h3>Total Visitors</h3>
+                                </div>
+
+                                <span class="analytics__stat-value" aria-labelledby="analytic-visitors">{{ totalVisitors }}</span>
+                            </div>
+                        </div>
                     </ui-card-body>
                 </ui-card>
             </div>
@@ -31,7 +47,15 @@
             <div class="col w-full sm:w-1/2 xl:w-1/3 xxl:w-1/4">
                 <ui-card>
                     <ui-card-body>
-                        Charlie
+                        <div class="analytics">
+                            <div class="analytics__stat">
+                                <div class="analytics__stat-label">
+                                    <h3>Bounce Rate</h3>
+                                </div>
+
+                                <span class="analytics__stat-value" aria-labelledby="analytic-visitors">{{ bounceRate }}</span>
+                            </div>
+                        </div>
                     </ui-card-body>
                 </ui-card>
             </div>
@@ -39,7 +63,15 @@
             <div class="col w-full sm:w-1/2 xl:w-1/3 xxl:w-1/4">
                 <ui-card>
                     <ui-card-body>
-                        Delta
+                        <div class="analytics">
+                            <div class="analytics__stat">
+                                <div class="analytics__stat-label">
+                                    <h3>Average Session</h3>
+                                </div>
+
+                                <span class="analytics__stat-value" aria-labelledby="analytic-visitors">{{ sessionDuration }}</span>
+                            </div>
+                        </div>
                     </ui-card-body>
                 </ui-card>
             </div>
@@ -71,7 +103,53 @@
             return {
                 single: {},
                 entry: {},
+                insight: [],
+                sessionDuration: null,
+                bounceRate: null,
+                totalVisitors: null,
+                totalPageViews: null,
             }
+        },
+
+        methods: {
+            secondsToString(seconds) {
+                let str = ''
+
+                let hours = _.floor((seconds %= 86400) / 3600)
+                let minutes = _.floor((seconds %= 3600) / 60)
+                seconds = _.floor(seconds % 60)
+
+                if (hours) {
+                    str += hours + 'h '
+                }
+
+                if (minutes) {
+                    str += minutes + 'm '
+                }
+
+                if (seconds) {
+                    str += seconds + 's'
+                }
+
+                if (str == '') {
+                    str = seconds + 's'
+                }
+
+                return str
+            }
+        },
+
+        mounted() {
+            let vm = this
+            axios.all([
+                axios.get('/api/singles/' + this.single.slug +'/insight'),
+            ]).then(axios.spread(function (insight) {
+                this.insight = insight.data.data
+                this.sessionDuration = this.secondsToString(insight.data.data.averageSessionDuration)
+                this.bounceRate = _.floor(insight.data.data.bounceRate, 2) + '%'
+                this.totalVisitors = Number(insight.data.data.totalVisitors).toLocaleString()
+                this.totalPageViews = Number(insight.data.data.totalPageViews).toLocaleString()
+            }.bind(this)))
         },
 
         beforeRouteEnter(to, from, next) {
@@ -79,7 +157,6 @@
                 next((vm) => {
                     vm.single = matrix
                     vm.entry = entry
-                    // vm.form   = new Form(fields, true)
 
                     vm.$emit('updateHead')
                 })
@@ -90,7 +167,6 @@
             getSingle(to.params.single, (error, entry, matrix, fields) => {
                 this.single = matrix
                 this.entry = entry
-                // this.form   = new Form(fields, true)
 
                 this.$emit('updateHead')
             })
