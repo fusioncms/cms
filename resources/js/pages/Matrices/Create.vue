@@ -40,34 +40,20 @@
                     handle: '',
                     description: '',
                     type: 'collection',
-
                     reference_singular: '',
                     reference_plural: '',
-
                     sections: [],
-
-                    sidebar: '1',
-                    quicklink: '1',
+                    sidebar: true,
+                    quicklink: true,
                     icon: '',
-
                     show_name_field: true,
                     name_label: '',
                     name_format: '',
-
                     route: '',
                     template: '',
-
-                    categorizable: '1',
-                    creditable: '1',
-                    publishable: '1',
-                    revision_control: '1',
-
-                    seoable: '1',
-                    
                     order_by: 'name',
                     order_direction: true,
-
-                    status: '1',
+                    status: true,
                 }, true)
             }
         },

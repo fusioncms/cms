@@ -21,7 +21,7 @@ class CollectionController extends DataTableController
     {
         $this->matrix = Matrix::findOrFail(request()->route('collection'));
         
-        return $matrix->getBuilder()->query();
+        return $this->matrix->getBuilder()->query();
     }
 
     /**

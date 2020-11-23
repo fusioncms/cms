@@ -15,9 +15,9 @@
                         name="status"
                         label="Status"
                         :help="form.status ? 'Toggle to disable this matrix.' : 'Toggle to enable this matrix.'"
-                        v-model="form.status"
-                        :true-value="1"
-                        :false-value="0">
+                        :has-error="form.errors.has('status')"
+                        :error-message="form.errors.get('status')"
+                        v-model="form.status">
                     </ui-toggle>
                 </sidebar-section>
 
@@ -25,19 +25,19 @@
                     <ui-toggle
                         id="matrix-sidebar-show"
                         name="sidebar"
-                        label="Show in Sidebar"
-                        v-model="form.sidebar"
-                        :true-value="1"
-                        :false-value="0">
+                        label="Show as Sidebar"
+                        :has-error="form.errors.has('sidebar')"
+                        :error-message="form.errors.get('sidebar')"
+                        v-model="form.sidebar">
                     </ui-toggle>
 
                     <ui-toggle
                         id="matrix-quicklink-show"
                         name="quicklink"
                         label="Show as Quicklink"
-                        v-model="form.quicklink"
-                        :true-value="1"
-                        :false-value="0">
+                        :has-error="form.errors.has('quicklink')"
+                        :error-message="form.errors.get('quicklink')"
+                        v-model="form.quicklink">
                     </ui-toggle>
 
                     <icon-picker

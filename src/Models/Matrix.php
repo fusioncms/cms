@@ -48,10 +48,11 @@ class Matrix extends Model
      * @var array
      */
     protected $casts = [
-        'sidebar'          => 'boolean',
-        'quicklink'        => 'boolean',
-        'status'           => 'boolean',
-        'show_name_field'  => 'boolean',
+        'sidebar'         => 'boolean',
+        'quicklink'       => 'boolean',
+        'status'          => 'boolean',
+        'show_name_field' => 'boolean',
+        'order_direction' => 'boolean',
     ];
 
     /**
