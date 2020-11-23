@@ -104,6 +104,7 @@
 
 
             <ui-select-group
+                v-if="id == 0"
                 id="matrix-type"
                 name="type"
                 label="Type"
@@ -124,6 +125,7 @@
             </ui-select-group>
 
             <ui-select-group
+                v-if="isCollection"
                 id="matrix-parent-id"
                 name="parent_id"
                 label="Parent Matrix"
@@ -159,6 +161,7 @@
             </ui-input-group>
 
             <ui-input-group
+                v-if="isCollection"
                 id="matrix-reference-plural"
                 name="reference_plural"
                 label="Plural Reference"
@@ -170,7 +173,7 @@
             </ui-input-group>
 
             <ui-toggle
-                v-if="form.type == 'collection'"
+                v-if="isCollection"
                 id="matrix-show-name-field"
                 name="show_name_field"
                 label="Show name field"
@@ -278,15 +281,21 @@
                 return pluralize(this.form.name)
             },
 
+            isCollection() {
+                return this.form.type == 'collection'
+            },
+
             parentOptions() {
-                let options = _.map(this.matrices, (item) => {
-                    return {
-                        'label': item.name,
-                        'value': item.id
+                let options = []
+
+                _.each(this.matrices, (item) => {
+                    if (this.id != item.id && item.type == 'single') {
+                        options.push({
+                            'label': item.name,
+                            'value': item.id
+                        })
                     }
                 })
-
-                options = _.remove(options, (item) => this.id == item.id)
 
                 options.unshift({ 'label': 'None', 'value': null })
 
@@ -295,9 +304,9 @@
         },
 
         watch: {
-            '$parent.form.type'(value) {
+            'form.type'(value) {
                 if (value == 'single') {
-                    this.$parent.form.show_name_field = true
+                    this.form.show_name_field = true
                 }
             }
         }

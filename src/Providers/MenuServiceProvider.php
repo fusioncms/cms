@@ -47,38 +47,37 @@ class MenuServiceProvider extends ServiceProvider
         ]);
 
         // matrices
-        $matrices = Matrix::where('sidebar', true)->where('parent_id', 0)->orderBy('name')->get();
-        if ($matrices->isNotEmpty()) {
-            $matrices = $matrices->mapWithKeys(function ($item) {
-                if ($item->has('children') and $item->children->count()) {
-                    $subitems = $item->children->mapWithKeys(function ($item) {
-                        $name   = $item->type == 'single' ? $item->reference_singular : $item->reference_plural;
-                        $handle = str_handle($name);
-                        $path   = $item->adminPath;
-
-                        return [$handle => ['title' => $name, 'to' => $path]];
-                    });
-
-                    $name   = $item->type == 'single' ? $item->reference_singular : $item->reference_plural;
+        $matrices = Matrix::sidebar()->get()->mapWithKeys(function ($item) {
+            if ($item->has('children') and $item->children->count()) {
+                $subitems = $item->children->mapWithKeys(function ($subitem) {
+                    $name   = $subitem->type == 'single' ? $subitem->reference_singular : $subitem->reference_plural;
                     $handle = str_handle($name);
-                    $path   = $item->adminPath;
+                    $path   = $subitem->adminPath;
 
-                    return [$item->handle => [
-                        'title'    => $item->name,
-                        'icon'     => $item->icon ?: 'pencil-alt',
-                        'children' => collect([
-                            $handle => ['title' => $name, 'to' => $path],
-                        ])->merge($subitems),
-                    ]];
-                }
+                    return [$handle => ['title' => $name, 'to' => $path]];
+                });
+
+                $name   = $item->type == 'single' ? $item->reference_singular : $item->reference_plural;
+                $handle = str_handle($name);
+                $path   = $item->adminPath;
 
                 return [$item->handle => [
-                    'title' => $item->name,
-                    'to'    => $item->adminPath,
-                    'icon'  => $item->icon ?: 'pencil-alt',
+                    'title'    => $item->name,
+                    'icon'     => $item->icon ?: 'pencil-alt',
+                    'children' => collect([
+                        $handle => ['title' => $name, 'to' => $path],
+                    ])->merge($subitems),
                 ]];
-            });
+            }
 
+            return [$item->handle => [
+                'title' => $item->name,
+                'to'    => $item->adminPath,
+                'icon'  => $item->icon ?: 'pencil-alt',
+            ]];
+        });
+
+        if ($matrices->isNotEmpty()) {
             $items->put('content', ['title' => 'Content', 'divider'  => true]);
             $items = $items->merge($matrices);
         }

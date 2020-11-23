@@ -14,30 +14,22 @@ class SingleController extends Controller
 {
     public function index($matrix)
     {
-        $matrix = Matrix::where('slug', $matrix)->firstOrFail();
-        $single = (new Single($matrix->handle))->make();
+        $matrix   = Matrix::where('slug', $matrix)->firstOrFail();
+        $single   = (new Single($matrix->handle))->make()->first();
+        $pagePath = compile_blade_template($matrix->route, $single) ?: '/';
 
-        $page = '/docs';
+        $stats = Analytics::performQuery(
+            Period::days(30),
+            'ga:users,ga:pageviews,ga:avgSessionDuration,ga:bounceRate',
+            ['filters' => "ga:pagePath=~{$pagePath}"]
+        );
 
-        $stats         = Analytics::performQuery(Period::days(30), 'ga:users,ga:pageviews,ga:avgSessionDuration,ga:bounceRate', [
-            'filters' => "ga:pagePath=~{$page}"]);
-        $dailyResponse = Analytics::performQuery(Period::days(30), 'ga:users,ga:pageviews,ga:bouncerate', ['dimensions' => 'ga:date', 'filters' => "ga:pagePath=~{$page}"]);
-        $daily         = collect($dailyResponse['rows'] ?? [])->map(function (array $row) {
-            return [
-                'date'       => Carbon::createFromFormat('Ymd', $row[0]),
-                'visitors'   => (int) $row[1],
-                'pageViews'  => (int) $row[2],
-                'bounceRate' => (int) $row[3],
-            ];
-        });
-
-        $overview = collect($stats['rows'] ?? [])->map(function (array $row) use ($daily) {
+        $overview = collect($stats['rows'] ?? [])->map(function (array $row) {
             return [
                 'totalVisitors'          => $row[0] ?: 0,
                 'totalPageViews'         => $row[1] ?: 0,
                 'averageSessionDuration' => $row[2] ?: 0,
                 'bounceRate'             => $row[3] ?: 0,
-                'daily'                  => $daily,
             ];
         })->first();
 

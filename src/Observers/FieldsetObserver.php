@@ -3,8 +3,8 @@
 namespace Fusion\Observers;
 
 use Fusion\Models\Fieldset;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class FieldsetObserver
 {
@@ -47,18 +47,6 @@ class FieldsetObserver
         if ($old->builderName() !== $fieldset->builderName()) {
             Schema::rename($old->builderName(), $fieldset->builderName());
         }
-    }
-
-    /**
-     * Handle the "saved" event.
-     *
-     * @param \Fusion\Models\Fieldset $fieldset
-     *
-     * @return void
-     */
-    public function saved(Fieldset $fieldset)
-    {
-        $fieldset->getBuilder();
     }
 
     /**

@@ -17,6 +17,7 @@
         },
         "files": [
             "helpers/app.php",
+            "helpers/blade.php",
             "helpers/datetime.php",
             "helpers/fields.php",
             "helpers/forms.php",
