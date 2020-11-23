@@ -14,6 +14,7 @@ class DeleteModelFiles
     public function handle()
     {
         File::delete(glob(fusion_path('src/Models/Collections').'/*.php'));
+        File::delete(glob(fusion_path('src/Models/Fieldsets').'/*.php'));
         File::delete(glob(fusion_path('src/Models/Forms').'/*.php'));
         File::delete(glob(fusion_path('src/Models/Navigation').'/*.php'));
         File::delete(glob(fusion_path('src/Models/Settings').'/*.php'));

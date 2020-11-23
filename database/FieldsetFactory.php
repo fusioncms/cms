@@ -13,7 +13,7 @@ class FieldsetFactory implements Factory
     /**
      * @var array
      */
-    protected $fields;
+    protected $fields = [];
 
     /**
      * Create a new Fieldset factory.

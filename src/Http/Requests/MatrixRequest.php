@@ -36,8 +36,8 @@ class MatrixRequest extends Request
     {
         $this->merge([
             'slug'               => $this->slug ?? Str::slug($this->name),
-            'reference_singular' => empty($this->reference_singular) ? Str::singular($this->name) : $this->reference_singular,
-            'reference_plural'   => empty($this->reference_plural) ? Str::plural($this->name) : $this->reference_plural,
+            'reference_singular' => empty($this->reference_singular) ? Str::singular($this->name ?? '') : $this->reference_singular,
+            'reference_plural'   => empty($this->reference_plural) ? Str::plural($this->name ?? '') : $this->reference_plural,
         ]);
     }
 
