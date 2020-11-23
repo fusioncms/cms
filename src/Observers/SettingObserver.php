@@ -18,7 +18,7 @@ class SettingObserver
      */
     public function created(Setting $setting)
     {
-        Schema::create($setting->builderName(), function (Blueprint $table) {
+        Schema::create($setting->getBuilderTable(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('setting_id')->index();
             $table->timestamps();
@@ -36,8 +36,8 @@ class SettingObserver
     {
         $old = Setting::find($setting->id);
 
-        if ($old->builderName() !== $setting->builderName()) {
-            Schema::rename($old->builderName(), $setting->builderName());
+        if ($old->getBuilderTable() !== $setting->getBuilderTable()) {
+            Schema::rename($old->getBuilderTable(), $setting->getBuilderTable());
 
             $oldClass = 'Fusion\\Models\\Settings\\'.Str::studly($old->handle);
             $newClass = 'Fusion\\Models\\Settings\\'.Str::studly($setting->handle);
@@ -53,6 +53,6 @@ class SettingObserver
      */
     public function deleted(Setting $setting)
     {
-        Schema::dropIfExists($setting->builderName());
+        Schema::dropIfExists($setting->getBuilderTable());
     }
 }

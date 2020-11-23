@@ -17,7 +17,7 @@ class FieldsetObserver
      */
     public function created(Fieldset $fieldset)
     {
-        Schema::create($fieldset->builderName(), function (Blueprint $table) {
+        Schema::create($fieldset->getBuilderTable(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('field_id');
             $table->unsignedBigInteger('fieldset_id');
@@ -44,8 +44,8 @@ class FieldsetObserver
     {
         $old = Fieldset::find($fieldset->id);
 
-        if ($old->builderName() !== $fieldset->builderName()) {
-            Schema::rename($old->builderName(), $fieldset->builderName());
+        if ($old->getBuilderTable() !== $fieldset->getBuilderTable()) {
+            Schema::rename($old->getBuilderTable(), $fieldset->getBuilderTable());
         }
     }
 
@@ -58,6 +58,6 @@ class FieldsetObserver
      */
     public function deleted(Fieldset $fieldset)
     {
-        Schema::dropIfExists($fieldset->builderName());
+        Schema::dropIfExists($fieldset->getBuilderTable());
     }
 }

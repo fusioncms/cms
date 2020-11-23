@@ -110,7 +110,7 @@ class FieldsetTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_delete_a_fieldset()
     {
-        $table = $this->fieldset->builderName();
+        $table = $this->fieldset->getBuilderTable();
 
         $this
             ->actingAs($this->owner, 'api')
@@ -164,7 +164,7 @@ class FieldsetTest extends TestCase
     {
         $this->fieldset->fields->each(function ($field) {
             $this->assertDatabaseTableHasColumn(
-                $this->fieldset->builderName(),
+                $this->fieldset->getBuilderTable(),
                 $field->handle
             );
         });
@@ -181,12 +181,12 @@ class FieldsetTest extends TestCase
             ]);
 
         $this->assertDatabaseTableHasColumn(
-            $this->fieldset->builderName(),
+            $this->fieldset->getBuilderTable(),
             'e_mail'
         );
 
         $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->fieldset->builderName(),
+            $this->fieldset->getBuilderTable(),
             'email'
         );
     }
@@ -199,7 +199,7 @@ class FieldsetTest extends TestCase
             ->delete();
 
         $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->fieldset->builderName(),
+            $this->fieldset->getBuilderTable(),
             'phone'
         );
     }

@@ -66,7 +66,7 @@ class FieldsetFieldtypeTest extends TestCase
             ])
             ->assertStatus(201);
 
-        $this->assertDatabaseHas($this->fieldset->builderName(), [
+        $this->assertDatabaseHas($this->fieldset->getBuilderTable(), [
             'field_id'          => $this->field->id,
             'fieldset_id'       => $this->fieldset->id,
             'fieldsetable_id'   => $this->model->first()->id,

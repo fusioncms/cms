@@ -18,7 +18,7 @@ class MatrixResource extends JsonResource
         $resource = parent::toArray($request);
 
         $resource['admin_path'] = $this->adminPath;
-        $resource['table']      = $this->builderName();
+        $resource['table']      = $this->getBuilderTable();
         $resource['blueprint']  = new BlueprintResource($this->blueprint);
         $resource['parent']     = new MatrixResource($this->parent);
         $resource['children']   = MatrixResource::collection($this->whenLoaded('children'));

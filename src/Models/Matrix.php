@@ -83,7 +83,7 @@ class Matrix extends Model
      *
      * @return string
      */
-    public function builderName()
+    public function getBuilderTable()
     {
         return "mx_{$this->handle}";
     }

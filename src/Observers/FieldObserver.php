@@ -19,7 +19,7 @@ class FieldObserver
         $fieldtype = fieldtypes()->get($field->type);
         $fieldtype->onSaved($field);
 
-        $tablename = $field->fieldable->builderName();
+        $tablename = $field->fieldable->getBuilderTable();
         $column    = $fieldtype->getColumn('type');
         $settings  = $fieldtype->getColumn('settings') ?? [];
 
@@ -64,7 +64,7 @@ class FieldObserver
         if ($old['handle'] !== $new['handle']) {
             if (!is_null($new['column'])) {
                 Schema::table(
-                    $field->fieldable->builderName(),
+                    $field->fieldable->getBuilderTable(),
                     function ($table) use ($old, $new) {
                         $table->renameColumn($old['handle'], $new['handle']);
                     }
@@ -78,7 +78,7 @@ class FieldObserver
         if ($old['type'] !== $new['type']) {
             if (!is_null($new['column'])) {
                 Schema::table(
-                    $field->fieldable->builderName(),
+                    $field->fieldable->getBuilderTable(),
                     function ($table) use ($new) {
                         call_user_func_array([$table, $new['column']], [$new['handle']])->change();
                     }
@@ -111,7 +111,7 @@ class FieldObserver
         $fieldtype = fieldtypes()->get($field->type);
         $column    = $fieldtype->getColumn('type');
 
-        $tablename = $field->fieldable->builderName();
+        $tablename = $field->fieldable->getBuilderTable();
 
         if (!is_null($column)) {
             if (Schema::hasColumn($tablename, $field->handle)) {

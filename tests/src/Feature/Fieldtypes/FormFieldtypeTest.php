@@ -56,7 +56,7 @@ class FormFieldtypeTest extends TestCase
 
         $entry = $this->model->first();
 
-        $this->assertDatabaseHas($this->matrix->builderName(), [
+        $this->assertDatabaseHas($this->matrix->getBuilderTable(), [
             'name' => $attributes['name'],
             'slug' => $attributes['slug'],
         ]);

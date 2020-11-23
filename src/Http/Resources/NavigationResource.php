@@ -21,7 +21,7 @@ class NavigationResource extends JsonResource
             'handle'      => $this->handle,
             'description' => $this->description,
 
-            'table'       => $this->builderName(),
+            'table'       => $this->getBuilderTable(),
             'blueprint'   => new BlueprintResource($this->blueprint),
             'nodes'       => NodeResource::collection($this->nodes),
         ];
