@@ -78,6 +78,9 @@ class Collection extends Builder implements BuilderContract
             '{trait_classes}' => $this->getTraitImportStatements($traits),
             '{traits}'        => $this->getTraitUseStatements($traits),
             '{relationships}' => $this->generateRelationships(),
+
+            '{matrix_order_by}'        => $this->matrix->order_by ?? 'name',
+            '{matrix_order_direction}' => $this->matrix->order_direction ? 'ASC' : 'DESC',
         ]);
 
         File::put($path, $contents);

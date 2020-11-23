@@ -36,6 +36,7 @@ class MatrixRequest extends Request
     {
         $this->merge([
             'slug'               => $this->slug ?? Str::slug($this->name),
+            'status'             => $this->status ?? true,
             'reference_singular' => empty($this->reference_singular) ? Str::singular($this->name ?? '') : $this->reference_singular,
             'reference_plural'   => empty($this->reference_plural) ? Str::plural($this->name ?? '') : $this->reference_plural,
         ]);
@@ -57,6 +58,7 @@ class MatrixRequest extends Request
             'slug'               => 'required|unique:matrices,slug,'.$id,
             'description'        => 'sometimes',
             'type'               => 'required',
+            'status'             => 'required|boolean',
 
             'reference_singular' => 'sometimes',
             'reference_plural'   => 'sometimes',
@@ -71,6 +73,10 @@ class MatrixRequest extends Request
 
             'route'              => 'sometimes',
             'template'           => 'sometimes',
+
+            'order_by'           => 'sometimes',
+            'order_direction'    => 'sometimes',
+
         ];
     }
 
