@@ -14,26 +14,25 @@ class CollectionController extends DataTableController
 
     /**
      * Return builder instance.
-     * 
+     *
      * @return Builder
      */
     public function builder()
     {
         $this->matrix = Matrix::findOrFail(request()->route('collection'));
-        
+
         return $this->matrix->getBuilder()->query();
     }
 
     /**
      * Returns default order.
-     * 
+     *
      * @return string
      */
     protected function getDefaultSort()
     {
-        return ($this->matrix->order_direction ? '' : '-') . $this->matrix->order_by;
+        return ($this->matrix->order_direction ? '' : '-').$this->matrix->order_by;
     }
-
 
     public function getDisplayableColumns()
     {
