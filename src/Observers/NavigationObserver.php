@@ -48,18 +48,6 @@ class NavigationObserver
     }
 
     /**
-     * Handle the "saved" event.
-     *
-     * @param \Fusion\Models\Navigation $navigation
-     *
-     * @return void
-     */
-    public function saved(Navigation $navigation)
-    {
-        $navigation->getBuilder();
-    }
-
-    /**
      * Handle the navigation "deleted" event.
      *
      * @param \Fusion\Models\Navigation $navigation

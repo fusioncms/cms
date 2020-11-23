@@ -18,7 +18,7 @@ class Fieldset extends Model
      *
      * @return Model
      */
-    public function getBuilder()
+    public function refreshBuilder()
     {
         $builder = new \Fusion\Services\Builders\Fieldset($this->handle);
 
