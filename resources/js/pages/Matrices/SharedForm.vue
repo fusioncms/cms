@@ -203,14 +203,7 @@
                 name="order_by"
                 label="Order By Column"
                 help="Should this matrix belong to another?"
-                :options="[
-                    { label: 'ID',           value: 'id'         },
-                    { label: 'Name',         value: 'name'       },
-                    { label: 'Slug',         value: 'slug'       },
-                    { label: 'Publish Date', value: 'publish_at' },
-                    { label: 'Created',      value: 'created_at' },
-                    { label: 'Last Update',  value: 'updated_at' },
-                ]"
+                :options="orderByOptions"
                 :has-error="form.errors.has('parent_id')"
                 :error-message="form.errors.get('parent_id')"
                 v-model="form.order_by">
@@ -313,6 +306,27 @@
 
             isCollection() {
                 return this.form.type == 'collection'
+            },
+
+            orderByOptions() {
+                let options = [
+                    { label: 'ID',           value: 'id'         },
+                    { label: 'Name',         value: 'name'       },
+                    { label: 'Slug',         value: 'slug'       },
+                    { label: 'Publish Date', value: 'publish_at' },
+                    { label: 'Created',      value: 'created_at' },
+                    { label: 'Last Update',  value: 'updated_at' },
+                ]
+
+                _.each(this.form.sections, (section) => {
+                    _.each(section.fields, (field) => {
+                        if (field.type.column !== null) {
+                            options.push({ label: field.name, value: field.handle })
+                        }
+                    })
+                })
+
+                return options
             },
 
             parentOptions() {
