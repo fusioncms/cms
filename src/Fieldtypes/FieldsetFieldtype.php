@@ -126,6 +126,8 @@ class FieldsetFieldtype extends Fieldtype
     public function generateRelationship($field)
     {
         $fieldset  = Fieldset::findOrFail($field->settings['fieldset']);
+        $fieldset->refreshBuilder();
+
         $namespace = $this->namespace.'\\'.Str::studly($fieldset->handle);
         $stub      = File::get(fusion_path("/stubs/relationships/{$this->relationship}.stub"));
 

@@ -50,18 +50,6 @@ class FieldsetObserver
     }
 
     /**
-     * Handle the "saved" event.
-     *
-     * @param \Fusion\Models\Fieldset $fieldset
-     *
-     * @return void
-     */
-    public function saved(Fieldset $fieldset)
-    {
-        $fieldset->getBuilder();
-    }
-
-    /**
      * Handle the "deleted" event.
      *
      * @param \Fusion\Models\Fieldset $fieldset

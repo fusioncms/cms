@@ -45,18 +45,6 @@ class FormObserver
     }
 
     /**
-     * Handle the "saved" event.
-     *
-     * @param \Fusion\Models\Form $form
-     *
-     * @return void
-     */
-    public function saved(Form $form)
-    {
-        $form->getBuilder();
-    }
-
-    /**
      * Handle the form "deleted" event.
      *
      * @param \Fusion\Models\Form $form
