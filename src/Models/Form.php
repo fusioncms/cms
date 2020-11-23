@@ -78,7 +78,7 @@ class Form extends Model
      *
      * @return string
      */
-    public function builderName()
+    public function getBuilderTable()
     {
         return "form_{$this->handle}";
     }

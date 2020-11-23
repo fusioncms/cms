@@ -52,7 +52,7 @@ class Setting extends Model
      *
      * @return string
      */
-    public function builderName()
+    public function getBuilderTable()
     {
         return "settings_{$this->handle}";
     }

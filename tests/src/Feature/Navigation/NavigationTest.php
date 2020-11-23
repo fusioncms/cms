@@ -178,7 +178,7 @@ class NavigationTest extends TestCase
             'before' => $nodeOne->id,
         ]);
 
-        $this->assertDatabaseHas($navigation->builderName(), [
+        $this->assertDatabaseHas($navigation->getBuilderTable(), [
             'name'  => $nodeTwo->name,
             'order' => 0.0,
         ]);
@@ -217,7 +217,7 @@ class NavigationTest extends TestCase
             'after' => $nodeTwo->id,
         ]);
 
-        $this->assertDatabaseHas($navigation->builderName(), [
+        $this->assertDatabaseHas($navigation->getBuilderTable(), [
             'name'  => $nodeOne->name,
             'order' => 2.5,
         ]);
@@ -258,9 +258,9 @@ class NavigationTest extends TestCase
 
         $this->json('PATCH', '/api/navigation/'.$navigation->id.'/nodes/refresh');
 
-        $this->assertDatabaseHas($navigation->builderName(), ['name' => $nodeTwo->name, 'order' => 1]);
-        $this->assertDatabaseHas($navigation->builderName(), ['name' => $nodeOne->name, 'order' => 2]);
-        $this->assertDatabaseHas($navigation->builderName(), ['name' => $nodeThree->name, 'order' => 3]);
+        $this->assertDatabaseHas($navigation->getBuilderTable(), ['name' => $nodeTwo->name, 'order' => 1]);
+        $this->assertDatabaseHas($navigation->getBuilderTable(), ['name' => $nodeOne->name, 'order' => 2]);
+        $this->assertDatabaseHas($navigation->getBuilderTable(), ['name' => $nodeThree->name, 'order' => 3]);
     }
 
     /** @test */

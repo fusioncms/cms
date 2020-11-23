@@ -18,7 +18,7 @@ class FormObserver
      */
     public function created(Form $form)
     {
-        Schema::create($form->builderName(), function (Blueprint $table) {
+        Schema::create($form->getBuilderTable(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('form_id');
 
@@ -39,8 +39,8 @@ class FormObserver
     {
         $old = Form::find($form->id);
 
-        if ($old->builderName() !== $form->builderName()) {
-            Schema::rename($old->builderName(), $form->builderName());
+        if ($old->getBuilderTable() !== $form->getBuilderTable()) {
+            Schema::rename($old->getBuilderTable(), $form->getBuilderTable());
         }
     }
 
@@ -53,7 +53,7 @@ class FormObserver
      */
     public function deleted(Form $form)
     {
-        Schema::dropIfExists($form->builderName());
+        Schema::dropIfExists($form->getBuilderTable());
     }
 
     /**
