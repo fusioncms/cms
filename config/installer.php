@@ -37,13 +37,13 @@ return [
     |
     */
 
-   'permissions' => [
-       'storage/framework/' => '755',
-       'storage/logs/'      => '755',
-       'bootstrap/cache/'   => '755',
-   ],
+    'permissions' => [
+        'storage/framework/' => '755',
+        'storage/logs/'      => '755',
+        'bootstrap/cache/'   => '755',
+    ],
 
-   /*
+    /*
     |--------------------------------------------------------------------------
     | Installation wizard
     |--------------------------------------------------------------------------
