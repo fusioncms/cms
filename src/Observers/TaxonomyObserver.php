@@ -51,18 +51,6 @@ class TaxonomyObserver
     }
 
     /**
-     * Handle the "saved" event.
-     *
-     * @param \Fusion\Models\Taxonomy $taxonomy
-     *
-     * @return void
-     */
-    public function saved(Taxonomy $taxonomy)
-    {
-        $taxonomy->getBuilder();
-    }
-
-    /**
      * Handle the taxonomy "deleted" event.
      *
      * @param \Fusion\Models\Taxonomy $taxonomy
