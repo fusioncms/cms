@@ -23,7 +23,7 @@ class FieldtypeResource extends JsonResource
             'description' => $this->description,
             'cast'        => $this->cast,
             'column'      => $this->column,
-            'exclude'     => $this->exclude,
+            'exclude'     => $this->getExclude(),
             'messages'    => $this->messages,
             'field'       => $this->field,
             'settings'    => $this->settings,

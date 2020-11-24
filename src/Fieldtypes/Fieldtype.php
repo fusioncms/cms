@@ -3,6 +3,7 @@
 namespace Fusion\Fieldtypes;
 
 use Fusion\Models\Field;
+use Fusion\Models\Fieldtype as FieldtypeModel;
 use Illuminate\Support\Str;
 
 abstract class Fieldtype
@@ -147,11 +148,14 @@ abstract class Fieldtype
     /**
      * Get the fieldtype exclude property.
      *
-     * @return string
+     * @return array
      */
     public function getExclude()
     {
-        return $this->exclude;
+        return FieldtypeModel::where('handle', $this->getHandle())
+            ->firstOrFail()
+            ->exclude
+            ->all();
     }
 
     /**

@@ -25,6 +25,15 @@ class AssetFieldtype extends Fieldtype
     public $description = 'A set of assets';
 
     /**
+     * Excluded fieldables.
+     * 
+     * @var array
+     */
+    public $exclude = [
+        'forms'
+    ];
+
+    /**
      * @var string
      */
     public $relationship = 'morphToMany';

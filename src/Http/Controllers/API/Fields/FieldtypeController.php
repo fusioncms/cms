@@ -13,7 +13,7 @@ class FieldtypeController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Fusion\Http\Resources\FieldtypeResource
      */
     public function index(Request $request)
     {
@@ -22,9 +22,17 @@ class FieldtypeController extends Controller
         return FieldtypeResource::collection($fieldtypes);
     }
 
-    public function show(Request $request, $slug)
+    /**
+     * Display the specified resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $handle
+     *
+     * @return \Fusion\Http\Resources\FieldtypeResource
+     */
+    public function show(Request $request, $handle)
     {
-        $fieldtype = fieldtypes()->get($slug);
+        $fieldtype = fieldtypes()->get($handle);
 
         return new FieldtypeResource($fieldtype);
     }

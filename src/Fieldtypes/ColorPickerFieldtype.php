@@ -14,8 +14,13 @@ class ColorPickerFieldtype extends Fieldtype
      */
     public $icon = 'palette';
 
+    /**
+     * Excluded fieldables.
+     * 
+     * @var array
+     */
     public $exclude = [
-        'forms',
+        'forms'
     ];
 
     /**

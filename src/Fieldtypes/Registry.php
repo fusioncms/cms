@@ -36,8 +36,6 @@ class Registry
         if ($this->fieldtypes->search($fieldtype) === false) {
             $instance = new $fieldtype();
 
-            // $this->registerSettings($instance);
-
             $this->fieldtypes->put($instance->getHandle(), $instance);
         }
 
@@ -74,27 +72,13 @@ class Registry
         throw new Exception('Fieldtype not found in registry. ['.$fieldtype.']');
     }
 
-    public function all($include = ['matrix', 'forms'])
+    /**
+     * Returns all registered fieldtypes sorted by name.
+     * 
+     * @return Collection          
+     */
+    public function all()
     {
-        $fieldtypes = $this->fieldtypes->filter(function ($value, $key) use ($include) {
-            return !in_array($include, $value->getExclude());
-        })->sortBy('name');
-
-        return $fieldtypes;
-    }
-
-    public function registerSettings($fieldtype)
-    {
-        if ($fieldtype->hasSettings() and app_installed()) {
-            foreach ($fieldtype->getSettings() as $handle => $data) {
-                $setting = Setting::where(['handle' => $handle])->first();
-
-                if (!$setting) {
-                    $data['handle'] = $handle;
-
-                    Setting::create($data);
-                }
-            }
-        }
+        return $this->fieldtypes->sortBy('name');
     }
 }
