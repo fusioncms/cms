@@ -3,12 +3,11 @@
 namespace Fusion\Http\Controllers\API\Insights;
 
 use Analytics;
-use Carbon\Carbon;
-use Fusion\Models\Matrix;
-use Spatie\Analytics\Period;
-use Fusion\Services\Builders\Single;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\InsightResource;
+use Fusion\Models\Matrix;
+use Fusion\Services\Builders\Single;
+use Spatie\Analytics\Period;
 
 class SingleController extends Controller
 {
