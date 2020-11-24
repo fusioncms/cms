@@ -2,14 +2,13 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\CollectionRequest;
-use Fusion\Http\Resources\EntryResource;
-use Fusion\Models\Matrix;
 use Fusion\Services\Builders\Collection;
+use Fusion\Http\Resources\EntryResource;
+use Fusion\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use ParseError;
+use Fusion\Models\Matrix;
 
 class CollectionController extends Controller
 {
@@ -69,7 +68,7 @@ class CollectionController extends Controller
 
         // Autogenerate name/slug
         if (!$matrix->show_name_field) {
-            $entry->name = $this->compileBladeString($matrix->name_format, $entry);
+            $entry->name = compile_blade_template($matrix->name_format, $entry);
             $entry->slug = Str::slug($entry->name);
 
             $entry->save();
@@ -100,7 +99,7 @@ class CollectionController extends Controller
         }
 
         if (!$matrix->show_name_field) {
-            $entry->name = $this->compileBladeString($matrix->name_format, $entry);
+            $entry->name = compile_blade_template($matrix->name_format, $entry);
             $entry->slug = Str::slug($entry->name);
 
             $entry->save();
@@ -133,42 +132,5 @@ class CollectionController extends Controller
         }
 
         $entry->delete();
-    }
-
-    /**
-     * Compile a blade string in a safe and controlled manner.
-     *
-     * @param string $string
-     * @param Entry  $entry
-     *
-     * @return string
-     */
-    protected function compileBladeString($string, $entry)
-    {
-        preg_match_all('/\{(.*?)\}/', $string, $matches);
-
-        foreach ($matches[1] as $index => $match) {
-            try {
-                $reference = explode('->', $match)[0];
-
-                if (in_array($reference, $entry->getReferences())) {
-                    ob_start();
-
-                    eval('echo $entry->'.$match.';');
-
-                    $replace[$index] = ob_get_clean();
-                } else {
-                    $replace[$index] = $matches[0][$index];
-                }
-            } catch (ParseError $e) {
-                ob_get_clean();
-
-                $replace[$index] = $match;
-            }
-        }
-
-        $compiled = str_replace($matches[0], $replace, $string);
-
-        return $compiled;
     }
 }

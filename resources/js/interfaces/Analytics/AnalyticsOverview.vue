@@ -19,7 +19,7 @@
                             </template>
                         </ui-tooltip>
                     </div>
-                    
+
                     <span class="analytics__stat-value" aria-labelledby="analytic-visitors">{{ totalVisitors }}</span>
                 </div>
 
@@ -38,7 +38,7 @@
                             </template>
                         </ui-tooltip>
                     </div>
-                    
+
                     <span class="analytics__stat-value" aria-labelledby="analytic-total-views">{{ totalPageViews }}</span>
                 </div>
 
@@ -57,7 +57,7 @@
                             </template>
                         </ui-tooltip>
                     </div>
-                    
+
                     <span class="analytics__stat-value" aria-labelledby="analytic-bounce-rate">{{ bounceRate }}</span>
                 </div>
 
@@ -76,7 +76,7 @@
                             </template>
                         </ui-tooltip>
                     </div>
-                    
+
                     <span class="analytics__stat-value" aria-labelledby="analytic-duration">{{ sessionDuration }}</span>
                 </div>
             </div>
