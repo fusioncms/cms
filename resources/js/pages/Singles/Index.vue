@@ -148,18 +148,6 @@
                     } else if (this.isValid == 'failed') {
                         console.error('Insights error: ' + response.data.message)
                     }
-
-                    // next((vm) => {
-                    //     vm.single = matrix
-                    //     vm.entry = entry
-                    //     vm.isValid = isValid
-                    //     vm.sessionDuration = sessionDuration
-                    //     vm.bounceRate = bounceRate
-                    //     vm.totalVisitors = totalVisitors
-                    //     vm.totalPageViews = totalPageViews
-
-                    //     vm.$emit('updateHead')
-                    // })
                 })
             })
         },
