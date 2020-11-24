@@ -2,7 +2,6 @@
 
 namespace Fusion\Providers;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,7 +15,7 @@ class ConfigServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $files  = File::files(__DIR__.'/../../config/');
+        $files = File::files(fusion_path('config'));
 
         foreach ($files as $file) {
             $path = $file->getPathname();
