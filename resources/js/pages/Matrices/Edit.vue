@@ -89,20 +89,17 @@
                             reference_singular: vm.matrix.reference_singular,
                             reference_plural:   vm.matrix.reference_plural,
                             sections:           vm.matrix.blueprint.sections,
-                            sidebar:            vm.matrix.sidebar ? '1' : '0',
-                            quicklink:          vm.matrix.quicklink ? '1' : '0',
+                            sidebar:            vm.matrix.sidebar,
+                            quicklink:          vm.matrix.quicklink,
                             icon:               vm.matrix.icon,
                             show_name_field:    vm.matrix.show_name_field,
                             name_label:         vm.matrix.name_label,
                             name_format:        vm.matrix.name_format,
                             route:              vm.matrix.route,
                             template:           vm.matrix.template,
-                            revision_control:   vm.matrix.revision_control ? '1' : '0',
-                            categorizable:      vm.matrix.categorizable ? '1' : '0',
-                            creditable:         vm.matrix.creditable ? '1' : '0',
-                            publishable:        vm.matrix.publishable ? '1' : '0',
-                            seoable:            vm.matrix.seoable ? '1' : '0',
-                            status:             vm.matrix.status ? '1' : '0'
+                            order_by:           vm.matrix.order_by,
+                            order_direction:    vm.matrix.order_direction,
+                            status:             vm.matrix.status
                         }, true)
 
                         vm.$nextTick(() => {

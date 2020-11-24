@@ -36,6 +36,9 @@ class CreateMatricesTable extends Migration
             $table->string('route')->nullable();
             $table->string('template')->nullable();
 
+            $table->string('order_by')->default('name');
+            $table->string('order_direction')->default(true);
+
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

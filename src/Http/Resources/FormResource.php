@@ -35,7 +35,7 @@ class FormResource extends JsonResource
             'thankyou_template'       => $this->thankyou_template,
             'status'                  => $this->status,
 
-            'table'                   => $this->builderName(),
+            'table'                   => $this->getBuilderTable(),
             'blueprint'               => new BlueprintResource($this->blueprint),
             'responses'               => $this->responses,
         ];

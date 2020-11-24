@@ -17,7 +17,7 @@ class TaxonomyObserver
      */
     public function created(Taxonomy $taxonomy)
     {
-        Schema::create($taxonomy->builderName(), function (Blueprint $table) {
+        Schema::create($taxonomy->getBuilderTable(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('taxonomy_id');
             $table->unsignedBigInteger('parent_id')->nullable();
@@ -45,8 +45,8 @@ class TaxonomyObserver
         $old = Taxonomy::find($taxonomy->id);
 
         // Rename the tables if changed
-        if ($old->builderName() !== $taxonomy->builderName()) {
-            Schema::rename($old->builderName(), $taxonomy->builderName());
+        if ($old->getBuilderTable() !== $taxonomy->getBuilderTable()) {
+            Schema::rename($old->getBuilderTable(), $taxonomy->getBuilderTable());
         }
     }
 
@@ -59,6 +59,6 @@ class TaxonomyObserver
      */
     public function deleted(Taxonomy $taxonomy)
     {
-        Schema::dropIfExists($taxonomy->builderName());
+        Schema::dropIfExists($taxonomy->getBuilderTable());
     }
 }

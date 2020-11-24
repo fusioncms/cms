@@ -15,9 +15,9 @@
                         name="status"
                         label="Status"
                         :help="form.status ? 'Toggle to disable this matrix.' : 'Toggle to enable this matrix.'"
-                        v-model="form.status"
-                        :true-value="1"
-                        :false-value="0">
+                        :has-error="form.errors.has('status')"
+                        :error-message="form.errors.get('status')"
+                        v-model="form.status">
                     </ui-toggle>
                 </sidebar-section>
 
@@ -25,19 +25,19 @@
                     <ui-toggle
                         id="matrix-sidebar-show"
                         name="sidebar"
-                        label="Show in Sidebar"
-                        v-model="form.sidebar"
-                        :true-value="1"
-                        :false-value="0">
+                        label="Show as Sidebar"
+                        :has-error="form.errors.has('sidebar')"
+                        :error-message="form.errors.get('sidebar')"
+                        v-model="form.sidebar">
                     </ui-toggle>
 
                     <ui-toggle
                         id="matrix-quicklink-show"
                         name="quicklink"
                         label="Show as Quicklink"
-                        v-model="form.quicklink"
-                        :true-value="1"
-                        :false-value="0">
+                        :has-error="form.errors.has('quicklink')"
+                        :error-message="form.errors.get('quicklink')"
+                        v-model="form.quicklink">
                     </ui-toggle>
 
                     <icon-picker
@@ -197,6 +197,29 @@
             </ui-input-group>
         </section-card>
 
+        <section-card v-if="isCollection" id="matrix_panel_sort" title="Default Order" description="Configure how entries within the collection will be ordered by default." tabindex="-1">
+            <ui-select-group
+                id="matrix-order_by"
+                name="order_by"
+                label="Order By Column"
+                help="Should this matrix belong to another?"
+                :options="orderByOptions"
+                :has-error="form.errors.has('parent_id')"
+                :error-message="form.errors.get('parent_id')"
+                v-model="form.order_by">
+            </ui-select-group>
+
+            <ui-toggle
+                id="matrix-order_direction"
+                name="order_direction"
+                label="Ascending Order?"
+                help="Should this collection be sorted in ascending order?"
+                :has-error="form.errors.has('order_direction')"
+                :error-message="form.errors.get('order_direction')"
+                v-model="form.order_direction">
+            </ui-toggle>
+        </section-card>
+
         <section-card id="matrix_panel_routing" title="Routing" description="Configure how entries within the collection will be accessed on the frontend." tabindex="-1">
             <ui-input-group
                 id="matrix-route"
@@ -283,6 +306,27 @@
 
             isCollection() {
                 return this.form.type == 'collection'
+            },
+
+            orderByOptions() {
+                let options = [
+                    { label: 'ID',           value: 'id'         },
+                    { label: 'Name',         value: 'name'       },
+                    { label: 'Slug',         value: 'slug'       },
+                    { label: 'Publish Date', value: 'publish_at' },
+                    { label: 'Created',      value: 'created_at' },
+                    { label: 'Last Update',  value: 'updated_at' },
+                ]
+
+                _.each(this.form.sections, (section) => {
+                    _.each(section.fields, (field) => {
+                        if (field.type.column !== null) {
+                            options.push({ label: field.name, value: field.handle })
+                        }
+                    })
+                })
+
+                return options
             },
 
             parentOptions() {

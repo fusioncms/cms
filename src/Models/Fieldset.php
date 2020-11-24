@@ -30,7 +30,7 @@ class Fieldset extends Model
      *
      * @return string
      */
-    public function builderName()
+    public function getBuilderTable()
     {
         return "fx_{$this->handle}";
     }

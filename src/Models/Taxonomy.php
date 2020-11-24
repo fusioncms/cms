@@ -57,7 +57,7 @@ class Taxonomy extends Model
      *
      * @return string
      */
-    public function builderName()
+    public function getBuilderTable()
     {
         return "taxonomy_{$this->handle}";
     }

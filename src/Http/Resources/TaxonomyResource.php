@@ -22,7 +22,7 @@ class TaxonomyResource extends JsonResource
             'slug'             => $this->slug,
             'description'      => $this->description,
             'admin_path'       => $this->adminPath,
-            'table'            => $this->builderName(),
+            'table'            => $this->getBuilderTable(),
 
             'sidebar'          => $this->sidebar,
             'icon'             => $this->icon,

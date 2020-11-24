@@ -32,7 +32,7 @@ class BlueprintTest extends TestCase
     {
         $this->matrix->blueprint->fields->each(function ($field) {
             $this->assertDatabaseTableHasColumn(
-                $this->matrix->builderName(),
+                $this->matrix->getBuilderTable(),
                 $field->handle
             );
         });
@@ -50,7 +50,7 @@ class BlueprintTest extends TestCase
              ]);
 
         $this->assertDatabaseTableHasColumn(
-            $this->matrix->builderName(),
+            $this->matrix->getBuilderTable(),
             'excerpt'
         );
     }
@@ -63,7 +63,7 @@ class BlueprintTest extends TestCase
              ->delete();
 
         $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->matrix->builderName(),
+            $this->matrix->getBuilderTable(),
             'content'
         );
     }
@@ -79,12 +79,12 @@ class BlueprintTest extends TestCase
              ]);
 
         $this->assertDatabaseTableHasColumn(
-            $this->matrix->builderName(),
+            $this->matrix->getBuilderTable(),
             'story'
         );
 
         $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->matrix->builderName(),
+            $this->matrix->getBuilderTable(),
             'content'
         );
     }
@@ -93,7 +93,7 @@ class BlueprintTest extends TestCase
     public function when_a_fields_fieldtype_is_changed_the_associated_database_columns_type_should_also_change()
     {
         $this->assertDatabaseTableColumnHasType(
-            $this->matrix->builderName(),
+            $this->matrix->getBuilderTable(),
             'content',
             'string'
         );
@@ -107,7 +107,7 @@ class BlueprintTest extends TestCase
              ]);
 
         $this->assertDatabaseTableColumnHasType(
-            $this->matrix->builderName(),
+            $this->matrix->getBuilderTable(),
             'content',
             'text'
         );
@@ -117,7 +117,7 @@ class BlueprintTest extends TestCase
     public function when_field_is_replaced_with_same_name_field_the_database_column_should_update_accordingly()
     {
         $this->assertDatabaseTableColumnHasType(
-            $this->matrix->builderName(),
+            $this->matrix->getBuilderTable(),
             'content',
             'string'
         );
@@ -137,7 +137,7 @@ class BlueprintTest extends TestCase
              ]);
 
         $this->assertDatabaseTableColumnHasType(
-            $this->matrix->builderName(),
+            $this->matrix->getBuilderTable(),
             'content',
             'text'
         );
@@ -146,7 +146,7 @@ class BlueprintTest extends TestCase
     /** @test */
     public function when_a_field_is_renamed_and_new_field_created_in_its_name_database_should_have_both_columns()
     {
-        $table     = $this->matrix->builderName();
+        $table     = $this->matrix->getBuilderTable();
         $blueprint = $this->matrix->blueprint;
         $section   = $blueprint->sections->first();
         $fieldA    = $section->fields->first();

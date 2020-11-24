@@ -68,7 +68,7 @@ class FileFieldtypeTest extends TestCase
             'extension'    => 'png',
         ]);
 
-        $this->assertDatabaseHas($this->matrix->builderName(), [
+        $this->assertDatabaseHas($this->matrix->getBuilderTable(), [
             'name' => $attributes['name'],
             'slug' => $attributes['slug'],
         ]);
