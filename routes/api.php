@@ -114,6 +114,7 @@ Route::prefix('addons')->group(function () {
  * API - Single Routes.
  */
 Route::prefix('singles')->group(function () {
+    Route::get('{slug}/insight', 'Insights\SingleController@index');
     Route::get('{slug}', 'SingleController@show');
     Route::patch('{single}', 'SingleController@update');
 });
