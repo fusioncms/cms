@@ -48,7 +48,6 @@ class FusionServiceProvider extends ServiceProvider
 
         $this->registerProviders();
         $this->registerFusion();
-        $this->registerConfig();
         $this->registerMiddleware();
 
         $this->commands([
@@ -150,6 +149,7 @@ class FusionServiceProvider extends ServiceProvider
     {
         $this->app->register(AddonServiceProvider::class);
         $this->app->register(BladeServiceProvider::class);
+        $this->app->register(ConfigServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
         $this->app->register(FieldtypeServiceProvider::class);
         $this->app->register(MenuServiceProvider::class);
@@ -240,53 +240,6 @@ class FusionServiceProvider extends ServiceProvider
     private function bootMigrations()
     {
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
-    }
-
-    /**
-     * Register the package's config.
-     * Merges in `fusioncms` overridding configs.
-     *
-     * @return void
-     */
-    private function registerConfig()
-    {
-        $files = File::files(__DIR__.'/../../config/');
-
-        foreach ($files as $file) {
-            $name     = File::name($file->getPathname());
-            $original = $this->app['config']->get($name, []);
-            $merging  = require $file->getPathname();
-
-            $this->app['config']->set(
-                $name,
-                $this->mergeDeep($original, $merging)
-            );
-        }
-    }
-
-    /**
-     * Deeply merge two arrays.
-     *
-     * @param array $original
-     * @param array $merging
-     *
-     * @return array
-     */
-    private function mergeDeep(array $original, array $merging)
-    {
-        $output = array_merge($original, $merging);
-
-        foreach ($original as $key => $value) {
-            if (is_numeric($key) or !isset($merging[$key])) {
-                continue;
-            }
-
-            if (is_array($value) && is_array($merging[$key])) {
-                $output[$key] = $this->mergeDeep($value, $merging[$key]);
-            }
-        }
-
-        return $output;
     }
 
     /**
