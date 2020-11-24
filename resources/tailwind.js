@@ -21,7 +21,11 @@ const screens = {
 }
 
 module.exports = {
-    purge: false,
+    purge: [
+        './**/*.html',
+        './**/*.vue',
+        './**/*.blade.php',
+    ],
     theme: {
         cursors: cursors,
 
