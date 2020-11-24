@@ -27,10 +27,11 @@ class ConfigServiceProvider extends ServiceProvider
 
     /**
      * Merge the given configuration with the existing configuration.
-     * [override]
-     * 
-     * @param  string  $path
-     * @param  string  $key
+     * [override].
+     *
+     * @param string $path
+     * @param string $key
+     *
      * @return void
      */
     protected function mergeConfigFrom($path, $key)

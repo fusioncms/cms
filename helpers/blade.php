@@ -24,10 +24,16 @@ function compile_blade_template($template, $model)
     try {
         eval('?>'.$php);
     } catch (Exception $e) {
-        while (ob_get_level() > $obLevel) ob_end_clean();
+        while (ob_get_level() > $obLevel) {
+            ob_end_clean();
+        }
+
         throw $e;
     } catch (Throwable $e) {
-        while (ob_get_level() > $obLevel) ob_end_clean();
+        while (ob_get_level() > $obLevel) {
+            ob_end_clean();
+        }
+
         throw new FatalThrowableError($e);
     }
 

@@ -2,13 +2,13 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Fusion\Http\Requests\CollectionRequest;
-use Fusion\Services\Builders\Collection;
-use Fusion\Http\Resources\EntryResource;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Requests\CollectionRequest;
+use Fusion\Http\Resources\EntryResource;
+use Fusion\Models\Matrix;
+use Fusion\Services\Builders\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Fusion\Models\Matrix;
 
 class CollectionController extends Controller
 {

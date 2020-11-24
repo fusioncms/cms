@@ -6,7 +6,6 @@ use Fusion\Facades\Addon;
 use Fusion\Facades\Theme;
 use Fusion\Models\Role;
 use Fusion\Models\User;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
