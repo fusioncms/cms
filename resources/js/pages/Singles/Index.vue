@@ -11,8 +11,8 @@
             </div>
         </portal>
 
-        <div class="row">
-            <div class="col w-full sm:w-1/2 xl:w-1/3 xxl:w-1/4">
+        <div class="row" v-if="isValid">
+            <div class="col w-full sm:w-1/2 xl:w-1/4">
                 <ui-card>
                     <ui-card-body>
                         <div class="analytics">
@@ -103,7 +103,7 @@
             return {
                 single: {},
                 entry: {},
-                insight: [],
+                isValid: null,
                 sessionDuration: null,
                 bounceRate: null,
                 totalVisitors: null,
@@ -111,54 +111,55 @@
             }
         },
 
-        methods: {
-            secondsToString(seconds) {
-                let str = ''
-
-                let hours = _.floor((seconds %= 86400) / 3600)
-                let minutes = _.floor((seconds %= 3600) / 60)
-                seconds = _.floor(seconds % 60)
-
-                if (hours) {
-                    str += hours + 'h '
-                }
-
-                if (minutes) {
-                    str += minutes + 'm '
-                }
-
-                if (seconds) {
-                    str += seconds + 's'
-                }
-
-                if (str == '') {
-                    str = seconds + 's'
-                }
-
-                return str
-            }
-        },
-
-        mounted() {
-            let vm = this
-            axios.all([
-                axios.get('/api/singles/' + this.single.slug +'/insight'),
-            ]).then(axios.spread(function (insight) {
-                this.insight = insight.data.data
-                this.sessionDuration = this.secondsToString(insight.data.data.averageSessionDuration)
-                this.bounceRate = _.floor(insight.data.data.bounceRate, 2) + '%'
-                this.totalVisitors = Number(insight.data.data.totalVisitors).toLocaleString()
-                this.totalPageViews = Number(insight.data.data.totalPageViews).toLocaleString()
-            }.bind(this)))
-        },
-
         beforeRouteEnter(to, from, next) {
-            getSingle(to.params.single, (error, entry, matrix, fields) => {
-                next((vm) => {
-                    vm.single = matrix
-                    vm.entry = entry
+            var sessionDuration = null
+            var bounceRate = null
+            var totalVisitors = null
+            var totalPageViews = null
+            var isValid = null
 
-                    vm.$emit('updateHead')
+            getSingle(to.params.single, (error, entry, matrix, fields) => {
+                axios.get('/api/insights/check').then((response) => {
+                    isValid = response.data.status
+
+                    if (isValid == 'OK') {
+                        axios.all([
+                            axios.get('/api/singles/' + matrix.slug +'/insight'),
+                        ]).then(axios.spread((insight) => {
+                            console.log('inside function')
+
+                            sessionDuration = secondsToString(insight.data.data.averageSessionDuration)
+                            bounceRate = _.floor(insight.data.data.bounceRate, 2) + '%'
+                            totalVisitors = Number(insight.data.data.totalVisitors).toLocaleString()
+                            totalPageViews = Number(insight.data.data.totalPageViews).toLocaleString()
+
+                            next((vm) => {
+                                vm.single = matrix
+                                vm.entry = entry
+                                vm.isValid = isValid
+                                vm.sessionDuration = sessionDuration
+                                vm.bounceRate = bounceRate
+                                vm.totalVisitors = totalVisitors
+                                vm.totalPageViews = totalPageViews
+
+                                vm.$emit('updateHead')
+                            })
+                        }))
+                    } else if (this.isValid == 'failed') {
+                        console.error('Insights error: ' + response.data.message)
+                    }
+
+                    // next((vm) => {
+                    //     vm.single = matrix
+                    //     vm.entry = entry
+                    //     vm.isValid = isValid
+                    //     vm.sessionDuration = sessionDuration
+                    //     vm.bounceRate = bounceRate
+                    //     vm.totalVisitors = totalVisitors
+                    //     vm.totalPageViews = totalPageViews
+
+                    //     vm.$emit('updateHead')
+                    // })
                 })
             })
         },
@@ -212,5 +213,31 @@
         }).catch(function(error) {
             callback(new Error('The requested entry could not be found'))
         })
+    }
+
+    export function secondsToString(seconds) {
+        let str = ''
+
+        let hours = _.floor((seconds %= 86400) / 3600)
+        let minutes = _.floor((seconds %= 3600) / 60)
+        seconds = _.floor(seconds % 60)
+
+        if (hours) {
+            str += hours + 'h '
+        }
+
+        if (minutes) {
+            str += minutes + 'm '
+        }
+
+        if (seconds) {
+            str += seconds + 's'
+        }
+
+        if (str == '') {
+            str = seconds + 's'
+        }
+
+        return str
     }
 </script>
