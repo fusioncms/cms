@@ -14,8 +14,8 @@ class StructureServiceProvider extends ServiceProvider
     public function boot()
     {
         structures()->register(\Fusion\Structures\CollectionStructure::class);
-        // structures()->register(\Fusion\Structures\SingleStructure::class);
-        // structures()->register(\Fusion\Structures\FormStructure::class);
+        structures()->register(\Fusion\Structures\SingleStructure::class);
+        structures()->register(\Fusion\Structures\FormStructure::class);
         
     }
 

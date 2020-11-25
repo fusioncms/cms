@@ -3,6 +3,7 @@
 namespace Fusion\Structures;
 
 use Exception;
+use Fusion\Models\Structure;
 
 class Registry
 {
@@ -32,18 +33,8 @@ class Registry
     {
         if ($this->structures->search($structure) === false) {
             $instance   = new $structure();
-            $handle     = $instance->getHandle();
-            $fieldtypes = $this->defaultFieldtypes($instance);
 
-            $structures->put($handle, $instance);
-
-            $model = Structure::firstOrCreate(
-                ['handle' => $handle], ['fieldtypes' => []]);
-
-            $merged = array_merge($model->fieldtypes->all(), $fieldtypes->all());
-            $merged = array_unique($merged);
-
-            $model->update([ 'fieldtypes' => $merged ]);
+            $this->structures->put($instance->getHandle(), $instance);
         }
 
         return $this;
@@ -89,23 +80,5 @@ class Registry
     public function all()
     {
         return $this->structures;
-    }
-
-    /**
-     * Returns all registered Structures.
-     *
-     * @param \Fusion\Structures\Structure $structure
-     * 
-     * @return Collection
-     */
-    private function defaultFieldtypes($stucture)
-    {
-        return fieldtypes()->all()
-            ->filter(function($fieldtype) use ($stucture) {
-                return in_array($fieldtype->getHandle(), $stucture->excluded);
-            })
-            ->map(function($fieldtype) {
-                return $fieldtype->getHandle();
-            });
     }
 }

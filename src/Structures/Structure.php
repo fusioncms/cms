@@ -21,16 +21,6 @@ abstract class Structure
      */
     public $excluded = [];
 
-	/**
-     * Get the fieldtype name property.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
     /**
      * Get the fieldtype handle based off the name property.
      *
@@ -38,7 +28,7 @@ abstract class Structure
      */
     public function getHandle()
     {
-        return str_handle($this->getName());
+        return str_handle($this->name);
     }
 
     /**
