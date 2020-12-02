@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="navigation-page">
         <portal to="title">
 			<page-title icon="anchor">Create Navigation</page-title>
 		</portal>
@@ -9,8 +9,8 @@
 </template>
 
 <script>
-    import Form from '../../services/Form'
-    import SharedForm from './SharedForm'
+    import Form       from '@/services/Form'
+    import SharedForm from '@/pages/Navigation/SharedForm'
 
     export default {
         auth() {
@@ -33,6 +33,7 @@
                     name: '',
                     handle: '',
                     description: '',
+                    status: 1,
                     sections: []
                 }, true)
             }
@@ -60,11 +61,11 @@
             }
         },
 
-        created() {
-            let unwatch = this.$watch('form.sections', (value) => {
-                this.form.orig.sections = _.cloneDeep(value)
-                unwatch()
-            })
-        }
+        // created() {
+        //     let unwatch = this.$watch('form.sections', (value) => {
+        //         this.form.orig.sections = _.cloneDeep(value)
+        //         unwatch()
+        //     })
+        // }
     }
 </script>
