@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Tests\Feature\Matrix;
+namespace Fusion\Tests\Feature;
 
 use Facades\FieldsetFactory;
 use Fusion\Models\Fieldset;

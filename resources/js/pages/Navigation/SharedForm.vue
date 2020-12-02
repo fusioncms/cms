@@ -56,7 +56,6 @@
         <section-card title="Blueprint" description="Configure this navigation's blueprint.">
             <blueprint>
                 <blueprint-area
-                    structure="navigation"
                     v-model="form.sections"
                     :placements="placements"
                     area="body"
@@ -64,7 +63,6 @@
                 </blueprint-area>
 
                 <blueprint-area
-                    structure="navigation"
                     v-model="form.sections"
                     class="blueprint__col--sidebar"
                     :placements="placements"
@@ -99,5 +97,9 @@
                 required: true,
             }
         },
+
+        created() {
+            this.$store.commit('fieldtypes/setStructure', 'navigation')
+        }
     }
 </script>

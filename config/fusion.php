@@ -47,4 +47,41 @@ return [
     'composer' => [
         'memory_limit' => '2048M',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Structure & Fieldtype Exclusions.
+    |--------------------------------------------------------------------------
+    |
+    */
+    'structures' => [
+        [
+            'name'     => 'Collections',
+            'excluded' => [],
+        ],
+        [
+            'name'     => 'Fieldsets',
+            'excluded' => ['fieldset'],
+        ],
+        [
+            'name'     => 'Forms',
+            'excluded' => ['audio', 'asset', 'code', 'color_picker', 'dictionary', 'form', 'list', 'markdown', 'replicator', 'table', 'taxonomy', 'user', 'video'],
+        ],
+        [
+            'name'     => 'Navigation',
+            'excluded' => ['audio', 'taxonomy', 'user', 'video'],
+        ],
+        [
+            'name'     => 'Replicator',
+            'excluded' => ['replicator'],
+        ],
+        [
+            'name'     => 'Singles',
+            'excluded' => [],
+        ],
+        [
+            'name'     => 'Taxonomies',
+            'excluded' => [],
+        ],
+    ],
 ];

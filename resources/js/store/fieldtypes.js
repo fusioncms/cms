@@ -2,35 +2,69 @@ export default {
     namespaced: true,
 
     state: {
+        structure: false,
+        structures: {},
         fieldtypes: {},
-        excluded: [],
     },
 
     getters: {
-        get(state) {
-            return _.mapValues(state.fieldtypes, (type, name) => {
-                type.disabled = state.excluded.includes(name)
-                return type
-            })
+        getFilteredFieldtypes: (state) => {
+            let fieldtypes = {}
+
+            if (state.structure && _.has(state.structures, state.structure)) {
+                fieldtypes = _.reject(state.fieldtypes, (fieldtype) => {
+                    const structure = state.structures[state.structure]
+                    const excluded  = structure.excluded
+
+                    return excluded.includes(fieldtype.handle)
+                })
+            }
+
+            return _.keyBy(fieldtypes, 'handle')
+        },
+
+        getFieldtypes: (state) => {
+            return state.fieldtypes
+        },
+
+        getStructures: (state) => {
+            return state.structures
         }
     },
 
     mutations: {
-        set: (state, fieldtypes) => {
-            state.fieldtypes = fieldtypes
+        setStructure: (state, structure) => {
+            state.structure = _.isEmpty(structure) ? false : structure
         },
 
-        setExcluded: (state, excluded) => {
-            state.excluded = excluded
-        }
+        setStructures: (state, structures) => {
+            state.structures = _.keyBy(structures, 'handle')
+        },
+
+        setFieldtypes: (state, fieldtypes) => {
+            state.fieldtypes = _.keyBy(fieldtypes, 'handle')
+        },
+
+        updateStructure: (state, payload) => {
+            if (_.has(state.structures, payload.handle)) {
+                state.structures[payload.handle] = payload.structure
+            }
+        },
     },
 
     actions: {
-        fetch: ({ state, commit}) => {
-            if (_.isEmpty(state.fieldtypes))
+        updateStructure: ({ commit }, payload) => {
+            commit('updateStructure', payload)
+        },
+
+        fetch: ({ state, commit }) => {
+            axios.all([
+                axios.get('/api/structures'),
                 axios.get('/api/fieldtypes')
-                    .then(response => commit('set', response.data.data))
-                    .catch(error   => console.log(error))
+            ]).then(axios.spread((structures, fieldtypes) => {
+                commit('setStructures', structures.data.data)
+                commit('setFieldtypes', fieldtypes.data.data)
+            }))
         }
     }
 }

@@ -1,15 +1,13 @@
 <template>
     <div class="grid grid-cols-3 lg:grid-cols-6 gap-3">
         <ui-button
-            v-for="(type, index) in types"
-            :key="`add-${type.handle}`"
-            :disabled="type.disabled"
+            v-for="(fieldtype, index) in fieldtypes"
+            :key="`add-${fieldtype.handle}`"
             class="flex items-center justify-center"
-            :class="{'text-gray-500':type.disabled}"
-            @click.prevent="$emit('click', type)">
+            @click.prevent="$emit('click', fieldtype)">
 
-            <fa-icon :icon="type.icon" class="icon"></fa-icon>
-            {{ type.name }}
+            <fa-icon :icon="fieldtype.icon" class="icon"></fa-icon>
+            {{ fieldtype.name }}
         </ui-button>
     </div>
 </template>
@@ -22,12 +20,12 @@
 
         computed: {
             ...mapGetters({
-                types: 'fieldtypes/get'
+                fieldtypes: 'fieldtypes/getFilteredFieldtypes'
             })
         },
 
         created() {
             this.$store.dispatch('fieldtypes/fetch')
-        }
+        },
     }
 </script>
