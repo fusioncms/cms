@@ -11,7 +11,7 @@ class Structure extends Model
      *
      * @var array
      */
-    protected $fillable = [ 'name', 'handle', 'excluded' ];
+    protected $fillable = ['name', 'handle', 'excluded'];
 
     /**
      * The attributes that should be cast to native types.
@@ -22,7 +22,7 @@ class Structure extends Model
         'excluded' => 'collection',
     ];
 
-   /**
+    /**
      * Get the structure for the given record.
      *
      * @return \Fusion\Structures\Structure
@@ -34,7 +34,7 @@ class Structure extends Model
 
     /**
      * Return valid Fieldsets for this Structure.
-     * 
+     *
      * @return \Illuminate\Support\Collection
      */
     public function fieldtypes()

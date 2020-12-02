@@ -27,7 +27,7 @@ class StructureController extends Controller
      * Display the specified resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @param string $handle
+     * @param string                   $handle
      *
      * @return \Fusion\Http\Resources\StructureResource
      */
@@ -47,9 +47,9 @@ class StructureController extends Controller
      */
     public function store(Request $request)
     {
-        collect($request->all())->each(function($structure) {
+        collect($request->all())->each(function ($structure) {
             Structure::find($structure['id'])->update([
-                'excluded' => $structure['excluded']
+                'excluded' => $structure['excluded'],
             ]);
         });
     }

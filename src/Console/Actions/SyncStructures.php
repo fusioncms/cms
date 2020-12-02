@@ -13,14 +13,16 @@ class SyncStructures
      */
     public function handle()
     {
-        collect(config('fusion.structures'))->each(function($structure) {
-            Structure::firstOrCreate([
-                'handle' => str_handle($structure['name'])
-            ],
-            [
-                'name'     => $structure['name'],
-                'excluded' => $structure['excluded']
-            ]);
+        collect(config('fusion.structures'))->each(function ($structure) {
+            Structure::firstOrCreate(
+                [
+                    'handle' => str_handle($structure['name']),
+                ],
+                [
+                    'name'     => $structure['name'],
+                    'excluded' => $structure['excluded'],
+                ]
+            );
         });
     }
 }
