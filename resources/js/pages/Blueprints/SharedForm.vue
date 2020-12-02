@@ -24,8 +24,22 @@
                 </ui-title-group>
 
                 <blueprint>
-                    <blueprint-area v-model="form.sections" :placements="placements" area="body" title="Body"></blueprint-area>
-                    <blueprint-area v-model="form.sections" class="blueprint__col--sidebar" :placements="placements" area="sidebar" title="Sidebar"></blueprint-area>
+                    <blueprint-area
+                        :structure="structure"
+                        v-model="form.sections"
+                        :placements="placements"
+                        area="body"
+                        title="Body">
+                    </blueprint-area>
+
+                    <blueprint-area
+                        :structure="structure"
+                        v-model="form.sections"
+                        class="blueprint__col--sidebar"
+                        :placements="placements"
+                        area="sidebar"
+                        title="Sidebar">
+                    </blueprint-area>
                 </blueprint>
 			</div>
 		</div>
@@ -53,6 +67,12 @@
             form: {
                 type: Object,
                 required: true,
+            }
+        },
+
+        computed: {
+            structure() {
+                return this.resource.group.toLowerCase()
             }
         }
     }

@@ -23,6 +23,7 @@
 
                     <field-builder
                         v-model="section.fields"
+                        :structure="structure"
                         :sections="sections"
                         :handle="section.handle">
                     </field-builder>
@@ -61,6 +62,11 @@
 
             placements: {
                 type: Array
+            },
+
+            structure: {
+                type: String,
+                required: true
             }
         },
 

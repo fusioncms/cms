@@ -74,6 +74,7 @@
 
             <field-builder
                 v-model="form.fields"
+                structure="fieldsets"
                 handle="fieldset">
             </field-builder>
         </section-card>
@@ -82,7 +83,6 @@
 
 <script>
     export default {
-
         data() {
             return {
                 placements: [
@@ -106,14 +106,6 @@
             submit: {
                 required: true,
             }
-        },
-
-        created() {
-            this.$store.commit('fieldtypes/setExcluded', ['fieldset'])
-        },
-
-        destroyed() {
-            this.$store.commit('fieldtypes/setExcluded', [])
         }
     }
 </script>
