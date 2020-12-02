@@ -61,19 +61,19 @@ return [
         ],
         [
             'name'     => 'Fieldsets',
-            'excluded' => [ 'fieldset' ],
+            'excluded' => ['fieldset'],
         ],
         [
             'name'     => 'Forms',
-            'excluded' => [ 'audio', 'asset', 'code', 'color_picker', 'dictionary', 'form', 'list', 'markdown', 'replicator', 'table', 'taxonomy', 'user', 'video' ],
+            'excluded' => ['audio', 'asset', 'code', 'color_picker', 'dictionary', 'form', 'list', 'markdown', 'replicator', 'table', 'taxonomy', 'user', 'video'],
         ],
         [
             'name'     => 'Navigation',
-            'excluded' => [ 'audio', 'taxonomy', 'user', 'video' ],
+            'excluded' => ['audio', 'taxonomy', 'user', 'video'],
         ],
         [
             'name'     => 'Replicator',
-            'excluded' => [ 'replicator' ],
+            'excluded' => ['replicator'],
         ],
         [
             'name'     => 'Singles',
