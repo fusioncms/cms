@@ -52,10 +52,7 @@
 
         <portal to="modals">
             <ui-modal name="add-field" title="Add Field" v-model="field.add" extra-large>
-                <fieldtype-picker
-                    :structure="structure"
-                    @click="add">
-                </fieldtype-picker>
+                <fieldtype-picker @click="add"></fieldtype-picker>
 
                 <template slot="footer">
                     <ui-button @click.prevent="field.add = false">Close</ui-button>
@@ -110,11 +107,6 @@
             },
 
             handle: {
-                type: String,
-                required: true
-            },
-
-            structure: {
                 type: String,
                 required: true
             },

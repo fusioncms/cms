@@ -13,21 +13,15 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
+
     export default {
         name: 'fieldtype-picker',
 
-        props: {
-            structure: {
-                type: String,
-                required: false,
-                default: ''
-            }
-        },
-
         computed: {
-            fieldtypes() {
-                return this.$store.getters['fieldtypes/getFieldtypesByStructure'](this.structure)
-            }
+            ...mapGetters({
+                fieldtypes: 'fieldtypes/getFilteredFieldtypes'
+            })
         },
 
         created() {

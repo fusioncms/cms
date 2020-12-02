@@ -49,7 +49,7 @@
 
 		methods: {
 			...mapActions({
-				setStructure: 'fieldtypes/setStructure'
+				updateStructure: 'fieldtypes/updateStructure'
 			}),
 
 			update(handle, excluded) {
@@ -64,7 +64,7 @@
 					structure.excluded.sort()
 				}
 
-				this.setStructure({ handle, structure })
+				this.updateStructure({ handle, structure })
 			},
 
 			submit() {

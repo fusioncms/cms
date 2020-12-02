@@ -2,17 +2,21 @@ export default {
     namespaced: true,
 
     state: {
+        structure: false,
         structures: {},
         fieldtypes: {},
     },
 
     getters: {
-        getFieldtypesByStructure: (state) => (handle) => {
+        getFilteredFieldtypes: (state) => {
             let fieldtypes = {}
 
-            if (_.has(state.structures, handle)) {
+            if (state.structure && _.has(state.structures, state.structure)) {
                 fieldtypes = _.reject(state.fieldtypes, (fieldtype) => {
-                    return state.structures[handle].excluded.includes(fieldtype.handle)
+                    const structure = state.structures[state.structure]
+                    const excluded  = structure.excluded
+
+                    return excluded.includes(fieldtype.handle)
                 })
             }
 
@@ -29,24 +33,28 @@ export default {
     },
 
     mutations: {
+        setStructure: (state, structure) => {
+            state.structure = _.isEmpty(structure) ? false : structure
+        },
+
         setStructures: (state, structures) => {
             state.structures = _.keyBy(structures, 'handle')
         },
 
-        setStructure: (state, payload) => {
+        setFieldtypes: (state, fieldtypes) => {
+            state.fieldtypes = _.keyBy(fieldtypes, 'handle')
+        },
+
+        updateStructure: (state, payload) => {
             if (_.has(state.structures, payload.handle)) {
                 state.structures[payload.handle] = payload.structure
             }
         },
-
-        setFieldtypes: (state, fieldtypes) => {
-            state.fieldtypes = _.keyBy(fieldtypes, 'handle')
-        }
     },
 
     actions: {
-        setStructure: ({ commit }, payload) => {
-            commit('setStructure', payload)
+        updateStructure: ({ commit }, payload) => {
+            commit('updateStructure', payload)
         },
 
         fetch: ({ state, commit }) => {

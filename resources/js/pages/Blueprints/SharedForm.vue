@@ -25,7 +25,6 @@
 
                 <blueprint>
                     <blueprint-area
-                        :structure="structure"
                         v-model="form.sections"
                         :placements="placements"
                         area="body"
@@ -33,7 +32,6 @@
                     </blueprint-area>
 
                     <blueprint-area
-                        :structure="structure"
                         v-model="form.sections"
                         class="blueprint__col--sidebar"
                         :placements="placements"
@@ -70,10 +68,8 @@
             }
         },
 
-        computed: {
-            structure() {
-                return this.resource.group.toLowerCase()
-            }
+        created() {
+            this.$store.commit('fieldtypes/setStructure', this.resource.group.toLowerCase())
         }
     }
 </script>
