@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="navigation-page">
         <portal to="title">
 			<page-title icon="anchor">Edit Navigation</page-title>
 		</portal>
@@ -9,8 +9,8 @@
 </template>
 
 <script>
-    import Form from '../../services/Form'
-    import SharedForm from './SharedForm'
+    import Form       from '@/services/Form'
+    import SharedForm from '@/pages/Navigation/SharedForm'
 
     export default {
         auth() {
@@ -29,7 +29,6 @@
 
         data() {
             return {
-                id: null,
                 navigation: null,
                 form: null
             }
@@ -41,7 +40,7 @@
 
         methods: {
             submit() {
-                this.form.patch(`/api/navigation/${this.id}`)
+                this.form.patch(`/api/navigation/${this.navigation.id}`)
                     .then(() => {
                         axios.post(`/api/blueprints/${this.navigation.blueprint.id}/sections`, { sections: this.form.sections })
                             .then(() => {
@@ -67,7 +66,6 @@
                     })
                 } else {
                     next((vm) => {
-                        vm.id   = navigation.id
                         vm.navigation = navigation
                         vm.form = new Form({
                             name:        navigation.name,

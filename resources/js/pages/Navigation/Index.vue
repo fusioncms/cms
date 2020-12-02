@@ -1,15 +1,15 @@
 <template>
-    <div>
+    <div class="navigation-page">
         <portal to="title">
             <page-title icon="anchor">Navigation</page-title>
         </portal>
 
         <portal to="actions">
-            <ui-button :to="{ name: 'navigation.create' }" variant="primary">Create Navigation</ui-button>
+            <ui-button key="create-navigation-btn" :to="{ name: 'navigation.create' }" variant="primary" v-if="$can('navigation.create')">Create Navigation</ui-button>
         </portal>
 
-        <div class="row">
-            <div class="content-container">
+        <ui-card>
+            <ui-card-body>
                 <ui-table :endpoint="endpoint" id="navigation" sort-by="name" primary-key="handle" key="navigation_table">
                     <template slot="name" slot-scope="table">
                         <router-link :to="{ name: 'navigation.nodes', params: {navigation: table.record.id} }">{{ table.record.name }}</router-link>
@@ -24,7 +24,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-actions :id="'navigation_' + table.record.id + '_actions'" :key="'navigation_' + table.record.id + '_actions'">
+                        <ui-table-actions :id="'navigation_' + table.record.id + '_actions'" :key="'navigation_' + table.record.id + '_actions'">
                             <ui-dropdown-link :to="{ name: 'navigation.nodes', params: {navigation: table.record.id} }">Manage</ui-dropdown-link>
                             <ui-dropdown-link :to="{ name: 'navigation.edit', params: {navigation: table.record.id} }">Edit</ui-dropdown-link>
 
@@ -34,11 +34,11 @@
                                 classes="link--danger">
                                 Delete
                             </ui-dropdown-link>
-                        </ui-actions>
+                        </ui-table-actions>
                     </template>
                 </ui-table>
-            </div>
-        </div>
+            </ui-card-body>
+        </ui-card>
 
         <portal to="modals">
             <ui-modal name="delete-navigation" title="Delete Navigation" key="delete_navigation">
