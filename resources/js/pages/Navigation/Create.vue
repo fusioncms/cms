@@ -58,13 +58,6 @@
                         toast(response.message, 'failed')
                     })
             }
-        },
-
-        // created() {
-        //     let unwatch = this.$watch('form.sections', (value) => {
-        //         this.form.orig.sections = _.cloneDeep(value)
-        //         unwatch()
-        //     })
-        // }
+        }
     }
 </script>
