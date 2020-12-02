@@ -51,6 +51,7 @@ Route::prefix('fieldtypes')->group(function () {
 Route::prefix('structures')->group(function () {
     Route::get('{handle}', 'StructureController@show');
     Route::get('', 'StructureController@index');
+    Route::post('', 'StructureController@store');
 });
 
 /**

@@ -37,4 +37,20 @@ class StructureController extends Controller
 
         return new StructureResource($structure);
     }
+
+    /**
+     * Persist the specified resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return void
+     */
+    public function store(Request $request)
+    {
+        collect($request->all())->each(function($structure) {
+            Structure::find($structure['id'])->update([
+                'excluded' => $structure['excluded']
+            ]);
+        });
+    }
 }

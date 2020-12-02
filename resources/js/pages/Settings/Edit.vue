@@ -4,7 +4,7 @@
             <page-title icon="cog">{{ group.name }} Settings</page-title>
         </portal>
 
-        <portal to="actions">
+        <portal name="actions" to="actions">
             <div class="buttons" v-if="form">
                 <ui-button :to="{ name: 'settings' }" variant="secondary">Go Back</ui-button>
                 <ui-button type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
