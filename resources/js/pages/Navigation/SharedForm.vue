@@ -7,29 +7,6 @@
             </div>
         </portal>
 
-        <portal to="sidebar-right">
-            <sidebar id="navigation-sidebar">
-                <sidebar-section id="matrix_panel_status" tabindex="-1">
-                    <ui-toggle
-                        id="navigation-status"
-                        name="status"
-                        label="Status"
-                        :help="form.status ? 'Toggle to disable this navigation.' : 'Toggle to enable this navigation.'"
-                        :has-error="form.errors.has('status')"
-                        :error-message="form.errors.get('status')"
-                        v-model="form.status">
-                    </ui-toggle>
-                </sidebar-section>
-
-                <status-card
-                    v-if="resource"
-                    :entry="resource"
-                    id="navigation_panel_status_card"
-                    tabindex="-1">
-                </status-card>
-            </sidebar>
-        </portal>
-
         <section-card id="navigation_panel_general" title="General Information" description="General information about your navigation menu and what it manages." tabindex="-1">
             <div class="row">
                 <div class="col w-full lg:w-1/2">

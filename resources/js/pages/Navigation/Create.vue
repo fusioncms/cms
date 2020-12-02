@@ -33,7 +33,6 @@
                     name: '',
                     handle: '',
                     description: '',
-                    status: 1,
                     sections: []
                 }, true)
             }

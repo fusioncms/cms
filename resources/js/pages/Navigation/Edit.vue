@@ -71,7 +71,6 @@
                             name:        navigation.name,
                             handle:      navigation.handle,
                             description: navigation.description,
-                            status:      navigation.status,
                             sections:    navigation.blueprint.sections,
                         }, true)
 
