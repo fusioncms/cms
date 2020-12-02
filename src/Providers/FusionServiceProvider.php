@@ -155,7 +155,6 @@ class FusionServiceProvider extends ServiceProvider
         $this->app->register(SettingServiceProvider::class);
         $this->app->register(ThemeServiceProvider::class);
         $this->app->register(ScheduleServiceProvider::class);
-        $this->app->register(StructureServiceProvider::class);
 
         // Not sure why Laravel doesn't register this against
         // the class name as well ¯\_(ツ)_/¯
@@ -202,10 +201,6 @@ class FusionServiceProvider extends ServiceProvider
         $this->publishes([
             fusion_path('/public') => public_path('vendor/fusion'),
         ], 'fusion-assets');
-
-        $this->publishes([
-            fusion_path('/config/fusion.php') => config_path('fusion.php'),
-        ], 'fusion-config');
 
         $this->publishes([
             fusion_path('/themes') => base_path('themes'),

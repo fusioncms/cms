@@ -14,18 +14,6 @@ if (!function_exists('fieldtypes')) {
     }
 }
 
-if (!function_exists('structures')) {
-    /**
-     * Returns the structure registry instance from the container.
-     *
-     * @return \Fusion\Structures\Registry
-     */
-    function structures()
-    {
-        return app()->make(Fusion\Structures\Registry::class);
-    }
-}
-
 if (!function_exists('validationRules')) {
     /**
      * Get list of validation rules to apply against Field Assignments.

@@ -46,6 +46,14 @@ Route::prefix('fieldtypes')->group(function () {
 });
 
 /**
+ * API - Structure Routes.
+ */
+Route::prefix('structures')->group(function () {
+    Route::get('{handle}', 'StructureController@show');
+    Route::get('', 'StructureController@index');
+});
+
+/**
  * API - Replicator Field Routes.
  */
 Route::get('replicators/{replicator}', 'Fields\ReplicatorController@show');

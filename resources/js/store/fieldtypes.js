@@ -2,35 +2,61 @@ export default {
     namespaced: true,
 
     state: {
+        structures: {},
         fieldtypes: {},
-        excluded: [],
     },
 
     getters: {
-        get(state) {
-            return _.mapValues(state.fieldtypes, (type, name) => {
-                type.disabled = state.excluded.includes(name)
-                return type
-            })
+        getFieldtypesByStructure: (state) => (handle) => {
+            let fieldtypes = {}
+
+            if (_.has(state.structures, handle)) {
+                fieldtypes = _.reject(state.fieldtypes, (fieldtype) => {
+                    return state.structures[handle].excluded.includes(fieldtype.handle)
+                })
+            }
+
+            return _.keyBy(fieldtypes, 'handle')
+        },
+
+        getFieldtypes: (state) => {
+            return state.fieldtypes
+        },
+
+        getStructures: (state) => {
+            return state.structures
         }
     },
 
     mutations: {
-        set: (state, fieldtypes) => {
-            state.fieldtypes = fieldtypes
+        setStructures: (state, structures) => {
+            state.structures = _.keyBy(structures, 'handle')
         },
 
-        setExcluded: (state, excluded) => {
-            state.excluded = excluded
+        setStructure: (state, payload) => {
+            if (_.has(state.structures, payload.handle)) {
+                state.structures[payload.handle] = payload.structure
+            }
+        },
+
+        setFieldtypes: (state, fieldtypes) => {
+            state.fieldtypes = _.keyBy(fieldtypes, 'handle')
         }
     },
 
     actions: {
-        fetch: ({ state, commit}) => {
-            if (_.isEmpty(state.fieldtypes))
+        setStructure: ({ commit }, payload) => {
+            commit('setStructure', payload)
+        },
+
+        fetch: ({ state, commit }) => {
+            axios.all([
+                axios.get('/api/structures'),
                 axios.get('/api/fieldtypes')
-                    .then(response => commit('set', response.data.data))
-                    .catch(error   => console.log(error))
+            ]).then(axios.spread((structures, fieldtypes) => {
+                commit('setStructures', structures.data.data)
+                commit('setFieldtypes', fieldtypes.data.data)
+            }))
         }
     }
 }

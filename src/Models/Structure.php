@@ -11,7 +11,7 @@ class Structure extends Model
      *
      * @var array
      */
-    protected $fillable = [ 'handle', 'fieldtypes' ];
+    protected $fillable = [ 'name', 'handle', 'excluded' ];
 
     /**
      * The attributes that should be cast to native types.
@@ -19,7 +19,7 @@ class Structure extends Model
      * @var array
      */
     protected $casts = [
-        'fieldtypes' => 'collection',
+        'excluded' => 'collection',
     ];
 
    /**
@@ -30,5 +30,17 @@ class Structure extends Model
     public function structure()
     {
         return structures()->get($this->handle);
+    }
+
+    /**
+     * Return valid Fieldsets for this Structure.
+     * 
+     * @return \Illuminate\Support\Collection
+     */
+    public function fieldtypes()
+    {
+        return fieldtypes()->all()->reject(function ($fieldtype) {
+            return in_array($fieldtype->getHandle(), $this->excluded->toArray());
+        });
     }
 }

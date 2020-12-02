@@ -15,8 +15,9 @@ class CreateStructuresTable extends Migration
     {
         Schema::create('structures', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->string('handle')->unique();
-            $table->json('fieldtypes');
+            $table->json('excluded');
             $table->timestamps();
         });
     }
