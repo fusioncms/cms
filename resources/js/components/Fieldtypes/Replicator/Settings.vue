@@ -21,14 +21,6 @@
                     this.settings.sections = []
                 }
             }
-        },
-
-        created() {
-            this.$store.commit('fieldtypes/setExcluded', ['replicator'])
-        },
-
-        destroyed() {
-            this.$store.commit('fieldtypes/setExcluded', [])
         }
     }
 </script>

@@ -53,3 +53,4 @@ Vue.component('rename-file-modal', require('@/interfaces/FileManager/Modals/Rena
 Vue.component('replace-file-modal', require('@/interfaces/FileManager/Modals/ReplaceFileModal').default)
 Vue.component('delete-file-modal', require('@/interfaces/FileManager/Modals/DeleteFileModal').default)
 Vue.component('settings-cache', require('@/interfaces/Settings/Cache').default)
+Vue.component('structures-fieldtypes', require('@/interfaces/Structures/Fieldtypes').default)
