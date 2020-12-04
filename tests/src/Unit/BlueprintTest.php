@@ -2,7 +2,9 @@
 
 namespace Fusion\Tests\Unit;
 
-use Facades\MatrixFactory;
+use Fusion\Models\Field;
+use Fusion\Models\Matrix;
+use Fusion\Models\Section;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -17,64 +19,58 @@ class BlueprintTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $matrix = MatrixFactory::withName('Posts')->withSections([
-            [
-                'name'   => 'General',
-                'handle' => 'general',
-                'fields' => [
-                    [
-                        'name'   => 'Foo',
-                        'handle' => 'foo',
-                        'type'   => 'asset',
-                    ],
-                    [
-                        'name'   => 'Bar',
-                        'handle' => 'bar',
-                        'type'   => 'textarea',
-                    ],
-                    [
-                        'name'   => 'Baz',
-                        'handle' => 'baz',
-                        'type'   => 'divider',
-                    ],
-                ],
-            ],
-        ])->create();
+        $this->matrix = Matrix::factory()
+            ->withName('Posts')
+            ->afterCreating(function (Matrix $matrix) {
+                $section = Section::factory()
+                    ->withBlueprint($matrix->blueprint)
+                    ->create();
 
-        $this->blueprint = $matrix->blueprint;
+                // create field w/ column..
+                $section->fields()->create(
+                    Field::factory()->make()->toArray()
+                );
 
-        $this->fieldFoo  = $this->blueprint->fields->where('name', 'Foo')->first();
-        $this->fieldBar  = $this->blueprint->fields->where('name', 'Bar')->first();
-        $this->fieldBaz  = $this->blueprint->fields->where('name', 'Baz')->first();
+                // create field w/o column..
+                $section->fields()->create(
+                    Field::factory()->withType('divider')->make()->toArray()
+                );
+
+                // create field w/ relationship..
+                $section->fields()->create(
+                    Field::factory()->withType('asset')->make()->toArray()
+                );
+            })
+            ->create();
     }
 
     /** @test */
     public function a_blueprint_has_sections()
     {
-        $this->assertTrue($this->blueprint->hasSections());
-        $this->assertInstanceOf(HasMany::class, $this->blueprint->sections());
-        $this->assertCount(1, $this->blueprint->sections);
+        $this->assertTrue($this->matrix->blueprint->hasSections());
+        $this->assertInstanceOf(HasMany::class, $this->matrix->blueprint->sections());
+        $this->assertCount(1, $this->matrix->blueprint->sections);
     }
 
     /** @test */
     public function a_blueprint_can_have_many_fields_through_a_section()
     {
-        $this->assertTrue($this->blueprint->hasFields());
-        $this->assertInstanceOf(HasManyThrough::class, $this->blueprint->fields());
-        $this->assertCount(3, $this->blueprint->fields);
+        $this->assertTrue($this->matrix->blueprint->hasFields());
+        $this->assertInstanceOf(HasManyThrough::class, $this->matrix->blueprint->fields());
+        $this->assertCount(3, $this->matrix->blueprint->fields);
     }
 
     /** @test */
     public function a_blueprint_can_return_fields_that_generate_database_columns()
     {
-        $this->assertInstanceOf('Fusion\Models\Field', $this->blueprint->database()->first());
-        $this->assertCount(1, $this->blueprint->database());
+        $this->assertInstanceOf(Field::class, $this->matrix->blueprint->database()->first());
+        $this->assertCount(1, $this->matrix->blueprint->database());
     }
 
     /** @test */
     public function a_blueprint_can_return_fields_that_generate_relationships()
     {
-        $this->assertInstanceOf('Fusion\Models\Field', $this->blueprint->relationships()->first());
-        $this->assertCount(1, $this->blueprint->relationships());
+        $this->assertInstanceOf(Field::class, $this->matrix->blueprint->relationships()->first());
+        $this->assertCount(1, $this->matrix->blueprint->relationships());
     }
 }

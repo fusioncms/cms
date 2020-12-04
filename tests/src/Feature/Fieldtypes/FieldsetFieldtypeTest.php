@@ -2,8 +2,11 @@
 
 namespace Fusion\Tests\Feature\Fieldtypes;
 
-use Facades\FieldsetFactory;
-use Facades\MatrixFactory;
+use Fusion\Models\Field;
+use Fusion\Models\Fieldset;
+use Fusion\Models\Matrix;
+use Fusion\Models\Section;
+use Fusion\Services\Builders\Collection;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -19,33 +22,41 @@ class FieldsetFieldtypeTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->fieldset = FieldsetFactory::withName('Contacts')
-            ->withFields([
-                ['name' => 'Email', 'handle' => 'email', 'type' => 'email'],
-                ['name' => 'Phone', 'handle' => 'phone', 'type' => 'phone', 'validation' => ['value' => 'required']],
-            ])->create();
+        /**
+         * Create Fieldset w/ 2 fields.
+         */
+        $this->fieldset = Fieldset::factory()
+            ->withName('Contacts')
+            ->afterCreating(function (Fieldset $fieldset) {
+                $fieldset->fields()->create( Field::factory()->withName('email')->withType('email')->make()->toArray() );
+                $fieldset->fields()->create( Field::factory()->withName('phone')->withType('phone')->withValidation(['value'=>'required'])->make()->toArray() );
+            })
+            ->create();
 
-        $this->matrix = MatrixFactory::withName($this->faker->word)
+        /**
+         * Create matrix to house Fieldset.
+         */
+        $this->matrix = Matrix::factory()
             ->asCollection()
-            ->withSections([
-                [
-                    'name'   => 'General',
-                    'handle' => 'general',
-                    'fields' => [
-                        [
-                            'name'       => 'Contacts',
-                            'handle'     => 'contacts',
-                            'type'       => 'fieldset',
-                            'settings'   => ['fieldset' => $this->fieldset->id],
-                            'validation' => ['value' => ''],
-                        ],
-                    ],
-                ],
-            ])
+            ->withName('Fieldsets')
+            ->afterCreating(function (Matrix $matrix) {
+                $section = Section::factory()
+                    ->withBlueprint($matrix->blueprint)
+                    ->create();
+
+                    $section->fields()->create(
+                        Field::factory()
+                            ->withName('Contacts')
+                            ->withType('fieldset')
+                            ->withSettings(['fieldset' => $this->fieldset->id])
+                            ->make()
+                            ->toArray()
+                    );
+            })
             ->create();
 
         $this->field = $this->matrix->blueprint->sections->first()->fields()->first();
-        $this->model = (new \Fusion\Services\Builders\Collection($this->matrix->handle))->make();
+        $this->model = (new Collection($this->matrix->handle))->make();
     }
 
     /** @test */
@@ -94,8 +105,8 @@ class FieldsetFieldtypeTest extends TestCase
             ])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                "{$this->fieldset->handle}.email" => 'The Email must be a valid email address.',
-                "{$this->fieldset->handle}.phone" => 'The Phone field is required.',
+                "{$this->fieldset->handle}.email" => 'The email must be a valid email address.',
+                "{$this->fieldset->handle}.phone" => 'The phone field is required.',
             ]);
     }
 }

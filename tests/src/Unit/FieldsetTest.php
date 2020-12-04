@@ -2,8 +2,8 @@
 
 namespace Fusion\Tests\Unit;
 
-use Facades\FieldsetFactory;
 use Fusion\Models\Field;
+use Fusion\Models\Fieldset;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,11 +17,10 @@ class FieldsetTest extends TestCase
     {
         parent::setUp();
 
-        $this->fieldset = FieldsetFactory::withName('Contacts')
-            ->withFields([
-                ['name' => 'Email', 'handle' => 'email', 'type' => 'email'],
-                ['name' => 'Phone', 'handle' => 'phone', 'type' => 'phone'],
-            ])->create();
+        $this->fieldset = Fieldset::factory()
+            ->withName('Contacts')
+            ->hasFields(2)
+            ->create();
     }
 
     /** @test */

@@ -2,7 +2,6 @@
 
 namespace Fusion\Tests\Feature\Forms;
 
-use Facades\FormFactory;
 use Fusion\Models\Form;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -22,7 +21,7 @@ class FormTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_create_a_form()
     {
-        $attributes = factory(Form::class)->make()->toArray();
+        $attributes = Form::factory()->make()->toArray();
 
         $this
             ->be($this->owner, 'api')
@@ -39,9 +38,11 @@ class FormTest extends TestCase
     /** @test */
     public function a_newly_created_form_should_create_associated_tables()
     {
+        $attributes = Form::factory()->make()->toArray();
+
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/forms', factory(Form::class)->make()->toArray())
+            ->json('POST', '/api/forms', $attributes)
             ->assertStatus(201);
 
         $form = Form::firstOrFail();
@@ -80,11 +81,11 @@ class FormTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $form = factory(Form::class)->create();
+        $form = Form::factory()->create();
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/forms/'.$form->id);
+            ->json('GET', "/api/forms/{$form->id}");
     }
 
     /** @test */
@@ -102,11 +103,11 @@ class FormTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $form = factory(Form::class)->create();
+        $form = Form::factory()->create();
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/forms/'.$form->id, []);
+            ->json('PATCH', "/api/forms/{$form->id}", []);
     }
 
     /** @test */
@@ -114,18 +115,17 @@ class FormTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $form = factory(Form::class)->create();
+        $form = Form::factory()->create();
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/forms/'.$form->id);
+            ->json('DELETE', "/api/forms/{$form->id}");
     }
 
     /** @test */
     public function a_user_with_permissions_can_update_an_existing_form()
     {
-        $this->actingAs($this->owner, 'api');
-        $form = FormFactory::create();
+        $form = Form::factory()->create();
 
         // Update ----
         $attributes                = $form->toArray();
@@ -133,7 +133,7 @@ class FormTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/forms/'.$form->id, $attributes)
+            ->json('PATCH', "/api/forms/{$form->id}", $attributes)
             ->assertStatus(200);
 
         $this->assertDatabaseHas('forms', [
@@ -145,8 +145,7 @@ class FormTest extends TestCase
     /** @test */
     public function an_updated_form_request_will_also_update_associated_blueprint_name()
     {
-        $this->actingAs($this->owner, 'api');
-        $form = FormFactory::create();
+        $form = Form::factory()->create();
 
         $oldName = $form->name;
 
@@ -156,7 +155,7 @@ class FormTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/forms/'.$form->id, $attributes)
+            ->json('PATCH', "/api/forms/{$form->id}", $attributes)
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('blueprints', [
@@ -173,12 +172,11 @@ class FormTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_delete_an_existing_form()
     {
-        $this->actingAs($this->owner, 'api');
-        $form = FormFactory::create();
+        $form = Form::factory()->create();
 
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', '/api/forms/'.$form->id)
+            ->json('DELETE', "/api/forms/{$form->id}")
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('forms', [
@@ -189,13 +187,12 @@ class FormTest extends TestCase
     /** @test */
     public function a_deleted_form_request_will_also_delete_associated_tables()
     {
-        $this->actingAs($this->owner, 'api');
-        $form      = FormFactory::create();
+        $form      = Form::factory()->create();
         $blueprint = $form->blueprint;
 
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', '/api/forms/'.$form->id)
+            ->json('DELETE', "/api/forms/{$form->id}")
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('blueprints', [
@@ -210,8 +207,7 @@ class FormTest extends TestCase
     /** @test */
     public function a_form_response_will_be_recorded_in_the_activity_log()
     {
-        $this->actingAs($this->owner, 'api');
-        $form = FormFactory::withName('Contact Us')->create();
+        $form = Form::factory()->withName('Contact Us')->create();
 
         $this
             ->be($this->user)
@@ -230,10 +226,8 @@ class FormTest extends TestCase
     /** @test */
     public function forms_do_not_collect_ips_on_default()
     {
-        $this->actingAs($this->owner, 'api');
-        $form = FormFactory::create();
+        $form = Form::factory()->create();
 
-        // guest form request
         $this
             ->be($this->guest)
             ->post($form->path());
@@ -247,8 +241,7 @@ class FormTest extends TestCase
     /** @test */
     public function a_form_can_be_set_to_collect_ips()
     {
-        $this->actingAs($this->owner, 'api');
-        $form = FormFactory::thatCollectsIPs()->create();
+        $form = Form::factory()->thatCollectsIPs()->create();
 
         $this
             ->be($this->guest)
@@ -265,8 +258,7 @@ class FormTest extends TestCase
     {
         $this->markTestIncomplete();
 
-        $this->actingAs($this->owner, 'api');
-        $form = FormFactory::thatCollectsEmails()->create();
+        $form = Form::factory()->thatCollectsEmails()->create();
 
         $this
             ->be($this->user)
@@ -281,8 +273,7 @@ class FormTest extends TestCase
     /** @test */
     public function forms_redirect_to_default_confirmation_page_on_default()
     {
-        $this->actingAs($this->owner, 'api');
-        $form = FormFactory::create();
+        $form = Form::factory()->create();
 
         $this
             ->be($this->user)
@@ -294,8 +285,7 @@ class FormTest extends TestCase
     /** @test */
     public function a_form_can_be_set_to_redirect_to_custom_page()
     {
-        $this->actingAs($this->owner, 'api');
-        $form = FormFactory::withCustomRedirect('thanks')->create();
+        $form = Form::factory()->withCustomRedirect('thanks')->create();
 
         $this
             ->be($this->user)
@@ -315,7 +305,7 @@ class FormTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $form           = factory(Form::class)->create()->toArray();
+        $form           = Form::factory()->create()->toArray();
         $form['id']     = null;
         $form['handle'] = 'new_handle';
 
@@ -330,7 +320,7 @@ class FormTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $form         = factory(Form::class)->create()->toArray();
+        $form         = Form::factory()->create()->toArray();
         $form['id']   = null;
         $form['slug'] = 'new-slug';
 
@@ -367,9 +357,11 @@ class FormTest extends TestCase
     /** @test */
     public function a_newly_created_form_should_be_logged_as_an_activity()
     {
+        $attributes = Form::factory()->make()->toArray();
+
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/forms', factory(Form::class)->make()->toArray());
+            ->json('POST', '/api/forms', $attributes);
 
         $form = Form::firstOrFail();
 
@@ -384,14 +376,15 @@ class FormTest extends TestCase
     /** @test */
     public function an_updated_form_should_be_logged_as_an_activity()
     {
-        $this->actingAs($this->owner, 'api');
-        $form = FormFactory::create();
+        $form = Form::factory()->create();
 
         // Update ----
         $attributes         = $form->toArray();
         $attributes['name'] = 'New Name';
 
-        $this->json('PATCH', '/api/forms/'.$form->id, $attributes);
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', "/api/forms/{$form->id}", $attributes);
 
         $this->assertDatabaseHas('activity_log', [
             'description' => "Updated form ({$attributes['name']})",
@@ -404,10 +397,11 @@ class FormTest extends TestCase
     /** @test */
     public function activities_will_be_cleaned_up_for_form_when_it_is_deleted()
     {
-        $this->actingAs($this->owner, 'api');
-        $form = FormFactory::create();
+        $form = Form::factory()->create();
 
-        $this->json('DELETE', '/api/forms/'.$form->id);
+        $this
+            ->be($this->owner, 'api')
+            ->json('DELETE', "/api/forms/{$form->id}");
 
         $this->assertDatabaseMissing('activity_log', [
             'subject_id'   => $form->id,

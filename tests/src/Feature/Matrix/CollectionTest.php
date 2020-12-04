@@ -2,11 +2,15 @@
 
 namespace Fusion\Tests\Feature\Matrix;
 
+use Fusion\Models\Matrix;
+use Fusion\Models\Section;
+use Fusion\Services\Builders\Collection;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CollectionTest extends TestCase
@@ -19,50 +23,38 @@ class CollectionTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->matrix = \Facades\MatrixFactory::withName('Collectibles')
+        $this->matrix = Matrix::factory()
             ->asCollection()
-            ->withSections([
-                [
-                    'name'   => 'General',
-                    'handle' => 'general',
-                    'fields' => [
-                        [
-                            'name'   => 'Excerpt',
-                            'handle' => 'excerpt',
-                            'type'   => 'input',
-                        ],
-                        [
-                            'name'   => 'Content',
-                            'handle' => 'content',
-                            'type'   => 'textarea',
-                        ],
-                    ],
-                ],
-            ])
-            ->withRoute('collectibles/{slug}')
-            ->withTemplate('index')
+            ->withName('Collectibles')
+            ->withSEO('collectibles/{slug}', 'index')
+            ->afterCreating(function (Matrix $matrix) {
+                Section::factory()
+                    ->withBlueprint($matrix->blueprint)
+                    ->hasFields(2)
+                    ->create();
+            })
             ->create();
 
-        $this->fieldExcerpt = $this->matrix->blueprint->fields->where('name', 'Excerpt')->first();
-        $this->fieldContent = $this->matrix->blueprint->fields->where('name', 'Content')->first();
-
-        $this->model = (new \Fusion\Services\Builders\Collection($this->matrix->handle))->make();
+        $this->model  = (new Collection($this->matrix->handle))->make();
+        $this->field1 = $this->matrix->blueprint->fields->get(0);
+        $this->field2 = $this->matrix->blueprint->fields->get(1);
     }
 
     /** @test */
     public function a_user_with_permissions_can_create_a_new_collection_entry()
     {
         $attributes = [
-            'name'    => 'Example Page',
-            'slug'    => 'example-page',
-            'excerpt' => 'This is an excerpt of the content.',
-            'content' => 'This is the content. Lorem ipsum dolor sit amit.',
-            'status'  => 1,
+            'name'   => 'Example Page',
+            'slug'   => 'example-page',
+            'status' => 1,
         ];
+
+        $attributes[$this->field1->handle] = $this->faker->word();
+        $attributes[$this->field2->handle] = $this->faker->word();
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/collections/collectibles', $attributes)
+            ->json('POST', "/api/collections/{$this->matrix->slug}", $attributes)
             ->assertStatus(201);
 
         $this->assertDatabaseHas('mx_collectibles', $attributes);
@@ -73,7 +65,7 @@ class CollectionTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->json('POST', '/api/collections/collectibles', []);
+        $this->json('POST', "/api/collections/{$this->matrix->slug}", []);
     }
 
     /** @test */
@@ -83,7 +75,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('POST', '/api/collections/collectibles', []);
+            ->json('POST', "/api/collections/{$this->matrix->slug}", []);
     }
 
     /** @test */
@@ -100,10 +92,18 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/collections/collectibles/'.$entry->id, $attributes)
+            ->json('PATCH', "/api/collections/{$this->matrix->slug}/{$entry->id}", $attributes)
             ->assertStatus(200);
 
-        $this->assertDatabaseHas('mx_collectibles', $attributes);
+        $this->assertDatabaseMissing($this->model->getTable(), [
+            'name' => 'New Post Title',
+            'slug' => 'new-post-title',
+        ]);
+
+        $this->assertDatabaseHas($this->model->getTable(), [
+            'name' => 'Updated Post Title',
+            'slug' => 'updated-post-title',
+        ]);
     }
 
     /** @test */
@@ -113,7 +113,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', '/api/collections/collectibles/'.$entry->id);
+            ->json('DELETE', "/api/collections/{$this->matrix->slug}/{$entry->id}");
 
         $this->assertDatabaseMissing('mx_collectibles', ['id' => $entry->id]);
     }
@@ -125,7 +125,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/collections/collectibles', $attributes)
+            ->json('POST', "/api/collections/{$this->matrix->slug}", $attributes)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['slug']);
     }
@@ -172,7 +172,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner)
-            ->get('/collectibles/'.$entry->slug.'?preview=true')
+            ->get("/collectibles/{$entry->slug}?preview=true")
             ->assertStatus(200);
     }
 
@@ -185,7 +185,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->user)
-            ->get('/collectibles/'.$entry->slug.'?preview=true');
+            ->get("/collectibles/{$entry->slug}?preview=true");
     }
 
     //
@@ -203,18 +203,17 @@ class CollectionTest extends TestCase
     protected function newEntry($overrides = []): array
     {
         $attributes = array_merge([
-            'name'    => 'Example Page',
-            'slug'    => 'example-page',
-            'excerpt' => 'This is the excerpt of the content.',
-            'content' => 'This is the content. Lorem ipsume dolor sit amit.',
-            'status'  => true,
+            'matrix_id' => $this->matrix->id,
+            'name'      => 'Example Page',
+            'slug'      => 'example-page',
+            'status'    => true,
         ], $overrides);
 
-        $this
-            ->be($this->owner, 'api')
-            ->json('POST', '/api/collections/collectibles', $attributes);
+        $attributes[$this->field1->handle] = $this->faker->word();
+        $attributes[$this->field2->handle] = $this->faker->word();
 
-        $entry = \DB::table($this->model->getTable())->first();
+        $model = (new Collection($this->matrix->handle))->make();
+        $entry = $model->create($attributes);
 
         return [$entry, $attributes];
     }

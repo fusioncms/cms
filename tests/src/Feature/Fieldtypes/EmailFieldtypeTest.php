@@ -2,6 +2,9 @@
 
 namespace Fusion\Tests\Feature\Fieldtypes;
 
+use Fusion\Models\Field;
+use Fusion\Models\Matrix;
+use Fusion\Models\Section;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -16,25 +19,23 @@ class EmailFieldtypeTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->matrix = \Facades\MatrixFactory::withName('EmailFieldTest')
+        $this->matrix = Matrix::factory()
             ->asSingle()
-            ->withSections([
-                [
-                    'name'   => 'General',
-                    'handle' => 'general',
-                    'fields' => [
-                        [
-                            'name'   => 'Email',
-                            'handle' => 'email',
-                            'type'   => 'email',
-                        ],
-                    ],
-                ],
-            ])
+            ->withName('Email Field')
+            ->afterCreating(function (Matrix $matrix) {
+                Section::factory()
+                    ->withBlueprint($matrix->blueprint)
+                    ->create()
+                    ->fields()
+                    ->create(
+                        Field::factory()
+                            ->withName('Email')
+                            ->withType('email')
+                            ->make()
+                            ->toArray()
+                );
+            })
             ->create();
-
-        $this->field = $this->matrix->blueprint->sections->first()->fields()->first();
-        $this->model = (new \Fusion\Services\Builders\Single($this->matrix->handle))->make();
     }
 
     /** @test */
@@ -42,7 +43,7 @@ class EmailFieldtypeTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/singles/'.$this->matrix->id, [
+            ->json('PATCH', "/api/singles/{$this->matrix->id}", [
                 'name'  => 'Invalid Single',
                 'slug'  => 'invalid-single',
                 'email' => 'fake-email',
@@ -58,7 +59,7 @@ class EmailFieldtypeTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/singles/'.$this->matrix->id, [
+            ->json('PATCH', "/api/singles/{$this->matrix->id}", [
                 'name'  => 'Invalid Single',
                 'slug'  => 'invalid-single',
                 'email' => $this->faker->unique()->safeEmail,

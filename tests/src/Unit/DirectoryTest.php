@@ -2,7 +2,7 @@
 
 namespace Fusion\Tests\Unit;
 
-use Facades\DirectoryFactory;
+use Fusion\Models\Directory;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,7 +18,7 @@ class DirectoryTest extends TestCase
         $this->expectException(QueryException::class);
         $this->expectExceptionMessage('UNIQUE constraint failed: directories.parent_id, directories.slug');
 
-        $directory       = DirectoryFactory::withName('lorem')->create();
+        $directory       = Directory::factory()->create();
         $directory       = $directory->toArray();
         $directory['id'] = null;
 
@@ -28,7 +28,7 @@ class DirectoryTest extends TestCase
     /** @test */
     public function directories_can_have_non_unique_parent_id_or_slug_seperately()
     {
-        $directory = DirectoryFactory::withName('lorem')->create();
+        $directory = Directory::factory()->create();
 
         $directoryOne         = $directory->toArray();
         $directoryOne['id']   = null;

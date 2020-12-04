@@ -2,6 +2,7 @@
 
 namespace Fusion\Tests\Unit;
 
+use Fusion\Models\Section;
 use Fusion\Models\Taxonomy;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
@@ -17,26 +18,20 @@ class TermTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->taxonomy = \Facades\TaxonomyFactory::withName('Categories')
-            ->withStates(['terms'])
-            ->withSections([
-                [
-                    'name'   => 'General',
-                    'handle' => 'general',
-                    'fields' => [
-                        [
-                            'name'   => 'Excerpt',
-                            'handle' => 'excerpt',
-                            'type'   => 'input',
-                        ],
-                        [
-                            'name'   => 'Content',
-                            'handle' => 'content',
-                            'type'   => 'textarea',
-                        ],
-                    ],
-                ],
-            ])
+        $this->taxonomy = Taxonomy::factory()
+            ->withName('Categories')
+            ->afterCreating(function (Taxonomy $taxonomy) {
+                Section::factory()
+                    ->withBlueprint($taxonomy->blueprint)
+                    ->hasFields(2)
+                    ->create();
+
+                $taxonomy->terms()->create([
+                    'name'   => 'Term A',
+                    'slug'   => 'term-a',
+                    'status' => true,
+                ]);
+            })
             ->create();
     }
 
@@ -55,9 +50,9 @@ class TermTest extends TestCase
         $this->taxonomy->handle = 'tags';
         $this->taxonomy->save();
 
-        $term = $this->taxonomy->terms->first();
+        // $term = $this->taxonomy->terms->first();
 
-        $this->assertDatabaseHasTable($term->getTable());
+        $this->assertDatabaseHasTable($this->taxonomy->getBuilderTable());
     }
 
     /** @test */

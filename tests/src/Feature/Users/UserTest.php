@@ -124,7 +124,7 @@ class UserTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this
             ->be($this->user, 'api')
@@ -146,7 +146,7 @@ class UserTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this
             ->be($this->user, 'api')
@@ -158,7 +158,7 @@ class UserTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this
             ->be($this->user, 'api')
@@ -369,7 +369,7 @@ class UserTest extends TestCase
     /** @test */
     public function each_user_must_have_a_unique_email()
     {
-        $user       = factory(User::class)->create()->toArray();
+        $user       = User::factory()->create()->toArray();
         $user['id'] = null;
 
         $this

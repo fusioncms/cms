@@ -3,9 +3,12 @@
 namespace Fusion\Models;
 
 use Fusion\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Blueprint extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are fillable via mass assignment.
      *

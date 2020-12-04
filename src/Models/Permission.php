@@ -2,11 +2,14 @@
 
 namespace Fusion\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Permission\Models\Permission as BasePermission;
 
 class Permission extends BasePermission
 {
+    use HasFactory;
+    
     /**
      * Wildcard guard.
      *

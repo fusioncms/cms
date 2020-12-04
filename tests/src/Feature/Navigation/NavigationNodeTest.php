@@ -2,6 +2,8 @@
 
 namespace Fusion\Tests\Feature\Navigation;
 
+use Fusion\Models\Navigation;
+use Fusion\Models\Section;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,27 +19,14 @@ class NavigationNodeTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->actingAs($this->owner, 'api');
-
-        $this->navigation = \Facades\NavigationFactory::withName('Header')
-            ->withSections([
-                [
-                    'name'   => 'General',
-                    'handle' => 'general',
-                    'fields' => [
-                        [
-                            'name'   => 'Excerpt',
-                            'handle' => 'excerpt',
-                            'type'   => 'input',
-                        ],
-                        [
-                            'name'   => 'Content',
-                            'handle' => 'content',
-                            'type'   => 'textarea',
-                        ],
-                    ],
-                ],
-            ])
+        $this->navigation = Navigation::factory()
+            ->withName('Header')
+            ->afterCreating(function(Navigation $navigation) {
+                $section = Section::factory()
+                    ->withBlueprint($navigation->blueprint)
+                    ->hasFields(2)
+                    ->create();
+            })
             ->create();
 
         $this->model = (new \Fusion\Services\Builders\Navigation($this->navigation->handle))->make();
@@ -53,7 +42,7 @@ class NavigationNodeTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/navigation/'.$this->navigation->id.'/nodes', $attributes)
+            ->json('POST', "/api/navigation/{$this->navigation->id}/nodes", $attributes)
             ->assertStatus(201);
 
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
@@ -72,7 +61,7 @@ class NavigationNodeTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/navigation/'.$this->navigation->id.'/nodes', $attributes)
+            ->json('POST', "/api/navigation/{$this->navigation->id}/nodes", $attributes)
             ->assertStatus(201);
 
         $this->assertDatabaseHas($this->model->getTable(), [
@@ -89,7 +78,7 @@ class NavigationNodeTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('POST', '/api/navigation/'.$this->navigation->id.'/nodes', []);
+            ->json('POST', "/api/navigation/{$this->navigation->id}/nodes", []);
     }
 
     /** @test */
@@ -104,7 +93,7 @@ class NavigationNodeTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/navigation/'.$this->navigation->id.'/nodes/'.$node->id);
+            ->json('GET', "/api/navigation/{$this->navigation->id}/nodes/{$node->id}");
     }
 
     /** @test */
@@ -129,7 +118,7 @@ class NavigationNodeTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/navigation/'.$this->navigation->id.'/nodes/'.$node->id, []);
+            ->json('PATCH', "/api/navigation/{$this->navigation->id}/nodes/{$node->id}", []);
     }
 
     /** @test */
@@ -144,7 +133,7 @@ class NavigationNodeTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/navigation/'.$this->navigation->id.'/nodes/'.$node->id);
+            ->json('DELETE', "/api/navigation/{$this->navigation->id}/nodes/{$node->id}");
     }
 
     /** @test */
@@ -161,7 +150,7 @@ class NavigationNodeTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/navigation/'.$this->navigation->id.'/nodes/'.$node->id, $attributes)
+            ->json('PATCH', "/api/navigation/{$this->navigation->id}/nodes/{$node->id}", $attributes)
             ->assertStatus(200);
 
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
@@ -175,7 +164,7 @@ class NavigationNodeTest extends TestCase
         // Delete ----
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', '/api/navigation/'.$this->navigation->id.'/nodes/'.$node->id);
+            ->json('DELETE', "/api/navigation/{$this->navigation->id}/nodes/{$node->id}");
 
         $this->assertDatabaseMissing($this->model->getTable(), ['id' => $node->id]);
     }
@@ -199,10 +188,11 @@ class NavigationNodeTest extends TestCase
             'url'  => $this->faker->url,
         ], $overrides);
 
-        $node = $this
-            ->json('POST', '/api/navigation/'.$this->navigation->id.'/nodes', $attributes)
-            ->getData()
-            ->data;
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/navigation/{$this->navigation->id}/nodes", $attributes);
+
+        $node = Navigation::first()->nodes->first();
 
         return [$node, $attributes];
     }

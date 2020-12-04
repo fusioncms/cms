@@ -3,6 +3,7 @@
 namespace Fusion\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Permission\Contracts\Role as RoleContract;
@@ -17,6 +18,7 @@ class Role extends Model implements RoleContract
 {
     use HasPermissions;
     use RefreshesPermissionCache;
+    use HasFactory;
 
     /**
      * Wildcard guard.

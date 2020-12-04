@@ -5,12 +5,14 @@ namespace Fusion\Models;
 use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Activitylog\Models\Activity;
 
 class Form extends Model
 {
     use HasBlueprint;
     use HasActivity;
+    use HasFactory;
 
     protected $with = ['blueprint'];
 

@@ -2,7 +2,6 @@
 
 namespace Fusion\Tests\Feature\Taxonomy;
 
-use Facades\TaxonomyFactory;
 use Fusion\Models\Taxonomy;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -25,6 +24,8 @@ class TaxonomyTest extends TestCase
     {
         parent::setUp();
         $this->handleValidationExceptions();
+
+        $this->taxonomy = Taxonomy::factory()->create();
     }
 
     /** @test */
@@ -68,11 +69,9 @@ class TaxonomyTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $taxonomy = factory(Taxonomy::class)->create();
-
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/taxonomies/'.$taxonomy->id);
+            ->json('GET', "/api/taxonomies/{$this->taxonomy->id}");
     }
 
     /** @test */
@@ -90,11 +89,9 @@ class TaxonomyTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $taxonomy = factory(Taxonomy::class)->create();
-
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/taxonomies/'.$taxonomy->id, []);
+            ->json('PATCH', "/api/taxonomies/{$this->taxonomy->id}", []);
     }
 
     /** @test */
@@ -102,20 +99,16 @@ class TaxonomyTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $taxonomy = factory(Taxonomy::class)->create();
-
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/taxonomies/'.$taxonomy->id);
+            ->json('DELETE', "/api/taxonomies/{$this->taxonomy->id}");
     }
 
     /** @test */
     public function a_user_with_permissions_can_update_an_existing_taxonomy()
     {
-        $taxonomy = factory(Taxonomy::class)->create();
-
         // update ----
-        $attributes           = $taxonomy->toArray();
+        $attributes           = $this->taxonomy->toArray();
         $attributes['name']   = 'New Name';
         $attributes['handle'] = 'new_name';
         $attributes['slug']   = 'new-name';
@@ -124,7 +117,7 @@ class TaxonomyTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/taxonomies/'.$taxonomy->id, $attributes)
+            ->json('PATCH', "/api/taxonomies/{$this->taxonomy->id}", $attributes)
             ->assertStatus(200);
 
         $this->assertDatabaseHas('taxonomies', $attributes);
@@ -152,7 +145,7 @@ class TaxonomyTest extends TestCase
     /** @test */
     public function each_taxonomy_must_have_a_unique_slug_and_handle()
     {
-        $taxonomy       = factory(Taxonomy::class)->create()->toArray();
+        $taxonomy       = $this->taxonomy->toArray();
         $taxonomy['id'] = null;
 
         $this
@@ -189,15 +182,11 @@ class TaxonomyTest extends TestCase
     /** @test */
     public function when_a_taxonomy_is_created_an_associated_blueprint_should_also_be_created()
     {
-        $this->actingAs($this->owner, 'api');
-
-        $taxonomy = TaxonomyFactory::withName('Categories')->create();
-
         $this->assertDatabaseHas('blueprints', [
-            'name'               => $taxonomy->name,
+            'name'               => $this->taxonomy->name,
             'group'              => 'Taxonomy',
-            'blueprintable_type' => get_class($taxonomy),
-            'blueprintable_id'   => $taxonomy->id,
+            'blueprintable_type' => Taxonomy::class,
+            'blueprintable_id'   => $this->taxonomy->id,
         ]);
     }
 }

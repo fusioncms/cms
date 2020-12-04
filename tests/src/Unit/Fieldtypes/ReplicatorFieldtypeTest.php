@@ -3,6 +3,7 @@
 namespace Fusion\Tests\Unit\Fieldtypes;
 
 use Fusion\Models\Field;
+use Fusion\Models\Fieldset;
 use Fusion\Models\Replicator;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,10 +20,19 @@ class ReplicatorFieldtypeTest extends TestCase
 
         $this->markTestIncomplete();
 
-        // --
-        $this->field    = \Facades\FieldFactory::withName('Replicator')->withType('replicator')->withSettings(['replicator'=>null, 'sections'=>[]])->create();
-        $this->section  = \Facades\SectionFactory::times(1)->withFields([$this->field])->create();
-        $this->fieldset = \Facades\FieldsetFactory::withSections(collect([$this->section]))->create();
+        // $this->fieldset = Fieldset::factory()
+        //     ->withName('Contacts')
+        //     ->afterCreating(function (Fieldset $fieldset) {
+        //         $fieldset->fields()->create(
+        //             Field::factory()
+        //                 ->withName('Replicator')
+        //                 ->withType('replicator')
+        //                 ->withSettings(['replicator'=>null, 'sections'=>[]])
+        //                 ->make()
+        //                 ->toArray()
+        //         );
+        //     })
+        //     ->create();
 
         DB::table('replicators')->insert([
             'field_id' => $this->field->id,

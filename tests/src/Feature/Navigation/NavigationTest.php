@@ -2,7 +2,6 @@
 
 namespace Fusion\Tests\Feature\Navigation;
 
-use Facades\NavigationFactory;
 use Fusion\Models\Navigation;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -21,9 +20,24 @@ class NavigationTest extends TestCase
     }
 
     /** @test */
+    public function only_admins_can_request_control_panel_navigation()
+    {
+        $this->expectException(AuthorizationException::class);
+
+        $this
+            ->be($this->user, 'api')
+            ->json('GET', '/api/admin/navigation');
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('GET', '/api/admin/navigation')
+            ->assertOk();
+    }
+
+    /** @test */
     public function a_user_with_permissions_can_create_a_navigation()
     {
-        $navigation = factory(Navigation::class)->make()->toArray();
+        $navigation = Navigation::factory()->make()->toArray();
 
         $this
             ->be($this->owner, 'api')
@@ -39,9 +53,7 @@ class NavigationTest extends TestCase
     /** @test */
     public function when_a_navigation_is_created_an_associated_blueprint_should_also_be_created()
     {
-        $this->actingAs($this->owner, 'api');
-
-        $navigation = NavigationFactory::withName('Header')->create();
+        $navigation = Navigation::factory()->withName('Header')->create();
 
         $this->assertDatabaseHas('blueprints', [
             'name'  => $navigation->name,
@@ -72,12 +84,11 @@ class NavigationTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $this->actingAs($this->owner, 'api');
-        $navigation = factory(Navigation::class)->create();
+        $navigation = Navigation::factory()->create();
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/navigation/'.$navigation->id);
+            ->json('GET', "/api/navigation/{$navigation->id}");
     }
 
     /** @test */
@@ -95,12 +106,11 @@ class NavigationTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $this->actingAs($this->owner, 'api');
-        $navigation = factory(Navigation::class)->create();
+        $navigation = Navigation::factory()->create();
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/navigation/'.$navigation->id, []);
+            ->json('PATCH', "/api/navigation/{$navigation->id}", []);
     }
 
     /** @test */
@@ -108,12 +118,11 @@ class NavigationTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $this->actingAs($this->owner, 'api');
-        $navigation = factory(Navigation::class)->create();
+        $navigation = Navigation::factory()->create();
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/navigation/'.$navigation->id);
+            ->json('DELETE', "/api/navigation/{$navigation->id}");
     }
 
     /** @test */
@@ -121,13 +130,13 @@ class NavigationTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $navigation = NavigationFactory::create();
+        $navigation = Navigation::factory()->create();
 
         $data                = $navigation->toArray();
         $data['description'] = 'This is the new navigation description';
 
         $this
-            ->json('PATCH', '/api/navigation/'.$navigation->id, $data)
+            ->json('PATCH', "/api/navigation/{$navigation->id}", $data)
             ->assertStatus(200);
 
         $this->assertDatabaseHas('navigation', [
@@ -141,15 +150,13 @@ class NavigationTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $navigation = NavigationFactory::create();
+        $navigation = Navigation::factory()->create();
 
         $this
-            ->json('DELETE', '/api/navigation/'.$navigation->id)
+            ->json('DELETE', "/api/navigation/{$navigation->id}")
             ->assertStatus(200);
 
-        $this->assertDatabaseMissing('navigation', [
-            'name' => $navigation->name,
-        ]);
+        $this->assertDatabaseMissing('navigation', [ 'name' => $navigation->name ]);
     }
 
     /** @test */
@@ -157,26 +164,27 @@ class NavigationTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $navigation = $navigation = NavigationFactory::withName('Test')->create();
+        $navigation = Navigation::factory()->withName('Test')->create();
 
         $nodeOne = $this
-            ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
+            ->json('POST', "/api/navigation/{$navigation->id}/nodes", [
                 'name' => 'Node One',
                 'url'  => 'https://example.com/node-one',
             ])
             ->getData()->data;
 
         $nodeTwo = $this
-            ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
+            ->json('POST', "/api/navigation/{$navigation->id}/nodes", [
                 'name' => 'Node Two',
                 'url'  => 'https://example.com/node-two',
             ])
             ->getData()->data;
 
-        $this->json('POST', '/api/navigation/'.$navigation->id.'/nodes/move/before', [
-            'move'   => $nodeTwo->id,
-            'before' => $nodeOne->id,
-        ]);
+        $this
+            ->json('POST', "/api/navigation/{$navigation->id}/nodes/move/before", [
+                'move'   => $nodeTwo->id,
+                'before' => $nodeOne->id,
+            ]);
 
         $this->assertDatabaseHas($navigation->getBuilderTable(), [
             'name'  => $nodeTwo->name,
@@ -189,7 +197,7 @@ class NavigationTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $navigation = $navigation = NavigationFactory::withName('Test')->create();
+        $navigation = Navigation::factory()->withName('Test')->create();
 
         $nodeOne = $this
             ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
@@ -228,7 +236,7 @@ class NavigationTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $navigation = $navigation = NavigationFactory::withName('Test')->create();
+        $navigation = Navigation::factory()->withName('Test')->create();
 
         $nodeOne = $this
             ->json('POST', '/api/navigation/'.$navigation->id.'/nodes', [
@@ -268,7 +276,7 @@ class NavigationTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $navigation       = factory(Navigation::class)->create()->toArray();
+        $navigation       = Navigation::factory()->create()->toArray();
         $navigation['id'] = null;
 
         $this

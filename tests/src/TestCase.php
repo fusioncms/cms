@@ -7,6 +7,7 @@ use Fusion\Providers\FusionServiceProvider;
 use Fusion\Tests\Concerns\InstallsFusion;
 use Fusion\Tests\Concerns\MakesDatabaseAssertions;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
 use Laravel\Sanctum\SanctumServiceProvider;
@@ -44,10 +45,12 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         parent::setUp();
 
-        Hash::driver('bcrypt')->setRounds(4);
+        // Customize factory path
+        Factory::guessFactoryNamesUsing(function (string $modelName) {
+            return 'Database\Factories\\'.class_basename($modelName).'Factory';
+        });
 
-        // TODO: remove w/ `laravel/legacy-factories` package
-        $this->withFactories(fusion_path('/database/definitions'));
+        Hash::driver('bcrypt')->setRounds(4);
 
         $this->install();
 

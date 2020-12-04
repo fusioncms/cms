@@ -12,7 +12,7 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
  */
 function compile_blade_template($template, $model)
 {
-    $template = str_replace(' ', '', $template);
+    $template = trim($template);
     $template = str_replace('{', '{{$model->', $template);
     $template = str_replace('}', '}}', $template);
 

@@ -2,7 +2,7 @@
 
 namespace Fusion\Tests\Feature;
 
-use Facades\FieldsetFactory;
+use Fusion\Models\Field;
 use Fusion\Models\Fieldset;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -18,11 +18,10 @@ class FieldsetTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->fieldset = FieldsetFactory::withName('Contacts')
-            ->withFields([
-                ['name' => 'Email', 'handle' => 'email', 'type' => 'email'],
-                ['name' => 'Phone', 'handle' => 'phone', 'type' => 'phone'],
-            ])->create();
+        $this->fieldset = Fieldset::factory()
+            ->withName('Contacts')
+            ->hasFields(2)
+            ->create();
     }
 
     /** @test */
@@ -86,7 +85,7 @@ class FieldsetTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_create_a_fieldset()
     {
-        $fieldset = factory(Fieldset::class)->make()->toArray();
+        $fieldset = Fieldset::factory()->make()->toArray();
 
         $this
             ->actingAs($this->owner, 'api')
@@ -110,14 +109,12 @@ class FieldsetTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_delete_a_fieldset()
     {
-        $table = $this->fieldset->getBuilderTable();
-
         $this
             ->actingAs($this->owner, 'api')
             ->json('DELETE', "/api/fieldsets/{$this->fieldset->id}")
             ->assertStatus(200);
 
-        $this->assertDatabaseDoesNotHaveTable($table);
+        $this->assertDatabaseDoesNotHaveTable($this->fieldset->getBuilderTable());
     }
 
     /** @test */
@@ -173,34 +170,27 @@ class FieldsetTest extends TestCase
     /** @test */
     public function renaming_field_from_fieldset_should_update_database_column()
     {
-        $this->fieldset->fields()
-            ->where('handle', 'email')->first()
-            ->update([
-                'name'   => 'E-mail',
-                'handle' => 'e_mail',
-            ]);
+        $table = $this->fieldset->getBuilderTable();
+        $field = $this->fieldset->fields->get(0);
 
-        $this->assertDatabaseTableHasColumn(
-            $this->fieldset->getBuilderTable(),
-            'e_mail'
-        );
+        $oldHandle = $field->handle;
+        $newHandle = 'updated_handle';
 
-        $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->fieldset->getBuilderTable(),
-            'email'
-        );
+        $field->update([ 'handle' => $newHandle ]);
+
+        $this->assertDatabaseTableHasColumn($table, $newHandle);
+
+        $this->assertDatabaseTableDoesNotHaveColumn($table, $oldHandle);
     }
 
     /** @test */
     public function removing_field_from_fieldset_should_update_database_column()
     {
-        $this->fieldset->fields()
-            ->where('handle', 'phone')->first()
-            ->delete();
+        $table = $this->fieldset->getBuilderTable();
+        $field = $this->fieldset->fields->get(0);
 
-        $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->fieldset->getBuilderTable(),
-            'phone'
-        );
+        $field->delete();
+
+        $this->assertDatabaseTableDoesNotHaveColumn($table, $field->handle);
     }
 }

@@ -326,7 +326,8 @@ class ReplicatorFieldtypeTest extends TestCase
      */
     private function createEntryWithReplicant(Replicator $replicator)
     {
-        $matrix     = \Facades\MatrixFactory::withName($this->faker->word)->asCollection()->withFieldset($this->fieldset)->create();
+        // TODO: repair this
+        // $matrix     = \Facades\MatrixFactory::withName($this->faker->word)->asCollection()->withFieldset($this->fieldset)->create();
         $model      = (new \Fusion\Services\Builders\Collection($matrix->handle))->make();
         $replicants = [];
 

@@ -33,7 +33,7 @@ class ActivityTest extends TestCase
     /** @test */
     public function models_with_activity_logging_will_log_created_event()
     {
-        $attributes = factory(Matrix::class)->make()->toArray();
+        $attributes = Matrix::factory()->make()->toArray();
 
         $this
             ->be($this->owner, 'api')
@@ -51,7 +51,7 @@ class ActivityTest extends TestCase
     /** @test */
     public function models_with_activity_logging_will_log_updated_event()
     {
-        $matrix = factory(Matrix::class)->create();
+        $matrix = Matrix::factory()->create();
 
         $attributes         = $matrix->toArray();
         $attributes['name'] = 'New Name';
@@ -73,7 +73,7 @@ class ActivityTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        $matrix   = factory(Matrix::class)->create();
+        $matrix   = Matrix::factory()->create();
         $activity = Activity::latest('id')->first();
 
         $this->assertDatabaseHas('activity_log', [
@@ -93,7 +93,7 @@ class ActivityTest extends TestCase
     /** @test */
     public function hosting_model_can_ask_for_all_activities_recorded_by_it()
     {
-        $matrix = factory(Matrix::class)->create();
+        $matrix = Matrix::factory()->create();
 
         $this->assertInstanceOf(Collection::class, $matrix->activities);
         $this->assertInstanceOf(Activity::class, $matrix->activities->first());
@@ -103,7 +103,7 @@ class ActivityTest extends TestCase
     /** @test */
     public function a_deleted_model_will_delete_its_own_logged_activities()
     {
-        $matrix = factory(Matrix::class)->create();
+        $matrix = Matrix::factory()->create();
         $matrix->delete();
 
         $this->assertInstanceOf(Collection::class, $matrix->activities);
