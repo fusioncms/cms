@@ -2,7 +2,6 @@
 
 namespace Fusion\Tests\Unit;
 
-use Facades\TaxonomyFactory;
 use Fusion\Models\Blueprint;
 use Fusion\Models\Taxonomy;
 use Fusion\Tests\TestCase;
@@ -14,36 +13,37 @@ class TaxonomyTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->handleValidationExceptions();
+
+        $this->taxonomy = Taxonomy::factory()->create();
+    }
+
     /** @test */
     public function a_taxonomy_should_have_a_blueprint()
     {
-        $taxonomy = factory(Taxonomy::class)->create();
-
-        $this->assertInstanceOf(Blueprint::class, $taxonomy->blueprint);
+        $this->assertInstanceOf(Blueprint::class, $this->taxonomy->blueprint);
     }
 
     /** @test */
     public function a_database_table_is_created_with_a_taxonomy()
     {
-        TaxonomyFactory::withName('Categories')
-            ->create();
-
-        $this->assertDatabaseHasTable('taxonomy_categories');
+        $this->assertDatabaseHasTable("taxonomy_{$this->taxonomy->handle}");
     }
 
     /** @test */
     public function the_database_table_is_renamed_when_renaming_a_taxonomy()
     {
-        $taxonomy = TaxonomyFactory::withName('Categories')
-            ->create();
+        $oldHandle = $this->taxonomy->handle;
+        $newHandle = 'tags';
 
-        $this->assertDatabaseHasTable('taxonomy_categories');
+        $this->taxonomy->handle = $newHandle;
+        $this->taxonomy->save();
 
-        $taxonomy->name   = 'Tags';
-        $taxonomy->handle = 'tags';
-        $taxonomy->save();
-
-        $this->assertDatabaseHasTable('taxonomy_tags');
+        $this->assertDatabaseDoesNotHaveTable("taxonomy_{$oldHandle}");
+        $this->assertDatabaseHasTable("taxonomy_{$newHandle}");
     }
 
     /** @test */
@@ -52,8 +52,7 @@ class TaxonomyTest extends TestCase
         $this->expectException(QueryException::class);
         $this->expectExceptionMessage('UNIQUE constraint failed: taxonomies.handle');
 
-        $taxonomy         = factory(Taxonomy::class)->create();
-        $taxonomy         = $taxonomy->toArray();
+        $taxonomy         = $this->taxonomy->toArray();
         $taxonomy['id']   = null;
         $taxonomy['slug'] = 'new-slug';
 
@@ -66,8 +65,7 @@ class TaxonomyTest extends TestCase
         $this->expectException(QueryException::class);
         $this->expectExceptionMessage('UNIQUE constraint failed: taxonomies.slug');
 
-        $taxonomy           = factory(Taxonomy::class)->create();
-        $taxonomy           = $taxonomy->toArray();
+        $taxonomy           = $this->taxonomy->toArray();
         $taxonomy['id']     = null;
         $taxonomy['handle'] = 'new-handle';
 

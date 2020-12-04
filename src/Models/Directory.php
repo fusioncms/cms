@@ -4,11 +4,13 @@ namespace Fusion\Models;
 
 use Fusion\Concerns\HasActivity;
 use Fusion\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Activitylog\Models\Activity;
 
 class Directory extends Model
 {
     use HasActivity;
+    use HasFactory;
 
     /**
      * Fillable fields for Directory model.

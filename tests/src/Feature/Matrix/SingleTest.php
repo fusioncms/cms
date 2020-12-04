@@ -2,6 +2,9 @@
 
 namespace Fusion\Tests\Feature\Matrix;
 
+use Fusion\Models\Matrix;
+use Fusion\Models\Section;
+use Fusion\Services\Builders\Single;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -25,46 +28,33 @@ class SingleTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->matrix = \Facades\MatrixFactory::withName('Single')
+        $this->matrix = Matrix::factory()
             ->asSingle()
-            ->withSections([
-                [
-                    'name'   => 'General',
-                    'handle' => 'general',
-                    'fields' => [
-                        [
-                            'name'   => 'Excerpt',
-                            'handle' => 'excerpt',
-                            'type'   => 'input',
-                        ],
-                        [
-                            'name'   => 'Content',
-                            'handle' => 'content',
-                            'type'   => 'textarea',
-                        ],
-                    ],
-                ],
-            ])
-            ->withRoute('{slug}')
-            ->withTemplate('index')
+            ->withName('Single')
+            ->withSEO('{slug}', 'index')
+            ->afterCreating(function (Matrix $matrix) {
+                Section::factory()
+                    ->withBlueprint($matrix->blueprint)
+                    ->hasFields(2)
+                    ->create();
+            })
             ->create();
 
-        $this->fieldExcerpt = $this->matrix->blueprint->fields->where('name', 'Excerpt')->first();
-        $this->fieldContent = $this->matrix->blueprint->fields->where('name', 'Content')->first();
-
-        $this->model = (new \Fusion\Services\Builders\Collection($this->matrix->handle))->make();
+        $this->field1 = $this->matrix->blueprint->fields->get(0);
+        $this->field2 = $this->matrix->blueprint->fields->get(1);
     }
 
     /** @test */
     public function a_user_with_permissions_can_update_a_single()
     {
         $attributes = [
-            'name'    => 'Example Single',
-            'slug'    => 'example-single',
-            'excerpt' => $this->faker->sentence(),
-            'content' => $this->faker->paragraph(),
-            'status'  => true,
+            'name'   => 'Example Single',
+            'slug'   => 'example-single',
+            'status' => true,
         ];
+
+        $attributes[$this->field1->handle] = $this->faker->word();
+        $attributes[$this->field2->handle] = $this->faker->word();
 
         $this
             ->be($this->owner, 'api')
@@ -185,19 +175,21 @@ class SingleTest extends TestCase
     protected function newSingle($overrides = []): array
     {
         $attributes = array_merge([
-            'name'    => 'Example Single',
-            'slug'    => 'example-single',
-            'excerpt' => $this->faker->sentence(),
-            'content' => $this->faker->paragraph(),
-            'status'  => true,
+            'name'   => 'Example Single',
+            'slug'   => 'example-single',
+            'status' => true,
         ], $overrides);
+
+        $attributes[$this->field1->handle] = $this->faker->word();
+        $attributes[$this->field2->handle] = $this->faker->word();
 
         $this
             ->be($this->owner, 'api')
             ->json('PATCH', '/api/singles/'.$this->matrix->id, $attributes);
 
-        $single = \DB::table($this->model->getTable())->first();
+        $model = (new Single($this->matrix->handle))->make();
+        $entry = \DB::table($model->getTable())->first();
 
-        return [$single, $attributes];
+        return [$entry, $attributes];
     }
 }

@@ -78,7 +78,7 @@ trait InstallsFusion
             'password' => bcrypt($password),
         ] + $overrides;
 
-        $user = factory(User::class)->create($attributes);
+        $user = User::factory()->create($attributes);
 
         if (!is_null($role)) {
             $user->assignRole($role);

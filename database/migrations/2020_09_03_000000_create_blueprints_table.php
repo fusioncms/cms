@@ -19,7 +19,7 @@ class CreateBlueprintsTable extends Migration
             $table->string('group');
             $table->boolean('hidden')->default(false);
 
-            $table->morphs('blueprintable');
+            $table->nullableMorphs('blueprintable');
             $table->timestamps();
         });
     }

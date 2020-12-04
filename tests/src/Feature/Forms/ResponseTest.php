@@ -2,6 +2,7 @@
 
 namespace Fusion\Tests\Feature\Forms;
 
+use Fusion\Models\Form;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -19,7 +20,7 @@ class ResponseTest extends TestCase
         $this->handleValidationExceptions();
         // --
 
-        $this->form = \Facades\FormFactory::withName('Reply All')->create();
+        $this->form = Form::factory()->withName('Reply All')->create();
 
         $this->form->responses()->createMany([
             ['form_id' => $this->form->id, 'identifiable_ip_address' => $this->faker->ipv4],

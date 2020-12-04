@@ -67,7 +67,7 @@ class MatrixFactory implements Factory
             $overrides['type'] = 'single';
         }
 
-        $matrix = factory(Matrix::class)->create($overrides);
+        $matrix = Matrix::factory()->create($overrides);
 
         if ($this->sections) {
             foreach ($this->sections as $data) {

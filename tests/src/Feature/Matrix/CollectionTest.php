@@ -2,6 +2,9 @@
 
 namespace Fusion\Tests\Feature\Matrix;
 
+use Fusion\Models\Matrix;
+use Fusion\Models\Section;
+use Fusion\Services\Builders\Collection;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -19,46 +22,33 @@ class CollectionTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->matrix = \Facades\MatrixFactory::withName('Collectibles')
+        $this->matrix = Matrix::factory()
             ->asCollection()
-            ->withSections([
-                [
-                    'name'   => 'General',
-                    'handle' => 'general',
-                    'fields' => [
-                        [
-                            'name'   => 'Excerpt',
-                            'handle' => 'excerpt',
-                            'type'   => 'input',
-                        ],
-                        [
-                            'name'   => 'Content',
-                            'handle' => 'content',
-                            'type'   => 'textarea',
-                        ],
-                    ],
-                ],
-            ])
-            ->withRoute('collectibles/{slug}')
-            ->withTemplate('index')
+            ->withName('Collectibles')
+            ->withSEO('collectibles/{slug}', 'index')
+            ->afterCreating(function (Matrix $matrix) {
+                Section::factory()
+                    ->withBlueprint($matrix->blueprint)
+                    ->hasFields(2)
+                    ->create();
+            })
             ->create();
 
-        $this->fieldExcerpt = $this->matrix->blueprint->fields->where('name', 'Excerpt')->first();
-        $this->fieldContent = $this->matrix->blueprint->fields->where('name', 'Content')->first();
-
-        $this->model = (new \Fusion\Services\Builders\Collection($this->matrix->handle))->make();
+        $this->field1 = $this->matrix->blueprint->fields->get(0);
+        $this->field2 = $this->matrix->blueprint->fields->get(1);
     }
 
     /** @test */
     public function a_user_with_permissions_can_create_a_new_collection_entry()
     {
         $attributes = [
-            'name'    => 'Example Page',
-            'slug'    => 'example-page',
-            'excerpt' => 'This is an excerpt of the content.',
-            'content' => 'This is the content. Lorem ipsum dolor sit amit.',
-            'status'  => 1,
+            'name'   => 'Example Page',
+            'slug'   => 'example-page',
+            'status' => 1,
         ];
+
+        $attributes[$this->field1->handle] = $this->faker->word();
+        $attributes[$this->field2->handle] = $this->faker->word();
 
         $this
             ->be($this->owner, 'api')
@@ -203,18 +193,20 @@ class CollectionTest extends TestCase
     protected function newEntry($overrides = []): array
     {
         $attributes = array_merge([
-            'name'    => 'Example Page',
-            'slug'    => 'example-page',
-            'excerpt' => 'This is the excerpt of the content.',
-            'content' => 'This is the content. Lorem ipsume dolor sit amit.',
-            'status'  => true,
+            'name'   => 'Example Page',
+            'slug'   => 'example-page',
+            'status' => true,
         ], $overrides);
+
+        $attributes[$this->field1->handle] = $this->faker->word();
+        $attributes[$this->field2->handle] = $this->faker->word();
 
         $this
             ->be($this->owner, 'api')
             ->json('POST', '/api/collections/collectibles', $attributes);
 
-        $entry = \DB::table($this->model->getTable())->first();
+        $model = (new Collection($this->matrix->handle))->make();
+        $entry = \DB::table($model->getTable())->first();
 
         return [$entry, $attributes];
     }

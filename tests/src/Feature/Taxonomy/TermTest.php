@@ -2,6 +2,8 @@
 
 namespace Fusion\Tests\Feature\Taxonomy;
 
+use Fusion\Models\Section;
+use Fusion\Models\Taxonomy;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -19,45 +21,36 @@ class TermTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->taxonomy = \Facades\TaxonomyFactory::withName('Tags')
-            ->withSections([
-                [
-                    'name'   => 'General',
-                    'handle' => 'general',
-                    'fields' => [
-                        [
-                            'name'   => 'Excerpt',
-                            'handle' => 'excerpt',
-                            'type'   => 'input',
-                        ],
-                        [
-                            'name'   => 'Content',
-                            'handle' => 'content',
-                            'type'   => 'textarea',
-                        ],
-                    ],
-                ],
-            ])
+        $this->taxonomy = Taxonomy::factory()
+            ->withName('Tags')
+            ->afterCreating(function (Taxonomy $taxonomy) {
+                Section::factory()
+                    ->withBlueprint($taxonomy->blueprint)
+                    ->hasFields(2)
+                    ->create();
+            })
             ->create();
 
-        $this->model        = (new \Fusion\Services\Builders\Taxonomy($this->taxonomy->handle))->make();
+        $this->field1 = $this->taxonomy->blueprint->fields->get(0);
+        $this->field2 = $this->taxonomy->blueprint->fields->get(1);
+        $this->model  = (new \Fusion\Services\Builders\Taxonomy($this->taxonomy->handle))->make();
     }
 
     /** @test */
     public function a_user_with_permissions_can_create_a_new_term()
     {
-        $this->actingAs($this->owner, 'api');
-
         $attributes = [
-            'name'    => ($name = $this->faker->word),
-            'slug'    => Str::slug($name),
-            'excerpt' => $this->faker->sentence(),
-            'content' => $this->faker->paragraph(),
-            'status'  => true,
+            'name'   => ($name = $this->faker->word),
+            'slug'   => Str::slug($name),
+            'status' => true,
         ];
 
+        $attributes[$this->field1->handle] = $this->faker->word();
+        $attributes[$this->field2->handle] = $this->faker->word();
+
         $this
-            ->json('POST', '/api/taxonomies/'.$this->taxonomy->id.'/terms', $attributes)
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/taxonomies/{$this->taxonomy->id}/terms", $attributes)
             ->assertStatus(201);
 
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
@@ -68,7 +61,7 @@ class TermTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->json('POST', '/api/taxonomies/'.$this->taxonomy->id.'/terms', []);
+        $this->json('POST', "/api/taxonomies/{$this->taxonomy->id}/terms", []);
     }
 
     /** @test */
@@ -78,7 +71,7 @@ class TermTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/taxonomies/'.$this->taxonomy->id.'/terms');
+            ->json('GET', "/api/taxonomies/{$this->taxonomy->id}/terms");
     }
 
     /** @test */
@@ -90,7 +83,7 @@ class TermTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/taxonomies/'.$this->taxonomy->id.'/terms/'.$term->id);
+            ->json('GET', "/api/taxonomies/{$this->taxonomy->id}/terms/{$term->id}");
     }
 
     /** @test */
@@ -100,7 +93,7 @@ class TermTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('POST', '/api/taxonomies/'.$this->taxonomy->id.'/terms', []);
+            ->json('POST', "/api/taxonomies/{$this->taxonomy->id}/terms", []);
     }
 
     /** @test */
@@ -112,7 +105,7 @@ class TermTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', '/api/taxonomies/'.$this->taxonomy->id.'/terms/'.$term->id, []);
+            ->json('PATCH', "/api/taxonomies/{$this->taxonomy->id}/terms/{$term->id}", []);
     }
 
     /** @test */
@@ -124,7 +117,7 @@ class TermTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', '/api/taxonomies/'.$this->taxonomy->id.'/terms/'.$term->id);
+            ->json('DELETE', "/api/taxonomies/{$this->taxonomy->id}/terms/{$term->id}");
     }
 
     /** @test */
@@ -141,7 +134,7 @@ class TermTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/taxonomies/'.$this->taxonomy->id.'/terms/'.$term->id, $attributes)
+            ->json('PATCH', "/api/taxonomies/{$this->taxonomy->id}/terms/{$term->id}", $attributes)
             ->assertStatus(200);
 
         $this->assertDatabaseHas($this->model->getTable(), $attributes);
@@ -155,7 +148,7 @@ class TermTest extends TestCase
         // Delete ----
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', '/api/taxonomies/'.$this->taxonomy->id.'/terms/'.$term->id);
+            ->json('DELETE', "/api/taxonomies/{$this->taxonomy->id}/terms/{$term->id}");
 
         $this->assertDatabaseMissing($this->model->getTable(), ['id' => $term->id]);
     }
@@ -167,7 +160,7 @@ class TermTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/taxonomies/'.$this->taxonomy->id.'/terms', $attributes)
+            ->json('POST', "/api/taxonomies/{$this->taxonomy->id}/terms", $attributes)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['slug']);
     }
@@ -187,18 +180,19 @@ class TermTest extends TestCase
     protected function newTerm($overrides = []): array
     {
         $attributes = array_merge([
-            'name'    => ($name = $this->faker->word),
-            'slug'    => Str::slug($name),
-            'excerpt' => $this->faker->sentence(),
-            'content' => $this->faker->paragraph(),
-            'status'  => $this->faker->boolean,
+            'name'   => ($name = $this->faker->word),
+            'slug'   => Str::slug($name),
+            'status' => $this->faker->boolean,
         ], $overrides);
 
-        $term = $this
+        $attributes[$this->field1->handle] = $this->faker->world();
+        $attributes[$this->field2->handle] = $this->faker->world();
+
+        $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/taxonomies/'.$this->taxonomy->id.'/terms', $attributes)
-            ->getData()
-            ->data;
+            ->json('POST', "/api/taxonomies/{$this->taxonomy->id}/terms", $attributes);
+
+        $term = $this->taxonomy->terms->first();
 
         return [$term, $attributes];
     }

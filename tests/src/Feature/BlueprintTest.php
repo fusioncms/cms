@@ -2,7 +2,9 @@
 
 namespace Fusion\Tests\Feature;
 
-use Facades\MatrixFactory;
+use Fusion\Models\Field;
+use Fusion\Models\Matrix;
+use Fusion\Models\Section;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -15,16 +17,15 @@ class BlueprintTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->matrix = MatrixFactory::withName('Posts')
-        ->withSections([
-            [
-                'name'   => 'General',
-                'handle' => 'general',
-                'fields' => [
-                    ['name' => 'Content', 'handle' => 'content', 'type' => 'input'],
-                ],
-            ],
-        ])->create();
+        $this->matrix = Matrix::factory()
+            ->withName('Posts')
+            ->afterCreating(function (Matrix $matrix) {
+                Section::factory()
+                    ->withBlueprint($matrix->blueprint)
+                    ->hasFields(1)
+                    ->create();
+            })
+            ->create();
     }
 
     /** @test */
@@ -58,77 +59,58 @@ class BlueprintTest extends TestCase
     /** @test */
     public function when_a_field_is_removed_the_associated_database_column_should_be_removed()
     {
-        $this->matrix->blueprint->sections->first()
-             ->fields()->where('name', 'Content')->first()
-             ->delete();
+        $table = $this->matrix->getBuilderTable();
+        $field = $this->matrix->blueprint->fields->get(0);
+        
+        $field->delete();
 
-        $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->matrix->getBuilderTable(),
-            'content'
-        );
+        $this->assertDatabaseTableDoesNotHaveColumn($table, $field->handle);
     }
 
     /** @test */
     public function when_a_field_is_renamed_the_associated_database_column_should_also_be_renamed()
     {
-        $this->matrix->blueprint->sections->first()
-             ->fields()->where('name', 'Content')->first()
-             ->update([
-                 'name'   => 'Story',
-                 'handle' => 'story',
-             ]);
+        $table = $this->matrix->getBuilderTable();
+        $field = $this->matrix->blueprint->fields->get(0);
 
-        $this->assertDatabaseTableHasColumn(
-            $this->matrix->getBuilderTable(),
-            'story'
-        );
+        $oldHandle = $field->handle;
+        $newHandle = 'story';
 
-        $this->assertDatabaseTableDoesNotHaveColumn(
-            $this->matrix->getBuilderTable(),
-            'content'
-        );
+        $field->update([ 'handle' => $newHandle ]);
+
+        $this->assertDatabaseTableHasColumn($table, $newHandle);
+        $this->assertDatabaseTableDoesNotHaveColumn($table, $oldHandle);
     }
 
     /** @test */
     public function when_a_fields_fieldtype_is_changed_the_associated_database_columns_type_should_also_change()
     {
-        $this->assertDatabaseTableColumnHasType(
-            $this->matrix->getBuilderTable(),
-            'content',
-            'string'
-        );
-
-        $this->matrix->blueprint->sections->first()
-             ->fields()->where('name', 'Content')->first()
-             ->update([
-                 'name'   => 'Content',
-                 'handle' => 'content',
-                 'type'   => 'textarea',
-             ]);
+        $table = $this->matrix->getBuilderTable();
+        $field = $this->matrix->blueprint->fields->get(0);
 
         $this->assertDatabaseTableColumnHasType(
-            $this->matrix->getBuilderTable(),
-            'content',
-            'text'
-        );
+            $table, $field->handle, $field->type()->getColumn('type'));
+
+        $field->update([
+            'handle' => 'content',
+            'type'   => 'textarea'
+        ]);
+
+        $this->assertDatabaseTableColumnHasType(
+            $table, $field->handle, $field->type()->getColumn('type'));
     }
 
     /** @test */
     public function when_field_is_replaced_with_same_name_field_the_database_column_should_update_accordingly()
     {
-        $this->assertDatabaseTableColumnHasType(
-            $this->matrix->getBuilderTable(),
-            'content',
-            'string'
-        );
-
+        $table    = $this->matrix->getBuilderTable();
+        $oldField = $this->matrix->blueprint->fields->get(0);
+        
         // Remove old field..
-        $this->matrix->blueprint->sections->first()
-             ->fields()->where('name', 'Content')->first()
-             ->delete();
+        $oldField->delete();
 
         // Create new field in it's place..
-        $this->matrix->blueprint->sections->first()
+        $newField = $this->matrix->blueprint->sections->first()
              ->fields()
              ->create([
                  'name'   => 'Content',
@@ -137,10 +119,7 @@ class BlueprintTest extends TestCase
              ]);
 
         $this->assertDatabaseTableColumnHasType(
-            $this->matrix->getBuilderTable(),
-            'content',
-            'text'
-        );
+            $table, $newField->handle, $newField->type()->getColumn('type'));
     }
 
     /** @test */
@@ -157,8 +136,10 @@ class BlueprintTest extends TestCase
         $fieldA->type   = ['handle' => 'textarea'];
 
         // new field - w/ previous name
-        $fieldB = factory(\Fusion\Models\Field::class)
-            ->make(['name' => 'Content', 'handle' => 'content', 'type' => ['handle' => 'input']]);
+        $fieldB = Field::factory()
+            ->withName('Content')
+            ->withType(['handle' => 'input'])
+            ->make();
 
         $section         = $section->fresh();
         $section->fields = [$fieldA, $fieldB];

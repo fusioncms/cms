@@ -23,7 +23,7 @@ class RoleTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_create_a_role()
     {
-        $role = factory(Role::class)->make()->toArray();
+        $role = Role::factory()->make()->toArray();
 
         $this
             ->be($this->owner, 'api')
@@ -36,8 +36,8 @@ class RoleTest extends TestCase
     /** @test */
     public function roles_can_be_assigned_zero_to_many_permissions()
     {
-        $role        = factory(Role::class)->create();
-        $permissions = factory(Permission::class, 3)->create();
+        $role        = Role::factory()->create();
+        $permissions = Permission::factory()->count(3)->create();
 
         $this
             ->be($this->owner, 'api')
@@ -79,7 +79,7 @@ class RoleTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $role = factory(Role::class)->create();
+        $role = Role::factory()->create();
 
         $this
             ->be($this->user, 'api')
@@ -101,7 +101,7 @@ class RoleTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $role = factory(Role::class)->create();
+        $role = Role::factory()->create();
 
         $this
             ->be($this->user, 'api')
@@ -113,7 +113,7 @@ class RoleTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $role = factory(Role::class)->create();
+        $role = Role::factory()->create();
 
         $this
             ->be($this->user, 'api')
@@ -125,7 +125,7 @@ class RoleTest extends TestCase
     {
         $this->expectException(AuthorizationException::class);
 
-        $role = factory(Role::class)->create();
+        $role = Role::factory()->create();
 
         $this->be($this->admin, 'api');
 
@@ -137,7 +137,7 @@ class RoleTest extends TestCase
     /** @test */
     public function a_role_to_transfer_users_must_be_supplied_when_deleting_roles()
     {
-        $role = factory(Role::class)->create();
+        $role = Role::factory()->create();
 
         $this->be($this->owner, 'api');
 

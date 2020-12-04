@@ -7,11 +7,13 @@ use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Matrix extends Model
 {
     use HasBlueprint;
     use HasActivity;
+    use HasFactory;
 
     protected $with = ['blueprint'];
 

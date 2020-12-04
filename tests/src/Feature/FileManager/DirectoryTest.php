@@ -2,6 +2,7 @@
 
 namespace Fusion\Tests\Feature\FileManager;
 
+use Fusion\Models\Directory;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -15,13 +16,6 @@ class DirectoryTest extends TestCase
     {
         parent::setUp();
         $this->handleValidationExceptions();
-
-        // --
-        $this->directoryA = \Facades\DirectoryFactory::withName('Lorem')->create();
-        $this->directoryB = \Facades\DirectoryFactory::withName('Dolor')->create();
-        $this->directoryC = \Facades\DirectoryFactory::withName('Ipsum')->withParent($this->directoryA)->create();
-        $this->directoryD = \Facades\DirectoryFactory::withName('Sit')->withParent($this->directoryA)->create();
-        $this->directoryE = \Facades\DirectoryFactory::withName('Amet')->withParent($this->directoryB)->create();
     }
 
     /** @test */
@@ -54,28 +48,32 @@ class DirectoryTest extends TestCase
     /** @test */
     public function activity_will_be_tracked_when_directory_is_updated()
     {
+        $directory = Directory::factory()->create();
+
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', 'api/directories/'.$this->directoryA->id, [
+            ->json('PATCH', "api/directories/{$directory->id}", [
                 'name' => 'Updated Name',
             ]);
 
         $this->assertDatabaseHas('activity_log', [
             'description' => 'Updated folder (Updated Name)',
             'causer_id'   => $this->owner->id,
-            'subject_id'  => $this->directoryA->id,
+            'subject_id'  => $directory->id,
         ]);
     }
 
     /** @test */
     public function activities_will_be_cleaned_up_for_directory_when_it_is_deleted()
     {
+        $directory = Directory::factory()->create();
+
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', 'api/directories/'.$this->directoryA->id);
+            ->json('DELETE', "api/directories/{$directory->id}");
 
         $this->assertDatabaseMissing('activity_log', [
-            'subject_id'   => $this->directoryA->id,
+            'subject_id'   => $directory->id,
             'subject_type' => 'Fusion\Models\Directory',
         ]);
     }
@@ -101,9 +99,11 @@ class DirectoryTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_rename_directories()
     {
+        $directory = Directory::factory()->create();
+
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', 'api/directories/'.$this->directoryA->id, [
+            ->json('PATCH', "api/directories/{$directory->id}", [
                 'name' => 'Updated Name',
             ])
             ->assertStatus(200);
@@ -117,23 +117,32 @@ class DirectoryTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_delete_directories()
     {
+        $directory   = Directory::factory()->create();
+        $directories = Directory::factory()->withParent($directory)->count(2)->create();
+
         // delete directory..
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', 'api/directories/'.$this->directoryA->id)
+            ->json('DELETE', "api/directories/{$directory->id}")
             ->assertStatus(200);
 
         // assert directory was removed..
-        $this->assertDatabaseMissing('directories', ['id' => $this->directoryA->id]);
+        $this->assertDatabaseMissing('directories', ['id' => $directory->id]);
 
         // assert children were removed..
-        $this->assertDatabaseMissing('directories', ['id' => $this->directoryC->id]);
-        $this->assertDatabaseMissing('directories', ['id' => $this->directoryD->id]);
+        $this->assertDatabaseMissing('directories', ['id' => $directories->get(0)->id]);
+        $this->assertDatabaseMissing('directories', ['id' => $directories->get(1)->id]);
     }
 
     /** @test */
     public function directories_can_be_searched_by_name()
     {
+        $directoryA = Directory::factory()->withName('Lorem')->create();
+        $directoryB = Directory::factory()->withName('Dolor')->create();
+        $directoryC = Directory::factory()->withName('Ipsum')->withParent($directoryA)->create();
+        $directoryD = Directory::factory()->withName('Sit')->withParent($directoryA)->create();
+        $directoryE = Directory::factory()->withName('Amet')->withParent($directoryB)->create();
+
         $this->actingAs($this->owner, 'api');
 
         $response = $this->json('GET', '/api/directories?filter[search]=lor');
@@ -153,6 +162,12 @@ class DirectoryTest extends TestCase
     /** @test */
     public function directories_can_be_searched_by_parent()
     {
+        $directoryA = Directory::factory()->withName('Lorem')->create();
+        $directoryB = Directory::factory()->withName('Dolor')->create();
+        $directoryC = Directory::factory()->withName('Ipsum')->withParent($directoryA)->create();
+        $directoryD = Directory::factory()->withName('Sit')->withParent($directoryA)->create();
+        $directoryE = Directory::factory()->withName('Amet')->withParent($directoryB)->create();
+
         $this->actingAs($this->owner, 'api');
 
         $response = $this->json('GET', '/api/directories');
@@ -173,7 +188,7 @@ class DirectoryTest extends TestCase
     /** @test */
     public function directories_must_have_a_unique_parent_id_and_slug_combination()
     {
-        $directory       = $this->directoryA->toArray();
+        $directory       = Directory::factory()->create()->toArray();
         $directory['id'] = null;
 
         $this
@@ -186,7 +201,7 @@ class DirectoryTest extends TestCase
     /** @test */
     public function directories_can_have_duplicate_slugs_with_a_different_parent_id()
     {
-        $directory              = $this->directoryA->toArray();
+        $directory              = Directory::factory()->create()->toArray();
         $directory['id']        = null;
         $directory['parent_id'] = 99;
 
@@ -200,9 +215,9 @@ class DirectoryTest extends TestCase
     public function a_directory_cannot_be_moved_to_another_directory_with_a_conflicting_slug()
     {
         // Create two directories (A1/A2) w/ same slug in diff folders
-        $directoryA1 = factory(\Fusion\Models\Directory::class)->create(['slug' => 'folder-a']);
-        $directoryA2 = factory(\Fusion\Models\Directory::class)->create(['slug' => 'folder-a', 'parent_id' => $directoryA1->id]);
-        $directoryB1 = factory(\Fusion\Models\Directory::class)->create(['slug' => 'folder-b', 'parent_id' => $directoryA1->id]);
+        $directoryA1 = Directory::factory()->withName('Folder A')->create();
+        $directoryA2 = Directory::factory()->withName('Folder A')->withParent($directoryA1)->create();
+        $directoryB1 = Directory::factory()->withName('Folder B')->withParent($directoryA1)->create();
 
         // Attempt to combine directories in same location
         $this
