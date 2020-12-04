@@ -35,8 +35,8 @@ class SectionFactory extends Factory
     /**
      * Set model blueprint.
      *
-     * @param  \Fusion\Models\Blueprint $name
-     * 
+     * @param \Fusion\Models\Blueprint $name
+     *
      * @return $this
      */
     public function withBlueprint(Blueprint $blueprint)

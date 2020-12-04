@@ -37,7 +37,7 @@ class FileFieldtypeTest extends TestCase
                             ->withType('file')
                             ->make()
                             ->toArray()
-                );
+                    );
             })
             ->create();
 

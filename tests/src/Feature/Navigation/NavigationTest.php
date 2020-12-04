@@ -156,7 +156,7 @@ class NavigationTest extends TestCase
             ->json('DELETE', "/api/navigation/{$navigation->id}")
             ->assertStatus(200);
 
-        $this->assertDatabaseMissing('navigation', [ 'name' => $navigation->name ]);
+        $this->assertDatabaseMissing('navigation', ['name' => $navigation->name]);
     }
 
     /** @test */

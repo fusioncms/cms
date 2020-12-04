@@ -21,7 +21,7 @@ class NavigationNodeTest extends TestCase
 
         $this->navigation = Navigation::factory()
             ->withName('Header')
-            ->afterCreating(function(Navigation $navigation) {
+            ->afterCreating(function (Navigation $navigation) {
                 $section = Section::factory()
                     ->withBlueprint($navigation->blueprint)
                     ->hasFields(2)

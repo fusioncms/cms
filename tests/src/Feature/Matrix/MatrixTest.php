@@ -110,7 +110,7 @@ class MatrixTest extends TestCase
             ->actingAs($this->owner, 'api')
             ->json('PATCH', '/api/matrices/'.$matrix->id, $data)
             ->assertJsonValidationErrors([
-                'parent_id' => 'The selected parent id is invalid.'
+                'parent_id' => 'The selected parent id is invalid.',
             ]);
     }
 
@@ -176,12 +176,12 @@ class MatrixTest extends TestCase
         // create new entry..
         $this
             ->actingAs($this->owner, 'api')
-            ->json('POST', '/api/collections/'.$matrix->slug, [ 'status' => true ]);
+            ->json('POST', '/api/collections/'.$matrix->slug, ['status' => true]);
 
         $entry = $matrix->getBuilder()->first();
 
         $this->assertDatabaseHas($matrix->getBuilderTable(), [
-            'name' => ($name = $entry->id." ".$entry->created_at->format('Y')),
+            'name' => ($name = $entry->id.' '.$entry->created_at->format('Y')),
             'slug' => Str::slug($name),
         ]);
     }

@@ -2,7 +2,6 @@
 
 namespace Fusion\Tests\Feature;
 
-use Fusion\Models\Field;
 use Fusion\Models\Fieldset;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -176,7 +175,7 @@ class FieldsetTest extends TestCase
         $oldHandle = $field->handle;
         $newHandle = 'updated_handle';
 
-        $field->update([ 'handle' => $newHandle ]);
+        $field->update(['handle' => $newHandle]);
 
         $this->assertDatabaseTableHasColumn($table, $newHandle);
 

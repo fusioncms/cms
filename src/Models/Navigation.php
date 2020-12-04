@@ -5,8 +5,8 @@ namespace Fusion\Models;
 use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
-use Spatie\Activitylog\Models\Activity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\Models\Activity;
 
 class Navigation extends Model
 {

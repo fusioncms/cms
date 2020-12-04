@@ -5,9 +5,9 @@ namespace Fusion\Models;
 use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasBlueprint;
 use Fusion\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Matrix extends Model
 {

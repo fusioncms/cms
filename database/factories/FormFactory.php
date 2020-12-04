@@ -47,8 +47,8 @@ class FormFactory extends Factory
     /**
      * Set model name.
      *
-     * @param  string $name
-     * 
+     * @param string $name
+     *
      * @return $this
      */
     public function withName($name)
@@ -61,7 +61,7 @@ class FormFactory extends Factory
     }
 
     /**
-     * Set model redirect
+     * Set model redirect.
      *
      * @param string $uri
      *
@@ -71,7 +71,7 @@ class FormFactory extends Factory
     {
         return $this->state([
             'redirect_on_submission' => true,
-            'redirect_url'           => $uri
+            'redirect_url'           => $uri,
         ]);
     }
 

@@ -30,8 +30,8 @@ class FieldsetFactory extends Factory
     /**
      * Set model name.
      *
-     * @param  string $name
-     * 
+     * @param string $name
+     *
      * @return $this
      */
     public function withName($name)
