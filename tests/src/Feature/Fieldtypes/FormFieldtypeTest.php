@@ -103,7 +103,7 @@ class FormFieldtypeTest extends TestCase
             ->json('POST', "/api/collections/{$this->matrix->slug}", $attributes)
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'form' => 'The Form must contain 2 items.'
+                'form' => 'The Form must contain 2 items.',
             ]);
     }
 

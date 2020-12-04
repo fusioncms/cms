@@ -42,8 +42,8 @@ class FieldFactory extends Factory
     /**
      * Set model name.
      *
-     * @param  string $name
-     * 
+     * @param string $name
+     *
      * @return $this
      */
     public function withName($name)
@@ -57,8 +57,8 @@ class FieldFactory extends Factory
     /**
      * Set model type.
      *
-     * @param  string $type
-     * 
+     * @param string $type
+     *
      * @return $this
      */
     public function withType($type)

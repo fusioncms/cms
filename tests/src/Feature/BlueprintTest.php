@@ -61,7 +61,7 @@ class BlueprintTest extends TestCase
     {
         $table = $this->matrix->getBuilderTable();
         $field = $this->matrix->blueprint->fields->get(0);
-        
+
         $field->delete();
 
         $this->assertDatabaseTableDoesNotHaveColumn($table, $field->handle);
@@ -76,7 +76,7 @@ class BlueprintTest extends TestCase
         $oldHandle = $field->handle;
         $newHandle = 'story';
 
-        $field->update([ 'handle' => $newHandle ]);
+        $field->update(['handle' => $newHandle]);
 
         $this->assertDatabaseTableHasColumn($table, $newHandle);
         $this->assertDatabaseTableDoesNotHaveColumn($table, $oldHandle);
@@ -89,15 +89,21 @@ class BlueprintTest extends TestCase
         $field = $this->matrix->blueprint->fields->get(0);
 
         $this->assertDatabaseTableColumnHasType(
-            $table, $field->handle, $field->type()->getColumn('type'));
+            $table,
+            $field->handle,
+            $field->type()->getColumn('type')
+        );
 
         $field->update([
             'handle' => 'content',
-            'type'   => 'textarea'
+            'type'   => 'textarea',
         ]);
 
         $this->assertDatabaseTableColumnHasType(
-            $table, $field->handle, $field->type()->getColumn('type'));
+            $table,
+            $field->handle,
+            $field->type()->getColumn('type')
+        );
     }
 
     /** @test */
@@ -105,7 +111,7 @@ class BlueprintTest extends TestCase
     {
         $table    = $this->matrix->getBuilderTable();
         $oldField = $this->matrix->blueprint->fields->get(0);
-        
+
         // Remove old field..
         $oldField->delete();
 
@@ -119,7 +125,10 @@ class BlueprintTest extends TestCase
              ]);
 
         $this->assertDatabaseTableColumnHasType(
-            $table, $newField->handle, $newField->type()->getColumn('type'));
+            $table,
+            $newField->handle,
+            $newField->type()->getColumn('type')
+        );
     }
 
     /** @test */

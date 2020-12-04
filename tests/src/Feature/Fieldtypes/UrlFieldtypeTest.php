@@ -33,7 +33,7 @@ class UrlFieldtypeTest extends TestCase
                             ->withType('url')
                             ->make()
                             ->toArray()
-                );
+                    );
             })
             ->create();
     }

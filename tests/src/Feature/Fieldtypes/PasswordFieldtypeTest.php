@@ -5,7 +5,6 @@ namespace Fusion\Tests\Feature\Fieldtypes;
 use Fusion\Models\Field;
 use Fusion\Models\Matrix;
 use Fusion\Models\Section;
-use Fusion\Services\Builders\Single;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -34,7 +33,7 @@ class PasswordFieldtypeTest extends TestCase
                             ->withType('password')
                             ->make()
                             ->toArray()
-                );
+                    );
             })
             ->create();
     }

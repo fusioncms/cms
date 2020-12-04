@@ -28,8 +28,8 @@ class FieldsetFieldtypeTest extends TestCase
         $this->fieldset = Fieldset::factory()
             ->withName('Contacts')
             ->afterCreating(function (Fieldset $fieldset) {
-                $fieldset->fields()->create( Field::factory()->withName('email')->withType('email')->make()->toArray() );
-                $fieldset->fields()->create( Field::factory()->withName('phone')->withType('phone')->withValidation(['value'=>'required'])->make()->toArray() );
+                $fieldset->fields()->create(Field::factory()->withName('email')->withType('email')->make()->toArray());
+                $fieldset->fields()->create(Field::factory()->withName('phone')->withType('phone')->withValidation(['value'=>'required'])->make()->toArray());
             })
             ->create();
 
@@ -44,14 +44,14 @@ class FieldsetFieldtypeTest extends TestCase
                     ->withBlueprint($matrix->blueprint)
                     ->create();
 
-                    $section->fields()->create(
-                        Field::factory()
+                $section->fields()->create(
+                    Field::factory()
                             ->withName('Contacts')
                             ->withType('fieldset')
                             ->withSettings(['fieldset' => $this->fieldset->id])
                             ->make()
                             ->toArray()
-                    );
+                );
             })
             ->create();
 

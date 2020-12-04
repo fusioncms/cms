@@ -5,8 +5,8 @@ namespace Database\Factories;
 use Fusion\Models\File;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class FileFactory extends Factory
 {
@@ -47,10 +47,10 @@ class FileFactory extends Factory
      */
     public function configure()
     {
-        return $this->afterCreating(function(File $file) {
+        return $this->afterCreating(function (File $file) {
             $type = Str::before($file->mimetype, '/');
 
-            switch($type) {
+            switch ($type) {
                 case 'image':
                     $location = "{$file->uuid}-{$file->name}.{$file->extension}";
                     $fakeFile = UploadedFile::fake()->image($location);
@@ -71,22 +71,22 @@ class FileFactory extends Factory
     /**
      * Set model as name.
      *
-     * @param  string $name
-     * 
+     * @param string $name
+     *
      * @return $this
      */
     public function withName($name)
     {
         return $this->state([
-            'name' => $name
+            'name' => $name,
         ]);
     }
 
     /**
      * Set model as audio type.
      *
-     * @param  string $names
-     * 
+     * @param string $names
+     *
      * @return $this
      */
     public function asAudio($name = null)
@@ -109,8 +109,8 @@ class FileFactory extends Factory
     /**
      * Set model as video type.
      *
-     * @param  string $name
-     * 
+     * @param string $name
+     *
      * @return $this
      */
     public function asVideo($name = null)
@@ -133,8 +133,8 @@ class FileFactory extends Factory
     /**
      * Set model as document type.
      *
-     * @param  string $name
-     * 
+     * @param string $name
+     *
      * @return $this
      */
     public function asDocument($name = null)

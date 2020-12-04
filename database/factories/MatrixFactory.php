@@ -43,8 +43,8 @@ class MatrixFactory extends Factory
     /**
      * Set model name.
      *
-     * @param  string $name
-     * 
+     * @param string $name
+     *
      * @return $this
      */
     public function withName($name)
@@ -59,9 +59,9 @@ class MatrixFactory extends Factory
     /**
      * Set model SEO.
      *
-     * @param  string $route
-     * @param  string $template
-     * 
+     * @param string $route
+     * @param string $template
+     *
      * @return $this
      */
     public function withSEO($route, $template)
@@ -74,25 +74,25 @@ class MatrixFactory extends Factory
 
     /**
      * Set model to collection.
-     * 
+     *
      * @return $this
      */
     public function asCollection()
     {
         return $this->state([
-            'type' => 'collection'
+            'type' => 'collection',
         ]);
     }
 
     /**
      * Set model to single.
-     * 
+     *
      * @return $this
      */
     public function asSingle()
     {
         return $this->state([
-            'type' => 'single'
+            'type' => 'single',
         ]);
     }
 }

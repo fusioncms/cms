@@ -5,14 +5,14 @@ namespace Fusion\Models;
 use File as FileSystem;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Storage;
 
 class File extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'uuid',
         'directory_id',

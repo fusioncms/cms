@@ -33,7 +33,7 @@ class EmailFieldtypeTest extends TestCase
                             ->withType('email')
                             ->make()
                             ->toArray()
-                );
+                    );
             })
             ->create();
     }
