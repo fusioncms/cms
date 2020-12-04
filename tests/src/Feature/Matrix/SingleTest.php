@@ -175,20 +175,17 @@ class SingleTest extends TestCase
     protected function newSingle($overrides = []): array
     {
         $attributes = array_merge([
-            'name'   => 'Example Single',
-            'slug'   => 'example-single',
-            'status' => true,
+            'matrix_id' => $this->matrix->id,
+            'name'      => 'Example Single',
+            'slug'      => 'example-single',
+            'status'    => true,
         ], $overrides);
 
         $attributes[$this->field1->handle] = $this->faker->word();
         $attributes[$this->field2->handle] = $this->faker->word();
 
-        $this
-            ->be($this->owner, 'api')
-            ->json('PATCH', '/api/singles/'.$this->matrix->id, $attributes);
-
         $model = (new Single($this->matrix->handle))->make();
-        $entry = \DB::table($model->getTable())->first();
+        $entry = $model->create($attributes);
 
         return [$entry, $attributes];
     }

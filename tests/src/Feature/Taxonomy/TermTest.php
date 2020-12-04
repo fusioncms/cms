@@ -129,15 +129,23 @@ class TermTest extends TestCase
         ]);
 
         // Update ----
-        $attributes['name'] = 'Updated Slug Name';
-        $attributes['slug'] = 'updated-slug-name';
+        $attributes['name'] = 'Updated Term Name';
+        $attributes['slug'] = 'updated-term-name';
 
         $this
             ->be($this->owner, 'api')
             ->json('PATCH', "/api/taxonomies/{$this->taxonomy->id}/terms/{$term->id}", $attributes)
             ->assertStatus(200);
 
-        $this->assertDatabaseHas($this->model->getTable(), $attributes);
+        $this->assertDatabaseMissing($this->model->getTable(), [
+            'name' => 'New Term Name',
+            'slug' => 'new-term-name',
+        ]);
+
+        $this->assertDatabaseHas($this->model->getTable(), [
+            'name' => 'Updated Term Name',
+            'slug' => 'updated-term-name',
+        ]);
     }
 
     /** @test */
@@ -185,14 +193,10 @@ class TermTest extends TestCase
             'status' => $this->faker->boolean,
         ], $overrides);
 
-        $attributes[$this->field1->handle] = $this->faker->world();
-        $attributes[$this->field2->handle] = $this->faker->world();
+        $attributes[$this->field1->handle] = $this->faker->word();
+        $attributes[$this->field2->handle] = $this->faker->word();
 
-        $this
-            ->be($this->owner, 'api')
-            ->json('POST', "/api/taxonomies/{$this->taxonomy->id}/terms", $attributes);
-
-        $term = $this->taxonomy->terms->first();
+        $term = $this->taxonomy->terms()->create($attributes);
 
         return [$term, $attributes];
     }

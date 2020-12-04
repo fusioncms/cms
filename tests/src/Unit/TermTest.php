@@ -25,6 +25,12 @@ class TermTest extends TestCase
                     ->withBlueprint($taxonomy->blueprint)
                     ->hasFields(2)
                     ->create();
+
+                $taxonomy->terms()->create([
+                    'name'   => 'Term A',
+                    'slug'   => 'term-a',
+                    'status' => true,
+                ]);
             })
             ->create();
     }
@@ -44,9 +50,9 @@ class TermTest extends TestCase
         $this->taxonomy->handle = 'tags';
         $this->taxonomy->save();
 
-        $term = $this->taxonomy->terms->first();
+        // $term = $this->taxonomy->terms->first();
 
-        $this->assertDatabaseHasTable($term->getTable());
+        $this->assertDatabaseHasTable($this->taxonomy->getBuilderTable());
     }
 
     /** @test */

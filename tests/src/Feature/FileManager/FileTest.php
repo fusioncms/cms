@@ -276,7 +276,7 @@ class FileTest extends TestCase
     public function a_user_with_permissions_can_move_files()
     {
         $file      = File::factory()->asDocument()->create();
-        $directory = factory(Directory::class)->create();
+        $directory = Directory::factory()->create();
 
         $this
             ->be($this->owner, 'api')
@@ -333,12 +333,12 @@ class FileTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        factory(File::class)->create(['name' => 'lorem']);
-        factory(File::class)->create(['name' => 'ipsum']);
-        factory(File::class)->create(['name' => 'dolor']);
-        factory(File::class)->create(['name' => 'sit']);
-        factory(File::class)->create(['name' => 'amet']);
-        factory(File::class)->create(['name' => 'do']);
+        File::factory()->withName('lorem')->create();
+        File::factory()->withName('ipsum')->create();
+        File::factory()->withName('dolor')->create();
+        File::factory()->withName('sit')->create();
+        File::factory()->withName('amet')->create();
+        File::factory()->withName('do')->create();
 
         // forward sort
         $response = $this->json('GET', '/api/files?sort=name');
@@ -358,12 +358,12 @@ class FileTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        factory(File::class)->create(['name' => 'lorem', 'bytes' => 400]);
-        factory(File::class)->create(['name' => 'ipsum', 'bytes' => 100]);
-        factory(File::class)->create(['name' => 'dolor', 'bytes' => 300]);
-        factory(File::class)->create(['name' => 'sit',   'bytes' => 600]);
-        factory(File::class)->create(['name' => 'amet',  'bytes' => 200]);
-        factory(File::class)->create(['name' => 'do',    'bytes' => 500]);
+        File::factory()->withName('lorem')->create(['bytes' => 400]);
+        File::factory()->withName('ipsum')->create(['bytes' => 100]);
+        File::factory()->withName('dolor')->create(['bytes' => 300]);
+        File::factory()->withName('sit')->create(['bytes' => 600]);
+        File::factory()->withName('amet')->create(['bytes' => 200]);
+        File::factory()->withName('do')->create(['bytes' => 500]);
 
         // forward sort
         $response = $this->json('GET', '/api/files?sort=bytes');
@@ -383,12 +383,12 @@ class FileTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        factory(File::class)->create(['name' => 'lorem', 'updated_at' => now()->addDays(1)]);
-        factory(File::class)->create(['name' => 'ipsum', 'updated_at' => now()->addDays(3)]);
-        factory(File::class)->create(['name' => 'dolor', 'updated_at' => now()->addDays(2)]);
-        factory(File::class)->create(['name' => 'sit',   'updated_at' => now()->addDays(6)]);
-        factory(File::class)->create(['name' => 'amet',  'updated_at' => now()->addDays(4)]);
-        factory(File::class)->create(['name' => 'do',    'updated_at' => now()->addDays(5)]);
+        File::factory()->withName('lorem')->create(['updated_at' => now()->addDays(1)]);
+        File::factory()->withName('ipsum')->create(['updated_at' => now()->addDays(3)]);
+        File::factory()->withName('dolor')->create(['updated_at' => now()->addDays(2)]);
+        File::factory()->withName('sit')->create(['updated_at' => now()->addDays(6)]);
+        File::factory()->withName('amet')->create(['updated_at' => now()->addDays(4)]);
+        File::factory()->withName('do')->create(['updated_at' => now()->addDays(5)]);
 
         // forward sort
         $response = $this->json('GET', '/api/files?sort=updated_at');
@@ -408,10 +408,10 @@ class FileTest extends TestCase
     {
         $this->actingAs($this->owner, 'api');
 
-        factory(File::class)->create(['name' => 'lorem']);
-        factory(File::class)->create(['name' => 'ipsum']);
-        factory(File::class)->states('audio')->create(['name' => 'dolor']);
-        factory(File::class)->states('video')->create(['name' => 'sit']);
+        File::factory()->withName('lorem')->create();
+        File::factory()->withName('ipsum')->create();
+        File::factory()->asAudio()->withName('dolor')->create();
+        File::factory()->asVideo()->withName('sit')->create();
 
         // filter by image
         $response = $this->json('GET', '/api/files?filter[display]=images');

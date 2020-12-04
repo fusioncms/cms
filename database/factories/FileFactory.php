@@ -84,17 +84,23 @@ class FileFactory extends Factory
 
     /**
      * Set model as audio type.
+     *
+     * @param  string $names
      * 
      * @return $this
      */
-    public function asAudio()
+    public function asAudio($name = null)
     {
+        $name = $name ?: $this->faker->word;
+        $uuid = unique_id();
+        $extn = 'ogg';
+
         return $this->state([
-            'uuid'      => ($uuid = unique_id()),
-            'name'      => ($name = $this->faker->word),
-            'extension' => ($extn = 'ogg'),
-            'mimetype'  => 'audio/ogg',
+            'uuid'      => $uuid,
+            'name'      => $name,
+            'extension' => $extn,
             'location'  => "files/{$uuid}-{$name}.{$extn}",
+            'mimetype'  => 'audio/ogg',
             'width'     => null,
             'height'    => null,
         ]);
@@ -107,14 +113,18 @@ class FileFactory extends Factory
      * 
      * @return $this
      */
-    public function asVideo()
+    public function asVideo($name = null)
     {
+        $name = $name ?: $this->faker->word;
+        $uuid = unique_id();
+        $extn = 'webm';
+
         return $this->state([
-            'uuid'      => ($uuid = unique_id()),
-            'name'      => ($name = $this->faker->word),
-            'extension' => ($extn = 'webm'),
-            'mimetype'  => 'video/webm',
+            'uuid'      => $uuid,
+            'name'      => $name,
+            'extension' => $extn,
             'location'  => "files/{$uuid}-{$name}.{$extn}",
+            'mimetype'  => 'video/webm',
             'width'     => null,
             'height'    => null,
         ]);
@@ -127,14 +137,19 @@ class FileFactory extends Factory
      * 
      * @return $this
      */
-    public function asDocument()
+    public function asDocument($name = null)
     {
+        $name = $name ?: $this->faker->word;
+        $uuid = unique_id();
+        $extn = 'txt';
+
         return $this->state([
-            'uuid'      => ($uuid = unique_id()),
-            'name'      => ($name = $this->faker->word),
-            'extension' => ($extn = 'txt'),
-            'mimetype'  => 'text/plain',
+            'uuid'      => $uuid,
+            'name'      => $name,
+            'extension' => $extn,
             'location'  => "files/{$uuid}-{$name}.{$extn}",
+            'extension' => $extn,
+            'mimetype'  => 'text/plain',
             'width'     => null,
             'height'    => null,
         ]);

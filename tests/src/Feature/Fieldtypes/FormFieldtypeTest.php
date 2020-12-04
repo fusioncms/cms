@@ -2,10 +2,14 @@
 
 namespace Fusion\Tests\Feature\Fieldtypes;
 
+use Fusion\Models\Field;
 use Fusion\Models\Form;
+use Fusion\Models\Matrix;
+use Fusion\Models\Section;
 use Fusion\Services\Builders\Collection;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 
 class FormFieldtypeTest extends TestCase
 {
@@ -16,26 +20,27 @@ class FormFieldtypeTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->matrix = \Facades\MatrixFactory::withName('FooBar')
+        $this->matrix = Matrix::factory()
             ->asCollection()
-            ->withSections([
-                [
-                    'name'   => 'General',
-                    'handle' => 'general',
-                    'fields' => [
-                        [
-                            'name'   => 'Form',
-                            'handle' => 'form',
-                            'type'   => 'form',
-                        ],
-                    ],
-                ],
-            ])
+            ->withName('Form Field')
+            ->afterCreating(function (Matrix $matrix) {
+                Section::factory()
+                    ->withBlueprint($matrix->blueprint)
+                    ->create()
+                    ->fields()
+                    ->create(
+                        Field::factory()
+                            ->withName('Form')
+                            ->withType('form')
+                            ->make()
+                            ->toArray()
+                    );
+            })
             ->create();
 
-        $this->fieldForm = $this->matrix->blueprint->sections->first()->fields()->first();
-        $this->model     = (new Collection($this->matrix->handle))->make();
-        $this->forms     = factory(Form::class, 3)->create();
+        $this->field = $this->matrix->blueprint->fields->first();
+        $this->model = (new Collection($this->matrix->handle))->make();
+        $this->forms = Form::factory()->count(3)->create();
     }
 
     /** @test */
@@ -52,7 +57,7 @@ class FormFieldtypeTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/collections/foobar', $attributes);
+            ->json('POST', "/api/collections/{$this->matrix->slug}", $attributes);
 
         $entry = $this->model->first();
 
@@ -63,15 +68,15 @@ class FormFieldtypeTest extends TestCase
 
         $this->assertDatabaseHas('forms_pivot', [
             'form_id'    => $this->forms->first()->id,
-            'field_id'   => $this->fieldForm->id,
-            'pivot_type' => 'Fusion\Models\Collections\Foobar',
+            'field_id'   => $this->field->id,
+            'pivot_type' => get_class($this->model),
             'pivot_id'   => $entry->id,
         ]);
 
         $this->assertDatabaseHas('forms_pivot', [
             'form_id'    => $this->forms->get(1)->id,
-            'field_id'   => $this->fieldForm->id,
-            'pivot_type' => 'Fusion\Models\Collections\Foobar',
+            'field_id'   => $this->field->id,
+            'pivot_type' => get_class($this->model),
             'pivot_id'   => $entry->id,
         ]);
     }
@@ -80,8 +85,8 @@ class FormFieldtypeTest extends TestCase
     public function number_of_forms_assigned_to_matrix_can_be_limited_through_validation()
     {
         // add validation
-        $this->fieldForm->validation = ['value' => 'array|size:2'];
-        $this->fieldForm->save();
+        $this->field->validation = ['value' => 'array|size:2'];
+        $this->field->save();
 
         $attributes = [
             'name' => 'New Post',
@@ -95,9 +100,11 @@ class FormFieldtypeTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/collections/foobar', $attributes)
+            ->json('POST', "/api/collections/{$this->matrix->slug}", $attributes)
             ->assertStatus(422)
-            ->assertJsonValidationErrors(['form' => 'The Form must contain 2 items.']);
+            ->assertJsonValidationErrors([
+                'form' => 'The Form must contain 2 items.'
+            ]);
     }
 
     /** @test */
@@ -115,12 +122,12 @@ class FormFieldtypeTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/collections/foobar', $attributes);
+            ->json('POST', "/api/collections/{$this->matrix->slug}", $attributes);
 
-        \Cache::flush();
+        Cache::flush();
         $entry = $this->model->first();
 
-        $this->assertInstanceOf('Fusion\Models\Form', $entry->form->first());
+        $this->assertInstanceOf(Form::class, $entry->form->first());
         $this->assertCount(3, $entry->form);
     }
 }

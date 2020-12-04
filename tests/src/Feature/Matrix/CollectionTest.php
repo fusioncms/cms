@@ -10,6 +10,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CollectionTest extends TestCase
@@ -34,6 +35,7 @@ class CollectionTest extends TestCase
             })
             ->create();
 
+        $this->model  = (new Collection($this->matrix->handle))->make();
         $this->field1 = $this->matrix->blueprint->fields->get(0);
         $this->field2 = $this->matrix->blueprint->fields->get(1);
     }
@@ -52,7 +54,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/collections/collectibles', $attributes)
+            ->json('POST', "/api/collections/{$this->matrix->slug}", $attributes)
             ->assertStatus(201);
 
         $this->assertDatabaseHas('mx_collectibles', $attributes);
@@ -63,7 +65,7 @@ class CollectionTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->json('POST', '/api/collections/collectibles', []);
+        $this->json('POST', "/api/collections/{$this->matrix->slug}", []);
     }
 
     /** @test */
@@ -73,7 +75,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('POST', '/api/collections/collectibles', []);
+            ->json('POST', "/api/collections/{$this->matrix->slug}", []);
     }
 
     /** @test */
@@ -90,10 +92,18 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', '/api/collections/collectibles/'.$entry->id, $attributes)
+            ->json('PATCH', "/api/collections/{$this->matrix->slug}/{$entry->id}", $attributes)
             ->assertStatus(200);
 
-        $this->assertDatabaseHas('mx_collectibles', $attributes);
+        $this->assertDatabaseMissing($this->model->getTable(), [
+            'name' => 'New Post Title',
+            'slug' => 'new-post-title',
+        ]);
+
+        $this->assertDatabaseHas($this->model->getTable(), [
+            'name' => 'Updated Post Title',
+            'slug' => 'updated-post-title',
+        ]);
     }
 
     /** @test */
@@ -103,7 +113,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', '/api/collections/collectibles/'.$entry->id);
+            ->json('DELETE', "/api/collections/{$this->matrix->slug}/{$entry->id}");
 
         $this->assertDatabaseMissing('mx_collectibles', ['id' => $entry->id]);
     }
@@ -115,7 +125,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/collections/collectibles', $attributes)
+            ->json('POST', "/api/collections/{$this->matrix->slug}", $attributes)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['slug']);
     }
@@ -162,7 +172,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->owner)
-            ->get('/collectibles/'.$entry->slug.'?preview=true')
+            ->get("/collectibles/{$entry->slug}?preview=true")
             ->assertStatus(200);
     }
 
@@ -175,7 +185,7 @@ class CollectionTest extends TestCase
 
         $this
             ->be($this->user)
-            ->get('/collectibles/'.$entry->slug.'?preview=true');
+            ->get("/collectibles/{$entry->slug}?preview=true");
     }
 
     //
@@ -193,20 +203,17 @@ class CollectionTest extends TestCase
     protected function newEntry($overrides = []): array
     {
         $attributes = array_merge([
-            'name'   => 'Example Page',
-            'slug'   => 'example-page',
-            'status' => true,
+            'matrix_id' => $this->matrix->id,
+            'name'      => 'Example Page',
+            'slug'      => 'example-page',
+            'status'    => true,
         ], $overrides);
 
         $attributes[$this->field1->handle] = $this->faker->word();
         $attributes[$this->field2->handle] = $this->faker->word();
 
-        $this
-            ->be($this->owner, 'api')
-            ->json('POST', '/api/collections/collectibles', $attributes);
-
         $model = (new Collection($this->matrix->handle))->make();
-        $entry = \DB::table($model->getTable())->first();
+        $entry = $model->create($attributes);
 
         return [$entry, $attributes];
     }
