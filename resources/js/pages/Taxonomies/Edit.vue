@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="taxonomies-page">
         <portal to="title">
             <page-title icon="sitemap">Edit Taxonomy</page-title>
         </portal>
@@ -15,7 +15,6 @@
 
 <script>
     import Form from '../../services/Form'
-    import store from '../../store'
     import SharedForm from './SharedForm'
 
     export default {
@@ -47,7 +46,7 @@
         methods: {
             submit() {
                 this.form.patch(`/api/taxonomies/${this.taxonomy.id}`).then((response) => {
-                    store.dispatch('navigation/fetchAdminNavigation')
+                    this.$store.dispatch('navigation/fetchAdminNavigation')
 
                     toast('Taxonomy successfully updated', 'success')
 
@@ -74,7 +73,7 @@
                             name:        vm.taxonomy.name,
                             handle:      vm.taxonomy.handle,
                             description: vm.taxonomy.description,
-                            sidebar:     vm.taxonomy.sidebar ? '1' : '0',
+                            sidebar:     vm.taxonomy.sidebar,
                             icon:        vm.taxonomy.icon,
                             route:       vm.taxonomy.route,
                             template:    vm.taxonomy.template

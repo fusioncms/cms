@@ -1,19 +1,23 @@
 <template>
-    <div>
+    <div class="term-page">
         <portal to="title">
             <page-title :icon="taxonomy.icon">Create {{ singular }}</page-title>
         </portal>
 
         <portal to="subtitle">{{ taxonomy.description }}</portal>
 
-        <shared-form :taxonomy="taxonomy" :form="form" :submit="submit"></shared-form>
+        <shared-form
+            v-if="form"
+            :form="form"
+            :taxonomy="taxonomy">
+        </shared-form>
     </div>
 </template>
 
 <script>
-    import pluralize from 'pluralize'
-    import Form from '../../services/Form'
-    import SharedForm from './SharedForm'
+    import pluralize  from 'pluralize'
+    import Form       from '@/services/Form'
+    import SharedForm from '@/pages/Terms/SharedForm'
 
     export default {
         auth() {
@@ -33,7 +37,7 @@
         data() {
             return {
                 taxonomy: {},
-                form: new Form({}),
+                form: null,
             }
         },
 
@@ -104,11 +108,10 @@
     export function getTaxonomy(taxonomy, callback) {
         axios.get(`/api/taxonomies/${taxonomy}`).then((response) => {
             let taxonomy = response.data.data
-
             let fields = {
                 name: '',
                 slug: '',
-                status: 1,
+                status: true,
             }
 
             _.forEach(taxonomy.blueprint.sections, function(section) {

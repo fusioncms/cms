@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="term-page">
         <portal to="title">
             <page-title :icon="taxonomy.icon || 'pencil-alt'">{{ taxonomy.name }}</page-title>
         </portal>
@@ -8,9 +8,9 @@
             <router-link v-if="taxonomy.id" :to="{ name: 'terms.create', params: {taxonomy: taxonomy.id} }" class="button">Create {{ singular }}</router-link>
         </portal>
 
-        <div class="row" v-if="endpoint">
-            <div class="content-container">
-                <ui-table id="entries" :endpoint="endpoint" sort-by="name" :key="taxonomy.handle + '_table'">
+        <ui-card>
+            <ui-card-body>
+                <ui-table v-if="endpoint" id="entries" :endpoint="endpoint" sort-by="name" :key="taxonomy.handle + '_table'">
                     <template slot="name" slot-scope="table">
                         <router-link :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
@@ -37,8 +37,8 @@
                         </ui-table-actions>
                     </template>
                 </ui-table>
-            </div>
-        </div>
+            </ui-card-body>
+        </ui-card>
 
         <portal to="modals">
             <ui-modal name="delete-term" title="Delete Term">

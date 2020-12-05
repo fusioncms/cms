@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="taxonomy-page">
         <portal to="title">
             <page-title icon="sitemap">Create Taxonomy</page-title>
         </portal>
@@ -9,9 +9,8 @@
 </template>
 
 <script>
-    import Form from '../../services/Form'
-    import store from '../../store'
-    import SharedForm from './SharedForm'
+    import Form       from '@/services/Form'
+    import SharedForm from '@/pages/Taxonomies/SharedForm'
 
     export default {
         auth() {
@@ -34,14 +33,10 @@
                     name: '',
                     handle: '',
                     description: '',
-
-                    sidebar: '1',
+                    sidebar: true,
                     icon: '',
-
                     route: '',
                     template: '',
-
-                    status: '1',
                 }, true)
             }
         },
@@ -53,7 +48,7 @@
         methods: {
             submit() {
                 this.form.post('/api/taxonomies').then((response) => {
-                    store.dispatch('navigation/fetchAdminNavigation')
+                    this.$store.dispatch('navigation/fetchAdminNavigation')
 
                     toast('Taxonomy successfully created', 'success')
 

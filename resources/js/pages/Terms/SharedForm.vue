@@ -1,32 +1,119 @@
 <template>
-	<form-container>
+	<div>
 		<portal to="actions">
 			<div class="buttons">
 				<ui-button v-if="taxonomy.id" :to="{ name: 'terms.index', params: {taxonomy: taxonomy.id} }" variant="secondary">Go Back</ui-button>
-				<ui-button type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
+				<ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
 			</div>
 		</portal>
 
-		<ui-card>
+        <portal to="sidebar-right">
+            <sidebar v-if="term" id="term-sidebar">
+                <sidebar-section id="term_panel_status" tabindex="-1">
+                    <ui-toggle
+                        name="status"
+                        label="Status"
+                        :help="form.status ? 'Toggle to disable this term.' : 'Toggle to enable this term.'"
+                        v-model="form.status"
+                        :true-value="1"
+                        :false-value="0">
+                    </ui-toggle>
+                </sidebar-section>
+
+                <sidebar-section
+                    v-for="section in sections.sidebar"
+                    v-if="section.fields.length > 0"
+                    :key="section.handle"
+                    :id="'term_panel_' + section.handle"
+                    :title="section.name"
+                    :description="section.description"
+                    tabindex="-1">
+
+                    <component
+                        v-for="field in section.fields"
+                        :key="field.handle"
+                        :is="field.type.id + '-fieldtype'"
+                        :field="field"
+                        :has-error="form.errors.has(field.handle)"
+                        :error-message="form.errors.get(field.handle)"
+                        v-model="form[field.handle]">
+                    </component>
+                </sidebar-section>
+
+                <status-card :entry="term" id="term_panel_status_card" tabindex="-1"></status-card>
+            </sidebar>
+        </portal>
+
+        <ui-card id="term_panel_general" title="General Information" description="General information about your term and what it manages." tabindex="-1">
             <ui-card-body>
-                <ui-input-group
+                <ui-title-group
+                    class="mb-0"
                     name="name"
                     label="Name"
-                    description="What should this term be called?"
                     autocomplete="off"
                     autofocus
                     required
+                    :readonly="editSlug"
+                    placeholder="Name"
                     :has-error="form.errors.has('name')"
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
-                </ui-input-group>
+                </ui-title-group>
+
+                <div class="entry-slug" v-if="form.slug">
+                    <div v-if="!editSlug" class="entry-slug__current">
+                        <span class="entry-slug__label">Slug:</span>
+
+                        <span class="entry-slug__value">{{ form.slug }}</span>
+
+                        <ui-button ref="edit" class="entry-slug__action" size="xsmall" @click.prevent="openEdit()">Edit</ui-button>
+                    </div>
+
+                    <div v-if="editSlug" class="entry-slug__edit">
+                        <label v-if="editSlug" class="entry-slug__label" for="edit-slug">Slug:</label>
+
+                        <ui-slug
+                            ref="slug"
+                            class="field--xs"
+                            id="edit-slug"
+                            name="edit_slug"
+                            monospaced
+                            autocomplete="off"
+                            v-model="slugValue">
+                        </ui-slug>
+
+                        <ui-button class="entry-slug__action" variant="primary" size="xsmall" @click.prevent="saveSlug()">Apply</ui-button>
+
+                        <ui-button class="entry-slug__action" variant="secondary" size="xsmall" @click.prevent="closeEdit()">Cancel</ui-button>
+                    </div>
+                </div>
+
+                <ui-slug
+                    v-if="term"
+                    type="hidden"
+                    name="slug"
+                    label="Slug"
+                    monospaced
+                    autocomplete="off"
+                    required
+                    :watch="form.name"
+                    :has-error="form.errors.has('slug')"
+                    :error-message="form.errors.get('slug')"
+                    v-model="form.slug">
+                </ui-slug>
             </ui-card-body>
         </ui-card>
 
-        <section-card v-for="section in sections.body" :key="section.handle" :title="section.name" :description="section.description">
-            <component
-                class="form__group"
-                v-for="field in section.fields"
+        <section-card
+            v-for="section in sections.body"
+            v-if="section.fields.length > 0"
+            :key="section.handle"
+            :id="'term_panel_' + section.handle"
+            :title="section.name"
+            :description="section.description"
+            tabindex="-1">
+
+            <component v-for="field in section.fields"
                 :key="field.handle"
                 :is="field.type.id + '-fieldtype'"
                 :field="field"
@@ -34,66 +121,7 @@
                 v-model="form[field.handle]">
             </component>
         </section-card>
-
-		<template v-slot:sidebar>
-            <div class="card">
-                <div class="card__body">
-                    <ui-slug-group
-                        name="slug"
-                        label="Slug"
-                        monospaced
-                        autocomplete="off"
-                        required
-                        :watch="form.name"
-                        :has-error="form.errors.has('slug')"
-                        :error-message="form.errors.get('slug')"
-                        v-model="form.slug">
-                    </ui-slug-group>
-
-                    <ui-toggle
-                        name="status"
-                        label="Status"
-                        v-model="form.status"
-                        :true-value="1"
-                        :false-value="0">
-                    </ui-toggle>
-                </div>
-            </div>
-
-			<div class="card" v-for="(section) in sections.sidebar" :key="section.handle">
-                <div class="card__header">
-                    <h3 class="card__title">{{ section.name }}</h3>
-                    <p v-if="section.description" class="card__subtitle">{{ section.description }}</p>
-                </div>
-
-                <div class="card__body">
-                    <component
-                        class="form__group"
-                        v-for="field in section.fields"
-                        :key="field.handle"
-                        :is="field.type.id + '-fieldtype'"
-                        :field="field"
-                        :errors="form.errors"
-                        v-model="form[field.handle]">
-                    </component>
-                </div>
-            </div>
-
-			<ui-definition-list v-if="term">
-                <ui-definition name="Status">
-                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': term.status, 'text-danger-500': ! term.status}"></fa-icon> {{ term.status ? 'Enabled' : 'Disabled' }}
-                </ui-definition>
-
-                <ui-definition name="Created At">
-                    {{ $moment(term.created_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-
-                <ui-definition name="Updated At">
-                    {{ $moment(term.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-            </ui-definition-list>
-		</template>
-	</form-container>
+    </div>
 </template>
 
 <script>
@@ -111,31 +139,65 @@
 			form: {
 				type: Object,
 				required: true,
-			},
-
-			submit: {
-				required: true,
-			},
+			}
 		},
+
+        data() {
+            return {
+                editSlug: false,
+                slugValue: '',
+            }
+        },
 
 		computed: {
 			sections() {
                 let body = []
                 let sidebar = []
 
-                body = _.filter(this.taxonomy.blueprint.sections, function(section) {
-                    return section.placement == 'body'
-                })
+                body = _.filter(this.taxonomy.blueprint.sections, (section) =>
+                    section.placement == 'body')
 
-                sidebar = _.filter(this.taxonomy.blueprint.sections, function(section) {
-                    return section.placement == 'sidebar'
-                })
+                sidebar = _.filter(this.taxonomy.blueprint.sections, (section) =>
+                    section.placement == 'sidebar')
 
-                return {
-                    body: body,
-                    sidebar: sidebar
-                }
+                return { body, sidebar }
             },
-		}
+		},
+
+        methods: {
+            openEdit() {
+                this.slugValue = this.form.slug
+                this.editSlug = true
+                this.slugFocus()
+            },
+
+            closeEdit() {
+                this.slugValue = ''
+                this.editSlug = false
+                this.editBtnFocus()
+            },
+
+            saveSlug() {
+                if (this.slugValue === '') {
+                    this.slugValue = this.form.slug
+                } else {
+                    this.form.slug = this.slugValue
+                }
+
+                this.closeEdit()
+            },
+
+            slugFocus() {
+                this.$nextTick(() => {
+                    this.$refs.slug.$el.focus()
+                })
+            },
+
+            editBtnFocus() {
+                this.$nextTick(() => {
+                    this.$refs.edit.$el.focus()
+                })
+            }
+        },
 	}
 </script>
