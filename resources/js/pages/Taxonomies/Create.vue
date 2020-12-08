@@ -37,6 +37,7 @@
                     icon: '',
                     route: '',
                     template: '',
+                    sections: [],
                 }, true)
             }
         },
@@ -48,11 +49,16 @@
         methods: {
             submit() {
                 this.form.post('/api/taxonomies').then((response) => {
-                    this.$store.dispatch('navigation/fetchAdminNavigation')
+                    axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
+                        .then((response) => {
+                            this.$store.dispatch('navigation/fetchAdminNavigation')
 
-                    toast('Taxonomy successfully created', 'success')
+                            toast('Taxonomy successfully created', 'success')
 
-                    this.$router.push('/taxonomies')
+                            this.$router.push('/taxonomies')
+                        }).catch((response) => {
+                            toast(response.message, 'failed')
+                        })
                 }).catch((response) => {
                     toast(response.message, 'failed')
                 })

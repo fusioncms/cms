@@ -48,24 +48,6 @@
         },
 
         computed: {
-            sections() {
-                let body = []
-                let sidebar = []
-
-                body = _.filter(this.taxonomy.blueprint.sections, function(section) {
-                    return section.placement == 'body'
-                })
-
-                sidebar = _.filter(this.taxonomy.blueprint.sections, function(section) {
-                    return section.placement == 'sidebar'
-                })
-
-                return {
-                    body: body,
-                    sidebar: sidebar
-                }
-            },
-
             singular() {
                 if (this.taxonomy.name) {
                     return pluralize.singular(this.taxonomy.name)

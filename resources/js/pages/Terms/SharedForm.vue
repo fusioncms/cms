@@ -8,18 +8,7 @@
 		</portal>
 
         <portal to="sidebar-right">
-            <sidebar v-if="term" id="term-sidebar">
-                <sidebar-section id="term_panel_status" tabindex="-1">
-                    <ui-toggle
-                        name="status"
-                        label="Status"
-                        :help="form.status ? 'Toggle to disable this term.' : 'Toggle to enable this term.'"
-                        v-model="form.status"
-                        :true-value="1"
-                        :false-value="0">
-                    </ui-toggle>
-                </sidebar-section>
-
+            <sidebar id="term-sidebar">
                 <sidebar-section
                     v-for="section in sections.sidebar"
                     v-if="section.fields.length > 0"
@@ -39,8 +28,6 @@
                         v-model="form[field.handle]">
                     </component>
                 </sidebar-section>
-
-                <status-card :entry="term" id="term_panel_status_card" tabindex="-1"></status-card>
             </sidebar>
         </portal>
 
@@ -154,11 +141,13 @@
                 let body = []
                 let sidebar = []
 
-                body = _.filter(this.taxonomy.blueprint.sections, (section) =>
-                    section.placement == 'body')
+                if (this.taxonomy.blueprint) {
+                    body = _.filter(this.taxonomy.blueprint.sections, (section) =>
+                        section.placement == 'body')
 
-                sidebar = _.filter(this.taxonomy.blueprint.sections, (section) =>
-                    section.placement == 'sidebar')
+                    sidebar = _.filter(this.taxonomy.blueprint.sections, (section) =>
+                        section.placement == 'sidebar')
+                }
 
                 return { body, sidebar }
             },

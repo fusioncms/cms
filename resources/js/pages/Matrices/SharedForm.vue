@@ -369,6 +369,10 @@
                     this.$store.commit('fieldtypes/setStructure', 'collections')
                 }
             }
+        },
+
+        created() {
+            this.$store.commit('fieldtypes/setStructure', 'collections')
         }
     }
 </script>
