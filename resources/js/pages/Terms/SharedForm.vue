@@ -9,6 +9,17 @@
 
         <portal to="sidebar-right">
             <sidebar id="term-sidebar">
+                <sidebar-section id="term_panel_status" tabindex="-1">
+                    <ui-toggle
+                        name="status"
+                        label="Status"
+                        :help="form.status ? 'Toggle to disable this term.' : 'Toggle to enable this term.'"
+                        v-model="form.status"
+                        :true-value="1"
+                        :false-value="0">
+                    </ui-toggle>
+                </sidebar-section>
+
                 <sidebar-section
                     v-for="section in sections.sidebar"
                     v-if="section.fields.length > 0"
@@ -28,6 +39,8 @@
                         v-model="form[field.handle]">
                     </component>
                 </sidebar-section>
+
+                <status-card v-if="term" id="term_panel_status_card" :entry="term" tabindex="-1"></status-card>
             </sidebar>
         </portal>
 

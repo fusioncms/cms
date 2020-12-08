@@ -12,8 +12,13 @@
             <ui-card-body>
                 <ui-table v-if="endpoint" id="entries" :endpoint="endpoint" sort-by="name" :key="taxonomy.handle + '_table'">
                     <template slot="name" slot-scope="table">
-                        <router-link :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">{{ table.record.name }}</router-link>
+                        <div class="flex items-center">
+                            <ui-status :value="table.record.status" class="mr-2"></ui-status>
+
+                            <router-link :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">{{ table.record.name }}</router-link>
+                        </div>
                     </template>
+                    
                     <template slot="slug" slot-scope="table">
                         <code>{{ table.record.slug }}</code>
                     </template>
@@ -30,8 +35,7 @@
                             <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-term="table.record"
-                                classes="link--danger"
-                            >
+                                class="danger">
                                 Delete
                             </ui-dropdown-link>
                         </ui-table-actions>
@@ -41,7 +45,7 @@
         </ui-card>
 
         <portal to="modals">
-            <ui-modal name="delete-term" title="Delete Term">
+            <ui-modal name="delete-term" title="Delete Term" key="delete_term">
                 <p>Are you sure you want to permenantly delete this term?</p>
 
                 <template slot="footer" slot-scope="term">
