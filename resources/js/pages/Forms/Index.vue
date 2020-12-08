@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="form-page">
         <portal to="title">
             <page-title icon="paper-plane">Forms</page-title>
         </portal>
@@ -11,8 +11,8 @@
             </div>
         </portal>
 
-        <div class="row">
-            <div class="content-container">
+        <ui-card>
+            <ui-card-body>
                 <ui-table :endpoint="endpoint" id="forms" sort-by="name" primary-key="handle" key="forms_table">
                     <template slot="name" slot-scope="table">
                         <ui-status :value="table.record.status" class="mr-2"></ui-status>
@@ -34,16 +34,15 @@
 
                             <ui-dropdown-link
                                 @click.prevent
-                                v-modal:delete-form="table.record"
-                                classes="link--danger"
-                            >
+                                v-modal:delete-term="table.record"
+                                class="danger">
                                 Delete
                             </ui-dropdown-link>
                         </ui-table-actions>
                     </template>
                 </ui-table>
-            </div>
-        </div>
+            </ui-card-body>
+        </ui-card>
 
         <portal to="modals">
             <ui-modal name="delete-form" title="Delete Form" key="delete_form">

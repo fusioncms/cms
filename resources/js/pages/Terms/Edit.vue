@@ -6,14 +6,19 @@
 
         <portal to="subtitle">{{ taxonomy.description }}</portal>
 
-        <shared-form :taxonomy="taxonomy" :form="form" :submit="submit" :term="term"></shared-form>
+        <shared-form
+            v-if="form"
+            :form="form"
+            :term="term"
+            :taxonomy="taxonomy">
+        </shared-form>
     </div>
 </template>
 
 <script>
-    import pluralize from 'pluralize'
-    import Form from '../../services/Form'
-    import SharedForm from './SharedForm'
+    import pluralize  from 'pluralize'
+    import Form       from '@/services/Form'
+    import SharedForm from '@/pages/Terms/SharedForm'
 
     export default {
         auth() {
@@ -43,24 +48,6 @@
         },
 
         computed: {
-            sections() {
-                let body = []
-                let sidebar = []
-
-                body = _.filter(this.taxonomy.blueprint.sections, function(section) {
-                    return section.placement == 'body'
-                })
-
-                sidebar = _.filter(this.taxonomy.blueprint.sections, function(section) {
-                    return section.placement == 'sidebar'
-                })
-
-                return {
-                    body: body,
-                    sidebar: sidebar
-                }
-            },
-
             singular() {
                 if (this.taxonomy.name) {
                     return pluralize.singular(this.taxonomy.name)

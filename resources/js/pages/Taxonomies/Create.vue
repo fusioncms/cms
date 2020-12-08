@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="taxonomy-page">
         <portal to="title">
             <page-title icon="sitemap">Create Taxonomy</page-title>
         </portal>
@@ -9,9 +9,8 @@
 </template>
 
 <script>
-    import Form from '../../services/Form'
-    import store from '../../store'
-    import SharedForm from './SharedForm'
+    import Form       from '@/services/Form'
+    import SharedForm from '@/pages/Taxonomies/SharedForm'
 
     export default {
         auth() {
@@ -34,14 +33,11 @@
                     name: '',
                     handle: '',
                     description: '',
-
-                    sidebar: '1',
+                    sidebar: true,
                     icon: '',
-
                     route: '',
                     template: '',
-
-                    status: '1',
+                    sections: [],
                 }, true)
             }
         },
@@ -53,11 +49,16 @@
         methods: {
             submit() {
                 this.form.post('/api/taxonomies').then((response) => {
-                    store.dispatch('navigation/fetchAdminNavigation')
+                    axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
+                        .then((response) => {
+                            this.$store.dispatch('navigation/fetchAdminNavigation')
 
-                    toast('Taxonomy successfully created', 'success')
+                            toast('Taxonomy successfully created', 'success')
 
-                    this.$router.push('/taxonomies')
+                            this.$router.push('/taxonomies')
+                        }).catch((response) => {
+                            toast(response.message, 'failed')
+                        })
                 }).catch((response) => {
                     toast(response.message, 'failed')
                 })

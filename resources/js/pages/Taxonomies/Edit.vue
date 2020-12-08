@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="taxonomies-page">
         <portal to="title">
             <page-title icon="sitemap">Edit Taxonomy</page-title>
         </portal>
@@ -15,7 +15,6 @@
 
 <script>
     import Form from '../../services/Form'
-    import store from '../../store'
     import SharedForm from './SharedForm'
 
     export default {
@@ -47,11 +46,16 @@
         methods: {
             submit() {
                 this.form.patch(`/api/taxonomies/${this.taxonomy.id}`).then((response) => {
-                    store.dispatch('navigation/fetchAdminNavigation')
+                    axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
+                        .then((response) => {
+                            this.$store.dispatch('navigation/fetchAdminNavigation')
 
-                    toast('Taxonomy successfully updated', 'success')
+                            toast('Taxonomy successfully updated', 'success')
 
-                    this.$router.push('/taxonomies')
+                            this.$router.push('/taxonomies')
+                        }).catch((response) => {
+                            toast(response.message, 'failed')
+                        })
                 }).catch((response) => {
                     toast(response.response.data.message, 'failed')
                 })
@@ -74,10 +78,11 @@
                             name:        vm.taxonomy.name,
                             handle:      vm.taxonomy.handle,
                             description: vm.taxonomy.description,
-                            sidebar:     vm.taxonomy.sidebar ? '1' : '0',
+                            sidebar:     vm.taxonomy.sidebar,
                             icon:        vm.taxonomy.icon,
                             route:       vm.taxonomy.route,
-                            template:    vm.taxonomy.template
+                            template:    vm.taxonomy.template,
+                            sections:    vm.taxonomy.blueprint.sections,
                         }, true)
 
                         vm.$nextTick(() => {

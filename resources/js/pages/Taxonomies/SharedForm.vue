@@ -1,80 +1,15 @@
 <template>
-    <form-container>
+    <div>
         <portal to="actions">
             <div class="buttons">
                 <ui-button :to="{ name: 'taxonomies' }" variant="secondary">Go Back</ui-button>
-                <ui-button variant="primary" type="submit" @click.prevent="submit" :disabled="!form.hasChanges">Save</ui-button>
+                <ui-button type="submit" @click.prevent="submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
             </div>
         </portal>
 
-        <section-card title="General Information" description="General information about this taxonomy and what it organizes.">
-            <ui-input-group
-                name="name"
-                label="Name"
-                help="What should this taxonomy be called?"
-                autocomplete="off"
-                autofocus
-                required
-                :has-error="form.errors.has('name')"
-                :error-message="form.errors.get('name')"
-                v-model="form.name">
-            </ui-input-group>
-
-            <ui-textarea-group
-                name="description"
-                label="Description"
-                help="Give a short description of what this taxonomy will organize and store."
-                autocomplete="off"
-                :has-error="form.errors.has('description')"
-                :error-message="form.errors.get('description')"
-                v-model="form.description">
-            </ui-textarea-group>
-        </section-card>
-
-        <section-card title="Routing" description="Configure how terms within this taxonomy will be accessed on the frontend.">
-            <ui-input-group
-                name="route"
-                label="Route"
-                help="When the URI matches this pattern..."
-                autocomplete="off"
-                monospaced
-                :has-error="form.errors.has('route')"
-                :error-message="form.errors.get('route')"
-                v-model="form.route">
-            </ui-input-group>
-
-            <ui-input-group
-                name="template"
-                label="Template"
-                help="Render this template"
-                autocomplete="off"
-                monospaced
-                :has-error="form.errors.has('template')"
-                :error-message="form.errors.get('template')"
-                v-model="form.template">
-            </ui-input-group>
-        </section-card>
-
-        <template v-slot:sidebar>
-            <div class="card">
-                <div class="card__body">
-                    <ui-slug-group
-                        name="handle"
-                        label="Handle"
-                        monospaced
-                        autocomplete="off"
-                        required
-                        :watch="form.name"
-                        delimiter="_"
-                        :has-error="form.errors.has('handle')"
-                        :error-message="form.errors.get('handle')"
-                        v-model="form.handle">
-                    </ui-slug-group>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card__body">
+        <portal to="sidebar-right">
+            <sidebar id="taxonomy-sidebar">
+                <sidebar-section id="matrix_panel_status" tabindex="-1">
                     <icon-picker
                         name="icon"
                         label="Icon"
@@ -93,26 +28,116 @@
                         :true-value="1"
                         :false-value="0">
                     </ui-toggle>
+                </sidebar-section>
+
+                <status-card v-if="taxonomy" :entry="taxonomy" id="taxonomy_panel_status_card" tabindex="-1"></status-card>
+            </sidebar>
+        </portal>
+
+        <section-card id="taxonomy_panel_general" title="General Information" description="General information about this taxonomy and what it organizes.">
+            <div class="row">
+                <div class="col w-full lg:w-1/2">
+                    <ui-input-group
+                        id="taxonomy-name"
+                        name="name"
+                        label="Name"
+                        help="What should this taxonomy be called?"
+                        autocomplete="off"
+                        autofocus
+                        required
+                        :has-error="form.errors.has('name')"
+                        :error-message="form.errors.get('name')"
+                        v-model="form.name">
+                    </ui-input-group>
+                </div>
+                <div class="col w-full lg:w-1/2">
+                    <ui-slug-group
+                        id="taxonomy-handle"
+                        name="handle"
+                        label="Handle"
+                        help="A developer-friendly identifier."
+                        monospaced
+                        autocomplete="off"
+                        required
+                        delimiter="_"
+                        :watch="form.name"
+                        :has-error="form.errors.has('handle')"
+                        :error-message="form.errors.get('handle')"
+                        v-model="form.handle">
+                    </ui-slug-group>
                 </div>
             </div>
 
-            <ui-definition-list v-if="taxonomy">
-                <ui-definition name="Created At">
-                    {{ $moment(taxonomy.created_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
+            <ui-textarea-group
+                id="taxonomy-description"
+                name="description"
+                label="Description"
+                help="Give a short description of what this taxonomy will manage and store."
+                autocomplete="off"
+                :has-error="form.errors.has('description')"
+                :error-message="form.errors.get('description')"
+                v-model="form.description">
+            </ui-textarea-group>
+        </section-card>
 
-                <ui-definition name="Updated At">
-                    {{ $moment(taxonomy.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-            </ui-definition-list>
-        </template>
-    </form-container>
+        <section-card id="taxonomy_panel_routing" title="Routing" description="Configure how terms within this taxonomy will be accessed on the frontend.">
+            <ui-input-group
+                id="taxonomy-route"
+                name="route"
+                label="Route"
+                help="When the URI matches this pattern..."
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('route')"
+                :error-message="form.errors.get('route')"
+                v-model="form.route">
+            </ui-input-group>
+
+            <ui-input-group
+                id="taxonomy-template"
+                name="template"
+                label="Template"
+                help="Render this template"
+                autocomplete="off"
+                monospaced
+                :has-error="form.errors.has('template')"
+                :error-message="form.errors.get('template')"
+                v-model="form.template">
+            </ui-input-group>
+        </section-card>
+
+        <section-card id="taxonomy_panel_blueprint" :grid="false" title="Blueprint" description="Create the content blueprint for this taxonomy by adding panel sections and fields to either the page body or page sidebar." tabindex="-1">
+            <blueprint>
+                <blueprint-area
+                    v-model="form.sections"
+                    :placements="placements"
+                    area="body"
+                    title="Body">
+                </blueprint-area>
+
+                <blueprint-area
+                    v-model="form.sections"
+                    class="blueprint__col--sidebar"
+                    :placements="placements"
+                    area="sidebar"
+                    title="Sidebar">
+                </blueprint-area>
+            </blueprint>
+        </section-card>
+    </div>
 </template>
 
 <script>
-    import pluralize from 'pluralize'
-
     export default {
+        data() {
+            return {
+                placements: [
+                    { label: 'Body',    value: 'body'    },
+                    { label: 'Sidebar', value: 'sidebar' }
+                ]
+            }
+        },
+
         props: {
             form: {
                 type: Object,
@@ -128,5 +153,9 @@
                 required: true,
             }
         },
+
+        created() {
+            this.$store.commit('fieldtypes/setStructure', 'taxonomies')
+        }
     }
 </script>

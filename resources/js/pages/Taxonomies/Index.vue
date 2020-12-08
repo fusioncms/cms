@@ -1,15 +1,15 @@
 <template>
-    <div>
+    <div class="taxonomy-page">
         <portal to="title">
             <page-title icon="sitemap">Taxonomy</page-title>
         </portal>
 
         <portal to="actions">
-            <ui-button :to="{ name: 'taxonomies.create' }" variant="primary">Create Taxonomy</ui-button>
+            <ui-button key="create-taxonomy-btn" :to="{ name: 'taxonomies.create' }" variant="primary" v-if="$can('taxonomies.create')">Create Taxonomy</ui-button>
         </portal>
 
-        <div class="row">
-            <div class="content-container">
+        <ui-card>
+            <ui-card-body>
                 <ui-table :endpoint="endpoint" id="taxonomies" sort-by="name" primary-key="handle" key="taxonomies_table">
                     <template slot="name" slot-scope="table">
                         <router-link :to="{ name: 'taxonomies.edit', params: {taxonomy: table.record.id} }">{{ table.record.name }}</router-link>
@@ -42,8 +42,8 @@
                         </ui-table-actions>
                     </template>
                 </ui-table>
-            </div>
-        </div>
+            </ui-card-body>
+        </ui-card>
 
         <portal to="modals">
             <ui-modal name="delete-taxonomy" title="Delete Taxonomy" key="delete_taxonomy">
@@ -59,8 +59,6 @@
 </template>
 
 <script>
-    import store from '../../store'
-
     export default {
         auth() {
             return {
@@ -85,7 +83,7 @@
         methods: {
             destroy(id) {
                 axios.delete(`/api/taxonomies/${id}`).then((response) => {
-                    store.dispatch('navigation/fetchAdminNavigation')
+                    this.$store.dispatch('navigation/fetchAdminNavigation')
 
                     toast('Taxonomy successfully deleted.', 'success')
 
