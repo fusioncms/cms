@@ -29,7 +29,7 @@ class Navigation extends Model
         'description',
     ];
 
-    protected $blueprintGroup = 'Navigation';
+    protected $structure = 'Navigation';
 
     /**
      * Get the builder instance.

@@ -57,11 +57,11 @@ class Form extends Model
     ];
 
     /**
-     * The blueprint grouping value.
+     * The blueprint structure value.
      *
      * @var string
      */
-    protected $blueprintGroup = 'Forms';
+    protected $structure = 'Forms';
 
     /**
      * Get the builder instance.
