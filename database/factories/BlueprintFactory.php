@@ -22,8 +22,8 @@ class BlueprintFactory extends Factory
     public function definition()
     {
         return [
-            'name'  => $this->faker->unique()->word,
-            'group' => $this->faker->unique()->word,
+            'name'      => $this->faker->unique()->word,
+            'structure' => $this->faker->unique()->word,
         ];
     }
 }

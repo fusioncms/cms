@@ -40,7 +40,7 @@ class Taxonomy extends Model
         'sidebar' => 'boolean',
     ];
 
-    protected $blueprintGroup = 'Taxonomy';
+    protected $structure = 'Taxonomy';
 
     /**
      * Get the builder instance.
