@@ -31,21 +31,18 @@ class {class} extends Model
     ];
 
     /**
+     * Mass assignment protection.
+     *
+     * @var array
+     */
+    protected $fillable = [{fillable}];
+
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = [{casts}];
-
-    /**
-     * Mass assignment protection.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'form_id',
-        'identifiable_ip_address'
-    ] + [{fillable}];
 
     /**
      * The attributes that should be mutated to dates.

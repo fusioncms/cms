@@ -15,4 +15,14 @@ class Form extends Builder
     {
         $this->source = Model::where('handle', $handle)->firstOrFail();
     }
+
+    /**
+     * Mass assignment protection.
+     * 
+     * @var array
+     */
+    protected function getFillable()
+    {
+        return ['form_id', 'identifiable_ip_address'];
+    }
 }

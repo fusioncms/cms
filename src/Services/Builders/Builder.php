@@ -51,6 +51,9 @@ abstract class Builder
             $casts[$column->handle] = $column->type()->cast;
         }
 
+        $fillable = array_merge($this->getFillable(), $fillable);
+        $casts    = array_merge($this->getCasts(), $casts);
+
         // Generate builder class file..
         File::put($this->getBuildPath(),
             strtr($this->getStubContent(),
@@ -77,7 +80,7 @@ abstract class Builder
     {
         $namespace = $this->getNamespace();
 
-        if (!class_exists($namespace)) {
+        if (!class_exists($namespace, false)) {
             return $this->refresh();
         }
 
@@ -91,7 +94,7 @@ abstract class Builder
      */
     protected function getStubFile()
     {
-        return "{$this->source->handle}.stub";
+        return Str::lower($this->source->getClassName()) . '.stub';
     }
 
     /**
@@ -131,7 +134,11 @@ abstract class Builder
      */
     protected function getBuildFolder()
     {
-        return Str::of($this->source->handle)->plural()->ucfirst()->__toString();
+        return Str::of($this->source->getClassName())
+            ->lower()
+            ->plural()
+            ->ucfirst()
+            ->__toString();
     }
 
     /**
@@ -155,6 +162,26 @@ abstract class Builder
     }
 
     /**
+     * Mass assignment protection.
+     * 
+     * @var array
+     */
+    protected function getFillable()
+    {
+        return [];
+    }
+
+    /**
+     * Attribute casting.
+     * 
+     * @var array
+     */
+    protected function getCasts()
+    {
+        return [];
+    }
+
+    /**
      * Add addl placeholders to merge into
      * your builder stub file.
      * 
@@ -174,7 +201,7 @@ abstract class Builder
     private function generateRelationships()
     {
         $generated = collect($this->relationships)->reduce(function ($carry, $field) {
-            return $carry . $fieldtype->generateRelationship($field)."\n\n";
+            return $carry . $field->type()->generateRelationship($field)."\n\n";
         }, '');
 
         return trim($generated);
@@ -189,7 +216,8 @@ abstract class Builder
     private function generateFields()
     {
         if ($this->source instanceof Structure) {
-            $this->source->fields->every(function ($field) {
+
+            $this->source->fields->each(function ($field) {
                 $fieldtype = $field->type();
 
                 if ($fieldtype->hasRelationship()) {
@@ -210,7 +238,17 @@ abstract class Builder
      */
     private function toString($arr)
     {
-        return ! empty($arr) ? "'" . implode("','", $arr) . "'" : null;
+        if (empty($arr)) {
+            return null;
+        }
+
+        return collect($arr)->map(function ($v, $k) {
+            if (is_numeric($k)) {
+                return sprintf("'%s'", $v);
+            } else {
+                return sprintf("'%s' => '%s'", $k, $v);
+            }
+        })->implode(",");
     }
 
     /**

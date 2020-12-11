@@ -20,10 +20,7 @@ class {class} extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'replicator_id',
-        'section_id'
-    ] + [{fillable}];
+    protected $fillable = [{fillable}];
 
     /**
      * The attributes that should be cast to native types.

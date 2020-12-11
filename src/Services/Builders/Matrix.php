@@ -18,6 +18,28 @@ class Matrix extends Builder
     }
 
     /**
+     * Mass assignment protection.
+     * 
+     * @var array
+     */
+    protected function getFillable()
+    {
+        return ['matrix_id', 'name', 'slug', 'publish_at', 'expire_at', 'status'];
+    }
+
+    /**
+     * Attribute casting.
+     * 
+     * @var array
+     */
+    protected function getCasts()
+    {
+        return [
+            'status' => 'boolean'
+        ];
+    }
+
+    /**
      * Return builder stub filename.
      * 
      * @return string
@@ -34,7 +56,10 @@ class Matrix extends Builder
      */
     protected function getBuildFolder()
     {
-        return Str::of($this->source->type)->plural()->ucfirst()->__toString();
+        return Str::of($this->source->type)
+            ->plural()
+            ->ucfirst()
+            ->__toString();
     }
 
     /**

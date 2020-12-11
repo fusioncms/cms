@@ -10,7 +10,7 @@ use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Database\Eloquent\Builder;
 
-class Page extends Model
+class {class} extends Model
 {
     use HasActivity;
 
@@ -26,23 +26,14 @@ class Page extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'matrix_id',
-        'name',
-        'slug',
-        'publish_at',
-        'expire_at',
-        'status'
-    ] + [{fillable}];
+    protected $fillable = [{fillable}];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = [
-        'status' => 'boolean'
-    ] + [{casts}];
+    protected $casts = [{casts}];
 
     /**
      * The attributes that should be mutated to dates.
@@ -65,7 +56,7 @@ class Page extends Model
      */
     public $incrementing = false;
 
-        /**
+    /**
      * The "booted" method of the model.
      *
      * @return void
@@ -94,7 +85,7 @@ class Page extends Model
     /**
      * Get the Matrix Type relationship.
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function matrix()
     {
@@ -103,6 +94,8 @@ class Page extends Model
 
     /**
      * Get all of the fields for the matrix.
+     *
+     * @return \Illuminate\Support\Collection
      */
     public function getFieldsAttribute()
     {
@@ -119,7 +112,7 @@ class Page extends Model
         return $this->matrix->handle;
     }
 
-    
+    {relationships}
 
     /**
      * Tap into activity before persisting to database.

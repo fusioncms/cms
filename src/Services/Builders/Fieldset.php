@@ -15,4 +15,26 @@ class Fieldset extends Builder
     {
         $this->source = Model::where('handle', $handle)->firstOrFail();
     }
+
+    /**
+     * Mass assignment protection.
+     * 
+     * @var array
+     */
+    protected function getFillable()
+    {
+        return ['field_id', 'fieldset_id', 'name', 'handle', 'status'];
+    }
+
+    /**
+     * Attribute casting.
+     * 
+     * @var array
+     */
+    protected function getCasts()
+    {
+        return [
+            'status' => 'boolean'
+        ];
+    }
 }

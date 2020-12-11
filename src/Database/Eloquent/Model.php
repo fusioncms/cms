@@ -72,7 +72,7 @@ class Model extends EloquentModel
      * 
      * @return string
      */
-    protected function getClassName()
+    public function getClassName()
     {
         return (new \ReflectionClass($this))->getShortName();
     }

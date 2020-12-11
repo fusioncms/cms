@@ -15,4 +15,26 @@ class Taxonomy extends Builder
     {
         $this->taxonomy = Model::where('handle', $handle)->firstOrFail();
     }
+
+    /**
+     * Mass assignment protection.
+     * 
+     * @var array
+     */
+    protected function getFillable()
+    {
+        return ['taxonomy_id', 'parent_id', 'name', 'slug', 'status'];
+    }
+
+    /**
+     * Attribute casting.
+     * 
+     * @var array
+     */
+    protected function getCasts()
+    {
+        return [
+	        'status' => 'boolean',
+        ];
+    }
 }

@@ -21,26 +21,18 @@ class {class} extends Model
     protected $table = 'taxonomy_{handle}';
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'status' => 'boolean'
-    ] + [{casts}];
-
-    /**
      * Mass assignment protection.
      *
      * @var array
      */
-    protected $fillable = [
-        'taxonomy_id',
-        'parent_id',
-        'name',
-        'slug',
-        'status'
-    ] + [{fillable}];
+    protected $fillable = [{fillable}];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [{casts}];
 
     /**
      * The attributes that should be mutated to dates.

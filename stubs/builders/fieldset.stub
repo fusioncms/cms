@@ -25,22 +25,14 @@ class {class} extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'field_id',
-        'fieldset_id',
-        'name',
-        'handle',
-        'status'
-    ] + [{fillable}];
+    protected $fillable = [{fillable}];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = [
-        'status' => 'boolean'
-    ] + [{casts}];
+    protected $casts = [{casts}];
 
     /**
      * Indicates if the model should be timestamped.

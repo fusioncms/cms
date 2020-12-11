@@ -23,29 +23,18 @@ class {class} extends Model
     protected $table = 'navigation_{handle}';
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'order'      => 'integer',
-        'new_window' => 'boolean',
-        'status'     => 'boolean',
-    ] + [{casts}];
-
-    /**
      * Mass assignment protection.
      *
      * @var array
      */
-    protected $fillable = [
-        'navigation_id',
-        'name',
-        'url',
-        'new_window',
-        'order',
-        'status'
-    ] + [{fillable}];
+    protected $fillable = [{fillable}];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [{casts}];
 
     /**
      * The attributes that should be mutated to dates.
@@ -77,6 +66,11 @@ class {class} extends Model
         return $this->navigation->blueprint->fields;
     }
 
+    /**
+     * Get parent relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function children()
     {
         return $this->hasMany(self::class, 'parent_id');

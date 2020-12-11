@@ -19,9 +19,7 @@ class {class} extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'setting_id',
-    ] + [{fillable}];
+    protected $fillable = [{fillable}];
 
     /**
      * The attributes that should be cast to native types.

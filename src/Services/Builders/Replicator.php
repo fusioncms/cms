@@ -36,6 +36,16 @@ class Replicator extends Builder
     }
 
     /**
+     * Mass assignment protection.
+     * 
+     * @var array
+     */
+    protected function getFillable()
+    {
+        return ['replicator_id', 'section_id'];
+    }
+
+    /**
      * Return builder class name.
      * 
      * @return string
