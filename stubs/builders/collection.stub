@@ -73,9 +73,9 @@ class {class} extends Model
     }
 
     /**
-     * Get the Matrix Type relationship.
+     * Get parenting Matrix relationship.
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function matrix()
     {
@@ -98,16 +98,6 @@ class {class} extends Model
     public function parent()
     {
         return $this->hasOne(Matrix::class, 'id', 'parent_id');
-    }
-
-    /**
-     * Get child relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function children()
-    {
-        return $this->hasMany(Matrix::class, 'parent_id', 'id');
     }
 
     {relationships}

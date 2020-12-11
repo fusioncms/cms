@@ -10,7 +10,7 @@ class SingleRequest extends Request
     public function __construct()
     {
         $this->matrix        = Matrix::findOrFail(request()->route('single'));
-        $this->model         = Builders\Single::resolve($this->matrix->handle);
+        $this->model         = Builders\Matrix::resolve($this->matrix->handle);
         $this->blueprint     = $this->matrix->blueprint;
         $this->fields        = $this->blueprint->fields ?? [];
         $this->relationships = $this->blueprint ? $this->blueprint->relationships() : [];

@@ -11,12 +11,17 @@ class CheckConfigurationController extends Controller
 {
     public function index()
     {
-        try {
-            if (!empty(setting('google_analytics.analytic_view_id')) and !empty(setting('google_analytics.analytic_credentials'))) {
-                Analytics::fetchTotalVisitorsAndPageViews(Period::days(1));
+        $viewID = setting('google_analytics.analytic_view_id');
+        $credentials = setting('google_analytics.analytic_credentials');
 
-                return response()->json(['status' => 'OK']);
-            }
+        if (empty($viewID) or empty($credentials)) {
+            return;
+        }
+
+        try {
+            Analytics::fetchTotalVisitorsAndPageViews(Period::days(1));
+
+            return response()->json(['status' => 'OK']);
         } catch (Exception $exception) {
             return response()->json([
                 'status'  => 'failed',

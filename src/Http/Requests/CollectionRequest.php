@@ -3,14 +3,14 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Models\Matrix;
-use Fusion\Services\Builders\Collection;
+use Fusion\Services\Builders;
 
 class CollectionRequest extends Request
 {
     public function __construct()
     {
         $this->matrix        = Matrix::where('slug', request()->route('slug'))->firstOrFail();
-        $this->model         = (new Collection($this->matrix->handle))->make();
+        $this->model         = Builders\Matrix::resolve($this->matrix->handle);
         $this->blueprint     = $this->matrix->blueprint;
         $this->fields        = $this->blueprint->fields ?? collect();
         $this->relationships = $this->blueprint ? $this->blueprint->relationships() : [];

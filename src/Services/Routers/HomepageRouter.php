@@ -14,7 +14,7 @@ class HomepageRouter extends Router
             $matrix = Matrix::where('route', '/')->first();
 
             if ($matrix) {
-                $model = Builders\Single::resolve($matrix->handle);
+                $model = Builders\Matrix::resolve($matrix->handle);
                 $page  = $model->firstOrFail();
 
                 return view(trim($matrix->template) == '' ? 'index' : $matrix->template, [

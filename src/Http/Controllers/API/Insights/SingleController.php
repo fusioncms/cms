@@ -14,7 +14,7 @@ class SingleController extends Controller
     public function index($matrix)
     {
         $matrix   = Matrix::where('slug', $matrix)->firstOrFail();
-        $single   = Builders\Single::resolve($matrix->handle);
+        $single   = Builders\Matrix::resolve($matrix->handle);
         $pagePath = compile_blade_template($matrix->route, $single->first()) ?: '/';
 
         $stats = Analytics::performQuery(

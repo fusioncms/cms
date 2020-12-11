@@ -20,7 +20,7 @@ class SingleRouter extends Router
                 continue 1;
             }
 
-            $page = Builders\Single::resolve($matrix->handle);
+            $page = Builders\Matrix::resolve($matrix->handle);
 
             if (request()->has('preview')) {
                 $page = $page->withoutGlobalScopes();

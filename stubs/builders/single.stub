@@ -19,7 +19,7 @@ class {class} extends Model
      *
      * @var string
      */
-    protected $table = 'mx_page';
+    protected $table = 'mx_{handle}';
 
     /**
      * Mass assignment protection.
@@ -83,7 +83,7 @@ class {class} extends Model
     }
 
     /**
-     * Get the Matrix Type relationship.
+     * Get parenting Matrix relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -110,6 +110,16 @@ class {class} extends Model
     public function getHandleAttribute()
     {
         return $this->matrix->handle;
+    }
+
+    /**
+     * Get child relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function children()
+    {
+        return $this->hasMany(Matrix::class, 'parent_id', 'id');
     }
 
     {relationships}

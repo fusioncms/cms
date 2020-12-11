@@ -24,7 +24,16 @@ class Matrix extends Builder
      */
     protected function getFillable()
     {
-        return ['matrix_id', 'name', 'slug', 'publish_at', 'expire_at', 'status'];
+        switch ($this->source->type) {
+            case 'single':
+                return ['matrix_id', 'name', 'slug' , 'publish_at', 'expire_at', 'status'];
+                break;
+            case 'collection':
+                return ['matrix_id', 'parent_id', 'name', 'slug', 'publish_at', 'expire_at', 'status'];
+                break;
+        }
+
+        return [];
     }
 
     /**
