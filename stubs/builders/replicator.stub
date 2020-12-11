@@ -20,21 +20,24 @@ class {class} extends Model
      *
      * @var array
      */
-    protected $fillable = {fillable};
+    protected $fillable = [
+        'replicator_id',
+        'section_id'
+    ] + [{fillable}];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = {casts};
+    protected $casts = [{casts}];
 
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = {dates};
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * Get BelongsTo 'Replicator' relationship.

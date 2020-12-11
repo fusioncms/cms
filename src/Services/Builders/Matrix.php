@@ -2,7 +2,7 @@
 
 namespace Fusion\Services\Builders;
 
-use Fusion\Models\Matrix as MatrixModel;
+use Fusion\Models\Matrix as Model;
 use Illuminate\Support\Str;
 
 class Matrix extends Builder
@@ -14,7 +14,7 @@ class Matrix extends Builder
      */
     public function __construct($handle)
     {
-        $this->source = MatrixModel::where('handle', $handle)->firstOrFail();
+        $this->source = Model::where('handle', $handle)->firstOrFail();
     }
 
     /**
@@ -35,5 +35,19 @@ class Matrix extends Builder
     protected function getBuildFolder()
     {
         return Str::of($this->source->type)->plural()->ucfirst()->__toString();
+    }
+
+    /**
+     * Add addl placeholders to merge into
+     * your builder stub file.
+     * 
+     * @return array
+     */
+    protected function getPlaceholders()
+    {
+        return [
+            '{order_by}'        => $this->source->order_by ?? 'name',
+            '{order_direction}' => $this->source->order_direction ? 'ASC' : 'DESC',
+        ];
     }
 }

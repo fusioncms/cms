@@ -4,16 +4,19 @@ namespace Fusion\Models;
 
 use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasBlueprint;
+use Fusion\Concerns\HasBuilder;
+use Fusion\Contracts\Structure;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 
-class Taxonomy extends Model
+class Taxonomy extends Model implements Structure
 {
     use HasBlueprint;
     use HasActivity;
     use HasFactory;
+    use HasBuilder;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -41,28 +44,6 @@ class Taxonomy extends Model
     ];
 
     protected $blueprintGroup = 'Taxonomy';
-
-    /**
-     * Get the builder instance.
-     *
-     * @return Model
-     */
-    public function getBuilder()
-    {
-        $builder = new \Fusion\Services\Builders\Taxonomy($this->handle);
-
-        return $builder->make();
-    }
-
-    /**
-     * Get the builder's table name.
-     *
-     * @return string
-     */
-    public function getBuilderTable()
-    {
-        return "taxonomy_{$this->handle}";
-    }
 
     /**
      * Get admin path.

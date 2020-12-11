@@ -59,11 +59,26 @@ return [
             'prefix'    => 'fx',
             'namepsace' => Fusion\Services\Builders\Fieldset::class
         ],
+        'form' => [
+            'prefix'    => 'form',
+            'namespace' => Fusion\Services\Builders\Form::class
+        ],
         'matrix' => [
             'prefix'    => 'mx',
             'namepsace' => Fusion\Services\Builders\Matrix::class
         ],
-        
+        'navigation' => [
+            'prefix'    => 'menu',
+            'namepsace' => Fusion\Services\Builders\Navigation::class
+        ],
+        'taxonomy' => [
+            'prefix'    => 'taxonomy',
+            'namepsace' => Fusion\Services\Builders\Taxonomy::class
+        ],
+        'setting' => [
+            'prefix'    => 'settings',
+            'namepsace' => Fusion\Services\Builders\Setting::class
+        ]
    ],
 
     /*

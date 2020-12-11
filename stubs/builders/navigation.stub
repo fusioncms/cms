@@ -27,21 +27,32 @@ class {class} extends Model
      *
      * @var array
      */
-    protected $casts = {casts};
+    protected $casts = [
+        'order'      => 'integer',
+        'new_window' => 'boolean',
+        'status'     => 'boolean',
+    ] + [{casts}];
 
     /**
      * Mass assignment protection.
      *
      * @var array
      */
-    protected $fillable = {fillable};
+    protected $fillable = [
+        'navigation_id',
+        'name',
+        'url',
+        'new_window',
+        'order',
+        'status'
+    ] + [{fillable}];
 
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = {dates};
+    protected $dates = ['created_at', 'updated_at'];
 
 
     protected $with = ['children'];

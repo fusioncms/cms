@@ -25,28 +25,34 @@ class {class} extends Model
      *
      * @var array
      */
-    protected $appends = ['identifiable_email_address', 'identifiable_ip_address'];
+    protected $appends = [
+        'identifiable_email_address',
+        'identifiable_ip_address'
+    ];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = {casts};
+    protected $casts = [{casts}];
 
     /**
      * Mass assignment protection.
      *
      * @var array
      */
-    protected $fillable = {fillable};
+    protected $fillable = [
+        'form_id',
+        'identifiable_ip_address'
+    ] + [{fillable}];
 
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = {dates};
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * Get the Form relationship.

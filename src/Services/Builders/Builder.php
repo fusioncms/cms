@@ -2,7 +2,6 @@
 
 namespace Fusion\Services\Builders;
 
-use Exception;
 use Fusion\Contracts\Structure;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
@@ -54,17 +53,16 @@ abstract class Builder
 
         // Generate builder class file..
         File::put($this->getBuildPath(),
-            strtr($this->getStubContent(), [
-                '{class}'         => $this->getBuildName(),
-                '{slug}'          => $this->source->slug,
-                '{handle}'        => $this->source->handle,
-                '{fillable}'      => $this->toString($fillable),
-                '{casts}'         => $this->toString($casts),
-                '{relationships}' => $this->generateRelationships(),
-
-                '{order_by}'        => $this->source->order_by ?? 'name',
-                '{order_direction}' => $this->source->order_direction ? 'ASC' : 'DESC',
-            ])
+            strtr($this->getStubContent(),
+                array_merge([
+                    '{class}'         => $this->getBuildName(),
+                    '{slug}'          => $this->source->slug,
+                    '{handle}'        => $this->source->handle,
+                    '{fillable}'      => $this->toString($fillable),
+                    '{casts}'         => $this->toString($casts),
+                    '{relationships}' => $this->generateRelationships(),
+                ], $this->getPlaceholders())
+            )
         );
 
         return app()->make($this->getNamespace());
@@ -157,6 +155,17 @@ abstract class Builder
     }
 
     /**
+     * Add addl placeholders to merge into
+     * your builder stub file.
+     * 
+     * @return array
+     */
+    protected function getPlaceholders()
+    {
+        return [];
+    }
+
+    /**
      * Returns relationship content.
      *
      * @access private
@@ -175,24 +184,21 @@ abstract class Builder
      * Separates column/relationship-based fields.
      * 
      * @access private
-     * @throws Exception
      * @return void
      */
     private function generateFields()
     {
-        if (!$this->source instanceof Structure) {
-            throw new Exception('Building Model must implement ' . Structure::class);
+        if ($this->source instanceof Structure) {
+            $this->source->fields->every(function ($field) {
+                $fieldtype = $field->type();
+
+                if ($fieldtype->hasRelationship()) {
+                    $this->relationships[$field->handle] = $field;
+                } else {
+                    $this->columns[$field->handle] = $field;
+                }
+            });
         }
-
-        $this->source->fields->every(function ($field) {
-            $fieldtype = $field->type();
-
-            if ($fieldtype->hasRelationship()) {
-                $this->relationships[$field->handle] = $field;
-            } else {
-                $this->columns[$field->handle] = $field;
-            }
-        });
     }
 
     /**
@@ -205,5 +211,15 @@ abstract class Builder
     private function toString($arr)
     {
         return ! empty($arr) ? "'" . implode("','", $arr) . "'" : null;
+    }
+
+    /**
+     * Static make method.
+
+     * @return \Fusion\Database\Eloquent\Model
+     */
+    public static function resolve(...$args)
+    {
+        return (new static(...$args))->make();
     }
 }

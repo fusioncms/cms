@@ -2,7 +2,7 @@
 
 namespace Fusion\Services\Builders;
 
-use Fusion\Models\Fieldset as FieldsetModel;
+use Fusion\Models\Fieldset as Model;
 
 class Fieldset extends Builder
 {
@@ -13,6 +13,6 @@ class Fieldset extends Builder
      */
     public function __construct($handle)
     {
-        $this->source = FieldsetModel::where('handle', $handle)->firstOrFail();
+        $this->source = Model::where('handle', $handle)->firstOrFail();
     }
 }

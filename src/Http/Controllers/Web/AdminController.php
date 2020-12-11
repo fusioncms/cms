@@ -13,7 +13,6 @@ class AdminController extends Controller
      */
     public function index()
     {
-// dd(\Fusion\Models\Fieldset::all());
         if (auth()->check()) {
             $this->authorize('access.controlPanel');
         }

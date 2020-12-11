@@ -4,15 +4,18 @@ namespace Fusion\Models;
 
 use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasBlueprint;
+use Fusion\Concerns\HasBuilder;
+use Fusion\Contracts\Structure;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Activitylog\Models\Activity;
 
-class Form extends Model
+class Form extends Model implements Structure
 {
     use HasBlueprint;
     use HasActivity;
     use HasFactory;
+    use HasBuilder;
 
     protected $with = ['blueprint'];
 
@@ -64,38 +67,22 @@ class Form extends Model
     protected $blueprintGroup = 'Forms';
 
     /**
-     * Get the builder instance.
-     *
-     * @return Model
+     * Return form path.
+     * 
+     * @param  string $additional
+     * @return string
      */
-    public function getBuilder()
+    public function path($additional = null)
     {
-        $builder = new \Fusion\Services\Builders\Form($this->handle);
-
-        return $builder->make();
+        return "/form/{$this->slug}" . ($additional ? "/{$additional}" : '');
     }
 
     /**
-     * Get the "table" attribute value.
-     *
+     * Return 'thank you' path.
+     * 
+     * @param  string $additional
      * @return string
      */
-    public function getBuilderTable()
-    {
-        return "form_{$this->handle}";
-    }
-
-    public function path($additional = null)
-    {
-        $path = '/form/'.$this->slug;
-
-        if ($additional) {
-            $path .= '/'.$additional;
-        }
-
-        return $path;
-    }
-
     public function thankyouPath()
     {
         return $this->path('thankyou');
