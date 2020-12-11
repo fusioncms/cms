@@ -66,4 +66,14 @@ class Model extends EloquentModel
     {
         return $this->$attribute->timezone($timezone ?: setting('system.time_zone'));
     }
+
+    /**
+     * Returns class name.
+     * 
+     * @return string
+     */
+    protected function getClassName()
+    {
+        return (new \ReflectionClass($this))->getShortName();
+    }
 }

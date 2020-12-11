@@ -21,18 +21,26 @@ class {class} extends Model
     protected $table = 'fx_{handle}';
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = {casts};
-
-    /**
      * Mass assignment protection.
      *
      * @var array
      */
-    protected $fillable = {fillable};
+    protected $fillable = [
+        'field_id',
+        'fieldset_id',
+        'name',
+        'handle',
+        'status'
+    ] + [{fillable}];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'status' => 'boolean'
+    ] + [{casts}];
 
     /**
      * Indicates if the model should be timestamped.

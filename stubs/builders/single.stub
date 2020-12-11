@@ -1,9 +1,8 @@
 <?php
 
-namespace Fusion\Models\Collections;
+namespace Fusion\Models\Singles;
 
 use Carbon\Carbon;
-use Fusion\Models\Field;
 use Fusion\Models\Matrix;
 use Illuminate\Support\Str;
 use Fusion\Concerns\HasActivity;
@@ -11,7 +10,7 @@ use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Database\Eloquent\Builder;
 
-class {class} extends Model
+class Page extends Model
 {
     use HasActivity;
 
@@ -20,37 +19,53 @@ class {class} extends Model
      *
      * @var string
      */
-    protected $table = 'mx_{handle}';
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = {casts};
+    protected $table = 'mx_page';
 
     /**
      * Mass assignment protection.
      *
      * @var array
      */
-    protected $fillable = {fillable};
+    protected $fillable = [
+        'matrix_id',
+        'name',
+        'slug',
+        'publish_at',
+        'expire_at',
+        'status'
+    ] + [{fillable}];
 
     /**
-     * Mass reference protection.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $references = {references};
+    protected $casts = [
+        'status' => 'boolean'
+    ] + [{casts}];
 
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = {dates};
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'matrix_id';
+
+    /**
+     * Indicates if the model's ID is auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+        /**
      * The "booted" method of the model.
      *
      * @return void
@@ -74,20 +89,6 @@ class {class} extends Model
         static::addGlobalScope('enabled', function (Builder $builder) {
             $builder->where('status', 1);
         });
-
-        static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderBy('{matrix_order_by}', '{matrix_order_direction}');
-        });
-    }
-
-    /**
-     * Mass reference protection.
-     *
-     * @var array
-     */
-    public function getReferences()
-    {
-        return $this->references;
     }
 
     /**
@@ -105,20 +106,20 @@ class {class} extends Model
      */
     public function getFieldsAttribute()
     {
-        return $this->matrix->blueprint->fields ?? null;
+        return $this->matrix->fields ?? null;
     }
 
-    public function parent()
+    /**
+     * Proxy the handle attribute from the owning matrix.
+     *
+     * @return string
+     */
+    public function getHandleAttribute()
     {
-        return $this->hasOne(Matrix::class, 'id', 'parent_id');
+        return $this->matrix->handle;
     }
 
-    public function children()
-    {
-        return $this->hasMany(Matrix::class, 'parent_id', 'id');
-    }
-
-    {relationships}
+    
 
     /**
      * Tap into activity before persisting to database.
@@ -131,14 +132,12 @@ class {class} extends Model
     {
         $entry      = $activity->subject;
         $matrix     = $entry->matrix;
-        $action     = Str::ucfirst($eventName);
         $modelName  = Str::singular($matrix->name);
-        $properties = [
-            'link' => "collection/{$matrix->slug}/{$entry->id}/edit",
-            'icon' => $matrix->icon
-        ];
 
-        $activity->description = "{$action} {$modelName} ({$entry->name})";
-        $activity->properties  = $properties;
+        $activity->description = "Updated {$modelName}";
+        $activity->properties  = [
+            'icon'  => $matrix->icon,
+            'link' => "single/{$matrix->slug}"
+        ];
     }
 }
