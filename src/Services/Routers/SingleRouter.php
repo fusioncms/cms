@@ -3,7 +3,7 @@
 namespace Fusion\Services\Routers;
 
 use Fusion\Models\Matrix;
-use Fusion\Services\Builders\Single;
+use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -20,7 +20,7 @@ class SingleRouter extends Router
                 continue 1;
             }
 
-            $page = (new Single($matrix->handle))->make();
+            $page = Builders\Single::resolve($matrix->handle);
 
             if (request()->has('preview')) {
                 $page = $page->withoutGlobalScopes();

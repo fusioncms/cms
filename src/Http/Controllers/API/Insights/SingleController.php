@@ -6,7 +6,7 @@ use Analytics;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\InsightResource;
 use Fusion\Models\Matrix;
-use Fusion\Services\Builders\Single;
+use Fusion\Services\Builders;
 use Spatie\Analytics\Period;
 
 class SingleController extends Controller
@@ -14,8 +14,8 @@ class SingleController extends Controller
     public function index($matrix)
     {
         $matrix   = Matrix::where('slug', $matrix)->firstOrFail();
-        $single   = (new Single($matrix->handle))->make()->first();
-        $pagePath = compile_blade_template($matrix->route, $single) ?: '/';
+        $single   = Builders\Single::resolve($matrix->handle);
+        $pagePath = compile_blade_template($matrix->route, $single->first()) ?: '/';
 
         $stats = Analytics::performQuery(
             Period::days(30),
