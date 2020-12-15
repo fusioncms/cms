@@ -13,7 +13,7 @@ class Taxonomy extends Builder
      */
     public function __construct($handle)
     {
-        $this->taxonomy = Model::where('handle', $handle)->firstOrFail();
+        $this->source = Model::where('handle', $handle)->firstOrFail();
     }
 
     /**

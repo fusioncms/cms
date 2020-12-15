@@ -1,7 +1,8 @@
 <?php
 
-namespace Fusion\Http\Requests;
+namespace Fusion\Http\Requests\Navigation;
 
+use Fusion\Http\Requests\Request;
 use Fusion\Rules\NotAReservedKeyword;
 
 class NavigationRequest extends Request

@@ -4,8 +4,8 @@ namespace Fusion\Models;
 
 use Fusion\Concerns\HasBuilder;
 use Fusion\Contracts\Structure;
+use Fusion\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Fieldset extends Model implements Structure
 {

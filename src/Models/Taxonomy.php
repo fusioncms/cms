@@ -72,10 +72,7 @@ class Taxonomy extends Model implements Structure
      */
     public function terms()
     {
-        $model = $this->getBuilder();
-        $class = new \ReflectionClass($model);
-
-        return $this->hasMany('\\'.$class->getName());
+        return $this->hasMany($this->getBuilderNamespace())->orderBy('order', 'asc');
     }
 
     /**

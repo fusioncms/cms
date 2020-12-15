@@ -3,7 +3,7 @@
 namespace Fusion\Http\Controllers\API\Navigation;
 
 use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Requests\NavigationRequest;
+use Fusion\Http\Requests\Navigation\NavigationRequest;
 use Fusion\Http\Resources\NavigationResource;
 use Fusion\Models\Navigation;
 use Illuminate\Http\Request;
@@ -13,9 +13,9 @@ class NavigationController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
-     * @return \Illuminate\Support\Collection
+     * @return NavigationResource
      */
     public function index(Request $request)
     {
@@ -29,9 +29,9 @@ class NavigationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \Fusion\Models\Navigation $navigation
+     * @param Navigation $navigation
      *
-     * @return \Fusion\Http\Responses\NavigationResource
+     * @return NavigationResource
      */
     public function show(Navigation $navigation)
     {
@@ -43,9 +43,9 @@ class NavigationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Fusion\Http\Requests\NavigationRequest $request
+     * @param NavigationNodeRequest $request
      *
-     * @return \Fusion\Http\Responses\NavigationResource
+     * @return NavigationResource
      */
     public function store(NavigationRequest $request)
     {
@@ -57,10 +57,10 @@ class NavigationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Fusion\Http\Requests\NavigationRequest $request
-     * @param \Fusion\Models\Navigation               $navigation
+     * @param NavigationNodeRequest $request
+     * @param Navigation            $navigation
      *
-     * @return \Fusion\Http\Responses\NavigationResource
+     * @return NavigationResource
      */
     public function update(NavigationRequest $request, Navigation $navigation)
     {
@@ -72,7 +72,7 @@ class NavigationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \Fusion\Models\Navigation $navigation
+     * @param Navigation $navigation
      *
      * @return void
      */

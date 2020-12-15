@@ -252,8 +252,18 @@ abstract class Builder
     }
 
     /**
-     * Static make method.
+     * Static refresh method.
+     * 
+     * @return \Fusion\Database\Eloquent\Model
+     */
+    public static function fresh(...$args)
+    {
+        return (new static(...$args))->refresh();
+    }
 
+    /**
+     * Static make method.
+     * 
      * @return \Fusion\Database\Eloquent\Model
      */
     public static function resolve(...$args)

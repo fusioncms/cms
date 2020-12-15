@@ -95,10 +95,7 @@ class Form extends Model implements Structure
      */
     public function responses()
     {
-        $model = $this->getBuilder();
-        $class = new \ReflectionClass($model);
-
-        return $this->hasMany('\\'.$class->getName());
+        return $this->hasMany($this->getBuilderNamespace());
     }
 
     /**

@@ -27,6 +27,16 @@ class Navigation extends Builder
     }
 
     /**
+     * Return builder folder name.
+     * 
+     * @return string
+     */
+    protected function getBuildFolder()
+    {
+        return 'Navigation';
+    }
+
+    /**
      * Attribute casting.
      * 
      * @var array

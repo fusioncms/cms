@@ -41,10 +41,7 @@ class Navigation extends Model implements Structure
      */
     public function nodes()
     {
-        $model = $this->getBuilder();
-        $class = new \ReflectionClass($model);
-
-        return $this->hasMany('\\'.$class->getName())->orderBy('order', 'asc');
+        return $this->hasMany($this->getBuilderNamespace())->orderBy('order', 'asc');
     }
 
     /**

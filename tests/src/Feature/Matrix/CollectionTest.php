@@ -4,7 +4,7 @@ namespace Fusion\Tests\Feature\Matrix;
 
 use Fusion\Models\Matrix;
 use Fusion\Models\Section;
-use Fusion\Services\Builders\Collection;
+use Fusion\Services\Builders;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -34,7 +34,7 @@ class CollectionTest extends TestCase
             })
             ->create();
 
-        $this->model  = (new Collection($this->matrix->handle))->make();
+        $this->model  = Builders\Matrix::resolve($this->matrix->handle);
         $this->field1 = $this->matrix->blueprint->fields->get(0);
         $this->field2 = $this->matrix->blueprint->fields->get(1);
     }
@@ -211,7 +211,7 @@ class CollectionTest extends TestCase
         $attributes[$this->field1->handle] = $this->faker->word();
         $attributes[$this->field2->handle] = $this->faker->word();
 
-        $model = (new Collection($this->matrix->handle))->make();
+        $model = Builders\Matrix::resolve($this->matrix->handle);
         $entry = $model->create($attributes);
 
         return [$entry, $attributes];

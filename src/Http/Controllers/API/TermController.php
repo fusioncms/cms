@@ -6,7 +6,7 @@ use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\TermRequest;
 use Fusion\Http\Resources\TermResource;
 use Fusion\Models\Taxonomy;
-use Fusion\Services\Builders\Taxonomy as Builder;
+use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 
 class TermController extends Controller
@@ -22,9 +22,9 @@ class TermController extends Controller
     {
         $this->authorize('terms.viewAny');
 
-        return TermResource::collection(
-            (new Builder($taxonomy->handle))->get()->paginate(25)
-        );
+        $terms = Builders\Taxonomy::resolve($taxonomy->handle);
+
+        return TermResource::collection($terms->paginate(25));
     }
 
     /**
@@ -39,9 +39,9 @@ class TermController extends Controller
     {
         $this->authorize('terms.view');
 
-        return new TermResource(
-            (new Builder($taxonomy->handle))->get()->findOrFail($id)
-        );
+        $terms = Builders\Taxonomy::resolve($taxonomy->handle);
+
+        return new TermResource($terms->findOrFail($id));
     }
 
     /**
@@ -99,7 +99,7 @@ class TermController extends Controller
     {
         $this->authorize('terms.delete');
 
-        $model = (new Builder($taxonomy->handle))->make();
+        $model = Builders\Taxonomy::resolve($taxonomy->handle);
         $term  = $model->findOrFail($id);
 
         $term->delete();

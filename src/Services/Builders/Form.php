@@ -11,7 +11,7 @@ class Form extends Builder
      *
      * @param string $handle
      */
-    public function __construct($form)
+    public function __construct($handle)
     {
         $this->source = Model::where('handle', $handle)->firstOrFail();
     }

@@ -18,6 +18,16 @@ trait HasBuilder
     }
 
     /**
+     * Get the builder namespace.
+     *
+     * @return \Fusion\Database\Eloquent\Model
+     */
+    public function getBuilderNamespace()
+    {
+        return get_class($this->getBuilder());
+    }
+
+    /**
      * Get the builder instance.
      *
      * @return \Fusion\Database\Eloquent\Model
@@ -25,7 +35,7 @@ trait HasBuilder
     public function getBuilder()
     {
         $id      = strtolower($this->getClassName());
-        $builder = config("fusion.builders.{$id}.namepsace");
+        $builder = config("fusion.builders.{$id}.namespace");
 
         return (new $builder($this->handle))->make();
     }

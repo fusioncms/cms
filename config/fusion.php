@@ -57,7 +57,7 @@ return [
    'builders' => [
         'fieldset' => [
             'prefix'    => 'fx',
-            'namepsace' => Fusion\Services\Builders\Fieldset::class
+            'namespace' => Fusion\Services\Builders\Fieldset::class
         ],
         'form' => [
             'prefix'    => 'form',
@@ -65,19 +65,19 @@ return [
         ],
         'matrix' => [
             'prefix'    => 'mx',
-            'namepsace' => Fusion\Services\Builders\Matrix::class
+            'namespace' => Fusion\Services\Builders\Matrix::class
         ],
         'navigation' => [
-            'prefix'    => 'menu',
-            'namepsace' => Fusion\Services\Builders\Navigation::class
+            'prefix'    => 'navigation',
+            'namespace' => Fusion\Services\Builders\Navigation::class
         ],
         'taxonomy' => [
             'prefix'    => 'taxonomy',
-            'namepsace' => Fusion\Services\Builders\Taxonomy::class
+            'namespace' => Fusion\Services\Builders\Taxonomy::class
         ],
         'setting' => [
             'prefix'    => 'settings',
-            'namepsace' => Fusion\Services\Builders\Setting::class
+            'namespace' => Fusion\Services\Builders\Setting::class
         ]
    ],
 

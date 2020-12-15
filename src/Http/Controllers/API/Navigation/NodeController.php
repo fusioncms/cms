@@ -4,72 +4,60 @@ namespace Fusion\Http\Controllers\API\Navigation;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\NodeResource;
+use Fusion\Http\Requests\Navigation\NavigationNodeRequest;
 use Fusion\Models\Navigation;
-use Fusion\Services\Builders\Navigation as Builder;
+use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 
 class NodeController extends Controller
 {
     /**
-     * Validation rules used for create and update
-     * actions.
+     * Display a listing of the resource.
      *
-     * @var array
+     * @param Navigation $navigation
+     *
+     * @return NavigationResource
      */
-    protected $rules = [
-        //
-    ];
+    public function index(Navigation $navigation)
+    {
+        $this->authorize('nodes.viewAny');
+
+        $nodes = Builders\Navigation::resolve($navigation->handle);
+
+        return NodeResource::collection($nodes->paginate(25));
+    }
 
     /**
      * Display the specified resource.
      *
      * @param \Fusion\Models\Navigation $navigation
+     * @param 
      *
-     * @return \Illuminate\Http\Response
+     * @return NodeResource
      */
-    public function show($navigation, $id)
+    public function show(Navigation $navigation, $id)
     {
         $this->authorize('nodes.view');
 
-        $navigation  = Navigation::find($navigation);
-        $model       = (new Builder($navigation->handle))->make();
-        $node        = $model->find($id);
+        $node = Builders\Navigation::resolve($navigation->handle);
 
-        return new NodeResource($node);
+        return new NodeResource($node->find($id));
     }
 
-    public function store(Request $request, $navigation)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param NavigationNodeRequest $request
+     * @param Navigation $navigation
+     *
+     * @return NodeResource
+     */
+    public function store(NavigationNodeRequest $request, Navigation $navigation)
     {
-        $this->authorize('nodes.create');
+        $node = $request->model->create($request->validated());
 
-        $navigation          = Navigation::find($navigation);
-        $model               = (new Builder($navigation->handle))->make();
-        $relationships       = [];
-
-        $rules = [
-            'name'       => 'required',
-            'url'        => 'sometimes',
-            'new_window' => 'sometimes',
-            'parent_id'  => 'sometimes',
-            'status'     => 'sometimes',
-        ];
-
-        if (isset($navigation->blueprint)) {
-            $fields        = $navigation->blueprint->database();
-            $relationships = $navigation->blueprint->relationships();
-
-            foreach ($fields as $field) {
-                $rules[$field->handle] = 'sometimes';
-            }
-        }
-
-        $attributes                  = $request->validate($rules);
-        $attributes['navigation_id'] = $navigation->id;
-        $attributes['order']         = $model->orderLast();
-
-        $node = $model->create($attributes);
-
-        foreach ($relationships as $relationship) {
+        // persist relationships..
+        foreach ($request->relationships as $relationship) {
             $relationship->type()->persistRelationship($node, $relationship);
         }
 
@@ -79,58 +67,40 @@ class NodeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param string                   $navigation
+     * @param NavigationNodeRequest $request
+     * @param Navigation            $navigation
+     * @param int                   $id
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $navigation, $id)
+    public function update(NavigationNodeRequest $request, Navigation $navigation, $id)
     {
-        $this->authorize('nodes.update');
+        $node = $request->model->findOrFail($id);
+        $node->update($request->validated());
 
-        $navigation          = Navigation::findOrFail($navigation);
-        $node                = (new Builder($navigation->handle))->make()->findOrFail($id);
-        $relationships       = [];
-        $rules               = [
-            'name'       => 'required',
-            'url'        => 'sometimes',
-            'new_window' => 'sometimes',
-            'parent_id'  => 'sometimes',
-            'status'     => 'sometimes',
-        ];
-
-        if (isset($navigation->blueprint)) {
-            $fields        = $navigation->blueprint->database();
-            $relationships = $navigation->blueprint->relationships();
-
-            foreach ($fields as $field) {
-                $rules[$field->handle] = 'sometimes';
-            }
-        }
-
-        $attributes = $request->validate($rules);
-
-        foreach ($attributes as $handle => $value) {
-            $node->{$handle} = $value;
-        }
-
-        $node->update($attributes);
-
-        foreach ($relationships as $relationship) {
+        // persist relationships..
+        foreach ($request->relationships as $relationship) {
             $relationship->type()->persistRelationship($node, $relationship);
         }
 
         return new NodeResource($node);
     }
 
-    public function destroy(Request $request, $navigation, $id)
+    /**
+     * Destroy resource from storage.
+     *
+     * @param \Illuminate\Http\Request  $request
+     * @param \Fusion\Models\Navigation $taxonomy
+     * @param int                       $id
+     *
+     * @return void
+     */
+    public function destroy(Request $request, Navigation $navigation, $id)
     {
         $this->authorize('nodes.delete');
 
-        $navigation  = Navigation::findOrFail($navigation);
-        $model       = (new Builder($navigation->handle))->make();
-        $node        = $model->findOrFail($id);
+        $node = Builders\Navigation::resolve($navigation->handle);
 
-        $node->delete();
+        $node->findOrFail($id)->delete();
     }
 }
