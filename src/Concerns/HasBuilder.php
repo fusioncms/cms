@@ -48,7 +48,7 @@ trait HasBuilder
     public function refreshBuilder()
     {
         $id      = strtolower($this->getClassName());
-        $builder = config("fusion.builders.{$id}.namepsace");
+        $builder = config("fusion.builders.{$id}.namespace");
 
         return (new $builder($this->handle))->refresh();
     }
