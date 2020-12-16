@@ -25,4 +25,14 @@ class Setting extends Builder
     {
         return ['setting_id'];
     }
+
+    /**
+     * Builder table prefix.
+     * 
+     * @var string
+     */
+    public static function prefix()
+    {
+        return 'settings';
+    }
 }

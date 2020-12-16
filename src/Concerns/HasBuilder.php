@@ -2,29 +2,42 @@
 
 namespace Fusion\Concerns;
 
+use Illuminate\Support\Str;
+
 trait HasBuilder
 {
     /**
-     * Get the builder's table name.
+     * Get the Building Model name.
      *
+     * @return string
+     */
+    public function getClassName()
+    {
+        return class_basename($this);
+    }
+
+    /**
+     * Get the Builder Model's namespace.
+     *
+     * @return string
+     */
+    public function getBuilderModelNamespace()
+    {
+        return get_class($this->getBuilder());
+    }
+
+    /**
+     * Get the Builder Class/Model table name.
+     * (i.e. `mx_pages`)
+     * 
      * @return string
      */
     public function getBuilderTable()
     {
-        $id     = strtolower($this->getClassName());
-        $prefix = config("fusion.builders.{$id}.prefix");
+        $namespace = $this->getBuilderNamespace();
+        $prefix    = $namespace::prefix();
 
         return "{$prefix}_{$this->handle}";
-    }
-
-    /**
-     * Get the builder namespace.
-     *
-     * @return \Fusion\Database\Eloquent\Model
-     */
-    public function getBuilderNamespace()
-    {
-        return get_class($this->getBuilder());
     }
 
     /**
@@ -34,10 +47,9 @@ trait HasBuilder
      */
     public function getBuilder()
     {
-        $id      = strtolower($this->getClassName());
-        $builder = config("fusion.builders.{$id}.namespace");
+        $namespace = $this->getBuilderNamespace();
 
-        return (new $builder($this->handle))->make();
+        return $namespace::resolve($this->handle);
     }
 
     /**
@@ -47,9 +59,19 @@ trait HasBuilder
      */
     public function refreshBuilder()
     {
-        $id      = strtolower($this->getClassName());
-        $builder = config("fusion.builders.{$id}.namespace");
+        $namespace = $this->getBuilderNamespace();
 
-        return (new $builder($this->handle))->refresh();
+        return $namespace::fresh($this->handle);
+    }
+
+    /**
+     * Get the Builder Class namespace.
+     *
+     * @access private
+     * @return string
+     */
+    private function getBuilderNamespace()
+    {
+        return "Fusion\\Services\\Builders\\{$this->getClassName()}";
     }
 }

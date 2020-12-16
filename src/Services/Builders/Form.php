@@ -25,4 +25,14 @@ class Form extends Builder
     {
         return ['form_id', 'identifiable_ip_address'];
     }
+
+    /**
+     * Builder table prefix.
+     * 
+     * @var string
+     */
+    public static function prefix()
+    {
+        return 'form';
+    }
 }

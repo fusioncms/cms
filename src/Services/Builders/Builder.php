@@ -53,19 +53,21 @@ abstract class Builder
 
         $fillable = array_merge($this->getFillable(), $fillable);
         $casts    = array_merge($this->getCasts(), $casts);
+        
+        $template  =  File::get($this->getStubPath());
+        $buildPath = $this->getBuildPath();
 
         // Generate builder class file..
-        File::put($this->getBuildPath(),
-            strtr($this->getStubContent(),
-                array_merge([
-                    '{class}'         => $this->getBuildName(),
-                    '{slug}'          => $this->source->slug,
-                    '{handle}'        => $this->source->handle,
-                    '{fillable}'      => $this->toString($fillable),
-                    '{casts}'         => $this->toString($casts),
-                    '{relationships}' => $this->generateRelationships(),
-                ], $this->getPlaceholders())
-            )
+        File::put($buildPath, strtr($template,
+            array_merge([
+                '{class}'         => $this->getBuildName(),
+                '{table}'         => $this->getBuildTable(),
+                '{slug}'          => $this->source->slug,
+                '{handle}'        => $this->source->handle,
+                '{fillable}'      => $this->toString($fillable),
+                '{casts}'         => $this->toString($casts),
+                '{relationships}' => $this->generateRelationships(),
+            ], $this->getPlaceholders()))
         );
 
         return app()->make($this->getNamespace());
@@ -88,13 +90,19 @@ abstract class Builder
     }
 
     /**
-     * Return builder stub filename.
+     * Get table name of Builder Model.
      * 
      * @return string
      */
-    protected function getStubFile()
+    public function getBuildTable()
     {
-        return Str::lower($this->source->getClassName()) . '.stub';
+        $prefix = static::prefix();
+
+        if (is_null($prefix)) {
+            $prefix = Str::lower($this->source->getClassName());
+        }
+
+        return "{$prefix}_{$this->source->handle}";
     }
 
     /**
@@ -104,17 +112,10 @@ abstract class Builder
      */
     protected function getStubPath()
     {
-        return fusion_path("/stubs/builders/{$this->getStubFile()}");
-    }
-
-    /**
-     * Return builder stub file path.
-     * 
-     * @return string
-     */
-    protected function getStubContent()
-    {
-        return File::get($this->getStubPath());
+        $name = Str::lower($this->source->getClassName());
+        $path = fusion_path("/stubs/builders/{$name}.stub");
+        
+        return $path;
     }
 
     /**
@@ -270,4 +271,11 @@ abstract class Builder
     {
         return (new static(...$args))->make();
     }
+
+    /**
+     * Builder table prefix.
+     * 
+     * @var string
+     */
+    abstract static function prefix();
 }

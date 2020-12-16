@@ -37,4 +37,14 @@ class Taxonomy extends Builder
 	        'status' => 'boolean',
         ];
     }
+
+    /**
+     * Builder table prefix.
+     * 
+     * @var string
+     */
+    public static function prefix()
+    {
+        return 'taxonomy';
+    }
 }

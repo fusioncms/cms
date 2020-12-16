@@ -6,7 +6,7 @@ use Fusion\Models\Form;
 use Fusion\Models\Field;
 use Illuminate\Support\Str;
 use Fusion\Concerns\HasActivity;
-use Illuminate\Database\Eloquent\Model;
+use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 
 class {class} extends Model
@@ -18,7 +18,7 @@ class {class} extends Model
      *
      * @var string
      */
-    protected $table = 'form_{handle}';
+    protected $table = '{table}';
 
     /**
      * The attributes that should be appended to the model.

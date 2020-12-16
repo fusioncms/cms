@@ -18,7 +18,7 @@ class {class} extends Model
      *
      * @var string
      */
-    protected $table = 'fx_{handle}';
+    protected $table = '{table}';
 
     /**
      * Mass assignment protection.

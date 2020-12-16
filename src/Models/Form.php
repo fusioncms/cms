@@ -95,7 +95,7 @@ class Form extends Model implements Structure
      */
     public function responses()
     {
-        return $this->hasMany($this->getBuilderNamespace());
+        return $this->hasMany($this->getBuilderModelNamespace());
     }
 
     /**

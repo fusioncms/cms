@@ -50,39 +50,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Builders
-    |--------------------------------------------------------------------------
-    |
-    */
-   'builders' => [
-        'fieldset' => [
-            'prefix'    => 'fx',
-            'namespace' => Fusion\Services\Builders\Fieldset::class
-        ],
-        'form' => [
-            'prefix'    => 'form',
-            'namespace' => Fusion\Services\Builders\Form::class
-        ],
-        'matrix' => [
-            'prefix'    => 'mx',
-            'namespace' => Fusion\Services\Builders\Matrix::class
-        ],
-        'navigation' => [
-            'prefix'    => 'navigation',
-            'namespace' => Fusion\Services\Builders\Navigation::class
-        ],
-        'taxonomy' => [
-            'prefix'    => 'taxonomy',
-            'namespace' => Fusion\Services\Builders\Taxonomy::class
-        ],
-        'setting' => [
-            'prefix'    => 'settings',
-            'namespace' => Fusion\Services\Builders\Setting::class
-        ]
-   ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Structure & Fieldtype Exclusions.
     |--------------------------------------------------------------------------
     |

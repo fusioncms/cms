@@ -49,17 +49,22 @@ class Matrix extends Builder
     }
 
     /**
-     * Return builder stub filename.
+     * Return builder stub file path.
+     * [override]
      * 
      * @return string
      */
-    protected function getStubFile()
+    protected function getStubPath()
     {
-        return Str::lower($this->source->type) . '.stub';
+        $name = Str::lower($this->source->type);
+        $path = fusion_path("/stubs/builders/{$name}.stub");
+
+        return $path;
     }
 
     /**
      * Return folder to generate builder.
+     * [override]
      * 
      * @return string
      */
@@ -72,8 +77,8 @@ class Matrix extends Builder
     }
 
     /**
-     * Add addl placeholders to merge into
-     * your builder stub file.
+     * Add addl. placeholders to merge into your builder stub file.
+     * [override]
      * 
      * @return array
      */
@@ -83,5 +88,15 @@ class Matrix extends Builder
             '{order_by}'        => $this->source->order_by ?? 'name',
             '{order_direction}' => $this->source->order_direction ? 'ASC' : 'DESC',
         ];
+    }
+
+    /**
+     * Builder table prefix.
+     * 
+     * @var string
+     */
+    public static function prefix()
+    {
+        return 'mx';
     }
 }

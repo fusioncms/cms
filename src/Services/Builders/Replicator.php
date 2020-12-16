@@ -67,4 +67,14 @@ class Replicator extends Builder
             '{tableName}' => str_handle("rp_{$this->handle}"),
         ];
     }
+
+    /**
+     * Builder table prefix.
+     * 
+     * @var string
+     */
+    public static function prefix()
+    {
+        return 'replicator';
+    }
 }
