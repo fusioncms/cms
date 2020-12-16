@@ -90,22 +90,6 @@ abstract class Builder
     }
 
     /**
-     * Get table name of Builder Model.
-     * 
-     * @return string
-     */
-    public function getBuildTable()
-    {
-        $prefix = static::prefix();
-
-        if (is_null($prefix)) {
-            $prefix = Str::lower($this->source->getClassName());
-        }
-
-        return "{$prefix}_{$this->source->handle}";
-    }
-
-    /**
      * Return builder stub file path.
      * 
      * @return string
@@ -191,6 +175,23 @@ abstract class Builder
     protected function getPlaceholders()
     {
         return [];
+    }
+
+    /**
+     * Get table name of Builder Model.
+     *
+     * @access private
+     * @return string
+     */
+    private function getBuildTable()
+    {
+        $prefix = static::prefix();
+
+        if (is_null($prefix)) {
+            $prefix = Str::lower($this->source->getClassName());
+        }
+
+        return "{$prefix}_{$this->source->handle}";
     }
 
     /**
