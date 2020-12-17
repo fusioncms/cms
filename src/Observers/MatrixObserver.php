@@ -2,26 +2,28 @@
 
 namespace Fusion\Observers;
 
+use Fusion\Contracts\BuilderObserver;
 use Fusion\Models\Matrix;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 
-class MatrixObserver
+class MatrixObserver implements BuilderObserver
 {
     /**
-     * Handle the matrix "created" event.
+     * Handle the "created" event.
      *
-     * @param \Fusion\Models\Matrix $matrix
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function created(Matrix $matrix)
+    public function created(Model $model)
     {
-        Schema::create($matrix->getBuilderTable(), function (Blueprint $table) use ($matrix) {
-            if ($matrix->type === 'collection') {
+        Schema::create($model->getBuilderTable(), function (Blueprint $table) use ($model) {
+            if ($model->type === 'collection') {
                 $table->bigIncrements('id');
             }
 
@@ -37,56 +39,56 @@ class MatrixObserver
     }
 
     /**
-     * Handle the matrix "updating" event.
+     * Handle the "updating" event.
      *
-     * @param \Fusion\Models\Matrix $matrix
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function updating(Matrix $matrix)
+    public function updating(Model $model)
     {
-        // Fetch our "old" matrix instance
-        $old = Matrix::find($matrix->id);
+        // Fetch our "old" instance
+        $old = Matrix::find($model->id);
 
         // Rename the tables if changed
-        if ($old->getBuilderTable() !== $matrix->getBuilderTable()) {
-            Schema::rename($old->getBuilderTable(), $matrix->getBuilderTable());
+        if ($old->getBuilderTable() !== $model->getBuilderTable()) {
+            Schema::rename($old->getBuilderTable(), $model->getBuilderTable());
 
             $oldClass = 'Fusion\\Models\\Collections\\'.Str::studly($old->handle);
-            $newClass = 'Fusion\\Models\\Collections\\'.Str::studly($matrix->handle);
+            $newClass = 'Fusion\\Models\\Collections\\'.Str::studly($model->handle);
 
             // Update model classes in the activity log to match the new class name
             Activity::where('subject_type', $oldClass)
                 ->update([
                     'subject_type' => $newClass,
-                    'properties'   => DB::raw("REPLACE(properties, '".$old->slug."', '".$matrix->slug."')"),
+                    'properties'   => DB::raw("REPLACE(properties, '".$old->slug."', '".$model->slug."')"),
                 ]);
         }
 
         // Create the ID column if converting from a single to a collection type
-        if ($old->type === 'single' and $matrix->type === 'collection') {
-            Schema::table($matrix->getBuilderTable(), function (Blueprint $table) {
+        if ($old->type === 'single' and $model->type === 'collection') {
+            Schema::table($model->getBuilderTable(), function (Blueprint $table) {
                 $table->bigIncrements('id')->first();
             });
         }
 
         // Drop the ID column if converting from a collection to a single type
-        if ($old->type === 'collection' and $matrix->type === 'single') {
-            Schema::table($matrix->getBuilderTable(), function (Blueprint $table) {
+        if ($old->type === 'collection' and $model->type === 'single') {
+            Schema::table($model->getBuilderTable(), function (Blueprint $table) {
                 $table->dropColumn('id');
             });
         }
     }
 
     /**
-     * Handle the matrix "deleted" event.
+     * Handle the "deleted" event.
      *
-     * @param \Fusion\Models\Matrix $matrix
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function deleted(Matrix $matrix)
+    public function deleted(Model $model)
     {
-        Schema::dropIfExists($matrix->getBuilderTable());
+        Schema::dropIfExists($model->getBuilderTable());
     }
 }
