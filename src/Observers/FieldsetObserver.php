@@ -2,22 +2,24 @@
 
 namespace Fusion\Observers;
 
+use Fusion\Contracts\BuilderObserver;
 use Fusion\Models\Fieldset;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class FieldsetObserver
+class FieldsetObserver implements BuilderObserver
 {
     /**
      * Handle the "created" event.
      *
-     * @param \Fusion\Models\Fieldset $fieldset
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function created(Fieldset $fieldset)
+    public function created(Model $model)
     {
-        Schema::create($fieldset->getBuilderTable(), function (Blueprint $table) {
+        Schema::create($model->getBuilderTable(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('field_id');
             $table->unsignedBigInteger('fieldset_id');
@@ -36,28 +38,28 @@ class FieldsetObserver
     /**
      * Handle the "updating" event.
      *
-     * @param \Fusion\Models\Fieldset $fieldset
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function updating(Fieldset $fieldset)
+    public function updating(Model $model)
     {
-        $old = Fieldset::find($fieldset->id);
+        $old = Fieldset::find($model->id);
 
-        if ($old->getBuilderTable() !== $fieldset->getBuilderTable()) {
-            Schema::rename($old->getBuilderTable(), $fieldset->getBuilderTable());
+        if ($old->getBuilderTable() !== $model->getBuilderTable()) {
+            Schema::rename($old->getBuilderTable(), $model->getBuilderTable());
         }
     }
 
     /**
      * Handle the "deleted" event.
      *
-     * @param \Fusion\Models\Fieldset $fieldset
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function deleted(Fieldset $fieldset)
+    public function deleted(Model $model)
     {
-        Schema::dropIfExists($fieldset->getBuilderTable());
+        Schema::dropIfExists($model->getBuilderTable());
     }
 }

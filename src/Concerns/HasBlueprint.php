@@ -57,6 +57,16 @@ trait HasBlueprint
     }
 
     /**
+     * Get all fields for blueprint.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function fields()
+    {
+        return $this->blueprint->fields();
+    }
+
+    /**
      * Handles creating a blueprint for the given model.
      */
     public function createBlueprint()

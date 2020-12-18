@@ -4,15 +4,18 @@ namespace Fusion\Models;
 
 use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasBlueprint;
+use Fusion\Concerns\HasBuilder;
+use Fusion\Contracts\Structure;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Activitylog\Models\Activity;
 
-class Navigation extends Model
+class Navigation extends Model implements Structure
 {
     use HasBlueprint;
     use HasActivity;
     use HasFactory;
+    use HasBuilder;
 
     protected $with = ['blueprint'];
 
@@ -32,38 +35,13 @@ class Navigation extends Model
     protected $structure = 'Navigation';
 
     /**
-     * Get the builder instance.
-     *
-     * @return Model
-     */
-    public function getBuilder()
-    {
-        $builder = new \Fusion\Services\Builders\Navigation($this->handle);
-
-        return $builder->make();
-    }
-
-    /**
-     * Get the "table" attribute value.
-     *
-     * @return string
-     */
-    public function getBuilderTable()
-    {
-        return "navigation_{$this->handle}";
-    }
-
-    /**
      * Navigation has many nodes.
      *
      * @return HasManyRelationship
      */
     public function nodes()
     {
-        $model = $this->getBuilder();
-        $class = new \ReflectionClass($model);
-
-        return $this->hasMany('\\'.$class->getName())->orderBy('order', 'asc');
+        return $this->hasMany($this->getBuilderModelNamespace())->orderBy('order', 'asc');
     }
 
     /**

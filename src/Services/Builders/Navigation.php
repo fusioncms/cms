@@ -2,99 +2,61 @@
 
 namespace Fusion\Services\Builders;
 
-use Fusion\Contracts\Builder as BuilderContract;
-use Fusion\Models\Navigation as NavigationModel;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
+use Fusion\Models\Navigation as Model;
 
-class Navigation extends Builder implements BuilderContract
+class Navigation extends Builder
 {
     /**
-     * @var string
-     */
-    protected $navigation;
-
-    /**
-     * @var string
-     */
-    protected $namespace = 'Fusion\Models\Navigation';
-
-    /**
-     * @var \Fusion\Database\Eloquent\Model
-     */
-    protected $model;
-
-    /**
-     * Create a new Navigation instance.
+     * New Builder instance.
      *
-     * @param string $navigation
+     * @param string $handle
      */
-    public function __construct($navigation)
+    public function __construct($handle)
     {
-        parent::__construct();
-
-        $this->navigation = NavigationModel::where('handle', $navigation)->firstOrFail();
-        $this->model      = $this->make();
+        $this->source = Model::where('handle', $handle)->firstOrFail();
     }
 
     /**
-     * Make a new navigation model instance.
+     * Mass assignment protection.
+     * 
+     * @var array
      */
-    public function make()
+    protected function getFillable()
     {
-        $className = Str::studly($this->navigation->handle);
-        $traits    = [];
-        $fillable  = ['navigation_id', 'name', 'url', 'new_window', 'order', 'status'];
-        $casts     = [
+        return ['navigation_id', 'name', 'url', 'new_window', 'order', 'status'];
+    }
+
+    /**
+     * Return builder folder name.
+     * 
+     * @return string
+     */
+    protected function getBuildFolder()
+    {
+        return 'Navigation';
+    }
+
+    /**
+     * Attribute casting.
+     * 
+     * @var array
+     */
+    protected function getCasts()
+    {
+        return [
             'order'      => 'integer',
-            'new_window' => 'boolean',
-            'status'     => 'boolean',
+	        'new_window' => 'boolean',
+	        'status'     => 'boolean',
         ];
-
-        if ($this->navigation->blueprint) {
-            $fields = $this->navigation->blueprint->fields->reject(function ($field) {
-                $fieldtype = fieldtypes()->get($field->type);
-
-                if ($fieldtype->hasRelationship()) {
-                    $this->addRelationship($field, $fieldtype);
-                }
-
-                return is_null($fieldtype->column);
-            });
-
-            foreach ($fields as $field) {
-                $fieldtype  = fieldtypes()->get($field->type);
-                $fillable[] = $field->handle;
-                $casts[]    = $field->handle.'\' => \''.$fieldtype->cast;
-            }
-        }
-
-        $path = fusion_path('/src/Models/Navigation/'.$className.'.php');
-        $stub = File::get(fusion_path('/stubs/matrices/navigation.stub'));
-
-        $contents = strtr($stub, [
-            '{class}'               => $className,
-            '{handle}'              => $this->navigation->handle,
-            '{fillable}'            => '[\''.implode('\', \'', $fillable).'\']',
-            '{casts}'               => '[\''.implode('\', \'', $casts).'\']',
-            '{with}'                => '[\''.implode('\', \'', $this->getWith()).'\']',
-            '{dates}'               => '[\''.implode('\', \'', $this->getDates()).'\']',
-            '{trait_classes}'       => $this->getTraitImportStatements($traits),
-            '{traits}'              => $this->getTraitUseStatements($traits),
-            '{navigation_id}'       => $this->navigation->id,
-            '{relationships}'       => $this->generateRelationships(),
-        ]);
-
-        File::put($path, $contents);
-
-        return app()->make('Fusion\Models\Navigation\\'.$className);
     }
 
     /**
-     * Get the navigation.
+     * Builder table prefix.
+     * 
+     * @var string
      */
-    public function get()
+    public static function prefix()
     {
-        return $this->model->where('navigation_id', $this->navigation->id)->firstOrCreate(['navigation_id' => $this->navigation->id]);
+        return 'navigation';
     }
 }

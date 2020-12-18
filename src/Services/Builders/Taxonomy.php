@@ -2,95 +2,49 @@
 
 namespace Fusion\Services\Builders;
 
-use Fusion\Contracts\Builder as BuilderContract;
-use Fusion\Models\Taxonomy as TaxonomyModel;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
+use Fusion\Models\Taxonomy as Model;
 
-class Taxonomy extends Builder implements BuilderContract
+class Taxonomy extends Builder
 {
     /**
-     * @var string
-     */
-    protected $taxonomy;
-
-    /**
-     * @var string
-     */
-    protected $namespace = 'Fusion\Models\Taxonomy';
-
-    /**
-     * @var \Fusion\Database\Eloquent\Model
-     */
-    protected $model;
-
-    /**
-     * Create a new Taxonomy instance.
+     * New Builder instance.
      *
-     * @param string $taxonomy
+     * @param string $handle
      */
-    public function __construct($taxonomy)
+    public function __construct($handle)
     {
-        parent::__construct();
-
-        $this->taxonomy = TaxonomyModel::where('handle', $taxonomy)->firstOrFail();
-        $this->model    = $this->make();
+        $this->source = Model::where('handle', $handle)->firstOrFail();
     }
 
     /**
-     * Make a new taxonomy model instance.
+     * Mass assignment protection.
+     * 
+     * @var array
      */
-    public function make()
+    protected function getFillable()
     {
-        $className = Str::studly($this->taxonomy->handle);
-        $traits    = [];
-        $fillable  = ['taxonomy_id', 'parent_id', 'name', 'slug', 'status'];
-        $casts     = [];
-
-        if ($this->taxonomy->blueprint) {
-            $fields = $this->taxonomy->blueprint->fields->reject(function ($field) {
-                $fieldtype = fieldtypes()->get($field->type);
-
-                if ($fieldtype->hasRelationship()) {
-                    $this->addRelationship($field, $fieldtype);
-                }
-
-                return is_null($fieldtype->column);
-            });
-
-            foreach ($fields as $field) {
-                $fieldtype  = fieldtypes()->get($field->type);
-                $fillable[] = $field->handle;
-                $casts[]    = $field->handle.'\' => \''.$fieldtype->cast;
-            }
-        }
-
-        $path = fusion_path('/src/Models/Taxonomies/'.$className.'.php');
-        $stub = File::get(fusion_path('/stubs/matrices/taxonomy.stub'));
-
-        $contents = strtr($stub, [
-            '{class}'         => $className,
-            '{handle}'        => $this->taxonomy->handle,
-            '{fillable}'      => '[\''.implode('\', \'', $fillable).'\']',
-            '{casts}'         => '[\''.implode('\', \'', $casts).'\']',
-            '{with}'          => '[\''.implode('\', \'', $this->getWith()).'\']',
-            '{dates}'         => '[\''.implode('\', \'', $this->getDates()).'\']',
-            '{trait_classes}' => $this->getTraitImportStatements($traits),
-            '{traits}'        => $this->getTraitUseStatements($traits),
-            '{taxonomy_id}'   => $this->taxonomy->id,
-            '{relationships}' => $this->generateRelationships(),
-        ]);
-
-        File::put($path, $contents);
-
-        return app()->make('Fusion\Models\Taxonomies\\'.$className);
+        return ['taxonomy_id', 'parent_id', 'name', 'slug', 'status'];
     }
 
     /**
-     * Get the taxonomy.
+     * Attribute casting.
+     * 
+     * @var array
      */
-    public function get()
+    protected function getCasts()
     {
-        return $this->model->where('taxonomy_id', $this->taxonomy->id)->firstOrCreate(['taxonomy_id' => $this->taxonomy->id]);
+        return [
+	        'status' => 'boolean',
+        ];
+    }
+
+    /**
+     * Builder table prefix.
+     * 
+     * @var string
+     */
+    public static function prefix()
+    {
+        return 'taxonomy';
     }
 }

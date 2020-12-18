@@ -3,7 +3,7 @@
 namespace Fusion\Services\Routers;
 
 use Fusion\Models\Matrix;
-use Fusion\Services\Builders\Single;
+use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 
 class HomepageRouter extends Router
@@ -14,7 +14,7 @@ class HomepageRouter extends Router
             $matrix = Matrix::where('route', '/')->first();
 
             if ($matrix) {
-                $model = (new Single($matrix->handle))->make();
+                $model = Builders\Matrix::resolve($matrix->handle);
                 $page  = $model->firstOrFail();
 
                 return view(trim($matrix->template) == '' ? 'index' : $matrix->template, [

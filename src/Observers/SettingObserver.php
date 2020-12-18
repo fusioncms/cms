@@ -2,23 +2,25 @@
 
 namespace Fusion\Observers;
 
+use Fusion\Contracts\BuilderObserver;
 use Fusion\Models\Setting;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-class SettingObserver
+class SettingObserver implements BuilderObserver
 {
     /**
-     * Handle the setting "created" event.
+     * Handle the "created" event.
      *
-     * @param \Fusion\Models\Setting $setting
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function created(Setting $setting)
+    public function created(Model $model)
     {
-        Schema::create($setting->getBuilderTable(), function (Blueprint $table) {
+        Schema::create($model->getBuilderTable(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('setting_id')->index();
             $table->timestamps();
@@ -26,33 +28,33 @@ class SettingObserver
     }
 
     /**
-     * Handle the setting "updating" event.
+     * Handle the "updating" event.
      *
-     * @param \Fusion\Models\Setting $setting
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function updating(Setting $setting)
+    public function updating(Model $model)
     {
-        $old = Setting::find($setting->id);
+        $old = Setting::find($model->id);
 
-        if ($old->getBuilderTable() !== $setting->getBuilderTable()) {
-            Schema::rename($old->getBuilderTable(), $setting->getBuilderTable());
+        if ($old->getBuilderTable() !== $model->getBuilderTable()) {
+            Schema::rename($old->getBuilderTable(), $model->getBuilderTable());
 
             $oldClass = 'Fusion\\Models\\Settings\\'.Str::studly($old->handle);
-            $newClass = 'Fusion\\Models\\Settings\\'.Str::studly($setting->handle);
+            $newClass = 'Fusion\\Models\\Settings\\'.Str::studly($model->handle);
         }
     }
 
     /**
-     * Handle the setting "deleted" event.
+     * Handle the "deleted" event.
      *
-     * @param \Fusion\Models\Setting $setting
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function deleted(Setting $setting)
+    public function deleted(Model $model)
     {
-        Schema::dropIfExists($setting->getBuilderTable());
+        Schema::dropIfExists($model->getBuilderTable());
     }
 }

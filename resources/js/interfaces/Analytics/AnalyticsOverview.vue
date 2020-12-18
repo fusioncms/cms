@@ -263,7 +263,7 @@
                 if (this.isValid == 'OK') {
                     axios.all([
                         axios.get('/api/insights/overview'),
-                    ]).then(axios.spread(function (insight) {
+                    ]).then(axios.spread((insight) => {
                         this.sessionDuration = this.secondsToString(insight.data.data.averageSessionDuration)
                         this.bounceRate = _.floor(insight.data.data.bounceRate, 2) + '%'
                         this.totalVisitors = Number(insight.data.data.totalVisitors).toLocaleString()
@@ -278,7 +278,7 @@
                         })
 
                         this.isReady = true
-                    }.bind(this)))
+                    }))
                 } else if (this.isValid == 'failed') {
                     toast('Insights error: ' + response.data.message, 'failed')
                 }

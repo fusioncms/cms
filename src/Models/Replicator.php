@@ -3,10 +3,11 @@
 namespace Fusion\Models;
 
 use Fusion\Concerns\HasBlueprint;
+use Fusion\Contracts\Structure;
 use Fusion\Database\Eloquent\Model;
-use Fusion\Services\Builders\Replicator as Builder;
+use Fusion\Services\Builders;
 
-class Replicator extends Model
+class Replicator extends Model implements Structure
 {
     use HasBlueprint;
 
@@ -26,7 +27,7 @@ class Replicator extends Model
      */
     public function getBuilder(Section $section)
     {
-        return Builder::resolve($this->uniqid, $section);
+        return Builders\Replicator::resolve($this->uniqid, $section);
     }
 
     /**

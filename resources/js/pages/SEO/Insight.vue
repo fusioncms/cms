@@ -154,17 +154,16 @@
                     axios.all([
                         axios.get('/api/insights/popular'),
                         axios.get('/api/insights/browsers'),
-                    ]).then(axios.spread(function (popular, browsers) {
+                    ]).then(axios.spread((popular, browsers) => {
                         this.popular = popular.data.data
-                        this.browsers = _.map(browsers.data.data, function(row) {
+                        this.browsers = _.map(browsers.data.data, (row) => {
                             return {
                                 browser: row.browser,
                                 sessions: row.sessions,
                                 icon: this.determineBrowserIcon(row.browser),
                             }
-                        }.bind(this))
-                    }.bind(this)))
-                    .catch((response) => {
+                        })
+                    })).catch((response) => {
                         toast(response.data.message, 'failed')
                     })
                 }

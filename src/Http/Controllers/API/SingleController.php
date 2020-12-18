@@ -6,7 +6,7 @@ use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\SingleRequest;
 use Fusion\Http\Resources\SingleResource;
 use Fusion\Models\Matrix;
-use Fusion\Services\Builders\Single;
+use Fusion\Services\Builders;
 
 class SingleController extends Controller
 {
@@ -22,7 +22,7 @@ class SingleController extends Controller
         $this->authorize('entries.show');
 
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
-        $single = (new Single($matrix->handle))->make();
+        $single = Builders\Matrix::resolve($matrix->handle);
 
         return new SingleResource($single->withoutGlobalScopes()->firstOrCreate(
             [

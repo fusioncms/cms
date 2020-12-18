@@ -4,7 +4,7 @@ namespace Fusion\Http\Controllers\API\Navigation;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Models\Navigation;
-use Fusion\Services\Builders\Navigation as Builder;
+use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -13,17 +13,16 @@ class NodeMoveBeforeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param string                   $navigation
+     * @param \Illuminate\Http\Request   $request
+     * @param \Fusion\Models\Navigation  $navigation
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request, $navigation)
+    public function __invoke(Request $request, Navigation $navigation)
     {
         $this->authorize('nodes.update');
 
-        $navigation  = Navigation::find($navigation)->firstOrFail();
-        $model       = (new Builder($navigation->handle))->make();
+        $model = Builders\Navigation::resolve($navigation->handle);
 
         $move   = $model->find($request->move);
         $before = $model->find($request->before);

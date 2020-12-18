@@ -9,7 +9,8 @@
         },
         {
             "type": "path",
-            "url": "package-a/1.1.0"
+            "url": "package-a/1.1.0",
+            "canonical": false
         },
         {
             "type": "path",
@@ -17,7 +18,8 @@
         },
         {
             "type": "path",
-            "url": "package-b/2.0.0"
+            "url": "package-b/2.0.0",
+            "canonical": false
         },
         {
             "type": "path",

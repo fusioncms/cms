@@ -3,12 +3,15 @@
 namespace Fusion\Models;
 
 use Fusion\Concerns\HasBlueprint;
+use Fusion\Concerns\HasBuilder;
+use Fusion\Contracts\Structure;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Setting extends Model
+class Setting extends Model implements Structure
 {
     use HasBlueprint;
+    use HasBuilder;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -27,26 +30,6 @@ class Setting extends Model
     protected $structure = 'Settings';
 
     protected $blueprintHidden = true;
-
-    /**
-     * @return \Fusion\Database\Eloquent\Model
-     */
-    public function getBuilder()
-    {
-        $builder = new \Fusion\Services\Builders\Setting($this->handle);
-
-        return $builder->make();
-    }
-
-    /**
-     * Get the "table" attribute value.
-     *
-     * @return string
-     */
-    public function getBuilderTable()
-    {
-        return "settings_{$this->handle}";
-    }
 
     /**
      * Group have one group of settings.

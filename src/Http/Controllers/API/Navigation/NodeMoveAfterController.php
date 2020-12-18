@@ -4,7 +4,7 @@ namespace Fusion\Http\Controllers\API\Navigation;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Models\Navigation;
-use Fusion\Services\Builders\Navigation as Builder;
+use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -23,7 +23,7 @@ class NodeMoveAfterController extends Controller
         $this->authorize('nodes.update');
 
         $navigation  = Navigation::find($navigation)->firstOrFail();
-        $model       = (new Builder($navigation->handle))->make();
+        $model       = Builders\Navigation::resolve($navigation->handle);
 
         $move  = $model->find($request->move);
         $after = $model->find($request->after);

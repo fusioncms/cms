@@ -3,7 +3,6 @@
 namespace Fusion\Models\Collections;
 
 use Carbon\Carbon;
-use Fusion\Models\Field;
 use Fusion\Models\Matrix;
 use Illuminate\Support\Str;
 use Fusion\Concerns\HasActivity;
@@ -20,35 +19,28 @@ class {class} extends Model
      *
      * @var string
      */
-    protected $table = 'mx_{handle}';
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = {casts};
+    protected $table = '{table}';
 
     /**
      * Mass assignment protection.
      *
      * @var array
      */
-    protected $fillable = {fillable};
+    protected $fillable = [{fillable}];
 
     /**
-     * Mass reference protection.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $references = {references};
+    protected $casts = [{casts}];
 
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = {dates};
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * The "booted" method of the model.
@@ -76,24 +68,14 @@ class {class} extends Model
         });
 
         static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderBy('{matrix_order_by}', '{matrix_order_direction}');
+            $builder->orderBy('{order_by}', '{order_direction}');
         });
     }
 
     /**
-     * Mass reference protection.
+     * Get parenting Matrix relationship.
      *
-     * @var array
-     */
-    public function getReferences()
-    {
-        return $this->references;
-    }
-
-    /**
-     * Get the Matrix Type relationship.
-     *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function matrix()
     {
@@ -105,17 +87,17 @@ class {class} extends Model
      */
     public function getFieldsAttribute()
     {
-        return $this->matrix->blueprint->fields ?? null;
+        return $this->matrix->fields ?? null;
     }
 
+    /**
+     * Get parent relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function parent()
     {
         return $this->hasOne(Matrix::class, 'id', 'parent_id');
-    }
-
-    public function children()
-    {
-        return $this->hasMany(Matrix::class, 'parent_id', 'id');
     }
 
     {relationships}

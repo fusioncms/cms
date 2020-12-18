@@ -6,7 +6,7 @@ use Fusion\Models\Field;
 use Fusion\Models\Fieldset;
 use Fusion\Models\Matrix;
 use Fusion\Models\Section;
-use Fusion\Services\Builders\Collection;
+use Fusion\Services\Builders;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -56,7 +56,7 @@ class FieldsetFieldtypeTest extends TestCase
             ->create();
 
         $this->field = $this->matrix->blueprint->sections->first()->fields()->first();
-        $this->model = (new Collection($this->matrix->handle))->make();
+        $this->model = Builders\Matrix::resolve($this->matrix->handle);
     }
 
     /** @test */

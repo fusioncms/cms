@@ -6,7 +6,7 @@ use Fusion\Models\Form;
 use Fusion\Models\Field;
 use Illuminate\Support\Str;
 use Fusion\Concerns\HasActivity;
-use Illuminate\Database\Eloquent\Model;
+use Fusion\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 
 class {class} extends Model
@@ -18,35 +18,38 @@ class {class} extends Model
      *
      * @var string
      */
-    protected $table = 'form_{handle}';
+    protected $table = '{table}';
 
     /**
      * The attributes that should be appended to the model.
      *
      * @var array
      */
-    protected $appends = ['identifiable_email_address', 'identifiable_ip_address'];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = {casts};
+    protected $appends = [
+        'identifiable_email_address',
+        'identifiable_ip_address'
+    ];
 
     /**
      * Mass assignment protection.
      *
      * @var array
      */
-    protected $fillable = {fillable};
+    protected $fillable = [{fillable}];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [{casts}];
 
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = {dates};
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * Get the Form relationship.

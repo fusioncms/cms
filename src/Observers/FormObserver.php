@@ -2,23 +2,25 @@
 
 namespace Fusion\Observers;
 
+use Fusion\Contracts\BuilderObserver;
 use Fusion\Models\Field;
 use Fusion\Models\Form;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class FormObserver
+class FormObserver implements BuilderObserver
 {
     /**
-     * Handle the form "created" event.
+     * Handle the "created" event.
      *
-     * @param \Fusion\Models\Form $form
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function created(Form $form)
+    public function created(Model $model)
     {
-        Schema::create($form->getBuilderTable(), function (Blueprint $table) {
+        Schema::create($model->getBuilderTable(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('form_id');
 
@@ -29,31 +31,31 @@ class FormObserver
     }
 
     /**
-     * Handle the form "updating" event.
+     * Handle the "updating" event.
      *
-     * @param \Fusion\Models\Form $form
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function updating(Form $form)
+    public function updating(Model $model)
     {
-        $old = Form::find($form->id);
+        $old = Form::find($model->id);
 
-        if ($old->getBuilderTable() !== $form->getBuilderTable()) {
-            Schema::rename($old->getBuilderTable(), $form->getBuilderTable());
+        if ($old->getBuilderTable() !== $model->getBuilderTable()) {
+            Schema::rename($old->getBuilderTable(), $model->getBuilderTable());
         }
     }
 
     /**
-     * Handle the form "deleted" event.
+     * Handle the "deleted" event.
      *
-     * @param \Fusion\Models\Form $form
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function deleted(Form $form)
+    public function deleted(Model $model)
     {
-        Schema::dropIfExists($form->getBuilderTable());
+        Schema::dropIfExists($model->getBuilderTable());
     }
 
     /**

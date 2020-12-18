@@ -4,16 +4,19 @@ namespace Fusion\Models;
 
 use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasBlueprint;
+use Fusion\Concerns\HasBuilder;
+use Fusion\Contracts\Structure;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 
-class Matrix extends Model
+class Matrix extends Model implements Structure
 {
     use HasBlueprint;
     use HasActivity;
     use HasFactory;
+    use HasBuilder;
 
     protected $with = ['blueprint'];
 
@@ -65,29 +68,6 @@ class Matrix extends Model
     public function getStructure(): string
     {
         return Str::plural(ucfirst($this->type));
-    }
-
-    /**
-     * Get the builder instance.
-     *
-     * @return Model
-     */
-    public function getBuilder()
-    {
-        $builder = 'Fusion\\Services\\Builders\\'.Str::studly($this->type);
-        $builder = new $builder($this->handle);
-
-        return $builder->make();
-    }
-
-    /**
-     * Get the builder's table name.
-     *
-     * @return string
-     */
-    public function getBuilderTable()
-    {
-        return "mx_{$this->handle}";
     }
 
     public function getAdminPathAttribute()

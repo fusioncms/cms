@@ -3,7 +3,7 @@
 namespace Fusion\Services\Routers;
 
 use Fusion\Models\Matrix;
-use Fusion\Services\Builders\Collection;
+use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -34,7 +34,7 @@ class EntryRouter extends Router
                 }
             }
 
-            $model = (new Collection($matrix->handle))->make();
+            $model = Builders\Matrix::resolve($matrix->handle);
             $page  = $model->with($relationships)->where('slug', $found->parameter('slug'));
 
             if (request()->has('preview')) {

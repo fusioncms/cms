@@ -2,22 +2,24 @@
 
 namespace Fusion\Observers;
 
+use Fusion\Contracts\BuilderObserver;
 use Fusion\Models\Taxonomy;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TaxonomyObserver
+class TaxonomyObserver implements BuilderObserver
 {
     /**
-     * Handle the taxonomy "created" event.
+     * Handle the "created" event.
      *
-     * @param \Fusion\Models\Taxonomy $taxonomy
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function created(Taxonomy $taxonomy)
+    public function created(Model $model)
     {
-        Schema::create($taxonomy->getBuilderTable(), function (Blueprint $table) {
+        Schema::create($model->getBuilderTable(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('taxonomy_id');
             $table->unsignedBigInteger('parent_id')->nullable();
@@ -33,32 +35,32 @@ class TaxonomyObserver
     }
 
     /**
-     * Handle the taxonomy "updating" event.
+     * Handle the "updating" event.
      *
-     * @param \Fusion\Models\Taxonomy $taxonomy
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function updating(Taxonomy $taxonomy)
+    public function updating(Model $model)
     {
-        // Fetch our "old" taxonomy instance
-        $old = Taxonomy::find($taxonomy->id);
+        // Fetch our "old" instance
+        $old = Taxonomy::find($model->id);
 
         // Rename the tables if changed
-        if ($old->getBuilderTable() !== $taxonomy->getBuilderTable()) {
-            Schema::rename($old->getBuilderTable(), $taxonomy->getBuilderTable());
+        if ($old->getBuilderTable() !== $model->getBuilderTable()) {
+            Schema::rename($old->getBuilderTable(), $model->getBuilderTable());
         }
     }
 
     /**
-     * Handle the taxonomy "deleted" event.
+     * Handle the "deleted" event.
      *
-     * @param \Fusion\Models\Taxonomy $taxonomy
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function deleted(Taxonomy $taxonomy)
+    public function deleted(Model $model)
     {
-        Schema::dropIfExists($taxonomy->getBuilderTable());
+        Schema::dropIfExists($model->getBuilderTable());
     }
 }

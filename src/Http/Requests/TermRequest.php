@@ -2,7 +2,7 @@
 
 namespace Fusion\Http\Requests;
 
-use Fusion\Services\Builders\Taxonomy as Builder;
+use Fusion\Services\Builders;
 use Illuminate\Support\Str;
 
 class TermRequest extends Request
@@ -10,7 +10,7 @@ class TermRequest extends Request
     public function __construct()
     {
         $this->taxonomy      = request()->route('taxonomy');
-        $this->model         = (new Builder($this->taxonomy->handle))->make();
+        $this->model         = Builders\Taxonomy::resolve($this->taxonomy->handle);
         $this->blueprint     = $this->taxonomy->blueprint;
         $this->fields        = $this->blueprint ? $this->blueprint->fields : [];
         $this->relationships = $this->blueprint ? $this->blueprint->relationships() : [];

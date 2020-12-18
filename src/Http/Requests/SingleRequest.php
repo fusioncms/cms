@@ -3,14 +3,14 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Models\Matrix;
-use Fusion\Services\Builders\Single;
+use Fusion\Services\Builders;
 
 class SingleRequest extends Request
 {
     public function __construct()
     {
         $this->matrix        = Matrix::findOrFail(request()->route('single'));
-        $this->model         = (new Single($this->matrix->handle))->make();
+        $this->model         = Builders\Matrix::resolve($this->matrix->handle);
         $this->blueprint     = $this->matrix->blueprint;
         $this->fields        = $this->blueprint->fields ?? [];
         $this->relationships = $this->blueprint ? $this->blueprint->relationships() : [];

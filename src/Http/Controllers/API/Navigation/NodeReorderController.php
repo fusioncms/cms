@@ -4,7 +4,7 @@ namespace Fusion\Http\Controllers\API\Navigation;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Models\Navigation;
-use Fusion\Services\Builders\Navigation as Builder;
+use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -23,7 +23,7 @@ class NodeReorderController extends Controller
         $this->authorize('nodes.update');
 
         $navigation  = Navigation::find($navigation)->firstOrFail();
-        $model       = (new Builder($navigation->handle))->make();
+        $model       = Builders\Navigation::resolve($navigation->handle);
         $nodes       = $request->nodes;
 
         foreach ($nodes as $id => $node) {

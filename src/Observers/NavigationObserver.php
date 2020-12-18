@@ -2,22 +2,24 @@
 
 namespace Fusion\Observers;
 
+use Fusion\Contracts\BuilderObserver;
 use Fusion\Models\Navigation;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class NavigationObserver
+class NavigationObserver implements BuilderObserver
 {
     /**
-     * Handle the navigation "created" event.
+     * Handle the "created" event.
      *
-     * @param \Fusion\Models\Navigation $navigation
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function created(Navigation $navigation)
+    public function created(Model $model)
     {
-        Schema::create($navigation->getBuilderTable(), function (Blueprint $table) {
+        Schema::create($model->getBuilderTable(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('navigation_id')->index();
             $table->unsignedBigInteger('parent_id')->index()->default(0);
@@ -32,30 +34,30 @@ class NavigationObserver
     }
 
     /**
-     * Handle the navigation "updating" event.
+     * Handle the "updating" event.
      *
-     * @param \Fusion\Models\Navigation $navigation
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function updating(Navigation $navigation)
+    public function updating(Model $model)
     {
-        $old = Navigation::find($navigation->id);
+        $old = Navigation::find($model->id);
 
-        if ($old->getBuilderTable() !== $navigation->getBuilderTable()) {
-            Schema::rename($old->getBuilderTable(), $navigation->getBuilderTable());
+        if ($old->getBuilderTable() !== $model->getBuilderTable()) {
+            Schema::rename($old->getBuilderTable(), $model->getBuilderTable());
         }
     }
 
     /**
-     * Handle the navigation "deleted" event.
+     * Handle the "deleted" event.
      *
-     * @param \Fusion\Models\Navigation $navigation
+     * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return void
      */
-    public function deleted(Navigation $navigation)
+    public function deleted(Model $model)
     {
-        Schema::dropIfExists($navigation->getBuilderTable());
+        Schema::dropIfExists($model->getBuilderTable());
     }
 }
