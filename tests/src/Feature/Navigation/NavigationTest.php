@@ -59,8 +59,8 @@ class NavigationTest extends TestCase
     public function when_a_navigation_is_created_an_associated_blueprint_should_also_be_created()
     {
         $this->assertDatabaseHas('blueprints', [
-            'name'  => $this->menu->name,
-            'group' => 'Navigation',
+            'name'      => $this->menu->name,
+            'structure' => 'Navigation',
         ]);
     }
 
