@@ -19,14 +19,14 @@ class Matrix extends Builder
 
     /**
      * Mass assignment protection.
-     * 
+     *
      * @var array
      */
     protected function getFillable()
     {
         switch ($this->source->type) {
             case 'single':
-                return ['matrix_id', 'name', 'slug' , 'publish_at', 'expire_at', 'status'];
+                return ['matrix_id', 'name', 'slug', 'publish_at', 'expire_at', 'status'];
                 break;
             case 'collection':
                 return ['matrix_id', 'parent_id', 'name', 'slug', 'publish_at', 'expire_at', 'status'];
@@ -38,20 +38,20 @@ class Matrix extends Builder
 
     /**
      * Attribute casting.
-     * 
+     *
      * @var array
      */
     protected function getCasts()
     {
         return [
-            'status' => 'boolean'
+            'status' => 'boolean',
         ];
     }
 
     /**
      * Return builder stub file path.
-     * [override]
-     * 
+     * [override].
+     *
      * @return string
      */
     protected function getStubPath()
@@ -64,8 +64,8 @@ class Matrix extends Builder
 
     /**
      * Return folder to generate builder.
-     * [override]
-     * 
+     * [override].
+     *
      * @return string
      */
     protected function getBuildFolder()
@@ -78,8 +78,8 @@ class Matrix extends Builder
 
     /**
      * Add addl. placeholders to merge into your builder stub file.
-     * [override]
-     * 
+     * [override].
+     *
      * @return array
      */
     protected function getPlaceholders()
@@ -92,7 +92,7 @@ class Matrix extends Builder
 
     /**
      * Builder table prefix.
-     * 
+     *
      * @var string
      */
     public static function prefix()

@@ -153,8 +153,8 @@ class NavigationTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_move_a_navigation_node_before_another()
     {
-        list($node1, $attrs1) = $this->newNode($this->menu, [ 'name' => 'Node One' ]);
-        list($node2, $attrs2) = $this->newNode($this->menu, [ 'name' => 'Node Two' ]);
+        list($node1, $attrs1) = $this->newNode($this->menu, ['name' => 'Node One']);
+        list($node2, $attrs2) = $this->newNode($this->menu, ['name' => 'Node Two']);
 
         $this
             ->be($this->owner, 'api')
@@ -177,9 +177,9 @@ class NavigationTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_move_a_navigation_node_after_another()
     {
-        list($node1, $attrs1) = $this->newNode($this->menu, [ 'name' => 'Node One' ]);
-        list($node2, $attrs2) = $this->newNode($this->menu, [ 'name' => 'Node Two' ]);
-        list($node3, $attrs3) = $this->newNode($this->menu, [ 'name' => 'Node Three' ]);
+        list($node1, $attrs1) = $this->newNode($this->menu, ['name' => 'Node One']);
+        list($node2, $attrs2) = $this->newNode($this->menu, ['name' => 'Node Two']);
+        list($node3, $attrs3) = $this->newNode($this->menu, ['name' => 'Node Three']);
 
         $this
             ->be($this->owner, 'api')
@@ -197,9 +197,9 @@ class NavigationTest extends TestCase
     /** @test */
     public function navigation_nodes_can_be_refreshed_after_reordering()
     {
-        list($node1, $attrs1) = $this->newNode($this->menu, [ 'name' => 'Node One' ]);
-        list($node2, $attrs2) = $this->newNode($this->menu, [ 'name' => 'Node Two' ]);
-        list($node3, $attrs3) = $this->newNode($this->menu, [ 'name' => 'Node Three' ]);
+        list($node1, $attrs1) = $this->newNode($this->menu, ['name' => 'Node One']);
+        list($node2, $attrs2) = $this->newNode($this->menu, ['name' => 'Node Two']);
+        list($node3, $attrs3) = $this->newNode($this->menu, ['name' => 'Node Three']);
 
         $node1->update(['order' => 10]);
         $node2->update(['order' => 3]);

@@ -58,7 +58,7 @@ trait HasBlueprint
 
     /**
      * Get all fields for blueprint.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
     public function fields()

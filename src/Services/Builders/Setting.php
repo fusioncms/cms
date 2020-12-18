@@ -18,7 +18,7 @@ class Setting extends Builder
 
     /**
      * Mass assignment protection.
-     * 
+     *
      * @var array
      */
     protected function getFillable()
@@ -28,7 +28,7 @@ class Setting extends Builder
 
     /**
      * Builder table prefix.
-     * 
+     *
      * @var string
      */
     public static function prefix()

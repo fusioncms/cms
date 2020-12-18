@@ -13,8 +13,8 @@ class NodeMoveBeforeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request   $request
-     * @param \Fusion\Models\Navigation  $navigation
+     * @param \Illuminate\Http\Request  $request
+     * @param \Fusion\Models\Navigation $navigation
      *
      * @return \Illuminate\Http\Response
      */

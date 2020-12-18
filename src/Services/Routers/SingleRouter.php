@@ -17,7 +17,7 @@ class SingleRouter extends Router
             $found = $this->matchRoute($matrix->route, $request);
 
             if ($found === false or empty($matrix->template)) {
-                continue 1;
+                continue;
             }
 
             $page = Builders\Matrix::resolve($matrix->handle);
@@ -30,7 +30,7 @@ class SingleRouter extends Router
 
             if (!$page->status) {
                 if (Gate::denies('access.controlPanel') || !request()->has('preview')) {
-                    continue 1;
+                    continue;
                 }
             }
 

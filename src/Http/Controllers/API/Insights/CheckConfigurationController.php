@@ -11,7 +11,7 @@ class CheckConfigurationController extends Controller
 {
     public function index()
     {
-        $viewID = setting('google_analytics.analytic_view_id');
+        $viewID      = setting('google_analytics.analytic_view_id');
         $credentials = setting('google_analytics.analytic_credentials');
 
         if (empty($viewID) or empty($credentials)) {

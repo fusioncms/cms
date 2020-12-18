@@ -18,7 +18,7 @@ class Taxonomy extends Builder
 
     /**
      * Mass assignment protection.
-     * 
+     *
      * @var array
      */
     protected function getFillable()
@@ -28,19 +28,19 @@ class Taxonomy extends Builder
 
     /**
      * Attribute casting.
-     * 
+     *
      * @var array
      */
     protected function getCasts()
     {
         return [
-	        'status' => 'boolean',
+            'status' => 'boolean',
         ];
     }
 
     /**
      * Builder table prefix.
-     * 
+     *
      * @var string
      */
     public static function prefix()

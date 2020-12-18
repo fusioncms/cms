@@ -3,35 +3,35 @@
 namespace Fusion\Services\Builders;
 
 use Fusion\Contracts\Structure;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 abstract class Builder
 {
     /**
      * Building Model.
-     * 
+     *
      * @var \Fusion\Database\Eloquent\Model
      */
     protected $source;
 
     /**
      * Column Fields.
-     * 
+     *
      * @var array
      */
     protected $columns = [];
 
     /**
      * Relationship Fields.
-     * 
+     *
      * @var array
      */
     protected $relationships = [];
 
     /**
      * Generate & return fresh builder instance.
-     * 
+     *
      * @return \Fusion\Database\Eloquent\Model
      */
     public function refresh()
@@ -47,18 +47,21 @@ abstract class Builder
         $casts    = [];
 
         foreach ($this->columns as $column) {
-            $fillable[] = $column->handle;
+            $fillable[]             = $column->handle;
             $casts[$column->handle] = $column->type()->cast;
         }
 
         $fillable = array_merge($this->getFillable(), $fillable);
         $casts    = array_merge($this->getCasts(), $casts);
-        
+
         $template  =  File::get($this->getStubPath());
         $buildPath = $this->getBuildPath();
 
         // Generate builder class file..
-        File::put($buildPath, strtr($template,
+        File::put(
+            $buildPath,
+            strtr(
+            $template,
             array_merge([
                 '{class}'         => $this->getBuildName(),
                 '{table}'         => $this->getBuildTable(),
@@ -67,7 +70,8 @@ abstract class Builder
                 '{fillable}'      => $this->toString($fillable),
                 '{casts}'         => $this->toString($casts),
                 '{relationships}' => $this->generateRelationships(),
-            ], $this->getPlaceholders()))
+            ], $this->getPlaceholders())
+        )
         );
 
         return app()->make($this->getNamespace());
@@ -75,7 +79,7 @@ abstract class Builder
 
     /**
      * Resolve builder instance.
-     * 
+     *
      * @return \Fusion\Database\Eloquent\Model
      */
     public function make()
@@ -91,20 +95,20 @@ abstract class Builder
 
     /**
      * Return builder stub file path.
-     * 
+     *
      * @return string
      */
     protected function getStubPath()
     {
         $name = Str::lower($this->source->getClassName());
         $path = fusion_path("/stubs/builders/{$name}.stub");
-        
+
         return $path;
     }
 
     /**
      * Return builder class name.
-     * 
+     *
      * @return string
      */
     protected function getBuildName()
@@ -114,7 +118,7 @@ abstract class Builder
 
     /**
      * Return builder folder name.
-     * 
+     *
      * @return string
      */
     protected function getBuildFolder()
@@ -128,7 +132,7 @@ abstract class Builder
 
     /**
      * Return build path.
-     * 
+     *
      * @return string
      */
     protected function getBuildPath()
@@ -138,7 +142,7 @@ abstract class Builder
 
     /**
      * Return builder namespace.
-     * 
+     *
      * @return string
      */
     protected function getNamespace()
@@ -148,7 +152,7 @@ abstract class Builder
 
     /**
      * Mass assignment protection.
-     * 
+     *
      * @var array
      */
     protected function getFillable()
@@ -158,7 +162,7 @@ abstract class Builder
 
     /**
      * Attribute casting.
-     * 
+     *
      * @var array
      */
     protected function getCasts()
@@ -169,7 +173,7 @@ abstract class Builder
     /**
      * Add addl placeholders to merge into
      * your builder stub file.
-     * 
+     *
      * @return array
      */
     protected function getPlaceholders()
@@ -180,7 +184,6 @@ abstract class Builder
     /**
      * Get table name of Builder Model.
      *
-     * @access private
      * @return string
      */
     private function getBuildTable()
@@ -197,13 +200,12 @@ abstract class Builder
     /**
      * Returns relationship content.
      *
-     * @access private
      * @return string
      */
     private function generateRelationships()
     {
         $generated = collect($this->relationships)->reduce(function ($carry, $field) {
-            return $carry . $field->type()->generateRelationship($field)."\n\n";
+            return $carry.$field->type()->generateRelationship($field)."\n\n";
         }, '');
 
         return trim($generated);
@@ -211,14 +213,12 @@ abstract class Builder
 
     /**
      * Separates column/relationship-based fields.
-     * 
-     * @access private
+     *
      * @return void
      */
     private function generateFields()
     {
         if ($this->source instanceof Structure) {
-
             $this->source->fields->each(function ($field) {
                 $fieldtype = $field->type();
 
@@ -234,8 +234,8 @@ abstract class Builder
     /**
      * Convert array to string format.
      *
-     * @access private
-     * @param  array $arr
+     * @param array $arr
+     *
      * @return string|null
      */
     private function toString($arr)
@@ -250,12 +250,12 @@ abstract class Builder
             } else {
                 return sprintf("'%s' => '%s'", $k, $v);
             }
-        })->implode(",");
+        })->implode(',');
     }
 
     /**
      * Static refresh method.
-     * 
+     *
      * @return \Fusion\Database\Eloquent\Model
      */
     public static function fresh(...$args)
@@ -265,7 +265,7 @@ abstract class Builder
 
     /**
      * Static make method.
-     * 
+     *
      * @return \Fusion\Database\Eloquent\Model
      */
     public static function resolve(...$args)
@@ -275,8 +275,8 @@ abstract class Builder
 
     /**
      * Builder table prefix.
-     * 
+     *
      * @var string
      */
-    abstract static function prefix();
+    abstract public static function prefix();
 }
