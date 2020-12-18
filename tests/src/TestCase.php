@@ -143,6 +143,16 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     }
 
     /**
+     * Define database migrations.
+     *
+     * @return void
+     */
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadMigrationsFrom(base_path('migrations'));
+    }
+
+    /**
      * Load the bundled FusionCMS service providers.
      *
      * @param \Illuminate\Foundation\Application $app
