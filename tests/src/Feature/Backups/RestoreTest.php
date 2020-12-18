@@ -222,7 +222,7 @@ class RestoreTest extends TestBase
     public function backup_log_will_be_updated_when_database_restore_fails()
     {
         $this->markTestIncomplete();
-        
+
         $backup = $this->newBackup('new-backup', 'public')->first();
 
         // invalidate

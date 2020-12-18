@@ -2,7 +2,7 @@
 
 return [
 
-	'providers' => [
+    'providers' => [
         'users' => [
             'model' => Fusion\Models\User::class,
         ],
