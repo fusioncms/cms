@@ -23,6 +23,6 @@ class {name} extends Builder
      */
     public static function prefix()
     {
-        return {handle};
+        return '{handle}';
     }
 }
