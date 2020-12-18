@@ -4,15 +4,18 @@ namespace Fusion\Models;
 
 use Fusion\Concerns\HasActivity;
 use Fusion\Concerns\HasBlueprint;
+use Fusion\Concerns\HasBuilder;
+use Fusion\Contracts\Structure;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Activitylog\Models\Activity;
 
-class Form extends Model
+class Form extends Model implements Structure
 {
     use HasBlueprint;
     use HasActivity;
     use HasFactory;
+    use HasBuilder;
 
     protected $with = ['blueprint'];
 
@@ -57,45 +60,31 @@ class Form extends Model
     ];
 
     /**
-     * The blueprint grouping value.
+     * The blueprint structure value.
      *
      * @var string
      */
-    protected $blueprintGroup = 'Forms';
+    protected $structure = 'Forms';
 
     /**
-     * Get the builder instance.
+     * Return form path.
      *
-     * @return Model
-     */
-    public function getBuilder()
-    {
-        $builder = new \Fusion\Services\Builders\Form($this->handle);
-
-        return $builder->make();
-    }
-
-    /**
-     * Get the "table" attribute value.
+     * @param string $additional
      *
      * @return string
      */
-    public function getBuilderTable()
-    {
-        return "form_{$this->handle}";
-    }
-
     public function path($additional = null)
     {
-        $path = '/form/'.$this->slug;
-
-        if ($additional) {
-            $path .= '/'.$additional;
-        }
-
-        return $path;
+        return "/form/{$this->slug}".($additional ? "/{$additional}" : '');
     }
 
+    /**
+     * Return 'thank you' path.
+     *
+     * @param string $additional
+     *
+     * @return string
+     */
     public function thankyouPath()
     {
         return $this->path('thankyou');
@@ -108,10 +97,7 @@ class Form extends Model
      */
     public function responses()
     {
-        $model = $this->getBuilder();
-        $class = new \ReflectionClass($model);
-
-        return $this->hasMany('\\'.$class->getName());
+        return $this->hasMany($this->getBuilderModelNamespace());
     }
 
     /**

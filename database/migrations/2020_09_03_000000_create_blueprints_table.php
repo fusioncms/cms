@@ -16,7 +16,7 @@ class CreateBlueprintsTable extends Migration
         Schema::create('blueprints', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('group');
+            $table->string('structure');
             $table->boolean('hidden')->default(false);
 
             $table->nullableMorphs('blueprintable');

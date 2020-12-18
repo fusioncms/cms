@@ -3,7 +3,7 @@
 namespace Fusion\Services\Routers;
 
 use Fusion\Models\Matrix;
-use Fusion\Services\Builders\Collection;
+use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -20,7 +20,7 @@ class EntryRouter extends Router
             $found = $this->matchRoute($matrix->route, $request);
 
             if ($found === false) {
-                continue 1;
+                continue;
             }
 
             // Eager load our relatable fields
@@ -34,7 +34,7 @@ class EntryRouter extends Router
                 }
             }
 
-            $model = (new Collection($matrix->handle))->make();
+            $model = Builders\Matrix::resolve($matrix->handle);
             $page  = $model->with($relationships)->where('slug', $found->parameter('slug'));
 
             if (request()->has('preview')) {
@@ -44,12 +44,12 @@ class EntryRouter extends Router
             $page = $page->first();
 
             if (is_null($page)) {
-                continue 1;
+                continue;
             }
 
             if (!$page->status) {
                 if (Gate::denies('access.controlPanel') || !request()->has('preview')) {
-                    continue 1;
+                    continue;
                 }
             }
 

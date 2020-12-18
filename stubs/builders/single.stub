@@ -3,7 +3,6 @@
 namespace Fusion\Models\Singles;
 
 use Carbon\Carbon;
-use Fusion\Models\Field;
 use Fusion\Models\Matrix;
 use Illuminate\Support\Str;
 use Fusion\Concerns\HasActivity;
@@ -20,47 +19,44 @@ class {class} extends Model
      *
      * @var string
      */
-    protected $table = 'mx_{handle}';
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ['name', 'handle', 'slug', 'fields'];
+    protected $table = '{table}';
 
     /**
      * Mass assignment protection.
      *
      * @var array
      */
-    protected $fillable = {fillable};
+    protected $fillable = [{fillable}];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = {casts};
+    protected $casts = [{casts}];
 
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = {dates};
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
-     * @var integer
+     * The primary key associated with the table.
+     *
+     * @var string
      */
     protected $primaryKey = 'matrix_id';
 
     /**
+     * Indicates if the model's ID is auto-incrementing.
+     *
      * @var bool
      */
     public $incrementing = false;
 
-        /**
+    /**
      * The "booted" method of the model.
      *
      * @return void
@@ -87,9 +83,9 @@ class {class} extends Model
     }
 
     /**
-     * Get the Matrix Type relationship.
+     * Get parenting Matrix relationship.
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function matrix()
     {
@@ -98,10 +94,12 @@ class {class} extends Model
 
     /**
      * Get all of the fields for the matrix.
+     *
+     * @return \Illuminate\Support\Collection
      */
     public function getFieldsAttribute()
     {
-        return $this->matrix->blueprint->fields ??  null;
+        return $this->matrix->fields ?? null;
     }
 
     /**
@@ -112,6 +110,16 @@ class {class} extends Model
     public function getHandleAttribute()
     {
         return $this->matrix->handle;
+    }
+
+    /**
+     * Get child relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function children()
+    {
+        return $this->hasMany(Matrix::class, 'parent_id', 'id');
     }
 
     {relationships}

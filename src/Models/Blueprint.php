@@ -16,7 +16,7 @@ class Blueprint extends Model
      */
     protected $fillable = [
         'name',
-        'group',
+        'structure',
         'hidden',
     ];
 

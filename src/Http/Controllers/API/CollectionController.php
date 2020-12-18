@@ -6,7 +6,7 @@ use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\CollectionRequest;
 use Fusion\Http\Resources\EntryResource;
 use Fusion\Models\Matrix;
-use Fusion\Services\Builders\Collection;
+use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -24,7 +24,7 @@ class CollectionController extends Controller
         $this->authorize('entries.viewAny');
 
         $matrix  = Matrix::where('slug', $matrix)->firstOrFail();
-        $model   = (new Collection($matrix->handle))->make();
+        $model   = Builders\Matrix::resolve($matrix->handle);
         $entries = $model->withoutGlobalScopes()->paginate(25);
 
         return EntryResource::collection($entries);
@@ -42,7 +42,7 @@ class CollectionController extends Controller
         $this->authorize('entries.view');
 
         $matrix = Matrix::where('slug', $matrix)->firstOrFail();
-        $model  = (new Collection($matrix->handle))->make();
+        $model  = Builders\Matrix::resolve($matrix->handle);
         $entry  = $model->withoutGlobalScopes()->findOrFail($id);
 
         return new EntryResource($entry);
@@ -122,7 +122,7 @@ class CollectionController extends Controller
         $this->authorize('entries.destroy');
 
         $matrix = Matrix::where('slug', $matrixSlug)->firstOrFail();
-        $model  = (new Collection($matrix->handle))->make();
+        $model  = Builders\Matrix::resolve($matrix->handle);
         $entry  = $model->findOrFail($id);
 
         if (isset($matrix->blueprint)) {

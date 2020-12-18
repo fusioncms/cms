@@ -4,7 +4,7 @@ namespace Fusion\Tests\Feature\Matrix;
 
 use Fusion\Models\Matrix;
 use Fusion\Models\Section;
-use Fusion\Services\Builders\Single;
+use Fusion\Services\Builders;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -184,7 +184,7 @@ class SingleTest extends TestCase
         $attributes[$this->field1->handle] = $this->faker->word();
         $attributes[$this->field2->handle] = $this->faker->word();
 
-        $model = (new Single($this->matrix->handle))->make();
+        $model = Builders\Matrix::resolve($this->matrix->handle);
         $entry = $model->create($attributes);
 
         return [$entry, $attributes];

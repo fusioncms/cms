@@ -29,13 +29,13 @@ trait HasBlueprint
      *
      * @return string
      */
-    public function getBlueprintGroup(): string
+    public function getStructure(): string
     {
-        if (!property_exists(static::class, 'blueprintGroup')) {
-            throw new \LogicException(static::class.' must have a "$blueprintGroup" property defined.');
+        if (!property_exists(static::class, 'structure')) {
+            throw new \LogicException(static::class.' must have a "$structure" property defined.');
         }
 
-        return $this->blueprintGroup;
+        return $this->structure;
     }
 
     /**
@@ -57,15 +57,25 @@ trait HasBlueprint
     }
 
     /**
+     * Get all fields for blueprint.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function fields()
+    {
+        return $this->blueprint->fields();
+    }
+
+    /**
      * Handles creating a blueprint for the given model.
      */
     public function createBlueprint()
     {
         return $this->withoutEvents(function () {
             return $this->blueprint()->create([
-                'name'   => $this->name,
-                'group'  => $this->getBlueprintGroup(),
-                'hidden' => $this->getBlueprintHidden(),
+                'name'      => $this->name,
+                'structure' => $this->getStructure(),
+                'hidden'    => $this->getBlueprintHidden(),
             ]);
         });
     }
@@ -78,7 +88,7 @@ trait HasBlueprint
         return $this->withoutEvents(function () {
             return $this->blueprint()->update([
                 'name'   => $this->name,
-                'group'  => $this->getBlueprintGroup(),
+                'group'  => $this->getStructure(),
                 'hidden' => $this->getBlueprintHidden(),
             ]);
         });

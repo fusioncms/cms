@@ -112,43 +112,47 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            var sessionDuration = null
-            var bounceRate = null
-            var totalVisitors = null
-            var totalPageViews = null
-            var isValid = null
+            let sessionDuration = null
+            let bounceRate = null
+            let totalVisitors = null
+            let totalPageViews = null
+            let isValid, message
 
             getSingle(to.params.single, (error, entry, matrix, fields) => {
-                axios.get('/api/insights/check').then((response) => {
-                    isValid = response.data.status
+                if (error) {
+                    next((vm) => {
+                        vm.$router.push('/')
 
-                    if (isValid == 'OK') {
-                        axios.all([
-                            axios.get('/api/singles/' + matrix.slug +'/insight'),
-                        ]).then(axios.spread((insight) => {
-                            console.log('inside function')
+                        toast(error.toString(), 'danger')
+                    })
+                } else {
+                    axios.get('/api/insights/check').then((response) => {
+                        isValid = response.data.status
 
-                            sessionDuration = secondsToString(insight.data.data.averageSessionDuration)
-                            bounceRate = _.floor(insight.data.data.bounceRate, 2) + '%'
-                            totalVisitors = Number(insight.data.data.totalVisitors).toLocaleString()
-                            totalPageViews = Number(insight.data.data.totalPageViews).toLocaleString()
-
-                            next((vm) => {
-                                vm.single = matrix
-                                vm.entry = entry
-                                vm.isValid = isValid
-                                vm.sessionDuration = sessionDuration
-                                vm.bounceRate = bounceRate
-                                vm.totalVisitors = totalVisitors
-                                vm.totalPageViews = totalPageViews
-
-                                vm.$emit('updateHead')
+                        if (isValid == 'OK') {
+                            axios.get(`/api/singles/{matrix.slug}/insight`).then((insight) => {
+                                sessionDuration = secondsToString(insight.data.data.averageSessionDuration)
+                                bounceRate = _.floor(insight.data.data.bounceRate, 2) + '%'
+                                totalVisitors = Number(insight.data.data.totalVisitors).toLocaleString()
+                                totalPageViews = Number(insight.data.data.totalPageViews).toLocaleString()
                             })
-                        }))
-                    } else if (this.isValid == 'failed') {
-                        console.error('Insights error: ' + response.data.message)
-                    }
-                })
+                        } else if (isValid == 'failed') {
+                            console.error('Insights error: ' + response.data.message)
+                        }
+
+                        next((vm) => {
+                            vm.single = matrix
+                            vm.entry = entry
+                            vm.isValid = isValid == 'OK'
+                            vm.sessionDuration = sessionDuration
+                            vm.bounceRate = bounceRate
+                            vm.totalVisitors = totalVisitors
+                            vm.totalPageViews = totalPageViews
+
+                            vm.$emit('updateHead')
+                        })
+                    })
+                }
             })
         },
 
@@ -165,7 +169,7 @@
     }
 
     export function getSingle(slug, callback) {
-        axios.get('/api/singles/' + slug).then((response) => {
+        axios.get(`/api/singles/${slug}`).then((response) => {
             let entry = {}
             let matrix = {}
 

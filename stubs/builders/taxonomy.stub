@@ -18,33 +18,33 @@ class {class} extends Model
      *
      * @var string
      */
-    protected $table = 'taxonomy_{handle}';
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = {casts};
+    protected $table = '{table}';
 
     /**
      * Mass assignment protection.
      *
      * @var array
      */
-    protected $fillable = {fillable};
+    protected $fillable = [{fillable}];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [{casts}];
 
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = {dates};
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * Get the Taxonomy relationship.
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function taxonomy()
     {
@@ -59,11 +59,21 @@ class {class} extends Model
         return $this->taxonomy->blueprint->fields ?? null;
     }
 
+    /**
+     * Get parent relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function parent()
     {
         return $this->hasOne(Taxonomy::class, 'id', 'parent_id');
     }
 
+    /**
+     * Get child relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function children()
     {
         return $this->hasMany(Taxonomy::class, 'parent_id', 'id');

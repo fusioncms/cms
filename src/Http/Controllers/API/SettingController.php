@@ -45,16 +45,10 @@ class SettingController extends Controller
      */
     public function update(SettingRequest $request, Setting $setting)
     {
-        // Filter out relationships
-        $relationships = $setting->blueprint->relationships();
-        $validated     = collect($request->validated())->reject(function ($value, $handle) use ($relationships) {
-            return $relationships->contains('handle', $handle);
-        })->toArray();
-
-        $setting->settings->update($validated);
+        $setting->settings->update($request->validated());
 
         // Persist relationships...
-        foreach ($relationships as $relationship) {
+        foreach ($setting->blueprint->relationships() as $relationship) {
             $relationship->type()->persistRelationship($setting->settings, $relationship);
         }
     }

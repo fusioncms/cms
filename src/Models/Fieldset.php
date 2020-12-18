@@ -2,12 +2,15 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasBuilder;
+use Fusion\Contracts\Structure;
+use Fusion\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Fieldset extends Model
+class Fieldset extends Model implements Structure
 {
     use HasFactory;
+    use HasBuilder;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -15,28 +18,6 @@ class Fieldset extends Model
      * @var array
      */
     protected $fillable = ['name', 'handle'];
-
-    /**
-     * Get the builder instance.
-     *
-     * @return Model
-     */
-    public function refreshBuilder()
-    {
-        $builder = new \Fusion\Services\Builders\Fieldset($this->handle);
-
-        return $builder->make();
-    }
-
-    /**
-     * Get the builder's table name.
-     *
-     * @return string
-     */
-    public function getBuilderTable()
-    {
-        return "fx_{$this->handle}";
-    }
 
     /**
      * Get the fields for the given section.

@@ -5,7 +5,7 @@ namespace Fusion\Http\Controllers\API\Forms;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\ResponseResource;
 use Fusion\Models\Form;
-use Fusion\Services\Builders\Form as Builder;
+use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 
 class ResponseController extends Controller
@@ -35,7 +35,7 @@ class ResponseController extends Controller
         $this->authorize('responses.view');
 
         $form     = Form::where('slug', $slug)->firstOrFail();
-        $model    = (new Builder($form->handle))->make();
+        $model    = Builders\Form::resolve($form->handle);
         $response = $model->find($id);
 
         return new ResponseResource($response);
@@ -46,7 +46,7 @@ class ResponseController extends Controller
         $this->authorize('responses.create');
 
         $form          = Form::where('slug', $slug)->firstOrFail();
-        $collection    = (new Builder($form->handle))->make();
+        $collection    = Builders\Form::resolve($form->handle);
         $relationships = [];
 
         $rules = [
@@ -88,7 +88,7 @@ class ResponseController extends Controller
         $this->authorize('responses.update');
 
         $form          = Form::where('slug', $slug)->firstOrFail();
-        $response      = (new Builder($form->handle))->make()->find($id);
+        $response      = Builders\Form::resolve($form->handle)->find($id);
         $relationships = [];
         $rules         = [
             'name'   => 'required',
@@ -124,7 +124,7 @@ class ResponseController extends Controller
         $this->authorize('responses.delete');
 
         $form     = Form::where('slug', $slug)->firstOrFail();
-        $model    = (new Builder($form->handle))->make();
+        $model    = Builders\Form::resolve($form->handle);
         $response = $model->findOrFail($id);
 
         $response->delete();

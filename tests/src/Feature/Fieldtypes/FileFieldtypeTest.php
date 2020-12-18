@@ -7,7 +7,7 @@ use Fusion\Models\Field;
 use Fusion\Models\File;
 use Fusion\Models\Matrix;
 use Fusion\Models\Section;
-use Fusion\Services\Builders\Single;
+use Fusion\Services\Builders;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -41,7 +41,7 @@ class FileFieldtypeTest extends TestCase
             })
             ->create();
 
-        $this->model = (new Single($this->matrix->handle))->make();
+        $this->model = Builders\Matrix::resolve($this->matrix->handle);
     }
 
     /** @test */
