@@ -184,7 +184,7 @@ class TaxonomyTest extends TestCase
     {
         $this->assertDatabaseHas('blueprints', [
             'name'               => $this->taxonomy->name,
-            'group'              => 'Taxonomy',
+            'structure'          => 'Taxonomy',
             'blueprintable_type' => Taxonomy::class,
             'blueprintable_id'   => $this->taxonomy->id,
         ]);

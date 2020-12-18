@@ -87,9 +87,9 @@ trait HasBlueprint
     {
         return $this->withoutEvents(function () {
             return $this->blueprint()->update([
-                'name'   => $this->name,
-                'group'  => $this->getStructure(),
-                'hidden' => $this->getBlueprintHidden(),
+                'name'      => $this->name,
+                'structure' => $this->getStructure(),
+                'hidden'    => $this->getBlueprintHidden(),
             ]);
         });
     }
