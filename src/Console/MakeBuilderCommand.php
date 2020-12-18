@@ -30,6 +30,10 @@ class MakeBuilderCommand extends Command
      */
     public function handle()
     {
+        $this->info('Verifying a few things...');
+        $this->verify();
+        $this->info('Setting up your Builder...');
+
     	// Building model..
     	$this->createBuildingModel();
     	$this->createBuildingModelObserver();
@@ -40,6 +44,8 @@ class MakeBuilderCommand extends Command
 
     	// Builder model..
     	$this->createBuilderModel();
+
+        $this->info('Builder created successfully.');
     }
 
     /**
@@ -133,35 +139,59 @@ class MakeBuilderCommand extends Command
 
     /**
      * Helper.
+     *
+     * @throws Exception
+     * @return void
+     */
+    private function verify()
+    {
+        foreach ($this->getPaths() as $key => $value) {
+            if (File::exists($value[0])) {
+                throw new \Exception($value[0] . ' already exists!');
+            }
+        }
+    }
+
+    /**
+     * Helper.
      * 
      * @param  string $key
+     * @access private
      * @return array
      */
     private function getPath($key)
     {
-    	$modelName = Str::studly($this->argument('name'));
-    	$stubName  = Str::camel($this->argument('name'));
-
-    	$paths = [
-    		'building_model' => [
-    			fusion_path("/src/Models/{$modelName}.php"),
-				fusion_path('stubs/builders/console/buildingModel.stub'),
-    		],
-    		'building_model_observer' => [
-    			fusion_path("/src/Observers/{$modelName}Observer.php"),
-				fusion_path('stubs/builders/console/buildingModelObserver.stub'),
-    		],
-    		'builder_class' => [
-    			fusion_path("/src/Services/Builders/{$modelName}"),
-    			fusion_path('stubs/builders/console/builderClass.stub'),
-    		],
-    		'builder_model' => [
-    			$path = fusion_path("/stubs/builders/{$stubName}.stub"),
-    			fusion_path('stubs/builders/console/builderModel.stub'),
-    		],
-    	];
-
-    	return $paths[$key];
+    	return $this->getPaths()[$key];
     }
 
+    /**
+     * Helper.
+     *
+     * @access private
+     * @return array
+     */
+    private function getPaths()
+    {
+        $modelName = Str::studly($this->argument('name'));
+        $stubName  = Str::camel($this->argument('name'));
+
+        return [
+            'building_model' => [
+                fusion_path("/src/Models/{$modelName}.php"),
+                fusion_path('stubs/builders/console/buildingModel.stub'),
+            ],
+            'building_model_observer' => [
+                fusion_path("/src/Observers/{$modelName}Observer.php"),
+                fusion_path('stubs/builders/console/buildingModelObserver.stub'),
+            ],
+            'builder_class' => [
+                fusion_path("/src/Services/Builders/{$modelName}"),
+                fusion_path('stubs/builders/console/builderClass.stub'),
+            ],
+            'builder_model' => [
+                $path = fusion_path("/stubs/builders/{$stubName}.stub"),
+                fusion_path('stubs/builders/console/builderModel.stub'),
+            ],
+        ];
+    }
 }
