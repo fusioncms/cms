@@ -1,0 +1,28 @@
+<?php
+
+namespace Fusion\Services\Builders;
+
+use Fusion\Models\{name} as Model;
+
+class {name} extends Builder
+{
+    /**
+     * New Builder instance.
+     *
+     * @param string $handle
+     */
+    public function __construct($handle)
+    {
+        $this->source = Model::where('handle', $handle)->firstOrFail();
+    }
+
+    /**
+     * Builder table prefix.
+     *
+     * @var string
+     */
+    public static function prefix()
+    {
+        return {handle};
+    }
+}

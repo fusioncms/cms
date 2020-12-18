@@ -1,0 +1,13 @@
+<?php
+
+namespace Fusion\Models;
+
+use Fusion\Concerns\HasBuilder;
+use Fusion\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class {name} extends Model
+{
+    use HasBuilder;
+    use HasFactory;
+}

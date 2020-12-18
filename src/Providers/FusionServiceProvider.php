@@ -59,6 +59,7 @@ class FusionServiceProvider extends ServiceProvider
             \Fusion\Console\Addons\ResetCommand::class,
             \Fusion\Console\Addons\ListCommand::class,
             \Fusion\Console\MakeAddonCommand::class,
+            \Fusion\Console\MakeBuilderCommand::class,
             \Fusion\Console\MakeThemeCommand::class,
             \Fusion\Console\UninstallCommand::class,
             \Fusion\Console\InstallCommand::class,
