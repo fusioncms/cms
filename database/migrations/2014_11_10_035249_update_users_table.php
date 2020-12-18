@@ -39,7 +39,7 @@ class UpdateUsersTable extends Migration
                 'password_changed_at',
                 'password_expires_at',
                 'email_verified_at',
-                'welcomed_at'
+                'welcomed_at',
             ]);
         });
     }
