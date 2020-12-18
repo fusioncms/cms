@@ -68,19 +68,21 @@ class Form extends Model implements Structure
 
     /**
      * Return form path.
-     * 
-     * @param  string $additional
+     *
+     * @param string $additional
+     *
      * @return string
      */
     public function path($additional = null)
     {
-        return "/form/{$this->slug}" . ($additional ? "/{$additional}" : '');
+        return "/form/{$this->slug}".($additional ? "/{$additional}" : '');
     }
 
     /**
      * Return 'thank you' path.
-     * 
-     * @param  string $additional
+     *
+     * @param string $additional
+     *
      * @return string
      */
     public function thankyouPath()

@@ -3,8 +3,8 @@
 namespace Fusion\Http\Controllers\API\Navigation;
 
 use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Resources\NodeResource;
 use Fusion\Http\Requests\Navigation\NavigationNodeRequest;
+use Fusion\Http\Resources\NodeResource;
 use Fusion\Models\Navigation;
 use Fusion\Services\Builders;
 use Illuminate\Http\Request;
@@ -31,7 +31,7 @@ class NodeController extends Controller
      * Display the specified resource.
      *
      * @param \Fusion\Models\Navigation $navigation
-     * @param 
+     * @param
      *
      * @return NodeResource
      */
@@ -48,7 +48,7 @@ class NodeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param NavigationNodeRequest $request
-     * @param Navigation $navigation
+     * @param Navigation            $navigation
      *
      * @return NodeResource
      */

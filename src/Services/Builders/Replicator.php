@@ -10,14 +10,14 @@ class Replicator extends Builder
 {
     /**
      * Owning Section.
-     * 
+     *
      * @var \Fusion\Models\Section
      */
     protected $section;
 
     /**
      * Generated handle.
-     * 
+     *
      * @var string
      */
     protected $handle;
@@ -37,7 +37,7 @@ class Replicator extends Builder
 
     /**
      * Mass assignment protection.
-     * 
+     *
      * @var array
      */
     protected function getFillable()
@@ -47,7 +47,7 @@ class Replicator extends Builder
 
     /**
      * Return builder class name.
-     * 
+     *
      * @return string
      */
     protected function getBuildName()
@@ -58,7 +58,7 @@ class Replicator extends Builder
     /**
      * Add addl placeholders to merge into
      * your builder stub file.
-     * 
+     *
      * @return array
      */
     protected function getPlaceholders()
@@ -70,7 +70,7 @@ class Replicator extends Builder
 
     /**
      * Builder table prefix.
-     * 
+     *
      * @var string
      */
     public static function prefix()

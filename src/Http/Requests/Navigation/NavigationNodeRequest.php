@@ -2,10 +2,8 @@
 
 namespace Fusion\Http\Requests\Navigation;
 
-use Fusion\Models\Navigation;
-use Fusion\Services\Builders;
 use Fusion\Http\Requests\Request;
-use Fusion\Rules\NotAReservedKeyword;
+use Fusion\Services\Builders;
 
 class NavigationNodeRequest extends Request
 {

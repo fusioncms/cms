@@ -18,7 +18,7 @@ class Navigation extends Builder
 
     /**
      * Mass assignment protection.
-     * 
+     *
      * @var array
      */
     protected function getFillable()
@@ -28,7 +28,7 @@ class Navigation extends Builder
 
     /**
      * Return builder folder name.
-     * 
+     *
      * @return string
      */
     protected function getBuildFolder()
@@ -38,21 +38,21 @@ class Navigation extends Builder
 
     /**
      * Attribute casting.
-     * 
+     *
      * @var array
      */
     protected function getCasts()
     {
         return [
             'order'      => 'integer',
-	        'new_window' => 'boolean',
-	        'status'     => 'boolean',
+            'new_window' => 'boolean',
+            'status'     => 'boolean',
         ];
     }
 
     /**
      * Builder table prefix.
-     * 
+     *
      * @var string
      */
     public static function prefix()

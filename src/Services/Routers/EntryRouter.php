@@ -20,7 +20,7 @@ class EntryRouter extends Router
             $found = $this->matchRoute($matrix->route, $request);
 
             if ($found === false) {
-                continue 1;
+                continue;
             }
 
             // Eager load our relatable fields
@@ -44,12 +44,12 @@ class EntryRouter extends Router
             $page = $page->first();
 
             if (is_null($page)) {
-                continue 1;
+                continue;
             }
 
             if (!$page->status) {
                 if (Gate::denies('access.controlPanel') || !request()->has('preview')) {
-                    continue 1;
+                    continue;
                 }
             }
 

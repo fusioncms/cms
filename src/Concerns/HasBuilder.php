@@ -2,8 +2,6 @@
 
 namespace Fusion\Concerns;
 
-use Illuminate\Support\Str;
-
 trait HasBuilder
 {
     /**
@@ -28,8 +26,8 @@ trait HasBuilder
 
     /**
      * Get the Builder Class/Model table name.
-     * (i.e. `mx_pages`)
-     * 
+     * (i.e. `mx_pages`).
+     *
      * @return string
      */
     public function getBuilderTable()
@@ -67,7 +65,6 @@ trait HasBuilder
     /**
      * Get the Builder Class namespace.
      *
-     * @access private
      * @return string
      */
     private function getBuilderNamespace()
