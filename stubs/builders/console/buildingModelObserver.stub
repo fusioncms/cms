@@ -1,0 +1,59 @@
+<?php
+
+namespace Fusion\Observers;
+
+use Fusion\Contracts\BuilderObserver;
+use Fusion\Models\{name};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class {name}Observer implements BuilderObserver
+{
+    /**
+     * Handle the "created" event.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
+     * @return void
+     */
+    public function created(Model $model)
+    {
+        Schema::create($model->getBuilderTable(), function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('{handle}_id');
+
+            // ..add additional columns here..
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Handle the "updating" event.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
+     * @return void
+     */
+    public function updating(Model $model)
+    {
+        $old = {name}::find($model->id);
+
+        if ($old->getBuilderTable() !== $model->getBuilderTable()) {
+            Schema::rename($old->getBuilderTable(), $model->getBuilderTable());
+        }
+    }
+
+    /**
+     * Handle the "deleted" event.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
+     * @return void
+     */
+    public function deleted(Model $model)
+    {
+        Schema::dropIfExists($model->getBuilderTable());
+    }
+}

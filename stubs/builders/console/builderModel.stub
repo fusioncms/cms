@@ -1,0 +1,32 @@
+<?php
+
+namespace Fusion\Models\{name};
+
+use Fusion\Database\Eloquent\Model;
+
+class {class} extends Model
+{
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = '{table}';
+
+    /**
+     * Mass assignment protection.
+     *
+     * @var array
+     */
+    protected $fillable = [{fillable}];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [{casts}];
+
+
+    {relationships}
+}
