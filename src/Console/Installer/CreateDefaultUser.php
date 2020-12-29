@@ -33,9 +33,9 @@ class CreateDefaultUser
             User::firstOrCreate([
                 'email' => $this->container['user_email'],
             ], [
-                'name'     => $this->container['user_name'],
-                'password' => Hash::make($this->container['user_password']),
-                'status'   => true,
+                'name'              => $this->container['user_name'],
+                'password'          => Hash::make($this->container['user_password']),
+                'status'            => true,
                 'email_verified_at' => now(),
             ])->assignRole('owner');
         });
