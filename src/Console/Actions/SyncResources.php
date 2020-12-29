@@ -13,6 +13,8 @@ class SyncResources
      */
     public function handle()
     {
+        File::ensureDirectoryExists(public_path('vendor'));
+
         foreach ($this->links() as $link => $target) {
             try {
                 if (!file_exists($link) && file_exists($target)) {

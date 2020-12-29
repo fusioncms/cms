@@ -38,7 +38,8 @@ class CreateDatabase
 
         try {
             $pdo = new PDO("{$driver}:host={$host}", $username, $password);
-            $pdo->query("CREATE DATABASE IF NOT EXISTS {$database} CHARACTER SET {$charset} COLLATE {$collation}");
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo->query("CREATE DATABASE IF NOT EXISTS `{$database}` CHARACTER SET {$charset} COLLATE {$collation}");
         } catch (PDOException $e) {
             exit($e->getMessage());
         }
