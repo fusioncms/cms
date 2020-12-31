@@ -47,6 +47,6 @@ class UpdateController extends Controller
      */
     public function store(Request $request)
     {
-        Version::update();
+        // TODO: Version::update();
     }
 }

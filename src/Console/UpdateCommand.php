@@ -16,7 +16,8 @@ class UpdateCommand extends Command
      * @var string
      */
     protected $signature = 'fusion:update'.
-                           ' {--no-backup  : Disable backup }';
+                           ' {--version    : Package version constraint. }'.
+                           ' {--no-backup  : Disable backup before update. }';
 
     /**
      * The console command description.
@@ -89,7 +90,7 @@ class UpdateCommand extends Command
      */
     private function jobs()
     {
-        $version = Version::latest();
+        $version = $this->option('version') ?? Version::latest();
 
         $jobs = [
             'Making backup...'          => new \Fusion\Jobs\Backups\BackupRun(['disable-notifications' => true]),
