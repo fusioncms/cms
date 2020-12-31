@@ -2,18 +2,17 @@
 
 namespace Fusion\Jobs;
 
-use Exception;
+use Throwable;
 use Fusion\Facades\Composer;
 use Fusion\Jobs\Backups\BackupRun;
-use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 
 class Update
 {
     use Dispatchable;
-    use Queueable;
 
     /**
      * Requested version.
@@ -39,7 +38,12 @@ class Update
      */
     public function handle()
     {
-        BackupRun::withChain([
+        Bus::chain([
+            /**
+             * Make backup..
+             */
+            new BackupRun(['disable-notifications' => true]),
+
             /**
              * Version update..
              */
@@ -56,17 +60,22 @@ class Update
                 Artisan::call('fusion:publish');
                 Artisan::call('migrate');
             },
-        ])->dispatch();
+        ])->catch(function (Throwable $e) {
+            $this->failed($e);
+        })
+
+        // aka, dispatch now!
+        ->onConnection('sync')->dispatch();
     }
 
     /**
-     * The job failed to process.
+     * Handle a job failure.
      *
-     * @param Exception $exception
-     *
+     * @throws \Throwable $exception
+     * 
      * @return void
      */
-    public function failed(Exception $exception)
+    public function failed(Throwable $exception)
     {
         Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
     }

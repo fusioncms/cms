@@ -165,7 +165,7 @@ Route::post('users/{user}/expire-password', 'Users\PasswordExpireController@stor
  * API - Updates Routes.
  */
 Route::prefix('updates')->group(function () {
-    Route::get('', 'UpdatesController@index');
-    Route::get('{version}', 'UpdatesController@show');
-    Route::post('', 'UpdatesController@store');
+    Route::get('', 'UpdateController@index');
+    Route::get('{version}', 'UpdateController@show');
+    Route::post('', 'UpdateController@store');
 });

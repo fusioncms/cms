@@ -176,7 +176,7 @@ class FusionServiceProvider extends ServiceProvider
         });
 
         // package manager
-        $this->app->singleton('composer', function () {
+        $this->app->singleton('fusion.composer', function () {
             return new \Fusion\Services\Composer();
         });
     }

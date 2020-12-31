@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <a href="https://beta.getfusioncms.com/changelog" title="Changelog" target="_blank">{{ current }}</a>
+            <a class="button" href="https://beta.getfusioncms.com/changelog" target="_blank">Changelog</a>
         </portal>
 
         <div class="card" v-for="(version, i1) in versions" :key="i1">
@@ -19,11 +19,10 @@
                 </h3>
 
                 <div class="flex items-center justify-start">
-                    <!-- upgrade --
-                    <ui-button v-if="version.id > id" @click="upgrade(version.id)" disabled>
+                    <!-- upgrade -->
+                    <ui-button v-if="version.id > id" @click="upgrade(version.id)">
                         Upgrade to {{ version.title }}
                     </ui-button>
-                    -->
 
                     <!-- current version -->
                     <ui-button v-if="version._isCurrent" disabled>
@@ -115,6 +114,10 @@
         computed: {
             current() {
                 return `v${this.$store.state.fusion.version}`
+            },
+
+            latest() {
+                return _.head(this.versions)
             },
 
             id() {
