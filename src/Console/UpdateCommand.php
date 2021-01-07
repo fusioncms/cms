@@ -16,8 +16,8 @@ class UpdateCommand extends Command
      * @var string
      */
     protected $signature = 'fusion:update'.
-                           ' {--version    : Package version constraint. }'.
-                           ' {--no-backup  : Disable backup before update. }';
+                           ' {--version-number : Package version constraint. }'.
+                           ' {--no-backup      : Disable backup before update. }';
 
     /**
      * The console command description.
@@ -33,13 +33,11 @@ class UpdateCommand extends Command
      */
     public function handle()
     {
-        // if (!Version::hasUpdate()) {
-        //     $this->error('You are currently on the latest version of FusionCMS.');
+        if (!Version::hasUpdate()) {
+            $this->error('You are currently on the latest version of FusionCMS.');
 
-        //     return;
-        // }
-
-        // Version::update();
+            return;
+        }
         
         $jobs = $this->jobs();
         // --
@@ -90,7 +88,7 @@ class UpdateCommand extends Command
      */
     private function jobs()
     {
-        $version = $this->option('version') ?? Version::latest();
+        $version = $this->option('version-number') ?? Version::latest();
 
         $jobs = [
             'Making backup...'          => new \Fusion\Jobs\Backups\BackupRun(['disable-notifications' => true]),

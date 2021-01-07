@@ -17,7 +17,5 @@ class Finalize
         Artisan::call('fusion:sync');
         Artisan::call('fusion:publish');
         Artisan::call('migrate');
-
-        // TODO: update `FUSION_VERSION`
     }
 }
