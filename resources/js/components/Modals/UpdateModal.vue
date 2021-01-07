@@ -110,55 +110,40 @@
             	this.isUpdating    = true
                 this.update.backup = 'active'
 
-                setTimeout(() => {
-                    this.update.backup = 'complete'
-                    this.runComposer()
-                }, 1000)
-
-                // axios.post('/api/updates/backup')
-                //     .then((response) => {
-                //         this.progress.backup = 'complete'
-                //         this.runComposer()
-                //     })
-                //     .catch((error) => {
-                //         console.log(error)
-                //     })
+                axios.post('/api/updates/backup')
+                    .then((response) => {
+                        this.update.backup = 'complete'
+                        this.runComposer()
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
             },
 
             runComposer() {
                 this.update.composer = 'active'
 
-                setTimeout(() => {
-                    this.update.composer = 'complete'
-                    this.runFinalize()
-                }, 1000)
-
-                // axios.post('/api/updates/composer')
-                //     .then((response) => {
-                //         this.update.composer = 'complete'
-                //         this.runFinalize()
-                //     })
-                //     .catch((error) => {
-                //         console.log(error)
-                //     })
+                axios.post('/api/updates/composer')
+                    .then((response) => {
+                        this.update.composer = 'complete'
+                        this.runFinalize()
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
             },
 
             runFinalize() {
                 this.update.finalize = 'active'
 
-                setTimeout(() => {
-                    this.update.finalize = 'complete'
-                    this.update.complete = true
-                }, 1500)
-
-                // axios.post('/api/updates/finalize')
-                //     .then((response) => {
-                //         this.update.finalize = 'complete'
-                //         this.update.complete = true
-                //     })
-                //     .catch((error) => {
-                //         console.log(error)
-                //     })
+                axios.post('/api/updates/finalize')
+                    .then((response) => {
+                        this.update.finalize = 'complete'
+                        this.update.complete = true
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
             },
 
 			close() {

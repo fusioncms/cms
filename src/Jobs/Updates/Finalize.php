@@ -2,10 +2,13 @@
 
 namespace Fusion\Jobs\Updates;
 
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Artisan;
 
 class Finalize
 {
+    use Dispatchable;
+
     /**
      * Execute the job.
      *
