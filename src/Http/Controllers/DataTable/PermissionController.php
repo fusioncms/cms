@@ -4,12 +4,17 @@ namespace Fusion\Http\Controllers\DataTable;
 
 use Fusion\Http\Controllers\DataTableController;
 use Fusion\Models\Permission;
+use Fusion\Models\Role;
 
 class PermissionController extends DataTableController
 {
     public function builder()
     {
-        return Permission::query();
+        if (request()->route('role')) {
+            return Role::find(request()->route('role'))->permissions();
+        } else {
+            return Permission::query();
+        }
     }
 
     public function getDisplayableColumns()
