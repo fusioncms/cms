@@ -368,6 +368,10 @@
                 } else {
                     this.$store.commit('fieldtypes/setStructure', 'collections')
                 }
+            },
+
+            'form.parent_id'(value) {
+                this.form.parent_id = Number(value)
             }
         },
 
