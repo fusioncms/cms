@@ -29,7 +29,7 @@ Route::prefix('users')->group(function () {
 Route::get('/files/{type}', 'FileController@index');
 
 Route::prefix('roles')->group(function () {
-	Route::get('/', 'RoleController@index');
+    Route::get('/', 'RoleController@index');
     Route::get('/{role}/permissions', 'PermissionController@index');
 });
 
