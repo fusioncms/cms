@@ -13,7 +13,6 @@ class AdminController extends Controller
      */
     public function index()
     {
-dd(\Storage::disk('s3')->put('foobar.txt', 'Hello World!'));
         if (auth()->check()) {
             $this->authorize('access.controlPanel');
         }
