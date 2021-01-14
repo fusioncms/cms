@@ -2,10 +2,10 @@
 
 namespace Fusion\Jobs\Updates;
 
-use Throwable;
 use Fusion\Facades\Composer;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class Update
 {
@@ -42,7 +42,7 @@ class Update
      * Handle a job failure.
      *
      * @throws \Throwable $exception
-     * 
+     *
      * @return void
      */
     public function failed(Throwable $exception)
