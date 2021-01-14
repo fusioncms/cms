@@ -2,11 +2,11 @@
 
 namespace Fusion\Console;
 
-use Throwable;
 use Fusion\Facades\Version;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Throwable;
 
 class UpdateCommand extends Command
 {
@@ -25,7 +25,7 @@ class UpdateCommand extends Command
      * @var string
      */
     protected $description = 'Update FusionCMS to the latest version';
-    
+
     /**
      * Execute the console command.
      *
@@ -38,11 +38,11 @@ class UpdateCommand extends Command
 
             return;
         }
-        
+
         $jobs = $this->jobs();
         // --
-        
-        $this->line("<fg=black;bg=white>--- Relax while FusionCMS proceeds with the update process...</>");
+
+        $this->line('<fg=black;bg=white>--- Relax while FusionCMS proceeds with the update process...</>');
 
         $progressBar = new ProgressBar($this->output, count($jobs));
         $progressBar->setFormat("\n%status:-45s%\n%current%/%max% [%bar%] %percent:3s%%\n🏁  %estimated:-20s%  %memory:20s%\n\n");
@@ -52,7 +52,7 @@ class UpdateCommand extends Command
         $progressBar->setBarCharacter('<fg=green>⚬</>');
         $progressBar->setEmptyBarCharacter('<fg=red>⚬</>');
         $progressBar->setProgressCharacter('<fg=green>➤</>');
-     
+
         $progressBar->setMessage('Starting update process...', 'status');
         $progressBar->start();
 
@@ -83,7 +83,7 @@ class UpdateCommand extends Command
 
     /**
      * List of jobs.
-     * 
+     *
      * @return array
      */
     private function jobs()
@@ -93,7 +93,7 @@ class UpdateCommand extends Command
         $jobs = [
             'Making backup...'          => new \Fusion\Jobs\Backups\BackupRun(['disable-notifications' => true]),
             'Updating dependencies...'  => new \Fusion\Jobs\Updates\Update($version),
-            'Finalizing..'              => new \Fusion\Jobs\Updates\Finalize,
+            'Finalizing..'              => new \Fusion\Jobs\Updates\Finalize(),
         ];
 
         // `--no-backup` option..

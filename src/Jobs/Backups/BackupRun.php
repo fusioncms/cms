@@ -83,8 +83,8 @@ class BackupRun implements ShouldQueue
     /**
      * Backup destination disks.
      *
-     * @param  string|null $disk
-     * 
+     * @param string|null $disk
+     *
      * @return array
      */
     private function backupDestinationDisks($disk)

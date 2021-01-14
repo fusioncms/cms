@@ -14,8 +14,8 @@ class UpdateController extends Controller
 {
     /**
      * Entries per page.
-     * 
-     * @var integer
+     *
+     * @var int
      */
     protected $perPage = 5;
 
@@ -84,9 +84,9 @@ class UpdateController extends Controller
      * Finalize update.
      *
      * @param \Illuminate\Http\Request $request
-     * 
+     *
      * @throws \Throwable;
-     * 
+     *
      * @return void
      */
     public function finalize(Request $request)
