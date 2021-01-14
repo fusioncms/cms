@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <a href="https://beta.getfusioncms.com/changelog" title="Changelog" target="_blank">{{ current }}</a>
+            <a class="button" href="https://beta.getfusioncms.com/changelog" target="_blank">Changelog</a>
         </portal>
 
         <div class="card" v-for="(version, i1) in versions" :key="i1">
@@ -19,13 +19,16 @@
                 </h3>
 
                 <div class="flex items-center justify-start">
-                    <!-- upgrade --
-                    <ui-button v-if="version.id > id" @click="upgrade(version.id)" disabled>
+
+                    <!-- Show Upgrade Button -->
+                    <ui-button
+                        v-if="newerVersionAvailable(version.title)"
+                        @click="upgrade(version)"
+                        v-modal:updater>
                         Upgrade to {{ version.title }}
                     </ui-button>
-                    -->
 
-                    <!-- current version -->
+                    <!-- IS on Current Version -->
                     <ui-button v-if="version._isCurrent" disabled>
                         Current version
                     </ui-button>
@@ -83,24 +86,14 @@
         </div>
 
         <portal to="modals">
-            <ui-modal
-                key="updater_modal"
-                name="updater"
-                :title="`Update to ${version.title}`"
-                v-model="isConfirming">
-
-                <p>Are you sure you want to update to version {{ version.title }}?</p>
-
-                <template slot="footer">
-                    <ui-button @click="confirm" type="button" class="button button--primary">Confirm</ui-button>
-                    <ui-button @click="close" type="button" class="mr-3">Cancel</ui-button>
-                </template>
-            </ui-modal>
+            <update-modal :version="version"></update-modal>
         </portal>
     </div>
 </template>
 
 <script>
+    import semver from 'semver'
+
     export default {
         name: 'updates',
 
@@ -108,49 +101,21 @@
             return {
                 version: false,
                 versions: [],
-                pagination: []
-            }
-        },
-
-        computed: {
-            current() {
-                return `v${this.$store.state.fusion.version}`
-            },
-
-            id() {
-                return this.findBy('title', this.current).id
-            },
-
-            isConfirming() {
-                return !! this.version
+                pagination: [],
             }
         },
 
         methods: {
-            findBy(key, value) {
-                return _.find(this.versions, (version) => version[key] == value)
+            newerVersionAvailable(version) {
+                return semver.gt(_.trimStart(version, 'v'), this.$store.state.fusion.version)
             },
 
             changePage(page) {
                 this.refresh(page)
             },
 
-            upgrade(id) {
-                this.version = this.findBy('id', id)
-            },
-
-            confirm() {
-                axios.post('/api/updates', { version: this.version })
-                    .then((response) => {
-                        console.log(response)
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-            },
-
-            close() {
-                this.version = false
+            upgrade(version) {
+                this.version = version
             },
 
             refresh(page) {
