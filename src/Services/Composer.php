@@ -33,7 +33,7 @@ class Composer
      */
     public function __construct($basePath = null)
     {
-        $this->basePath    = $basePath ?? fusion_path();
+        $this->basePath    = $basePath ?? base_path();
         $this->memoryLimit = config('fusion.composer.memory_limit');
     }
 
@@ -65,7 +65,7 @@ class Composer
     {
         $this->run(
             'update '.implode(' ', Arr::wrap($packages)),
-            array_merge(['--with-dependencies'], $flags)
+            array_merge(['--with-all-dependencies'], $flags)
         );
     }
 
@@ -242,6 +242,7 @@ class Composer
                 (new PhpExecutableFinder())->find(),
                 "-d memory_limit={$this->memoryLimit}",
                 exec('which composer'),
+                '-vv',
             ],
             explode(' ', $command),
             $flags

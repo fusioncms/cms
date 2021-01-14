@@ -3,9 +3,9 @@
 namespace Fusion\Services;
 
 use Composer\Semver\Comparator;
-use Fusion\Jobs\Update;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Artisan;
 
 class Version
 {
@@ -120,7 +120,7 @@ class Version
      */
     public function update()
     {
-        Update::dispatchIf($this->hasUpdate(), $this->latest());
+        Artisan::call('fusion:update');
     }
 
     /**

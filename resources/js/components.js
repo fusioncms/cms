@@ -18,6 +18,7 @@ Vue.component('blueprint', require('@/components/Blueprints/Blueprint').default)
 Vue.component('blueprint-area', require('@/components/Blueprints/BlueprintArea').default)
 Vue.component('blueprint-section', require('@/components/Blueprints/BlueprintSection').default)
 Vue.component('confirm-modal', require('@/components/Modals/ConfirmModal').default)
+Vue.component('update-modal', require('@/components/Modals/UpdateModal').default)
 Vue.component('edit-directory-modal', require('@/components/Modals/EditDirectoryModal').default) // TODO
 Vue.component('fieldtype-picker', require('@/components/FieldtypePicker').default)
 Vue.component('form-container', require('@/components/FormContainer').default)

@@ -16,6 +16,6 @@ class Composer extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'composer';
+        return 'fusion.composer';
     }
 }

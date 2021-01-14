@@ -50,7 +50,7 @@
         "php": "^7.2.5",
         "composer/semver": "^1.5",
         "doctrine/dbal": "^2.9",
-        "laravel/framework": "^8.0",
+        "illuminate/support": "^8.20",
         "laravel/sanctum": "^2.3",
         "laravel/scout": "^8.0",
         "laravel/ui": "^3.0",
