@@ -7,6 +7,7 @@
 						<component
 							v-if="field.settings.component"
 							:is="field.settings.component"
+							:field="field"
 							:settings="group.settings">
 						</component>
 
