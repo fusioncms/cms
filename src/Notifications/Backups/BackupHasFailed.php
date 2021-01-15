@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Backup\Notifications\Notifications;
+namespace Fusion\Notifications\Backups;
 
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackAttachment;
@@ -10,7 +10,9 @@ use Spatie\Backup\Notifications\BaseNotification;
 
 class BackupHasFailed extends BaseNotification
 {
-    /** @var \Spatie\Backup\Events\BackupHasFailed */
+    /**
+     * @var \Spatie\Backup\Events\BackupHasFailed
+     */
     protected $event;
 
     public function __construct(BackupHasFailedEvent $event)
@@ -18,11 +20,32 @@ class BackupHasFailed extends BaseNotification
         $this->event = $event;
     }
 
-    public function toMail(): MailMessage
+    /**
+     * Get the notification channels.
+     *
+     * @param  mixed  $notifiable
+     * @return array|string
+     */
+    public function via($notifiable): array
+    {
+        //TODO: get preferred channel
+        //$notifiable->getPreferredChannel();
+
+        return ['mail'];
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * 
+     * @return \Illuminate\Notifications\Messages\MailMessage
+     */
+    public function toMail($notifiable): MailMessage
     {
         $mailMessage = (new MailMessage)
             ->error()
-            ->from(config('backup.notifications.mail.from.address', config('mail.from.address')), config('backup.notifications.mail.from.name', config('mail.from.name')))
+            ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject(trans('backup::notifications.backup_failed_subject', ['application_name' => $this->applicationName()]))
             ->line(trans('backup::notifications.backup_failed_body', ['application_name' => $this->applicationName()]))
             ->line(trans('backup::notifications.exception_message', ['message' => $this->event->exception->getMessage()]))
@@ -35,7 +58,14 @@ class BackupHasFailed extends BaseNotification
         return $mailMessage;
     }
 
-    public function toSlack(): SlackMessage
+    /**
+     * Get the slack representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * 
+     * @return \Illuminate\Notifications\Messages\SlackMessage
+     */
+    public function toSlack($notifiable): SlackMessage
     {
         return (new SlackMessage)
             ->error()

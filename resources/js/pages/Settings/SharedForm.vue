@@ -8,7 +8,7 @@
 							v-if="field.settings.component"
 							:is="field.settings.component"
 							:field="field"
-							:settings="group.settings">
+							v-model="form[field.handle]">
 						</component>
 
 						<component

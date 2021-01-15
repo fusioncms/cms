@@ -19,14 +19,21 @@ return [
         ],
         'Notifications' => [
             [
-                'name'      => 'Backup Notification Mail',
-                'handle'    => 'backups_failed_notification',
+                'name'      => 'Backup Has Failed',
+                'handle'    => 'backups_notifications_backup_has_failed',
                 'component' => 'settings-notifications',
+                'type'      => 'dictionary',
                 'default'   => [
-                    'enabled' => true,
-                    'subscribers' => [],
-                ]
-            ],
+                    'mail' => [
+                        'enabled' => true,
+                        'users'   => []
+                    ],
+                    'slack' => [
+                        'enabled' => false,
+                        'users'   => []
+                    ],
+                ],
+            ]
         ]
     ],
 ];

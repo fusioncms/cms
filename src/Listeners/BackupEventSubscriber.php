@@ -5,6 +5,8 @@ namespace Fusion\Listeners;
 use Fusion\Concerns\HasCustomLogger;
 use Fusion\Jobs\Backups\BackupSync;
 use Fusion\Models\Backup;
+use Fusion\Models\User;
+use Fusion\Notifications\Backups\BackupHasFailed;
 use Illuminate\Support\Facades\Log;
 
 class BackupEventSubscriber
@@ -106,6 +108,17 @@ class BackupEventSubscriber
             'disk'    => optional($event->backupDestination)->diskName(),
             'message' => $event->exception->getMessage(),
         ]);
+
+        /**
+         * Notify subscribers
+         *
+        $subscribers = setting('backups.backups_notifications_backup_has_failed');
+
+        $subscribers->each(function($id) use ($event) {
+            User::find($id)
+                ->notify(new BackupHasFailed($event));
+        });
+        */
     }
 
     /**
