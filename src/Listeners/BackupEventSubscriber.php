@@ -106,6 +106,9 @@ class BackupEventSubscriber
             'disk'    => optional($event->backupDestination)->diskName(),
             'message' => $event->exception->getMessage(),
         ]);
+
+        //TODO: Assure 'BackupHasFailed' exists?
+        // \Fusion\Models\Notification::notify('BackupHasFailed');
     }
 
     /**
