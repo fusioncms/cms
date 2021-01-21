@@ -20,6 +20,13 @@ class Subscription extends Pivot
       */
     public $timestamps = false;
 
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = true;
+
 	/**
       * Returns owning Channel for this model.
       *
@@ -49,15 +56,4 @@ class Subscription extends Pivot
 	{
 		return $this->belongsTo(User::class);
 	}
-
-     /**
-      * Get the query builder for a delete operation on the pivot.
-      * [override]
-      * 
-      * @return \Illuminate\Database\Eloquent\Builder
-      */
-     protected function getDeleteQuery()
-     {
-          return $this->newQueryWithoutRelationships();
-     }
 }

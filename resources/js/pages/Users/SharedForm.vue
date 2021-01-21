@@ -89,6 +89,13 @@
             </ui-select-group>
         </section-card>
 
+        <section-card id="user_panel_notifications" title="Notifications" description="Toggle the notification subscriptions on each channel for this user." tabindex="-1">
+            <user-notifications
+                v-if="user.id"
+                :user="user">
+            </user-notifications>
+        </section-card>
+
         <section-card v-if="canEditPassword" id="user_panel_security" title="Security" description="Configure this user's security details." tabindex="-1">
             <ui-fieldset :help="user ? 'Only fill out the password fields below if you intend to update the user account password.' : null">
                 <ui-password-group
