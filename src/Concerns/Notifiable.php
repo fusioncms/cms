@@ -17,7 +17,19 @@ trait Notifiable
     public function channels()
 	{
 		return $this
-			->belongsToMany(Channel::class, 'channels_notifications_users')
+			->belongsToMany(Channel::class, 'notifications_users')
+			->using(Subscription::class);
+	}
+
+	/**
+     * Returns all Notifications for this model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function notifications()
+	{
+		return $this
+			->belongsToMany(Notification::class, 'notifications_users')
 			->using(Subscription::class);
 	}
 

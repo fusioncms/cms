@@ -11,7 +11,7 @@ class Subscription extends Pivot
       *
       * @var string
       */
-	protected $table = 'channels_notifications_users';
+	protected $table = 'notifications_users';
 
 	/**
       * Indicates if the model should be timestamped.
@@ -51,11 +51,11 @@ class Subscription extends Pivot
 	}
 
      /**
-     * Get the query builder for a delete operation on the pivot.
-     * [override]
-     * 
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+      * Get the query builder for a delete operation on the pivot.
+      * [override]
+      * 
+      * @return \Illuminate\Database\Eloquent\Builder
+      */
      protected function getDeleteQuery()
      {
           return $this->newQueryWithoutRelationships();

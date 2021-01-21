@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChannelsNotificationsUsersTable extends Migration
+class CreateNotificationsUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateChannelsNotificationsUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('channels_notifications_users', function (Blueprint $table) {
+        Schema::create('notifications_users', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('channel_id');
             $table->unsignedBigInteger('notification_id');
@@ -45,6 +45,6 @@ class CreateChannelsNotificationsUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('channels_notifications_users');
+        Schema::dropIfExists('notifications_users');
     }
 }

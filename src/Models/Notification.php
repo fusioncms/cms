@@ -22,7 +22,7 @@ class Notification extends Model
     public function subscriptions()
 	{
 		return $this
-			->belongsToMany(User::class, 'channels_notifications_users')
+			->belongsToMany(User::class, 'notifications_users')
 			->using(Subscription::class);
 	}
 
@@ -31,7 +31,7 @@ class Notification extends Model
 	 * 
 	 * @return void
 	 */
-	public function notifySubscriber()
+	public function notifySubscribers()
 	{
 		NotificationFacade::send($this->subscriptions, new $this->namespace(...func_get_args()));
 	}
