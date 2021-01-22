@@ -1,5 +1,5 @@
 <template>
-	<ui-tabs v-if="isReady">
+	<ui-tabs>
 		<ui-tab v-for="channel in channels" :key="channel.handle" :name="channel.name" class="row">
 			<ui-toggle
 				v-for="notification in notifications"
@@ -20,16 +20,15 @@
 	export default {
 		name: 'user-notifications',
 
-		data() {
-			return {
-				isReady: false
-			}
-		},
-
 		props: {
             user: {
                 type: Object,
                 required: true
+            },
+            
+            value: {
+                type: Array,
+                required: false
             }
         },
 
@@ -64,18 +63,20 @@
 
         created() {
         	this.$store.dispatch('notifications/fetch')
+
+            _.each(this.user.subscriptions, (subscription) => {
+                this.subscriptions[subscription.channel.id][subscription.notification.id] = true
+            })
         },
 
-        mounted() {
-        	axios.get(`/api/users/${this.user.id}/subscriptions`).then((response) => {
-				_.each(response.data.data, (subscription) => {
-					this.subscriptions[subscription.channel.id][subscription.notification.id] = true
-				})
-
-				this.isReady = true
-			}).catch((response) => {
-				toast(response.response.data.message, 'failed')
-			})
-        }
+        // mounted() {
+        // 	axios.get(`/api/users/${this.user.id}/subscriptions`).then((response) => {
+        // 		_.each(response.data.data, (subscription) => {
+        // 			this.subscriptions[subscription.channel.id][subscription.notification.id] = true
+        // 		})
+        // 	}).catch((response) => {
+        // 		toast(response.response.data.message, 'failed')
+        // 	})
+        // }
 	}
 </script>

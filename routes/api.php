@@ -159,10 +159,10 @@ Route::prefix('users')->group(function () {
     Route::post('{user}/reset-password', 'Users\PasswordResetController@store');
     Route::post('{user}/expire-password', 'Users\PasswordExpireController@store');
     
-    // subscriptionss
-    Route::get('{user}/subscriptions', 'Users\SubscriptionController@index');
-    Route::post('{user}/subscriptions/subscribe', 'Users\SubscriptionController@store');
-    Route::post('{user}/subscriptions/unsubscribe', 'Users\SubscriptionController@destroy');
+    // // subscriptions
+    // Route::get('{user}/subscriptions', 'Users\SubscriptionController@index');
+    // Route::post('{user}/subscriptions/subscribe', 'Users\SubscriptionController@store');
+    // Route::post('{user}/subscriptions/unsubscribe', 'Users\SubscriptionController@destroy');
 });
 Route::apiResource('users', 'Users\UserController');
 Route::apiResource('roles', 'Users\RoleController');

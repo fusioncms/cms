@@ -36,13 +36,13 @@ export default {
     },
 
     actions: {
-        subscribe: ({ commit }, payload) => {
-            axios.post(`/api/users/${payload.user}/subscriptions/subscribe`, payload)
-        },
+        // subscribe: ({ commit }, payload) => {
+        //     axios.post(`/api/users/${payload.user}/subscriptions/subscribe`, payload)
+        // },
 
-        unsubscribe: ({ commit }, payload) => {
-            axios.post(`/api/users/${payload.user}/subscriptions/unsubscribe`, payload)
-        },
+        // unsubscribe: ({ commit }, payload) => {
+        //     axios.post(`/api/users/${payload.user}/subscriptions/unsubscribe`, payload)
+        // },
 
         fetch: ({ commit }) => {
             axios.all([

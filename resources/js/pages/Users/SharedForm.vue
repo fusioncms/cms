@@ -92,7 +92,8 @@
         <section-card id="user_panel_notifications" title="Notifications" description="Toggle the notification subscriptions on each channel for this user." tabindex="-1">
             <user-notifications
                 v-if="user.id"
-                :user="user">
+                :user="user"
+                v-model="form.subscriptions">
             </user-notifications>
         </section-card>
 
