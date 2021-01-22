@@ -79,16 +79,19 @@ class SyncNotifications
     {
         $existing = Notification::all()->pluck('id', 'id');
 
-        foreach ($this->notifications as $name => $namespace) {
-            $notification = Notification::updateOrCreate([
-                'handle' => str_handle($name),
-            ],[
-                'name'      => $name,
-                'namespace' => $namespace,
-            ]);
+        foreach ($this->notifications as $group => $notifications) {
+            foreach ($notifications as $name => $namespace) {
+                $notification = Notification::updateOrCreate([
+                    'handle' => str_handle($name),
+                ],[
+                    'name'      => $name,
+                    'group'     => $group,
+                    'namespace' => $namespace,
+                ]);
 
-            // Unset for later cleanup..
-            unset($existing[$notification->id]);
+                // Unset for later cleanup..
+                unset($existing[$notification->id]);
+            }
         }
         
         // Clean up removed notifications..

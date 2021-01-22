@@ -19,7 +19,7 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
-        $notifications = Notification::paginate(25);
+        $notifications = Notification::paginate(25)->groupBy('group');
 
         return NotificationResource::collection($notifications);
     }

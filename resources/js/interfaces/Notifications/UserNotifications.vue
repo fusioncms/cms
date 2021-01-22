@@ -1,21 +1,34 @@
 <template>
 	<ui-tabs>
-		<ui-tab v-for="channel in channels" :key="channel.handle" :name="channel.name" class="row">
-			<ui-toggle
-				v-for="notification in notifications"
-				:key="notifications.handle"
-				:name="notification.handle"
-				:label="notification.name"
-				class="col w-full sm:w-1/2"
-				@input="toggle(channel, notification)"
-				v-model="subscriptions[channel.id][notification.id]">
-			</ui-toggle>
+		<ui-tab
+            class="row"
+            v-for="channel in channels"
+            :key="channel.handle"
+            :name="channel.name">
+			
+            <ui-checkbox-group
+                class="col row"
+                v-for="(notifications, name) in groups"
+                :key="name"
+                :label="name">
+
+                <ui-checkbox
+                    class="col w-full sm:w-1/2"
+                    v-for="notification in notifications"
+                    :id="notification.handle"
+                    :key="notifications.handle"
+                    :name="notification.handle"
+                    :native-value="nativeValue(channel, notification)"
+                    v-model="model">
+                    {{ notification.name }}
+                </ui-checkbox>
+            </ui-checkbox-group>
 		</ui-tab>
 	</ui-tabs>
 </template>
 
 <script>
-	import { mapActions, mapGetters } from 'vuex'
+	import { mapGetters } from 'vuex'
 
 	export default {
 		name: 'user-notifications',
@@ -35,48 +48,32 @@
         computed: {
         	...mapGetters({
         		channels: 'notifications/getChannels',
-        		notifications: 'notifications/getNotifications',
-        		subscriptions: 'notifications/getSubscriptions',
-        	})
+        		groups: 'notifications/getNotifications',
+        	}),
+
+            model: {
+                get() {
+                    return this.value
+                },
+
+                set(value) {
+                    this.$emit('input', value)
+                }
+            }
         },
 
         methods: {
-        	...mapActions({
-        		subscribe: 'notifications/subscribe',
-        		unsubscribe: 'notifications/unsubscribe',
-        	}),
-
-        	toggle(channel, notification) {
-        		let subscription = {
-        			user: this.user.id,
-        			channel: channel.id,
-        			notification: notification.id
-        		}
-
-        		if (this.subscriptions[channel.id][notification.id]) {
-        			this.subscribe(subscription)
-        		} else {
-        			this.unsubscribe(subscription)
-        		}
-        	}
+            nativeValue(channel, notification) {
+                return {
+                    user_id: this.user.id,
+                    channel_id: channel.id,
+                    notification_id: notification.id
+                }
+            }
         },
 
         created() {
         	this.$store.dispatch('notifications/fetch')
-
-            _.each(this.user.subscriptions, (subscription) => {
-                this.subscriptions[subscription.channel.id][subscription.notification.id] = true
-            })
         },
-
-        // mounted() {
-        // 	axios.get(`/api/users/${this.user.id}/subscriptions`).then((response) => {
-        // 		_.each(response.data.data, (subscription) => {
-        // 			this.subscriptions[subscription.channel.id][subscription.notification.id] = true
-        // 		})
-        // 	}).catch((response) => {
-        // 		toast(response.response.data.message, 'failed')
-        // 	})
-        // }
 	}
 </script>

@@ -12,7 +12,7 @@ class Notification extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'handle', 'namespace'];
+    protected $fillable = ['name', 'group', 'handle', 'namespace'];
 
     /**
      * Returns all Subscriptions for this model.

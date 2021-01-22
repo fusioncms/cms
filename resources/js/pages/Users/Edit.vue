@@ -4,7 +4,13 @@
             <page-title icon="user-alt">Edit User</page-title>
         </portal>
 
-        <shared-form :form="form" :roles="roles" :user="user" :submit="submit"></shared-form>
+        <shared-form
+            v-if="form"
+            :form="form"
+            :roles="roles"
+            :user="user"
+            :submit="submit">
+        </shared-form>
     </div>
 </template>
 
@@ -32,14 +38,7 @@
             return {
                 user: {},
                 roles: [],
-                form: new Form({
-                    name: '',
-                    email: '',
-                    role: null,
-                    password: '',
-                    password_confirmation: '',
-                    status: 1,
-                }, true)
+                form: null
             }
         },
 
@@ -105,6 +104,7 @@
                 role: user.role.handle,
                 password: '',
                 password_confirmation: '',
+                subscriptions: user.subscriptions,
             })
         }))
     }
