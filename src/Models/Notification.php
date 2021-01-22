@@ -28,11 +28,15 @@ class Notification extends Model
 
 	/**
 	 * Send Notification to Users with Subscription.
-	 * 
+	 *
+	 * @param  string $handle
 	 * @return void
 	 */
-	public function notifySubscribers()
+	public static function notifySubscribers($handle, ...$args)
 	{
-		NotificationFacade::send($this->subscriptions, new $this->namespace(...func_get_args()));
+		$notification = static::where('handle', $handle)->firstOrFail();
+		$subscribers  = $notification->subscriptions;
+
+		NotificationFacade::send($subscribers, new $notification->namespace(...$args));
 	}
 }

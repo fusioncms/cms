@@ -3,7 +3,7 @@
 namespace Fusion\Listeners;
 
 use Fusion\Jobs\Onboard;
-use Fusion\Models\User;
+use Fusion\Models\{Notification,User};
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 
@@ -64,6 +64,8 @@ class UserEventSubscriber
         } else {
             Onboard::dispatchNow($event->user);
         }
+
+        Notification::notifySubscribers('new_user_registration', $event->user);
     }
 
     /**

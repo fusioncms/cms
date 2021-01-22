@@ -11,7 +11,7 @@ class NewUserRegistration extends Notification
     /**
      * @var \Fusion\Models\User
      */
-    protected $user;
+    public $user;
 
     /**
      * Construct new instance.
