@@ -31,7 +31,7 @@ class NewUserRegistration extends Notification
      */
     public function via($notifiable): array
     {
-        return $notifiable->channels->pluck('handle')->toArray();
+        return $notifiable->via(__CLASS__);
     }
 
     /**

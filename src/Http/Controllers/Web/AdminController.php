@@ -13,6 +13,7 @@ class AdminController extends Controller
      */
     public function index()
     {
+notify('new_user_registration', auth()->user());
         if (auth()->check()) {
             $this->authorize('access.controlPanel');
         }

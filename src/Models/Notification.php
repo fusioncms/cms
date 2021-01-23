@@ -25,18 +25,4 @@ class Notification extends Model
 			->belongsToMany(User::class, 'notifications_users')
 			->using(Subscription::class);
 	}
-
-	/**
-	 * Send Notification to Users with Subscription.
-	 *
-	 * @param  string $handle
-	 * @return void
-	 */
-	public static function notifySubscribers($handle, ...$args)
-	{
-		$notification = static::where('handle', $handle)->firstOrFail();
-		$subscribers  = $notification->subscriptions;
-
-		NotificationFacade::send($subscribers, new $notification->namespace(...$args));
-	}
 }

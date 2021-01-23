@@ -12,13 +12,22 @@ trait Notifiable
 	/**
      * Returns all Channels for this model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @param  string $namespace - notification class
+     * @return array
      */
-    public function channels()
+    public function via($namespace)
 	{
 		return $this
-			->belongsToMany(Channel::class, 'notifications_users')
-			->using(Subscription::class);
+			->subscriptions()
+			->with('channel:id,handle')
+			->whereHas('notification', function($query) use ($namespace) {
+				return $query->where('namespace', $namespace);
+			})
+			->get()
+			->map(function($sub) {
+				return $sub->channel->handle;
+			})
+			->toArray();
 	}
 
 	/**
