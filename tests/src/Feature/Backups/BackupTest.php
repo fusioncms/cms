@@ -6,10 +6,12 @@ use Fusion\Events\Backups\Backup\HasFinished;
 use Fusion\Events\Backups\Backup\HasStarted;
 use Fusion\Events\Backups\Backup\WasUpdated;
 use Fusion\Jobs\Backups\BackupRun;
+use Fusion\Notifications\Backups\BackupWasSuccessful;
 use Fusion\Models\Backup;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
@@ -389,13 +391,17 @@ class BackupTest extends TestBase
     // ------------------------------------------------
 
     /** @test */
-    public function successful_backup_will_notify_user_with_valid_mail_settings()
+    public function successful_backup_will_notify_subscribed_users()
     {
+        $this->admin->subscribeTo([
+            'channel_id'      => \Fusion\Models\Channel::where('handle', 'mail')->first()->id,
+            'notification_id' => \Fusion\Models\Notification::where('handle', 'backup_was_successful')->first()->id,
+        ]);
+
         $backup = $this->newBackup();
 
         \Notification::assertSentTo(
-            app(config('backup.notifications.notifiable')),
-            'Spatie\Backup\Notifications\Notifications\BackupWasSuccessful'
+            $this->admin, BackupWasSuccessful::class
         );
     }
 }

@@ -29,9 +29,9 @@ class SubscriptionTest extends TestCase
     public function each_subscription_must_have_a_unique_combination_of_ids()
     {
         $this->expectException(QueryException::class);
-        $this->expectExceptionMessage('UNIQUE constraint failed: channels_notifications_users.user_id, channels_notifications_users.channel_id, channels_notifications_users.notification_id');
+        $this->expectExceptionMessage('UNIQUE constraint failed: notifications_users.user_id, notifications_users.channel_id, notifications_users.notification_id');
 
-        DB::table('channels_notifications_users')->insert(
+        DB::table('notifications_users')->insert(
             $this->subscription->toArray()
         );
     }

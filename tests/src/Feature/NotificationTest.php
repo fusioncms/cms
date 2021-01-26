@@ -63,7 +63,7 @@ class NotificationTest extends TestCase
         NotificationFacade::assertSentTo(
             $this->admin,
             function (NewUserRegistration $notification, $channels) use ($newUser) {
-                return $channels == $this->admin->channels->pluck('handle')->all() &&
+                return $channels == $this->admin->via(NewUserRegistration::class) &&
                        $notification->user->id == $newUser->id;
             }
         );

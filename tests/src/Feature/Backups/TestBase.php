@@ -63,7 +63,10 @@ class TestBase extends TestCase
     {
         $name = $name ?? Carbon::now()->format(Backup::FILENAME_FORMAT);
 
-        BackupRun::dispatchNow($name, $disk);
+        BackupRun::dispatchNow([
+            'name' => $name,
+            'disk' => $disk
+        ]);
 
         return Backup::where(['name' => $name])->get();
     }
