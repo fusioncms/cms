@@ -3,15 +3,15 @@
 namespace Fusion\Notifications\Backups;
 
 use Illuminate\Notifications\Messages\MailMessage;
-use Spatie\Backup\Events\BackupWasSuccessful as BackupWasSuccessfulEvent;
+use Spatie\Backup\Events\CleanupHasFailed as CleanupHasFailedEvent;
 use Spatie\Backup\Notifications\BaseNotification;
 
-class BackupWasSuccessful extends BaseNotification
+class CleanupHasFailed extends BaseNotification
 {
-    /** @var \Spatie\Backup\Events\BackupWasSuccessful */
+    /** @var \Spatie\Backup\Events\CleanupHasFailed */
     protected $event;
 
-    public function __construct(BackupWasSuccessfulEvent $event)
+    public function __construct(CleanupHasFailedEvent $event)
     {
         $this->event = $event;
     }
@@ -32,9 +32,12 @@ class BackupWasSuccessful extends BaseNotification
     public function toMail(): MailMessage
     {
         $mailMessage = (new MailMessage)
+            ->error()
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject(trans('backup::notifications.backup_successful_subject', ['application_name' => $this->applicationName()]))
-            ->line(trans('backup::notifications.backup_successful_body', ['application_name' => $this->applicationName(), 'disk_name' => $this->diskName()]));
+            ->subject(trans('backup::notifications.cleanup_failed_subject', ['application_name' => $this->applicationName()]))
+            ->line(trans('backup::notifications.cleanup_failed_body', ['application_name' => $this->applicationName()]))
+            ->line(trans('backup::notifications.exception_message', ['message' => $this->event->exception->getMessage()]))
+            ->line(trans('backup::notifications.exception_trace', ['trace' => $this->event->exception->getTraceAsString()]));
 
         $this->backupDestinationProperties()->each(function ($value, $name) use ($mailMessage) {
             $mailMessage->line("{$name}: $value");

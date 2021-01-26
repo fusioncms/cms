@@ -14,8 +14,8 @@ return [
     'Backups' => [
     	'Backup Was Successful'      => Fusion\Notifications\Backups\BackupWasSuccessful::class,
     	'Backup Has Failed'          => Fusion\Notifications\Backups\BackupHasFailed::class,
-    	// 'Cleanup Was Successful'     => Fusion\Notifications\Backups\CleanupWasSuccessful::class,
-    	// 'Cleanup Has Failed'         => Fusion\Notifications\Backups\CleanupHasFailed::class,
+    	'Cleanup Was Successful'     => Fusion\Notifications\Backups\CleanupWasSuccessful::class,
+    	'Cleanup Has Failed'         => Fusion\Notifications\Backups\CleanupHasFailed::class,
     	// 'Healthy Backup Was Found'   => Fusion\Notifications\Backups\HealthyBackupWasFound::class,
     	// 'Unhealthy Backup Was Found' => Fusion\Notifications\Backups\UnhealthyBackupWasFound::class,
     ]

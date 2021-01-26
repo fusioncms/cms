@@ -3,8 +3,6 @@
 namespace Fusion\Notifications\Backups;
 
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Messages\SlackAttachment;
-use Illuminate\Notifications\Messages\SlackMessage;
 use Spatie\Backup\Events\BackupHasFailed as BackupHasFailedEvent;
 use Spatie\Backup\Notifications\BaseNotification;
 
@@ -26,7 +24,9 @@ class BackupHasFailed extends BaseNotification
      */
     public function via(): array
     {
-        return $notifiable->channels->pluck('handle')->toArray();
+        if (func_get_arg(0) instanceof \Fusion\Models\User) {
+            return func_get_arg(0)->via(__CLASS__);
+        }
     }
 
     public function toMail(): MailMessage

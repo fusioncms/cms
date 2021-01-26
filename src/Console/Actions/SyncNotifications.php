@@ -14,8 +14,7 @@ class SyncNotifications
      * @var array
      */
     protected $channels = [
-        'mail',
-        'database'
+        'mail'
     ];
 
     /**

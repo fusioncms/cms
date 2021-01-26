@@ -93,6 +93,8 @@ class BackupEventSubscriber
         Log::info('Backup was successful.', [
             'disk' => $event->backupDestination->diskName(),
         ]);
+
+        notify('backup_was_successful', $event);
     }
 
     /**
@@ -107,8 +109,7 @@ class BackupEventSubscriber
             'message' => $event->exception->getMessage(),
         ]);
 
-        //TODO: Assure 'BackupHasFailed' exists?
-        // \Fusion\Models\Notification::notify('BackupHasFailed');
+        notify('backup_has_failed', $event);
     }
 
     /**
@@ -157,6 +158,8 @@ class BackupEventSubscriber
     public function handleCleanupSuccessful($event)
     {
         BackupSync::dispatchNow($event->backupDestination);
+
+        notify('cleanup_was_successful', $event);
     }
 
     /**
@@ -173,6 +176,8 @@ class BackupEventSubscriber
                 'message' => $event->exception->getMessage(),
             ]);
         }
+
+        notify('cleanup_has_failed', $event);
     }
 
     /**

@@ -1,13 +1,13 @@
 <template>
 	<ui-tabs>
 		<ui-tab
-            class="row"
+            class="col"
             v-for="channel in channels"
             :key="channel.handle"
             :name="channel.name">
 			
             <ui-checkbox-group
-                class="col row"
+                class="row"
                 v-for="(notifications, name) in groups"
                 :key="name"
                 :label="name">
