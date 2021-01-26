@@ -166,8 +166,8 @@ Route::apiResource('tokens', 'Users\TokenController')->except(['show', 'update']
 /**
  * API - Notification Routes.
  */
-Route::apiResource('channels', 'Notifications\ChannelController');
-Route::apiResource('notifications', 'Notifications\NotificationController');
+Route::get('channels', 'Notifications\ChannelController@index');
+Route::get('notifications', 'Notifications\NotificationController@index');
 
 /**
  * API - Updates Routes.

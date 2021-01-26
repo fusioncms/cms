@@ -36,7 +36,8 @@
 		props: {
             user: {
                 type: Object,
-                required: true
+                required: false,
+                default: () => {}
             },
             
             value: {
@@ -65,7 +66,7 @@
         methods: {
             nativeValue(channel, notification) {
                 return {
-                    user_id: this.user.id,
+                    user_id: this.user && this.user.id ? this.user.id : null,
                     channel_id: channel.id,
                     notification_id: notification.id
                 }

@@ -23,16 +23,4 @@ class NotificationController extends Controller
 
         return NotificationResource::collection($notifications);
     }
-
-    /**
-     * Display specified resource.
-     *
-     * @param \Fusion\Models\Notification $notification
-     *
-     * @return \Fusion\Http\Resources\NotificationResource
-     */
-    public function show(Notification $notification)
-    {
-        return new NotificationResource($notification);
-    }
 }
