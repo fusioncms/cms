@@ -22,9 +22,6 @@ class CreateMatricesTable extends Migration
             $table->text('description')->nullable();
             $table->string('type');
 
-            $table->string('reference_singular')->default('');
-            $table->string('reference_plural')->default('');
-
             $table->boolean('sidebar')->default(true);
             $table->boolean('quicklink')->default(true);
             $table->string('icon')->nullable();

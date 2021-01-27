@@ -25,7 +25,7 @@
                     <ui-toggle
                         id="matrix-sidebar-show"
                         name="sidebar"
-                        label="Show as Sidebar"
+                        label="Show in Sidebar"
                         :has-error="form.errors.has('sidebar')"
                         :error-message="form.errors.get('sidebar')"
                         v-model="form.sidebar">
@@ -34,7 +34,7 @@
                     <ui-toggle
                         id="matrix-quicklink-show"
                         name="quicklink"
-                        label="Show as Quicklink"
+                        label="Show as Quick Link"
                         :has-error="form.errors.has('quicklink')"
                         :error-message="form.errors.get('quicklink')"
                         v-model="form.quicklink">
@@ -48,7 +48,6 @@
                         help="Choose an icon that best represents your matrix."
                         :has-error="form.errors.has('icon')"
                         :error-message="form.errors.get('icon')"
-                        required
                         v-model="form.icon">
                     </icon-picker>
                 </sidebar-section>
@@ -147,29 +146,6 @@
                 :has-error="form.errors.has('name_label')"
                 :error-message="form.errors.get('name_label')"
                 v-model="form.name_label">
-            </ui-input-group>
-
-            <ui-input-group
-                id="matrix-reference-singular"
-                name="reference_singular"
-                label="Singular Reference"
-                :placeholder="singularReference"
-                help="What would you like to reference this as in singular form? By default will try to guess from the name. Results may vary."
-                :has-error="form.errors.has('reference_singular')"
-                :error-message="form.errors.get('reference_singular')"
-                v-model="form.reference_singular">
-            </ui-input-group>
-
-            <ui-input-group
-                v-if="isCollection"
-                id="matrix-reference-plural"
-                name="reference_plural"
-                label="Plural Reference"
-                :placeholder="pluralReference"
-                help="What would you like to reference this as in plural form? By default will try to guess from the name. Results may vary."
-                :has-error="form.errors.has('reference_plural')"
-                :error-message="form.errors.get('reference_plural')"
-                v-model="form.reference_plural">
             </ui-input-group>
 
             <ui-toggle
