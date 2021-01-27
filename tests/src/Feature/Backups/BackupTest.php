@@ -6,12 +6,11 @@ use Fusion\Events\Backups\Backup\HasFinished;
 use Fusion\Events\Backups\Backup\HasStarted;
 use Fusion\Events\Backups\Backup\WasUpdated;
 use Fusion\Jobs\Backups\BackupRun;
-use Fusion\Notifications\Backups\BackupWasSuccessful;
 use Fusion\Models\Backup;
+use Fusion\Notifications\Backups\BackupWasSuccessful;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
@@ -401,7 +400,8 @@ class BackupTest extends TestBase
         $backup = $this->newBackup();
 
         \Notification::assertSentTo(
-            $this->admin, BackupWasSuccessful::class
+            $this->admin,
+            BackupWasSuccessful::class
         );
     }
 }

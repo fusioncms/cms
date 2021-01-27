@@ -2,7 +2,7 @@
 
 return [
     'Authentication' => [
-    	'New User Registration' => Fusion\Notifications\Auth\NewUserRegistration::class,
+        'New User Registration' => Fusion\Notifications\Auth\NewUserRegistration::class,
     ],
 
     // 'Users' => [
@@ -12,11 +12,11 @@ return [
     // ],
 
     'Backups' => [
-    	'Backup Was Successful'      => Fusion\Notifications\Backups\BackupWasSuccessful::class,
-    	'Backup Has Failed'          => Fusion\Notifications\Backups\BackupHasFailed::class,
-    	'Cleanup Was Successful'     => Fusion\Notifications\Backups\CleanupWasSuccessful::class,
-    	'Cleanup Has Failed'         => Fusion\Notifications\Backups\CleanupHasFailed::class,
-    	// 'Healthy Backup Was Found'   => Fusion\Notifications\Backups\HealthyBackupWasFound::class,
-    	// 'Unhealthy Backup Was Found' => Fusion\Notifications\Backups\UnhealthyBackupWasFound::class,
-    ]
+        'Backup Was Successful'      => Fusion\Notifications\Backups\BackupWasSuccessful::class,
+        'Backup Has Failed'          => Fusion\Notifications\Backups\BackupHasFailed::class,
+        'Cleanup Was Successful'     => Fusion\Notifications\Backups\CleanupWasSuccessful::class,
+        'Cleanup Has Failed'         => Fusion\Notifications\Backups\CleanupHasFailed::class,
+        // 'Healthy Backup Was Found'   => Fusion\Notifications\Backups\HealthyBackupWasFound::class,
+        // 'Unhealthy Backup Was Found' => Fusion\Notifications\Backups\UnhealthyBackupWasFound::class,
+    ],
 ];

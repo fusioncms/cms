@@ -19,7 +19,8 @@ class CleanupHasFailed extends BaseNotification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via(): array
@@ -31,7 +32,7 @@ class CleanupHasFailed extends BaseNotification
 
     public function toMail(): MailMessage
     {
-        $mailMessage = (new MailMessage)
+        $mailMessage = (new MailMessage())
             ->error()
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject(trans('backup::notifications.cleanup_failed_subject', ['application_name' => $this->applicationName()]))

@@ -22,7 +22,7 @@ class CreateNotificationsUsersTable extends Migration
             $table->unique([
                 'user_id',
                 'channel_id',
-                'notification_id'
+                'notification_id',
             ], 'pivot_unique');
 
             $table->foreign('user_id')

@@ -2,12 +2,15 @@
 
 namespace Fusion\Tests\Feature;
 
-use Fusion\Models\{Channel,Notification,User};
+use Fusion\Models\Channel;
+use Fusion\Models\Notification;
+use Fusion\Models\User;
 use Fusion\Notifications\Auth\NewUserRegistration;
 use Fusion\Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification as NotificationFacade;
-use Illuminate\Foundation\Testing\{RefreshDatabase,WithFaker};
 
 class NotificationTest extends TestCase
 {
@@ -27,15 +30,15 @@ class NotificationTest extends TestCase
     public function a_user_with_permission_can_subscribe_notifications_to_a_user()
     {
         $attributes = [
-            'name'  => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
-            'role'  => 'user',
+            'name'          => $this->faker->name,
+            'email'         => $this->faker->unique()->safeEmail,
+            'role'          => 'user',
             'subscriptions' => [
                 [
-                    'channel_id' => Channel::first()->id,
+                    'channel_id'      => Channel::first()->id,
                     'notification_id' => Notification::first()->id,
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this
@@ -54,7 +57,7 @@ class NotificationTest extends TestCase
     public function a_user_will_receive_a_notification_they_are_subscribed_to()
     {
         $this->admin->subscribeTo([
-            'channel_id' => Channel::where('handle', 'mail')->first()->id,
+            'channel_id'      => Channel::where('handle', 'mail')->first()->id,
             'notification_id' => Notification::first()->id,
         ]);
 

@@ -65,7 +65,7 @@ class TestBase extends TestCase
 
         BackupRun::dispatchNow([
             'name' => $name,
-            'disk' => $disk
+            'disk' => $disk,
         ]);
 
         return Backup::where(['name' => $name])->get();

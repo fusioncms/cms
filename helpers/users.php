@@ -33,30 +33,31 @@ function permission()
     return app()->make(Fusion\Models\Permission::class);
 }
 
-if (! function_exists('notify')) {
+if (!function_exists('notify')) {
     /**
      * Dispatch an event and call the listeners.
-     * 
-     * @param  string|object  $event
-     * @param  mixed  $payload
-     * 
+     *
+     * @param string|object $event
+     * @param mixed         $payload
+     *
      * @return bool
      */
     function notify(...$args)
     {
-		try {
-			$model  = app(Fusion\Models\Notification::class);
-			$handle = array_shift($args);
+        try {
+            $model  = app(Fusion\Models\Notification::class);
+            $handle = array_shift($args);
 
-			$notification = $model->where('handle', $handle)->firstOrFail();
-			$subscribers  = $notification->subscriptions;
+            $notification = $model->where('handle', $handle)->firstOrFail();
+            $subscribers  = $notification->subscriptions;
 
-			Notification::send($subscribers, new $notification->namespace(...$args));
-		} catch(Exception $e) {
-			Log::error($e->getMessage(), (array) $e->getTrace()[0]);
-			return false;
-		}
+            Notification::send($subscribers, new $notification->namespace(...$args));
+        } catch (Exception $e) {
+            Log::error($e->getMessage(), (array) $e->getTrace()[0]);
 
-		return true;
+            return false;
+        }
+
+        return true;
     }
 }
