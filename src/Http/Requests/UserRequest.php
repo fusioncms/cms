@@ -15,8 +15,6 @@ class UserRequest extends Request
     public function authorizePost()
     {
         return $this->user()->can('users.create');
-
-        return $this->user()->can('users.update') and $this->user()->level($this->user->role->level);
     }
 
     /**
@@ -59,6 +57,7 @@ class UserRequest extends Request
             'email'  => ['email', 'unique:users,email,'.$id],
             'role'   => ['sometimes', 'exists:roles,handle'],
             'status' => ['sometimes', 'boolean'],
+            'subscriptions' => 'sometimes',
         ];
 
         if ($this->method() == 'POST') {

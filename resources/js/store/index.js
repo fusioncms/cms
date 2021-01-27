@@ -6,6 +6,7 @@ import inbox from './inbox'
 import fusion from './fusion'
 import settings from './settings'
 import navigation from './navigation'
+import notifications from './notifications'
 import fieldtypes from './fieldtypes'
 import filemanager from './filemanager'
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
         fusion,
         settings,
         navigation,
+        notifications,
         fieldtypes,
         filemanager,
     },

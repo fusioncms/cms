@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
+
 /**
  * Retrieve the user model.
  *
@@ -28,4 +31,32 @@ function role()
 function permission()
 {
     return app()->make(Fusion\Models\Permission::class);
+}
+
+if (! function_exists('notify')) {
+    /**
+     * Dispatch an event and call the listeners.
+     * 
+     * @param  string|object  $event
+     * @param  mixed  $payload
+     * 
+     * @return bool
+     */
+    function notify(...$args)
+    {
+		try {
+			$model  = app(Fusion\Models\Notification::class);
+			$handle = array_shift($args);
+
+			$notification = $model->where('handle', $handle)->firstOrFail();
+			$subscribers  = $notification->subscriptions;
+
+			Notification::send($subscribers, new $notification->namespace(...$args));
+		} catch(Exception $e) {
+			Log::error($e->getMessage(), (array) $e->getTrace()[0]);
+			return false;
+		}
+
+		return true;
+    }
 }
