@@ -17,23 +17,70 @@ return [
                 'required'    => true,
             ],
         ],
-        'Notifications' => [
+        'Storage' => [
             [
-                'name'      => 'Backup Has Failed',
-                'handle'    => 'backups_notifications_backup_has_failed',
-                'component' => 'settings-notifications',
-                'type'      => 'dictionary',
-                'default'   => [
-                    'mail' => [
-                        'enabled' => true,
-                        'users'   => []
-                    ],
-                    'slack' => [
-                        'enabled' => false,
-                        'users'   => []
-                    ],
+                'name'        => 'Filename Prefix',
+                'handle'      => 'filename_prefix',
+                'description' => 'The filename prefix used for the backup zip file.',
+                'type'        => 'input',
+                'override'    => 'backups.backup.destination.filename_prefix',
+            ],
+            [
+                'name'        => 'Disks',
+                'handle'      => 'disks',
+                'description' => 'The disk names on which the backups will be stored.',
+                'type'        => 'checkbox',
+                'options'     => [
+                    'public' => 'Public',
+                    'sftp'   => 'SFTP',
+                    'S3'     => 'AmazonS3'
                 ],
-            ]
+                'default'     => ['public'],
+                'override'    => 'backups.backup.destination.disks',
+                'required'    => true,
+            ],
+        ],
+        'Cleanup Strategy' => [
+            [
+                'name'        => 'Keep All Backps For Days',
+                'handle'      => 'keep_all_backups_for_days',
+                'description' => 'The number of days for which backups must be kept.',
+                'type'        => 'number',
+                'default'     => 7,
+                'override'    => 'backups.backup.cleanup.default_strategy.keep_all_backups_for_days',
+            ],
+            [
+                'name'        => 'Keep Daily Backups For Days',
+                'handle'      => 'keep_daily_backups_for_days',
+                'description' => 'The number of days for which daily backups must be kept.',
+                'type'        => 'number',
+                'default'     => 16,
+                'override'    => 'backups.backup.cleanup.default_strategy.keep_daily_backups_for_days',
+            ],
+            [
+                'name'        => 'Keep Weekly Backups For Weeks',
+                'handle'      => 'keep_weekly_backups_for_weeks',
+                'description' => 'The number of weeks for which one weekly backup must be kept.',
+                'type'        => 'number',
+                'default'     => 8,
+                'override'    => 'backups.backup.cleanup.default_strategy.keep_weekly_backups_for_weeks',
+            ],
+            [
+                'name'        => 'Keep Monthly Backups For Months',
+                'handle'      => 'keep_monthly_backups_for_months',
+                'description' => 'The number of months for which one monthly backup must be kept.',
+                'type'        => 'number',
+                'default'     => 4,
+                'override'    => 'backups.backup.cleanup.default_strategy.keep_monthly_backups_for_months',
+            ],
+            [
+                'name'        => 'Keep Yearly Backups For Years',
+                'handle'      => 'keep_yearly_backups_for_years',
+                'description' => 'The number of years for which one yearly backup must be kept.',
+                'type'        => 'number',
+                'default'     => 2,
+                'override'    => 'backups.backup.cleanup.default_strategy.keep_yearly_backups_for_years',
+            ],
         ]
     ],
 ];
