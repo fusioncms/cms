@@ -40,8 +40,6 @@
                     handle: '',
                     description: '',
                     type: 'collection',
-                    reference_singular: '',
-                    reference_plural: '',
                     sections: [],
                     sidebar: true,
                     quicklink: true,

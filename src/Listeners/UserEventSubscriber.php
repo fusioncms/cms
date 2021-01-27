@@ -64,6 +64,8 @@ class UserEventSubscriber
         } else {
             Onboard::dispatchNow($event->user);
         }
+
+        notify('new_user_registration', $event->user);
     }
 
     /**

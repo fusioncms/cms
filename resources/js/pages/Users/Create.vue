@@ -37,6 +37,7 @@
                     password: '',
                     password_confirmation: '',
                     email_verified_at: this.$moment().format('X'),
+                    subscriptions: [],
                     status: 1,
                 }, true)
             }

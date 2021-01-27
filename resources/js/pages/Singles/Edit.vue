@@ -1,7 +1,7 @@
 <template>
     <div class="single-page">
         <portal to="title">
-            <page-title :icon="single.icon || 'pencil-alt'" :subtitle="single.description">Edit {{ single.reference_singular }}</page-title>
+            <page-title :icon="single.icon || 'pencil-alt'" :subtitle="single.description">Edit</page-title>
         </portal>
 
         <shared-form

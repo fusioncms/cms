@@ -1,7 +1,7 @@
 <template>
     <div class="collection-page">
         <portal to="title">
-            <page-title :icon="collection.icon || 'pencil-alt'" :subtitle="collection.description">Create {{ collection.reference_singular }}</page-title>
+            <page-title :icon="collection.icon || 'pencil-alt'" :subtitle="collection.description">Create</page-title>
         </portal>
 
         <shared-form
@@ -20,7 +20,7 @@
         head: {
             title() {
                 return {
-                    inner: this.collection.reference_singular || 'Loading...'
+                    inner: this.collection.name || 'Loading...'
                 }
             }
         },

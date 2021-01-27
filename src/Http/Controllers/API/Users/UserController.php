@@ -62,6 +62,11 @@ class UserController extends Controller
         // handle role setting..
         $this->assureOwnerRoleLimit($user);
 
+        // handle notification subscriptions..
+        if (isset($attributes['subscriptions'])) {
+            $user->syncSubscriptions($attributes['subscriptions']);
+        }
+
         /**
          * Forces new users to confirm themselves.
          *
@@ -102,6 +107,11 @@ class UserController extends Controller
 
         // handle role setting..
         $this->assureOwnerRoleLimit($user);
+
+        // handle notification subscriptions..
+        if (isset($attributes['subscriptions'])) {
+            $user->syncSubscriptions($attributes['subscriptions']);
+        }
 
         return new UserResource($user);
     }
