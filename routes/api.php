@@ -154,12 +154,20 @@ Route::prefix('settings')->group(function () {
 /**
  * API - User Routes.
  */
+Route::prefix('users')->group(function () {
+    Route::post('{user}/verify', 'Users\VerifyEmailController@store');
+    Route::post('{user}/reset-password', 'Users\PasswordResetController@store');
+    Route::post('{user}/expire-password', 'Users\PasswordExpireController@store');
+});
 Route::apiResource('users', 'Users\UserController');
 Route::apiResource('roles', 'Users\RoleController');
 Route::apiResource('tokens', 'Users\TokenController')->except(['show', 'update']);
-Route::post('users/{user}/verify', 'Users\VerifyEmailController@store');
-Route::post('users/{user}/reset-password', 'Users\PasswordResetController@store');
-Route::post('users/{user}/expire-password', 'Users\PasswordExpireController@store');
+
+/**
+ * API - Notification Routes.
+ */
+Route::get('channels', 'Notifications\ChannelController@index');
+Route::get('notifications', 'Notifications\NotificationController@index');
 
 /**
  * API - Updates Routes.
