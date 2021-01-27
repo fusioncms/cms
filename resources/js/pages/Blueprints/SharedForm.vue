@@ -69,7 +69,7 @@
         },
 
         created() {
-            this.$store.commit('fieldtypes/setStructure', this.resource.group.toLowerCase())
+            this.$store.commit('fieldtypes/setStructure', this.resource.structure.toLowerCase())
         }
     }
 </script>

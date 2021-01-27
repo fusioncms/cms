@@ -50,14 +50,14 @@ class MenuServiceProvider extends ServiceProvider
         $matrices = Matrix::sidebar()->get()->mapWithKeys(function ($item) {
             if ($item->has('children') and $item->children->count()) {
                 $subitems = $item->children->mapWithKeys(function ($subitem) {
-                    $name   = $subitem->type == 'single' ? $subitem->reference_singular : $subitem->reference_plural;
+                    $name   = $subitem->name;
                     $handle = str_handle($name);
                     $path   = $subitem->adminPath;
 
                     return [$handle => ['title' => $name, 'to' => $path]];
                 });
 
-                $name   = $item->type == 'single' ? $item->reference_singular : $item->reference_plural;
+                $name   = $item->name;
                 $handle = str_handle($name);
                 $path   = $item->adminPath;
 
