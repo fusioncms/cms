@@ -34,7 +34,7 @@
                     <ui-toggle
                         id="matrix-quicklink-show"
                         name="quicklink"
-                        label="Show as Quick Link"
+                        label="Show as Quicklink"
                         :has-error="form.errors.has('quicklink')"
                         :error-message="form.errors.get('quicklink')"
                         v-model="form.quicklink">
