@@ -3,7 +3,6 @@
 namespace Fusion\Models;
 
 use Fusion\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Notification as NotificationFacade;
 
 class Notification extends Model
 {
@@ -20,9 +19,9 @@ class Notification extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function subscriptions()
-	{
-		return $this
-			->belongsToMany(User::class, 'notifications_users')
-			->using(Subscription::class);
-	}
+    {
+        return $this
+            ->belongsToMany(User::class, 'notifications_users')
+            ->using(Subscription::class);
+    }
 }

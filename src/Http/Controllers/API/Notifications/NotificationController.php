@@ -2,10 +2,9 @@
 
 namespace Fusion\Http\Controllers\API\Notifications;
 
-use Exception;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Resources\NotificationResource;
-use Fusion\Models\{Notification,User};
+use Fusion\Models\Notification;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller

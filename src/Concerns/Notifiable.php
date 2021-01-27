@@ -2,118 +2,122 @@
 
 namespace Fusion\Concerns;
 
-use Fusion\Models\{Channel,Notification,Subscription};
+use Fusion\Models\Notification;
+use Fusion\Models\Subscription;
 use Illuminate\Notifications\Notifiable as BaseNotifiable;
 
 trait Notifiable
 {
-	use BaseNotifiable;
+    use BaseNotifiable;
 
-	/**
+    /**
      * Returns all Channels for this model.
      *
-     * @param  string $namespace - notification class
+     * @param string $namespace - notification class
+     *
      * @return array
      */
     public function via($namespace)
-	{
-		return $this
-			->subscriptions()
-			->with('channel:id,handle')
-			->whereHas('notification', function($query) use ($namespace) {
-				return $query->where('namespace', $namespace);
-			})
-			->get()
-			->map(function($sub) {
-				return $sub->channel->handle;
-			})
-			->toArray();
-	}
+    {
+        return $this
+            ->subscriptions()
+            ->with('channel:id,handle')
+            ->whereHas('notification', function ($query) use ($namespace) {
+                return $query->where('namespace', $namespace);
+            })
+            ->get()
+            ->map(function ($sub) {
+                return $sub->channel->handle;
+            })
+            ->toArray();
+    }
 
-	/**
+    /**
      * Returns all Notifications for this model.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function notifications()
-	{
-		return $this
-			->belongsToMany(Notification::class, 'notifications_users')
-			->using(Subscription::class);
-	}
+    {
+        return $this
+            ->belongsToMany(Notification::class, 'notifications_users')
+            ->using(Subscription::class);
+    }
 
-	/**
-	 * Return all Subscriptions for this model.
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-	 */
-	public function subscriptions()
-	{
-		return $this->hasMany(Subscription::class);
-	}
+    /**
+     * Return all Subscriptions for this model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
 
-	/**
-	 * Sync notification subscriptions for this model.
-	 * 
-	 * @param  array $subscriptions
-	 * @return $this
-	 */
-	public function syncSubscriptions($subscriptions)
-	{
-		$existing = $this->subscriptions->pluck('id', 'id');
+    /**
+     * Sync notification subscriptions for this model.
+     *
+     * @param array $subscriptions
+     *
+     * @return $this
+     */
+    public function syncSubscriptions($subscriptions)
+    {
+        $existing = $this->subscriptions->pluck('id', 'id');
 
-		// sync subscriptions
-		collect($subscriptions)
-			->each(function($sub) use ($existing) {
-				$subscription = Subscription::updateOrCreate([
-					'channel_id'      => $sub['channel_id'],
-					'notification_id' => $sub['notification_id'],
-					'user_id'         => $this->id,
-				]);
+        // sync subscriptions
+        collect($subscriptions)
+            ->each(function ($sub) use ($existing) {
+                $subscription = Subscription::updateOrCreate([
+                    'channel_id'      => $sub['channel_id'],
+                    'notification_id' => $sub['notification_id'],
+                    'user_id'         => $this->id,
+                ]);
 
-				unset($existing[$subscription['id']]);
-			});
+                unset($existing[$subscription['id']]);
+            });
 
-		// remove unwanted subscriptions..
-		foreach ($existing as $id) {
+        // remove unwanted subscriptions..
+        foreach ($existing as $id) {
             Subscription::findOrFail($id)->delete();
         }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Assign the given subscription to the model.
-	 * 
-	 * @param  array $subscription
-	 * 
-	 * @return $this
-	 */
-	public function subscribeTo($subscription)
-	{
-		Subscription::firstOrCreate([
-			'channel_id'      => $subscription['channel_id'],
-			'notification_id' => $subscription['notification_id'],
-			'user_id'         => $this->id,
-		]);
+    /**
+     * Assign the given subscription to the model.
+     *
+     * @param array $subscription
+     *
+     * @return $this
+     */
+    public function subscribeTo($subscription)
+    {
+        Subscription::firstOrCreate([
+            'channel_id'      => $subscription['channel_id'],
+            'notification_id' => $subscription['notification_id'],
+            'user_id'         => $this->id,
+        ]);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Remove the given subscription to the model.
-	 * 
-	 * @param  array $subscription
-	 * @return $this
-	 */
-	public function unsubscribeFrom($subscription)
-	{
-		Subscription::where([
-			'channel_id'      => $subscription['channel_id'],
-			'notification_id' => $subscription['notification_id'],
-			'user_id'         => $this->id,
-		])->firstOrFail()->delete();;
+    /**
+     * Remove the given subscription to the model.
+     *
+     * @param array $subscription
+     *
+     * @return $this
+     */
+    public function unsubscribeFrom($subscription)
+    {
+        Subscription::where([
+            'channel_id'      => $subscription['channel_id'],
+            'notification_id' => $subscription['notification_id'],
+            'user_id'         => $this->id,
+        ])->firstOrFail()->delete();
 
-		return $this;
-	}
+        return $this;
+    }
 }

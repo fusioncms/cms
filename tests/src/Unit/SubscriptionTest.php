@@ -2,7 +2,10 @@
 
 namespace Fusion\Tests\Unit;
 
-use Fusion\Models\{Channel,Notification,Subscription,User};
+use Fusion\Models\Channel;
+use Fusion\Models\Notification;
+use Fusion\Models\Subscription;
+use Fusion\Models\User;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;

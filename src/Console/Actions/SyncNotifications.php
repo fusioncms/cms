@@ -2,7 +2,8 @@
 
 namespace Fusion\Console\Actions;
 
-use Fusion\Models\{Channel,Notification};
+use Fusion\Models\Channel;
+use Fusion\Models\Notification;
 use Illuminate\Support\Arr;
 use Symfony\Component\Finder\Finder;
 
@@ -10,34 +11,33 @@ class SyncNotifications
 {
     /**
      * Supported Channels.
-     * 
+     *
      * @var array
      */
     protected $channels = [
-        'mail'
+        'mail',
     ];
 
     /**
      * Supported Notifications.
-     * 
+     *
      * @var array
      */
     protected $notifications = [];
 
     /**
      * Path to notifications.
-     * 
+     *
      * @var string
      */
     protected $path;
 
     /**
      * Construct new instance.
-     * 
      */
     public function __construct()
     {
-        $this->path = fusion_path('notifications');
+        $this->path          = fusion_path('notifications');
         $this->notifications = $this->fetchNotifications();
     }
 
@@ -54,13 +54,13 @@ class SyncNotifications
 
     /**
      * Sync available channels in storage.
-     * 
+     *
      * @return void
      */
     public function syncChannels()
     {
         //TODO: allow for extension
-        
+
         foreach ($this->channels as $channel) {
             Channel::firstOrCreate(
                 ['handle' => $channel],
@@ -82,7 +82,7 @@ class SyncNotifications
             foreach ($notifications as $name => $namespace) {
                 $notification = Notification::updateOrCreate([
                     'handle' => str_handle($name),
-                ],[
+                ], [
                     'name'      => $name,
                     'group'     => $group,
                     'namespace' => $namespace,
@@ -92,7 +92,7 @@ class SyncNotifications
                 unset($existing[$notification->id]);
             }
         }
-        
+
         // Clean up removed notifications..
         foreach ($existing as $id) {
             Notification::findOrFail($id)->delete();

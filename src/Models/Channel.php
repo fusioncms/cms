@@ -11,5 +11,5 @@ class Channel extends Model
      *
      * @var array
      */
-    protected $fillable = [ 'name', 'handle' ];
+    protected $fillable = ['name', 'handle'];
 }

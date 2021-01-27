@@ -19,7 +19,8 @@ class BackupWasSuccessful extends BaseNotification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via(): array
@@ -31,7 +32,7 @@ class BackupWasSuccessful extends BaseNotification
 
     public function toMail(): MailMessage
     {
-        $mailMessage = (new MailMessage)
+        $mailMessage = (new MailMessage())
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject(trans('backup::notifications.backup_successful_subject', ['application_name' => $this->applicationName()]))
             ->line(trans('backup::notifications.backup_successful_body', ['application_name' => $this->applicationName(), 'disk_name' => $this->diskName()]));

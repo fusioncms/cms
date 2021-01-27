@@ -16,14 +16,13 @@ class ConfigServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         $this->registerMacro();
         $this->mergeConfigurations();
     }
 
     /**
      * Add `mergeDeep` macro to Arr Facade.
-     * 
+     *
      * @var array
      */
     protected function registerMacro()
@@ -59,7 +58,8 @@ class ConfigServiceProvider extends ServiceProvider
             $path = $file->getPathname();
             $name = File::name($path);
 
-            $this->app['config']->set($name,
+            $this->app['config']->set(
+                $name,
                 Arr::mergeDeep(
                     $this->app['config']->get($name, []),
                     require $path
