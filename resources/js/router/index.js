@@ -467,6 +467,16 @@ const router = new Router({
         },
 
         {
+            path: '/scripts',
+            component: () => import('@/pages/Scripts/Index'),
+            name: 'scripts',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+
+        {
             path: '/addons',
             component: () => import('@/pages/Addons'),
             name: 'addons',

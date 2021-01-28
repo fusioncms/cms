@@ -16,8 +16,8 @@ class CreateScriptsTable extends Migration
         Schema::create('scripts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('code')->default('');
-            $table->string('location')->default('head'); // head, before_body, after_body, foot
+            $table->text('code');
+            $table->string('location')->default('head'); // head, before_body, after_body
             $table->string('include_on')->default('all');
             $table->string('include_where')->default('');
             $table->string('type')->default('user');

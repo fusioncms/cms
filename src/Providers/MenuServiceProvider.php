@@ -128,6 +128,7 @@ class MenuServiceProvider extends ServiceProvider
                 'children' => [
                     'backups' => ['title' => 'Backups', 'to' => '/backups'],
                     'logs'    => ['title' => 'Logs',    'to' => '/logs'],
+                    'scripts' => ['title' => 'Scripts', 'to' => '/scripts'],
                 ],
             ],
             'users' => [

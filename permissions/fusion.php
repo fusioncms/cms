@@ -23,6 +23,7 @@ return [
     'terms'         => ['viewAny', 'view', 'create', 'update', 'delete'],
     'themes'        => ['viewAny', 'view', 'create', 'update', 'delete'],
     'users'         => ['viewAny', 'view', 'create', 'update', 'delete'],
+    'scripts'       => ['viewAny', 'view', 'create', 'update', 'delete'],
 
     // special permissions
     // --
