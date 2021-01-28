@@ -14,9 +14,7 @@
 						<component
 							v-else
 							:is="field.type.id + '-fieldtype'"
-							:field="field"
-							:errors="form.errors"
-							v-model="form[field.handle]">
+							:settings="group.settings">
 						</component>
 					</div>
 				</ui-tab>
