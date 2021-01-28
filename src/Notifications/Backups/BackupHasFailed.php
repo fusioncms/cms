@@ -17,17 +17,17 @@ class BackupHasFailed extends BaseNotification
     }
 
     /**
-     * Get the notification channels.
+     * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
-     * @return array|string
+     * @param mixed $notifiable
+     *
+     * @return array
      */
-    public function via($notifiable): array
+    public function via(): array
     {
-        //TODO: get preferred channel
-        //$notifiable->getPreferredChannel();
-
-        return ['mail'];
+        if (func_get_arg(0) instanceof \Fusion\Models\User) {
+            return func_get_arg(0)->via(__CLASS__);
+        }
     }
 
     /**
@@ -39,7 +39,7 @@ class BackupHasFailed extends BaseNotification
      */
     public function toMail($notifiable): MailMessage
     {
-        $mailMessage = (new MailMessage)
+        $mailMessage = (new MailMessage())
             ->error()
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject(trans('backup::notifications.backup_failed_subject', ['application_name' => $this->applicationName()]))

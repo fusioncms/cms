@@ -5,8 +5,6 @@ namespace Fusion\Listeners;
 use Fusion\Concerns\HasCustomLogger;
 use Fusion\Jobs\Backups\BackupSync;
 use Fusion\Models\Backup;
-use Fusion\Models\User;
-use Fusion\Notifications\Backups\BackupHasFailed;
 use Illuminate\Support\Facades\Log;
 
 class BackupEventSubscriber
