@@ -23,14 +23,14 @@ return [
                 'handle'      => 'disks',
                 'description' => 'The disk names on which the backups will be stored.',
                 'type'        => 'checkbox',
-                'options' => collect(config('filesystems.disks'))
+                'options'     => collect(config('filesystems.disks'))
                     ->filter(function ($disk) {
                         return $disk['driver'] !== 'local';
                     })
                     ->mapWithKeys(function ($disk, $key) {
                         return [$key => $key];
                     })
-                    ->put('public','public')
+                    ->put('public', 'public')
                     ->all(),
                 'default'     => ['public'],
                 'override'    => 'backup.backup.destination.disks',

@@ -40,11 +40,11 @@ if (!function_exists('notify')) {
      * @param string|object $event
      * @param mixed         $payload
      *
-     * @return bool
+     * @return void
      */
     function notify(...$args)
     {
-        try {
+        rescue(function() use ($args) {
             $model  = app(Fusion\Models\Notification::class);
             $handle = array_shift($args);
 
@@ -52,12 +52,6 @@ if (!function_exists('notify')) {
             $subscribers  = $notification->subscriptions;
 
             Notification::send($subscribers, new $notification->namespace(...$args));
-        } catch (Exception $e) {
-            Log::error($e->getMessage(), (array) $e->getTrace()[0]);
-
-            return false;
-        }
-
-        return true;
+        });
     }
 }
