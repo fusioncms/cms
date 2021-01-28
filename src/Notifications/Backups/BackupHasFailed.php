@@ -19,8 +19,6 @@ class BackupHasFailed extends BaseNotification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
-     *
      * @return array
      */
     public function via(): array

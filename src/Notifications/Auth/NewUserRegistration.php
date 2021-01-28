@@ -42,7 +42,7 @@ class NewUserRegistration extends Notification
      *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail(): MailMessage
+    public function toMail($notifiable): MailMessage
     {
         return (new MailMessage())
             ->from(config('mail.from.address'), config('mail.from.name'))
