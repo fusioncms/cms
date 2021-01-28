@@ -19,24 +19,21 @@ return [
         ],
         'Storage' => [
             [
-                'name'        => 'Filename Prefix',
-                'handle'      => 'filename_prefix',
-                'description' => 'The filename prefix used for the backup zip file.',
-                'type'        => 'input',
-                'override'    => 'backups.backup.destination.filename_prefix',
-            ],
-            [
                 'name'        => 'Disks',
                 'handle'      => 'disks',
                 'description' => 'The disk names on which the backups will be stored.',
                 'type'        => 'checkbox',
-                'options'     => [
-                    'public' => 'Public',
-                    'sftp'   => 'SFTP',
-                    'S3'     => 'AmazonS3'
-                ],
+                'options' => collect(config('filesystems.disks'))
+                    ->filter(function ($disk) {
+                        return $disk['driver'] !== 'local';
+                    })
+                    ->mapWithKeys(function ($disk, $key) {
+                        return [$key => $key];
+                    })
+                    ->put('public','public')
+                    ->all(),
                 'default'     => ['public'],
-                'override'    => 'backups.backup.destination.disks',
+                'override'    => 'backup.backup.destination.disks',
                 'required'    => true,
             ],
         ],
@@ -47,7 +44,7 @@ return [
                 'description' => 'The number of days for which backups must be kept.',
                 'type'        => 'number',
                 'default'     => 7,
-                'override'    => 'backups.backup.cleanup.default_strategy.keep_all_backups_for_days',
+                'override'    => 'backup.backup.cleanup.default_strategy.keep_all_backups_for_days',
             ],
             [
                 'name'        => 'Keep Daily Backups For Days',
@@ -55,7 +52,7 @@ return [
                 'description' => 'The number of days for which daily backups must be kept.',
                 'type'        => 'number',
                 'default'     => 16,
-                'override'    => 'backups.backup.cleanup.default_strategy.keep_daily_backups_for_days',
+                'override'    => 'backup.backup.cleanup.default_strategy.keep_daily_backups_for_days',
             ],
             [
                 'name'        => 'Keep Weekly Backups For Weeks',
@@ -63,7 +60,7 @@ return [
                 'description' => 'The number of weeks for which one weekly backup must be kept.',
                 'type'        => 'number',
                 'default'     => 8,
-                'override'    => 'backups.backup.cleanup.default_strategy.keep_weekly_backups_for_weeks',
+                'override'    => 'backup.backup.cleanup.default_strategy.keep_weekly_backups_for_weeks',
             ],
             [
                 'name'        => 'Keep Monthly Backups For Months',
@@ -71,7 +68,7 @@ return [
                 'description' => 'The number of months for which one monthly backup must be kept.',
                 'type'        => 'number',
                 'default'     => 4,
-                'override'    => 'backups.backup.cleanup.default_strategy.keep_monthly_backups_for_months',
+                'override'    => 'backup.backup.cleanup.default_strategy.keep_monthly_backups_for_months',
             ],
             [
                 'name'        => 'Keep Yearly Backups For Years',
@@ -79,7 +76,7 @@ return [
                 'description' => 'The number of years for which one yearly backup must be kept.',
                 'type'        => 'number',
                 'default'     => 2,
-                'override'    => 'backups.backup.cleanup.default_strategy.keep_yearly_backups_for_years',
+                'override'    => 'backup.backup.cleanup.default_strategy.keep_yearly_backups_for_years',
             ],
         ]
     ],
