@@ -9,3 +9,16 @@ if (!function_exists('seo')) {
         return app('seo.seo');
     }
 }
+
+if (!function_exists('render_scripts')) {
+    function render_scripts($location)
+    {
+        $scripts = \Fusion\Models\Script::select('code')
+            ->where('location', $location)
+            ->where('status', true)
+            ->get()
+            ->implode('code', "\n");
+
+        echo $scripts;
+    }
+}

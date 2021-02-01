@@ -50,6 +50,17 @@ class BladeServiceProvider extends ServiceProvider
                     throw new \Exception('Invalid asset type declared. Must be either "css" or "js".');
             }
         });
+
+        Blade::directive('scripts', function ($expression) {
+            list($location) = explode(', ', $expression);
+            $location       = strval(trim($location, "\'\""));
+
+            if (!in_array($location, ['head', 'body'])) {
+                return;
+            }
+
+            return "<?php render_scripts('{$location}'); ?>";
+        });
     }
 
     protected function registerCacheDirectives()

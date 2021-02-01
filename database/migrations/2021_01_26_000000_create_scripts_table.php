@@ -16,10 +16,11 @@ class CreateScriptsTable extends Migration
         Schema::create('scripts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description')->nullable();
             $table->text('code');
-            $table->string('location')->default('head'); // head, before_body, after_body
-            $table->string('include_on')->default('all');
-            $table->string('include_where')->default('');
+            $table->string('location')->default('head'); // head, body
+            $table->string('trigger_on')->default('all');
+            $table->string('trigger_where')->default('');
             $table->string('type')->default('user');
             $table->integer('order')->default(0);
             $table->boolean('status')->default(true);

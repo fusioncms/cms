@@ -475,6 +475,24 @@ const router = new Router({
                 layout: 'admin'
             }
         },
+        {
+            path: '/scripts/create',
+            component: () => import('@/pages/Scripts/Create'),
+            name: 'scripts.create',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin',
+            },
+        },
+        {
+            path: '/scripts/:script/edit',
+            component: () => import('@/pages/Scripts/Edit'),
+            name: 'scripts.edit',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin',
+            },
+        },
 
         {
             path: '/addons',

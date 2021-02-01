@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API\Users;
+namespace Fusion\Http\Controllers\API;
 
 use Fusion\Http\Resources\ScriptResource;
 use Fusion\Http\Controllers\Controller;
@@ -29,15 +29,15 @@ class ScriptController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \Fusion\Models\Script $role
+     * @param \Fusion\Models\Script $script
      *
      * @return \Fusion\Http\Resources\ScriptResource
      */
-    public function show(Script $role)
+    public function show(Script $script)
     {
         $this->authorize('scripts.view');
 
-        return new ScriptResource($role);
+        return new ScriptResource($script);
     }
 
     /**
@@ -49,53 +49,37 @@ class ScriptController extends Controller
      */
     public function store(ScriptRequest $request)
     {
-        $role = Script::create($request->validated());
+        $script = Script::create($request->validated());
 
-        if ($request->has('permissions')) {
-            $role->givePermissionTo($request->input('permissions'));
-        }
-
-        return new ScriptResource($role);
+        return new ScriptResource($script);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param \Fusion\Http\Requests\ScriptRequest $request
-     * @param \Fusion\Models\Script               $role
+     * @param \Fusion\Models\Script               $script
      *
      * @return \Fusion\Http\Resources\ScriptResource
      */
-    public function update(ScriptRequest $request, Script $role)
+    public function update(ScriptRequest $request, Script $script)
     {
-        $role->update($request->validated());
+        $script->update($request->validated());
 
-        if ($request->has('permissions')) {
-            $role->syncPermissions($request->input('permissions'));
-        }
-
-        return new ScriptResource($role);
+        return new ScriptResource($script);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \Fusion\Models\Script $role
+     * @param \Fusion\Models\Script $script
      *
      * @return void
      */
-    public function destroy(ScriptRequest $request, Script $role)
+    public function destroy(Script $script)
     {
-        if (!$request->has('transfer')) {
-            return response()->json([
-                'error' => 'Script transfer not specified.',
-            ], 400);
-        }
+        $this->authorize('scripts.delete');
 
-        $role->users->each(function ($user) use ($request) {
-            $user->syncScripts($request->get('transfer'));
-        });
-
-        $role->delete();
+        $script->delete();
     }
 }

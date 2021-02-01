@@ -6,7 +6,7 @@
         :help="field.help"
         :has-error="hasError(field.handle)"
         :error-message="errorMessage(field.handle)">
-        
+
         <div :ref="braceRef" class="border rounded"></div>
     </ui-field-group>
 </template>
@@ -31,7 +31,7 @@
     import 'brace/mode/xml'
     import 'brace/mode/yaml'
     import FieldMixin from '@/mixins/fieldtypes/field'
-    
+
     export default {
         name: 'code-fieldtype',
 
@@ -73,4 +73,3 @@
         }
     }
 </script>
-
