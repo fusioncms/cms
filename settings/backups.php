@@ -17,26 +17,6 @@ return [
                 'required'    => true,
             ],
         ],
-        // 'Storage' => [
-        //     [
-        //         'name'        => 'Disks',
-        //         'handle'      => 'disks',
-        //         'description' => 'The disk names on which the backups will be stored.',
-        //         'type'        => 'checkbox',
-        //         'options'     => collect(config('filesystems.disks'))
-        //             ->filter(function ($disk) {
-        //                 return $disk['driver'] !== 'local';
-        //             })
-        //             ->mapWithKeys(function ($disk, $key) {
-        //                 return [$key => $key];
-        //             })
-        //             ->put('public', 'public')
-        //             ->all(),
-        //         'default'     => ['public'],
-        //         'override'    => 'backup.backup.destination.disks',
-        //         'required'    => true,
-        //     ],
-        // ],
         'Cleanup Strategy' => [
             [
                 'name'        => 'Keep All Backps For Days',
