@@ -43,6 +43,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      */
     public function setUp(): void
     {
+        // dd('wtf');
         parent::setUp();
 
         // Customize factory path
@@ -61,6 +62,17 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             $this->unverifiedUser = $this->createUser('Unverified Consumer', 'unverified@example.com', 'secret', null, ['email_verified_at' => null]);
             $this->guest          = $this->createGuest();
         });
+    }
+
+    /**
+     * Define database migrations.
+     *
+     * @return void
+     */
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadLaravelMigrations();
+        $this->loadMigrationsFrom(base_path('migrations'));
     }
 
     /**
@@ -140,16 +152,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         $this->uninstall();
 
         parent::tearDown();
-    }
-
-    /**
-     * Define database migrations.
-     *
-     * @return void
-     */
-    protected function defineDatabaseMigrations()
-    {
-        $this->loadMigrationsFrom(base_path('migrations'));
     }
 
     /**
