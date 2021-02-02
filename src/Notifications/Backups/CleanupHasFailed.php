@@ -19,8 +19,6 @@ class CleanupHasFailed extends BaseNotification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
-     *
      * @return array
      */
     public function via(): array
@@ -30,7 +28,14 @@ class CleanupHasFailed extends BaseNotification
         }
     }
 
-    public function toMail(): MailMessage
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * 
+     * @return \Illuminate\Notifications\Messages\MailMessage
+     */
+    public function toMail($notifiable): MailMessage
     {
         $mailMessage = (new MailMessage())
             ->error()
