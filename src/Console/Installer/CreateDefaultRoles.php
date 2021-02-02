@@ -43,6 +43,7 @@ class CreateDefaultRoles
                 'singles.viewAny', 'singles.view', 'singles.create', 'singles.update', 'singles.delete',
                 'responses.viewAny', 'responses.view', 'responses.create', 'responses.update', 'responses.delete',
                 'roles.viewAny', 'roles.view', 'roles.create', 'roles.update', 'roles.delete',
+                'scripts.viewAny', 'scripts.view', 'scripts.create', 'scripts.update', 'scripts.delete',
                 'settings.viewAny', 'settings.view', 'settings.update',
                 'taxonomies.viewAny', 'taxonomies.view', 'taxonomies.create', 'taxonomies.update', 'taxonomies.delete',
                 'terms.viewAny', 'terms.view', 'terms.create', 'terms.update', 'terms.delete',

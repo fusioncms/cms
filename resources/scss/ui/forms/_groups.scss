@@ -5,7 +5,7 @@
 
     &--toggle {
         @apply flex flex-wrap justify-between items-center;
-        width: 250px;
+        width: 300px;
         max-width: 100%;
     }
 }
@@ -16,18 +16,18 @@
     > * {
         @apply relative;
 
-        &:not(:first-child) {  margin-left: -1px; } 
+        &:not(:first-child) {  margin-left: -1px; }
 
         &:not(:first-child):not(:last-child) {
             @apply rounded-r-none rounded-l-none;
         }
- 
-        &:first-child { 
-            @apply rounded-br-none rounded-tr-none; 
+
+        &:first-child {
+            @apply rounded-br-none rounded-tr-none;
         }
 
-        &:last-child { 
-            @apply rounded-bl-none rounded-tl-none; 
+        &:last-child {
+            @apply rounded-bl-none rounded-tl-none;
         }
 
         &:focus { z-index: 1; }
