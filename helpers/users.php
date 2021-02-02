@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 /**
@@ -44,7 +43,7 @@ if (!function_exists('notify')) {
      */
     function notify(...$args)
     {
-        rescue(function() use ($args) {
+        rescue(function () use ($args) {
             $model  = app(Fusion\Models\Notification::class);
             $handle = array_shift($args);
 

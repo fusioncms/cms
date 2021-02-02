@@ -46,7 +46,7 @@ class SettingController extends Controller
     public function update(SettingRequest $request, Setting $setting)
     {
         $updates = collect($request->validated())
-            ->mapWithKeys(function($value, $key) use ($setting) {
+            ->mapWithKeys(function ($value, $key) use ($setting) {
                 return ["{$setting->handle}.{$key}" => $value];
             })
             ->all();
@@ -56,9 +56,9 @@ class SettingController extends Controller
          * ---------
          * In order for FusionCMS to pick
          * up on changes we'll run our
-         * updates through: Fusion\Services\Setting
+         * updates through: Fusion\Services\Setting.
          */
-       setting($updates);
+        setting($updates);
 
         // Persist relationships...
         foreach ($setting->blueprint->relationships() as $relationship) {

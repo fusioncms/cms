@@ -58,6 +58,6 @@ return [
                 'default'     => 2,
                 'override'    => 'backup.cleanup.default_strategy.keep_yearly_backups_for_years',
             ],
-        ]
+        ],
     ],
 ];

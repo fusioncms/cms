@@ -24,7 +24,7 @@ class BackupTest extends TestCase
             ->be($this->owner, 'api')
             ->json('PATCH', 'api/settings/backups', [
                 'backups_auto' => 'enabled',
-                'disks'        => ['public']
+                'disks'        => ['public'],
             ])->assertStatus(200);
     }
 
