@@ -35,10 +35,8 @@ class MatrixRequest extends Request
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug'               => $this->slug ?? Str::slug($this->name),
-            'status'             => $this->status ?? true,
-            'reference_singular' => empty($this->reference_singular) ? Str::singular($this->name ?? '') : $this->reference_singular,
-            'reference_plural'   => empty($this->reference_plural) ? Str::plural($this->name ?? '') : $this->reference_plural,
+            'slug'   => $this->slug ?? Str::slug($this->name),
+            'status' => $this->status ?? true,
         ]);
     }
 
@@ -59,9 +57,6 @@ class MatrixRequest extends Request
             'description'        => 'sometimes',
             'type'               => 'required',
             'status'             => 'required|boolean',
-
-            'reference_singular' => 'sometimes',
-            'reference_plural'   => 'sometimes',
 
             'sidebar'            => 'required|boolean',
             'quicklink'          => 'required|boolean',

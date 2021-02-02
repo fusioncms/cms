@@ -21,7 +21,7 @@ class Clean
             ->withoutOverlapping()
             ->environments(['production'])
             ->when(function () {
-                return setting('backups.scheduled_backups', 'disabled') == 'enabled';
+                return setting('backups.backups_auto', 'disabled') == 'enabled';
             });
     }
 }

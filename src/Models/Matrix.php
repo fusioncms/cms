@@ -32,8 +32,6 @@ class Matrix extends Model implements Structure
         'slug',
         'description',
         'type',
-        'reference_singular',
-        'reference_plural',
         'sidebar',
         'quicklink',
         'icon',

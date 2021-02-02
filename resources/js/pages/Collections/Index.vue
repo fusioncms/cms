@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <ui-button v-if="collection.slug" variant="primary" :to="{ name: 'collection.create', params: {collection: collection.slug} }">Create {{ collection.reference_singular }}</ui-button>
+            <ui-button v-if="collection.slug" variant="primary" :to="{ name: 'collection.create', params: {collection: collection.slug} }">Create</ui-button>
         </portal>
 
         <ui-card v-if="endpoint">

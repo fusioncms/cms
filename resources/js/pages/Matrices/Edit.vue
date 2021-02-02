@@ -81,25 +81,23 @@
                         vm.matrices  = matrices.data.data
 
                         vm.form = new Form({
-                            parent_id:          vm.matrix.parent_id,
-                            name:               vm.matrix.name,
-                            handle:             vm.matrix.handle,
-                            description:        vm.matrix.description,
-                            type:               vm.matrix.type,
-                            reference_singular: vm.matrix.reference_singular,
-                            reference_plural:   vm.matrix.reference_plural,
-                            sections:           vm.matrix.blueprint.sections,
-                            sidebar:            vm.matrix.sidebar,
-                            quicklink:          vm.matrix.quicklink,
-                            icon:               vm.matrix.icon,
-                            show_name_field:    vm.matrix.show_name_field,
-                            name_label:         vm.matrix.name_label,
-                            name_format:        vm.matrix.name_format,
-                            route:              vm.matrix.route,
-                            template:           vm.matrix.template,
-                            order_by:           vm.matrix.order_by,
-                            order_direction:    vm.matrix.order_direction,
-                            status:             vm.matrix.status
+                            parent_id:       vm.matrix.parent_id,
+                            name:            vm.matrix.name,
+                            handle:          vm.matrix.handle,
+                            description:     vm.matrix.description,
+                            type:            vm.matrix.type,
+                            sections:        vm.matrix.blueprint.sections,
+                            sidebar:         vm.matrix.sidebar,
+                            quicklink:       vm.matrix.quicklink,
+                            icon:            vm.matrix.icon,
+                            show_name_field: vm.matrix.show_name_field,
+                            name_label:      vm.matrix.name_label,
+                            name_format:     vm.matrix.name_format,
+                            route:           vm.matrix.route,
+                            template:        vm.matrix.template,
+                            order_by:        vm.matrix.order_by,
+                            order_direction: vm.matrix.order_direction,
+                            status:          vm.matrix.status
                         }, true)
 
                         vm.$nextTick(() => {

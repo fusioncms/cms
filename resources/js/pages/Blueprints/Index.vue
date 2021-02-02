@@ -4,7 +4,7 @@
             <page-title icon="map">Blueprints</page-title>
         </portal>
 
-        <section-card v-for="(blueprints, group) in groups" :key="group" :title="group">
+        <section-card v-for="(blueprints, structure) in structures" :key="structure" :title="structure">
             <table class="table">
                 <tbody>
                     <tr v-for="blueprint in blueprints" :key="blueprint.name">
@@ -39,8 +39,8 @@
         },
 
         computed: {
-            groups() {
-                return _.groupBy(this.blueprints, 'group')
+            structures() {
+                return _.groupBy(this.blueprints, 'structure')
             }
         },
 
