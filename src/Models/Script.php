@@ -20,8 +20,8 @@ class Script extends Model
         'description',
         'code',
         'location',
-        'include_on',
-        'include_where',
+        'trigger_on',
+        'trigger_where',
         'type',
         'order',
         'status'

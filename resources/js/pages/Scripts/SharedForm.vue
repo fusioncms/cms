@@ -67,23 +67,23 @@
             <ui-radio-group
                 inline
                 label="Trigger on pages..."
-                :has-error="form.errors.has('include_on')"
-                :error-message="form.errors.get('include_on')">
-                <ui-radio id="trigger_all" v-model="form.include_on" name="include_on" native-value="all">All</ui-radio>
-                <ui-radio id="include_only" v-model="form.include_on" name="include_on" native-value="only">Only</ui-radio>
-                <ui-radio id="trigger_except" v-model="form.include_on" name="include_on" native-value="except">Except</ui-radio>
+                :has-error="form.errors.has('trigger_on')"
+                :error-message="form.errors.get('trigger_on')">
+                <ui-radio id="trigger_all" v-model="form.trigger_on" name="trigger_on" native-value="all">All</ui-radio>
+                <ui-radio id="trigger_only" v-model="form.trigger_on" name="trigger_on" native-value="only">Only</ui-radio>
+                <ui-radio id="trigger_except" v-model="form.trigger_on" name="trigger_on" native-value="except">Except</ui-radio>
             </ui-radio-group>
 
             <ui-input-group
-                v-if="form.include_on !== 'all'"
-                name="include_where"
+                v-if="form.trigger_on !== 'all'"
+                name="trigger_where"
                 label="Pattern"
                 help="Where the incoming request matches the given pattern."
                 autocomplete="off"
-                :has-error="form.errors.has('include_where')"
-                :error-message="form.errors.get('include_where')"
+                :has-error="form.errors.has('trigger_where')"
+                :error-message="form.errors.get('trigger_where')"
                 placeholder="example/*"
-                v-model="form.include_where">
+                v-model="form.trigger_where">
             </ui-input-group>
         </section-card>
 

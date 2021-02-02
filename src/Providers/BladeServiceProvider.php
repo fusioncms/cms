@@ -59,7 +59,7 @@ class BladeServiceProvider extends ServiceProvider
                 return;
             }
 
-            return "<?php render_scripts('{$location}'); ?>";
+            return "<?php echo Fusion::scripts('{$location}'); ?>";
         });
     }
 
