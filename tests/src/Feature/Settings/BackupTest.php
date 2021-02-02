@@ -39,25 +39,12 @@ class BackupTest extends TestCase
     }
 
     /** @test */
-    public function at_least_one_destination_disk_must_be_selected()
-    {
-        $this
-            ->be($this->owner, 'api')
-            ->json('PATCH', 'api/settings/backups', [
-                'backups_auto' => 'enabled',
-            ])
-            ->assertStatus(422)
-            ->assertJsonValidationErrors(['disks']);
-    }
-
-    /** @test */
     public function updates_to_backup_setting_will_override_some_config_values()
     {
         $this
             ->be($this->owner, 'api')
             ->json('PATCH', 'api/settings/backups', [
                 'backups_auto'                    => 'enabled',
-                'disks'                           => ['public','s3'],
                 'keep_all_backups_for_days'       => 3,
                 'keep_daily_backups_for_days'     => 7,
                 'keep_weekly_backups_for_weeks'   => 2,
@@ -65,7 +52,6 @@ class BackupTest extends TestCase
                 'keep_yearly_backups_for_years'   => 1,
             ]);
 
-        $this->assertEquals(config('backup.backup.destination.disks'), ['public','s3']);
         $this->assertEquals(config('backup.cleanup.default_strategy.keep_all_backups_for_days'), 3);
         $this->assertEquals(config('backup.cleanup.default_strategy.keep_daily_backups_for_days'), 7);
         $this->assertEquals(config('backup.cleanup.default_strategy.keep_weekly_backups_for_weeks'), 2);
