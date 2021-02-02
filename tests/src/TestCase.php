@@ -43,7 +43,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      */
     public function setUp(): void
     {
-        // dd('wtf');
         parent::setUp();
 
         // Customize factory path

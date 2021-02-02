@@ -1,5 +1,5 @@
 <template>
-    <div class="matrix-page">
+    <div class="script-page">
         <portal to="title">
             <page-title icon="code">Edit Script</page-title>
         </portal>

@@ -1,5 +1,5 @@
 <template>
-    <div class="scripts-page">
+    <div class="script-page">
         <portal to="title">
             <page-title icon="code">Scripts</page-title>
         </portal>
