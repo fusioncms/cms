@@ -95,18 +95,18 @@ class DiskTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_create_a_new_disk()
     {
-        $disk    = Disk::factory()->make();
-        $request = $disk->toArray();
-        $request['configurations'] = $disk->configurations;
+        $disk    = Disk::factory()->make()->toArray();
+        // $request = $disk->toArray();
+        // $request['configurations'] = $disk->configurations;
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/disks', $request)
+            ->json('POST', '/api/disks', $disk)
             ->assertStatus(201);
 
         $this->assertDatabaseHas('disks', [
-            'name'   => $disk->name,
-            'handle' => $disk->handle,
+            'name'   => $disk['name'],
+            'handle' => $disk['handle']ß,
         ]);
     }
 
@@ -122,10 +122,9 @@ class DiskTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_update_an_existing_disk()
     {
-        $request                   = $this->disk->toArray();
-        $request['name']           = 'New Name';
-        $request['handle']         = 'new_name';
-        $request['configurations'] = $this->disk->configurations;
+        $request           = $this->disk->toArray();
+        $request['name']   = 'New Name';
+        $request['handle'] = 'new_name';
 
         $this
             ->be($this->owner, 'api')

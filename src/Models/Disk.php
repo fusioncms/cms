@@ -26,9 +26,9 @@ class Disk extends Model
      *
      * @var array
      */
-    protected $hidden = [
-        'configurations'
-    ];
+    // protected $hidden = [
+    //     'configurations'
+    // ];
 
     /**
      * The attributes that should be casted to native types.
