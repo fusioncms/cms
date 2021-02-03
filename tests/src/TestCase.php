@@ -64,6 +64,17 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     }
 
     /**
+     * Define database migrations.
+     *
+     * @return void
+     */
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadLaravelMigrations();
+        $this->loadMigrationsFrom(base_path('migrations'));
+    }
+
+    /**
      * Set the currently logged in user for the application.
      * [override].
      *
@@ -140,16 +151,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         $this->uninstall();
 
         parent::tearDown();
-    }
-
-    /**
-     * Define database migrations.
-     *
-     * @return void
-     */
-    protected function defineDatabaseMigrations()
-    {
-        $this->loadMigrationsFrom(base_path('migrations'));
     }
 
     /**

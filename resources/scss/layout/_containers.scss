@@ -1,6 +1,6 @@
-.main-content { 
+.main-content {
     @apply w-full flex flex-col items-center flex-auto pb-6;
-    
+
     @screen lg {
         transition: padding 0.5s $transition-effect;
 
@@ -41,8 +41,8 @@
     &__container {
         @apply flex flex-col justify-center w-full pt-4;
 
-        @screen lg { 
-            @apply flex-row pt-6; 
+        @screen lg {
+            @apply flex-row pt-6;
         }
     }
 
@@ -73,9 +73,9 @@
 
         @screen lg {
             @apply flex-shrink-0;
-            width: 250px;
+            width: 300px;
         }
 
-        @screen xl { width: 300px; }
+        @screen xl { width: 350px; }
     }
 }

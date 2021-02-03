@@ -135,6 +135,11 @@ Route::apiResource('taxonomies/{taxonomy}/terms', 'TermController');
 Route::apiResource('taxonomies', 'TaxonomyController');
 
 /**
+ * API - Scripts.
+ */
+Route::apiResource('scripts', 'ScriptController');
+
+/**
  * API - Theme Routes.
  */
 Route::post('themes/verify', 'Themes\VerifyController@index');

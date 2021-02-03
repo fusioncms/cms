@@ -72,7 +72,7 @@ class MatrixTest extends TestCase
     }
 
     /** @test */
-    public function a_user_without_permissions_cannot_delete_existing_roles()
+    public function a_user_without_permissions_cannot_delete_existing_matrices()
     {
         $this->expectException(AuthorizationException::class);
 
