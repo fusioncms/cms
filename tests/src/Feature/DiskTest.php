@@ -19,7 +19,9 @@ class DiskTest extends TestCase
 
         $this->disk = Disk::factory()
             ->withName('public')
+            // ->isDefault()
             ->create();
+        dd($this->disk);
     }
 
     #
@@ -106,7 +108,7 @@ class DiskTest extends TestCase
 
         $this->assertDatabaseHas('disks', [
             'name'   => $disk['name'],
-            'handle' => $disk['handle']ß,
+            'handle' => $disk['handle'],
         ]);
     }
 
@@ -148,5 +150,27 @@ class DiskTest extends TestCase
         $this->assertDatabaseMissing('disks', [
             'id' => $this->disk->id
         ]);
+    }
+
+    #
+    # 
+    # MISC TESTS
+    # 
+    #
+
+    /** @test */
+    public function only_one_disk_can_be_selected_as_the_default_disk()
+    {
+        $attributes = Disk::factory()
+            ->withName('another')
+            ->isDefault()
+            ->make()
+            ->toArray();
+dd($attributes);
+    //     $this
+    //         ->be($this->owner, 'api')
+    //         ->json('POST', '/api/disks', $attributes)
+    //         ->assertStatus(201);
+    // dd(\DB::table('disks')->get());
     }
 }

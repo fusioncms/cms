@@ -33,6 +33,7 @@
                     name: '',
                     handle: '',
                     driver: 'local',
+                    is_default: false,
                     configurations: {}
                 }, true)
             }

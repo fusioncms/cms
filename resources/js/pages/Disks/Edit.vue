@@ -66,6 +66,7 @@
                             name:           disk.name,
                             handle:         disk.handle,
                             driver:         disk.driver,
+                            is_default:     disk.is_default,
                             configurations: disk.configurations,
                         }, true)
 

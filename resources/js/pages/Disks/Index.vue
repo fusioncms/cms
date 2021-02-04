@@ -15,8 +15,18 @@
                         <router-link :to="{ name: 'disks.nodes', params: {disk: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
 
+                    <template slot="handle" slot-scope="table">
+                        <code>{{ table.record.handle }}</code>
+                    </template>
+
                     <template slot="driver" slot-scope="table">
-                        <code>{{ table.record.driver }}</code>
+                        <strong>{{ table.record.driver }}</strong>
+                    </template>
+
+                    <template slot="is_default" slot-scope="table">
+                        <span class="badge" :class="[table.record.is_default ? 'badge--success' : '']">
+                            {{ table.record.is_default ? 'Yes' : 'No' }}
+                        </span>
                     </template>
 
                     <template slot="actions" slot-scope="table">

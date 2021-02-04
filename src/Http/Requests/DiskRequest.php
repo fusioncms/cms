@@ -35,6 +35,7 @@ class DiskRequest extends Request
             'name'           => 'required',
             'handle'         => 'required',
             'driver'         => 'required',
+            'is_default'     => 'sometimes|boolean',
             'configurations' => 'required|array',
         ];
     }

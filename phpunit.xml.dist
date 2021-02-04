@@ -11,7 +11,7 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
-         printerClass="NunoMaduro\Collision\Adapters\Phpunit\Printer"
+         
 >
     <testsuites>
         <testsuite name="Fusion Tests">

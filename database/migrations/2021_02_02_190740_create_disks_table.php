@@ -18,7 +18,8 @@ class CreateDisksTable extends Migration
             $table->string('name');
             $table->string('handle')->unique();
             $table->string('driver');
-            $table->json('configurations')->nullable();
+            $table->boolean('is_default');
+            $table->text('configurations')->nullable();
             $table->timestamps();
         });
     }

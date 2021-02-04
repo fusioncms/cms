@@ -16,8 +16,9 @@ class DiskController extends DataTableController
     {
         return [
             'name',
+            'handle',
             'driver',
-            'created_at',
+            'is_default',
         ];
     }
 
@@ -25,8 +26,9 @@ class DiskController extends DataTableController
     {
         return [
             'name',
+            'handle',
             'driver',
-            'created_at',
+            'is_default',
         ];
     }
 
@@ -34,8 +36,9 @@ class DiskController extends DataTableController
     {
         return [
             'name',
+            'handle',
             'driver',
-            'created_at',
+            'is_default',
         ];
     }
 
@@ -43,8 +46,9 @@ class DiskController extends DataTableController
     {
         return [
             'name'       => 'Name',
+            'handle'     => 'Handle',
             'driver'     => 'Driver',
-            'created_at' => 'Created',
+            'is_default' => 'Is Default',
         ];
     }
 }

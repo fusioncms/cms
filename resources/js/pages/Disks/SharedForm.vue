@@ -9,58 +9,66 @@
 
         <section-card id="disk_panel_general" title="General Information" description="General information about your filesystem disk and what it manages." tabindex="-1">
             <div class="row">
-                <div class="col w-full lg:w-1/2">
-                    <ui-input-group
-                        id="disk-name"
-                        name="name"
-                        label="Name"
-                        help="What should this filesystem disk be called?"
-                        autocomplete="off"
-                        autofocus
-                        required
-                        :has-error="form.errors.has('name')"
-                        :error-message="form.errors.get('name')"
-                        v-model="form.name">
-                    </ui-input-group>
-                </div>
+                <ui-input-group
+                    class="col w-full lg:w-1/2"
+                    id="disk-name"
+                    name="name"
+                    label="Name"
+                    help="What should this filesystem disk be called?"
+                    autocomplete="off"
+                    autofocus
+                    required
+                    :has-error="form.errors.has('name')"
+                    :error-message="form.errors.get('name')"
+                    v-model="form.name">
+                </ui-input-group>
 
-                <div class="col w-full lg:w-1/2">
-                    <ui-slug-group
-                        id="disk-handle"
-                        name="handle"
-                        label="Handle"
-                        help="Disk identifier <small><strong>(must match up with config/filesystem disk)</strong></small>."
-                        monospaced
-                        autocomplete="off"
-                        required
-                        delimiter="_"
-                        :watch="form.name"
-                        :has-error="form.errors.has('handle')"
-                        :error-message="form.errors.get('handle')"
-                        v-model="form.handle">
-                    </ui-slug-group>
-                </div>
+                <ui-slug-group
+                    class="col w-full lg:w-1/2"
+                    id="disk-handle"
+                    name="handle"
+                    label="Handle"
+                    help="Disk identifier (doubles as handle)."
+                    monospaced
+                    autocomplete="off"
+                    required
+                    delimiter="_"
+                    :watch="form.name"
+                    :has-error="form.errors.has('handle')"
+                    :error-message="form.errors.get('handle')"
+                    v-model="form.handle">
+                </ui-slug-group>
+
+                <ui-select-group
+                    class="col w-full lg:w-1/2"
+                    id="disk-driver"
+                    name="driver"
+                    label="Driver"
+                    help="Select and configure your driver."
+                    :options="driverOptions"
+                    :has-error="form.errors.has('driver')"
+                    :error-message="form.errors.get('driver')"
+                    v-model="form.driver">
+                </ui-select-group>
+
+                <ui-toggle
+                    class="col w-full sm:w-1/2"
+                    id="disk-is_default"
+                    name="is_default"
+                    label="Default Disk"
+                    help="Default disk used when accessing file storage."
+                    :has-error="form.errors.has('is_default')"
+                    :error-message="form.errors.get('is_default')"
+                    v-model="form.is_default">
+                </ui-toggle>
             </div>
         </section-card>
 
-        <section-card title="Configurations" description="Manage this filesystem disk's configurations.">
-            <ui-select-group
-                id="disk-driver"
-                name="driver"
-                label="Driver"
-                help="Select and configure your driver."
-                :options="driverOptions"
-                :has-error="form.errors.has('driver')"
-                :error-message="form.errors.get('driver')"
-                v-model="form.driver">
-            </ui-select-group>
-
-            <component
-                key="disk-configurations"
-                :is="`disks-configurations-${form.driver}`"
-                v-model="form.configurations">
-            </component>
-        </section-card>
+        <component
+            key="disk-configurations"
+            :is="`disks-configurations-${form.driver}`"
+            v-model="form.configurations">
+        </component>
     </div>
 </template>
 
