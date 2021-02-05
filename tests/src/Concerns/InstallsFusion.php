@@ -3,6 +3,7 @@
 namespace Fusion\Tests\Concerns;
 
 use Fusion\Console\Installer\CreateDatabaseTables;
+use Fusion\Console\Installer\CreateDefaultDisks;
 use Fusion\Console\Installer\CreateDefaultNotifications;
 use Fusion\Console\Installer\CreateDefaultPermissions;
 use Fusion\Console\Installer\CreateDefaultRoles;
@@ -37,6 +38,7 @@ trait InstallsFusion
     protected function install()
     {
         dispatch_now(new CreateDatabaseTables());
+        dispatch_now(new CreateDefaultDisks());
         dispatch_now(new CreateDefaultNotifications());
         dispatch_now(new CreateDefaultPermissions());
         dispatch_now(new CreateDefaultRoles());

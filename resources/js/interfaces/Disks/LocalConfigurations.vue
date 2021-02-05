@@ -28,6 +28,7 @@
                 </ui-select-group>
 
                 <ui-input-group
+                    v-if="model.visibility == 'public'"
                     class="col w-full sm:w-1/2"
                     name="configurations.url"
                     label="Public URL"

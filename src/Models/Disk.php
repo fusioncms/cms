@@ -18,8 +18,6 @@ class Disk extends Model
         'name',
         'handle',
         'driver',
-        'disk',
-        'is_default',
         'configurations'
     ];
 
@@ -51,12 +49,6 @@ class Disk extends Model
      */
     public static function MergeWithConfigurations()
     {
-        // Set default disk..
-        if ($default = Disk::default()->first()) {
-            config(['filesystems.default' => $default->handle]);
-        }
-
-        // Merge in disks..
         config(['filesystems.disks' => 
             array_merge(
                 config('filesystems.disks', []),

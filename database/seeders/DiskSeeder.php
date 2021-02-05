@@ -14,16 +14,17 @@ class DiskSeeder extends Seeder
      */
     public function run()
     {
-        Disk::create([
-            'name'       => 'Public',
-            'handle'     => 'public',
-            'driver'     => 'local',
-            'is_default' => true,
+        $disk = Disk::create([
+            'name'   => 'Public',
+            'handle' => 'public',
+            'driver' => 'local',
             'configurations' => [
                 'root'       => storage_path('app/public'),
                 'url'        => env('APP_URL').'/storage',
                 'visibility' => 'public'
             ]
         ]);
+
+        $disk->forceFill(['is_default' => true])->save();
     }
 }

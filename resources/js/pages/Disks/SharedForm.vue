@@ -50,17 +50,6 @@
                     :error-message="form.errors.get('driver')"
                     v-model="form.driver">
                 </ui-select-group>
-
-                <ui-toggle
-                    class="col w-full sm:w-1/2"
-                    id="disk-is_default"
-                    name="is_default"
-                    label="Default Disk"
-                    help="Default disk used when accessing file storage."
-                    :has-error="form.errors.has('is_default')"
-                    :error-message="form.errors.get('is_default')"
-                    v-model="form.is_default">
-                </ui-toggle>
             </div>
         </section-card>
 

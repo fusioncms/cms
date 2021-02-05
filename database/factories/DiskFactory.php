@@ -25,21 +25,8 @@ class DiskFactory extends Factory
             'name'           => ($name = $this->faker->word),
             'handle'         => str_handle($name),
             'driver'         => ($driver = 'local'),
-            'is_default'     => false,
             'configurations' => $this->generateConfigurations($driver)
         ];
-    }
-
-    /**
-     * Set as default.
-     *
-     * @return $this
-     */
-    public function isDefault()
-    {
-        return $this->state([
-            'is_default' => true,
-        ]);
     }
 
     /**

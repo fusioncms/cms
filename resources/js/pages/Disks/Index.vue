@@ -34,6 +34,13 @@
                             <ui-dropdown-link :to="{ name: 'disks.edit', params: {disk: table.record.id} }">Edit</ui-dropdown-link>
 
                             <ui-dropdown-link
+                                v-if="!table.record.is_default"
+                                @click="setAsDefault(table.record.id)">
+                                Set as Default
+                            </ui-dropdown-link>
+
+                            <ui-dropdown-link
+                                v-if="!table.record.is_default"
                                 @click.prevent
                                 v-modal:delete-disk="table.record"
                                 classes="link--danger">
@@ -81,9 +88,17 @@
         },
 
         methods: {
+            setAsDefault(id) {
+                axios.post(`/api/disks/${id}/default`).then((response) => {
+                    toast('Disk successfully promoted to default.', 'success')
+
+                    bus().$emit('refresh-datatable-disks')
+                })
+            },
+
             destroy(id) {
                 axios.delete(`/api/disks/${id}`).then((response) => {
-                    toast('Navigation successfully deleted.', 'success')
+                    toast('Disk successfully deleted.', 'success')
 
                     bus().$emit('refresh-datatable-disks')
                 })

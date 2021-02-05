@@ -17,10 +17,7 @@ class DiskTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
-        $this->disk = Disk::factory()
-            ->withName('public')
-            ->isDefault()
-            ->create();
+        $this->disk = Disk::first();
     }
 
     #
@@ -139,40 +136,81 @@ class DiskTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_delete_an_existing_disk()
     {
+        $disk = Disk::factory()->create();
+
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', "/api/disks/{$this->disk->id}")
+            ->json('DELETE', "/api/disks/{$disk->id}")
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('disks', [
+            'id' => $disk->id
+        ]);
+    }
+
+    /** @test */
+    public function default_disk_cannot_be_deleted()
+    {
+        $this
+            ->be($this->owner, 'api')
+            ->json('DELETE', "/api/disks/{$this->disk->id}")
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'handle' => 'Cannot delete default disk.',
+            ]);
+
+        $this->assertDatabaseHas('disks', [
             'id' => $this->disk->id
         ]);
     }
 
-    #
-    # 
-    # MISC TESTS
-    # 
-    #
-
     /** @test */
-    public function only_one_disk_can_be_selected_as_the_default_disk()
+    public function reassigning_default_disk_will_unassign_previous_default()
     {
-        $attributes = Disk::factory()
-            ->withName('another')
-            ->isDefault()
-            ->make()
-            ->toArray();
+        $disk = Disk::factory()->create();
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/disks', $attributes);
+            ->json('POST', "/api/disks/{$disk->id}/default")
+            ->assertStatus(200);
+
+        $this->assertDatabaseHas('disks', [
+            'id'         => $disk->id,
+            'is_default' => true
+        ]);
 
         $this->assertDatabaseHas('disks', [
             'id'         => $this->disk->id,
             'is_default' => false
         ]);
     }
+
+    #
+    #
+    # VALIDATION
+    #
+    #
+
+    /** @test */
+    public function each_disk_must_have_a_unique_handle()
+    {
+        $disk       = $this->disk->toArray();
+        $disk['id'] = null;
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/disks', $disk)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'handle' => 'The handle has already been taken.',
+            ]);
+    }
+
+    #
+    # 
+    # CONFIG TESTS
+    # 
+    #
 
     /** @test */
     public function adding_a_new_disk_will_reflect_in_configs()
@@ -210,10 +248,26 @@ class DiskTest extends TestCase
     /** @test */
     public function deleting_an_existing_disk_will_reflect_in_configs()
     {
+        $disk = Disk::factory()->create();
+
+        $this->assertNotNull(config("filesystems.disks.{$disk->handle}"));
+
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', "/api/disks/{$this->disk->id}");
+            ->json('DELETE', "/api/disks/{$disk->id}");
 
-        $this->assertNull(config("filesystems.disks.{$this->disk->handle}"));
+        $this->assertNull(config("filesystems.disks.{$disk->handle}"));
+    }
+
+    /** @test */
+    public function reassigning_default_disk_will_reflect_in_configs()
+    {
+        $disk = Disk::factory()->create();
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', "/api/disks/{$disk->id}/default");
+
+        $this->assertTrue(config('filesystems.default') == $disk->handle);
     }
 }

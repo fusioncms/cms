@@ -33,11 +33,12 @@ class DiskRequest extends Request
      */
     public function rules()
     {
+        $id = $this->disk->id ?? null;
+
         return [
             'name'           => 'required',
-            'handle'         => 'required',
+            'handle'         => "required|unique:disks,handle,{$id}",
             'driver'         => 'required',
-            'is_default'     => 'sometimes|boolean',
             'configurations' => 'required|array',
         ];
     }
@@ -62,20 +63,20 @@ class DiskRequest extends Request
      * @param  \Illuminate\Validation\Validator  $validator
      * @return void
      */
-    private function testConnection($validator)
-    {
-        rescue(function() {
-            $disks = config('filesystems.disks');
+    // private function testConnection($validator)
+    // {
+    //     rescue(function() {
+    //         $disks = config('filesystems.disks');
 
-            config(["filesystems.disks.{$this->handle}" =>
-                $this->configurations + ['driver' => $this->driver]]);
+    //         config(["filesystems.disks.{$this->handle}" =>
+    //             $this->configurations + ['driver' => $this->driver]]);
 
-            Storage::disk($this->handle);
+    //         Storage::disk($this->handle);
 
-            // revert..
-            config(['filesystems.disks' => $disks]);
-        }, function($e) use ($validator) {
-            $validator->errors()->add('driver', $e->getMessage());
-        });
-    }
+    //         // revert..
+    //         config(['filesystems.disks' => $disks]);
+    //     }, function($e) use ($validator) {
+    //         $validator->errors()->add('driver', $e->getMessage());
+    //     });
+    // }
 }

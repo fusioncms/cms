@@ -7,21 +7,6 @@ use Fusion\Models\Disk;
 class DiskObserver
 {
     /**
-     * Handle the "saved" event.
-     *
-     * @param \Fusion\Models\Disk $disk
-     *
-     * @return void
-     */
-    public function saved(Disk $disk)
-    {
-        // Assure only one disk is the default..
-        if ($disk->is_default) {
-            Disk::where('id', '<>', $disk->id)->update(['is_default' => false]);
-        }
-    }
-
-    /**
      * Handle the "created" event.
      *
      * @param \Fusion\Models\Disk $disk
