@@ -17,10 +17,11 @@ class Disk extends Model
     // protected static function booted()
     // {
     //     static::saved(function ($disk) {
-    //     dd($disk);
     //         if ($disk->is_default) {
-    //             static::where('id', '<>', $disk->id)->update(['is_default', false]);
+    //             static::where('id', '<>', $disk->id)->update(['is_default' => false]);
     //         }
+
+    //         static::MergeWithConfigurations();
     //     });
     // }
 
@@ -66,5 +67,31 @@ class Disk extends Model
     public function scopeDefault($query)
     {
         return $query->where('is_default', true);
+    }
+
+    /**
+     * Merge in FileSystem Disks configurations.
+     * 
+     * @return void
+     */
+    public static function MergeWithConfigurations()
+    {
+        // Set default disk..
+        if ($default = Disk::default()->first()) {
+            config(['filesystems.default' => $default->handle]);
+        }
+
+        // Merge in disks..
+        config(['filesystems.disks' => 
+            array_merge(
+                config('filesystems.disks', []),
+                Disk::all()->mapWithKeys(function($disk) {
+                    $configs = $disk->configurations;
+                    $configs->put('driver', $disk->driver);
+                    
+                    return [ $disk->handle => $configs->toArray() ];
+                })->toArray()
+            )
+        ]);
     }
 }

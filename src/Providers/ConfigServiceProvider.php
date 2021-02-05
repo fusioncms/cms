@@ -90,35 +90,8 @@ class ConfigServiceProvider extends ServiceProvider
      */
     protected function mergeFileSystemConfigurations()
     {
-        // Set default disk..
-        if ($default = Disk::default()->first()) {
-            $this->app['config']->set('filesystems.default', $default->handle);
+        if (app_installed()) {
+            Disk::MergeWithConfigurations();
         }
-
-        // Merge in disks..
-        $this->app['config']->set('filesystems.disks', 
-            array_merge(
-                $this->app['config']->get('filesystems.disks', []),
-                $this->getFusionDisks()
-            )
-        );
-
-        // dd($this->app['config']->get('filesystems.default'));
-    }
-
-    /**
-     * Returns FileSystem Disks from storage.
-     * [Helper]
-     * 
-     * @return array
-     */
-    private function getFusionDisks()
-    {
-        return Disk::all()->mapWithKeys(function($disk) {
-            $configurations = $disk->configurations;
-            $configurations->put('driver', $disk->driver);
-            
-            return [ $disk->handle => $configurations->toArray() ];
-        })->toArray();
     }
 }

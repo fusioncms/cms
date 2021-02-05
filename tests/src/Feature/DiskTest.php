@@ -19,9 +19,8 @@ class DiskTest extends TestCase
 
         $this->disk = Disk::factory()
             ->withName('public')
-            // ->isDefault()
+            ->isDefault()
             ->create();
-        dd($this->disk);
     }
 
     #
@@ -97,9 +96,7 @@ class DiskTest extends TestCase
     /** @test */
     public function a_user_with_permissions_can_create_a_new_disk()
     {
-        $disk    = Disk::factory()->make()->toArray();
-        // $request = $disk->toArray();
-        // $request['configurations'] = $disk->configurations;
+        $disk = Disk::factory()->make()->toArray();
 
         $this
             ->be($this->owner, 'api')
@@ -166,11 +163,47 @@ class DiskTest extends TestCase
             ->isDefault()
             ->make()
             ->toArray();
-dd($attributes);
-    //     $this
-    //         ->be($this->owner, 'api')
-    //         ->json('POST', '/api/disks', $attributes)
-    //         ->assertStatus(201);
-    // dd(\DB::table('disks')->get());
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/disks', $attributes);
+
+        $this->assertDatabaseHas('disks', [
+            'id'         => $this->disk->id,
+            'is_default' => false
+        ]);
+    }
+
+    /** @test */
+    public function adding_a_new_disk_will_reflect_in_configs()
+    {
+        $attributes = Disk::factory()->make()->toArray();
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('POST', '/api/disks', $attributes);
+
+        $this->assertEquals(
+            config("filesystems.disks.{$attributes['handle']}"),
+            $attributes['configurations'] + ['driver' => $attributes['driver']]
+        );
+    }
+
+    /** @test */
+    public function updating_existing_disk_will_reflect_in_configs()
+    {
+        $attributes           = $this->disk->toArray();
+        $attributes['name']   = 'Another';
+        $attributes['handle'] = 'another';
+
+        $this
+            ->be($this->owner, 'api')
+            ->json('PATCH', "/api/disks/{$this->disk->id}", $attributes);
+
+        $this->assertNull(config('filesystems.disks.public'));
+        $this->assertEquals(
+            config('filesystems.disks.another'),
+            $attributes['configurations'] + ['driver' => $attributes['driver']]
+        );
     }
 }

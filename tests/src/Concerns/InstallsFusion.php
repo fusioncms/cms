@@ -8,6 +8,7 @@ use Fusion\Console\Installer\CreateDefaultPermissions;
 use Fusion\Console\Installer\CreateDefaultRoles;
 use Fusion\Facades\Addon;
 use Fusion\Facades\Theme;
+use Fusion\Models\Disk;
 use Fusion\Models\User;
 use Illuminate\Support\Facades\Artisan;
 
@@ -48,6 +49,9 @@ trait InstallsFusion
 
         Artisan::call('fusion:flush');
         Artisan::call('fusion:sync');
+
+        // Merge in Disk configurations
+        Disk::MergeWithConfigurations();
     }
 
     /**
