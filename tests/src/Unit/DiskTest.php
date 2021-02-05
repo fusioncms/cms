@@ -21,6 +21,7 @@ class DiskTest extends TestCase
         $disk       = Disk::factory()->create();
         $disk       = $disk->toArray();
         $disk['id'] = null;
+        $disk['configurations'] = json_encode($disk['configurations']);
 
         DB::table('disks')->insert($disk);
     }

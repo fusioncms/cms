@@ -2,6 +2,8 @@
 
 namespace Fusion\Http\Requests;
 
+use Illuminate\Support\Facades\Storage;
+
 class DiskRequest extends Request
 {
     /**
@@ -38,5 +40,42 @@ class DiskRequest extends Request
             'is_default'     => 'sometimes|boolean',
             'configurations' => 'required|array',
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            // $this->testConnection($validator);
+        });
+    }
+
+    /**
+     * Test that driver exists..
+     * [Helper]
+     * 
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    private function testConnection($validator)
+    {
+        rescue(function() {
+            $disks = config('filesystems.disks');
+
+            config(["filesystems.disks.{$this->handle}" =>
+                $this->configurations + ['driver' => $this->driver]]);
+
+            Storage::disk($this->handle);
+
+            // revert..
+            config(['filesystems.disks' => $disks]);
+        }, function($e) use ($validator) {
+            $validator->errors()->add('driver', $e->getMessage());
+        });
     }
 }

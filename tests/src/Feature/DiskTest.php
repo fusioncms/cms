@@ -190,7 +190,7 @@ class DiskTest extends TestCase
     }
 
     /** @test */
-    public function updating_existing_disk_will_reflect_in_configs()
+    public function updating_an_existing_disk_will_reflect_in_configs()
     {
         $attributes           = $this->disk->toArray();
         $attributes['name']   = 'Another';
@@ -205,5 +205,15 @@ class DiskTest extends TestCase
             config('filesystems.disks.another'),
             $attributes['configurations'] + ['driver' => $attributes['driver']]
         );
+    }
+
+    /** @test */
+    public function deleting_an_existing_disk_will_reflect_in_configs()
+    {
+        $this
+            ->be($this->owner, 'api')
+            ->json('DELETE', "/api/disks/{$this->disk->id}");
+
+        $this->assertNull(config("filesystems.disks.{$this->disk->handle}"));
     }
 }

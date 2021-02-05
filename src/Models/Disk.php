@@ -10,22 +10,6 @@ class Disk extends Model
     use HasFactory;
 
     /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    // protected static function booted()
-    // {
-    //     static::saved(function ($disk) {
-    //         if ($disk->is_default) {
-    //             static::where('id', '<>', $disk->id)->update(['is_default' => false]);
-    //         }
-
-    //         static::MergeWithConfigurations();
-    //     });
-    // }
-
-    /**
      * The attributes that are fillable via mass assignment.
      *
      * @var array
@@ -38,15 +22,6 @@ class Disk extends Model
         'is_default',
         'configurations'
     ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    // protected $hidden = [
-    //     'configurations'
-    // ];
 
     /**
      * The attributes that should be casted to native types.

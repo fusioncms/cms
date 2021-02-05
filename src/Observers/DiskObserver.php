@@ -3,7 +3,6 @@
 namespace Fusion\Observers;
 
 use Fusion\Models\Disk;
-use Illuminate\Support\Facades\Artisan;
 
 class DiskObserver
 {
