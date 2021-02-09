@@ -28,7 +28,6 @@
                             <ui-dropdown-link :to="{ name: 'disks.edit', params: {disk: table.record.id} }">Edit</ui-dropdown-link>
 
                             <ui-dropdown-link
-                                v-if="!table.record.is_default"
                                 @click.prevent
                                 v-modal:delete-disk="table.record"
                                 classes="link--danger">
