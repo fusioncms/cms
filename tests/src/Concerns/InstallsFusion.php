@@ -53,7 +53,7 @@ trait InstallsFusion
         Artisan::call('fusion:sync');
 
         // Merge in Disk configurations
-        Disk::MergeWithConfigurations();
+        Disk::MergeConfigs();
     }
 
     /**

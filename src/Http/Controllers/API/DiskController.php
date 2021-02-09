@@ -81,28 +81,6 @@ class DiskController extends Controller
     {
         $this->authorize('disks.delete');
 
-        if ($disk->is_default) {
-            throw ValidationException::withMessages(['handle' => 'Cannot delete default disk.']);
-        }
-
         $disk->delete();
-    }
-
-    /**
-     * Set default disk.
-     * 
-     * @param \Fusion\Models\Disk $disk
-     * 
-     * @return void
-     */
-    public function setDefault(Disk $disk)
-    {
-        if ($default = Disk::where('is_default', true)->first()) {
-            $default->forceFill(['is_default' => false])->save();
-        }
-
-        $disk->forceFill(['is_default' => true])->save();
-
-        config(['filesystems.default' => $disk->handle]);
     }
 }

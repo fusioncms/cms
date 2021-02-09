@@ -91,7 +91,7 @@ class ConfigServiceProvider extends ServiceProvider
     protected function mergeFileSystemConfigurations()
     {
         if (app_installed()) {
-            Disk::MergeWithConfigurations();
+            Disk::MergeConfigs();
         }
     }
 }

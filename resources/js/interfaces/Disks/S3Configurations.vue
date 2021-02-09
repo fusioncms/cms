@@ -51,33 +51,6 @@
                 </ui-input-group>
             </div>
         </section-card>
-
-        <section-card title="Visibility" description="Configure the filesystem disk's visibility settings.">
-            <div class="row">
-                <ui-select-group
-                    class="col w-full sm:w-1/2"
-                    name="configurations.visibility"
-                    label="Visibility"
-                    help="Choose whether or not this disk is publicly visible."
-                    autocomplete="off"
-                    :options="[
-                        { label: 'Public',  value: 'public' },
-                        { label: 'Private', value: 'private' }
-                    ]"
-                    v-model="model.visibility">
-                </ui-select-group>
-
-                <ui-input-group
-                    v-if="model.visibility == 'public'"
-                    class="col w-full sm:w-1/2"
-                    name="configurations.url"
-                    label="Public URL"
-                    :placeholder="`https://s3.${model.region}.amazonaws.com/${model.bucket}/`"
-                    help="Choose public URL to access this disk files."
-                    v-model="model.url">
-                </ui-input-group>
-            </div>
-        </section-card>
     </div>
 </template>
 
@@ -97,8 +70,6 @@
                     region: '',
                     bucket: '',
                     endpoint: '',
-                    url: '',
-					visibility: 'public',
 				}
 			}
 		}

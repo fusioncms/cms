@@ -18,7 +18,6 @@ class DiskController extends DataTableController
             'name',
             'handle',
             'driver',
-            'is_default',
         ];
     }
 
@@ -28,7 +27,6 @@ class DiskController extends DataTableController
             'name',
             'handle',
             'driver',
-            'is_default',
         ];
     }
 
@@ -38,17 +36,15 @@ class DiskController extends DataTableController
             'name',
             'handle',
             'driver',
-            'is_default',
         ];
     }
 
     public function getCustomColumnNames()
     {
         return [
-            'name'       => 'Name',
-            'handle'     => 'Handle',
-            'driver'     => 'Driver',
-            'is_default' => 'Is Default',
+            'name'   => 'Name',
+            'handle' => 'Handle',
+            'driver' => 'Driver',
         ];
     }
 }

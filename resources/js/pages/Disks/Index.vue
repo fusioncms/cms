@@ -12,7 +12,7 @@
             <ui-card-body>
                 <ui-table :endpoint="endpoint" id="disks" sort-by="name" primary-key="handle" key="disks_table">
                     <template slot="name" slot-scope="table">
-                        <router-link :to="{ name: 'disks.nodes', params: {disk: table.record.id} }">{{ table.record.name }}</router-link>
+                        <router-link :to="{ name: 'disks.edit', params: {disk: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
 
                     <template slot="handle" slot-scope="table">
@@ -23,21 +23,9 @@
                         <strong>{{ table.record.driver }}</strong>
                     </template>
 
-                    <template slot="is_default" slot-scope="table">
-                        <span class="badge" :class="[table.record.is_default ? 'badge--success' : '']">
-                            {{ table.record.is_default ? 'Yes' : 'No' }}
-                        </span>
-                    </template>
-
                     <template slot="actions" slot-scope="table">
                         <ui-table-actions :id="'disks_' + table.record.id + '_actions'" :key="'disks_' + table.record.id + '_actions'">
                             <ui-dropdown-link :to="{ name: 'disks.edit', params: {disk: table.record.id} }">Edit</ui-dropdown-link>
-
-                            <ui-dropdown-link
-                                v-if="!table.record.is_default"
-                                @click="setAsDefault(table.record.id)">
-                                Set as Default
-                            </ui-dropdown-link>
 
                             <ui-dropdown-link
                                 v-if="!table.record.is_default"
@@ -88,14 +76,6 @@
         },
 
         methods: {
-            setAsDefault(id) {
-                axios.post(`/api/disks/${id}/default`).then((response) => {
-                    toast('Disk successfully promoted to default.', 'success')
-
-                    bus().$emit('refresh-datatable-disks')
-                })
-            },
-
             destroy(id) {
                 axios.delete(`/api/disks/${id}`).then((response) => {
                     toast('Disk successfully deleted.', 'success')

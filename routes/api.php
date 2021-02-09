@@ -178,7 +178,6 @@ Route::get('notifications', 'Notifications\NotificationController@index');
  * API - Filesystem Disks.
  */
 Route::apiResource('disks', 'DiskController');
-Route::post('disks/{disk}/default', 'DiskController@setDefault');
 
 /**
  * API - Updates Routes.

@@ -58,11 +58,7 @@ class DiskObserver
      */
     private function addFileSystemConfiguration(Disk $disk)
     {
-        $disks = config('filesystems.disks');
-
-        $disks[$disk->handle] = $disk->configurations->toArray() + ['driver' => $disk->driver];
-        
-        config(['filesystems.disks' => $disks]);
+        Disk::AddConfig($disk->handle, $disk->driver, $disk->configurations->all());
     }
 
     /**
@@ -75,10 +71,6 @@ class DiskObserver
      */
     private function removeFileSystemConfiguration(Disk $disk)
     {
-        $disks = config('filesystems.disks');
-
-        unset($disks[$disk->handle]);
-
-        config(['filesystems.disks' => $disks]);
+        Disk::RemoveConfig($disk->handle);
     }
 }

@@ -52,7 +52,9 @@ class DiskRequest extends Request
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            // $this->testConnection($validator);
+            if ($this->driver == 's3' and !app()->runningUnitTests()) {
+                $this->testConnection($validator);
+            }
         });
     }
 
@@ -63,20 +65,14 @@ class DiskRequest extends Request
      * @param  \Illuminate\Validation\Validator  $validator
      * @return void
      */
-    // private function testConnection($validator)
-    // {
-    //     rescue(function() {
-    //         $disks = config('filesystems.disks');
-
-    //         config(["filesystems.disks.{$this->handle}" =>
-    //             $this->configurations + ['driver' => $this->driver]]);
-
-    //         Storage::disk($this->handle);
-
-    //         // revert..
-    //         config(['filesystems.disks' => $disks]);
-    //     }, function($e) use ($validator) {
-    //         $validator->errors()->add('driver', $e->getMessage());
-    //     });
-    // }
+    private function testConnection($validator)
+    {
+        rescue(function() {
+            app('filesystem')
+                ->createS3Driver($this->configurations)
+                ->files('/');
+        }, function($exception) use ($validator) {
+            $validator->errors()->add('driver', $exception->getMessage());
+        });
+    }
 }

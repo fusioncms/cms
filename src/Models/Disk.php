@@ -2,11 +2,14 @@
 
 namespace Fusion\Models;
 
+use Fusion\Concerns\HasActivity;
 use Fusion\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\Models\Activity;
 
 class Disk extends Model
 {
+    use HasActivity;
     use HasFactory;
 
     /**
@@ -27,38 +30,76 @@ class Disk extends Model
      * @var array
      */
     protected $casts = [
-        'is_default'     => 'boolean',
         'configurations' => 'encrypted:collection',
     ];
 
     /**
-     * Scope a query to only include the default disk.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeDefault($query)
-    {
-        return $query->where('is_default', true);
-    }
-
-    /**
      * Merge in FileSystem Disks configurations.
+     * [Static Method]
      * 
      * @return void
      */
-    public static function MergeWithConfigurations()
+    public static function MergeConfigs()
+    {;
+        Disk::all()->each(function($disk) {
+            self::AddConfig($disk->handle, $disk->driver, $disk->configurations->all());
+        });
+    }
+
+    /**
+     * Tap into activity before persisting to database.
+     *
+     * @param \Spatie\Activitylog\Models\Activity $activity
+     * @param string                              $eventName
+     *
+     * @return void
+     */
+    public function tapActivity(Activity $activity, string $eventName)
     {
-        config(['filesystems.disks' => 
-            array_merge(
-                config('filesystems.disks', []),
-                Disk::all()->mapWithKeys(function($disk) {
-                    $configs = $disk->configurations;
-                    $configs->put('driver', $disk->driver);
-                    
-                    return [ $disk->handle => $configs->toArray() ];
-                })->toArray()
-            )
-        ]);
+        $subject = $activity->subject;
+        $action  = ucfirst($eventName);
+
+        $activity->description = "{$action} disk ({$subject->name})";
+        $activity->properties  = ['icon' => 'hdd'];
+    }
+
+    /**
+     * Add/Override `filesystems.disks` configuration.
+     * [Static Method]
+     * 
+     * @param string $handle
+     * @param string $driver
+     * @param array  $configurations
+     *
+     * @return void
+     */
+    public static function AddConfig($handle, $driver, array $configurations = [])
+    {
+        $disks = config('filesystems.disks');
+
+        if ($driver == 'local') {
+            $configurations['root'] = storage_path($configurations['root']);
+        }
+
+        $disks[$handle] = ['driver' => $driver] + $configurations;
+
+        config(['filesystems.disks' => $disks]);
+    }
+
+    /**
+     * Remove `filesystems.disks` configuration.
+     * [Static Method]
+     * 
+     * @param string $handle
+     *
+     * @return void
+     */
+    public static function RemoveConfig($handle)
+    {
+        $disks = config('filesystems.disks');
+
+        unset($disks[$handle]);
+
+        config(['filesystems.disks' => $disks]);
     }
 }

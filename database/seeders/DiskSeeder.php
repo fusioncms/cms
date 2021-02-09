@@ -19,12 +19,8 @@ class DiskSeeder extends Seeder
             'handle' => 'public',
             'driver' => 'local',
             'configurations' => [
-                'root'       => storage_path('app/public'),
-                'url'        => env('APP_URL').'/storage',
-                'visibility' => 'public'
+                'root' => 'app/public',
             ]
         ]);
-
-        $disk->forceFill(['is_default' => true])->save();
     }
 }
