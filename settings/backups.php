@@ -17,6 +17,14 @@ return [
                 'required'    => true,
             ],
         ],
+        'Disks' => [
+            [
+                'name'        => 'Backup Disks',
+                'handle'      => 'backup_disks_component',
+                'description' => 'Select which disks will hold your backups.',
+                'component'   => 'settings-backup-disks',
+            ]
+        ],
         'Cleanup Strategy' => [
             [
                 'name'        => 'Keep All Backps For Days',
