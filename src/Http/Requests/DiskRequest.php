@@ -35,11 +35,55 @@ class DiskRequest extends Request
     {
         $id = $this->disk->id ?? null;
 
-        return [
+        $rules = [
             'name'           => 'required',
             'handle'         => "required|unique:disks,handle,{$id}",
             'driver'         => 'required',
-            'configurations' => 'required|array',
+        ];
+
+        switch ($this->driver) {
+            case 'local':
+                $rules['configurations.root'] = 'required';
+                break;
+            case 's3':
+                $rules['configurations.key']    = 'required';
+                $rules['configurations.secret'] = 'required';
+                $rules['configurations.region'] = 'required';
+                $rules['configurations.bucket'] = 'required';
+                break;
+            case 'ftp':
+                $rules['configurations.host']     = 'required';
+                $rules['configurations.username'] = 'required';
+                $rules['configurations.password'] = 'required';
+                break;
+            case 'sftp':
+                $rules['configurations.host']       = 'required';
+                $rules['configurations.username']   = 'required';
+                $rules['configurations.password']   = 'required_without:configurations.privateKey';
+                $rules['configurations.privateKey'] = 'required_without:configurations.password';
+                break;
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'configurations.root'       => 'root path',
+            'configurations.key'        => 'key',
+            'configurations.secret'     => 'secret',
+            'configurations.region'     => 'region',
+            'configurations.bucket'     => 'bucket',
+            'configurations.host'       => 'host',
+            'configurations.username'   => 'username',
+            'configurations.password'   => 'password',
+            'configurations.privateKey' => 'private key',
         ];
     }
 

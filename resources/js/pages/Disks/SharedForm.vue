@@ -56,6 +56,7 @@
         <component
             key="disk-configurations"
             :is="`disks-configurations-${form.driver}`"
+            :errors="form.errors"
             v-model="form.configurations">
         </component>
     </div>
@@ -65,7 +66,6 @@
     export default {
         data() {
             return {
-                //TODO: can we pull these directly from config('filesystems.disks')?
                 driverOptions: [
                     { label: 'Local', value: 'local' },
                     { label: 'S3',    value: 's3' },

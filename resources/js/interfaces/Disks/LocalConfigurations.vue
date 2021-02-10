@@ -6,8 +6,11 @@
                     class="col w-full"
                     name="configurations.root"
                     label="Root Path"
-                    :help="`resolves to storage_path(${model.root}))`"
-                    v-model="model.root">
+                    help="Enter a folder path on your local filesystem."
+                    :placeholder="init.root"
+                    v-model="model.root"
+                    :has-error="hasError('configurations.root')"
+                    :error-message="errorMessage('configurations.root')">
                 </ui-input-group>
             </div>
         </section-card>
@@ -24,7 +27,7 @@
 
 		data() {
 			return {
-				default: {
+				init: {
 					root: '/',
 				}
 			}

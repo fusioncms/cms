@@ -5,39 +5,43 @@
                 class="col w-full sm:w-1/2"
                 name="configurations.host"
                 label="Host"
-                help=""
-                v-model="model.host">
+                v-model="model.host"
+                :has-error="hasError('configurations.host')"
+                :error-message="errorMessage('configurations.host')">
             </ui-input-group>
 
             <ui-input-group
                 class="col w-full sm:w-1/2"
                 name="configurations.username"
                 label="Username"
-                help=""
-                v-model="model.username">
+                v-model="model.username"
+                :has-error="hasError('configurations.username')"
+                :error-message="errorMessage('configurations.username')">
             </ui-input-group>
 
             <ui-input-group
                 class="col w-full sm:w-1/2"
                 name="configurations.password"
                 label="Password"
-                help=""
-                v-model="model.password">
+                v-model="model.password"
+                :has-error="hasError('configurations.password')"
+                :error-message="errorMessage('configurations.password')">
             </ui-input-group>
 
             <ui-input-group
                 class="col w-full sm:w-1/2"
                 name="configurations.privateKey"
                 label="Private Key"
-                help=""
-                v-model="model.privateKey">
+                v-model="model.privateKey"
+                :has-error="hasError('configurations.privateKey')"
+                :error-message="errorMessage('configurations.privateKey')">
             </ui-input-group>
 
             <ui-input-group
                 class="col w-full sm:w-1/2"
                 name="configurations.port"
                 label="Port"
-                help="Choose a connection port."
+                :placeholder="init.port"
                 v-model="model.port">
             </ui-input-group>
 
@@ -45,7 +49,7 @@
                 class="col w-full sm:w-1/2"
                 name="configurations.root"
                 label="Root Path"
-                help="Choose root path for this disk (.e.g. myfolder)."
+                help="Enter the root path on your FTP connection."
                 v-model="model.root">
             </ui-input-group>
 
@@ -53,11 +57,12 @@
                 class="col w-full sm:w-1/2"
                 name="configurations.timeout"
                 label="Timeout"
-                help="Choose a max connection timeout."
+                help="Enter a max connection timeout."
                 :min="0"
                 :max="60"
                 :step="1"
                 :decimals="0"
+                :placeholder="init.timeout"
                 v-model="model.timeout">
             </ui-number-group>
         </div>
@@ -74,14 +79,14 @@
 
 		data() {
 			return {
-				default: {
+				init: {
 					host: '',
                     username: '',
                     password: '',
                     privateKey: '',
-                    port: 22,
+                    port: '22',
                     root: '',
-                    timeout: 10,
+                    timeout: '10',
 				}
 			}
 		}

@@ -40,7 +40,7 @@ class Disk extends Model
      * @return void
      */
     public static function MergeConfigs()
-    {;
+    {
         Disk::all()->each(function($disk) {
             self::AddConfig($disk->handle, $disk->driver, $disk->configurations->all());
         });

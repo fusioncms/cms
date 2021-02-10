@@ -2,7 +2,7 @@
 
 namespace Fusion\Console\Installer;
 
-use Fusion\Database\Seeders\DiskSeeder;
+use Fusion\Models\Disk;
 use Illuminate\Support\Facades\Artisan;
 
 class CreateDefaultDisks
@@ -14,8 +14,15 @@ class CreateDefaultDisks
      */
     public function handle()
     {
-        Artisan::call('db:seed', [
-        	'--class' => DiskSeeder::class
-        ]);
+        activity()->withoutLogs(function () {
+            Disk::create([
+                'name'   => 'Public',
+                'handle' => 'public',
+                'driver' => 'local',
+                'configurations' => [
+                    'root' => 'app/public',
+                ]
+            ]);
+        });
     }
 }

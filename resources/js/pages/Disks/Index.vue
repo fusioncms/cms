@@ -12,7 +12,8 @@
             <ui-card-body>
                 <ui-table :endpoint="endpoint" id="disks" sort-by="name" primary-key="handle" key="disks_table">
                     <template slot="name" slot-scope="table">
-                        <router-link :to="{ name: 'disks.edit', params: {disk: table.record.id} }">{{ table.record.name }}</router-link>
+                        <router-link v-if="!isLocked(table.record.handle)" :to="{ name: 'disks.edit', params: {disk: table.record.id} }">{{ table.record.name }}</router-link>
+                        <span v-else>{{ table.record.name }}</span>
                     </template>
 
                     <template slot="handle" slot-scope="table">
@@ -24,8 +25,13 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'disks_' + table.record.id + '_actions'" :key="'disks_' + table.record.id + '_actions'">
-                            <ui-dropdown-link :to="{ name: 'disks.edit', params: {disk: table.record.id} }">Edit</ui-dropdown-link>
+                        <ui-table-actions
+                            v-if="!isLocked(table.record.handle)"
+                            :id="'disks_' + table.record.id + '_actions'"
+                            :key="'disks_' + table.record.id + '_actions'">
+                            <ui-dropdown-link :to="{ name: 'disks.edit', params: {disk: table.record.id} }">
+                                Edit
+                            </ui-dropdown-link>
 
                             <ui-dropdown-link
                                 @click.prevent
@@ -75,6 +81,10 @@
         },
 
         methods: {
+            isLocked(handle) {
+                return _.includes(['public'], handle)
+            },
+
             destroy(id) {
                 axios.delete(`/api/disks/${id}`).then((response) => {
                     toast('Disk successfully deleted.', 'success')

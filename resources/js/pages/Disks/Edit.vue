@@ -39,6 +39,10 @@
         },
 
         methods: {
+            isLocked(handle) {
+                return _.includes(['public'], handle)
+            },
+
             submit() {
                 this.form.patch(`/api/disks/${this.disk.id}`)
                     .then(() => {
@@ -61,17 +65,21 @@
                     })
                 } else {
                     next((vm) => {
-                        vm.disk = disk
-                        vm.form = new Form({
-                            name:           disk.name,
-                            handle:         disk.handle,
-                            driver:         disk.driver,
-                            configurations: disk.configurations,
-                        }, true)
+                        if (vm.isLocked(disk.handle)) {
+                            vm.$router.push('/disks')
+                        } else {
+                            vm.disk = disk
+                            vm.form = new Form({
+                                name:           disk.name,
+                                handle:         disk.handle,
+                                driver:         disk.driver,
+                                configurations: disk.configurations,
+                            }, true)
 
-                        vm.$nextTick(() => {
-                            vm.$emit('updateHead')
-                        })
+                            vm.$nextTick(() => {
+                                vm.$emit('updateHead')
+                            })
+                        }
                     })
                 }
             })

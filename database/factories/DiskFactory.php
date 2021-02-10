@@ -71,12 +71,10 @@ class DiskFactory extends Factory
         switch ($driver) {
             case 's3':
                 return [
-                    'key'        => $this->faker->md5,
-                    'secret'     => $this->faker->sha1,
-                    'region'     => 'us-west-1',
-                    'bucket'     => $this->faker->word,
-                    'url'        => $this->faker->url,
-                    'visibility' => $this->faker->randomElement(['public','private']),
+                    'key'    => $this->faker->md5,
+                    'secret' => $this->faker->sha1,
+                    'region' => 'us-west-1',
+                    'bucket' => $this->faker->word,
                 ];
 
             case 'sftp':
@@ -91,9 +89,7 @@ class DiskFactory extends Factory
 
         // Local driver..
         return [
-            'root'       => storage_path('app/public'),
-            'url'        => $this->faker->domainName . '/storage',
-            'visibility' => $this->faker->randomElement(['public','private']),
+            'root' => storage_path('app/public'),
         ];
     }
 }
