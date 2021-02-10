@@ -44,4 +44,5 @@ Route::get('/matrices/{matrix}/fields', 'MatrixFieldController@index');
 Route::get('/collections/{collection}', 'CollectionController@index');
 Route::get('/addons', 'AddonController@index');
 Route::get('/backups', 'BackupController@index');
+Route::get('/disks', 'DiskController@index');
 Route::get('/scripts', 'ScriptController@index');
