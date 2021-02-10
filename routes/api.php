@@ -175,6 +175,11 @@ Route::get('channels', 'Notifications\ChannelController@index');
 Route::get('notifications', 'Notifications\NotificationController@index');
 
 /**
+ * API - Filesystem Disks.
+ */
+Route::apiResource('disks', 'DiskController');
+
+/**
  * API - Updates Routes.
  */
 Route::prefix('updates')->group(function () {

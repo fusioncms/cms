@@ -57,3 +57,8 @@ Vue.component('settings-cache', require('@/interfaces/Settings/Cache').default)
 Vue.component('settings-backup-disks', require('@/interfaces/Settings/BackupDisks').default)
 Vue.component('structures-fieldtypes', require('@/interfaces/Structures/Fieldtypes').default)
 Vue.component('user-notifications', require('@/interfaces/Notifications/UserNotifications').default)
+
+Vue.component('disks-configurations-local', require('@/interfaces/Disks/LocalConfigurations').default)
+Vue.component('disks-configurations-s3', require('@/interfaces/Disks/S3Configurations').default)
+Vue.component('disks-configurations-ftp', require('@/interfaces/Disks/FTPConfigurations').default)
+Vue.component('disks-configurations-sftp', require('@/interfaces/Disks/SFTPConfigurations').default)

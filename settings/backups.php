@@ -23,6 +23,8 @@ return [
                 'handle'      => 'backup_disks_component',
                 'description' => 'Select which disks will hold your backups.',
                 'component'   => 'settings-backup-disks',
+                'default'     => ['public'],
+                'override'    => 'backup.destination.disks',
             ]
         ],
         'Cleanup Strategy' => [
