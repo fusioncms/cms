@@ -2,8 +2,6 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Support\Facades\Storage;
-
 class DiskRequest extends Request
 {
     /**
@@ -90,7 +88,8 @@ class DiskRequest extends Request
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param \Illuminate\Validation\Validator $validator
+     *
      * @return void
      */
     public function withValidator($validator)
@@ -104,18 +103,19 @@ class DiskRequest extends Request
 
     /**
      * Test that driver exists..
-     * [Helper]
-     * 
-     * @param  \Illuminate\Validation\Validator  $validator
+     * [Helper].
+     *
+     * @param \Illuminate\Validation\Validator $validator
+     *
      * @return void
      */
     private function testConnection($validator)
     {
-        rescue(function() {
+        rescue(function () {
             app('filesystem')
                 ->createS3Driver($this->configurations)
                 ->files('/');
-        }, function($exception) use ($validator) {
+        }, function ($exception) use ($validator) {
             $validator->errors()->add('driver', $exception->getMessage());
         });
     }

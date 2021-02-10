@@ -85,7 +85,7 @@ class ConfigServiceProvider extends ServiceProvider
 
     /**
      * Merge in FileSystem Disks configurations.
-     * 
+     *
      * @return void
      */
     protected function mergeFileSystemConfigurations()

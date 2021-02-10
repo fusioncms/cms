@@ -21,7 +21,7 @@ class Disk extends Model
         'name',
         'handle',
         'driver',
-        'configurations'
+        'configurations',
     ];
 
     /**
@@ -35,13 +35,13 @@ class Disk extends Model
 
     /**
      * Merge in FileSystem Disks configurations.
-     * [Static Method]
-     * 
+     * [Static Method].
+     *
      * @return void
      */
     public static function MergeConfigs()
     {
-        Disk::all()->each(function($disk) {
+        Disk::all()->each(function ($disk) {
             self::AddConfig($disk->handle, $disk->driver, $disk->configurations->all());
         });
     }
@@ -65,8 +65,8 @@ class Disk extends Model
 
     /**
      * Add/Override `filesystems.disks` configuration.
-     * [Static Method]
-     * 
+     * [Static Method].
+     *
      * @param string $handle
      * @param string $driver
      * @param array  $configurations
@@ -88,8 +88,8 @@ class Disk extends Model
 
     /**
      * Remove `filesystems.disks` configuration.
-     * [Static Method]
-     * 
+     * [Static Method].
+     *
      * @param string $handle
      *
      * @return void

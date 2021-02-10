@@ -50,7 +50,7 @@ class DiskObserver
 
     /**
      * Add FileSystem Disk configuration..
-     * [Helper]
+     * [Helper].
      *
      * @param \Fusion\Models\Disk $disk
      *
@@ -63,7 +63,7 @@ class DiskObserver
 
     /**
      * Remove FileSystem Disk configuration..
-     * [Helper]
+     * [Helper].
      *
      * @param string $handle
      *

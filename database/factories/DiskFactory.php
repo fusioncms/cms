@@ -25,7 +25,7 @@ class DiskFactory extends Factory
             'name'           => ($name = $this->faker->word),
             'handle'         => str_handle($name),
             'driver'         => ($driver = 'local'),
-            'configurations' => $this->generateConfigurations($driver)
+            'configurations' => $this->generateConfigurations($driver),
         ];
     }
 
@@ -40,7 +40,7 @@ class DiskFactory extends Factory
     {
         return $this->state([
             'name'   => $name,
-            'handle' => str_handle($name)
+            'handle' => str_handle($name),
         ]);
     }
 
@@ -55,15 +55,16 @@ class DiskFactory extends Factory
     {
         return $this->state([
             'driver'         => $driver,
-            'configurations' => $this->generateConfigurations($driver)
+            'configurations' => $this->generateConfigurations($driver),
         ]);
     }
 
     /**
      * Generates disk configurations for specified driver.
-     * [Helper]
-     * 
-     * @param  string $driver
+     * [Helper].
+     *
+     * @param string $driver
+     *
      * @return array
      */
     private function generateConfigurations($driver)

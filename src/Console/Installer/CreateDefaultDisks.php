@@ -3,7 +3,6 @@
 namespace Fusion\Console\Installer;
 
 use Fusion\Models\Disk;
-use Illuminate\Support\Facades\Artisan;
 
 class CreateDefaultDisks
 {
@@ -16,12 +15,12 @@ class CreateDefaultDisks
     {
         activity()->withoutLogs(function () {
             Disk::create([
-                'name'   => 'Public',
-                'handle' => 'public',
-                'driver' => 'local',
+                'name'           => 'Public',
+                'handle'         => 'public',
+                'driver'         => 'local',
                 'configurations' => [
                     'root' => 'app/public',
-                ]
+                ],
             ]);
         });
     }

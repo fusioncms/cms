@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Script extends Model
 {
-    use HasActivity, HasFactory;
+    use HasActivity;
+    use HasFactory;
 
     /**
      * The attributes that are fillable via mass assignment.
@@ -24,7 +25,7 @@ class Script extends Model
         'trigger_where',
         'type',
         'order',
-        'status'
+        'status',
     ];
 
     /**

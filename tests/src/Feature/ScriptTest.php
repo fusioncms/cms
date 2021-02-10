@@ -4,8 +4,8 @@ namespace Fusion\Tests\Feature;
 
 use Fusion\Models\Script;
 use Fusion\Tests\TestCase;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ScriptTest extends TestCase
