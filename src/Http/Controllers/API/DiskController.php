@@ -7,7 +7,6 @@ use Fusion\Http\Requests\DiskRequest;
 use Fusion\Http\Resources\DiskResource;
 use Fusion\Models\Disk;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class DiskController extends Controller
 {

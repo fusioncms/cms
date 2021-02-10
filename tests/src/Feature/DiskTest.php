@@ -20,11 +20,11 @@ class DiskTest extends TestCase
         $this->disk = Disk::first();
     }
 
-    #
-    # 
-    # PERMISSIONS TESTS
-    # 
-    #
+    //
+    //
+    // PERMISSIONS TESTS
+    //
+    //
 
     /** @test */
     public function a_guest_cannot_not_create_a_disk()
@@ -84,12 +84,12 @@ class DiskTest extends TestCase
             ->json('DELETE', "/api/disks/{$this->disk->id}");
     }
 
-    #
-    # 
-    # CRUD TESTS
-    # 
-    #
-    
+    //
+    //
+    // CRUD TESTS
+    //
+    //
+
     /** @test */
     public function a_user_with_permissions_can_create_a_new_disk()
     {
@@ -144,15 +144,15 @@ class DiskTest extends TestCase
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('disks', [
-            'id' => $disk->id
+            'id' => $disk->id,
         ]);
     }
 
-    #
-    #
-    # VALIDATION
-    #
-    #
+    //
+    //
+    // VALIDATION
+    //
+    //
 
     /** @test */
     public function each_disk_must_have_a_unique_handle()
@@ -169,11 +169,11 @@ class DiskTest extends TestCase
             ]);
     }
 
-    #
-    # 
-    # CONFIG TESTS
-    # 
-    #
+    //
+    //
+    // CONFIG TESTS
+    //
+    //
 
     /** @test */
     public function adding_a_new_disk_will_reflect_in_configs()
@@ -193,7 +193,7 @@ class DiskTest extends TestCase
     /** @test */
     public function updating_an_existing_disk_will_reflect_in_configs()
     {
-        $attributes = Disk::factory()->make()->toArray();
+        $attributes           = Disk::factory()->make()->toArray();
         $attributes['name']   = 'Another';
         $attributes['handle'] = 'another';
 
