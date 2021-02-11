@@ -14,7 +14,7 @@ class CleanupTest extends TestBase
     public function successful_cleanup_will_run_sync_command()
     {
         Bus::fake([
-            BackupSync::class
+            BackupSync::class,
         ]);
 
         $this->artisan('backup:clean');
@@ -33,7 +33,7 @@ class CleanupTest extends TestBase
         $this->assertDatabaseMissing('backups', [
             'id'   => $backup->id,
             'name' => 'new-backup',
-            'disk' => 'public'
+            'disk' => 'public',
         ]);
     }
 

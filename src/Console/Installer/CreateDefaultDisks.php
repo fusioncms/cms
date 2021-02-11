@@ -8,7 +8,7 @@ class CreateDefaultDisks
 {
     /**
      * Default Disks.
-     * 
+     *
      * @var array
      */
     protected $disks = [
@@ -27,9 +27,8 @@ class CreateDefaultDisks
             'configurations' => [
                 'root' => 'app',
             ],
-        ]
+        ],
     ];
-
 
     /**
      * Execute the command.
