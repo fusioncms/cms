@@ -35,20 +35,6 @@ class File extends Model
     ];
 
     /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($model) {
-            Storage::delete($model->location);
-        });
-    }
-
-    /**
      * Get derived absolute file path.
      *
      * @return string

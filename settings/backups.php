@@ -24,7 +24,7 @@ return [
                 'description' => 'Select which disks will hold your backups.',
                 'type'        => 'list',
                 'component'   => 'settings-backup-disks',
-                'default'     => ['public'],
+                'default'     => ['local'],
                 'override'    => 'backup.backup.destination.disks',
             ]
         ],

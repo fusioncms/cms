@@ -114,11 +114,18 @@ class FileController extends Controller
         return new FileResource($file);
     }
 
-    public function destroy(Request $request, File $file)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param \Fusion\Models\File $file
+     *
+     * @return void
+     */
+    public function destroy(File $file)
     {
         $this->authorize('files.delete');
 
-        Storage::delete($file->location);
+        Storage::disk('public')->delete($file->location);
 
         $file->delete();
     }

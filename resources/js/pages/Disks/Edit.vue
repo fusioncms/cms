@@ -40,7 +40,7 @@
 
         methods: {
             isLocked(handle) {
-                return _.includes(['public'], handle)
+                return _.includes(['public','local'], handle)
             },
 
             submit() {

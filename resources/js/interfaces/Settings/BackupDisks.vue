@@ -6,7 +6,7 @@
             help="Select all disks to act as backup storage.">
 
 			<ui-checkbox
-                v-for="(disk, index) in disks"
+                v-for="(disk, index) in diskOptions"
                 :key="`${field.handle}.${index}`"
 	            :id="`${field.handle}.${index}`"
 	            :name="field.handle"
@@ -40,6 +40,10 @@
 			...mapGetters({
 				disks: 'disks/getDisks',
 			}),
+
+			diskOptions() {
+				return _.reject(this.disks, (disk) => disk.handle == 'public')
+			},
 
 			model: {
 				get() {
