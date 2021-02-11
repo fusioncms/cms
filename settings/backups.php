@@ -17,17 +17,17 @@ return [
                 'required'    => true,
             ],
         ],
-        // 'Disks' => [
-        //     [
-        //         'name'        => 'Backup Disks',
-        //         'handle'      => 'backup_disks_component',
-        //         'description' => 'Select which disks will hold your backups.',
-        //         'type'        => 'list',
-        //         'component'   => 'settings-backup-disks',
-        //         'default'     => ['public'],
-        //         'override'    => 'backup.backup.destination.disks',
-        //     ]
-        // ],
+        'Disks' => [
+            [
+                'name'        => 'Backup Disks',
+                'handle'      => 'backup_disks_component',
+                'description' => 'Select which disks will hold your backups.',
+                'type'        => 'list',
+                'component'   => 'settings-backup-disks',
+                'default'     => ['public'],
+                'override'    => 'backup.backup.destination.disks',
+            ]
+        ],
         'Cleanup Strategy' => [
             [
                 'name'        => 'Keep All Backps For Days',
