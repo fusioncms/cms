@@ -26,7 +26,7 @@ return [
                 'component'   => 'settings-backup-disks',
                 'default'     => ['local'],
                 'override'    => 'backup.backup.destination.disks',
-            ]
+            ],
         ],
         'Cleanup Strategy' => [
             [
