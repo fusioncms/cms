@@ -31,6 +31,7 @@ class ConfigServiceProvider extends ServiceProvider
          * FusionCMS will now merge it's own
          * configurations on top of Laravel's.
          */
+        $this->resetBackupConfigurations();
         $this->mergeFusionCMSConfigurations();
         $this->mergeFileSystemConfigurations();
     }
@@ -61,6 +62,17 @@ class ConfigServiceProvider extends ServiceProvider
     }
 
     /**
+     * Reset backup configurations from `spatie/laravel-backup`
+     * so we can use a fresh copy of our own.
+     *
+     * @return void
+     */
+    protected function resetBackupConfigurations()
+    {
+        $this->app['config']->set('backup', []);
+    }
+
+    /**
      * Merge in FusionCMS config file configurations.
      *
      * @return void
@@ -77,7 +89,7 @@ class ConfigServiceProvider extends ServiceProvider
                 $name,
                 Arr::mergeDeep(
                     $this->app['config']->get($name, []),
-                    require $path
+                    require $path,
                 )
             );
         }

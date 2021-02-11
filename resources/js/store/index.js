@@ -9,19 +9,21 @@ import navigation from './navigation'
 import notifications from './notifications'
 import fieldtypes from './fieldtypes'
 import filemanager from './filemanager'
+import disks from './disks'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     modules: {
         auth,
-        form,
-        inbox,
-        fusion,
-        settings,
-        navigation,
-        notifications,
+        disks,
         fieldtypes,
         filemanager,
+        form,
+        fusion,
+        inbox,
+        navigation,
+        notifications,
+        settings,
     },
 })

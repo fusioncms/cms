@@ -13,11 +13,28 @@ class CleanupTest extends TestBase
     /** @test */
     public function successful_cleanup_will_run_sync_command()
     {
-        Bus::fake();
+        Bus::fake([
+            BackupSync::class
+        ]);
 
         $this->artisan('backup:clean');
 
         Bus::assertDispatched(BackupSync::class);
+    }
+
+    /** @test */
+    public function successful_cleanup_will_sync_database_with_physical_backups()
+    {
+        $backups = $this->newBackup('new-backup', 'public');
+        $backup  = $backups->first();
+
+        $this->artisan('backup:clean');
+
+        $this->assertDatabaseMissing('backups', [
+            'id'   => $backup->id,
+            'name' => 'new-backup',
+            'disk' => 'public'
+        ]);
     }
 
     /** @test */

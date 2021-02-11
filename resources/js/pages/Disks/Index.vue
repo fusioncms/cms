@@ -25,10 +25,11 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions
-                            v-if="!isLocked(table.record.handle)"
-                            :id="'disks_' + table.record.id + '_actions'"
-                            :key="'disks_' + table.record.id + '_actions'">
+                        <ui-button v-if="isLocked(table.record.handle)" icon size="small" disabled>
+                            <fa-icon icon="ellipsis-h" class="fa-fw"></fa-icon>
+                        </ui-button>
+
+                        <ui-table-actions v-else :id="'disks_' + table.record.id + '_actions'" :key="'disks_' + table.record.id + '_actions'">
                             <ui-dropdown-link :to="{ name: 'disks.edit', params: {disk: table.record.id} }">
                                 Edit
                             </ui-dropdown-link>
@@ -82,7 +83,7 @@
 
         methods: {
             isLocked(handle) {
-                return _.includes(['public'], handle)
+                return _.includes(['public','local'], handle)
             },
 
             destroy(id) {

@@ -39,7 +39,7 @@ class BackupSync
         $disk = $this->backupDestination->diskName();
 
         Backup::where(['disk' => $disk])->each(function ($backup) {
-            if (!$backup->exists()) {
+            if ($backup->exists()) {
                 $backup->delete();
             }
         });
