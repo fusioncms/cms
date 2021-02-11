@@ -17,7 +17,7 @@ class CreateBackupsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('disk');
-            $table->unsignedInteger('size')->nullable();
+            $table->unsignedBigInteger('size')->nullable();
             $table->string('location')->nullable();
             $table->string('log_path');
             $table->string('state');
