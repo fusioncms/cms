@@ -25,7 +25,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
+                        <ui-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
                             <ui-dropdown-link :to="{ name: 'roles.show', params: {role: table.record.id} }" v-if="$can('roles.view')">View</ui-dropdown-link>
 
                             <ui-dropdown-link v-if="! isOwner(table.record.id) && $can('roles.update', table.record.level)" @click.prevent :to="{ name: 'roles.edit', params: {role: table.record.id} }">Edit</ui-dropdown-link>
@@ -38,7 +38,7 @@
                                 classes="danger">
                                 Delete
                             </ui-dropdown-link>
-                        </ui-table-actions>
+                        </ui-actions>
                     </template>
                 </ui-table>
             </ui-card-body>

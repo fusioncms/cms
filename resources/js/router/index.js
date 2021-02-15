@@ -113,18 +113,19 @@ const router = new Router({
             },
         },
         {
-            path: '/navigation/:navigation/nodes',
-            component: () => import('@/pages/Nodes/Index'),
-            name: 'navigation.nodes',
+            path: '/navigation/:navigation/links',
+            component: () => import('@/pages/Links/Index'),
+            name: 'links',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
             },
         },
+
         {
-            path: '/navigation/:navigation/nodes/:node/edit',
-            component: () => import('@/pages/Nodes/Edit'),
-            name: 'navigation.nodes.edit',
+            path: '/navigation/:navigation/links/:link/edit',
+            component: () => import('@/pages/Links/Edit'),
+            name: 'links.edit',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',

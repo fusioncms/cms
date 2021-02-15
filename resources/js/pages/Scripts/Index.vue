@@ -17,7 +17,7 @@
                         <ui-table key="scripts" class="scripts-table" id="scripts" :endpoint="endpoint" sort-by="name" :per-page="50">
 
                             <template slot="actions" slot-scope="table">
-                                <ui-table-actions :id="'script_' + table.record.id + '_actions'" :key="'script_' + table.record.id + '_actions'">
+                                <ui-actions :id="'script_' + table.record.id + '_actions'" :key="'script_' + table.record.id + '_actions'">
                                     <ui-dropdown-link :to="{ name: 'scripts.edit', params: {script: table.record.id} }" v-if="$can('scripts.update')">Edit</ui-dropdown-link>
 
                                     <ui-dropdown-divider></ui-dropdown-divider>
@@ -29,7 +29,7 @@
                                         class="danger">
                                         Delete
                                     </ui-dropdown-link>
-                                </ui-table-actions>
+                                </ui-actions>
                             </template>
                         </ui-table>
                     </ui-card-body>

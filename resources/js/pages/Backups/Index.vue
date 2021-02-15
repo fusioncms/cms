@@ -29,13 +29,13 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'backup_' + table.record.id + '_actions'" :key="'backup_' + table.record.id + '_actions'">
+                        <ui-actions :id="'backup_' + table.record.id + '_actions'" :key="'backup_' + table.record.id + '_actions'">
 							<ui-dropdown-link
 								v-if="$can('backups.view')"
 								:to="{ name: 'backups.show', params: {backup: table.record.id} }">
 								View
 							</ui-dropdown-link>
-                        	
+
                         	<ui-dropdown-divider></ui-dropdown-divider>
 
 							<ui-dropdown-link
@@ -56,7 +56,7 @@
 								v-modal:delete-backup="table.record">
 								Delete
 							</ui-dropdown-link>
-                        </ui-table-actions>
+                        </ui-actions>
                     </template>
                 </ui-table>
             </ui-card-body>

@@ -23,7 +23,7 @@ class NavigationResource extends JsonResource
 
             'table'       => $this->getBuilderTable(),
             'blueprint'   => new BlueprintResource($this->blueprint),
-            'nodes'       => NodeResource::collection($this->nodes),
+            'links'       => LinkResource::collection($this->links),
         ];
 
         foreach ($this->blueprint->fields as $field) {

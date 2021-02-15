@@ -101,12 +101,12 @@ Route::apiResource('matrices', 'MatrixController');
 /**
  * API - Navigation Routes.
  */
-Route::post('navigation/{navigation}/nodes/move/before', 'Navigation\NodeMoveBeforeController');
-Route::post('navigation/{navigation}/nodes/move/after', 'Navigation\NodeMoveAfterController');
-Route::patch('navigation/{navigation}/nodes/refresh', 'Navigation\NodeRefreshController');
-Route::post('navigation/{navigation}/reorder', 'Navigation\NodeReorderController');
-Route::apiResource('navigation/{navigation}/nodes', 'Navigation\NodeController');
-Route::apiResource('navigation', 'Navigation\NavigationController');
+// Route::post('navigation/{navigation}/links/move/before', 'Navigation\LinkMoveBeforeController');
+// Route::post('navigation/{navigation}/links/move/after', 'Navigation\LinkMoveAfterController');
+// Route::patch('navigation/{navigation}/links/refresh', 'Navigation\LinkRefreshController');
+Route::post('navigation/{navigation}/reorder', 'LinkReorderController');
+Route::apiResource('navigation/{navigation}/links', 'LinkController');
+Route::apiResource('navigation', 'NavigationController');
 
 /**
  * API - Addon Routes.

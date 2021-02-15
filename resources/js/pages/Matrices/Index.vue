@@ -33,7 +33,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'matrix_' + table.record.id + '_actions'" :key="'matrix_' + table.record.id + '_actions'">
+                        <ui-actions :id="'matrix_' + table.record.id + '_actions'" :key="'matrix_' + table.record.id + '_actions'">
                             <ui-dropdown-link :to="{ name: 'matrices.edit', params: {matrix: table.record.id} }" v-if="$can('matrices.update')">Edit</ui-dropdown-link>
 
                             <ui-dropdown-divider></ui-dropdown-divider>
@@ -45,7 +45,7 @@
                                 class="danger">
                                 Delete
                             </ui-dropdown-link>
-                        </ui-table-actions>
+                        </ui-actions>
                     </template>
                 </ui-table>
             </ui-card-body>

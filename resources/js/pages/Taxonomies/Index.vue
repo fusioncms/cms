@@ -29,7 +29,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'taxonomy_' + table.record.id + '_actions'" :key="'taxonomy_' + table.record.id + '_actions'">
+                        <ui-actions :id="'taxonomy_' + table.record.id + '_actions'" :key="'taxonomy_' + table.record.id + '_actions'">
                             <ui-dropdown-link @click.prevent :to="{ name: 'taxonomies.edit', params: {taxonomy: table.record.id} }">Edit</ui-dropdown-link>
 
                             <ui-dropdown-link
@@ -39,7 +39,7 @@
                             >
                                 Delete
                             </ui-dropdown-link>
-                        </ui-table-actions>
+                        </ui-actions>
                     </template>
                 </ui-table>
             </ui-card-body>

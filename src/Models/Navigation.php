@@ -35,13 +35,13 @@ class Navigation extends Model implements Structure
     protected $structure = 'Navigation';
 
     /**
-     * Navigation has many nodes.
+     * Navigation has many links.
      *
      * @return HasManyRelationship
      */
-    public function nodes()
+    public function links()
     {
-        return $this->hasMany($this->getBuilderModelNamespace())->orderBy('order', 'asc');
+        return $this->hasMany($this->getBuilderModelNamespace())->orderBy('order', 'asc')->where('parent_id', 0);
     }
 
     /**

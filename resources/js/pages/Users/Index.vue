@@ -56,7 +56,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
+                        <ui-actions :id="'user_' + table.record.id + '_actions'" :key="'user_' + table.record.id + '_actions'">
                             <ui-dropdown-link :to="{ name: 'users.show', params: {user: table.record.id} }" v-if="$can('users.view')">View</ui-dropdown-link>
 
                             <ui-dropdown-link @click.prevent :to="{ name: 'users.edit', params: {user: table.record.id} }" v-if="$can('users.update', table.record.role.level)">Edit</ui-dropdown-link>
@@ -84,7 +84,7 @@
                                 class="danger">
                                 Delete
                             </ui-dropdown-link>
-                        </ui-table-actions>
+                        </ui-actions>
                     </template>
                 </ui-table>
             </ui-card-body>
