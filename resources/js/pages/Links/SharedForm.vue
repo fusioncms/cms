@@ -8,7 +8,7 @@
 		</portal>
 
         <portal to="sidebar-right">
-            <sidebar v-if="link" id="link-sidebar">
+            <sidebar id="link-sidebar">
                 <sidebar-section id="link_panel_status" tabindex="-1">
                     <ui-toggle
                         name="status"
@@ -90,6 +90,9 @@
         props: {
             link: {
                 type: Object,
+                default: function() {
+                    return {}
+                }
             },
 
             links: {

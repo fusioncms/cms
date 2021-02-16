@@ -121,7 +121,15 @@ const router = new Router({
                 layout: 'admin',
             },
         },
-
+        {
+            path: '/navigation/:navigation/links/create',
+            component: () => import('@/pages/Links/Create'),
+            name: 'links.create',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin',
+            },
+        },
         {
             path: '/navigation/:navigation/links/:link/edit',
             component: () => import('@/pages/Links/Edit'),
@@ -131,6 +139,7 @@ const router = new Router({
                 layout: 'admin',
             },
         },
+
         {
             path: '/matrices',
             component: () => import('@/pages/Matrices/Index'),

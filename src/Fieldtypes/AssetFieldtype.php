@@ -49,6 +49,11 @@ class AssetFieldtype extends Fieldtype
     public $namespace = 'Fusion\Models\File';
 
     /**
+     * @var mixed
+     */
+    protected $default = [];
+
+    /**
      * Generate relationship methods for associated Model.
      *
      * @param Fusion\Models\Field $field
