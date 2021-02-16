@@ -25,7 +25,7 @@
 
                     <template slot="actions" slot-scope="table">
                         <ui-actions :id="'navigation_' + table.record.id + '_actions'" :key="'navigation_' + table.record.id + '_actions'">
-                            <ui-dropdown-link :to="{ name: 'navigation.nodes', params: {navigation: table.record.id} }">Manage</ui-dropdown-link>
+                            <ui-dropdown-link :to="{ name: 'links', params: {navigation: table.record.id} }">Links</ui-dropdown-link>
                             <ui-dropdown-link :to="{ name: 'navigation.edit', params: {navigation: table.record.id} }">Edit</ui-dropdown-link>
 
                             <ui-dropdown-link

@@ -45,7 +45,7 @@ class LinkRequest extends Request
     {
         $this->merge([
             'navigation_id' => $this->navigation->id,
-            'order'         => $this->model->orderLast(),
+            'order'         => $this->order ?? $this->model->orderLast(),
             'status'        => $this->status ?? true,
         ]);
     }
@@ -63,7 +63,7 @@ class LinkRequest extends Request
             'url'           => 'sometimes',
             'new_window'    => 'sometimes',
             'parent_id'     => 'sometimes',
-            'order'         => 'required',
+            'order'         => 'sometimes',
             'status'        => 'required|boolean',
         ];
 

@@ -7,6 +7,7 @@
         <portal to="actions">
             <div class="buttons">
                 <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'navigation' }" variant="secondary">Go Back</ui-button>
+                <ui-button key="create-btn" :to="{ name: 'links.create' }" variant="primary">Create</ui-button>
                 <ui-button key="save-btn" variant="primary" @click.prevent="save" :disabled="saving">Save</ui-button>
             </div>
         </portal>
@@ -55,28 +56,31 @@
                         </VueNestableHandle>
 
                         <div class="flex flex-1 items-center justify-between">
-                            <div class="p-3" :class="{'font-bold': (item.url == '' || item.url == '#')}">{{ item.name }}</div>
+                            <div class="p-3 flex items-center" :class="{'font-bold': (item.url == '' || item.url == '#')}">
+                                <ui-status :value="item.status" class="mr-2"></ui-status>
+                                <router-link :to="{ name: 'links.edit', params: {navigation: navigation.id, link: item.id} }">{{ item.name }}</router-link>
+                            </div>
                             <div class="p-2">
                                 <ui-actions right :id="'link_' + item.id + '_actions'" :key="'link_' + item.id + '_actions'">
                                     <ui-dropdown-link @click.prevent :to="{ name: 'links.edit', params: {navigation: navigation.id, link: item.id} }">Edit</ui-dropdown-link>
-                                        <ui-dropdown-link
-                                            @click.prevent
-                                            v-modal:move-before="item">
-                                            Move before...
-                                        </ui-dropdown-link>
+                                    <ui-dropdown-link
+                                        @click.prevent
+                                        v-modal:move-before="item">
+                                        Move before...
+                                    </ui-dropdown-link>
 
-                                        <ui-dropdown-link
-                                            @click.prevent
-                                            v-modal:move-after="item">
-                                            Move after...
-                                        </ui-dropdown-link>
+                                    <ui-dropdown-link
+                                        @click.prevent
+                                        v-modal:move-after="item">
+                                        Move after...
+                                    </ui-dropdown-link>
 
-                                        <ui-dropdown-link
-                                            @click.prevent
-                                            v-modal:delete-link="item"
-                                            classes="link--danger">
-                                            Delete
-                                        </ui-dropdown-link>
+                                    <ui-dropdown-link
+                                        @click.prevent
+                                        v-modal:delete-link="item"
+                                        classes="link--danger">
+                                        Delete
+                                    </ui-dropdown-link>
                                 </ui-actions>
                             </div>
                         </div>
