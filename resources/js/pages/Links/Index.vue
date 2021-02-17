@@ -12,35 +12,6 @@
             </div>
         </portal>
 
-        <portal to="sidebar-right">
-            <sidebar id="links-sidebar">
-                <sidebar-section id="add_custom_link" title="Custom URL" description="Add a custom URL to this navigational menu." tabindex="-1">
-                    <ui-input-group name="name" label="Name" v-model="form.name"></ui-input-group>
-
-                    <ui-input-group name="url" label="URL" v-model="form.url"></ui-input-group>
-
-                    <ui-select-group
-                        name="new_window"
-                        label="Open link where"
-                        help="Determine where the link should open."
-                        :options="[
-                            {
-                                'label': 'New Window',
-                                'value': 1,
-                            },
-                            {
-                                'label': 'Same Window',
-                                'value': 0,
-                            },
-                        ]"
-                        v-model="form.new_window">
-                    </ui-select-group>
-
-                    <ui-button variant="primary" @click.prevent="add('custom')">Add</ui-button>
-                </sidebar-section>
-            </sidebar>
-        </portal>
-
         <div class="card" v-if="links.length == 0">
             <div class="card__body text-center">
                 <p>Add your first link to get started.</p>
@@ -181,22 +152,6 @@
         },
 
         methods: {
-            add(type) {
-                this.saving = true
-
-                this.form.post('/api/navigation/' + this.navigation.id + '/links').then((response) => {
-                    this.fetchLinks().then((response) => {
-                        this.reset()
-                        this.saving = false
-                        this.changed = false
-
-                        toast('Navigation link successfully added', 'success')
-                    })
-                }).catch((response) => {
-                    toast(response.message, 'failed')
-                })
-            },
-
             save() {
                 this.saving = true
 
@@ -219,12 +174,6 @@
                 return axios.get('/api/navigation/' + this.navigation.id).then((response) => {
                     this.links = response.data.data.links
                 })
-            },
-
-            reset() {
-                this.form.name = ''
-                this.form.url  = ''
-                this.form.new_window = 0
             },
 
             destroy(id) {
