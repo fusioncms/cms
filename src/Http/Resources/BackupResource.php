@@ -34,7 +34,8 @@ class BackupResource extends JsonResource
     private function packageLogs()
     {
         // Open log file..
-        $logFile = new SplFileObject(Storage::path($this->log_path));
+        $logFile = Storage::disk($this->disk)->path($this->log_path);
+        $logFile = new SplFileObject($logFile);
         $logFile->seek($logFile->getSize());  // Move cursor to EOF
 
         // Settings..

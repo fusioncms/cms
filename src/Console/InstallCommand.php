@@ -215,6 +215,7 @@ class InstallCommand extends Command
             'Creating database tables...'       => new \Fusion\Console\Installer\CreateDatabaseTables(),
             'Publishing Fusion resources...'    => new \Fusion\Console\Installer\PublishFusionResources(),
             'Creating storage link...'          => new \Fusion\Console\Installer\CreateStorageLink(),
+            'Creating default disks...'         => new \Fusion\Console\Installer\CreateDefaultDisks(),
             'Creating default notifications...' => new \Fusion\Console\Installer\CreateDefaultNotifications(),
             'Creating default permissions...'   => new \Fusion\Console\Installer\CreateDefaultPermissions(),
             'Creating default roles...'         => new \Fusion\Console\Installer\CreateDefaultRoles(),

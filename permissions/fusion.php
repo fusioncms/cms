@@ -5,6 +5,7 @@ return [
     // --
     'backups'       => ['viewAny', 'view', 'create', 'update', 'delete', 'restore'],
     'directories'   => ['viewAny', 'view', 'create', 'update', 'delete'],
+    'disks'         => ['viewAny', 'view', 'create', 'update', 'delete'],
     'entries'       => ['viewAny', 'view', 'create', 'update', 'delete'],
     'files'         => ['viewAny', 'view', 'create', 'update', 'delete', 'download'],
     'blueprints'    => ['viewAny', 'view', 'create', 'update', 'delete'],

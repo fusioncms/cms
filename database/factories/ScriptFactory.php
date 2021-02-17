@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use Fusion\Models\Script;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ScriptFactory extends Factory

@@ -2,11 +2,11 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Fusion\Http\Resources\ScriptResource;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\ScriptRequest;
-use Illuminate\Http\Request;
+use Fusion\Http\Resources\ScriptResource;
 use Fusion\Models\Script;
+use Illuminate\Http\Request;
 
 class ScriptController extends Controller
 {

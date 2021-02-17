@@ -2,6 +2,7 @@
 
 namespace Fusion\Providers;
 
+use Fusion\Models\Disk;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
@@ -17,7 +18,22 @@ class ConfigServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerMacro();
-        $this->mergeConfigurations();
+    }
+
+    /**
+     * Boot the provided services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        /**
+         * FusionCMS will now merge it's own
+         * configurations on top of Laravel's.
+         */
+        $this->resetBackupConfigurations();
+        $this->mergeFusionCMSConfigurations();
+        $this->mergeFileSystemConfigurations();
     }
 
     /**
@@ -46,11 +62,22 @@ class ConfigServiceProvider extends ServiceProvider
     }
 
     /**
-     * Merge FusionCMS configurations into existing.
+     * Reset backup configurations from `spatie/laravel-backup`
+     * so we can use a fresh copy of our own.
      *
      * @return void
      */
-    protected function mergeConfigurations()
+    protected function resetBackupConfigurations()
+    {
+        $this->app['config']->set('backup', []);
+    }
+
+    /**
+     * Merge in FusionCMS config file configurations.
+     *
+     * @return void
+     */
+    protected function mergeFusionCMSConfigurations()
     {
         $files = File::files(fusion_path('config'));
 
@@ -62,9 +89,21 @@ class ConfigServiceProvider extends ServiceProvider
                 $name,
                 Arr::mergeDeep(
                     $this->app['config']->get($name, []),
-                    require $path
+                    require $path,
                 )
             );
+        }
+    }
+
+    /**
+     * Merge in FileSystem Disks configurations.
+     *
+     * @return void
+     */
+    protected function mergeFileSystemConfigurations()
+    {
+        if (app_installed()) {
+            Disk::MergeConfigs();
         }
     }
 }

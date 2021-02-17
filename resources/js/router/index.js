@@ -525,6 +525,34 @@ const router = new Router({
         },
 
         {
+            path: '/disks',
+            component: () => import('@/pages/Disks/Index'),
+            name: 'disks',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+        {
+            path: '/disks/create',
+            component: () => import('@/pages/Disks/Create'),
+            name: 'disks.create',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+        {
+            path: '/disks/:disk/edit',
+            component: () => import('@/pages/Disks/Edit'),
+            name: 'disks.edit',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+
+        {
             path: '/styleguide',
             component: () => import('@/pages/Styleguide/Index'),
             name: 'styleguide',

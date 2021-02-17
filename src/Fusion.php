@@ -2,8 +2,8 @@
 
 namespace Fusion;
 
-use Fusion\Models\Script;
 use Fusion\Concerns\RegistersAssets;
+use Fusion\Models\Script;
 
 class Fusion
 {
@@ -15,7 +15,7 @@ class Fusion
             ->where('location', $location)
             ->where('status', true)
             ->get()
-            ->filter(function($script) {
+            ->filter(function ($script) {
                 if ($script->trigger_on == 'all') {
                     return true;
                 }
