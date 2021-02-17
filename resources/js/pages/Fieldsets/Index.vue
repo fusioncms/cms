@@ -42,7 +42,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'fieldset_' + table.record.id + '_actions'" :key="'fieldset_' + table.record.id + '_actions'">
+                        <ui-actions :id="'fieldset_' + table.record.id + '_actions'" :key="'fieldset_' + table.record.id + '_actions'">
                             <ui-dropdown-link :to="{ name: 'fieldsets.edit', params: {fieldset: table.record.id} }" v-if="$can('fieldsets.update')">Edit</ui-dropdown-link>
 
                             <ui-dropdown-divider></ui-dropdown-divider>
@@ -54,7 +54,7 @@
                                 class="danger">
                                 Delete
                             </ui-dropdown-link>
-                        </ui-table-actions>
+                        </ui-actions>
                     </template>
                 </ui-table>
             </ui-card-body>

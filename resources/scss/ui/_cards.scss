@@ -1,5 +1,5 @@
 .card {
-    @apply bg-white border rounded relative mb-4;
+    @apply bg-white border rounded-md relative mb-4;
 
     @screen xl { @apply mb-6; }
 
@@ -16,8 +16,8 @@
         @apply border-b px-4 py-2;
     }
 
-    &__title { 
-        @apply text-base m-0; 
+    &__title {
+        @apply text-base m-0;
     }
 
     &__subtitle { @apply mb-0; }

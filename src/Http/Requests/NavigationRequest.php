@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Requests\Navigation;
+namespace Fusion\Http\Requests;
 
 use Fusion\Http\Requests\Request;
 use Fusion\Rules\NotAReservedKeyword;

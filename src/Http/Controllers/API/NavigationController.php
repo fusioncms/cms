@@ -1,9 +1,9 @@
 <?php
 
-namespace Fusion\Http\Controllers\API\Navigation;
+namespace Fusion\Http\Controllers\API;
 
 use Fusion\Http\Controllers\Controller;
-use Fusion\Http\Requests\Navigation\NavigationRequest;
+use Fusion\Http\Requests\NavigationRequest;
 use Fusion\Http\Resources\NavigationResource;
 use Fusion\Models\Navigation;
 use Illuminate\Http\Request;

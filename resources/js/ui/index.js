@@ -1,6 +1,7 @@
 export { default as Renderless } from './Renderless'
 
 export { default as Accordion } from './Accordion'
+export { default as Actions } from './Actions'
 export { default as Alert } from './Alert'
 export { default as Badge } from './Badge'
 export { default as Breadcrumbs } from './Breadcrumbs'

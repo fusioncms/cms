@@ -1,13 +1,13 @@
 <?php
 
-namespace Fusion\Http\Controllers\API\Navigation;
+namespace Fusion\Http\Controllers\API;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Models\Navigation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class NodeRefreshController extends Controller
+class LinkRefreshController extends Controller
 {
     /**
      * Update the specified resource in storage.
@@ -19,11 +19,11 @@ class NodeRefreshController extends Controller
      */
     public function __invoke(Request $request, $navigation)
     {
-        $this->authorize('nodes.update');
+        $this->authorize('links.update');
 
         $navigation = Navigation::find($navigation)->firstOrFail();
 
-        $navigation->nodes->each(function ($node, $index) {
+        $navigation->links->each(function ($node, $index) {
             $node->order = $index + 1;
             $node->save();
         });
@@ -32,8 +32,8 @@ class NodeRefreshController extends Controller
             ->performedOn($navigation)
             ->withProperties([
                 'icon' => 'anchor',
-                'link' => 'navigation/'.$navigation->id.'/nodes',
+                'link' => 'navigation/'.$navigation->id.'/links',
             ])
-            ->log('Refreshed '.strtolower(Str::singular($navigation->name)).' navigation node ordering');
+            ->log('Refreshed '.strtolower(Str::singular($navigation->name)).' link ordering');
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace Fusion\Http\Requests\Navigation;
+namespace Fusion\Http\Requests;
 
 use Fusion\Http\Requests\Request;
 use Fusion\Services\Builders;
 
-class NavigationNodeRequest extends Request
+class LinkRequest extends Request
 {
     public function __construct()
     {
@@ -23,7 +23,7 @@ class NavigationNodeRequest extends Request
      */
     public function authorizePost()
     {
-        return $this->user()->can('nodes.create');
+        return $this->user()->can('links.create');
     }
 
     /**
@@ -33,7 +33,7 @@ class NavigationNodeRequest extends Request
      */
     public function authorizePatch()
     {
-        return $this->user()->can('nodes.update');
+        return $this->user()->can('links.update');
     }
 
     /**
@@ -45,7 +45,7 @@ class NavigationNodeRequest extends Request
     {
         $this->merge([
             'navigation_id' => $this->navigation->id,
-            'order'         => $this->model->orderLast(),
+            'order'         => $this->order ?? $this->model->orderLast(),
             'status'        => $this->status ?? true,
         ]);
     }
@@ -63,7 +63,7 @@ class NavigationNodeRequest extends Request
             'url'           => 'sometimes',
             'new_window'    => 'sometimes',
             'parent_id'     => 'sometimes',
-            'order'         => 'required',
+            'order'         => 'sometimes',
             'status'        => 'required|boolean',
         ];
 

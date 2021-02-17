@@ -4,7 +4,7 @@ namespace Fusion\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class NodeResource extends JsonResource
+class LinkResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -27,8 +27,8 @@ class NodeResource extends JsonResource
             }
         }
 
-        $resource['parent']   = new NodeResource($this->parent);
-        $resource['children'] = NodeResource::collection($this->children);
+        $resource['parent']   = new LinkResource($this->parent);
+        $resource['children'] = LinkResource::collection($this->children);
 
         $resource['created_at'] = $this->created_at;
         $resource['updated_at'] = $this->updated_at;

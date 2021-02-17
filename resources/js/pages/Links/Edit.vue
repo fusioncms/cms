@@ -1,10 +1,10 @@
 <template>
     <div>
         <portal to="title">
-			<page-title icon="anchor">Edit Node</page-title>
+			<page-title icon="anchor">Edit Link</page-title>
 		</portal>
 
-        <shared-form :form="form" :submit="submit" :navigation="navigation" :node="node" :nodes="nodes"></shared-form>
+        <shared-form :form="form" :submit="submit" :navigation="navigation" :link="link" :links="links"></shared-form>
     </div>
 </template>
 
@@ -15,30 +15,7 @@
     export default {
         auth() {
             return {
-                permission: 'nodes.update',
-            }
-        },
-
-        head: {
-            title() {
-                return {
-                    inner: this.node.name || 'Loading...'
-                }
-            }
-        },
-
-        data() {
-            return {
-                navigation: {},
-                node: {},
-                nodes: [],
-                form: new Form({
-                    name: '',
-                    url: '',
-                    new_window: false,
-                    parent_id: 0,
-                    status: false,
-                }, true)
+                permission: 'links.update',
             }
         },
 
@@ -46,12 +23,28 @@
             'shared-form': SharedForm
         },
 
+        data() {
+            return {
+                navigation: {},
+                link: {},
+                links: [],
+                form: new Form({
+                    name: '',
+                    url: '',
+                    new_window: false,
+                    parent_id: 0,
+                    order: 0,
+                    status: false,
+                }, true)
+            }
+        },
+
         methods: {
             submit() {
-                this.form.patch('/api/navigation/' + this.navigation.id + '/nodes/' + this.node.id).then((response) => {
-                    toast('Node saved successfully', 'success')
+                this.form.patch('/api/navigation/' + this.navigation.id + '/links/' + this.link.id).then((response) => {
+                    toast('Link saved successfully', 'success')
 
-                    this.$router.push('/navigation/' + this.navigation.id + '/nodes')
+                    this.$router.push('/navigation/' + this.navigation.id + '/links')
                 }).catch((response) => {
                     toast(response.response.data.message, 'failed')
                 })
@@ -59,7 +52,7 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            getNode(to.params.navigation, to.params.node, (error, node, navigation, fields) => {
+            getLink(to.params.navigation, to.params.link, (error, link, navigation, fields) => {
                 if (error) {
                     next((vm) => {
                         vm.$router.push('/navigation')
@@ -69,17 +62,17 @@
                 } else {
                     next((vm) => {
                         vm.navigation = navigation
-                        vm.node = node
+                        vm.link = link
                         vm.form = new Form(fields, true)
 
-                        vm.nodes = _.map(navigation.nodes, function(parent) {
+                        vm.links = _.map(navigation.links, function(parent) {
                             return {
                                 'label': parent.name,
                                 'value': parent.id
                             }
                         })
 
-                        vm.nodes.unshift({
+                        vm.links.unshift({
                             'label': 'None',
                             'value': 0
                         })
@@ -91,29 +84,30 @@
         },
     }
 
-    export function getNode(navigation, id, callback) {
+    export function getLink(navigation, id, callback) {
         axios.all([
-            axios.get('/api/navigation/' + navigation + '/nodes/' + id),
+            axios.get('/api/navigation/' + navigation + '/links/' + id),
             axios.get('/api/navigation/' + navigation),
-        ]).then(axios.spread(function (node, navigation) {
-            node = node.data.data
+        ]).then(axios.spread(function (link, navigation) {
+            link = link.data.data
             navigation = navigation.data.data
 
             let fields = {
-                name: node.name,
-                url: node.url,
-                new_window: node.new_window,
-                parent_id: node.parent_id,
-                status: node.status,
+                name: link.name,
+                url: link.url,
+                new_window: link.new_window,
+                parent_id: link.parent_id,
+                order: link.order,
+                status: link.status,
             }
 
             _.forEach(navigation.blueprint.sections, function(section) {
                 _.forEach(section.fields, function(field) {
-                    fields[field.handle] = node[field.handle]
+                    fields[field.handle] = link[field.handle]
                 })
             })
 
-            callback(null, node, navigation, fields)
+            callback(null, link, navigation, fields)
         }))
     }
 </script>

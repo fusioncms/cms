@@ -18,7 +18,7 @@
                             <router-link :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">{{ table.record.name }}</router-link>
                         </div>
                     </template>
-                    
+
                     <template slot="slug" slot-scope="table">
                         <code>{{ table.record.slug }}</code>
                     </template>
@@ -29,7 +29,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'term_' + table.record.id + '_actions'" :key="'term_' + table.record.id + '_actions'">
+                        <ui-actions :id="'term_' + table.record.id + '_actions'" :key="'term_' + table.record.id + '_actions'">
                             <ui-dropdown-link @click.prevent :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">Edit</ui-dropdown-link>
 
                             <ui-dropdown-link
@@ -38,7 +38,7 @@
                                 class="danger">
                                 Delete
                             </ui-dropdown-link>
-                        </ui-table-actions>
+                        </ui-actions>
                     </template>
                 </ui-table>
             </ui-card-body>

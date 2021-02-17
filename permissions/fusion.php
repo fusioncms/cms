@@ -14,7 +14,7 @@ return [
     'matrices'      => ['viewAny', 'view', 'create', 'update', 'delete'],
     'navigation'    => ['viewAny', 'view', 'create', 'update', 'delete'],
     'addons'        => ['viewAny', 'create', 'update', 'delete'],
-    'nodes'         => ['viewAny', 'view', 'create', 'update', 'delete'],
+    'links'         => ['viewAny', 'view', 'create', 'update', 'delete'],
     'permissions'   => ['viewAny'],
     'singles'       => ['viewAny', 'view', 'create', 'update', 'delete'],
     'responses'     => ['viewAny', 'view', 'create', 'update', 'delete'],

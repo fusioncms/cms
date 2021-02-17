@@ -25,7 +25,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
+                        <ui-actions :id="'role_' + table.record.id + '_actions'" :key="'role_' + table.record.id + '_actions'">
                             <ui-dropdown-link
                                 v-if="$can('roles.view')"
                                 :to="{ name: 'roles.show', params: {role: table.record.id} }">
@@ -48,7 +48,7 @@
                                 classes="danger">
                                 Delete
                             </ui-dropdown-link>
-                        </ui-table-actions>
+                        </ui-actions>
                     </template>
                 </ui-table>
             </ui-card-body>

@@ -37,20 +37,20 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions v-show="table.record.installed" :id="'addon_' + table.record.slug + '_actions_installed'" :key="'addon_' + table.record.slug + '_actions_installed'">
+                        <ui-actions v-show="table.record.installed" :id="'addon_' + table.record.slug + '_actions_installed'" :key="'addon_' + table.record.slug + '_actions_installed'">
                             <ui-dropdown-link v-if="table.record.enabled" @click="disable(table.record.slug)">Disable</ui-dropdown-link>
                             <ui-dropdown-link v-else @click="enable(table.record.slug)">Enable</ui-dropdown-link>
 
                             <ui-dropdown-link @click.prevent v-modal:uninstall-addon="table.record.slug" classes="link--danger">
                                 Uninstall
                             </ui-dropdown-link>
-                        </ui-table-actions>
+                        </ui-actions>
 
-                        <ui-table-actions v-show="!table.record.installed" :id="'addon_' + table.record.slug + '_actions_uninstalled'" :key="'addon_' + table.record.slug + '_actions_uninstalled'">
+                        <ui-actions v-show="!table.record.installed" :id="'addon_' + table.record.slug + '_actions_uninstalled'" :key="'addon_' + table.record.slug + '_actions_uninstalled'">
                             <ui-dropdown-link v-modal:install-addon="table.record.slug">
                                 Install
                             </ui-dropdown-link>
-                        </ui-table-actions>
+                        </ui-actions>
                     </template>
                 </ui-table>
             </div>

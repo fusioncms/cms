@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API\Navigation;
+namespace Fusion\Http\Controllers\API;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Models\Navigation;
@@ -8,7 +8,7 @@ use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class NodeMoveAfterController extends Controller
+class LinkMoveAfterController extends Controller
 {
     /**
      * Update the specified resource in storage.
@@ -18,15 +18,14 @@ class NodeMoveAfterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request, $navigation)
+    public function __invoke(Request $request, Navigation $navigation)
     {
-        $this->authorize('nodes.update');
+        $this->authorize('links.update');
 
-        $navigation  = Navigation::find($navigation)->firstOrFail();
         $model       = Builders\Navigation::resolve($navigation->handle);
 
-        $move  = $model->find($request->move);
-        $after = $model->find($request->after);
+        $move  = $model->find(intval($request->move));
+        $after = $model->find(intval($request->after));
 
         $order = $after->orderAfter();
 
@@ -37,8 +36,8 @@ class NodeMoveAfterController extends Controller
             ->performedOn($navigation)
             ->withProperties([
                 'icon' => 'anchor',
-                'link' => 'navigation/'.$navigation->id.'/nodes',
+                'link' => 'navigation/'.$navigation->id.'/links',
             ])
-            ->log('Updated '.strtolower(Str::singular($navigation->name)).' navigation node ordering');
+            ->log('Updated '.strtolower(Str::singular($navigation->name)).' link ordering');
     }
 }
