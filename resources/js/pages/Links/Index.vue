@@ -200,7 +200,7 @@
             save() {
                 this.saving = true
 
-                axios.post('/api/navigation/' + this.navigation.id + '/reorder', {links: this.links}).then((response) => {
+                axios.post('/api/navigation/' + this.navigation.id + '/links/reorder', {links: this.links}).then((response) => {
                     this.saving = false
                     this.changed = false
                     toast('Links successfully saved.', 'success')
