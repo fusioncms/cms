@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Controllers\API\Navigation;
+namespace Fusion\Http\Controllers\API;
 
 use Fusion\Http\Controllers\Controller;
 use Fusion\Models\Navigation;
@@ -8,7 +8,7 @@ use Fusion\Services\Builders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class NodeMoveBeforeController extends Controller
+class LinkMoveBeforeController extends Controller
 {
     /**
      * Update the specified resource in storage.
@@ -20,12 +20,12 @@ class NodeMoveBeforeController extends Controller
      */
     public function __invoke(Request $request, Navigation $navigation)
     {
-        $this->authorize('nodes.update');
+        $this->authorize('links.update');
 
         $model = Builders\Navigation::resolve($navigation->handle);
 
-        $move   = $model->find($request->move);
-        $before = $model->find($request->before);
+        $move   = $model->find(intval($request->move));
+        $before = $model->find(intval($request->before));
 
         $order = $before->orderBefore();
 
@@ -36,8 +36,8 @@ class NodeMoveBeforeController extends Controller
             ->performedOn($navigation)
             ->withProperties([
                 'icon' => 'anchor',
-                'link' => 'navigation/'.$navigation->id.'/nodes',
+                'link' => 'navigation/'.$navigation->id.'/links',
             ])
-            ->log('Updated '.strtolower(Str::singular($navigation->name)).' navigation node ordering');
+            ->log('Updated '.strtolower(Str::singular($navigation->name)).' link ordering');
     }
 }

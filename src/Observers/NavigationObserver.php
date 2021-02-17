@@ -26,7 +26,7 @@ class NavigationObserver implements BuilderObserver
             $table->string('name');
             $table->string('url')->nullable();
             $table->boolean('new_window')->default(false);
-            $table->integer('order')->nullable()->index();
+            $table->float('order')->nullable()->index();
 
             $table->boolean('status')->default(true);
             $table->timestamps();

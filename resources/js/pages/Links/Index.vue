@@ -8,7 +8,7 @@
             <div class="buttons">
                 <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'navigation' }" variant="secondary">Go Back</ui-button>
                 <ui-button key="create-btn" :to="{ name: 'links.create' }" variant="primary">Create</ui-button>
-                <ui-button key="save-btn" variant="primary" @click.prevent="save" :disabled="saving">Save</ui-button>
+                <ui-button key="save-btn" variant="primary" @click.prevent="save" v-if="changed" :disabled="saving">Save</ui-button>
             </div>
         </portal>
 
@@ -47,8 +47,8 @@
             </div>
         </div>
 
-        <div v-else>
-            <VueNestable v-model="links">
+        <div v-else class="mb-4 xl:mb-6">
+            <VueNestable v-model="links" :threshold="32" @input="changing()">
                 <template slot-scope="{ item }">
                     <div class="flex">
                         <VueNestableHandle :item="item" class="flex items-center justify-center border-r w-8 text-gray-500 bg-gray-50 rounded-l">
@@ -108,7 +108,7 @@
 
                 <template slot="footer" slot-scope="link">
                     <ui-button v-modal:move-before @click="moveBefore(link.data.id)" variant="danger" class="ml-3">Move</ui-button>
-                    <ui-button v-modal:move-after @click="before = null">Cancel</ui-button>
+                    <ui-button v-modal:move-before @click="before = null">Cancel</ui-button>
                 </template>
             </ui-modal>
 
@@ -154,9 +154,11 @@
 
         data() {
             return {
+                loaded: false,
                 navigation: {},
                 links: [],
                 saving: false,
+                changed: false,
                 before: null,
                 after: null,
                 form: new Form({
@@ -186,6 +188,7 @@
                     this.fetchLinks().then((response) => {
                         this.reset()
                         this.saving = false
+                        this.changed = false
 
                         toast('Navigation link successfully added', 'success')
                     })
@@ -199,8 +202,17 @@
 
                 axios.post('/api/navigation/' + this.navigation.id + '/reorder', {links: this.links}).then((response) => {
                     this.saving = false
+                    this.changed = false
                     toast('Links successfully saved.', 'success')
                 })
+            },
+
+            changing() {
+                if (!this.loaded) {
+                    this.loaded = true
+                } else {
+                    this.changed = true
+                }
             },
 
             fetchLinks() {
@@ -224,26 +236,28 @@
             },
 
             moveBefore(move) {
-                axios.post('/api/navigation/' + this.navigation.id + '/links/move/before', {
+                axios.post('/api/navigation/' + this.navigation.id + '/links/before', {
                     move: move,
-                    before: this.before,
+                    before: parseInt(this.before),
                 }).then((response) => {
-                    this.fetchLinks().then(() => {
-                        this.before = null
+                    this.after = null
+                    this.before = null
 
+                    this.fetchLinks().then(() => {
                         toast('Link successfully moved.', 'success')
                     })
                 })
             },
 
             moveAfter(move) {
-                axios.post('/api/navigation/' + this.navigation.id + '/links/move/after', {
+                axios.post('/api/navigation/' + this.navigation.id + '/links/after', {
                     move: move,
-                    after: this.after,
+                    after: parseInt(this.after),
                 }).then((response) => {
-                    this.fetchLinks().then(() => {
-                        this.after = null
+                    this.after = null
+                    this.before = null
 
+                    this.fetchLinks().then(() => {
                         toast('Link successfully moved.', 'success')
                     })
                 })
