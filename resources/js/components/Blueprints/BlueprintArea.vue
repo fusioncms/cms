@@ -30,7 +30,7 @@
             </div>
         </template>
 
-        <ui-button class="blueprint-area__btn" @click.prevent="add(area)" size="large">Add {{ area }} section <fa-icon icon="plus" class="ml-3"></fa-icon></ui-button>
+        <ui-button class="blueprint-area__btn" @click.prevent="add()" size="large">Add {{ area }} section <fa-icon icon="plus" class="ml-3"></fa-icon></ui-button>
     </div>
 </template>
 
@@ -109,7 +109,7 @@
                 }
             },
 
-            add(area, name = 'Section', prototype = true) {
+            add(name = 'Section', prototype = true) {
                 name = this.uniqName(name)
 
                 this.sections.push({
@@ -147,11 +147,6 @@
                 return `${count >= 0 ? count : 1} field`
             }
         },
-
-         mounted() {
-            if (this.value.length == 0)
-                this.add('General')
-        }
     }
 </script>
 
