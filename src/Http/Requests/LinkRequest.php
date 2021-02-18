@@ -2,7 +2,6 @@
 
 namespace Fusion\Http\Requests;
 
-use Fusion\Http\Requests\Request;
 use Fusion\Services\Builders;
 
 class LinkRequest extends Request
