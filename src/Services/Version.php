@@ -117,7 +117,7 @@ class Version
      * Update to latest version.
      *
      * @params array $options = []
-     * 
+     *
      * @return void
      */
     public function update($options = [])

@@ -2,12 +2,12 @@
 
 namespace Fusion\Http\Controllers\API;
 
-use Illuminate\Http\Request;
-use Fusion\Services\Builders;
-use Fusion\Models\Navigation;
-use Fusion\Http\Requests\LinkRequest;
 use Fusion\Http\Controllers\Controller;
+use Fusion\Http\Requests\LinkRequest;
 use Fusion\Http\Resources\LinkResource;
+use Fusion\Models\Navigation;
+use Fusion\Services\Builders;
+use Illuminate\Http\Request;
 
 class LinkController extends Controller
 {
@@ -47,8 +47,8 @@ class LinkController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param LinkRequest  $request
-     * @param Navigation   $navigation
+     * @param LinkRequest $request
+     * @param Navigation  $navigation
      *
      * @return LinkResource
      */
@@ -68,8 +68,8 @@ class LinkController extends Controller
      * Update the specified resource in storage.
      *
      * @param LinkRequest $request
-     * @param Navigation            $navigation
-     * @param int                   $id
+     * @param Navigation  $navigation
+     * @param int         $id
      *
      * @return \Illuminate\Http\Response
      */
