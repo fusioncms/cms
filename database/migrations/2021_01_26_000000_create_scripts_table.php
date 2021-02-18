@@ -20,7 +20,7 @@ class CreateScriptsTable extends Migration
             $table->text('code');
             $table->string('location')->default('head'); // head, body
             $table->string('trigger_on')->default('all');
-            $table->string('trigger_where')->default('');
+            $table->string('trigger_where')->nullable();
             $table->string('type')->default('user');
             $table->integer('order')->default(0);
             $table->boolean('status')->default(true);

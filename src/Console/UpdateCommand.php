@@ -88,7 +88,7 @@ class UpdateCommand extends Command
      */
     private function jobs()
     {
-        $version = $this->option('version-number') ?? Version::latest();
+        $version = $this->option('version-number') ? $this->option('version-number') : Version::latest();
 
         $jobs = [
             'Making backup...'          => new \Fusion\Jobs\Backups\BackupRun(['disable-notifications' => true]),
