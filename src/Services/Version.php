@@ -116,11 +116,13 @@ class Version
     /**
      * Update to latest version.
      *
+     * @params array $options = []
+     * 
      * @return void
      */
-    public function update()
+    public function update($options = [])
     {
-        Artisan::call('fusion:update');
+        Artisan::call('fusion:update', $options);
     }
 
     /**

@@ -158,7 +158,7 @@ class NavigationTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', "/api/navigation/{$this->menu->id}/nodes/move/before", [
+            ->json('POST', "/api/navigation/{$this->menu->id}/links/before", [
                 'move'   => $node2->id,
                 'before' => $node1->id,
             ]);
@@ -183,7 +183,7 @@ class NavigationTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', "/api/navigation/{$this->menu->id}/nodes/move/after", [
+            ->json('POST', "/api/navigation/{$this->menu->id}/links/after", [
                 'move'  => $node1->id,
                 'after' => $node2->id,
             ]);
@@ -207,7 +207,7 @@ class NavigationTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', "/api/navigation/{$this->menu->id}/nodes/refresh");
+            ->json('PATCH', "/api/navigation/{$this->menu->id}/links/refresh");
 
         $this->assertDatabaseHas($this->menu->getBuilderTable(), ['name' => $node1->name, 'order' => 3]);
         $this->assertDatabaseHas($this->menu->getBuilderTable(), ['name' => $node2->name, 'order' => 2]);
