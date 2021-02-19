@@ -12,6 +12,7 @@
             </div>
 
             <vue-dropzone ref="dropzone_element" id="dropzone"
+                v-if="dropzoneOptions"
                 :options="dropzoneOptions"
                 @vdropzone-mounted="configureDZ"
                 @vdropzone-drag-leave="setDropzoneVisible(false)"
@@ -46,18 +47,16 @@
 
         data() {
             return {
-                dropzoneOptions: {
-                    url: '/api/files',
-                    headers: {},
-                }
+                dropzoneOptions: false
             }
         },
 
         computed: {
             ...mapGetters({
+                disk:             'filemanager/getDisk',
                 currentDirectory: 'filemanager/getCurrentDirectory',
-                dropzoneVisible: 'filemanager/getDropzoneVisible',
-                fileUploads: 'filemanager/getFileUploads',
+                dropzoneVisible:  'filemanager/getDropzoneVisible',
+                fileUploads:      'filemanager/getFileUploads',
             }),
 
             csrf() {
@@ -71,16 +70,25 @@
             }
         },
 
+        watch: {
+            disk(value) {
+                this.dropzoneOptions = {
+                    url: `/api/files/${value.id}`,
+                    headers: {},
+                }
+            }
+        },
+
         methods: {
             ...mapActions({
                 fetchFilesAndDirectories: 'filemanager/fetchFilesAndDirectories',
-                setUploadsMinimized: 'filemanager/setUploadsMinimized',
-                setDropzoneVisible: 'filemanager/setDropzoneVisible',
-                setUploadProgress: 'filemanager/setUploadProgress',
-                setUploadsVisible: 'filemanager/setUploadsVisible',
-                setFileUploads: 'filemanager/setFileUploads',
-                addFileUpload: 'filemanager/addFileUpload',
-                addFile: 'filemanager/addFile',
+                setUploadsMinimized:      'filemanager/setUploadsMinimized',
+                setDropzoneVisible:       'filemanager/setDropzoneVisible',
+                setUploadProgress:        'filemanager/setUploadProgress',
+                setUploadsVisible:        'filemanager/setUploadsVisible',
+                setFileUploads:           'filemanager/setFileUploads',
+                addFileUpload:            'filemanager/addFileUpload',
+                addFile:                  'filemanager/addFile',
             }),
 
             openDZ() {

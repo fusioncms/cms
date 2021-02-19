@@ -72,8 +72,10 @@ class FileController extends Controller
      */
     public function store(UploadFileRequest $request, Disk $disk)
     {
+        $attributes = $request->validated();
+
         $upload    = $request->file('file');
-        $directory = $request->input('directory_id', 0);
+        $directory = $attributes['directory_id'];
         $uuid      = unique_id();
         $name      = pathinfo($upload->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $upload->extension();

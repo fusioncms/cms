@@ -23,8 +23,9 @@
 
         computed: {
             ...mapGetters({
+                disk:        'filemanager/getDisk',
                 directories: 'filemanager/getDirectories',
-                files: 'filemanager/getFiles',
+                files:       'filemanager/getFiles',
             }),
 
             title: function() {
@@ -37,9 +38,9 @@
 
             endpoint: function() {
                 if (this.isFile) {
-                    return `/api/files/${this.selection.id}`
+                    return `/api/files/${this.disk.id}/${this.selection.id}`
                 } else {
-                    return `/api/directories/${this.selection.id}`
+                    return `/api/directories/${this.disk.id}/${this.selection.id}`
                 }
             }
         },

@@ -26,6 +26,10 @@
         },
 
         props: {
+            disk: {
+                required: true,
+            },
+
             file: {
                 required: true,
             },
@@ -40,7 +44,7 @@
 
             submit() {
                 if (this.uploadForm) {
-                    axios.post(`/api/files/replace/${this.file.id}`, this.uploadForm).then((response) => {
+                    axios.post(`/api/files/${this.disk.id}/${this.file.id}/replace`, this.uploadForm).then((response) => {
                         this.uploadForm = null
                         this.$refs.upload.remove()
                         this.$emit('replaced', response.data.data)

@@ -59,7 +59,7 @@ export default {
 		},
 
 		preview(file) {
-			this.$router.push({ path: `/files/${disk}/${file.id}` })
+			this.$router.push({ path: `/files/${this.disk.id}/${file.id}` })
 		},
 	}
 }

@@ -44,6 +44,7 @@
 
         computed: {
             ...mapGetters({
+                disk:             'filemanager/getDisk',
                 currentDirectory: 'filemanager/getCurrentDirectory',
             })
         },
@@ -54,7 +55,7 @@
             }),
 
             submit() {
-                this.form.post('/api/directories').then((response) => {
+                this.form.post(`/api/directories/${this.disk.id}`).then((response) => {
                     this.form.name = ""
                     this.fetchFilesAndDirectories()
                     this.$children[0].isActive = false

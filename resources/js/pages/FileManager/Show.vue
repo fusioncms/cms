@@ -20,9 +20,16 @@
         <portal to="modals">
             <move-file-modal></move-file-modal>
 
-            <replace-file-modal :file="file" @replaced="replacement => file = replacement"></replace-file-modal>
+            <replace-file-modal
+                :disk="disk"
+                :file="file"
+                @replaced="replacement => file = replacement">
+            </replace-file-modal>
 
-            <delete-file-modal :file="file"></delete-file-modal>
+            <delete-file-modal
+                :disk="disk"
+                :file="file">
+            </delete-file-modal>
         </portal>
 
         <div class="card" v-if="loaded" :key="file.name">
@@ -186,6 +193,10 @@
         },
 
         computed: {
+            ...mapGetters({
+                disk: 'filemanager/getDisk',
+            }),
+
             fileSrc(file) {
                 return `${this.file.url}?w=1500&h=1500&fit=max&t=${this.$moment.utc(this.file.updated_at).format('X')}`
             }
@@ -223,11 +234,12 @@
 
         methods: {
             ...mapActions({
+                fetchDisk: 'filemanager/fetchDisk',
                 toggleSelection: 'filemanager/toggleFileSelection',
             }),
 
             getFile(to, from, next) {
-                axios.get('/api/files/' + to.params.uuid)
+                axios.get(`/api/files/${to.params.disk}/${to.params.file}`)
                     .then((response) => {
                         this.file   = response.data.data
                         this.loaded = true
@@ -245,7 +257,7 @@
             },
 
             submit() {
-                this.form.patch(`/api/files/${this.file.id}`)
+                this.form.patch(`/api/files/${this.disk.id}/${this.file.id}`)
                     .then((response) => {
                         this.file.name = this.form.name
 
@@ -261,7 +273,7 @@
 
             download() {
                 axios({
-                    url: `/api/files/${this.file.uuid}/download`,
+                    url: `/api/files/${this.disk.id}/${this.file.id}/download`,
                     method: 'GET',
                     responseType: 'blob',
                 }).then((response) => {
@@ -277,11 +289,13 @@
 
         beforeRouteEnter(to, from, next) {
             next(vm => {
+                vm.fetchDisk(to.params.disk)
                 vm.getFile(to, from, next)
             })
         },
 
-        beforeRouteUpdate(to,from,next) {
+        beforeRouteUpdate(to, from, next) {
+            this.fetchDisk(to.params.disk)
             this.getFile(to, from, next)
 
             next()

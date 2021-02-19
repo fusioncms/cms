@@ -21,7 +21,7 @@
 
 		<quick-edit
 			:file="file"
-			:endpoint="'/api/files/' + file.id">
+			:endpoint="`/api/files/${disk.id}/${file.id}`">
 		</quick-edit>
 
 		<div class="gallery-subtitle">
@@ -72,6 +72,7 @@
 
 		computed: {
             ...mapGetters({
+            	disk:     'filemanager/getDisk',
                 selected: 'filemanager/getSelectedFiles',
                 view:     'filemanager/getView',
             }),

@@ -28,15 +28,19 @@
 
         methods: {
             ...mapActions({
-                fetchFilesAndDirectories: 'filemanager/fetchFilesAndDirectories',
+                fetchDisk: 'filemanager/fetchDisk',
             }),
         },
 
         beforeRouteEnter(to, from, next) {
             next(vm => {
-                vm.setDisk(to.params.disk)
-                vm.fetchFilesAndDirectories()
+                vm.fetchDisk(to.params.disk)
             })
         },
+
+        beforeRouteUpdate (to, from, next) {
+            this.fetchDisk(to.params.disk)
+            next()
+        }
     }
 </script>

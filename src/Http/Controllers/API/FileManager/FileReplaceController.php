@@ -49,7 +49,7 @@ class FileReplaceController extends Controller
                 'height'    => $height ?? null,
             ]);
 
-            glide()->deleteCache($file->location);
+            glide($disk->handle)->deleteCache($file->location);
         }
 
         return new FileResource($file);

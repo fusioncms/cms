@@ -39,6 +39,7 @@
 
         computed: {
             ...mapGetters({
+                disk:                'filemanager/getDisk',
                 selectedDirectories: 'filemanager/getSelectedDirectories',
                 currentDirectory:    'filemanager/getCurrentDirectory',
                 selectedFiles:       'filemanager/getSelectedFiles',
@@ -92,7 +93,7 @@
             },
 
             gatherOptions() {
-                axios.get('/api/directories?recursive=true').then(({data}) => {
+                axios.get(`/api/directories/${this.disk.id}?recursive=true`).then(({data}) => {
                     this.directories = [{
                         id:        '0',
                         name:      'Root',
