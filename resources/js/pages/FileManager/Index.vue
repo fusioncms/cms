@@ -34,6 +34,7 @@
 
         beforeRouteEnter(to, from, next) {
             next(vm => {
+                vm.setDisk(to.params.disk)
                 vm.fetchFilesAndDirectories()
             })
         },

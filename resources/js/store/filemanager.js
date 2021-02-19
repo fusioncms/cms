@@ -4,6 +4,7 @@ export default {
     namespaced: true,
 
     state: {
+        disk: null,
         loading: true,
         files: [],
         directory: 0,
@@ -145,6 +146,10 @@ export default {
     },
 
     mutations: {
+        setDisk(state, disk) {
+            state.disk = disk
+        },
+
         setLoading(state, loading) {
             state.loading = loading
         },
@@ -277,6 +282,10 @@ export default {
             commit('clearDirectorySelection')
         },
 
+        setDisk(context, disk) {
+            context.commit('setDisk', disk)
+        },
+
         setLoading(context, loading) {
             context.commit('setLoading', loading)
         },
@@ -319,11 +328,11 @@ export default {
             let getDirectory = null
 
             if (state.currentDirectory > 0)
-                getDirectory = axios.get(`/api/directories/${state.currentDirectory}`)
+                getDirectory = axios.get(`/api/directories/${state.disk}/${state.currentDirectory}`)
 
             axios.all([
-                axios.get('/api/files', { params: getters.getFileFilters }),
-                axios.get('/api/directories', { params: getters.getDirectoryFilters }),
+                axios.get(`/api/files/${state.disk}`, { params: getters.getFileFilters }),
+                axios.get(`/api/directories/${state.disk}`, { params: getters.getDirectoryFilters }),
                 getDirectory
             ]).then(
                 axios.spread((files, directories, currentDirectory) => {
@@ -341,7 +350,7 @@ export default {
         }, 500),
 
         moveFileToDirectory({ commit, state, dispatch }, payload) {
-            axios.post(`/api/files/move`, {
+            axios.post(`/api/files/${state.disk}/move`, {
                 directory: payload.directory,
                 moving: payload.moving
             }).then(response  => {

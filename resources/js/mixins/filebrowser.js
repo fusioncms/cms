@@ -3,6 +3,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
 	computed: {
 		...mapGetters({
+			disk:             'filemanager/getDisk',
 			rootDirectory:    'filemanager/getRootDirectory',
 			currentDirectory: 'filemanager/getCurrentDirectory',
 			parentDirectory:  'filemanager/getParentDirectory',
@@ -58,7 +59,7 @@ export default {
 		},
 
 		preview(file) {
-			this.$router.push({ path: `/files/${file.uuid}` })
+			this.$router.push({ path: `/files/${disk}/${file.id}` })
 		},
 	}
 }
