@@ -5,6 +5,7 @@ namespace Fusion\Http\Controllers\API\FileManager;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\DirectoryRequest;
 use Fusion\Http\Resources\DirectoryResource;
+use Fusion\Models\Disk;
 use Fusion\Models\Directory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -16,9 +17,12 @@ class DirectoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param \Fusion\Http\Requests\Request $request
+     * @param \Fusion\Models\Disk           $disk
+     * 
+     * @return \Fusion\Http\Resources\DirectoryResource
      */
-    public function index(Request $request)
+    public function index(Request $request, Disk $disk)
     {
         $this->authorize('directories.viewAny');
 
@@ -26,6 +30,7 @@ class DirectoryController extends Controller
             $directories = Directory::hierarchy()->get();
         } else {
             $directories = QueryBuilder::for(Directory::class)
+                ->where('disk_id', $disk->id)
                 ->withCount('files')
                 ->allowedFilters([
                     AllowedFilter::exact('parent_id')->default(0),
@@ -42,29 +47,32 @@ class DirectoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display the specified resource.
      *
-     * @param \Fusion\Http\Requests\DirectoryRequest $request
+     * @param \Fusion\Http\Requests\Request $request
+     * @param \Fusion\Models\Disk           $disk
+     * @param \Fusion\Models\File           $file
      *
      * @return \Fusion\Http\Resources\DirectoryResource
      */
-    public function store(DirectoryRequest $request)
+    public function show(Request $request, Disk $disk, Directory $directory)
     {
-        $directory = Directory::create($request->validated());
+        $this->authorize('directories.view');
 
         return new DirectoryResource($directory);
     }
 
     /**
-     * Display the specified resource.
+     * Store a newly created resource in storage.
      *
-     * @param \Fusion\Models\Directory $directory
+     * @param \Fusion\Http\Requests\DirectoryRequest $request
+     * @param \Fusion\Models\Disk                    $disk
      *
-     * @return \Illuminate\Http\Response
+     * @return \Fusion\Http\Resources\DirectoryResource
      */
-    public function show(Directory $directory)
+    public function store(DirectoryRequest $request, Disk $disk)
     {
-        $this->authorize('directories.view');
+        $directory = Directory::create($request->validated());
 
         return new DirectoryResource($directory);
     }
@@ -73,11 +81,12 @@ class DirectoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Fusion\Http\Requests\DirectoryRequest $request
+     * @param \Fusion\Models\Disk                    $disk
      * @param \Fusion\Models\Directory               $directory
      *
      * @return \Fusion\Http\Resources\DirectoryResource
      */
-    public function update(DirectoryRequest $request, Directory $directory)
+    public function update(DirectoryRequest $request, Disk $disk, Directory $directory)
     {
         $directory->update($request->validated());
 
@@ -87,11 +96,13 @@ class DirectoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param \Illuminate\Http\Request $request
+     * @param \Fusion\Models\Disk      $disk
      * @param \Fusion\Models\Directory $directory
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function destroy(Directory $directory)
+    public function destroy(Request $request, Disk $disk, Directory $directory)
     {
         $this->authorize('directories.delete');
 

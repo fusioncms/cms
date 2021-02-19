@@ -6,6 +6,7 @@ use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\FileRequest;
 use Fusion\Http\Requests\UploadFileRequest;
 use Fusion\Http\Resources\FileResource;
+use Fusion\Models\Disk;
 use Fusion\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,11 +15,20 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class FileController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Display a listing of the resource.
+     *
+     * @param @param \Illuminate\Http\Request $request
+     * @param \Fusion\Models\Disk             $disk
+     *
+     * @return \Fusion\Http\Resources\FileResource
+     */
+    public function index(Request $request, Disk $disk)
     {
         $this->authorize('files.viewAny');
 
         $files = QueryBuilder::for(File::class)
+            ->where('disk_id', $disk->id)
             ->allowedFilters([
                 AllowedFilter::exact('directory_id')->default(0),
                 AllowedFilter::scope('search', 'searchQuery'),
@@ -39,15 +49,15 @@ class FileController extends Controller
     /**
      * Show the specific resource.
      *
-     * @param string $uuid
+     * @param \Illuminate\Http\Request $request
+     * @param \Fusion\Models\Disk      $disk
+     * @param \Fusion\Models\File      $file
      *
-     * @return
+     * @return \Fusion\Http\Resources\FileResource
      */
-    public function show(Request $request, $uuid)
+    public function show(Request $request, Disk $disk, File $file)
     {
         $this->authorize('files.view');
-
-        $file = File::where('uuid', $uuid)->firstOrFail();
 
         return new FileResource($file);
     }
@@ -56,10 +66,11 @@ class FileController extends Controller
      * Persist a new resource in storage.
      *
      * @param \Fusion\Http\Requests\UploadFileRequest $request
+     * @param \Fusion\Models\Disk $disk
      *
      * @return \Fusion\Http\Resources\FileResource
      */
-    public function store(UploadFileRequest $request)
+    public function store(UploadFileRequest $request, Disk $disk)
     {
         $upload    = $request->file('file');
         $directory = $request->input('directory_id', 0);
@@ -71,7 +82,7 @@ class FileController extends Controller
         $filetype  = strtok($mimetype, '/');
         $location  = "files/{$uuid}-{$name}.{$extension}";
 
-        Storage::disk('public')->putFileAs('', $upload, $location);
+        Storage::disk($disk->handle)->putFileAs('', $upload, $location);
 
         switch ($filetype) {
             case 'image':
@@ -84,6 +95,7 @@ class FileController extends Controller
         }
 
         $file = File::create([
+            'disk_id'      => $disk->id,
             'directory_id' => $directory,
             'uuid'         => $uuid,
             'name'         => $name,
@@ -93,7 +105,6 @@ class FileController extends Controller
             'location'     => $location,
             'width'        => $width ?? null,
             'height'       => $height ?? null,
-
         ]);
 
         return new FileResource($file);
@@ -103,13 +114,23 @@ class FileController extends Controller
      * Update an existing resource in storage.
      *
      * @param \Fusion\Http\Requests\FileRequest $request
+     * @param \Fusion\Models\Disk               $disk
      * @param \Fusion\Models\File               $file
      *
      * @return \Fusion\Http\Resources\FileResource
      */
-    public function update(FileRequest $request, File $file)
+    public function update(FileRequest $request, Disk $disk, File $file)
     {
-        $file->update($request->validated());
+        $attributes = $request->validated();
+
+        /**
+         * Update location, if applicable.
+         */
+        if ($file->location !== $attributes['location']) {
+            Storage::disk($disk->handle)->move($file->location, $attributes['location']);
+        }
+
+        $file->update($attributes);
 
         return new FileResource($file);
     }
@@ -117,15 +138,17 @@ class FileController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \Fusion\Models\File $file
+     * @param \Illuminate\Http\Request $request
+     * @param \Fusion\Models\Disk      $disk
+     * @param \Fusion\Models\File      $file
      *
      * @return void
      */
-    public function destroy(File $file)
+    public function destroy(Request $request, Disk $disk, File $file)
     {
         $this->authorize('files.delete');
 
-        Storage::disk('public')->delete($file->location);
+        Storage::disk($disk->handle)->delete($file->location);
 
         $file->delete();
     }

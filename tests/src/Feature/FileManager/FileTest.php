@@ -3,6 +3,7 @@
 namespace Fusion\Tests\Feature\FileManager;
 
 use Fusion\Models\Directory;
+use Fusion\Models\Disk;
 use Fusion\Models\File;
 use Fusion\Tests\TestCase;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -23,7 +24,10 @@ class FileTest extends TestCase
         $this->handleValidationExceptions();
 
         // --
-        Storage::fake('public');
+        // Get default public disk..
+        $this->disk = Disk::first();
+
+        Storage::fake($this->disk->handle);
     }
 
     /** @test */
@@ -31,18 +35,19 @@ class FileTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('POST', 'api/files', [
+            ->json('POST', "/api/files/{$this->disk->id}", [
                 'file' => UploadedFile::fake()->image('foobar.png'),
             ])
             ->assertStatus(201);
 
         $this->assertDatabaseHas('files', [
+            'disk_id'   => $this->disk->id,
             'name'      => 'foobar',
             'mimetype'  => 'image/png',
             'extension' => 'png',
         ]);
 
-        Storage::disk('public')->assertExists(
+        Storage::disk($this->disk->handle)->assertExists(
             File::latest()->first()->location
         );
     }
@@ -52,7 +57,7 @@ class FileTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->json('POST', '/api/files', []);
+        $this->json('POST', "/api/files/{$this->disk->id}", []);
     }
 
     /** @test */
@@ -62,7 +67,7 @@ class FileTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/files');
+            ->json('GET', "/api/files/{$this->disk->id}");
     }
 
     /** @test */
@@ -74,7 +79,7 @@ class FileTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', '/api/files/'.$file->id);
+            ->json('GET', "/api/files/{$this->disk->id}/{$file->id}");
     }
 
     /** @test */
@@ -84,7 +89,7 @@ class FileTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('POST', '/api/files', []);
+            ->json('POST', "/api/files/{$this->disk->id}", []);
     }
 
     /** @test */
@@ -96,7 +101,7 @@ class FileTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('PATCH', "/api/files/{$file->id}", []);
+            ->json('PATCH', "/api/files/{$this->disk->id}/{$file->id}", []);
     }
 
     /** @test */
@@ -108,7 +113,7 @@ class FileTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('DELETE', "/api/files/{$file->id}");
+            ->json('DELETE', "/api/files/{$this->disk->id}/{$file->id}");
     }
 
     /** @test */
@@ -120,7 +125,7 @@ class FileTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', "/api/files/{$file->uuid}/download");
+            ->json('GET', "/api/files/{$this->disk->id}/{$file->id}/download");
     }
 
     /** @test */
@@ -128,7 +133,7 @@ class FileTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/files', ['file' => null])
+            ->json('POST', "/api/files/{$this->disk->id}", ['file' => null])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
                 'file' => 'The file field is required.',
@@ -140,7 +145,7 @@ class FileTest extends TestCase
     {
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/files', ['file' => 'foobar'])
+            ->json('POST', "/api/files/{$this->disk->id}", ['file' => 'foobar'])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
                 'file' => 'The file must be a file.',
@@ -161,7 +166,7 @@ class FileTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', "api/files/{$file->id}", $attr)
+            ->json('PATCH', "/api/files/{$this->disk->id}/{$file->id}", $attr)
             ->assertStatus(200);
 
         $this->assertDatabaseHas('files', [
@@ -174,8 +179,8 @@ class FileTest extends TestCase
             'location'    => "files/{$uuid}-{$name}.{$extn}",
         ]);
 
-        Storage::disk('public')->assertMissing($file->location);
-        Storage::disk('public')->assertExists("files/{$uuid}-{$name}.{$extn}");
+        Storage::disk($this->disk->handle)->assertMissing($file->location);
+        Storage::disk($this->disk->handle)->assertExists("files/{$uuid}-{$name}.{$extn}");
     }
 
     /** @test */
@@ -185,12 +190,12 @@ class FileTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('DELETE', "api/files/{$file->id}")
+            ->json('DELETE', "/api/files/{$this->disk->id}/{$file->id}")
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('files', ['id' => $file->id]);
 
-        Storage::disk('public')->assertMissing($file->location);
+        Storage::disk($this->disk->handle)->assertMissing($file->location);
     }
 
     /** @test */
@@ -200,7 +205,7 @@ class FileTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('PATCH', "api/files/{$file->id}", [])
+            ->json('PATCH', "/api/files/{$this->disk->id}/{$file->id}", [])
             ->assertStatus(422)
             ->assertJsonValidationErrors([
                 'name' => 'The name field is required.',
@@ -214,7 +219,7 @@ class FileTest extends TestCase
 
         $payload = $this
             ->be($this->owner, 'api')
-            ->json('GET', "api/files/{$file->uuid}")
+            ->json('GET', "/api/files/{$this->disk->id}/{$file->id}")
             ->assertStatus(200)
             ->getData()->data;
 
@@ -230,7 +235,7 @@ class FileTest extends TestCase
 
         $this
             ->be($this->user, 'api')
-            ->json('GET', "api/files/{$file->uuid}");
+            ->json('GET', "/api/files/{$this->disk->id}/{$file->id}");
     }
 
     /** @test */
@@ -240,7 +245,7 @@ class FileTest extends TestCase
 
         $response = $this
             ->be($this->owner, 'api')
-            ->json('GET', "/api/files/{$file->uuid}/download")
+            ->json('GET', "/api/files/{$this->disk->id}/{$file->id}/download")
             ->assertStatus(200);
 
         $this->assertTrue($response->headers->get('content-type') === $file->mimetype);
@@ -254,14 +259,14 @@ class FileTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', '/api/files/replace/'.$file->id, [
+            ->json('POST', "/api/files/{$this->disk->id}/{$file->id}/replace", [
                 'file' => UploadedFile::fake()->image('file.jpeg', 25, 25),
             ])
             ->assertStatus(200);
 
         // assert file still exists at same location
         //   w/ same name..
-        Storage::disk('public')->assertExists($file->location);
+        Storage::disk($this->disk->handle)->assertExists($file->location);
 
         // assert file info has updated..
         $this->assertDatabaseHas('files', [
@@ -280,7 +285,7 @@ class FileTest extends TestCase
 
         $this
             ->be($this->owner, 'api')
-            ->json('POST', 'api/files/move', [
+            ->json('POST', "/api/files/{$this->disk->id}/move", [
                 'directory' => $directory->id,
                 'moving'    => [
                     'files'       => [$file->id],
@@ -306,7 +311,7 @@ class FileTest extends TestCase
         File::factory()->withName('dolor')->create(['caption' => 'foo']);
         File::factory()->withName('foo')->create(['caption' => 'bar']);
 
-        $response = $this->json('GET', '/api/files?filter[search]=lor');
+        $response = $this->json('GET', "/api/files/{$this->disk->id}?filter[search]=lor");
         $data     = collect($response->getData()->data);
 
         $this->assertCount(3, $data);
@@ -314,13 +319,13 @@ class FileTest extends TestCase
         $this->assertCount(1, $data->where('name', 'sit'));
         $this->assertCount(1, $data->where('name', 'dolor'));
 
-        $response = $this->json('GET', '/api/files?filter[search]=dolor');
+        $response = $this->json('GET', "/api/files/{$this->disk->id}?filter[search]=dolor");
         $data     = collect($response->getData()->data);
 
         $this->assertCount(1, $data);
         $this->assertCount(1, $data->where('name', 'dolor'));
 
-        $response = $this->json('GET', '/api/files?filter[search]=foo');
+        $response = $this->json('GET', "/api/files/{$this->disk->id}?filter[search]=foo");
         $data     = collect($response->getData()->data);
 
         $this->assertCount(2, $data);
@@ -341,13 +346,13 @@ class FileTest extends TestCase
         File::factory()->withName('do')->create();
 
         // forward sort
-        $response = $this->json('GET', '/api/files?sort=name');
+        $response = $this->json('GET', "/api/files/{$this->disk->id}?sort=name");
         $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['amet', 'do', 'dolor', 'ipsum', 'lorem', 'sit'], $data);
 
         // reverse sort
-        $response = $this->json('GET', '/api/files?sort=-name');
+        $response = $this->json('GET', "/api/files/{$this->disk->id}?sort=-name");
         $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['sit', 'lorem', 'ipsum', 'dolor', 'do', 'amet'], $data);
@@ -366,13 +371,13 @@ class FileTest extends TestCase
         File::factory()->withName('do')->create(['bytes' => 500]);
 
         // forward sort
-        $response = $this->json('GET', '/api/files?sort=bytes');
+        $response = $this->json('GET', "/api/files/{$this->disk->id}?sort=bytes");
         $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['ipsum', 'amet', 'dolor', 'lorem', 'do', 'sit'], $data);
 
         // reverse sort
-        $response = $this->json('GET', '/api/files?sort=-bytes');
+        $response = $this->json('GET', "/api/files/{$this->disk->id}?sort=-bytes");
         $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['sit', 'do', 'lorem', 'dolor', 'amet', 'ipsum'], $data);
@@ -391,13 +396,13 @@ class FileTest extends TestCase
         File::factory()->withName('do')->create(['updated_at' => now()->addDays(5)]);
 
         // forward sort
-        $response = $this->json('GET', '/api/files?sort=updated_at');
+        $response = $this->json('GET', "/api/files/{$this->disk->id}?sort=updated_at");
         $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['lorem', 'dolor', 'ipsum', 'amet', 'do', 'sit'], $data);
 
         // reverse sort
-        $response = $this->json('GET', '/api/files?sort=-updated_at');
+        $response = $this->json('GET', "/api/files/{$this->disk->id}?sort=-updated_at");
         $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['sit', 'do', 'amet', 'ipsum', 'dolor', 'lorem'], $data);
@@ -414,13 +419,13 @@ class FileTest extends TestCase
         File::factory()->asVideo()->withName('sit')->create();
 
         // filter by image
-        $response = $this->json('GET', '/api/files?filter[display]=images');
+        $response = $this->json('GET', "/api/files/{$this->disk->id}?filter[display]=images");
         $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['ipsum', 'lorem'], $data);
 
         // filter by video
-        $response = $this->json('GET', '/api/files?filter[display]=videos');
+        $response = $this->json('GET', "/api/files/{$this->disk->id}?filter[display]=videos");
         $data     = collect($response->getData()->data)->pluck('name')->all();
 
         $this->assertSame(['sit'], $data);

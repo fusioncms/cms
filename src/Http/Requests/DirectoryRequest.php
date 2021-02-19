@@ -34,7 +34,10 @@ class DirectoryRequest extends Request
      */
     protected function prepareForValidation()
     {
+        $disk = $this->route('disk');
+        
         $this->merge([
+            'disk_id'   => $this->disk->id,
             'parent_id' => $this->parent_id ?? 0,
             'slug'      => $this->slug ?? Str::slug($this->name),
         ]);
@@ -48,6 +51,7 @@ class DirectoryRequest extends Request
     public function rules()
     {
         return [
+            'disk_id'   => 'required|integer',
             'name'      => 'required',
             'parent_id' => 'required|integer',
             'slug'      => Rule::unique('directories')
