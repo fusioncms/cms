@@ -23,15 +23,12 @@ class FileRequest extends Request
      */
     protected function prepareForValidation()
     {
-        $oldLocation = $this->file->location;
-        $newLocation = "files/{$this->file->uuid}-{$this->name}.{$this->file->extension}";
-
-        // Rename if necessary..
-        if ($oldLocation !== $newLocation) {
-            Storage::disk('public')->move($oldLocation, $newLocation);
-
-            $this->merge(['location' => $newLocation]);
-        }
+        $disk = $this->route('disk');
+        
+        $this->merge([
+            'disk_id'  => $disk->id,
+            'location' => "files/{$this->file->uuid}-{$this->name}.{$this->file->extension}",
+        ]);
     }
 
     /**
@@ -42,6 +39,7 @@ class FileRequest extends Request
     public function rules()
     {
         return [
+            'disk_id'  => 'required|integer',
             'name'     => 'required',
             'title'    => 'sometimes',
             'alt'      => 'sometimes',

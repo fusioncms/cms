@@ -22,7 +22,7 @@
 
 		<quick-edit
 			:file="directory"
-			:endpoint="'/api/directories/' + directory.id">
+			:endpoint="`/api/directories/${disk.id}/${directory.id}`">
 		</quick-edit>
 
 		<div class="gallery-subtitle">
@@ -65,6 +65,7 @@
 
         computed: {
 			...mapGetters({
+				disk:     'filemanager/getDisk',
 				selected: 'filemanager/getSelectedDirectories',
 			}),
 

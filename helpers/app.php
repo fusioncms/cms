@@ -51,10 +51,10 @@ function fusion()
     return app()->make(Fusion\Http\Dispatcher::class);
 }
 
-function glide()
+function glide($disk = 'public')
 {
     $request    = app('request');
-    $filesystem = app('filesystem')->getDriver();
+    $filesystem = Storage::disk($disk)->getDriver();
 
     return League\Glide\ServerFactory::create([
         'response'          => new League\Glide\Responses\LaravelResponseFactory($request),

@@ -16,6 +16,10 @@
         name: 'delete-file-modal',
 
         props: {
+            disk: {
+                required: true,
+            },
+
             file: {
                 required: true,
             },
@@ -25,7 +29,7 @@
             submit() {
                 let vm = this
 
-                axios.delete('/api/files/' + this.file.id).then(() => {
+                axios.delete(`/api/files/${this.disk.id}/${this.file.id}`).then(() => {
                     toast(vm.file.name + ' was successfully deleted.', 'success')
 
                     vm.$router.push({name: 'file-manager.index'})

@@ -429,7 +429,8 @@ const router = new Router({
             }
         },
         {
-            path: '/files',
+            path: '/files/:disk',
+            alias: '/files',
             component: () => import('@/pages/FileManager/Index'),
             name: 'file-manager.index',
             meta: {
@@ -438,7 +439,7 @@ const router = new Router({
             }
         },
         {
-            path: '/files/:uuid',
+            path: '/files/:disk/:file',
             component: () => import('@/pages/FileManager/Show'),
             name: 'file-manager.show',
             meta: {

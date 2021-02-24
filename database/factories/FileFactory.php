@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use Fusion\Models\Disk;
+use Fusion\Models\Directory;
 use Fusion\Models\File;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
@@ -25,6 +27,7 @@ class FileFactory extends Factory
     public function definition()
     {
         return [
+            'disk_id'      => Disk::first(),
             'directory_id' => 0,
             'uuid'         => ($uuid = unique_id()),
             'name'         => ($name = $this->faker->word),
@@ -79,6 +82,20 @@ class FileFactory extends Factory
     {
         return $this->state([
             'name' => $name,
+        ]);
+    }
+
+    /**
+     * Set model directory.
+     *
+     * @param mixed $directory
+     *
+     * @return $this
+     */
+    public function withDirectory($directory)
+    {
+        return $this->state([
+            'directory_id' => $directory,
         ]);
     }
 

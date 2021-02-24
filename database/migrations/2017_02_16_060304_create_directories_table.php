@@ -15,6 +15,7 @@ class CreateDirectoriesTable extends Migration
     {
         Schema::create('directories', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('disk_id');
             $table->unsignedBigInteger('parent_id')->default(0);
             $table->string('name');
             $table->string('slug');

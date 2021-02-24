@@ -3,6 +3,7 @@
 namespace Fusion\Providers;
 
 use Fusion\Facades\Menu;
+use Fusion\Models\Disk;
 use Fusion\Models\Matrix;
 use Fusion\Models\Taxonomy;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +34,23 @@ class MenuServiceProvider extends ServiceProvider
         });
     }
 
+    private function getFileManagerDisks()
+    {
+        $disks = Disk::all();
+
+        if ($disks->count() == 1) {
+            return ['title' => 'File Manager', 'to' => "/files/{$disk->first()->handle}", 'icon' => 'images'];
+        }
+
+        return [
+            'title'    => 'File Manager',
+            'icon'     => 'images',
+            'children' => $disks->mapWithKeys(function($disk) {
+                return [$disk->handle => ['title' => $disk->name, 'to' => "/files/{$disk->id}"]];
+            })
+        ];
+    }
+
     /**
      * Generate Admin Navigation.
      *
@@ -41,8 +59,9 @@ class MenuServiceProvider extends ServiceProvider
     private function adminNavigation()
     {
         $items = collect([
+            // -- General --
             'dashboard'   => ['title' => 'Dashboard', 'to' => '/', 'icon' => 'grip-horizontal', 'permission' => 'access.controlPanel'],
-            'filemanager' => ['title' => 'File Manager', 'to' => '/files', 'icon' => 'images'],
+            'filemanager' => $this->getFileManagerDisks(),
             'inbox'       => ['title' => 'Inbox', 'to' => '/inbox', 'icon' => 'inbox'],
         ]);
 
