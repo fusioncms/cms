@@ -137,21 +137,23 @@ class SyncSettings
 
         collect($fields)
             ->each(function ($item) use ($section, $existing, &$order) {
+                $fieldtype = fieldtypes()->get($item['type'] ?? 'input');
+
                 $field = $section->fields()->updateOrCreate([
                     'handle' => $item['handle'],
                 ], [
                     'name'       => $item['name'],
-                    'type'       => $item['type'] ?? 'input',
+                    'type'       => $fieldtype->getHandle(),
                     'help'       => $item['description'] ?? '',
                     'order'      => ++$order,
                     'validation' => $this->determineValidation($item),
-                    'settings'   => [
+                    'settings'   => array_merge($fieldtype->getSettings(), [
                         'default'   => $item['default'] ?? '',
                         'override'  => $item['override'] ?? false,
                         'options'   => $this->formatSettingOptions($item['options'] ?? []),
                         'hidden'    => $this->determineHidden($item),
                         'component' => $item['component'] ?? false,
-                    ],
+                    ]),
                 ]);
 
                 $existing->forget($field->id);

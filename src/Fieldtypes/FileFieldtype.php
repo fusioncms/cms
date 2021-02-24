@@ -43,7 +43,7 @@ class FileFieldtype extends Fieldtype
     public $settings = [
         'multiple'  => false,
         'accept'    => null,
-        'directory' => null,
+        'directory' => false,
     ];
 
     /**
@@ -79,47 +79,27 @@ class FileFieldtype extends Fieldtype
     public function persistRelationship($model, Field $field)
     {
         if (request()->hasFile($field->handle)) {
-            $files     = request()->file($field->handle);
-            $directory = Directory::firstOrCreate([
-                'name' => ($name = $field->settings['directory'] ?? 'uploads'),
-                'slug' => Str::slug($name),
-            ]);
-
+            $uploads   = request()->file($field->handle);
             $oldValues = $model->{$field->handle}->pluck('id');
-            $newValues = collect($files)
-                ->mapWithKeys(function ($file, $key) use ($field, $directory) {
-                    $uuid = unique_id();
-                    $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                    $extension = $file->extension();
-                    $bytes = $file->getSize();
-                    $mimetype = $file->getClientMimeType();
-                    $filetype = strtok($mimetype, '/');
-                    $location = "files/{$uuid}-{$name}.{$extension}";
+            $newValues = collect();
+            
+            foreach ($uploads as $key => $file){
+                foreach ((array) $field->settings['directory'] as $diskId => $data) {
+                    if ($data['status']) {
+                        $file = (new \Fusion\Services\FileUploader($file))
+                            ->setDisk($diskId)
+                            ->setDirectoryByPath($data['path'])
+                            ->persist();
 
-                    Storage::disk('public')->putFileAs('', $file, $location);
-
-                    if ($filetype == 'image') {
-                        list($width, $height) = getimagesize($file);
+                        $newValues->put($file->id, [
+                            'field_id' => $field->id,
+                            'order'    => $key + 1
+                        ]);
                     }
+                }
+            }
 
-                    $model = FileModel::create([
-                        'directory_id' => $directory->id,
-                        'uuid'         => $uuid,
-                        'name'         => $name,
-                        'extension'    => $extension,
-                        'bytes'        => $bytes,
-                        'mimetype'     => $mimetype,
-                        'location'     => $location,
-                        'width'        => $width ?? null,
-                        'height'       => $height ?? null,
-                    ]);
-
-                    return [$model['id'] => [
-                        'field_id' => $field->id,
-                        'order'    => $key + 1,
-                    ]];
-                });
-
+            // --
             $model->{$field->handle}()->detach($oldValues);
             $model->{$field->handle}()->attach($newValues);
         }

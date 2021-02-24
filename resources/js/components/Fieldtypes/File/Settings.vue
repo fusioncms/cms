@@ -23,17 +23,12 @@
             monospaced>
         </ui-input-group>
 
-        <ui-input-group
-            class="col w-full sm:w-1/2"
-            name="settings.directory"
-            label="Directory"
-            help="Directory where files will be uploaded to within the File Manager."
-            autocomplete="off"
-            placeholder="uploads"
+        <disk-path-selector
+            class="col w-full"
             v-model="settings.directory"
             :has-error="errors.has('settings.directory')"
             :error-message="errors.get('settings.directory')">
-        </ui-input-group>
+        </disk-path-selector>
     </div>
 </template>
 

@@ -3,6 +3,7 @@
 namespace Fusion\Tests\Feature\Fieldtypes;
 
 use Fusion\Models\Directory;
+use Fusion\Models\Disk;
 use Fusion\Models\Field;
 use Fusion\Models\File;
 use Fusion\Models\Matrix;
@@ -23,6 +24,14 @@ class FileFieldtypeTest extends TestCase
         parent::setUp();
         $this->handleValidationExceptions();
 
+        // --
+        Storage::fake('public');
+        Storage::fake('local');
+
+        $disks = Disk::all();
+        $this->publicDisk = $disks->get(0);
+        $this->localDisk = $disks->get(1);
+
         $this->matrix = Matrix::factory()
             ->asSingle()
             ->withName('File Field')
@@ -35,20 +44,27 @@ class FileFieldtypeTest extends TestCase
                         Field::factory()
                             ->withName('File')
                             ->withType('file')
+                            ->withSettings([
+                                'directory' => [
+                                    $this->publicDisk->id => [
+                                        'status' => true,
+                                        'path'   => 'uploads'
+                                    ]
+                                ]
+                            ])
                             ->make()
                             ->toArray()
                     );
             })
             ->create();
 
+        $this->field = $this->matrix->blueprint->fields->first();
         $this->model = Builders\Matrix::resolve($this->matrix->handle);
     }
 
     /** @test */
     public function assigning_file_to_a_matrix_will_populate_its_pivot_table()
     {
-        Storage::fake('public');
-
         $attributes = [
             'name' => 'New Page',
             'slug' => 'new-page',
@@ -63,11 +79,9 @@ class FileFieldtypeTest extends TestCase
             ->json('PATCH', "/api/singles/{$this->matrix->id}", $attributes)
             ->assertStatus(201);
 
-        $file      = File::latest()->first();
-        $directory = Directory::where('slug', 'uploads')->first();
+        $file = File::latest()->first();
 
         $this->assertDatabaseHas('files', [
-            'directory_id' => $directory->id,
             'name'         => 'foobar',
             'mimetype'     => 'image/png',
             'extension'    => 'png',
