@@ -65,16 +65,14 @@ class FileFieldtype extends Fieldtype
      */
     public function onPostFieldRequest($validator)
     {
-        $validator->after(function ($validator) {
-            $input = $validator->attributes();
-            $valid = collect($input['settings']['directory'])->contains(function($item, $key) {
-                return $item['status'] == true;
-            });
-
-            if (!$valid) {
-                $validator->errors()->add('settings.directory', 'At least one disk must be enabled.');
-            }
+        $input = $validator->attributes();
+        $valid = collect($input['settings']['directory'])->contains(function($item, $key) {
+            return $item['status'] == true;
         });
+
+        if (!$valid) {
+            $validator->errors()->add('settings.directory', 'At least one disk must be enabled.');
+        }
     }
 
     /**

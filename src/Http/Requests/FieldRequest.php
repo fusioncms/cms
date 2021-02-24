@@ -104,6 +104,8 @@ class FieldRequest extends Request
      */
     public function withValidator($validator)
     {
-        $this->fieldtype->onPostFieldRequest($validator);
+        $validator->after(function ($validator) {
+            $this->fieldtype->onPostFieldRequest($validator);
+        });
     }
 }
