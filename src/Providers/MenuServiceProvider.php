@@ -45,9 +45,9 @@ class MenuServiceProvider extends ServiceProvider
         return [
             'title'    => 'File Manager',
             'icon'     => 'images',
-            'children' => $disks->mapWithKeys(function($disk) {
+            'children' => $disks->mapWithKeys(function ($disk) {
                 return [$disk->handle => ['title' => $disk->name, 'to' => "/files/{$disk->id}"]];
-            })
+            }),
         ];
     }
 

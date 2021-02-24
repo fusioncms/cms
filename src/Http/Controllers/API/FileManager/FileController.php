@@ -66,7 +66,7 @@ class FileController extends Controller
      * Persist a new resource in storage.
      *
      * @param \Fusion\Http\Requests\UploadFileRequest $request
-     * @param \Fusion\Models\Disk $disk
+     * @param \Fusion\Models\Disk                     $disk
      *
      * @return \Fusion\Http\Resources\FileResource
      */

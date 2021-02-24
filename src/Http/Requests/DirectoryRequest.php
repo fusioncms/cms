@@ -35,7 +35,7 @@ class DirectoryRequest extends Request
     protected function prepareForValidation()
     {
         $disk = $this->route('disk');
-        
+
         $this->merge([
             'disk_id'   => $this->disk->id,
             'parent_id' => $this->parent_id ?? 0,

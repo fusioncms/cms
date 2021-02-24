@@ -37,7 +37,7 @@ class UploadFileRequest extends Request
     protected function prepareForValidation()
     {
         $this->merge([
-            'directory_id' => (int)$this->directory_id,
+            'directory_id' => (int) $this->directory_id,
         ]);
     }
 

@@ -21,7 +21,7 @@ class Directory extends Model
         'disk_id',
         'parent_id',
         'name',
-        'slug'
+        'slug',
     ];
 
     /**

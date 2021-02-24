@@ -68,26 +68,26 @@ Route::apiResource('blueprints/{blueprint}/sections', 'SectionController');
 /**
  * API - FileManager Routes.
  */
-Route::prefix('files/{disk}')->group(function() {
+Route::prefix('files/{disk}')->group(function () {
     Route::get('{file}/download', 'FileManager\FileDownloadController@index');
-    Route::post('move',           'FileManager\FileMoveController@store');
+    Route::post('move', 'FileManager\FileMoveController@store');
     Route::post('{file}/replace', 'FileManager\FileReplaceController@store');
 
-    Route::get('',          'FileManager\FileController@index');
-    Route::get('{file}',    'FileManager\FileController@show');
-    Route::post('',         'FileManager\FileController@store');
-    Route::patch('{file}',  'FileManager\FileController@update');
+    Route::get('', 'FileManager\FileController@index');
+    Route::get('{file}', 'FileManager\FileController@show');
+    Route::post('', 'FileManager\FileController@store');
+    Route::patch('{file}', 'FileManager\FileController@update');
     Route::delete('{file}', 'FileManager\FileController@destroy');
 });
 
 /**
  * API - FileManager Directory Routes.
  */
-Route::prefix('directories/{disk}')->group(function() {
-    Route::get('',               'FileManager\DirectoryController@index');
-    Route::get('{directory}',    'FileManager\DirectoryController@show');
-    Route::post('',              'FileManager\DirectoryController@store');
-    Route::patch('{directory}',  'FileManager\DirectoryController@update');
+Route::prefix('directories/{disk}')->group(function () {
+    Route::get('', 'FileManager\DirectoryController@index');
+    Route::get('{directory}', 'FileManager\DirectoryController@show');
+    Route::post('', 'FileManager\DirectoryController@store');
+    Route::patch('{directory}', 'FileManager\DirectoryController@update');
     Route::delete('{directory}', 'FileManager\DirectoryController@destroy');
 });
 
