@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class FileDownloadController extends Controller
 {
-	/**
+    /**
      * Download the specific resource.
      *
      * @param \Illuminate\Http\Request $request

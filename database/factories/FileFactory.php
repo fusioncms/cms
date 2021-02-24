@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Fusion\Models\Disk;
 use Fusion\Models\Directory;
+use Fusion\Models\Disk;
 use Fusion\Models\File;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;

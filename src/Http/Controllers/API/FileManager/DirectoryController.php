@@ -5,8 +5,8 @@ namespace Fusion\Http\Controllers\API\FileManager;
 use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\DirectoryRequest;
 use Fusion\Http\Resources\DirectoryResource;
-use Fusion\Models\Disk;
 use Fusion\Models\Directory;
+use Fusion\Models\Disk;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -19,7 +19,7 @@ class DirectoryController extends Controller
      *
      * @param \Fusion\Http\Requests\Request $request
      * @param \Fusion\Models\Disk           $disk
-     * 
+     *
      * @return \Fusion\Http\Resources\DirectoryResource
      */
     public function index(Request $request, Disk $disk)

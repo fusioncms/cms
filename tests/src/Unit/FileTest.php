@@ -2,6 +2,8 @@
 
 namespace Fusion\Tests\Unit;
 
+use Fusion\Models\Directory;
+use Fusion\Models\Disk;
 use Fusion\Models\File;
 use Fusion\Models\Directory;
 use Fusion\Models\Disk;
