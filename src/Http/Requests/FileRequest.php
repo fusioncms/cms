@@ -2,8 +2,6 @@
 
 namespace Fusion\Http\Requests;
 
-use Illuminate\Support\Facades\Storage;
-
 class FileRequest extends Request
 {
     /**
@@ -24,7 +22,7 @@ class FileRequest extends Request
     protected function prepareForValidation()
     {
         $disk = $this->route('disk');
-        
+
         $this->merge([
             'disk_id'  => $disk->id,
             'location' => "files/{$this->file->uuid}-{$this->name}.{$this->file->extension}",

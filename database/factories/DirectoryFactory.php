@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Fusion\Models\Disk;
 use Fusion\Models\Directory;
+use Fusion\Models\Disk;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
