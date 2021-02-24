@@ -46,7 +46,7 @@ class FileUploader
             'bytes'     => $file->getSize(),
             'mimetype'  => ($mimetype = $file->getClientMimeType()),
             'filetype'  => strtok($mimetype, '/'),
-            'location'  => "{$uuid}-{$name}.{$extn}",
+            'location'  => "files/{$uuid}-{$name}.{$extn}",
         ], $overrides);
 
 		$this->setDefaultDisk();
@@ -56,7 +56,7 @@ class FileUploader
 	/**
 	 * Set Disk for File to Upload.
 	 * 
-	 * @param \Fusion\Models\Disk $disk
+	 * @param \Fusion\Models\Disk|int $disk
 	 *
 	 * @return $this
 	 */
@@ -64,7 +64,7 @@ class FileUploader
 	{
 		if (is_a($disk, Disk::class)) {
 			$this->disk = $disk;
-		} else {
+		} elseif (is_numeric($disk) and $disk > 0) {
 			$this->disk = Disk::findOrFail($disk);
 		}
 
@@ -74,13 +74,17 @@ class FileUploader
 	/**
 	 * Set Directory for File to Upload.
 	 * 
-	 * @param \Fusion\Models\Disk $disk
+	 * @param \Fusion\Models\Directory|int $disk
 	 *
 	 * @return $this
 	 */
-	public function setDirectory(Directory $directory)
+	public function setDirectory($directory)
 	{
-		$this->directory = $directory;
+		if (is_a($directory, Directory::class)) {
+			$this->directory = $directory;
+		} elseif (is_numeric($directory) and $directory > 0) {
+			$this->directory = Directory::findOrFail($directory);
+		}
 
 		return $this;
 	}

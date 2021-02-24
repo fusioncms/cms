@@ -8,6 +8,7 @@ use Fusion\Http\Requests\UploadFileRequest;
 use Fusion\Http\Resources\FileResource;
 use Fusion\Models\Disk;
 use Fusion\Models\File;
+use Fusion\Services\FileUploader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -74,40 +75,10 @@ class FileController extends Controller
     {
         $attributes = $request->validated();
 
-        $upload    = $request->file('file');
-        $directory = $attributes['directory_id'];
-        $uuid      = unique_id();
-        $name      = pathinfo($upload->getClientOriginalName(), PATHINFO_FILENAME);
-        $extension = $upload->extension();
-        $bytes     = $upload->getSize();
-        $mimetype  = $upload->getClientMimeType();
-        $filetype  = strtok($mimetype, '/');
-        $location  = "files/{$uuid}-{$name}.{$extension}";
-
-        Storage::disk($disk->handle)->putFileAs('', $upload, $location);
-
-        switch ($filetype) {
-            case 'image':
-                list($width, $height) = getimagesize($upload);
-            break;
-            case 'audio':
-            case 'video':
-                // TODO: capture duration
-            break;
-        }
-
-        $file = File::create([
-            'disk_id'      => $disk->id,
-            'directory_id' => $directory,
-            'uuid'         => $uuid,
-            'name'         => $name,
-            'extension'    => $extension,
-            'bytes'        => $bytes,
-            'mimetype'     => $mimetype,
-            'location'     => $location,
-            'width'        => $width ?? null,
-            'height'       => $height ?? null,
-        ]);
+        $file = (new FileUploader($request->file('file')))
+            ->setDisk($disk)
+            ->setDirectory($attributes['directory_id'])
+            ->persist();
 
         return new FileResource($file);
     }

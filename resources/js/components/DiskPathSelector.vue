@@ -1,28 +1,20 @@
 <template>
 	<div>
-		<ui-field-group
+		<ui-fieldset
 			class="row"
 			name="disk-selection"
-			fieldId="disk-selection"
-			label="Select which disks & directory files will be uploaded to"
+			label="Disk &amp; directory path configuration"
+			help="<small>Directory path will be created if it doesn't exist.</small>"
 			:hasError="hasError"
 			:errorMessage="errorMessage">
 
 			<div class="input-group items-start" v-for="disk in disks" :key="disk.handle">
 				<ui-checkbox
-					v-if="multiple"
 					class="col w-1/4"
 					:id="disk.id"
 					:name="`${disk.handle}-status`"
-				    v-model="model[disk.id].status">
-				    {{ disk.name }}
-				</ui-checkbox>
-				<ui-checkbox
-					v-else
-					class="col w-1/4"
-					:id="disk.id"
-					name="disk-status"
-				    v-model="model[disk.id].status">
+				    v-model="model[disk.id].status"
+				    @input="toggle(disk.id)">
 				    {{ disk.name }}
 				</ui-checkbox>
 
@@ -31,11 +23,10 @@
 				    :name="`${disk.handle}-path`"
 					:readonly="!model[disk.id].status"
 				    placeholder="Directory Path"
-				    help="<small>Directory will be created if it doesn't exist.</small>"
 				    v-model="model[disk.id].path">
 				</ui-input-group>
 			</div>
-	    </ui-field-group>
+	    </ui-fieldset>
 	</div>
 </template>
 
@@ -53,8 +44,8 @@
 			},
 
 			value: {
-				type: Object,
-				required: false,
+				type: [Boolean,Object],
+				required: true,
 				default: () => {}
 			},
 
@@ -76,9 +67,14 @@
 				disks: 'disks/getDisks',
 			}),
 
+			message() {
+				if (this.multiple)
+					return "Set disk and directory path"
+			},
+
 			model: {
 				get() {
-					let model = _.defaultTo(this.value, {})
+					let model = _.isObject(this.value) ? this.value : {}
 
 					_.each(this.disks, (disk) => {
 						model[disk.id] = {
@@ -101,6 +97,18 @@
                     this.$emit('input', value)
                 }
             }
+        },
+
+        methods: {
+			toggle(id) {
+				if (!this.multiple) {
+					_.each(this.model, (item, key) => {
+						if (key != id) {
+							item.status = false
+						}
+					})
+				}
+			}
         },
 
 		created() {
