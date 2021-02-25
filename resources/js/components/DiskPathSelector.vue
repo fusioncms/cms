@@ -1,65 +1,70 @@
 <template>
-	<div>
-		<ui-fieldset
-			class="row"
-			name="disk-selection"
-			label="Disk &amp; directory path configuration"
-			help="<small>Directory path will be created if it doesn't exist.</small>"
-			:hasError="hasError"
-			:errorMessage="errorMessage">
+	<ui-fieldset
+		name="disk-selection"
+		label="Directory path selector"
+		help="<small>Directory path will be created if it doesn't exist.</small>">
 
-			<div class="input-group items-start" v-for="disk in disks" :key="disk.handle">
-				<ui-checkbox
-					class="col w-1/4"
-					:id="disk.id"
-					:name="`${disk.handle}-status`"
-				    v-model="model[disk.id].status"
-				    @input="toggle(disk.id)">
-				    {{ disk.name }}
-				</ui-checkbox>
+		<table class="table" v-if="model && model.length > 0">
+			<tr v-for="(item, key) in model" :key="item._id">
+				<td>
+					<ui-select
+						:name="`${item._id}-disk`"
+						:options="diskOptions"
+						v-model="model[key].disk">
+					</ui-select>
+				</td>
+				<td>
+					<ui-input
+						class="col"
+						:name="`${item._id}-path`"
+						placeholder="Directory Path"
+						v-model="model[key].path">
+					</ui-input>
+				</td>
+				<td class="w-16" v-if="multiple && model.length > 1">
+					<ui-button icon @click.prevent="remove(item._id)">
+						<fa-icon icon="times"></fa-icon>
+						<span class="sr-only">Destroy</span>
+					</ui-button>
+				</td>
+			</tr>
+        </table>
 
-				<ui-input-group
-					class="col w-3/4"
-				    :name="`${disk.handle}-path`"
-					:readonly="!model[disk.id].status"
-				    placeholder="Directory Path"
-				    v-model="model[disk.id].path">
-				</ui-input-group>
+		<div v-if="multiple || model.length == 0" class="row mt-3">
+			<div class="input-group">
+				<ui-select
+					class="col w-1/2"
+					name="new-disk"
+					label="Add disk"
+					:options="diskOptions"
+					v-model="newDisk">
+				</ui-select>
+
+				<ui-button icon @click.prevent="add" :disabled="!newDisk">
+	                <fa-icon icon="plus"></fa-icon>
+	                <span class="sr-only">Add</span>
+	            </ui-button>
 			</div>
-	    </ui-fieldset>
-	</div>
+		</div>
+	</ui-fieldset>
 </template>
 
 <script>
+	import uniqid from 'uniqid'
 	import { mapGetters } from 'vuex'
 
 	export default {
 		name: 'disk-path-selector',
 
+		data() {
+			return {
+				newDisk: false
+			}
+		},
+
 		props: {
-			multiple: {
-				type: Boolean,
-				required: false,
-				default: false
-			},
-
-			value: {
-				type: [Boolean,Object],
-				required: true,
-				default: () => {}
-			},
-
-			hasError: {
-                required: false,
-                type: Boolean,
-                default: false,
-            },
-
-            errorMessage: {
-                required: false,
-                type: String,
-                default: '',
-            },
+			multiple: Boolean,
+			value: Array
 		},
 
 		computed: {
@@ -67,52 +72,47 @@
 				disks: 'disks/getDisks',
 			}),
 
-			message() {
-				if (this.multiple)
-					return "Set disk and directory path"
+			diskOptions() {
+				return _.map(this.disks, (disk) => {
+					return { label: disk.name, value: disk.id }
+				})
 			},
 
 			model: {
 				get() {
-					let model = _.isObject(this.value) ? this.value : {}
-
-					_.each(this.disks, (disk) => {
-						model[disk.id] = {
-							status: _.has(model, [disk.id, 'status']) ? model[disk.id].status : false,
-							path: _.has(model, [disk.id, 'path']) ? model[disk.id].path : '',
-						}
-					})
-
-					return model
+					return this.value
 				},
 
-				set(value) { /* see 'watch' */ }
+				set(value) {
+					this.$emit('input', value)
+				}
 			}
 		},
 
-		watch: {
-            model: {
-                deep: true,
-                handler(value) {
-                    this.$emit('input', value)
-                }
-            }
-        },
+		methods: {
+			new(disk = '1', path = '') {
+				return { _id: uniqid(), disk, path }
+			},
 
-        methods: {
-			toggle(id) {
-				if (!this.multiple) {
-					_.each(this.model, (item, key) => {
-						if (key != id) {
-							item.status = false
-						}
-					})
-				}
-			}
-        },
+			add() {
+                if (this.newDisk) {
+                    this.model.push(this.new(this.newDisk))
+                    this.newDisk = false
+                }
+            },
+
+            remove(id) {
+                this.model = _.filter(this.model,
+                	(item) => item._id !== id)
+            },
+		},
 
 		created() {
 			this.$store.dispatch('disks/fetchDisks')
+
+			if (_.isEmpty(this.value)) {
+				this.model = [ this.new( )]
+			}
 		}
 	}
 </script>

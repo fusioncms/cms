@@ -44,36 +44,18 @@ class FileFieldtype extends Fieldtype
     public $settings = [
         'multiple'  => false,
         'accept'    => null,
-        'directory' => false,
+        'directory' => [],  // Example: [{ _id: 1, disk: 1, path: 'foo/bar' }]
     ];
 
     /**
      * @var array
      */
     public $rules = [
-        'settings.multiple'           => 'required|boolean',
-        'settings.accept'             => 'nullable|numeric',
-        'settings.directory.*.status' => 'required|boolean',
-        'settings.directory.*.path'   => 'sometimes|string',
+        'settings.multiple'         => 'required|boolean',
+        'settings.accept'           => 'nullable|numeric',
+        'settings.directory.*.disk' => 'required',
+        'settings.directory.*.path' => 'nullable|string',
     ];
-
-    /**
-     * Add additional checks made from FieldRequest.
-     *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return void
-     */
-    public function onPostFieldRequest($validator)
-    {
-        $input = $validator->attributes();
-        $valid = collect($input['settings']['directory'])->contains(function($item, $key) {
-            return $item['status'] == true;
-        });
-
-        if (!$valid) {
-            $validator->errors()->add('settings.directory', 'At least one disk must be enabled.');
-        }
-    }
 
     /**
      * Generate relationship methods for associated Model.
@@ -108,23 +90,26 @@ class FileFieldtype extends Fieldtype
     public function persistRelationship($model, Field $field)
     {
         if (request()->hasFile($field->handle)) {
-            $uploads   = request()->file($field->handle);
+            $files     = request()->file($field->handle);
             $oldValues = $model->{$field->handle}->pluck('id');
             $newValues = collect();
             
-            foreach ($uploads as $key => $file) {
-                foreach ((array) $field->settings['directory'] as $diskId => $data) {
-                    if ($data['status']) {
-                        $file = (new FileUploader($file))
-                            ->setDisk($diskId)
-                            ->setDirectoryByPath($data['path'])
-                            ->persist();
+            foreach ($files as $key => $file) {
+                foreach ((array) $field->settings['directory'] as $data) {
+                    /**
+                     * Create file record for every
+                     *   disk/directory path.
+                     * 
+                     */
+                    $file = (new FileUploader($file))
+                        ->setDisk($data['disk'])
+                        ->setDirectoryByPath($data['path'])
+                        ->persist();
 
-                        $newValues->put($file->id, [
-                            'field_id' => $field->id,
-                            'order'    => $key + 1
-                        ]);
-                    }
+                    $newValues->put($file->id, [
+                        'field_id' => $field->id,
+                        'order'    => $key + 1
+                    ]);
                 }
             }
 

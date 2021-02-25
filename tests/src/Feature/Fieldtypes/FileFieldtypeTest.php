@@ -48,9 +48,10 @@ class FileFieldtypeTest extends TestCase
                             ->withType('file')
                             ->withSettings([
                                 'directory' => [
-                                    $this->disk->id => [
-                                        'status' => true,
-                                        'path'   => $this->directory->slug,
+                                    [
+                                        '_id'  => '1234',
+                                        'disk' => $this->disk->id,
+                                        'path' => $this->directory->slug,
                                     ]
                                 ]
                             ])
@@ -125,7 +126,7 @@ class FileFieldtypeTest extends TestCase
         $this->field->update([
             'settings' => array_merge($this->field->settings->toArray(), [
                 'directory' => [
-                    $this->disk->id => [ 'status' => true, 'path' => 'another']
+                    [ '_id' => '1234', 'disk' => $this->disk->id, 'path' => 'another']
                 ]
             ])
         ]);

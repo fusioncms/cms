@@ -31,6 +31,11 @@ class FileUploader
 	protected $info = [];
 
 	/**
+	 * @var string
+	 */
+	protected $prefix = 'files';
+
+	/**
 	 * Create new instance.
 	 * 
 	 * @param \Illuminate\Http\UploadedFile $file
@@ -46,7 +51,7 @@ class FileUploader
             'bytes'     => $file->getSize(),
             'mimetype'  => ($mimetype = $file->getClientMimeType()),
             'filetype'  => strtok($mimetype, '/'),
-            'location'  => "files/{$uuid}-{$name}.{$extn}",
+            'location'  => "{$this->prefix}/{$uuid}-{$name}.{$extn}",
         ], $overrides);
 
 		$this->setDefaultDisk();
@@ -102,13 +107,17 @@ class FileUploader
 		$fullpath = explode("/", trim($directoryPath, "/"));
 
         foreach ($fullpath as $path) {
-            $this->directory = Directory::firstOrCreate([
-                'disk_id'   => $this->disk->id,
-                'slug'      => str_handle($path)
-            ],[
-                'parent_id' => $this->directory ? $this->directory->id : 0,
-                'name'      => ucwords($path),
-            ]);
+        	$path = trim($path);
+
+        	if (!empty($path)) {
+	            $this->directory = Directory::firstOrCreate([
+	                'disk_id'   => $this->disk->id,
+	                'slug'      => str_handle($path)
+	            ],[
+	                'parent_id' => $this->directory ? $this->directory->id : 0,
+	                'name'      => ucwords($path),
+	            ]);
+	        }
         }
 
         return $this;
