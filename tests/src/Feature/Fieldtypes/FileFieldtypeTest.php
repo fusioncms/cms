@@ -30,7 +30,7 @@ class FileFieldtypeTest extends TestCase
         // --
         Storage::fake('public');
 
-        $this->disk      = Disk::where('handle','public')->first();
+        $this->disk      = Disk::where('handle', 'public')->first();
         $this->directory = Directory::factory()->create(['disk_id' => $this->disk->id, 'name' => 'uploads']);
         // --
 
@@ -52,8 +52,8 @@ class FileFieldtypeTest extends TestCase
                                         '_id'  => '1234',
                                         'disk' => $this->disk->id,
                                         'path' => $this->directory->slug,
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ])
                             ->make()
                             ->toArray()
@@ -61,7 +61,6 @@ class FileFieldtypeTest extends TestCase
             })
             ->create();
 
-        
         $this->field = $this->matrix->blueprint->fields->first();
         $this->model = Builders\Matrix::resolve($this->matrix->handle);
     }
@@ -126,20 +125,20 @@ class FileFieldtypeTest extends TestCase
         $this->field->update([
             'settings' => array_merge($this->field->settings->toArray(), [
                 'directory' => [
-                    [ '_id' => '1234', 'disk' => $this->disk->id, 'path' => 'another']
-                ]
-            ])
+                    ['_id' => '1234', 'disk' => $this->disk->id, 'path' => 'another'],
+                ],
+            ]),
         ]);
 
         list($entry, $attributes) = $this->generateNewEntry();
 
-        $file = $entry->file->first();
-        $directory = Directory::where('slug','another')->first();
+        $file      = $entry->file->first();
+        $directory = Directory::where('slug', 'another')->first();
 
         $this->assertDatabaseHas('directories', [
             'disk_id' => $this->disk->id,
             'name'    => 'Another',
-            'slug'    => 'another'
+            'slug'    => 'another',
         ]);
 
         $this->assertDatabaseHas('files', [
@@ -151,9 +150,10 @@ class FileFieldtypeTest extends TestCase
 
     /**
      * Generates new entry with attribute overrides.
-     * [Helper]
-     * 
-     * @param  array  $overrides
+     * [Helper].
+     *
+     * @param array $overrides
+     *
      * @return \Fusion\Models\Singles\{...}
      */
     private function generateNewEntry(array $overrides = [])
