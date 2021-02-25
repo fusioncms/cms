@@ -318,6 +318,17 @@ abstract class Fieldtype
     }
 
     /**
+     * Add additional checks made from FieldRequest.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function onPostFieldRequest($validator)
+    {
+        return;
+    }
+
+    /**
      * Cast the variable to the appropriate data type.
      *
      * @param mixed $value

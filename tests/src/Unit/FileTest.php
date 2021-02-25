@@ -2,9 +2,9 @@
 
 namespace Fusion\Tests\Unit;
 
+use Fusion\Models\File;
 use Fusion\Models\Directory;
 use Fusion\Models\Disk;
-use Fusion\Models\File;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;

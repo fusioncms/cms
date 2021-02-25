@@ -78,7 +78,7 @@
         computed: {
             model: {
                 get() {
-                    return this.value || []
+                    return _.defaultTo(this.value, [])
                 },
 
                 set(value) {

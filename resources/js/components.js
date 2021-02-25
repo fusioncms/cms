@@ -35,6 +35,7 @@ Vue.component('settings-modal', require('@/components/Modals/SettingsModal').def
 Vue.component('sidebar', require('@/components/Sidebar/Sidebar').default)
 Vue.component('sidebar-section', require('@/components/Sidebar/SidebarSection').default)
 Vue.component('status-card', require('@/components/Cards/StatusCard').default)
+Vue.component('disk-path-selector', require('@/components/DiskPathSelector').default)
 
 // Interfaces
 Vue.component('analytics-overview', require('@/interfaces/Analytics/AnalyticsOverview').default)

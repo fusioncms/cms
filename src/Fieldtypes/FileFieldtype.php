@@ -6,6 +6,7 @@ use Fusion\Http\Resources\FileResource;
 use Fusion\Models\Directory;
 use Fusion\Models\Field;
 use Fusion\Models\File as FileModel;
+use Fusion\Services\FileUploader;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -43,7 +44,17 @@ class FileFieldtype extends Fieldtype
     public $settings = [
         'multiple'  => false,
         'accept'    => null,
-        'directory' => null,
+        'directory' => [],  // Example: [{ _id: 1, disk: 1, path: 'foo/bar' }]
+    ];
+
+    /**
+     * @var array
+     */
+    public $rules = [
+        'settings.multiple'         => 'required|boolean',
+        'settings.accept'           => 'nullable|numeric',
+        'settings.directory.*.disk' => 'required',
+        'settings.directory.*.path' => 'nullable|string',
     ];
 
     /**
@@ -80,46 +91,29 @@ class FileFieldtype extends Fieldtype
     {
         if (request()->hasFile($field->handle)) {
             $files     = request()->file($field->handle);
-            $directory = Directory::firstOrCreate([
-                'name' => ($name = $field->settings['directory'] ?? 'uploads'),
-                'slug' => Str::slug($name),
-            ]);
-
             $oldValues = $model->{$field->handle}->pluck('id');
-            $newValues = collect($files)
-                ->mapWithKeys(function ($file, $key) use ($field, $directory) {
-                    $uuid = unique_id();
-                    $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                    $extension = $file->extension();
-                    $bytes = $file->getSize();
-                    $mimetype = $file->getClientMimeType();
-                    $filetype = strtok($mimetype, '/');
-                    $location = "files/{$uuid}-{$name}.{$extension}";
+            $newValues = collect();
+            
+            foreach ($files as $key => $file) {
+                foreach ((array) $field->settings['directory'] as $data) {
+                    /**
+                     * Create file record for every
+                     *   disk/directory path.
+                     * 
+                     */
+                    $file = (new FileUploader($file))
+                        ->setDisk($data['disk'])
+                        ->setDirectoryByPath($data['path'])
+                        ->persist();
 
-                    Storage::disk('public')->putFileAs('', $file, $location);
-
-                    if ($filetype == 'image') {
-                        list($width, $height) = getimagesize($file);
-                    }
-
-                    $model = FileModel::create([
-                        'directory_id' => $directory->id,
-                        'uuid'         => $uuid,
-                        'name'         => $name,
-                        'extension'    => $extension,
-                        'bytes'        => $bytes,
-                        'mimetype'     => $mimetype,
-                        'location'     => $location,
-                        'width'        => $width ?? null,
-                        'height'       => $height ?? null,
-                    ]);
-
-                    return [$model['id'] => [
+                    $newValues->put($file->id, [
                         'field_id' => $field->id,
-                        'order'    => $key + 1,
-                    ]];
-                });
+                        'order'    => $key + 1
+                    ]);
+                }
+            }
 
+            // --
             $model->{$field->handle}()->detach($oldValues);
             $model->{$field->handle}()->attach($newValues);
         }
