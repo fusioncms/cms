@@ -99,7 +99,8 @@ class FieldRequest extends Request
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param \Illuminate\Validation\Validator $validator
+     *
      * @return void
      */
     public function withValidator($validator)

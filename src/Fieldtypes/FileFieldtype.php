@@ -5,7 +5,6 @@ namespace Fusion\Fieldtypes;
 use Fusion\Http\Resources\FileResource;
 use Fusion\Models\Directory;
 use Fusion\Models\Field;
-use Fusion\Models\File as FileModel;
 use Fusion\Services\FileUploader;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -93,13 +92,12 @@ class FileFieldtype extends Fieldtype
             $files     = request()->file($field->handle);
             $oldValues = $model->{$field->handle}->pluck('id');
             $newValues = collect();
-            
+
             foreach ($files as $key => $file) {
                 foreach ((array) $field->settings['directory'] as $data) {
                     /**
                      * Create file record for every
                      *   disk/directory path.
-                     * 
                      */
                     $file = (new FileUploader($file))
                         ->setDisk($data['disk'])
@@ -108,7 +106,7 @@ class FileFieldtype extends Fieldtype
 
                     $newValues->put($file->id, [
                         'field_id' => $field->id,
-                        'order'    => $key + 1
+                        'order'    => $key + 1,
                     ]);
                 }
             }

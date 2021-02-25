@@ -320,12 +320,12 @@ abstract class Fieldtype
     /**
      * Add additional checks made from FieldRequest.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param \Illuminate\Validation\Validator $validator
+     *
      * @return void
      */
     public function onPostFieldRequest($validator)
     {
-        return;
     }
 
     /**
