@@ -49,7 +49,7 @@
             :error-message="errors.get('settings.allow_uploads')">
         </ui-toggle>
 
-        <ui-select
+        <ui-select-group
             class="col w-full sm:w-1/2"
             name="settings.disk"
             label="Disk"
@@ -57,9 +57,9 @@
             v-model="settings.disk"
             :has-error="errors.has('settings.disk')"
             :error-message="errors.get('settings.disk')">
-        </ui-select>
+        </ui-select-group>
 
-        <ui-select
+        <ui-select-group
             class="col w-full sm:w-1/2"
             name="settings.directory"
             label="Starting directory"
@@ -67,7 +67,7 @@
             v-model="settings.directory"
             :has-error="errors.has('settings.directory')"
             :error-message="errors.get('settings.directory')">
-        </ui-select>
+        </ui-select-group>
     </div>
 </template>
 

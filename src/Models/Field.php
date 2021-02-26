@@ -3,6 +3,7 @@
 namespace Fusion\Models;
 
 use Fusion\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Field extends Model
@@ -65,5 +66,19 @@ class Field extends Model
     public function type()
     {
         return fieldtypes()->get($this->type);
+    }
+
+    /**
+     * Returns validation parameters,
+     *   else if no validation returns false.
+     * 
+     * @param  string $value
+     * @return \Illuminate\Support\Collection|false
+     */
+    public function getValidationAttribute($value)
+    {
+        $value = collect(json_decode($value));
+
+        return $value->isNotEmpty() ? $value : false;
     }
 }

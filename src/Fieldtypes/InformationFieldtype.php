@@ -32,5 +32,5 @@ class InformationFieldtype extends Fieldtype
     /**
      * @var array
      */
-    public $validation = false;
+    public $validation = [];  // no validation
 }

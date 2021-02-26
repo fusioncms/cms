@@ -58,7 +58,7 @@ class FieldsetFieldtype extends Fieldtype
     /**
      * @var array
      */
-    public $validation = false;
+    public $validation = [];  // no validation
 
     /**
      * Get custom attributes for validator errors.
