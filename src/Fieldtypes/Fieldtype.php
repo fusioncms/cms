@@ -35,16 +35,22 @@ abstract class Fieldtype
     public $column = null;
 
     /**
+     * Field setting validation rules (FieldRequest)
+     * 
      * @var array
      */
     public $rules = [];
 
     /**
+     * Field setting custom message (FieldRequest)
+     * 
      * @var array
      */
     public $messages = [];
 
     /**
+     * Field setting custom attribute (FieldRequest)
+     * 
      * @var array
      */
     public $attributes = [];

@@ -36,7 +36,7 @@
             <div class="card__body flex items-center justify-center">
                 <div v-if="file.type == 'image'">
                     <ui-img
-                        :src="fileSrc"
+                        :src="fileSrc(file, 1500, 1500, 'max')"
                         :alt="file.alt"
                         background-color="#ffffff"
                         class="rounded">
@@ -195,11 +195,7 @@
         computed: {
             ...mapGetters({
                 disk: 'filemanager/getDisk',
-            }),
-
-            fileSrc(file) {
-                return `${this.file.url}?w=1500&h=1500&fit=max&t=${this.$moment.utc(this.file.updated_at).format('X')}`
-            }
+            })
         },
 
         watch: {

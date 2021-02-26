@@ -32,7 +32,6 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
-    import _ from 'lodash'
     import vue2Dropzone from 'vue2-dropzone'
     import 'vue2-dropzone/dist/vue2Dropzone.min.css'
     import FileProgress from './FileProgress.vue'
