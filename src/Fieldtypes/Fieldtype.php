@@ -242,9 +242,13 @@ abstract class Fieldtype
      */
     public function rules(Field $field, $value = null)
     {
-        return [
-            $field->handle => $field->validation->get('value') ?: 'sometimes',
-        ];
+        if ($field->validation) {
+            return [
+                $field->handle => $field->validation->get('value') ?: 'sometimes',
+            ];
+        }
+
+        return [];
     }
 
     /**
