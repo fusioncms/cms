@@ -14,7 +14,6 @@
             <vue-dropzone ref="dropzone_element" id="dropzone"
                 v-if="dropzoneOptions"
                 :options="dropzoneOptions"
-                @vdropzone-mounted="configureDZ"
                 @vdropzone-drag-leave="setDropzoneVisible(false)"
                 @vdropzone-success="dzUploaded"
                 @vdropzone-queue-complete="dzComplete"
@@ -66,14 +65,21 @@
                     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token')
                 }
                 return token
-            }
+            },
         },
 
         watch: {
             disk(value) {
-                this.dropzoneOptions = {
-                    url: `/api/files/${value.id}`,
-                    headers: {},
+                if (this.$refs.dropzone_element) {
+                    // update endpoint
+                    this.$refs.dropzone_element.dropzone.options.url = `/api/files/${value.id}`
+                } else {
+                    this.dropzoneOptions = {
+                        url: `/api/files/${value.id}`,
+                        headers: {
+                            'X-CSRF-TOKEN':  this.csrf
+                        },
+                    }
                 }
             }
         },
@@ -94,12 +100,9 @@
                 document.querySelector('.dz-hidden-input').click()
             },
 
-            configureDZ() {
-                let dz = this.$refs.dropzone_element
-                dz.options.headers['X-CSRF-TOKEN'] = this.csrf
-            },
-
             dzPreSend(file, xhr, formData) {
+                this.$refs['dropzone_element'].url = `/api/files/${this.disk.id}`
+
                 formData.append('directory_id', this.currentDirectory)
             },
 
@@ -113,9 +116,8 @@
             },
 
             startUpload(files) {
-                let vm = this
-                vm.showUploads()
-                vm.setDropzoneVisible(false)
+                this.showUploads()
+                this.setDropzoneVisible(false)
             },
 
             showUploads() {
@@ -125,7 +127,7 @@
 
             updateProgress() {
                 let uploaded = _.filter(this.fileUploads, function(file){
-                return file.status == 'success' || file.status == 'error'
+                    return file.status == 'success' || file.status == 'error'
                 }).length
                 this.setUploadProgress((uploaded / this.fileUploads.length) * 100)
             },
