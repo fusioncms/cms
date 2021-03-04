@@ -39,7 +39,7 @@ class UserFieldtype extends Fieldtype
     /**
      * @var array
      */
-    public $validation = false;
+    public $validation = [];  // no validation
 
     /**
      * @var string

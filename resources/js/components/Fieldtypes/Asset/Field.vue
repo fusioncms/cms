@@ -21,7 +21,10 @@
         </ui-field-group>
 
 		<ui-modal name="file-manager" no-header no-footer extra-large v-model="modalOpen">
-			<file-uploader ref="uploader"></file-uploader>
+			<file-uploader
+				v-if="uploadsEnabled"
+				ref="uploader">
+			</file-uploader>
 
 			<div class="row" @dragenter="setDropzoneVisible(true)">
 				<div class="side-container">
@@ -38,19 +41,17 @@
 						<div class="card__body">
                     		<div class="toolbar">
                     			<div class="toolbar__group">
-									<ui-button icon @click.prevent="push">
-										<fa-icon class="icon" icon="arrow-alt-circle-left"></fa-icon>
-									</ui-button>
-                    			</div>
-
-                    			<div class="toolbar__group">
                     				<div class="buttons">
 										<div class="buttons__group">
-											<ui-button icon @click.prevent="$refs.uploader.openDZ()">
+											<ui-button icon @click.prevent="push">
+												<fa-icon class="icon" icon="arrow-alt-circle-left"></fa-icon>
+											</ui-button>
+
+											<ui-button v-if="uploadsEnabled" icon @click.prevent="$refs.uploader.openDZ()">
 												<fa-icon class="icon" :icon="['fas', 'upload']"></fa-icon>
 											</ui-button>
 
-											<ui-button icon v-modal:new-folder>
+											<ui-button v-if="navigationEnabled" icon v-modal:new-folder>
 												<fa-icon class="icon" :icon="['fas', 'folder-plus']"></fa-icon>
 											</ui-button>
 										</div>
@@ -70,15 +71,11 @@
 						</div>
 
 						<div class="flex items-center border-b border-gray-200 px-3 py-2">
-                            <ui-breadcrumbs>
-                                <ui-breadcrumb  v-for="(breadcrumb, index) in breadcrumbs" :key="breadcrumb.name" @click="navigate(breadcrumb)" :divider="index > 0">
-                                    {{ breadcrumb.name }}
-                                </ui-breadcrumb>
-                            </ui-breadcrumbs>
+                            <breadcrumb-action v-if="navigationEnabled"></breadcrumb-action>
 						</div>
 
 						<div class="gallery-container selectables">
-							<div class="gallery border-b border-gray-200 pb-2">
+							<div v-if="navigationEnabled" class="gallery border-b border-gray-200 pb-2">
 								<directory
 									v-for="directory in directories"
 									:key="directory.id"
@@ -119,6 +116,7 @@
 	import FileUploader  from '@/interfaces/FileManager/FileUploader.vue'
 	import FileSelection from '@/interfaces/FileManager/FileSelection.vue'
 
+	import BreadcrumbAction from '@/interfaces/FileManager/Actions/Breadcrumb.vue'
 	import DisplayAction    from '@/interfaces/FileManager/Actions/Display.vue'
 	import SearchAction     from '@/interfaces/FileManager/Actions/Search.vue'
 	import SortAction       from '@/interfaces/FileManager/Actions/Sort.vue'
@@ -136,10 +134,11 @@
 			'file-uploader':  FileUploader,
 			'file-selection': FileSelection,
 
-			'display-action': DisplayAction,
-			'search-action':  SearchAction,
-			'sort-action':    SortAction,
-			'view-action':    ViewAction,
+			'breadcrumb-action': BreadcrumbAction,
+			'display-action':    DisplayAction,
+			'search-action':     SearchAction,
+			'sort-action':       SortAction,
+			'view-action':       ViewAction,
 
 			'directory':      Directory,
 			'file':           File,
@@ -171,6 +170,14 @@
 		},
 
         computed: {
+        	uploadsEnabled() {
+        		return this.field.settings.allow_uploads
+        	},
+
+        	navigationEnabled() {
+        		return this.field.settings.allow_navigation
+        	},
+
 			selectionLimit() {
 				return Number(this.field.settings.limit) || Infinity
 			},
@@ -210,9 +217,9 @@
 
 			open() {
                 this.reset()
-                this.setCurrentDirectory(this.field.settings.root_directory || 0)
-                this.setRootDirectory(this.field.settings.root_directory || 0)
-                this.fetchFilesAndDirectories()
+                this.setCurrentDirectory(this.field.settings.directory || 0)
+                this.setRootDirectory(this.field.settings.directory || 0)
+                this.fetchDisk(this.field.settings.disk)
 
                 this.selection = [...this.model]
                 this.requestOpen = true
@@ -236,11 +243,9 @@
 
             navigate(directory) {
                 this.reset()
-                
                 this.setCurrentDirectory(directory.id)
-                this.setRootDirectory(this.field.settings.root_directory || 0)
-                
-                this.fetchFilesAndDirectories()
+                this.setRootDirectory(this.field.settings.directory || 0)
+                this.fetchDisk(this.field.settings.disk)
             }
 		},
 

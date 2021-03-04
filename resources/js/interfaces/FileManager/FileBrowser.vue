@@ -27,14 +27,14 @@
 	import Directory from './Browse/Directory.vue'
 	import File      from './Browse/File.vue'
 
+	import FileBrowserMixin  from '@/mixins/filebrowser'
+	import FileDragDropMixin from '@/mixins/filedragdrop'
+	import FileSelectorMixin from '@/mixins/fileselector'
+
 	export default {
 		name: 'file-manager-browser',
 
-		mixins: [
-			require('../../mixins/fileselector').default,
-			require('../../mixins/filedragdrop').default,
-            require('../../mixins/filebrowser').default,
-        ],
+		mixins: [FileBrowserMixin, FileDragDropMixin, FileSelectorMixin],
 
 		components: {
 			'directory': Directory,

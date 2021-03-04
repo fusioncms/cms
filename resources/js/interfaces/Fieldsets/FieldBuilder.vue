@@ -162,7 +162,7 @@
                     validation: data.validation ? _.cloneDeep(data.validation, true) : _.cloneDeep(type.validation, true),
                     prototype:  prototype
                 }
-                
+
                 if (prototype) {
                     this.field.add  = false
                     this.field.edit = field

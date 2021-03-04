@@ -1,5 +1,6 @@
 <template>
 	<ui-fieldset
+		class="border border-gray-300 p-3 rounded"
 		name="disk-selection"
 		label="Directory path selector"
 		help="<small>Directory path will be created if it doesn't exist.</small>">
@@ -30,7 +31,7 @@
 			</tr>
         </table>
 
-		<div v-if="multiple || model.length == 0" class="row mt-3">
+		<div v-if="multiple || model && model.length == 0" class="row mt-3">
 			<div class="input-group">
 				<ui-select
 					class="col w-1/2"

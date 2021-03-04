@@ -23,6 +23,7 @@ class FileController extends DataTableController
             'bytes',
             'extension',
             'created_at',
+            'updated_at',
         ];
     }
 
@@ -33,6 +34,7 @@ class FileController extends DataTableController
             'bytes',
             'extension',
             'created_at',
+            'updated_at',
         ];
     }
 
@@ -43,6 +45,7 @@ class FileController extends DataTableController
             'bytes',
             'extension',
             'created_at',
+            'updated_at',
         ];
     }
 
@@ -53,6 +56,7 @@ class FileController extends DataTableController
             'bytes'      => 'Filesize',
             'extension'  => 'Extension',
             'created_at' => 'Created',
+            'updated_at' => 'Last Modified',
         ];
     }
 }
