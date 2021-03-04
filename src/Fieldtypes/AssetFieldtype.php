@@ -43,7 +43,7 @@ class AssetFieldtype extends Fieldtype
 
     /**
      * Field setting validation rules (FieldRequest).
-     * 
+     *
      * @var array
      */
     public $rules = [
