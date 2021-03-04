@@ -11,7 +11,7 @@
 				src="/vendor/fusion/img/image-large.svg"
 				background-color="white"
 				class="gallery-image"
-				:lazySrc="fileSrc"
+				:lazySrc="fileSrc(file)"
 				:width="100"
 				:height="100"
 				:alt="file.alt"
@@ -79,16 +79,7 @@
 
             isSelected() {
                 return _.includes(this.selected, this.file.id)
-            },
-
-			fileSrc() {
-				switch(this.file.type) {
-					case 'image':
-						return `${this.file.url}?w=100&h=100&fit=crop&t=${this.$moment.utc(this.file.updated_at).format('X')}`
-					default:
-						return `/vendor/fusion/img/${this.file.type}-large.svg`
-				}
-			}
+            }
         }
     }
 </script>

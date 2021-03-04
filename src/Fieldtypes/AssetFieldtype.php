@@ -33,15 +33,32 @@ class AssetFieldtype extends Fieldtype
      * @var array
      */
     public $settings = [
-        'limit'                 => null,
-        'root_directory'        => null,
+        'limit'                 => 0,
+        'disk'                  => 1,
+        'directory'             => 0,
         'filetype_restrictions' => [],
+        'allow_navigation'      => true,
+        'allow_uploads'         => true,
+    ];
+
+    /**
+     * Field setting validation rules (FieldRequest).
+     *
+     * @var array
+     */
+    public $rules = [
+        'settings.limit'                 => 'nullable|integer',
+        'settings.disk'                  => 'required|integer',
+        'settings.directory'             => 'nullable|integer',
+        'settings.filetype_restrictions' => 'nullable',
+        'settings.allow_navigation'      => 'required|boolean',
+        'settings.allow_uploads'         => 'required|boolean',
     ];
 
     /**
      * @var array
      */
-    public $validation = false;
+    public $validation = [];  // no validation
 
     /**
      * @var string

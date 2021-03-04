@@ -40,6 +40,7 @@ export default {
 
 	methods: {
 		...mapActions({
+			fetchDisk:                'filemanager/fetchDisk',
 			fetchFilesAndDirectories: 'filemanager/fetchFilesAndDirectories',
 			setCurrentDirectory:      'filemanager/setCurrentDirectory',
 			setParentDirectory:       'filemanager/setParentDirectory',

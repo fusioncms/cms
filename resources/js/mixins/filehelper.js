@@ -56,6 +56,15 @@ export default {
 			}
 
 			return this.acceptRegex.exec(file.name) !== null
+		},
+
+		fileSrc(file, width = 100, height = 100, fit = 'crop') {
+			switch(file.type) {
+				case 'image':
+					return `${file.url}?w=${width}&h=${height}&fit=${fit}&t=${this.$moment.utc(file.updated_at).format('X')}`
+				default:
+					return `/vendor/fusion/img/${file.type}-large.svg`
+			}
 		}
 	}
 }
