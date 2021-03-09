@@ -8,6 +8,7 @@ use Fusion\Http\Controllers\Controller;
 use Fusion\Http\Requests\AddonUploadRequest;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use ZipArchive;
 
 class UploadController extends Controller
@@ -58,10 +59,12 @@ class UploadController extends Controller
                     $files[] = $this->zipArchive->getNameIndex($i);
                 }
 
-                $this->zipArchive->extractTo(addon_path(), $files);
+                $folderName = Str::slug($settings->name);
+                $folderPath = addon_path($folderName);
+
+                $this->zipArchive->extractTo($folderPath, $files);
                 $this->zipArchive->close();
 
-                // Artisan::call('addon:discover');
                 Addon::discover();
             } else {
                 throw new Exception('Unable to locate an addon manifest file.');

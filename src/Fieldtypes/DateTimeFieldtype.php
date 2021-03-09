@@ -46,7 +46,16 @@ class DateTimeFieldtype extends Fieldtype
      * @var array
      */
     public $attributes = [
-        'settings.format' => 'format',
+        'settings.format' => 'display format',
+    ];
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @var array
+     */
+    public $messages = [
+      'settings.format.required' => 'Please enter a valid :attribute.',
     ];
 
     /**
