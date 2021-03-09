@@ -8,9 +8,9 @@
             <ui-button v-modal:upload-addon>Upload Addon</ui-button>
         </portal>
 
-        <div class="row">
-            <div class="content-container">
-                <ui-table :endpoint="endpoint" id="addons" sort-by="name" primary-key="handle" key="addons_table">
+        <ui-card>
+            <ui-card-body>
+                <ui-table key="addons" class="matrix-table" id="addons" :endpoint="endpoint" sort-by="name" primary-key="handle" show-page-status show-page-numbers show-page-nav show-page-ends>
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">
                             <ui-status
@@ -37,7 +37,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-actions v-show="table.record.installed" :id="'addon_' + table.record.slug + '_actions_installed'" :key="'addon_' + table.record.slug + '_actions_installed'">
+                        <ui-actions v-if="table.record.installed" :id="'addon_' + table.record.slug + '_actions_installed'" :key="'addon_' + table.record.slug + '_actions_installed'">
                             <ui-dropdown-link v-if="table.record.enabled" @click="disable(table.record.slug)">Disable</ui-dropdown-link>
                             <ui-dropdown-link v-else @click="enable(table.record.slug)">Enable</ui-dropdown-link>
 
@@ -46,16 +46,16 @@
                             </ui-dropdown-link>
                         </ui-actions>
 
-                        <ui-actions v-show="!table.record.installed" :id="'addon_' + table.record.slug + '_actions_uninstalled'" :key="'addon_' + table.record.slug + '_actions_uninstalled'">
+                        <ui-actions v-else :id="'addon_' + table.record.slug + '_actions_uninstalled'" :key="'addon_' + table.record.slug + '_actions_uninstalled'">
                             <ui-dropdown-link v-modal:install-addon="table.record.slug">
                                 Install
                             </ui-dropdown-link>
                         </ui-actions>
                     </template>
                 </ui-table>
-            </div>
-        </div>
-
+            </ui-card-body>
+        </ui-card>
+        
         <portal to="modals">
             <ui-modal name="uninstall-addon" title="Uninstall Addon" key="uninstall_addon">
                 <p>Existing data related to this addon will be removed.</p>
