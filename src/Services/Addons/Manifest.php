@@ -2,6 +2,7 @@
 
 namespace Fusion\Services\Addons;
 
+use Closure;
 use Illuminate\Foundation\PackageManifest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -37,10 +38,9 @@ class Manifest extends PackageManifest
     private function formatPackage($package)
     {
         $settings = Arr::get($package, 'extra.fusioncms');
-        $name     = data_get($settings, 'name', $package['name']);
 
-        return [strtolower($name) => [
-            'name'        => $name,
+        return [$package['name'] => [
+            'name'        => data_get($settings, 'name', $package['name']),
             'description' => $package['description'] ?? null,
             'namespace'   => rtrim(key(data_get($package, 'autoload.psr-4', [])), '/'),
             'version'     => rtrim(data_get($package, 'version'), 'v'),
@@ -73,19 +73,95 @@ class Manifest extends PackageManifest
      */
     public function getAddon($name)
     {
-        if ($this->addons()->has($name)) {
+        if ($this->hasAddon($name)) {
             return new Addon($this->addons()->get($name));
         }
     }
 
     /**
+     * Returns true if Addon is registered.
+     * 
+     * @param  string  $name
+     * @return boolean
+     */
+    public function hasAddon($name)
+    {
+        return $this->addons()->has($name);
+    }
+
+    /**
+     * Returns number of registered Addons.
+     * 
+     * @return integer
+     */
+    public function getAddonCount()
+    {
+        return $this->addons()->count();
+    }
+
+    /**
+     * Returns resource links of registered Addons.
+     * 
+     * @return array
+     */
+    public function getResourceLinks()
+    {
+        return $this->getAddons()->mapWithKeys(function ($addon) {
+            if (file_exists($addon->getPath('public'))) {
+                return [ $addon->getPath('public') => public_path('vendor/'.$addon->getSlug()) ];
+            }
+        })->toArray();
+    }
+
+    /**
+     * Sync publishables for all Addons.
+     * 
+     * @return void
+     */
+    public function sync()
+    {
+        $this->getAddons()->each(function($addon) {
+            $addon->sync();
+        });
+    }
+
+    /**
+     * Publish vendor files for all Addons.
+     * 
+     * @return void
+     */
+    public function publish()
+    {
+        $this->getAddons()->each(function($addon) {
+            $addon->publish();
+        });
+    }
+
+    /**
      * Retrieve collection of registered Addons.
-     * [Helper]
      * 
      * @return \Illuminate\Support\Collection
      */
     public function addons()
     {
         return collect($this->getManifest());
+    }
+
+    /**
+     * Process addon storage.
+     * 
+     * @return void
+     */
+    public function storage(Closure $callback)
+    {
+        if (is_file($storage = app()->bootstrapPath('addon.php'))) {
+            foreach($this->files->lines($storage) as $name) {
+                if ($addon = $this->getAddon($name)) {
+                    $callback($addon);
+                }
+            }
+
+            @unlink($storage);            
+        }
     }
 }

@@ -23,14 +23,12 @@ class FusionServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->bootMigrations();
-        $this->bootPublishing();
         $this->bootViews();
         $this->bootRoutes();
         $this->bootGates();
         $this->bootCustomRules();
 
         if (app_installed()) {
-            // $this->bootAddonManifest();
             $this->bootTheme();
         }
     }
@@ -49,7 +47,7 @@ class FusionServiceProvider extends ServiceProvider
         $this->registerProviders();
         $this->registerFusion();
         $this->registerMiddleware();
-        // $this->registerAddonManifest();
+        $this->registerAddonManifest();
 
         $this->commands([
             \Fusion\Console\MakeThemeCommand::class,
@@ -60,6 +58,11 @@ class FusionServiceProvider extends ServiceProvider
             \Fusion\Console\FlushCommand::class,
             \Fusion\Console\SyncCommand::class,
             \Fusion\Console\UpdateCommand::class,
+
+            // Addons
+            \Fusion\Console\Addons\DiscoverCommand::class,
+            \Fusion\Console\Addons\ListCommand::class,
+            \Fusion\Console\Addons\UninstallCommand::class,
         ]);
     }
 
@@ -193,22 +196,6 @@ class FusionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register FusionCMS' publishable resources.
-     *
-     * @return void
-     */
-    private function bootPublishing()
-    {
-        $this->publishes([
-            fusion_path('/public') => public_path('vendor/fusion'),
-        ], 'fusion-assets');
-
-        $this->publishes([
-            fusion_path('/themes') => base_path('themes'),
-        ], 'fusion-themes');
-    }
-
-    /**
      * Register the currently active theme.
      *
      * @return void
@@ -216,11 +203,6 @@ class FusionServiceProvider extends ServiceProvider
     private function bootTheme()
     {
         Theme::activate(setting('system.theme'));
-    }
-
-    private function bootAddonManifest()
-    {
-        $this->app['addons.manifest']->build();
     }
 
     /**

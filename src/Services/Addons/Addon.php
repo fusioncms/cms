@@ -3,10 +3,18 @@
 namespace Fusion\Services\Addons;
 
 use ReflectionClass;
+use Illuminate\Database\Migrations\Migrator;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class Addon 
 {
+    /**
+     * @var \Illuminate\Database\Migrations\Migrator
+     */
+    protected $migrator;
+
 	/**
 	 * @var array
 	 */
@@ -19,6 +27,8 @@ class Addon
 	 */
     public function __construct($properties)
     {
+        $this->migrator = app('migrator');
+
     	foreach($properties as $key => $value) {
     		$this->data[$key] = $value;
     	}
@@ -46,6 +56,16 @@ class Addon
     }
 
     /**
+     * Returns publish tag.
+     * 
+     * @return string
+     */
+    public function getPublishTag()
+    {
+        return 'addon-'.$this->getSlug();
+    }
+
+    /**
      * Returns relative folder path.
      * 
      * @return string|null
@@ -69,5 +89,74 @@ class Addon
         $rootPath = Str::before($reflect->getFileName(), 'src/');
 
         return rtrim($rootPath, '/').'/';
+    }
+
+    /**
+     * Publish publishables.
+     * 
+     * @return void
+     */
+    public function publish()
+    {
+        Artisan::call('vendor:publish', [
+            '--tag'   => $this->getPublishTag(),
+            '--force' => true,
+        ]);
+    }
+
+    /**
+     * Unpublish publishables.
+     * 
+     * @return void
+     */
+    public function unpublish()
+    {
+        $slug = $this->getSlug();
+
+        File::delete(fusion_path("settings/vendor/{$slug}.php"));
+        File::delete(fusion_path("notifications/vendor/{$slug}.php"));
+        File::delete(fusion_path("permissions/vendor/{$slug}.php"));
+    }
+
+    /**
+     * Sync.
+     * 
+     * @return void
+     */
+    public function sync()
+    {
+        $this->runMigrations();
+        $this->publish();
+    }
+
+    /**
+     * Uninstall.
+     * 
+     * @return void
+     */
+    public function uninstall()
+    {
+        $this->rollbackMigrations();
+        $this->unpublish();
+    }
+
+    /**
+     * Run migrations.
+     * 
+     * @return void
+     */
+    protected function runMigrations()
+    {
+        $this->migrator->run($this->getPath('database/migrations'));
+    }
+
+    /**
+     * Rollback migrations.
+     * 
+     * @return void
+     */
+    protected function rollbackMigrations()
+    {
+        $this->migrator->rollback($this->getPath('database/migrations'));
     }
 }

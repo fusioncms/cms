@@ -3,9 +3,11 @@
 namespace Fusion\Providers;
 
 use Fusion\Facades\Menu;
+use Fusion\Services\Addons\Addon;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 abstract class AddonServiceProvider extends ServiceProvider
@@ -51,20 +53,6 @@ abstract class AddonServiceProvider extends ServiceProvider
 	protected $fieldtypes = [];
 
 	/**
-	 * Publishable javascript
-	 * 
-	 * @var array
-	 */
-	protected $scripts = [];
-
-	/**
-	 * Publishable stylesheets
-	 * 
-	 * @var array
-	 */
-	protected $stylesheets = [];
-
-	/**
 	 * Admin Navigation.
 	 * 
 	 * @var array
@@ -78,46 +66,123 @@ abstract class AddonServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-    	if (!$this->addon = $this->getAddon()) {
+		if (!$this->addon = $this->getAddon()) {
 			return;
 		}
 
 		$this->bootEvents();
+		$this->bootSubscribers();
 		$this->bootConfig();
 		$this->bootCommands();
 		$this->bootRoutes();
 		$this->bootMigrations();
-		$this->bootFieldtypes();
+		$this->bootFactories();
 		$this->bootViews();
 		$this->bootTranslations();
 		$this->bootAdminMenu();
-		$this->bootScripts();
-		$this->bootStylesheets();
+		$this->bootFieldtypes();
+		$this->bootSettings();
+		$this->bootNotifications();
+		$this->bootPermissions();
     }
 
+   	/**
+	 * Register publishable settings.
+	 * 
+	 * @return void
+	 */
+	protected function bootSettings()
+	{
+		$slug = $this->addon->getSlug();
+		$path = $this->addon->getPath("settings/{$slug}.php");
+
+		if (file_exists($path)) {
+			$this->publishes([
+				$path => fusion_path("settings/vendor/{$slug}.php"),
+			], $this->addon->getPublishTag());
+		}
+	}
+
+	/**
+	 * Register publishable notifications.
+	 * 
+	 * @return void
+	 */
+	protected function bootNotifications()
+	{
+		$slug = $this->addon->getSlug();
+		$path = $this->addon->getPath("notifications/{$slug}.php");
+
+		if (file_exists($path)) {
+			$this->publishes([
+				$path => fusion_path("notifications/vendor/{$slug}.php"),
+			], $this->addon->getPublishTag());
+		}
+	}
+
+	/**
+	 * Register publishable permissions.
+	 * 
+	 * @return void
+	 */
+	protected function bootPermissions()
+	{
+		$slug = $this->addon->getSlug();
+		$path = $this->addon->getPath("permissions/{$slug}.php");
+
+		if (file_exists($path)) {
+			$this->publishes([
+				$path => fusion_path("permissions/vendor/{$slug}.php"),
+			], $this->addon->getPublishTag());
+		}
+	}
+
+	/**
+	 * Register event listeners.
+	 * 
+	 * @return void
+	 */
     protected function bootEvents()
     {
-    	foreach ($this->listen as $event => $listeners) {
-    		foreach ($listeners as $listener) {
-                Event::listen($event, $listener);
-            }
-    	}
+		foreach ($this->listen as $event => $listeners) {
+			foreach (Arr::wrap($listeners) as $listener) {
+				Event::listen($event, $listener);
+			}
+		}
+	}
 
+	/**
+	 * Register event subscribers.
+	 * 
+	 * @return void
+	 */
+	protected function bootSubscribers()
+	{
     	foreach ($this->subscribe as $subscriber) {
             Event::subscribe($subscriber);
         }
     }
 
+    /**
+	 * Merge configurations.
+	 * 
+	 * @return void
+	 */
     protected function bootConfig()
     {
-    	$slug   = $this->addon->getSlug();
-    	$config = $this->addon->getPath("config/{$slug}.php");
+    	$slug = $this->addon->getSlug();
+    	$path = $this->addon->getPath("config/{$slug}.php");
 
-    	if (file_exists($config)) {
-    		$this->mergeConfigFrom($config, $slug);
+    	if (file_exists($path)) {
+    		$this->mergeConfigFrom($path, $slug);
     	}
     }
 
+    /**
+	 * Register commands (console only).
+	 * 
+	 * @return void
+	 */
     protected function bootCommands()
     {
     	if ($this->app->runningInConsole()) {
@@ -125,6 +190,11 @@ abstract class AddonServiceProvider extends ServiceProvider
     	}
     }
 
+    /**
+	 * Register middleware router groups.
+	 * 
+	 * @return void
+	 */
     protected function bootMiddleware()
     {
         foreach ($this->middlewareGroups as $group => $middleware) {
@@ -134,6 +204,11 @@ abstract class AddonServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+	 * Register migrations.
+	 * 
+	 * @return void
+	 */
     protected function bootMigrations()
     {
         $this->loadMigrationsFrom(
@@ -141,6 +216,23 @@ abstract class AddonServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+	 * Register model factories.
+	 * 
+	 * @return void
+	 */
+    protected function bootFactories()
+    {
+        $this->loadFactoriesFrom(
+        	$this->addon->getPath('database/factories')
+        );
+    }
+
+    /**
+	 * Register fieldtypes.
+	 * 
+	 * @return void
+	 */
     protected function bootFieldtypes()
 	{
 		foreach ($this->fieldtypes as $fieldtype) {
@@ -148,6 +240,11 @@ abstract class AddonServiceProvider extends ServiceProvider
 		}
 	}
 
+	/**
+	 * Load in view templates.
+	 * 
+	 * @return void
+	 */
 	protected function bootViews()
 	{
 		if (file_exists($this->addon->getPath('resources/views'))) {
@@ -158,6 +255,11 @@ abstract class AddonServiceProvider extends ServiceProvider
 		}
 	}
 
+	/**
+	 * Register lang translations.
+	 * 
+	 * @return void
+	 */
 	protected function bootTranslations()
 	{
 		$slug = $this->addon->getSlug();
@@ -168,48 +270,30 @@ abstract class AddonServiceProvider extends ServiceProvider
 		}
 	}
 
-	protected function bootScripts()
-	{
-		$slug = $this->addon->getSlug();
-
-		foreach ($this->scripts as $path) {
-			if (file_exists($path)) {
-				$filename = pathinfo($path, PATHINFO_FILENAME);
-
-				$this->publishes([
-					$path => public_path("vendor/{$slug}/js/{$filename}.js")
-				], $slug);
-			}
-		}
-	}
-
-	protected function bootStylesheets()
-	{
-		$slug = $this->addon->getSlug();
-
-		foreach ($this->stylesheets as $path) {
-			if (file_exists($path)) {
-				$filename = pathinfo($path, PATHINFO_FILENAME);
-
-				$this->publishes([
-					$path => public_path("vendor/{$slug}/css/{$filename}.css")
-				], $slug);
-			}
-		}
-	}
-
+	/**
+	 * Append CP menu items.
+	 * 
+	 * @return void
+	 */
 	protected function bootAdminMenu()
 	{
 		$slug = $this->addon->getSlug();
 
-		// Menu::set("admin.addons", [
-		// 	'title'   => 'Addons',
-		// 	'divider' => true,
-		// ]);
+		if (!Menu::has("admin.{$slug}")) {
+			Menu::set("admin.addons", [
+				'title'   => 'Addons',
+				'divider' => true,
+			]);
+		}
 
 		Menu::set("admin.{$slug}", $this->navigation);
 	}
 
+	/**
+	 * Register routes.
+	 * 
+	 * @return void
+	 */
     protected function bootRoutes()
     {
 		$this->bootWebRoutes();
@@ -256,14 +340,20 @@ abstract class AddonServiceProvider extends ServiceProvider
     }
 
     /**
-     * Retrieve Addon object.
+     * Returns Addon object.
      * 
      * @return \Fusion\Services\Addons\Addon
      */
     private function getAddon()
     {
-    	$name = Str::lower(explode('\\', get_class($this))[1]);
+    	// ..find matching service provider name..
+    	$addons = app('addons.manifest')->addons();
+    	$addon  = $addons->first(function ($addon) {
+			return get_class($this) == $addon['provider'];
+		});
 
-    	return app('addons.manifest')->getAddon($name);
+    	if ($addon) {
+			return new Addon($addon);
+		}
     }
 }
