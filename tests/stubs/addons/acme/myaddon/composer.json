@@ -1,0 +1,22 @@
+{
+    "name": "acme/myaddon",
+    "description": "Addon for testing purposes.",
+    "version": "1.0.0",
+    "autoload": {
+
+        "psr-4": {
+            "Acme\\Myaddon\\": "src/",
+            "Database\\": "database/"
+        }
+    },
+    "extra": {
+        "fusioncms": {
+            "name": "MyAddon"
+        },
+        "laravel": {
+            "providers": [
+                "Acme\\Myaddon\\Providers\\MyAddonServiceProvider"
+            ]
+        }
+    }
+}

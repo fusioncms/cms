@@ -3,12 +3,51 @@
 namespace Fusion\Services\Addons;
 
 use Closure;
+use Composer\Autoload\ClassLoader;
 use Illuminate\Foundation\PackageManifest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class Manifest extends PackageManifest
 {
+    /**
+     * Mock Addon Manifest with test package.
+     * [Unit Test only]
+     * 
+     * @param  string $path - path to test addon
+     * @return void
+     */
+    public function mock($path) {
+        if (app()->runningUnitTests()) {
+            if ($this->files->exists("{$path}/composer.json")) {
+                $package = json_decode($this->files->get("{$path}/composer.json"), true);
+                
+                if (Arr::has($package, 'extra.fusioncms')) {
+                    $formatted      = $this->formatPackage($package);
+                    $this->manifest = $formatted;
+
+                    // Register Addon namespace..
+                    $classLoader = new ClassLoader();
+
+                    foreach (data_get($package, 'autoload.psr-4', []) as $namespace => $source) {
+                        $classLoader->addPsr4($namespace, "{$path}/{$source}");
+                    }
+
+                    // $classLoader->addClassMap(data_get($package, 'autoload.classmap', []));
+                    $classLoader->register();
+
+                    // Register service provider..
+                    if (Arr::has($package, 'extra.laravel.providers')) {
+                        app()->register(data_get($package, 'extra.laravel.providers.0'));
+                    }
+
+                    // Sync..
+                    $this->sync();
+                }
+            }
+        }
+    }
+
     /**
      * Build Addon manifest cache.
      * [override]
@@ -17,6 +56,8 @@ class Manifest extends PackageManifest
      */
     public function build()
     {
+        $packages = [];
+
         if ($this->files->exists($path = $this->vendorPath.'/composer/installed.json')) {
             $installed = json_decode($this->files->get($path), true);
             $packages  = $installed['packages'] ?? $installed;
@@ -31,10 +72,16 @@ class Manifest extends PackageManifest
             })
             ->filter()
             ->all();
-            
+
         $this->write($formatted);
     }
 
+    /**
+     * Format Addon packages.
+     * 
+     * @param  array $package
+     * @return array
+     */
     private function formatPackage($package)
     {
         $settings = Arr::get($package, 'extra.fusioncms');
