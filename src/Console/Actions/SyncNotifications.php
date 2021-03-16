@@ -106,7 +106,17 @@ class SyncNotifications
      */
     protected function fetchNotifications()
     {
-        $files  = Finder::create()->files()->name('*.php')->in($this->path);
+        // Include FusionCMS notifications..
+        $paths = [ $this->path ];
+
+        // Include Addon notifications..
+        app('addons.manifest')->getAddons()->each(function($addon) use (&$paths) {
+            if (file_exists($addon->getPath('notifications'))) {
+                array_push($paths, $addon->getPath('notifications'));
+            }
+        });
+
+        $files  = Finder::create()->files()->name('*.php')->in($paths);
         $files  = $files->sortByModifiedTime()->reverseSorting();
         $merged = [];
 

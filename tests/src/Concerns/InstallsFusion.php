@@ -59,7 +59,7 @@ trait InstallsFusion
      */
     protected function uninstall()
     {
-        dispatch_now(new \Fusion\Console\Uninstaller\DeleteAddonCache());
+        dispatch_now(new \Fusion\Console\Uninstaller\DeleteAddonResources());
         dispatch_now(new \Fusion\Console\Uninstaller\DeleteModelFiles());
     }
 

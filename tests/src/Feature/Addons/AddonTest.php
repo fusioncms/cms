@@ -7,6 +7,9 @@ use Composer\Autoload\ClassLoader;
 use Fusion\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class AddonTest extends TestCase
 {
@@ -20,13 +23,14 @@ class AddonTest extends TestCase
         $manifest = app('addons.manifest');
         $manifest->mock($this->getBasePath("../addons/acme/myaddon"));
 
+
         Artisan::call('fusion:sync');
 	}
 
 	/** @test */
     public function addon_will_run_its_own_migrations()
     {
-    	$this->assertDatabaseHasTable('acme');
+    	$this->assertDatabaseHasTable('acmes');
     }
 
     /** @test */
@@ -52,5 +56,34 @@ class AddonTest extends TestCase
     	$this->assertDatabaseHas('permissions', [
     		'name' => 'acme.viewAny'
     	]);
+
+
+    }
+
+    /** @test */
+    public function addon_will_register_its_own_settings()
+    {
+    	$this->assertDatabaseHasTable('settings_myaddon');
+
+        // TODO:
+        // $this->assertEquals(setting('myaddon.allow_likes'), 'enabled');
+        // setting(['myaddon.allow_likes' => 'disabled']);
+        // $this->assertEquals(setting('myaddon.allow_likes'), 'disabled');
+    }
+
+    /** @test */
+    public function addon_will_register_its_own_event_listeners()
+    {
+        $this->assertTrue(
+            Event::hasListeners(\Acme\Myaddon\Events\AcmeEvent::class)
+        );
+    }
+
+    /** @test */
+    public function addon_will_register_its_own_event_subscribers()
+    {
+        $this->assertTrue(
+            Event::hasListeners(\Acme\Myaddon\Events\AcmeSubscription::class)
+        );
     }
 }

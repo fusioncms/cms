@@ -153,10 +153,8 @@ class Manifest extends PackageManifest
      */
     public function getResourceLinks()
     {
-        return $this->getAddons()->mapWithKeys(function ($addon) {
-            if (file_exists($addon->getPath('public'))) {
-                return [ $addon->getPath('public') => public_path('vendor/'.$addon->getSlug()) ];
-            }
+        return $this->getAddons()->mapWithKeys(function($addon) {
+            return $addon->getResourceLink();
         })->toArray();
     }
 

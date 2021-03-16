@@ -92,6 +92,16 @@ class Addon
     }
 
     /**
+     * Returns `target` & `link` for syncing published resources.
+     * 
+     * @return array
+     */
+    public function getResourceLink()
+    {
+        return [ $this->getPath('public') => public_path('vendor/'.$this->getSlug()) ];
+    }
+
+    /**
      * Publish publishables.
      * 
      * @return void

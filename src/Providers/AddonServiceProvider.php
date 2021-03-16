@@ -81,60 +81,6 @@ abstract class AddonServiceProvider extends ServiceProvider
 		$this->bootTranslations();
 		$this->bootAdminMenu();
 		$this->bootFieldtypes();
-		$this->bootSettings();
-		$this->bootNotifications();
-		$this->bootPermissions();
-    }
-
-   	/**
-	 * Register publishable settings.
-	 * 
-	 * @return void
-	 */
-	protected function bootSettings()
-	{
-		$slug = $this->addon->getSlug();
-		$path = $this->addon->getPath("settings/{$slug}.php");
-
-		if (file_exists($path)) {
-			$this->publishes([
-				$path => fusion_path("settings/vendor/{$slug}.php"),
-			], $this->addon->getPublishTag());
-		}
-	}
-
-	/**
-	 * Register publishable notifications.
-	 * 
-	 * @return void
-	 */
-	protected function bootNotifications()
-	{
-		$slug = $this->addon->getSlug();
-		$path = $this->addon->getPath("notifications/{$slug}.php");
-
-		if (file_exists($path)) {
-			$this->publishes([
-				$path => fusion_path("notifications/vendor/{$slug}.php"),
-			], $this->addon->getPublishTag());
-		}
-	}
-
-	/**
-	 * Register publishable permissions.
-	 * 
-	 * @return void
-	 */
-	protected function bootPermissions()
-	{
-		$slug = $this->addon->getSlug();
-		$path = $this->addon->getPath("permissions/{$slug}.php");
-
-		if (file_exists($path)) {
-			$this->publishes([
-				$path => fusion_path("permissions/vendor/{$slug}.php"),
-			], $this->addon->getPublishTag());
-		}
 	}
 
 	/**

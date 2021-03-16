@@ -44,10 +44,10 @@ class FusionServiceProvider extends ServiceProvider
             define('FUSION_VERSION', '6.0.0-beta.10');
         }
 
+        $this->registerAddonManifest();
         $this->registerProviders();
         $this->registerFusion();
         $this->registerMiddleware();
-        $this->registerAddonManifest();
 
         $this->commands([
             \Fusion\Console\MakeThemeCommand::class,

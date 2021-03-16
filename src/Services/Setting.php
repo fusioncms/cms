@@ -200,8 +200,20 @@ class Setting
      */
     private static function raw()
     {
-        $path  = fusion_path('settings');
-        $files = Finder::create()->files()->name('*.php')->in($path);
+        // Include FusionCMS settings..
+        $paths = [ fusion_path('settings') ];
+
+        // Include Addon settings..
+        app('addons.manifest')->getAddons()->each(function($addon) use (&$paths) {
+            if (file_exists($addon->getPath('settings'))) {
+                array_push($paths, $addon->getPath('settings'));
+            }
+        });
+
+        $files = Finder::create()
+            ->files()
+            ->name('*.php')
+            ->in($paths);
 
         return collect($files)->mapWithKeys(function ($file) {
             $path = $file->getRealPath();
