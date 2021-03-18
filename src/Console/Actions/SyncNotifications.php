@@ -107,10 +107,10 @@ class SyncNotifications
     protected function fetchNotifications()
     {
         // Include FusionCMS notifications..
-        $paths = [ $this->path ];
+        $paths = [$this->path];
 
         // Include Addon notifications..
-        app('addons.manifest')->getAddons()->each(function($addon) use (&$paths) {
+        app('addons.manifest')->getAddons()->each(function ($addon) use (&$paths) {
             if (file_exists($addon->getPath('notifications'))) {
                 array_push($paths, $addon->getPath('notifications'));
             }

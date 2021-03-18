@@ -2,52 +2,54 @@
 
 namespace Fusion\Services\Addons;
 
-use ReflectionClass;
-use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use ReflectionClass;
 
-class Addon 
+class Addon
 {
     /**
      * @var \Illuminate\Database\Migrations\Migrator
      */
     protected $migrator;
 
-	/**
-	 * @var array
-	 */
-	protected $data;
+    /**
+     * @var array
+     */
+    protected $data;
 
-	/**
-	 * Contruct new instance.
-	 * 
-	 * @param array $properties
-	 */
+    /**
+     * Contruct new instance.
+     *
+     * @param array $properties
+     */
     public function __construct($properties)
     {
         $this->migrator = app('migrator');
 
-    	foreach($properties as $key => $value) {
-    		$this->data[$key] = $value;
-    	}
+        foreach ($properties as $key => $value) {
+            $this->data[$key] = $value;
+        }
     }
 
     /**
      * Magic getter.
      *
+     * @param string $key
+     *
      * @throws Exception
-     * @param  string $key
+     *
      * @return mixed
      */
-    public function __get($key) {
-    	return data_get($this->data, $key);
+    public function __get($key)
+    {
+        return data_get($this->data, $key);
     }
 
     /**
      * Returns slug representation of Addon name.
-     * 
+     *
      * @return string|null
      */
     public function getSlug()
@@ -57,7 +59,7 @@ class Addon
 
     /**
      * Returns publish tag.
-     * 
+     *
      * @return string
      */
     public function getPublishTag()
@@ -67,7 +69,7 @@ class Addon
 
     /**
      * Returns relative folder path.
-     * 
+     *
      * @return string|null
      */
     public function getPath($path = '')
@@ -77,10 +79,11 @@ class Addon
 
     /**
      * Returns root folder path of Addon.
-     * 
+     *
      * @return string|null
      */
-    public function rootPath() {
+    public function rootPath()
+    {
         if (!$this->provider) {
             return null;
         }
@@ -93,17 +96,17 @@ class Addon
 
     /**
      * Returns `target` & `link` for syncing published resources.
-     * 
+     *
      * @return array
      */
     public function getResourceLink()
     {
-        return [ $this->getPath('public') => public_path('vendor/'.$this->getSlug()) ];
+        return [$this->getPath('public') => public_path('vendor/'.$this->getSlug())];
     }
 
     /**
      * Publish publishables.
-     * 
+     *
      * @return void
      */
     public function publish()
@@ -116,7 +119,7 @@ class Addon
 
     /**
      * Unpublish publishables.
-     * 
+     *
      * @return void
      */
     public function unpublish()
@@ -130,7 +133,7 @@ class Addon
 
     /**
      * Sync.
-     * 
+     *
      * @return void
      */
     public function sync()
@@ -141,7 +144,7 @@ class Addon
 
     /**
      * Uninstall.
-     * 
+     *
      * @return void
      */
     public function uninstall()
@@ -152,7 +155,7 @@ class Addon
 
     /**
      * Run migrations.
-     * 
+     *
      * @return void
      */
     protected function runMigrations()
@@ -162,7 +165,7 @@ class Addon
 
     /**
      * Rollback migrations.
-     * 
+     *
      * @return void
      */
     protected function rollbackMigrations()

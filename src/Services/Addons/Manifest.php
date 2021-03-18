@@ -6,22 +6,23 @@ use Closure;
 use Composer\Autoload\ClassLoader;
 use Illuminate\Foundation\PackageManifest;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 
 class Manifest extends PackageManifest
 {
     /**
      * Mock Addon Manifest with test package.
-     * [Unit Test only]
-     * 
-     * @param  string $path - path to test addon
+     * [Unit Test only].
+     *
+     * @param string $path - path to test addon
+     *
      * @return void
      */
-    public function mock($path) {
+    public function mock($path)
+    {
         if (app()->runningUnitTests()) {
             if ($this->files->exists("{$path}/composer.json")) {
                 $package = json_decode($this->files->get("{$path}/composer.json"), true);
-                
+
                 if (Arr::has($package, 'extra.fusioncms')) {
                     $formatted      = $this->formatPackage($package);
                     $this->manifest = $formatted;
@@ -50,8 +51,8 @@ class Manifest extends PackageManifest
 
     /**
      * Build Addon manifest cache.
-     * [override]
-     * 
+     * [override].
+     *
      * @return void
      */
     public function build()
@@ -67,7 +68,7 @@ class Manifest extends PackageManifest
             ->filter(function ($package) {
                 return Arr::has($package, 'extra.fusioncms');
             })
-            ->mapWithKeys(function($package) {
+            ->mapWithKeys(function ($package) {
                 return $this->formatPackage($package);
             })
             ->filter()
@@ -78,8 +79,9 @@ class Manifest extends PackageManifest
 
     /**
      * Format Addon packages.
-     * 
-     * @param  array $package
+     *
+     * @param array $package
+     *
      * @return array
      */
     private function formatPackage($package)
@@ -101,12 +103,12 @@ class Manifest extends PackageManifest
 
     /**
      * Returns collection of Addons objects.
-     * 
+     *
      * @return \Illuminate\Support\Collection
      */
     public function getAddons()
     {
-        return $this->addons()->transform(function($addon) {
+        return $this->addons()->transform(function ($addon) {
             return new Addon($addon);
         });
     }
@@ -114,8 +116,8 @@ class Manifest extends PackageManifest
     /**
      * Returns Addons object by name.
      *
-     * @param  string $name
-     * 
+     * @param string $name
+     *
      * @return \Illuminate\Support\Collection
      */
     public function getAddon($name)
@@ -127,9 +129,10 @@ class Manifest extends PackageManifest
 
     /**
      * Returns true if Addon is registered.
-     * 
-     * @param  string  $name
-     * @return boolean
+     *
+     * @param string $name
+     *
+     * @return bool
      */
     public function hasAddon($name)
     {
@@ -138,8 +141,8 @@ class Manifest extends PackageManifest
 
     /**
      * Returns number of registered Addons.
-     * 
-     * @return integer
+     *
+     * @return int
      */
     public function getAddonCount()
     {
@@ -148,43 +151,43 @@ class Manifest extends PackageManifest
 
     /**
      * Returns resource links of registered Addons.
-     * 
+     *
      * @return array
      */
     public function getResourceLinks()
     {
-        return $this->getAddons()->mapWithKeys(function($addon) {
+        return $this->getAddons()->mapWithKeys(function ($addon) {
             return $addon->getResourceLink();
         })->toArray();
     }
 
     /**
      * Sync publishables for all Addons.
-     * 
+     *
      * @return void
      */
     public function sync()
     {
-        $this->getAddons()->each(function($addon) {
+        $this->getAddons()->each(function ($addon) {
             $addon->sync();
         });
     }
 
     /**
      * Publish vendor files for all Addons.
-     * 
+     *
      * @return void
      */
     public function publish()
     {
-        $this->getAddons()->each(function($addon) {
+        $this->getAddons()->each(function ($addon) {
             $addon->publish();
         });
     }
 
     /**
      * Retrieve collection of registered Addons.
-     * 
+     *
      * @return \Illuminate\Support\Collection
      */
     public function addons()
@@ -194,19 +197,19 @@ class Manifest extends PackageManifest
 
     /**
      * Process addon storage.
-     * 
+     *
      * @return void
      */
     public function storage(Closure $callback)
     {
         if (is_file($storage = app()->bootstrapPath('addon.php'))) {
-            foreach($this->files->lines($storage) as $name) {
+            foreach ($this->files->lines($storage) as $name) {
                 if ($addon = $this->getAddon($name)) {
                     $callback($addon);
                 }
             }
 
-            @unlink($storage);            
+            @unlink($storage);
         }
     }
 }

@@ -29,7 +29,7 @@ class ListCommand extends Command
     public function handle()
     {
         $manifest = $this->getLaravel()->make('addons.manifest');
-        $addons   = $manifest->getAddons()->map(function(Addon $addon) {
+        $addons   = $manifest->getAddons()->map(function (Addon $addon) {
             return [
                 'name'        => $addon->name,
                 'version'     => $addon->version,

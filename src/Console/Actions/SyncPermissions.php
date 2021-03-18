@@ -75,10 +75,10 @@ class SyncPermissions
     protected function fetchPermissions()
     {
         // Include FusionCMS permissions..
-        $paths = [ fusion_path('permissions') ];
+        $paths = [fusion_path('permissions')];
 
         // Include Addon permissions..
-        app('addons.manifest')->getAddons()->each(function($addon) use (&$paths) {
+        app('addons.manifest')->getAddons()->each(function ($addon) use (&$paths) {
             if (file_exists($addon->getPath('permissions'))) {
                 array_push($paths, $addon->getPath('permissions'));
             }

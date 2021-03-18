@@ -7,7 +7,6 @@ use Fusion\Console\Installer\CreateDefaultDisks;
 use Fusion\Console\Installer\CreateDefaultNotifications;
 use Fusion\Console\Installer\CreateDefaultPermissions;
 use Fusion\Console\Installer\CreateDefaultRoles;
-use Fusion\Facades\Addon;
 use Fusion\Facades\Theme;
 use Fusion\Models\Disk;
 use Fusion\Models\User;
