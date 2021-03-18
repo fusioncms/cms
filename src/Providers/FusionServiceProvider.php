@@ -143,7 +143,7 @@ class FusionServiceProvider extends ServiceProvider
     private function registerAddonManifest()
     {
         $this->app->instance('addons.manifest', new Manifest(
-            new Filesystem,
+            new Filesystem(),
             $this->app->basePath(),
             $this->app->bootstrapPath().'/cache/addons.php'
         ));

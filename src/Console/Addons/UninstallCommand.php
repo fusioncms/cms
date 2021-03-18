@@ -27,7 +27,7 @@ class UninstallCommand extends Command
      */
     public function handle()
     {
-        app('addons.manifest')->storage(function($addon) {
+        app('addons.manifest')->storage(function ($addon) {
             $addon->uninstall();
         });
     }

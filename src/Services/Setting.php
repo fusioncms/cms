@@ -201,10 +201,10 @@ class Setting
     private static function raw()
     {
         // Include FusionCMS settings..
-        $paths = [ fusion_path('settings') ];
+        $paths = [fusion_path('settings')];
 
         // Include Addon settings..
-        app('addons.manifest')->getAddons()->each(function($addon) use (&$paths) {
+        app('addons.manifest')->getAddons()->each(function ($addon) use (&$paths) {
             if (file_exists($addon->getPath('settings'))) {
                 array_push($paths, $addon->getPath('settings'));
             }
