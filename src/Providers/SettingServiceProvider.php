@@ -2,20 +2,13 @@
 
 namespace Fusion\Providers;
 
-use Fusion\Models\Setting as SettingGroup;
-use Fusion\Services\Setting as SettingService;
+use Fusion\Models\Setting;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class SettingServiceProvider extends ServiceProvider
 {
-    /**
-     * @var array
-     */
-    private $settings;
-
     /**
      * Bootstrap services.
      *
@@ -23,8 +16,6 @@ class SettingServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->settings = SettingService::load();
-
         if (settings_available()) {
             $this->bootConfigOverrides();
         }
@@ -39,12 +30,12 @@ class SettingServiceProvider extends ServiceProvider
     {
         // Explicit model binding..
         Route::bind('group', function ($handle) {
-            return SettingGroup::where('handle', $handle)->first() ?? abort(404);
+            return Setting::where('handle', $handle)->first() ?? abort(404);
         });
 
         // load system settings
         $this->app->singleton('setting', function () {
-            return new SettingService($this->settings);
+            return \Fusion\Services\Setting::make();
         });
     }
 
@@ -55,7 +46,7 @@ class SettingServiceProvider extends ServiceProvider
      */
     private function bootConfigOverrides()
     {
-        SettingGroup::all()->each(function ($group) {
+        Setting::all()->each(function ($group) {
             if ($group->blueprint) {
                 $group->blueprint->fields->each(function ($field) use ($group) {
                     if ($field->settings['override'] !== false) {

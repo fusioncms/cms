@@ -36,8 +36,8 @@ Route::get('sitemap.xml', [
 ]);
 
 Auth::routes([
-    'verify'   => setting('users.user_email_verification') === 'enabled',
-    'register' => setting('users.public_registration') === 'enabled',
+    'verify'   => setting('users.user_email_verification', 'enabled') === 'enabled',
+    'register' => setting('users.public_registration', 'enabled') === 'enabled',
     'confirm'  => true,
 ]);
 
@@ -61,7 +61,7 @@ Route::group(['prefix' => 'account', 'middleware' => ['auth', 'verified']], func
         Route::post('', 'Account\SecurityController@update');
     });
 
-    if (setting('api.personal_access_tokens') === 'enabled') {
+    if (setting('api.personal_access_tokens', 'disabled') === 'enabled') {
         Route::get('api', 'Account\APIController@edit');
     }
 });
