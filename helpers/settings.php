@@ -31,7 +31,9 @@ if (!function_exists('setting')) {
      */
     function setting($key = null, $default = null)
     {
-        if (is_null($key)) {
+        if (!settings_available()) {
+            return $default;
+        } elseif (is_null($key)) {
             return \Setting::all();
         } elseif (is_array($key)) {
             return \Setting::set($key);

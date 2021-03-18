@@ -125,35 +125,16 @@ class Setting
      *
      * @return array
      */
-    public static function load()
+    public static function make()
     {
-        if (settings_available()) {
-            return SettingGroup::all()->flatMap(function ($group) {
-                return collect($group->blueprint->fields ?? [])
-                    ->mapWithKeys(function ($field) use ($group) {
-                        return ["{$group->handle}.{$field->handle}" => $group->settings->{$field->handle} ?? $field->settings['default'] ?? null];
-                    });
-            })->all();
-        } else {
-            /**
-             * Load settings from flat files.
-             */
-            $files   = glob(fusion_path('settings').'/*.php');
-            $results = [];
+        $items = SettingGroup::all()->flatMap(function ($group) {
+            return collect($group->blueprint->fields ?? [])
+                ->mapWithKeys(function ($field) use ($group) {
+                    return ["{$group->handle}.{$field->handle}" => $group->settings->{$field->handle} ?? $field->settings['default'] ?? null];
+                });
+        })->all();
 
-            foreach ($files as $file) {
-                $group    = basename($file, '.php');
-                $contents = require $file;
-
-                foreach ($contents['settings'] as $settings) {
-                    foreach ($settings as $setting) {
-                        $results["{$group}.{$setting['handle']}"] = $setting['value'] ?? $setting['default'] ?? '';
-                    }
-                }
-            }
-
-            return $results;
-        }
+        return new static($items);
     }
 
     /**
