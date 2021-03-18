@@ -18,12 +18,13 @@ class AddonTest extends TestCase
 	public function setUp(): void
     {
         parent::setUp();
+        $this->handleValidationExceptions();
 
         // Mock w/ Addon..
         $manifest = app('addons.manifest');
         $manifest->mock($this->getBasePath("../addons/acme/myaddon"));
 
-
+        // Re-sync..
         Artisan::call('fusion:sync');
 	}
 
@@ -42,7 +43,8 @@ class AddonTest extends TestCase
     }
 
     /** @test */
-    public function addon_will_register_and_manage_its_own_config_namespace() {
+    public function addon_will_register_and_manage_its_own_config_namespace()
+    {
     	$this->assertTrue(config('myaddon.foo') == 'bar');
 
     	config(['myaddon.foo' => 'baz']);
@@ -53,11 +55,20 @@ class AddonTest extends TestCase
     /** @test */
     public function addon_will_register_its_own_permissions()
     {
-    	$this->assertDatabaseHas('permissions', [
-    		'name' => 'acme.viewAny'
-    	]);
+    	$this->assertDatabaseHas('permissions', ['name' => 'acme.viewAny']);
+        $this->assertDatabaseHas('permissions', ['name' => 'acme.view']);
+        $this->assertDatabaseHas('permissions', ['name' => 'acme.create']);
+        $this->assertDatabaseHas('permissions', ['name' => 'acme.update']);
+        $this->assertDatabaseHas('permissions', ['name' => 'acme.delete']);
+    }
 
-
+    /** @test */
+    public function addon_will_register_its_own_routes()
+    {
+        $this
+            ->be($this->owner, 'api')
+            ->json('GET', '/api/acme')
+            ->assertOk();
     }
 
     /** @test */
@@ -82,8 +93,17 @@ class AddonTest extends TestCase
     /** @test */
     public function addon_will_register_its_own_event_subscribers()
     {
+        /**
+         * Registered through `\Acme\Myaddon\Listener\AcmeEventSubscriber`
+         */
         $this->assertTrue(
             Event::hasListeners(\Acme\Myaddon\Events\AcmeSubscription::class)
         );
+    }
+
+    /** @test */
+    public function addon_will_register_its_own_artisan_commands()
+    {
+        $this->artisan('acme:motivate')->expectsOutput('You can do it!');
     }
 }

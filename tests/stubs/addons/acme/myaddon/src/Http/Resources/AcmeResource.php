@@ -1,6 +1,6 @@
 <?php
 
-namespace Fusion\Http\Resources;
+namespace Acme\Myaddon\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 

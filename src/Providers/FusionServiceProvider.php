@@ -135,6 +135,11 @@ class FusionServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * Registers Addon Manifest.
+     *
+     * @return void
+     */
     private function registerAddonManifest()
     {
         $this->app->instance('addons.manifest', new Manifest(

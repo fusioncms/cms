@@ -252,7 +252,7 @@ abstract class AddonServiceProvider extends ServiceProvider
     	if (file_exists($this->addon->getPath('routes/web.php'))) {
     		Route::group([
 				'middleware' => 'web',
-				'namespace'  => $this->addon->namespace.'\\Http\\Controllers\Web',
+				'namespace'  => $this->addon->namespace.'Http\\Controllers\Web',
 			], function () {
 				$this->loadRoutesFrom($this->addon->getPath('routes/web.php'));
 			});
@@ -264,7 +264,7 @@ abstract class AddonServiceProvider extends ServiceProvider
     	if (file_exists($this->addon->getPath('routes/api.php'))) {
 			Route::group([
 			    'middleware' => ['api', 'auth:sanctum'],
-			    'namespace'  => $this->addon->namespace.'\\Http\\Controllers\API',
+			    'namespace'  => $this->addon->namespace.'Http\\Controllers\\API',
 			    'prefix'     => 'api',
 			], function () {
 				$this->loadRoutesFrom($this->addon->getPath('routes/api.php'));
@@ -277,7 +277,7 @@ abstract class AddonServiceProvider extends ServiceProvider
     	if (file_exists($this->addon->getPath('routes/datatable.php'))) {
 			Route::group([
 	            'middleware' => 'api',
-	            'namespace'  => $this->addon->namespace.'\\Http\\Controllers\DataTable',
+	            'namespace'  => $this->addon->namespace.'Http\\Controllers\DataTable',
 	            'prefix'     => 'datatable',
 	        ], function () {
 				$this->loadRoutesFrom($this->addon->getPath('routes/datatable.php'));

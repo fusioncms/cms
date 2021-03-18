@@ -3,7 +3,10 @@
 namespace Acme\Myaddon\Http\Controllers\API;
 
 use Fusion\Http\Controllers\Controller;
-
+use Illuminate\Http\Request;
+use Acme\Myaddon\Models\Acme;
+use Acme\Myaddon\Http\Requests\AcmeRequest;
+use Acme\Myaddon\Http\Resources\AcmeResource;
 
 class AcmeController extends Controller
 {
