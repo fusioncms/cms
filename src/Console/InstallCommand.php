@@ -201,8 +201,7 @@ class InstallCommand extends Command
 
             'Deleting asset files...'           => new \Fusion\Console\Uninstaller\DeleteUserFiles(),
             'Deleting model files...'           => new \Fusion\Console\Uninstaller\DeleteModelFiles(),
-            'Deleting addon assets...'          => new \Fusion\Console\Uninstaller\DeleteAddonAssets(),
-            'Deleting addon cache...'           => new \Fusion\Console\Uninstaller\DeleteAddonCache(),
+            'Deleting addon assets...'          => new \Fusion\Console\Uninstaller\DeleteAddonResources(),
             'Deleting theme assets...'          => new \Fusion\Console\Uninstaller\DeleteThemeAssets(),
             'Deleting theme cache...'           => new \Fusion\Console\Uninstaller\DeleteThemeCache(),
             'Deleting log files...'             => new \Fusion\Console\Uninstaller\DeleteLogFiles(),

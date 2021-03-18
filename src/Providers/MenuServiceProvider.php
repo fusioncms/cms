@@ -165,11 +165,6 @@ class MenuServiceProvider extends ServiceProvider
                 'to'    => '/customize',
                 'icon'  => 'paint-roller',
             ],
-            'addons' => [
-                'title' => 'Addons',
-                'to'    => '/addons',
-                'icon'  => 'box-open',
-            ],
             'updates' => [
                 'title' => 'Updates',
                 'to'    => '/updates',

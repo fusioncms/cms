@@ -2,7 +2,7 @@
 
 namespace Fusion\Console\Addons;
 
-use Fusion\Facades\Addon;
+use Fusion\Services\Addons\Addon;
 use Illuminate\Console\Command;
 
 class ListCommand extends Command
@@ -28,16 +28,15 @@ class ListCommand extends Command
      */
     public function handle()
     {
-        $headers = ['Name', 'Version', 'Description', 'Status'];
-        $addons  = Addon::map(function ($addon) {
+        $manifest = $this->getLaravel()->make('addons.manifest');
+        $addons   = $manifest->getAddons()->map(function(Addon $addon) {
             return [
-                'name'        => $addon['name'],
-                'version'     => $addon['version'],
-                'description' => $addon['description'],
-                'status'      => $addon['installed'] ? ($addon['enabled'] ? 'Enabled' : 'Disabled') : 'Not installed',
+                'name'        => $addon->name,
+                'version'     => $addon->version,
+                'description' => $addon->description,
             ];
         })->toArray();
 
-        $this->table($headers, $addons);
+        $this->table(['Name', 'Version', 'Description'], $addons);
     }
 }

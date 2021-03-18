@@ -44,10 +44,6 @@ trait InstallsFusion
         dispatch_now(new CreateDefaultRoles());
 
         Theme::activate('Hello');
-        Addon::discover();
-        Addon::register();
-
-        Addon::install('Foobar');
 
         Artisan::call('fusion:flush');
         Artisan::call('fusion:sync');
@@ -63,7 +59,7 @@ trait InstallsFusion
      */
     protected function uninstall()
     {
-        dispatch_now(new \Fusion\Console\Uninstaller\DeleteAddonCache());
+        dispatch_now(new \Fusion\Console\Uninstaller\DeleteAddonResources());
         dispatch_now(new \Fusion\Console\Uninstaller\DeleteModelFiles());
     }
 

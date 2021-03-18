@@ -18,9 +18,7 @@ class SyncPermissions
      */
     public function handle()
     {
-        $this->sync(
-            $this->fetchPermissions(fusion_path('permissions'))
-        );
+        $this->sync($this->fetchPermissions());
     }
 
     /**
@@ -72,13 +70,21 @@ class SyncPermissions
     /**
      * Fetch all permission files.
      *
-     * @param string $directory
-     *
      * @return array
      */
-    protected function fetchPermissions($directory)
+    protected function fetchPermissions()
     {
-        $files = Finder::create()->files()->name('*.php')->in($directory);
+        // Include FusionCMS permissions..
+        $paths = [ fusion_path('permissions') ];
+
+        // Include Addon permissions..
+        app('addons.manifest')->getAddons()->each(function($addon) use (&$paths) {
+            if (file_exists($addon->getPath('permissions'))) {
+                array_push($paths, $addon->getPath('permissions'));
+            }
+        });
+
+        $files = Finder::create()->files()->name('*.php')->in($paths);
         $data  = [];
 
         foreach ($files as $file) {

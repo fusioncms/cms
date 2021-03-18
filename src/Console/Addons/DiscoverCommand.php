@@ -2,7 +2,6 @@
 
 namespace Fusion\Console\Addons;
 
-use Fusion\Facades\Addon;
 use Illuminate\Console\Command;
 
 class DiscoverCommand extends Command
@@ -28,9 +27,10 @@ class DiscoverCommand extends Command
      */
     public function handle()
     {
-        Addon::discover();
+        $manifest = $this->getLaravel()->make('addons.manifest');
+        $manifest->build();
 
-        $count = Addon::count();
+        $count = $manifest->getAddonCount();
         $term  = ($count == 1) ? 'addon' : 'addons';
 
         $this->info("Discovered {$count} {$term}!");

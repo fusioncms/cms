@@ -27,7 +27,6 @@ return [
                 'include' => [
                     storage_path('app/public/files'),
                     theme_path(),
-                    addon_path(),
                 ],
 
                 /*

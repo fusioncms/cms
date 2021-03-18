@@ -1,19 +1,5 @@
 <?php
 
-if (!function_exists('addon_path')) {
-    /**
-     * Get the path to the addons folder.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    function addon_path($path = '')
-    {
-        return base_path().DIRECTORY_SEPARATOR.'addons'.($path ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : $path);
-    }
-}
-
 if (!function_exists('fusion_path')) {
     /**
      * Get the path to the fusion folder.

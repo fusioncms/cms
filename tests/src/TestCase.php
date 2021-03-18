@@ -189,7 +189,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         return [
             'Fusion'  => 'Fusion\Facades\Fusion',
             'Theme'   => 'Fusion\Facades\Theme',
-            'Addon'   => 'Fusion\Facades\Addon',
             'Setting' => 'Fusion\Facades\Setting',
         ];
     }

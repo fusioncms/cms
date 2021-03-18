@@ -506,16 +506,6 @@ const router = new Router({
         },
 
         {
-            path: '/addons',
-            component: () => import('@/pages/Addons'),
-            name: 'addons',
-            meta: {
-                requiresAuth: true,
-                layout: 'admin'
-            }
-        },
-
-        {
             path: '/updates',
             component: () => import('@/pages/Updates/Index'),
             name: 'updates',

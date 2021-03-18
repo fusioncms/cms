@@ -12,13 +12,11 @@
     },
     "autoload": {
         "classmap": [
-            "database",
-            "tests/TestCase.php"
+            "database"
         ],
         "psr-4": {
             "App\\": "app/",
-            "Themes\\": "themes/",
-            "Modules\\": "modules/"
+            "Themes\\": "themes/"
         }
     },
     "extra": {
