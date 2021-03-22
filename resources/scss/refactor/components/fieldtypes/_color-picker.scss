@@ -12,10 +12,10 @@
       padding: 5px 4px;
     }
     .pcr-type {
-      @apply .bg-white .border .text-gray-700 .border-gray-400 .shadow;
+      @apply bg-white border text-gray-700 border-gray-400 shadow;
     }
     .pcr-type.active {
-      @apply .bg-primary-500;
+      @apply bg-primary-500;
     }
   }
 }
@@ -23,7 +23,7 @@
 .color-picker {
   .pickr {
     @extend .button;
-    @apply .p-1;
+    @apply p-1;
   }
   .pickr .pcr-button {
     height: 2.5em;

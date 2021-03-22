@@ -19,14 +19,14 @@
 			id="{{ $name }}"
 			type="{{ $type }}"
 			name="{{ $name }}"
-			class="appearance-none block w-full px-3 py-2 border border-gray-500 rounded-md text-gray-600 placeholder-gray-400 focus:outline-none focus:shadow-outline-gray focus:border-gray-600 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+			class="appearance-none block w-full px-3 py-2 border border-gray-500 rounded-md text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-gray focus:border-gray-600 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
 			placeholder="{{ $label }}"
 			aria-describedby="{{ $name }}-input"
 			value="{{ old($name, $value) }}"
 			{{ $disabled ? 'disabled' : '' }}
 			{{ $readonly ? 'readonly' : '' }}/>
 	</div>
-	
+
 	@error("$name")
 		<div class="text-red-500">{{ $message }}</div>
 	@enderror

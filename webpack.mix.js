@@ -9,11 +9,6 @@ mix.setPublicPath('public')
     .js('resources/js/gravity.js', 'js')
     .vue()
     .sass('resources/scss/gravity.scss', 'css', { implementation: require('node-sass') })
-    // .extract(['vue', 'vue-loader', 'vue-router', 'vue-template-compiler', 'vuex'], 'js/vue.js')
-    // .extract(['vuedraggable', 'portal-vue', 'vue-apexcharts', 'vue-feather-icons', 'vue-head', 'vue-moment', 'vue-mq', 'vue-scrollactive', 'vue2-dropzone', '@fortawesome/vue-fontawesome'], 'js/vue-plugins.js')
-    // .extract(['tailwindcss', '@tailwindcss/ui'], 'js/tailwind.js')
-    // .extract(['@fortawesome/fontawesome-free', '@fortawesome/fontawesome-svg-core', '@fortawesome/free-brands-svg-icons', '@fortawesome/free-regular-svg-icons', '@fortawesome/free-solid-svg-icons'], 'js/fontawesome.js')
-    // .extract()
     .version()
     .webpackConfig({
         devtool: sourceMap,
@@ -30,7 +25,9 @@ mix.setPublicPath('public')
     .options({
         processCssUrls: false,
         postCss: [
-            tailwindcss('./resources/tailwind.js')
+            require('postcss-import'),
+            require('tailwindcss'),
+            require('autoprefixer'),
         ],
     })
     .copy('resources/img', 'public/img')

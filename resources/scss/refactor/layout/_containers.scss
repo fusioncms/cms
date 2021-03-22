@@ -1,13 +1,13 @@
 .flex-wrapper {
-    @apply .min-h-screen .flex .flex-1 .flex-col;
+    @apply min-h-screen flex flex-1 flex-col;
 }
 
 .content-container {
-    @apply .px-3 .mb-6 .flex-1;
+    @apply px-3 mb-6 flex-1;
 }
 
 .side-container {
-    @apply .px-3 .mb-6 .w-full;
+    @apply px-3 mb-6 w-full;
 
     @screen xl {
         width: 350px;
