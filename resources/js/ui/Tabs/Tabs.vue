@@ -36,7 +36,7 @@
                         @click.prevent="tab.remove(index)"
                         class="flex items-center justify-center w-6 h-6 rounded"
                         :class="{ 'hover:bg-gray-200 hover:text-gray-600': ! tab.isDropzone }">
-                        
+
                         <fa-icon icon="times" class="fa-xs"></fa-icon>
                     </span>
                 </a>

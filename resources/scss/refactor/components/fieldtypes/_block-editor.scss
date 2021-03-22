@@ -1,13 +1,13 @@
 .block-editor {
-  @apply .bg-white .text-gray-700 .border .border-gray-400 .rounded .px-3 .py-1 .relative;
+  @apply bg-white text-gray-700 border border-gray-400 rounded px-3 py-1 relative;
 
   .ce-block {
-    @apply .border-dashed .border .border-transparent .mb-3;
-    
+    @apply border-dashed border border-transparent mb-3;
+
     padding: 15px 10px 15px 40px;
 
     &:hover, &:focus {
-      @apply .border-gray-300;
+      @apply border-gray-300;
     }
 
     &__content {
@@ -37,12 +37,12 @@
   }
 
   &__add {
-    @apply .absolute .border-dashed .border .border-gray-300 .py-3 .text-center .z-10 .block .text-gray-500;
+    @apply absolute border-dashed border border-gray-300 py-3 text-center z-10 block text-gray-500;
     left: .75rem;
     right: .75rem;
     bottom: .75rem;
     &:hover, &:focus {
-      @apply .bg-gray-100;
+      @apply bg-gray-100;
     }
   }
 
