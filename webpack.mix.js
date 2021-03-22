@@ -25,6 +25,7 @@ mix.setPublicPath('public')
     .options({
         processCssUrls: false,
         postCss: [
+            require("@tailwindcss/jit"),
             require('postcss-import'),
             require('tailwindcss'),
             require('autoprefixer'),
