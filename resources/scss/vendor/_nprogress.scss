@@ -1,9 +1,9 @@
 #nprogress {
     pointer-events: none;
 }
-  
+
 #nprogress .bar {
-    @apply .bg-primary-500 .w-full .fixed .top-0 .left-0;
+    @apply bg-primary-500 w-full fixed top-0 left-0;
 
     z-index: 9000;
     height: 4px;

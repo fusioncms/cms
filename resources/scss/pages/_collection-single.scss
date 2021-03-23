@@ -6,7 +6,7 @@
         @apply flex flex-wrap w-full;
 
         @screen lg {
-            @apply flex flex-no-wrap items-center;
+            @apply flex flex-nowrap items-center;
         }
     }
 
@@ -15,9 +15,9 @@
     &__edit {
         @apply flex-wrap;
 
-        input { 
+        input {
             @apply flex-auto leading-normal mr-2 mb-2 tracking-wide w-full flex-shrink;
-            
+
             @screen lg {
                 width: 400px;
                 max-width: 100%;

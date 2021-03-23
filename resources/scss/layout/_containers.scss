@@ -15,7 +15,7 @@
     }
 
     &__header {
-        @apply sticky top-0 z-10 bg-gray-300 flex flex-row justify-between py-1 w-full;
+        @apply sticky top-0 z-10 bg-gray-100 flex flex-row justify-between py-1 w-full;
 
         @screen sm {
             @apply relative top-auto py-3;
@@ -58,7 +58,7 @@
     @extend .row;
 
     @screen lg {
-        @apply flex flex-no-wrap;
+        @apply flex flex-nowrap;
     }
 
     &__content {

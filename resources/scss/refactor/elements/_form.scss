@@ -1,5 +1,5 @@
 .form__control {
-        @apply .appearance-none .block .w-full .bg-white .text-gray-700 .border .border-gray-400 .rounded py-2 px-3 .leading-tight;
+        @apply appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-2 px-3 leading-tight;
 
         max-height: 38px;
 
@@ -8,22 +8,22 @@
         }
 
         &:focus {
-            @apply .outline-none .shadow;
+            @apply outline-none shadow;
         }
 
         &.form__error {
-            @apply .border-danger-200 .border-2;
+            @apply border-danger-200 border-2;
         }
 
         &.font-mono {
-            @apply .text-sm;
+            @apply text-sm;
         }
 
         &:read-only, &:disabled {
-            @apply .bg-gray-200;
+            @apply bg-gray-200;
 
             &:focus {
-                @apply .shadow-none;
+                @apply shadow-none;
             }
         }
     }
@@ -31,13 +31,13 @@
 
 select {
     &.form__control {
-        @apply .pr-8;
+        @apply pr-8;
     }
 }
 
 .form__select {
     &-button.form__error {
-        @apply .border-danger-200 .border-2;
+        @apply border-danger-200 border-2;
     }
 }
 
@@ -80,7 +80,7 @@ select {
         }
 
         &--inline {
-            @apply .inline-flex my-3;
+            @apply inline-flex my-3;
 
             label {
                 @apply mr-4;
@@ -135,7 +135,7 @@ select {
         }
 
         &--inline {
-            @apply .inline-flex my-3;
+            @apply inline-flex my-3;
 
             label {
                 @apply mr-4;
@@ -145,7 +145,7 @@ select {
 }
 
 .form__number {
-    @apply .flex;
+    @apply flex;
     &-decrease {
         @extend .button;
         @apply mr-2;
@@ -157,49 +157,49 @@ select {
 }
 
 .form__control--meta {
-    @apply .text-sm .mt-1 .flex .justify-between;
+    @apply text-sm mt-1 flex justify-between;
 
     span {
-        @apply .block;
+        @apply block;
     }
 
     .form__error--message {
-        @apply .text-danger-500;
+        @apply text-danger-500;
     }
 
     > .form__password {
-        @apply .ml-2 .flex-none;
+        @apply ml-2 flex-none;
     }
 }
 
 .form__group {
-    @apply .mb-6;
+    @apply mb-6;
 
     &:last-child {
-        @apply .mb-0;
+        @apply mb-0;
     }
 }
 
 .input__group {
-    @apply .flex .flex-wrap .items-stretch .w-full .mb-6 .relative;
+    @apply flex flex-wrap items-stretch w-full mb-6 relative;
 
     > .form__control {
-        @apply .flex-shrink .flex-grow .flex-auto .w-px .flex-1 .rounded-r-none .relative;
+        @apply flex-shrink flex-grow flex-auto w-px flex-1 rounded-r-none relative;
 
         &:focus {
-            @apply .border-r-0;
+            @apply border-r-0;
         }
     }
 }
 
 .input__group--append {
-    @apply .flex .-mr-px;
+    @apply flex -mr-px;
 
     > .button {
-        @apply .flex .items-center .rounded .rounded-l-none .whitespace-no-wrap .shadow-none .bg-white .text-gray-700;
+        @apply flex items-center rounded rounded-l-none whitespace-nowrap shadow-none bg-white text-gray-700;
 
         &:focus {
-            @apply .outline-none .shadow;
+            @apply outline-none shadow;
         }
     }
 }

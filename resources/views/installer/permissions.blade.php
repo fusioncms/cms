@@ -14,7 +14,7 @@
 	<div class="flex flex-col">
 		<div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
 			<div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-				
+
 				@php
 					$thead = ['Folder', 'Actual', 'Required', 'Pass'];
 					$tbody = \Fusion\Console\Actions\CheckServerRequirements::permissions();
@@ -34,7 +34,7 @@
 						@foreach($tbody as $row)
 							<tr class="bg-white">
 								@foreach($row as $key => $value)
-									<td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+									<td class="px-6 py-4 whitespace-nowrap text-sm leading-5 text-gray-500">
 										{{ $value }}
 									</td>
 								@endforeach

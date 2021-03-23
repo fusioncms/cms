@@ -1,7 +1,7 @@
 .blueprint {
-    &__row { 
+    &__row {
         @screen xl {
-            @apply flex-no-wrap;
+            @apply flex-nowrap;
         }
     }
 
