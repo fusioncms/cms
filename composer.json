@@ -36,7 +36,6 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/stubs/laravel/addons",
             "tests/stubs/laravel/themes"
         ],
         "psr-4": {
