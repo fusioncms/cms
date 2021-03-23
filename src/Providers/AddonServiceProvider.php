@@ -2,6 +2,7 @@
 
 namespace Fusion\Providers;
 
+use Fusion\Fusion;
 use Fusion\Facades\Menu;
 use Fusion\Services\Addons\Addon;
 use Illuminate\Support\Arr;
@@ -60,11 +61,11 @@ abstract class AddonServiceProvider extends ServiceProvider
     protected $navigation = [];
 
     /**
-     * Admin scripts.
+     * Front-end assets.
      * 
      * @var array
      */
-    protected $scripts = [];
+    protected $assets = [];
 
     /**
      * Boot the provided services.
@@ -225,13 +226,17 @@ abstract class AddonServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register asset files.
+     * Register front-end assets.
      * 
      * @return void
      */
     protected function bootAssets()
     {
-        //
+        foreach ($this->assets as $path) {
+            if (file_exists(public_path($path))) {
+                Fusion::asset($path);
+            }
+        }
     }
 
     /**
