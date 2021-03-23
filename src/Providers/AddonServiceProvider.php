@@ -60,6 +60,13 @@ abstract class AddonServiceProvider extends ServiceProvider
     protected $navigation = [];
 
     /**
+     * Admin scripts.
+     * 
+     * @var array
+     */
+    protected $scripts = [];
+
+    /**
      * Boot the provided services.
      *
      * @return void
@@ -80,6 +87,7 @@ abstract class AddonServiceProvider extends ServiceProvider
         $this->bootViews();
         $this->bootTranslations();
         $this->bootAdminMenu();
+        $this->bootAssets();
         $this->bootFieldtypes();
     }
 
@@ -213,6 +221,26 @@ abstract class AddonServiceProvider extends ServiceProvider
 
         if (file_exists($path)) {
             $this->loadTranslationsFrom($path, $slug);
+        }
+    }
+
+    /**
+     * Register asset files.
+     * 
+     * @return void
+     */
+    protected function bootAssets()
+    {
+        $slug  = $this->addon->getSlug();
+        $paths = [
+            "/vendor/{$slug}/js/{$slug}.js",
+            "/vendor/{$slug}/css/{$slug}.css",
+        ];
+
+        foreach ($paths as $path) {
+            if (file_exists(public_path($path))) {
+                \Fusion::asset($path);
+            }
         }
     }
 

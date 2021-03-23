@@ -34,7 +34,7 @@ export default class Fusion {
 
     boot () {
         this.bootingCallbacks.forEach((callback) => {
-            callback(this.router, this.store)
+            callback(Vue, this.router, this.store)
         })
 
         this.vue = new Vue({
