@@ -231,17 +231,7 @@ abstract class AddonServiceProvider extends ServiceProvider
      */
     protected function bootAssets()
     {
-        $slug  = $this->addon->getSlug();
-        $paths = [
-            "/vendor/{$slug}/js/{$slug}.js",
-            "/vendor/{$slug}/css/{$slug}.css",
-        ];
-
-        foreach ($paths as $path) {
-            if (file_exists(public_path($path))) {
-                \Fusion::asset($path);
-            }
-        }
+        //
     }
 
     /**
