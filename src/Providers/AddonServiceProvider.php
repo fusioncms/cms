@@ -2,7 +2,6 @@
 
 namespace Fusion\Providers;
 
-use Fusion\Fusion;
 use Fusion\Facades\Menu;
 use Fusion\Services\Addons\Addon;
 use Illuminate\Support\Arr;
@@ -234,7 +233,7 @@ abstract class AddonServiceProvider extends ServiceProvider
     {
         foreach ($this->assets as $path) {
             if (file_exists(public_path($path))) {
-                Fusion::asset($path);
+                \Fusion::asset($path);
             }
         }
     }
