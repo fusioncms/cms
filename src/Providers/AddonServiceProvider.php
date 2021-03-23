@@ -61,7 +61,7 @@ abstract class AddonServiceProvider extends ServiceProvider
 
     /**
      * Front-end assets.
-     * 
+     *
      * @var array
      */
     protected $assets = [];
@@ -226,7 +226,7 @@ abstract class AddonServiceProvider extends ServiceProvider
 
     /**
      * Register front-end assets.
-     * 
+     *
      * @return void
      */
     protected function bootAssets()
