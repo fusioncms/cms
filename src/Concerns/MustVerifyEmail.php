@@ -3,6 +3,7 @@
 namespace Fusion\Concerns;
 
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Throwable;
 
 trait MustVerifyEmail
 {
@@ -62,7 +63,11 @@ trait MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         if ($this->shouldVerifyEmail()) {
-            $this->notify(new VerifyEmail());
+            rescue(function() {
+                $this->notify(new VerifyEmail());
+            }, function(Throwable $exception) {
+                logger()->error("Unable to send email verification: `{$exception->getMessage()}`");
+            });
         }
     }
 
