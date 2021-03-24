@@ -67,7 +67,7 @@ class UserController extends Controller
             $user->syncSubscriptions($attributes['subscriptions']);
         }
 
-        rescue(function() use ($user) {
+        rescue(function () use ($user) {
             /**
              * Forces new users to confirm themselves.
              *

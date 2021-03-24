@@ -63,9 +63,9 @@ trait MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         if ($this->shouldVerifyEmail()) {
-            rescue(function() {
+            rescue(function () {
                 $this->notify(new VerifyEmail());
-            }, function(Throwable $exception) {
+            }, function (Throwable $exception) {
                 logger()->error("Unable to send email verification: `{$exception->getMessage()}`");
             });
         }
