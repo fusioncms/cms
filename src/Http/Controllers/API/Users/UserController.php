@@ -67,15 +67,17 @@ class UserController extends Controller
             $user->syncSubscriptions($attributes['subscriptions']);
         }
 
-        /**
-         * Forces new users to confirm themselves.
-         *
-         * Via:
-         * - Verifying their e-mail address.
-         * - Setting their own password.
-         */
-        Mail::to($user)
-            ->send(new ConfirmNewUser($user));
+        rescue(function() use ($user) {
+            /**
+             * Forces new users to confirm themselves.
+             *
+             * Via:
+             * - Verifying their e-mail address.
+             * - Setting their own password.
+             */
+            Mail::to($user)
+                ->send(new ConfirmNewUser($user));
+        });
 
         return new UserResource($user);
     }
