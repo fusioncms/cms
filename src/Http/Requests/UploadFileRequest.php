@@ -30,6 +30,18 @@ class UploadFileRequest extends Request
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'directory_id' => (int) $this->directory_id,
+        ]);
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -40,7 +52,7 @@ class UploadFileRequest extends Request
 
         return [
             'file'         => "required|file|max:{$maxKb}",
-            'directory_id' => 'sometimes',
+            'directory_id' => 'required',
         ];
     }
 

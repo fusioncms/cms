@@ -35,16 +35,22 @@ abstract class Fieldtype
     public $column = null;
 
     /**
+     * Field setting validation rules (FieldRequest).
+     *
      * @var array
      */
     public $rules = [];
 
     /**
+     * Field setting custom message (FieldRequest).
+     *
      * @var array
      */
     public $messages = [];
 
     /**
+     * Field setting custom attribute (FieldRequest).
+     *
      * @var array
      */
     public $attributes = [];
@@ -236,9 +242,13 @@ abstract class Fieldtype
      */
     public function rules(Field $field, $value = null)
     {
-        return [
-            $field->handle => $field->validation->get('value') ?: 'sometimes',
-        ];
+        if ($field->validation) {
+            return [
+                $field->handle => $field->validation->get('value') ?: 'sometimes',
+            ];
+        }
+
+        return [];
     }
 
     /**
@@ -315,6 +325,17 @@ abstract class Fieldtype
     public function onAfterSave($value, Field $field)
     {
         return $value;
+    }
+
+    /**
+     * Add additional checks made from FieldRequest.
+     *
+     * @param \Illuminate\Validation\Validator $validator
+     *
+     * @return void
+     */
+    public function onPostFieldRequest($validator)
+    {
     }
 
     /**

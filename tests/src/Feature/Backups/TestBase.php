@@ -24,7 +24,7 @@ class TestBase extends TestCase
 
         // --
         Storage::fake('public');
-        Storage::fake('temp');
+        Storage::fake('local');
 
         // Establish fake db connection..
         config(['backup.backup.source.databases' => ['sqlite']]);
@@ -35,7 +35,7 @@ class TestBase extends TestCase
         ]);
 
         // Establish backup destination disks
-        config(['backup.backup.destination.disks' => ['public', 'temp']]);
+        config(['backup.backup.destination.disks' => ['public', 'local']]);
 
         // Establish backup source env variables
         config(['backup.backup.source.env' => ['APP_KEY']]);
@@ -63,7 +63,10 @@ class TestBase extends TestCase
     {
         $name = $name ?? Carbon::now()->format(Backup::FILENAME_FORMAT);
 
-        BackupRun::dispatchNow($name, $disk);
+        BackupRun::dispatchNow([
+            'name' => $name,
+            'disk' => $disk,
+        ]);
 
         return Backup::where(['name' => $name])->get();
     }

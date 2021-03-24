@@ -106,6 +106,10 @@
             submit: {
                 required: true,
             }
+        },
+
+        created() {
+            this.$store.commit('fieldtypes/setStructure', 'fieldsets')
         }
     }
 </script>

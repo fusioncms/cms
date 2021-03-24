@@ -1,6 +1,6 @@
-.main-content { 
+.main-content {
     @apply w-full flex flex-col items-center flex-auto pb-6;
-    
+
     @screen lg {
         transition: padding 0.5s $transition-effect;
 
@@ -15,7 +15,7 @@
     }
 
     &__header {
-        @apply sticky top-0 z-10 bg-gray-300 flex flex-row justify-between py-1 w-full;
+        @apply sticky top-0 z-10 bg-gray-100 flex flex-row justify-between py-1 w-full;
 
         @screen sm {
             @apply relative top-auto py-3;
@@ -41,8 +41,8 @@
     &__container {
         @apply flex flex-col justify-center w-full pt-4;
 
-        @screen lg { 
-            @apply flex-row pt-6; 
+        @screen lg {
+            @apply flex-row pt-6;
         }
     }
 
@@ -58,7 +58,7 @@
     @extend .row;
 
     @screen lg {
-        @apply flex flex-no-wrap;
+        @apply flex flex-nowrap;
     }
 
     &__content {
@@ -73,9 +73,9 @@
 
         @screen lg {
             @apply flex-shrink-0;
-            width: 250px;
+            width: 300px;
         }
 
-        @screen xl { width: 300px; }
+        @screen xl { width: 350px; }
     }
 }

@@ -2,7 +2,7 @@
     <div>
         <div class="fixed inset-0 flex items-end justify-end px-4 py-6 sm:p-6 pointer-events-none z-50">
             <div class="max-w-xs w-full bg-gray-900 shadow-lg rounded-lg pointer-events-auto border border-gray-300" v-show="show">
-                <div class="rounded-lg shadow-xs overflow-hidden">
+                <div class="rounded-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                     <div class="p-4">
                         <div class="flex items-start">
                             <div class="flex-shrink-0">

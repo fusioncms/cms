@@ -29,6 +29,7 @@
 
         computed: {
             ...mapGetters({
+                disk:                'filemanager/getDisk',
                 selectedDirectories: 'filemanager/getSelectedDirectories',
                 selectedFiles:       'filemanager/getSelectedFiles',
                 hasSelection:        'filemanager/hasSelection',
@@ -57,14 +58,14 @@
 
                 // delete directories..
                 _.each(this.selectedDirectories, (id) => {
-                    axios.delete(`/api/directories/${id}`).then(() => {
+                    axios.delete(`/api/directories/${this.disk.id}/${id}`).then(() => {
                         this.toggleDirectorySelection(id)
                     })
                 })
 
                 // delete files..
                 _.each(this.selectedFiles, (id) => {
-                    axios.delete(`/api/files/${id}`).then(() => {
+                    axios.delete(`/api/files/${this.disk.id}/${id}`).then(() => {
                         this.toggleFileSelection(id)
                     })
                 })

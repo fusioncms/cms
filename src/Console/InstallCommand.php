@@ -201,8 +201,7 @@ class InstallCommand extends Command
 
             'Deleting asset files...'           => new \Fusion\Console\Uninstaller\DeleteUserFiles(),
             'Deleting model files...'           => new \Fusion\Console\Uninstaller\DeleteModelFiles(),
-            'Deleting addon assets...'          => new \Fusion\Console\Uninstaller\DeleteAddonAssets(),
-            'Deleting addon cache...'           => new \Fusion\Console\Uninstaller\DeleteAddonCache(),
+            'Deleting addon assets...'          => new \Fusion\Console\Uninstaller\DeleteAddonResources(),
             'Deleting theme assets...'          => new \Fusion\Console\Uninstaller\DeleteThemeAssets(),
             'Deleting theme cache...'           => new \Fusion\Console\Uninstaller\DeleteThemeCache(),
             'Deleting log files...'             => new \Fusion\Console\Uninstaller\DeleteLogFiles(),
@@ -215,6 +214,8 @@ class InstallCommand extends Command
             'Creating database tables...'       => new \Fusion\Console\Installer\CreateDatabaseTables(),
             'Publishing Fusion resources...'    => new \Fusion\Console\Installer\PublishFusionResources(),
             'Creating storage link...'          => new \Fusion\Console\Installer\CreateStorageLink(),
+            'Creating default disks...'         => new \Fusion\Console\Installer\CreateDefaultDisks(),
+            'Creating default notifications...' => new \Fusion\Console\Installer\CreateDefaultNotifications(),
             'Creating default permissions...'   => new \Fusion\Console\Installer\CreateDefaultPermissions(),
             'Creating default roles...'         => new \Fusion\Console\Installer\CreateDefaultRoles(),
             'Creating default user account...'  => new \Fusion\Console\Installer\CreateDefaultUser($this->container),

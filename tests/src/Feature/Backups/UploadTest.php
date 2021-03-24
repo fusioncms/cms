@@ -99,7 +99,7 @@ class UploadTest extends TestBase
         // setup ----
         File::move(
             $backupPath = Storage::disk('public')->path($backup->location),
-            $uploadPath = Storage::disk('temp')->path("{$name}.zip")
+            $uploadPath = Storage::disk('local')->path("{$name}.zip")
         );
 
         DB::table('backups')->delete();

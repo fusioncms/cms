@@ -47,8 +47,7 @@ class InstallController extends Controller
         $jobs = [
             'Deleting asset files...'           => new \Fusion\Console\Uninstaller\DeleteUserFiles(),
             'Deleting model files...'           => new \Fusion\Console\Uninstaller\DeleteModelFiles(),
-            'Deleting addon assets...'          => new \Fusion\Console\Uninstaller\DeleteAddonAssets(),
-            'Deleting addon cache...'           => new \Fusion\Console\Uninstaller\DeleteAddonCache(),
+            'Deleting addon assets...'          => new \Fusion\Console\Uninstaller\DeleteAddonResources(),
             'Deleting log files...'             => new \Fusion\Console\Uninstaller\DeleteLogFiles(),
             'Deleting database...'              => new \Fusion\Console\Uninstaller\DeleteDatabase(),
 

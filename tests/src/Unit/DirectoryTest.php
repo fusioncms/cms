@@ -3,6 +3,7 @@
 namespace Fusion\Tests\Unit;
 
 use Fusion\Models\Directory;
+use Fusion\Models\Disk;
 use Fusion\Tests\TestCase;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -42,5 +43,13 @@ class DirectoryTest extends TestCase
         DB::table('directories')->insert($directoryTwo);
 
         $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function a_directory_belongs_to_a_disk()
+    {
+        $directory = Directory::factory()->create();
+
+        $this->assertInstanceOf(Disk::class, $directory->disk);
     }
 }

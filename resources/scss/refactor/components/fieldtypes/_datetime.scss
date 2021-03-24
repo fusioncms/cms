@@ -11,9 +11,9 @@
 }
 
 .flatpickr-calendar {
-  @apply .border-gray-400;
+  @apply border-gray-400;
   .flatpickr-months {
-    @apply .border-gray-400 .pb-1 .mt-1 .mb-2 .relative;
+    @apply border-gray-400 pb-1 mt-1 mb-2 relative;
     border-bottom-width: 1px;
   }
 
@@ -24,7 +24,7 @@
     font-weight: 800;
   }
   .flatpickr-day.selected {
-    @apply .bg-primary-500 .border-primary-500;
+    @apply bg-primary-500 border-primary-500;
   }
 
   .flatpickr-monthDropdown-months {

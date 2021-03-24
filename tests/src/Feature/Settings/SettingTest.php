@@ -57,7 +57,7 @@ class SettingTest extends TestCase
         $settings = setting();
 
         $this->assertArrayHasKey('api.personal_access_tokens', $settings);
-        $this->assertArrayHasKey('backups.scheduled_backups', $settings);
+        $this->assertArrayHasKey('backups.backups_auto', $settings);
         $this->assertArrayHasKey('cache.clear_cache_component', $settings);
         $this->assertArrayHasKey('date_time.date_format', $settings);
     }
@@ -68,7 +68,7 @@ class SettingTest extends TestCase
         $settings = Setting::all();
 
         $this->assertArrayHasKey('api.personal_access_tokens', $settings);
-        $this->assertArrayHasKey('backups.scheduled_backups', $settings);
+        $this->assertArrayHasKey('backups.backups_auto', $settings);
         $this->assertArrayHasKey('cache.clear_cache_component', $settings);
         $this->assertArrayHasKey('date_time.date_format', $settings);
     }

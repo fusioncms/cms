@@ -28,8 +28,11 @@ Route::prefix('users')->group(function () {
 
 Route::get('/files/{type}', 'FileController@index');
 
-Route::get('/roles', 'RoleController@index');
-Route::get('/roles/{role}/permissions', 'RolePermissionController@index');
+Route::prefix('roles')->group(function () {
+    Route::get('/', 'RoleController@index');
+    Route::get('/{role}/permissions', 'PermissionController@index');
+});
+
 Route::get('/permissions', 'PermissionController@index');
 Route::get('/taxonomies', 'TaxonomyController@index');
 Route::get('/forms', 'FormController@index');
@@ -41,3 +44,5 @@ Route::get('/matrices/{matrix}/fields', 'MatrixFieldController@index');
 Route::get('/collections/{collection}', 'CollectionController@index');
 Route::get('/addons', 'AddonController@index');
 Route::get('/backups', 'BackupController@index');
+Route::get('/disks', 'DiskController@index');
+Route::get('/scripts', 'ScriptController@index');

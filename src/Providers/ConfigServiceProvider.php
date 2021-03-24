@@ -2,6 +2,8 @@
 
 namespace Fusion\Providers;
 
+use Fusion\Models\Disk;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,59 +17,93 @@ class ConfigServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerMacro();
+    }
+
+    /**
+     * Boot the provided services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        /**
+         * FusionCMS will now merge it's own
+         * configurations on top of Laravel's.
+         */
+        $this->resetBackupConfigurations();
+        $this->mergeFusionCMSConfigurations();
+        $this->mergeFileSystemConfigurations();
+    }
+
+    /**
+     * Add `mergeDeep` macro to Arr Facade.
+     *
+     * @var array
+     */
+    protected function registerMacro()
+    {
+        Arr::macro('mergeDeep', function (array $arr1, array $arr2) {
+            $output = array_merge($arr1, $arr2);
+
+            foreach ($arr1 as $key => $value) {
+                if (is_numeric($key) or !isset($arr2[$key])) {
+                    continue;
+                }
+
+                if (is_array($value) && is_array($arr2[$key])) {
+                    $output[$key] = Arr::mergeDeep($value, $arr2[$key]);
+                    $output[$key] = array_unique($output[$key], SORT_REGULAR);
+                }
+            }
+
+            return $output;
+        });
+    }
+
+    /**
+     * Reset backup configurations from `spatie/laravel-backup`
+     * so we can use a fresh copy of our own.
+     *
+     * @return void
+     */
+    protected function resetBackupConfigurations()
+    {
+        $this->app['config']->set('backup', []);
+    }
+
+    /**
+     * Merge in FusionCMS config file configurations.
+     *
+     * @return void
+     */
+    protected function mergeFusionCMSConfigurations()
+    {
         $files = File::files(fusion_path('config'));
 
         foreach ($files as $file) {
             $path = $file->getPathname();
             $name = File::name($path);
 
-            $this->mergeConfigFrom($path, $name);
+            $this->app['config']->set(
+                $name,
+                Arr::mergeDeep(
+                    $this->app['config']->get($name, []),
+                    require $path,
+                )
+            );
         }
     }
 
     /**
-     * Merge the given configuration with the existing configuration.
-     * [override].
-     *
-     * @param string $path
-     * @param string $key
+     * Merge in FileSystem Disks configurations.
      *
      * @return void
      */
-    protected function mergeConfigFrom($path, $key)
+    protected function mergeFileSystemConfigurations()
     {
-        $this->app['config']->set(
-            $key,
-            $this->mergeDeep(
-                $this->app['config']->get($key, []),
-                require $path
-            )
-        );
-    }
-
-    /**
-     * Deeply merge two arrays.
-     *
-     * @param array $original
-     * @param array $merging
-     *
-     * @return array
-     */
-    private function mergeDeep(array $original, array $merging)
-    {
-        $output = array_merge($original, $merging);
-
-        foreach ($original as $key => $value) {
-            if (is_numeric($key) or !isset($merging[$key])) {
-                continue;
-            }
-
-            if (is_array($value) && is_array($merging[$key])) {
-                $output[$key] = $this->mergeDeep($value, $merging[$key]);
-                $output[$key] = array_unique($output[$key], SORT_REGULAR);
-            }
+        if (app_installed()) {
+            Disk::MergeConfigs();
         }
-
-        return $output;
     }
 }

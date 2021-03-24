@@ -3,6 +3,7 @@
 namespace Fusion\Providers;
 
 use Fusion\Facades\Menu;
+use Fusion\Models\Disk;
 use Fusion\Models\Matrix;
 use Fusion\Models\Taxonomy;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +34,23 @@ class MenuServiceProvider extends ServiceProvider
         });
     }
 
+    private function getFileManagerDisks()
+    {
+        $disks = Disk::all();
+
+        if ($disks->count() == 1) {
+            return ['title' => 'File Manager', 'to' => "/files/{$disk->first()->handle}", 'icon' => 'images'];
+        }
+
+        return [
+            'title'    => 'File Manager',
+            'icon'     => 'images',
+            'children' => $disks->mapWithKeys(function ($disk) {
+                return [$disk->handle => ['title' => $disk->name, 'to' => "/files/{$disk->id}"]];
+            }),
+        ];
+    }
+
     /**
      * Generate Admin Navigation.
      *
@@ -41,8 +59,9 @@ class MenuServiceProvider extends ServiceProvider
     private function adminNavigation()
     {
         $items = collect([
+            // -- General --
             'dashboard'   => ['title' => 'Dashboard', 'to' => '/', 'icon' => 'grip-horizontal', 'permission' => 'access.controlPanel'],
-            'filemanager' => ['title' => 'File Manager', 'to' => '/files', 'icon' => 'images'],
+            'filemanager' => $this->getFileManagerDisks(),
             'inbox'       => ['title' => 'Inbox', 'to' => '/inbox', 'icon' => 'inbox'],
         ]);
 
@@ -50,14 +69,14 @@ class MenuServiceProvider extends ServiceProvider
         $matrices = Matrix::sidebar()->get()->mapWithKeys(function ($item) {
             if ($item->has('children') and $item->children->count()) {
                 $subitems = $item->children->mapWithKeys(function ($subitem) {
-                    $name   = $subitem->type == 'single' ? $subitem->reference_singular : $subitem->reference_plural;
+                    $name   = $subitem->name;
                     $handle = str_handle($name);
                     $path   = $subitem->adminPath;
 
                     return [$handle => ['title' => $name, 'to' => $path]];
                 });
 
-                $name   = $item->type == 'single' ? $item->reference_singular : $item->reference_plural;
+                $name   = $item->name;
                 $handle = str_handle($name);
                 $path   = $item->adminPath;
 
@@ -126,8 +145,10 @@ class MenuServiceProvider extends ServiceProvider
                 'title'    => 'Tools',
                 'icon'     => 'tools',
                 'children' => [
+                    'disks'   => ['title' => 'Disks',   'to' => '/disks'],
                     'backups' => ['title' => 'Backups', 'to' => '/backups'],
                     'logs'    => ['title' => 'Logs',    'to' => '/logs'],
+                    'scripts' => ['title' => 'Scripts', 'to' => '/scripts'],
                 ],
             ],
             'users' => [
@@ -143,11 +164,6 @@ class MenuServiceProvider extends ServiceProvider
                 'title' => 'Customize',
                 'to'    => '/customize',
                 'icon'  => 'paint-roller',
-            ],
-            'addons' => [
-                'title' => 'Addons',
-                'to'    => '/addons',
-                'icon'  => 'box-open',
             ],
             'updates' => [
                 'title' => 'Updates',

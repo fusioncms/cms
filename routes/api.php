@@ -68,11 +68,28 @@ Route::apiResource('blueprints/{blueprint}/sections', 'SectionController');
 /**
  * API - FileManager Routes.
  */
-Route::apiResource('directories', 'FileManager\DirectoryController');
-Route::get('files/{uuid}/download', 'FileManager\FileDownloadController@index');
-Route::post('files/move', 'FileManager\FileMoveController@store');
-Route::post('files/replace/{file}', 'FileManager\FileReplaceController@store');
-Route::apiResource('files', 'FileManager\FileController');
+Route::prefix('files/{disk}')->group(function () {
+    Route::get('{file}/download', 'FileManager\FileDownloadController@index');
+    Route::post('move', 'FileManager\FileMoveController@store');
+    Route::post('{file}/replace', 'FileManager\FileReplaceController@store');
+
+    Route::get('', 'FileManager\FileController@index');
+    Route::get('{file}', 'FileManager\FileController@show');
+    Route::post('', 'FileManager\FileController@store');
+    Route::patch('{file}', 'FileManager\FileController@update');
+    Route::delete('{file}', 'FileManager\FileController@destroy');
+});
+
+/**
+ * API - FileManager Directory Routes.
+ */
+Route::prefix('directories/{disk}')->group(function () {
+    Route::get('', 'FileManager\DirectoryController@index');
+    Route::get('{directory}', 'FileManager\DirectoryController@show');
+    Route::post('', 'FileManager\DirectoryController@store');
+    Route::patch('{directory}', 'FileManager\DirectoryController@update');
+    Route::delete('{directory}', 'FileManager\DirectoryController@destroy');
+});
 
 /**
  * API - Form Routes.
@@ -101,12 +118,12 @@ Route::apiResource('matrices', 'MatrixController');
 /**
  * API - Navigation Routes.
  */
-Route::post('navigation/{navigation}/nodes/move/before', 'Navigation\NodeMoveBeforeController');
-Route::post('navigation/{navigation}/nodes/move/after', 'Navigation\NodeMoveAfterController');
-Route::patch('navigation/{navigation}/nodes/refresh', 'Navigation\NodeRefreshController');
-Route::post('navigation/{navigation}/reorder', 'Navigation\NodeReorderController');
-Route::apiResource('navigation/{navigation}/nodes', 'Navigation\NodeController');
-Route::apiResource('navigation', 'Navigation\NavigationController');
+Route::post('navigation/{navigation}/links/before', 'LinkMoveBeforeController');
+Route::post('navigation/{navigation}/links/after', 'LinkMoveAfterController');
+Route::patch('navigation/{navigation}/links/refresh', 'LinkRefreshController');
+Route::post('navigation/{navigation}/links/reorder', 'LinkReorderController');
+Route::apiResource('navigation/{navigation}/links', 'LinkController');
+Route::apiResource('navigation', 'NavigationController');
 
 /**
  * API - Addon Routes.
@@ -135,6 +152,11 @@ Route::apiResource('taxonomies/{taxonomy}/terms', 'TermController');
 Route::apiResource('taxonomies', 'TaxonomyController');
 
 /**
+ * API - Scripts.
+ */
+Route::apiResource('scripts', 'ScriptController');
+
+/**
  * API - Theme Routes.
  */
 Route::post('themes/verify', 'Themes\VerifyController@index');
@@ -154,18 +176,33 @@ Route::prefix('settings')->group(function () {
 /**
  * API - User Routes.
  */
+Route::prefix('users')->group(function () {
+    Route::post('{user}/verify', 'Users\VerifyEmailController@store');
+    Route::post('{user}/reset-password', 'Users\PasswordResetController@store');
+    Route::post('{user}/expire-password', 'Users\PasswordExpireController@store');
+});
 Route::apiResource('users', 'Users\UserController');
 Route::apiResource('roles', 'Users\RoleController');
 Route::apiResource('tokens', 'Users\TokenController')->except(['show', 'update']);
-Route::post('users/{user}/verify', 'Users\VerifyEmailController@store');
-Route::post('users/{user}/reset-password', 'Users\PasswordResetController@store');
-Route::post('users/{user}/expire-password', 'Users\PasswordExpireController@store');
+
+/**
+ * API - Notification Routes.
+ */
+Route::get('channels', 'Notifications\ChannelController@index');
+Route::get('notifications', 'Notifications\NotificationController@index');
+
+/**
+ * API - Filesystem Disks.
+ */
+Route::apiResource('disks', 'DiskController');
 
 /**
  * API - Updates Routes.
  */
 Route::prefix('updates')->group(function () {
-    Route::get('', 'UpdatesController@index');
-    Route::get('{version}', 'UpdatesController@show');
-    Route::post('', 'UpdatesController@store');
+    Route::get('', 'UpdateController@index');
+    Route::get('{version}', 'UpdateController@show');
+    Route::post('backup', 'UpdateController@backup');
+    Route::post('composer', 'UpdateController@composer');
+    Route::post('finalize', 'UpdateController@finalize');
 });

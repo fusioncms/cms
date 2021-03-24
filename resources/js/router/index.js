@@ -113,23 +113,33 @@ const router = new Router({
             },
         },
         {
-            path: '/navigation/:navigation/nodes',
-            component: () => import('@/pages/Nodes/Index'),
-            name: 'navigation.nodes',
+            path: '/navigation/:navigation/links',
+            component: () => import('@/pages/Links/Index'),
+            name: 'links',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
             },
         },
         {
-            path: '/navigation/:navigation/nodes/:node/edit',
-            component: () => import('@/pages/Nodes/Edit'),
-            name: 'navigation.nodes.edit',
+            path: '/navigation/:navigation/links/create',
+            component: () => import('@/pages/Links/Create'),
+            name: 'links.create',
             meta: {
                 requiresAuth: true,
                 layout: 'admin',
             },
         },
+        {
+            path: '/navigation/:navigation/links/:link/edit',
+            component: () => import('@/pages/Links/Edit'),
+            name: 'links.edit',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin',
+            },
+        },
+
         {
             path: '/matrices',
             component: () => import('@/pages/Matrices/Index'),
@@ -419,7 +429,8 @@ const router = new Router({
             }
         },
         {
-            path: '/files',
+            path: '/files/:disk',
+            alias: '/files',
             component: () => import('@/pages/FileManager/Index'),
             name: 'file-manager.index',
             meta: {
@@ -428,7 +439,7 @@ const router = new Router({
             }
         },
         {
-            path: '/files/:uuid',
+            path: '/files/:disk/:file',
             component: () => import('@/pages/FileManager/Show'),
             name: 'file-manager.show',
             meta: {
@@ -467,9 +478,37 @@ const router = new Router({
         },
 
         {
-            path: '/addons',
-            component: () => import('@/pages/Addons'),
-            name: 'addons',
+            path: '/scripts',
+            component: () => import('@/pages/Scripts/Index'),
+            name: 'scripts',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+        {
+            path: '/scripts/create',
+            component: () => import('@/pages/Scripts/Create'),
+            name: 'scripts.create',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin',
+            },
+        },
+        {
+            path: '/scripts/:script/edit',
+            component: () => import('@/pages/Scripts/Edit'),
+            name: 'scripts.edit',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin',
+            },
+        },
+
+        {
+            path: '/updates',
+            component: () => import('@/pages/Updates/Index'),
+            name: 'updates',
             meta: {
                 requiresAuth: true,
                 layout: 'admin'
@@ -477,9 +516,27 @@ const router = new Router({
         },
 
         {
-            path: '/updates',
-            component: () => import('@/pages/Updates/Index'),
-            name: 'updates',
+            path: '/disks',
+            component: () => import('@/pages/Disks/Index'),
+            name: 'disks',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+        {
+            path: '/disks/create',
+            component: () => import('@/pages/Disks/Create'),
+            name: 'disks.create',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin'
+            }
+        },
+        {
+            path: '/disks/:disk/edit',
+            component: () => import('@/pages/Disks/Edit'),
+            name: 'disks.edit',
             meta: {
                 requiresAuth: true,
                 layout: 'admin'

@@ -95,4 +95,18 @@ class FieldRequest extends Request
             'handle.not_regex' => 'Handle must contain only letters, numbers, and underscores.',
         ] + $this->fieldtype->messages;
     }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param \Illuminate\Validation\Validator $validator
+     *
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $this->fieldtype->onPostFieldRequest($validator);
+        });
+    }
 }

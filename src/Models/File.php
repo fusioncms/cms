@@ -15,6 +15,7 @@ class File extends Model
 
     protected $fillable = [
         'uuid',
+        'disk_id',
         'directory_id',
         'name',
         'title',
@@ -35,27 +36,13 @@ class File extends Model
     ];
 
     /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($model) {
-            Storage::delete($model->location);
-        });
-    }
-
-    /**
      * Get derived absolute file path.
      *
      * @return string
      */
     public function getFullPathAttribute()
     {
-        return Storage::disk('public')->path($this->location);
+        return Storage::disk($this->disk->handle)->path($this->location);
     }
 
     /**
@@ -91,6 +78,16 @@ class File extends Model
     public function getUrlAttribute()
     {
         return "/file/{$this->uuid}/{$this->name}";
+    }
+
+    /**
+     * A file belongs to a disk.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function disk()
+    {
+        return $this->belongsTo(Disk::class);
     }
 
     /**

@@ -2,10 +2,11 @@
 
 namespace Fusion\Providers;
 
-use Fusion\Facades\Addon;
 use Fusion\Facades\Theme;
 use Fusion\Models\Role;
 use Fusion\Models\User;
+use Fusion\Services\Addons\Manifest;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
@@ -22,14 +23,12 @@ class FusionServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->bootMigrations();
-        $this->bootPublishing();
         $this->bootViews();
         $this->bootRoutes();
         $this->bootGates();
         $this->bootCustomRules();
 
         if (app_installed()) {
-            $this->bootAddons();
             $this->bootTheme();
         }
     }
@@ -45,21 +44,12 @@ class FusionServiceProvider extends ServiceProvider
             define('FUSION_VERSION', '6.0.0-beta.10');
         }
 
+        $this->registerAddonManifest();
         $this->registerProviders();
         $this->registerFusion();
         $this->registerMiddleware();
 
         $this->commands([
-            \Fusion\Console\Addons\RollbackCommand::class,
-            \Fusion\Console\Addons\DiscoverCommand::class,
-            \Fusion\Console\Addons\DisableCommand::class,
-            \Fusion\Console\Addons\MigrateCommand::class,
-            \Fusion\Console\Addons\RefreshCommand::class,
-            \Fusion\Console\Addons\EnableCommand::class,
-            \Fusion\Console\Addons\ResetCommand::class,
-            \Fusion\Console\Addons\ListCommand::class,
-            \Fusion\Console\MakeAddonCommand::class,
-            \Fusion\Console\MakeBuilderCommand::class,
             \Fusion\Console\MakeThemeCommand::class,
             \Fusion\Console\UninstallCommand::class,
             \Fusion\Console\InstallCommand::class,
@@ -68,6 +58,11 @@ class FusionServiceProvider extends ServiceProvider
             \Fusion\Console\FlushCommand::class,
             \Fusion\Console\SyncCommand::class,
             \Fusion\Console\UpdateCommand::class,
+
+            // Addons
+            \Fusion\Console\Addons\DiscoverCommand::class,
+            \Fusion\Console\Addons\ListCommand::class,
+            \Fusion\Console\Addons\UninstallCommand::class,
         ]);
     }
 
@@ -141,13 +136,26 @@ class FusionServiceProvider extends ServiceProvider
     }
 
     /**
+     * Registers Addon Manifest.
+     *
+     * @return void
+     */
+    private function registerAddonManifest()
+    {
+        $this->app->instance('addons.manifest', new Manifest(
+            new Filesystem(),
+            $this->app->basePath(),
+            $this->app->bootstrapPath().'/cache/addons.php'
+        ));
+    }
+
+    /**
      * Register the package's supplied service providers.
      *
      * @return void
      */
     private function registerProviders()
     {
-        $this->app->register(AddonServiceProvider::class);
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(ConfigServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
@@ -177,7 +185,7 @@ class FusionServiceProvider extends ServiceProvider
         });
 
         // package manager
-        $this->app->singleton('composer', function () {
+        $this->app->singleton('fusion.composer', function () {
             return new \Fusion\Services\Composer();
         });
     }
@@ -190,32 +198,6 @@ class FusionServiceProvider extends ServiceProvider
     private function bootViews()
     {
         View::getFinder()->prependLocation(fusion_path('resources/views'));
-    }
-
-    /**
-     * Register FusionCMS' publishable resources.
-     *
-     * @return void
-     */
-    private function bootPublishing()
-    {
-        $this->publishes([
-            fusion_path('/public') => public_path('vendor/fusion'),
-        ], 'fusion-assets');
-
-        $this->publishes([
-            fusion_path('/themes') => base_path('themes'),
-        ], 'fusion-themes');
-    }
-
-    /**
-     * Register the available addons.
-     *
-     * @return void
-     */
-    private function bootAddons()
-    {
-        Addon::register();
     }
 
     /**
@@ -247,7 +229,6 @@ class FusionServiceProvider extends ServiceProvider
     {
         Route::mixin(new \Laravel\Ui\AuthRouteMethods());
 
-        $this->registerRouteBindings();
         $this->registerRoutePatterns();
         $this->registerRouteMiddleware();
 
@@ -305,18 +286,6 @@ class FusionServiceProvider extends ServiceProvider
             'namespace'  => 'Fusion\Http\Controllers\DataTable',
             'prefix'     => 'datatable',
         ];
-    }
-
-    /**
-     * Register the package's route bindings.
-     *
-     * @return void
-     */
-    private function registerRouteBindings()
-    {
-        Route::bind('addon', function ($slug) {
-            return \Fusion\Facades\Addon::where('slug', $slug)->first();
-        });
     }
 
     /**

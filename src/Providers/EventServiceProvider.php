@@ -37,6 +37,7 @@ class EventServiceProvider extends ServiceProvider
         parent::boot();
 
         \Fusion\Models\Backup::observe(\Fusion\Observers\BackupObserver::class);
+        \Fusion\Models\Disk::observe(\Fusion\Observers\DiskObserver::class);
         \Fusion\Models\Form::observe(\Fusion\Observers\FormObserver::class);
         \Fusion\Models\Field::observe(\Fusion\Observers\FieldObserver::class);
         \Fusion\Models\Fieldset::observe(\Fusion\Observers\FieldsetObserver::class);

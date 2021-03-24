@@ -12,8 +12,8 @@
             </div>
 
             <vue-dropzone ref="dropzone_element" id="dropzone"
+                v-if="dropzoneOptions"
                 :options="dropzoneOptions"
-                @vdropzone-mounted="configureDZ"
                 @vdropzone-drag-leave="setDropzoneVisible(false)"
                 @vdropzone-success="dzUploaded"
                 @vdropzone-queue-complete="dzComplete"
@@ -31,7 +31,6 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
-    import _ from 'lodash'
     import vue2Dropzone from 'vue2-dropzone'
     import 'vue2-dropzone/dist/vue2Dropzone.min.css'
     import FileProgress from './FileProgress.vue'
@@ -46,18 +45,16 @@
 
         data() {
             return {
-                dropzoneOptions: {
-                    url: '/api/files',
-                    headers: {},
-                }
+                dropzoneOptions: false
             }
         },
 
         computed: {
             ...mapGetters({
+                disk:             'filemanager/getDisk',
                 currentDirectory: 'filemanager/getCurrentDirectory',
-                dropzoneVisible: 'filemanager/getDropzoneVisible',
-                fileUploads: 'filemanager/getFileUploads',
+                dropzoneVisible:  'filemanager/getDropzoneVisible',
+                fileUploads:      'filemanager/getFileUploads',
             }),
 
             csrf() {
@@ -68,31 +65,44 @@
                     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token')
                 }
                 return token
+            },
+        },
+
+        watch: {
+            disk(value) {
+                if (this.$refs.dropzone_element) {
+                    // update endpoint
+                    this.$refs.dropzone_element.dropzone.options.url = `/api/files/${value.id}`
+                } else {
+                    this.dropzoneOptions = {
+                        url: `/api/files/${value.id}`,
+                        headers: {
+                            'X-CSRF-TOKEN':  this.csrf
+                        },
+                    }
+                }
             }
         },
 
         methods: {
             ...mapActions({
                 fetchFilesAndDirectories: 'filemanager/fetchFilesAndDirectories',
-                setUploadsMinimized: 'filemanager/setUploadsMinimized',
-                setDropzoneVisible: 'filemanager/setDropzoneVisible',
-                setUploadProgress: 'filemanager/setUploadProgress',
-                setUploadsVisible: 'filemanager/setUploadsVisible',
-                setFileUploads: 'filemanager/setFileUploads',
-                addFileUpload: 'filemanager/addFileUpload',
-                addFile: 'filemanager/addFile',
+                setUploadsMinimized:      'filemanager/setUploadsMinimized',
+                setDropzoneVisible:       'filemanager/setDropzoneVisible',
+                setUploadProgress:        'filemanager/setUploadProgress',
+                setUploadsVisible:        'filemanager/setUploadsVisible',
+                setFileUploads:           'filemanager/setFileUploads',
+                addFileUpload:            'filemanager/addFileUpload',
+                addFile:                  'filemanager/addFile',
             }),
 
             openDZ() {
                 document.querySelector('.dz-hidden-input').click()
             },
 
-            configureDZ() {
-                let dz = this.$refs.dropzone_element
-                dz.options.headers['X-CSRF-TOKEN'] = this.csrf
-            },
-
             dzPreSend(file, xhr, formData) {
+                this.$refs['dropzone_element'].url = `/api/files/${this.disk.id}`
+
                 formData.append('directory_id', this.currentDirectory)
             },
 
@@ -106,9 +116,8 @@
             },
 
             startUpload(files) {
-                let vm = this
-                vm.showUploads()
-                vm.setDropzoneVisible(false)
+                this.showUploads()
+                this.setDropzoneVisible(false)
             },
 
             showUploads() {
@@ -118,7 +127,7 @@
 
             updateProgress() {
                 let uploaded = _.filter(this.fileUploads, function(file){
-                return file.status == 'success' || file.status == 'error'
+                    return file.status == 'success' || file.status == 'error'
                 }).length
                 this.setUploadProgress((uploaded / this.fileUploads.length) * 100)
             },

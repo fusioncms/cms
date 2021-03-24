@@ -17,7 +17,12 @@ class Directory extends Model
      *
      * @var
      */
-    protected $fillable = ['parent_id', 'name', 'slug'];
+    protected $fillable = [
+        'disk_id',
+        'parent_id',
+        'name',
+        'slug',
+    ];
 
     /**
      * @var bool
@@ -47,9 +52,19 @@ class Directory extends Model
     }
 
     /**
+     * A file belongs to a disk.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function disk()
+    {
+        return $this->belongsTo(Disk::class);
+    }
+
+    /**
      * A directory has many files.
      *
-     * @return Builder
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function files()
     {
@@ -59,7 +74,7 @@ class Directory extends Model
     /**
      * Relationship to parent Directory.
      *
-     * @return Builder
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function parent()
     {
@@ -69,7 +84,7 @@ class Directory extends Model
     /**
      * Relationship to child Directories.
      *
-     * @return Builder
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function children()
     {

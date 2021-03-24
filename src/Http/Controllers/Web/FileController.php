@@ -23,14 +23,14 @@ class FileController extends Controller
         }
 
         if (in_array($file->mimetype, ['image/jpeg', 'image/gif', 'image/png'])) {
-            return $this->imageResponse($file->location, $params);
+            return $this->imageResponse($file, $params);
         }
 
         if (Str::startsWith($file->mimetype, 'video')) {
             return $this->videoResponse($file->location, $file->mimetype);
         }
 
-        return Storage::disk('public')->response(
+        return Storage::disk($file->disk->handle)->response(
             $file->location,
             $file->name,
             [
@@ -39,9 +39,9 @@ class FileController extends Controller
         );
     }
 
-    protected function imageResponse($path, $params)
+    protected function imageResponse($file, $params)
     {
-        return glide()->getImageResponse($path, $params);
+        return glide($file->disk->handle)->getImageResponse($file->location, $params);
     }
 
     protected function videoResponse($path, $mimetype)

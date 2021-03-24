@@ -36,7 +36,6 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/stubs/laravel/addons",
             "tests/stubs/laravel/themes"
         ],
         "psr-4": {
@@ -47,10 +46,10 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.3|^8.0",
         "composer/semver": "^1.5",
         "doctrine/dbal": "^2.9",
-        "laravel/framework": "^8.0",
+        "illuminate/support": "^8.20",
         "laravel/sanctum": "^2.3",
         "laravel/scout": "^8.0",
         "laravel/ui": "^3.0",
@@ -62,14 +61,13 @@
         "spatie/laravel-permission": "^3.16",
         "spatie/laravel-query-builder": "^3.2",
         "spatie/laravel-searchable": "^1.7",
-        "symfony/yaml": "^4.3"
+        "symfony/yaml": "^5.2"
     },
     "require-dev": {
-        "mockery/mockery": "^1.0",
+        "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
-        "orchestra/testbench": "^6.0",
-        "phpunit/phpunit": "^9.0",
-        "predis/predis": "^1.1",
+        "orchestra/testbench": "^6.11",
+        "phpunit/phpunit": "^9.3.3",
         "symfony/css-selector": "^4.3",
         "symfony/dom-crawler": "^4.3"
     },

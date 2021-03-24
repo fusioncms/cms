@@ -61,17 +61,17 @@ abstract class Builder
         File::put(
             $buildPath,
             strtr(
-            $template,
-            array_merge([
-                '{class}'         => $this->getBuildName(),
-                '{table}'         => $this->getBuildTable(),
-                '{slug}'          => $this->source->slug,
-                '{handle}'        => $this->source->handle,
-                '{fillable}'      => $this->toString($fillable),
-                '{casts}'         => $this->toString($casts),
-                '{relationships}' => $this->generateRelationships(),
-            ], $this->getPlaceholders())
-        )
+                $template,
+                array_merge([
+                    '{class}'         => $this->getBuildName(),
+                    '{table}'         => $this->getBuildTable(),
+                    '{slug}'          => $this->source->slug,
+                    '{handle}'        => $this->source->handle,
+                    '{fillable}'      => $this->toString($fillable),
+                    '{casts}'         => $this->toString($casts),
+                    '{relationships}' => $this->generateRelationships(),
+                ], $this->getPlaceholders())
+            )
         );
 
         return app()->make($this->getNamespace());

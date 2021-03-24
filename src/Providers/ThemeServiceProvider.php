@@ -16,7 +16,9 @@ class ThemeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->publishes([
+            fusion_path('/themes') => base_path('themes'),
+        ], 'fusion-themes');
     }
 
     /**

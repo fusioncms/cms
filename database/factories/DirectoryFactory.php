@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Fusion\Models\Directory;
+use Fusion\Models\Disk;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -23,6 +24,7 @@ class DirectoryFactory extends Factory
     public function definition()
     {
         return [
+            'disk_id'   => Disk::first(),
             'name'      => ($name = $this->faker->unique()->word()),
             'slug'      => Str::slug($name),
             'parent_id' => 0,

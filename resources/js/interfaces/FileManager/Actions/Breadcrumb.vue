@@ -1,5 +1,7 @@
 <template>
 	<ui-breadcrumbs>
+		<ui-badge>{{ disk.name }}</ui-badge>
+
 		<ui-breadcrumb  v-for="(breadcrumb, index) in breadcrumbs" :key="breadcrumb.name" @click="navigate(breadcrumb)" :divider="index > 0">
 			{{ breadcrumb.name }}
 		</ui-breadcrumb>

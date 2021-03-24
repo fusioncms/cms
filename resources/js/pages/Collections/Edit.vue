@@ -1,7 +1,7 @@
 <template>
     <div class="collection-page">
         <portal to="title">
-            <page-title :icon="collection.icon || 'pencil-alt'" :subtitle="collection.description">Edit {{ collection.reference_singular }}</page-title>
+            <page-title :icon="collection.icon || 'pencil-alt'" :subtitle="collection.description">Edit {{ collection.name }}</page-title>
         </portal>
 
         <shared-form

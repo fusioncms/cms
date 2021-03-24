@@ -30,9 +30,10 @@ class CreateDefaultUser
     public function handle()
     {
         activity()->withoutLogs(function () {
-            User::create([
+            User::firstOrCreate([
+                'email' => $this->container['user_email'],
+            ], [
                 'name'              => $this->container['user_name'],
-                'email'             => $this->container['user_email'],
                 'password'          => Hash::make($this->container['user_password']),
                 'status'            => true,
                 'email_verified_at' => now(),

@@ -13,7 +13,9 @@ class SyncResources
      */
     public function handle()
     {
-        foreach ($this->links() as $link => $target) {
+        File::ensureDirectoryExists(public_path('vendor'));
+
+        foreach ($this->links() as $target => $link) {
             try {
                 if (!file_exists($link) && file_exists($target)) {
                     File::link($target, $link);
@@ -31,8 +33,17 @@ class SyncResources
      */
     protected function links()
     {
-        return [
-            public_path('vendor/fusion') => fusion_path('public'),
+        // Fusion..
+        $links = [
+            fusion_path('public') => public_path('vendor/fusion'),
         ];
+
+        // Addons..
+        $links = array_merge(
+            $links,
+            app('addons.manifest')->getResourceLinks()
+        );
+
+        return $links;
     }
 }

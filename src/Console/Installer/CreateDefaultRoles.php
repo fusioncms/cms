@@ -12,25 +12,21 @@ class CreateDefaultRoles
     protected $roles = [
         'owner' => [
             'name'        => 'Owner',
-            'handle'      => 'owner',
             'level'       => 0,
             'description' => 'The owner has full, unlimited control panel access and permissions. This role is not editable.',
         ],
         'guest' => [
             'name'        => 'Guest',
-            'handle'      => 'guest',
             'level'       => 99,
             'description' => 'All non-logged, visiting users automatically assume this role.',
         ],
         'user' => [
-            'name'          => 'User',
-            'handle'        => 'user',
-            'level'         => 5,
-            'description'   => 'Default role assigned to new users after creating an account.',
+            'name'        => 'User',
+            'level'       => 5,
+            'description' => 'Default role assigned to new users after creating an account.',
         ],
         'admin' => [
             'name'        => 'Administrator',
-            'handle'      => 'admin',
             'level'       => 1,
             'description' => 'Administrators have control panel access with a base set of assigned permissions.',
             'permissions' => [
@@ -40,13 +36,14 @@ class CreateDefaultRoles
                 'files.viewAny', 'files.view', 'files.create', 'files.update', 'files.delete', 'files.download',
                 'blueprints.viewAny', 'blueprints.view', 'blueprints.create', 'blueprints.update', 'blueprints.delete',
                 'forms.viewAny', 'forms.view', 'forms.create', 'forms.update', 'forms.delete',
+                'links.viewAny', 'links.view', 'links.create', 'links.update', 'links.delete',
                 'matrices.viewAny', 'matrices.view', 'matrices.create', 'matrices.update', 'matrices.delete',
                 'navigation.viewAny', 'navigation.view', 'navigation.create', 'navigation.update', 'navigation.delete',
-                'nodes.viewAny', 'nodes.view', 'nodes.create', 'nodes.update', 'nodes.delete',
                 'permissions.viewAny',
                 'singles.viewAny', 'singles.view', 'singles.create', 'singles.update', 'singles.delete',
                 'responses.viewAny', 'responses.view', 'responses.create', 'responses.update', 'responses.delete',
                 'roles.viewAny', 'roles.view', 'roles.create', 'roles.update', 'roles.delete',
+                'scripts.viewAny', 'scripts.view', 'scripts.create', 'scripts.update', 'scripts.delete',
                 'settings.viewAny', 'settings.view', 'settings.update',
                 'taxonomies.viewAny', 'taxonomies.view', 'taxonomies.create', 'taxonomies.update', 'taxonomies.delete',
                 'terms.viewAny', 'terms.view', 'terms.create', 'terms.update', 'terms.delete',
@@ -63,10 +60,11 @@ class CreateDefaultRoles
      */
     public function handle()
     {
-        foreach ($this->roles as $role) {
-            Role::create([
+        foreach ($this->roles as $handle => $role) {
+            Role::firstOrCreate([
+                'handle' => $handle,
+            ], [
                 'name'        => $role['name'],
-                'handle'      => $role['handle'],
                 'guard_name'  => '*',
                 'description' => $role['description'],
                 'level'       => $role['level'],

@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <ui-button v-if="collection.slug" variant="primary" :to="{ name: 'collection.create', params: {collection: collection.slug} }">Create {{ collection.reference_singular }}</ui-button>
+            <ui-button v-if="collection.slug" variant="primary" :to="{ name: 'collection.create', params: {collection: collection.slug} }">Create</ui-button>
         </portal>
 
         <ui-card v-if="endpoint">
@@ -32,7 +32,7 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-table-actions :id="'entry_' + table.record.id + '_actions'" :key="'entry_' + table.record.id + '_actions'">
+                        <ui-actions :id="'entry_' + table.record.id + '_actions'" :key="'entry_' + table.record.id + '_actions'">
                             <ui-dropdown-link>View</ui-dropdown-link>
                             <ui-dropdown-link :to="{ name: 'collection.edit', params: {collection: collection.slug, id: table.record.id} }">Edit</ui-dropdown-link>
 
@@ -44,7 +44,7 @@
                                 class="danger">
                                 Delete
                             </ui-dropdown-link>
-                        </ui-table-actions>
+                        </ui-actions>
                     </template>
                 </ui-table>
             </ui-card-body>

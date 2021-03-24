@@ -36,16 +36,16 @@
                     </div>
                     <div class="container">
                         <div v-if="loaded">
-                            <div v-for="log in logs" :key="log" class="logs__row flex flex-no-wrap py-2" @click="changeCurrentError(log)" v-modal:error-view>
+                            <div v-for="log in logs" :key="log" class="logs__row flex flex-nowrap py-2" @click="changeCurrentError(log)" v-modal:error-view>
                                 <div class="px-2 py-1 flex-shrink-0 flex items-center">
-                                    <div :class="'d-flex whitespace-no-wrap text-' + log.level.status + '-600'" :title="log.level.name">
+                                    <div :class="'d-flex whitespace-nowrap text-' + log.level.status + '-600'" :title="log.level.name">
                                         <fa-icon :icon="['fas', log.level.icon]" class="fa-inverse! fa-fw"></fa-icon>
                                         <span class="sr-only">
                                             {{ log.level.name }}
                                         </span>
                                     </div>
                                 </div>
-                                <div class="px-3 py-1 flex-shrink-0 flex items-center text-xs whitespace-no-wrap">{{ log.date }}</div>
+                                <div class="px-3 py-1 flex-shrink-0 flex items-center text-xs whitespace-nowrap">{{ log.date }}</div>
                                 <div class="col px-3 py-1 leading-tight overflow-hidden">
                                     <div class="text-md" v-html="log.text"></div>
                                     <div v-if="log.inFile" class="truncate pt-2 text-xs text-gray-600">
@@ -68,15 +68,15 @@
             <div v-if="currentError.date">
                 <div class="leading-tight mb-3">
                     <div class="flex p-2">
-                        <div class="pr-2 whitespace-no-wrap">
+                        <div class="pr-2 whitespace-nowrap">
                             <strong>Timestamp:</strong>
                         </div>
-                        <div class="whitespace-no-wrap">
+                        <div class="whitespace-nowrap">
                             {{currentError.date}}
                         </div>
                     </div>
                     <div class="flex p-2">
-                        <div class="pr-2 whitespace-no-wrap">
+                        <div class="pr-2 whitespace-nowrap">
                             <strong>Error Text:</strong>
                         </div>
                         <div class="logs__full-text">

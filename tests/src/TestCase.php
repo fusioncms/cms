@@ -64,6 +64,17 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     }
 
     /**
+     * Define database migrations.
+     *
+     * @return void
+     */
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadLaravelMigrations();
+        $this->loadMigrationsFrom(base_path('migrations'));
+    }
+
+    /**
      * Set the currently logged in user for the application.
      * [override].
      *
@@ -143,16 +154,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     }
 
     /**
-     * Define database migrations.
-     *
-     * @return void
-     */
-    protected function defineDatabaseMigrations()
-    {
-        $this->loadMigrationsFrom(base_path('migrations'));
-    }
-
-    /**
      * Load the bundled FusionCMS service providers.
      *
      * @param \Illuminate\Foundation\Application $app
@@ -188,7 +189,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         return [
             'Fusion'  => 'Fusion\Facades\Fusion',
             'Theme'   => 'Fusion\Facades\Theme',
-            'Addon'   => 'Fusion\Facades\Addon',
             'Setting' => 'Fusion\Facades\Setting',
         ];
     }
