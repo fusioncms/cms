@@ -33,6 +33,7 @@ Route::prefix('roles')->group(function () {
     Route::get('/{role}/permissions', 'PermissionController@index');
 });
 
+Route::get('/addons', 'AddonController@index');
 Route::get('/permissions', 'PermissionController@index');
 Route::get('/taxonomies', 'TaxonomyController@index');
 Route::get('/forms', 'FormController@index');

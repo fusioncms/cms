@@ -3,6 +3,7 @@
 return [
     // core permissions
     // --
+    'addons'        => ['viewAny'],
     'backups'       => ['viewAny', 'view', 'create', 'update', 'delete', 'restore'],
     'directories'   => ['viewAny', 'view', 'create', 'update', 'delete'],
     'disks'         => ['viewAny', 'view', 'create', 'update', 'delete'],

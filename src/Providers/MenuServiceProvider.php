@@ -63,6 +63,7 @@ class MenuServiceProvider extends ServiceProvider
             'dashboard'   => ['title' => 'Dashboard', 'to' => '/', 'icon' => 'grip-horizontal', 'permission' => 'access.controlPanel'],
             'filemanager' => $this->getFileManagerDisks(),
             'inbox'       => ['title' => 'Inbox', 'to' => '/inbox', 'icon' => 'inbox'],
+            'addons.list' => ['title' => 'Addons', 'to' => '/addons', 'icon' => 'puzzle-piece'],
         ]);
 
         // matrices
