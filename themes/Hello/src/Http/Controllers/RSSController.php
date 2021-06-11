@@ -2,8 +2,6 @@
 
 namespace Themes\Hello\Http\Controllers;
 
-use Illuminate\Http\Response;
-
 class RSSController extends Controller
 {
     public function index()
