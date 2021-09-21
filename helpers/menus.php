@@ -11,19 +11,19 @@ if (!function_exists('menu')) {
     function menu($handle)
     {
         $model = Navigation::where('handle', $handle)->firstOrFail();
-        $menu  = $model->nodes->mapWithKeys(function ($node) {
-            if ($node->status) {
+        $menu  = $model->links->mapWithKeys(function ($link) {
+            if ($link->status) {
                 $item = [
-                    'title'  => $node->name,
-                    'to'     => $node->url,
-                    'target' => $node->new_window ? '_blank' : '_self',
+                    'title'  => $link->name,
+                    'to'     => $link->url,
+                    'target' => $link->new_window ? '_blank' : '_self',
                 ];
 
-                foreach ($node->fields as $field) {
-                    $item[$field->handle] = $node->{$field->handle} ?? null;
+                foreach ($link->fields as $field) {
+                    $item[$field->handle] = $link->{$field->handle} ?? null;
                 }
 
-                return [str_handle($node->name) => $item];
+                return [str_handle($link->name) => $item];
             }
         });
 
