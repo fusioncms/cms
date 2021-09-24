@@ -3,7 +3,7 @@
         <div class="blueprint-section__header card__header">
             <fa-icon class="blueprint-section__grip" icon="grip-vertical"></fa-icon> {{ section.name }}
             <div class="blueprint-section__actions buttons">
-                <ui-button icon size="small" v-modal:delete-section class="mr-1">
+                <ui-button icon size="small" v-modal:delete_section @click="setRemoveIndex" class="mr-1">
                     <span class="sr-only">Delete Section</span>
                     <fa-icon icon="trash-alt"></fa-icon>
                 </ui-button>
@@ -65,16 +65,6 @@
 
         </ui-card-body>
 
-        <portal to="modals">
-            <ui-modal name="delete-section" title="Delete Section">
-                <p>Are you sure you want to permenantly delete this section and related fields?</p>
-
-                <template slot="footer">
-                    <ui-button v-modal:delete-section @click="remove(parentIndex)" variant="danger" class="ml-3">Delete</ui-button>
-                    <ui-button v-modal:delete-section variant="secondary">Cancel</ui-button>
-                </template>
-            </ui-modal>
-        </portal>
     </ui-card>
 </template>
 
@@ -139,6 +129,10 @@
             deactivate() {
                 this.isActive = false
             },
+
+            setRemoveIndex() {
+                this.$store.commit('blueprint/setRemoveIndex', this.parentIndex);
+            }
         }
     }
 </script>
