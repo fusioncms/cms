@@ -38,6 +38,18 @@
                         area="sidebar"
                         title="Sidebar">
                     </blueprint-area>
+
+                    <portal to="modals">
+                        <ui-modal name="delete_section" title="Delete" >
+                            <p>Are you sure you want to permenantly delete this section and related fields?</p>
+
+                            <template slot="footer">
+                                <ui-button v-modal:delete_section @click="remove" variant="danger" class="ml-3">Delete</ui-button>
+                                <ui-button v-modal:delete_section variant="secondary">Cancel</ui-button>
+                            </template>
+                        </ui-modal>
+                    </portal>
+
                 </blueprint>
 			</div>
 		</div>
@@ -66,6 +78,14 @@
                 type: Object,
                 required: true,
             }
+        },
+
+        methods: {
+            remove() {
+                const index = this.$store.getters['blueprint/getRemoveIndex'];
+                if (this.form.sections.length > 0)
+                    this.form.sections.splice(index, 1);
+            },
         },
 
         created() {
