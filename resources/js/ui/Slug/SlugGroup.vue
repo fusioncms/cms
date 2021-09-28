@@ -26,6 +26,7 @@
             :hasError="hasError"
             :hasSuccess="hasSuccess"
             :message="hasMessage"
+            :help="help"
             v-model="computedValue">
         </ui-slug>
     </ui-field-group>

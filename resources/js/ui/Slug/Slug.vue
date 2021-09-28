@@ -133,8 +133,9 @@
             },
 
             isLocked() {
-                return !this.forceWatch &&
-                       _.endsWith(this.$route.name, '.edit')
+                if (this.help === `A developer-friendly variant of the field's name.`)
+                    return false;
+                return !this.forceWatch && _.endsWith(this.$route.name, '.edit');
             }
         },
 
