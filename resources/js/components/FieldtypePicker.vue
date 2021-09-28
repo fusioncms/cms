@@ -12,7 +12,7 @@
             {{ fieldtype.name }}
         </ui-button>
         </div>
-        <div class="pb-3">Fieldset</div>
+        <div v-if="Object.keys(filtered('fieldset')).length" class="pb-3">Fieldset</div>
         <div class="grid grid-cols-3 lg:grid-cols-6 gap-3">
             <ui-button
                 v-for="(fieldtype, index) in filtered('fieldset')"
@@ -42,8 +42,9 @@
         methods: {
             filtered(item) {
                 const { ['fieldset']: fieldset, ...rest } = this.fieldtypes;
-                if (item === 'fieldset')
-                    return fieldset === undefined ? rest : {['fieldset']: fieldset}
+                if (item === 'fieldset') {
+                    return fieldset === undefined ? {} : {['fieldset']: fieldset};
+                }
                 else
                     return rest;
             }
