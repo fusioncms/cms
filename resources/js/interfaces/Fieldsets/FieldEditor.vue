@@ -24,7 +24,7 @@
                         autocomplete="off"
                         required
                         delimiter="_"
-                        :force-watch="value.prototype"
+                        :force-watch="true"
                         :watch="form.name"
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
