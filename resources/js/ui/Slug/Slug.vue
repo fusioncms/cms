@@ -133,8 +133,7 @@
             },
 
             isLocked() {
-                return !this.forceWatch &&
-                       _.endsWith(this.$route.name, '.edit')
+                return !this.forceWatch && _.endsWith(this.$route.name, '.edit');
             }
         },
 
