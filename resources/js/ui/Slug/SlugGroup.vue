@@ -26,7 +26,7 @@
             :hasError="hasError"
             :hasSuccess="hasSuccess"
             :message="hasMessage"
-            :help="help"
+            :forceWatch="forceWatch"
             v-model="computedValue">
         </ui-slug>
     </ui-field-group>
@@ -117,6 +117,10 @@
                 required: false,
                 type: String,
                 default: '',
+            },
+            forceWatch: {
+                type: Boolean,
+                default: false,
             }
         }
     }

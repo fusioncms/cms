@@ -1,7 +1,7 @@
 <template>
     <div class="matrix-page">
         <portal to="title">
-            <page-title icon="layer-group">Edit Matrix</page-title>
+            <page-title icon="layer-group">Edit Fieldset</page-title>
         </portal>
 
         <shared-form v-if="form" :form="form" :submit="submit"></shared-form>
