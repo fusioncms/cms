@@ -33,6 +33,7 @@
         "easymde": "^2.12.1",
         "flatpickr": "^4.6.2",
         "form-data": "^2.3.3",
+        "fuzzysort": "^1.1.4",
         "js-cookie": "^2.2.0",
         "later": "^1.2.0",
         "lodash": "^4.17.19",
