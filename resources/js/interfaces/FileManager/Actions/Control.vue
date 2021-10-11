@@ -2,7 +2,7 @@
     <div title="Actions">
 	<ui-dropdown id="control-filter" right v-if="hasSelection">
 	    <fa-icon class="fa-fw" :icon="['fas', 'bolt']"></fa-icon>
-            <span class="hidden md:inline">Selected</span>
+            <span class="hidden md:inline">Actions</span>
 	    <template v-slot:menu>
 		<ui-dropdown-link @click.prevent="clearSelection"><fa-icon class="icon" :icon="['fas', 'minus-square']"></fa-icon> Unselect All</ui-dropdown-link>
 		<ui-dropdown-link v-if="singleSelection" v-modal:rename-file><fa-icon class="icon" :icon="['fas', 'tag']"></fa-icon> Rename File</ui-dropdown-link>
