@@ -16,7 +16,7 @@ return [
                     'enabled'  => 'Enabled',
                     'disabled' => 'Disabled',
                 ],
-                'default'  => 'enabled',
+                'default'  => 'disabled',
                 'required' => true,
             ],
             [
