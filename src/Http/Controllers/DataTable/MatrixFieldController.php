@@ -4,7 +4,6 @@ namespace Fusion\Http\Controllers\DataTable;
 
 use Fusion\Http\Controllers\DataTableController;
 use Fusion\Models\Matrix;
-use Illuminate\Http\Request;
 
 class MatrixFieldController extends DataTableController
 {

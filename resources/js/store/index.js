@@ -1,21 +1,23 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import auth from './auth'
-import form from './form'
-import inbox from './inbox'
-import fusion from './fusion'
-import settings from './settings'
-import navigation from './navigation'
-import notifications from './notifications'
+import blueprint from './blueprint'
+import disks from './disks'
 import fieldtypes from './fieldtypes'
 import filemanager from './filemanager'
-import disks from './disks'
+import form from './form'
+import fusion from './fusion'
+import inbox from './inbox'
+import navigation from './navigation'
+import notifications from './notifications'
+import settings from './settings'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     modules: {
         auth,
+        blueprint,
         disks,
         fieldtypes,
         filemanager,

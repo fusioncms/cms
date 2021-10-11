@@ -121,7 +121,8 @@
                 isOpen: false,
                 search: '',
                 highlighted: 0,
-                selection: []
+                // assuming selection is a string or a number only
+                selection: _.isString(this.value) ? this.value.split(',') : [ _.toString(this.value) ],
             }
         },
 
@@ -370,11 +371,7 @@
         },
 
         mounted() {
-            if (_.isString(this.value)) {
-                this.selection = this.value.split(',')
-            } else if (_.isNumber(this.value)) {
-                this.selection = [ _.toString(this.value) ]
-            }
+            this.highlighted = this.filteredOptions.findIndex(option => option.value === this.value);
         },
 
         beforeDestroy() {

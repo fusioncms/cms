@@ -329,7 +329,7 @@
                     }
                 })
 
-                options.unshift({ 'label': 'None', 'value': null })
+                options.unshift({ 'label': 'None', 'value': 0 })
 
                 return options
             }

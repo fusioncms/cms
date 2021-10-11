@@ -76,7 +76,7 @@ class FieldsetFieldtype extends Fieldtype
             $name  = "{$fieldset->handle}.{$field->handle}";
             $value = $field->type()->attributes($field, $value ? $value[$field->handle] : null);
 
-            return [$name => $value[$field->handle]];
+            return [$name => ($value[$field->handle] ?? $field->name)];
         });
     }
 
@@ -96,7 +96,7 @@ class FieldsetFieldtype extends Fieldtype
             $name = "{$fieldset->handle}.{$field->handle}";
             $rule = $field->type()->rules($field, $value ? $value[$field->handle] : null);
 
-            return [$name => $rule[$field->handle] ?: 'sometimes'];
+            return [$name => ($rule[$field->handle] ?? 'sometimes')];
         });
     }
 

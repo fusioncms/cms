@@ -1,12 +1,11 @@
 <template>
 	<div :class="[ view == 'grid' ? 'gallery-wrapper' : 'gallery-wrapper--row' ]">
 		<div
-            class="gallery-item"
             :class="{ 'gallery-item--selected selectable--selected': isSelected, 'selectable': isSelectable }"
             @dblclick="$emit('dblclick')"
             :data-selection="file.id"
             :draggable="isDraggable">
-
+                    <div class="gallery-item">
 			<ui-img
 				src="/vendor/fusion/img/image-large.svg"
 				background-color="white"
@@ -17,6 +16,7 @@
 				:alt="file.alt"
 				:draggable="false">
 			</ui-img>
+                    </div>
 		</div>
 
 		<quick-edit

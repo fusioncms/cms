@@ -16,13 +16,15 @@ class SyncResources
         File::ensureDirectoryExists(public_path('vendor'));
 
         foreach ($this->links() as $target => $link) {
-            try {
-                if (!file_exists($link) && file_exists($target)) {
-                    File::link($target, $link);
-                }
-            } catch (\Exception $e) {
-                dd($e->getMessage(), $target, File::exists($target), $link, File::exists($link));
+            if (file_exists($link) && !$this->isRemovableSymlink($link)) {
+                continue;
             }
+
+            if (is_link($link)) {
+                File::delete($link);
+            }
+
+            File::link($target, $link);
         }
     }
 
@@ -33,17 +35,28 @@ class SyncResources
      */
     protected function links()
     {
-        // Fusion..
         $links = [
             fusion_path('public') => public_path('vendor/fusion'),
         ];
 
-        // Addons..
         $links = array_merge(
             $links,
             app('addons.manifest')->getResourceLinks()
         );
 
         return $links;
+    }
+
+    /**
+     * Determine if the provided path is a symlink that can be removed.
+     *
+     * @param string $link
+     * @param bool   $force
+     *
+     * @return bool
+     */
+    protected function isRemovableSymlink(string $link): bool
+    {
+        return is_link($link);
     }
 }

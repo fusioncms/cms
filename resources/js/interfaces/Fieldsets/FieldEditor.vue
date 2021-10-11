@@ -1,5 +1,5 @@
 <template>
-    <ui-modal name="edit-field" title="Edit Field" noCloseButton noEscClose extra-large v-model="modalOpen">
+    <ui-modal name="edit-field" :title="title" noCloseButton noEscClose extra-large v-model="modalOpen">
         <form-container v-if="form">
             <div class="row mb-6">
                 <div class="col w-1/2">
@@ -24,7 +24,7 @@
                         autocomplete="off"
                         required
                         delimiter="_"
-                        :force-watch="value.prototype"
+                        :force-watch="true"
                         :watch="form.name"
                         :has-error="form.errors.has('handle')"
                         :error-message="form.errors.get('handle')"
@@ -81,7 +81,8 @@
         data() {
             return {
                 form: false,
-                modalOpen: false
+                modalOpen: false,
+                title: ''
             }
         },
 
@@ -96,6 +97,7 @@
             value(value) {
                 this.modalOpen = !! value
                 this.form      = value ? new Form(_.cloneDeep(value)) : false
+                this.title = value.prototype ? 'Add Field' : 'Edit Field';
             }
         },
 
