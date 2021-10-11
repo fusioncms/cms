@@ -1,18 +1,5 @@
 <template>
     <div class="file-manager__wrap" @dragenter="setDropzoneVisible(true)">
-        <portal to="actions">
-            <div class="buttons">
-                <ui-button v-modal:new-folder>
-                    New Folder
-                </ui-button>
-
-                <ui-button variant="primary" @click="$refs.uploader.openDZ()">
-                    Upload
-                </ui-button>
-            </div>
-        </portal>
-
-        <file-uploader ref="uploader"></file-uploader>
             <div class="card">
                 <div class="card__body">
                     <breadcrumb-action></breadcrumb-action>
@@ -27,6 +14,7 @@
                             <sort-action></sort-action>
                             <control-action></control-action>
                             <view-action></view-action>
+                            <new-action></new-action>
                         </div>
                     </div>
 
@@ -44,32 +32,32 @@
 <script>
     import { mapActions } from 'vuex'
 
-    import FileBrowser   from './FileBrowser.vue'
-    import FilePaginator from './FilePaginator.vue'
-    import FileUploader  from './FileUploader.vue'
+ import FileBrowser   from './FileBrowser.vue'
+ import FilePaginator from './FilePaginator.vue'
 
-    import BreadcrumbAction from './Actions/Breadcrumb.vue'
-    import ControlAction    from './Actions/Control.vue'
-    import DisplayAction    from './Actions/Display.vue'
-    import SearchAction     from './Actions/Search.vue'
-    import SortAction       from './Actions/Sort.vue'
-    import ViewAction       from './Actions/View.vue'
+ import BreadcrumbAction from './Actions/Breadcrumb.vue'
+ import ControlAction    from './Actions/Control.vue'
+ import DisplayAction    from './Actions/Display.vue'
+ import SearchAction     from './Actions/Search.vue'
+ import SortAction       from './Actions/Sort.vue'
+ import ViewAction       from './Actions/View.vue'
+ import NewAction       from './Actions/New.vue'
 
     export default {
         name: 'file-manager',
 
-        components: {
-            'file-browser':   FileBrowser,
-            'file-paginator': FilePaginator,
-            'file-uploader':  FileUploader,
+     components: {
+         'file-browser':   FileBrowser,
+         'file-paginator': FilePaginator,
 
-            'breadcrumb-action': BreadcrumbAction,
-            'control-action':    ControlAction,
-            'display-action':    DisplayAction,
-            'search-action':     SearchAction,
-            'sort-action':       SortAction,
-            'view-action':       ViewAction,
-        },
+         'breadcrumb-action': BreadcrumbAction,
+         'control-action':    ControlAction,
+         'display-action':    DisplayAction,
+         'search-action':     SearchAction,
+         'sort-action':       SortAction,
+         'view-action':       ViewAction,
+         'new-action':       NewAction,
+     },
 
         methods: {
             ...mapActions({

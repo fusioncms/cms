@@ -9,7 +9,7 @@
                 <fa-icon v-if="! noArrow" icon="angle-down" class="dropdown__arrow"></fa-icon>
             </button>
 
-            <div class="dropdown__menu" :aria-labelledby="id">
+            <div v-if="! disabled" class="dropdown__menu" :aria-labelledby="id">
                 <slot name="menu"></slot>
             </div>
         </div>
@@ -50,7 +50,12 @@
                 default: false,
                 required: false,
             },
-            size: String
+            size: String,
+            disabled: {
+                type: Boolean,
+                default: false,
+                required: false,
+            },
         },
 
         data() {

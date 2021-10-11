@@ -1,5 +1,5 @@
 <template>
-	<ui-dropdown id="sort-filters">
+    <ui-dropdown id="sort-filters" title="Sort by">
 		<fa-icon class="icon" :icon="sortIcon(sort)"></fa-icon>
 		<span class="hidden md:inline">{{ options[sort] }}</span>
 

@@ -1,22 +1,26 @@
 <template>
-	<div>
-		<ui-dropdown id="control-filter" right v-show="hasSelection">
-			<fa-icon class="fa-fw" :icon="['fas', 'bolt']"></fa-icon>
+    <div title="Control selected element">
+	<ui-dropdown id="control-filter" right v-if="hasSelection">
+	    <fa-icon class="fa-fw" :icon="['fas', 'bolt']"></fa-icon>
+            <span class="hidden md:inline">Selected</span>
+	    <template v-slot:menu>
+		<ui-dropdown-link @click.prevent="clearSelection"><fa-icon :icon="['fas', 'minus-square']"></fa-icon> Unselect All</ui-dropdown-link>
+		<ui-dropdown-link v-if="singleSelection" v-modal:rename-file><fa-icon :icon="['fas', 'tag']"></fa-icon> Rename File</ui-dropdown-link>
+		<ui-dropdown-link v-modal:move-file><fa-icon :icon="['fas', 'exchange-alt']"></fa-icon> Move Selected</ui-dropdown-link>
+		<ui-dropdown-link v-modal:delete><fa-icon :icon="['fas', 'trash']"></fa-icon> Delete Selected</ui-dropdown-link>
+	    </template>
+	</ui-dropdown>
+	<ui-dropdown id="control-filter" right v-else disabled="true">
+	    <fa-icon class="fa-fw" :icon="['fas', 'bolt']"></fa-icon>
+            <span class="hidden md:inline">Disabled</span>
+	</ui-dropdown>
 
-			<template v-slot:menu>
-				<ui-dropdown-link @click.prevent="clearSelection"><fa-icon :icon="['fas', 'minus-square']"></fa-icon> Unselect All</ui-dropdown-link>
-				<ui-dropdown-link v-if="singleSelection" v-modal:rename-file><fa-icon :icon="['fas', 'tag']"></fa-icon> Rename File</ui-dropdown-link>
-				<ui-dropdown-link v-modal:move-file><fa-icon :icon="['fas', 'exchange-alt']"></fa-icon> Move Selected</ui-dropdown-link>
-				<ui-dropdown-link v-modal:delete><fa-icon :icon="['fas', 'trash']"></fa-icon> Delete Selected</ui-dropdown-link>
-			</template>
-		</ui-dropdown>
-
-		<portal to="modals">
-	        <move-file-modal></move-file-modal>
-	        <rename-file-modal :selection="singleSelection"></rename-file-modal>
-	        <delete-selected-files-modal></delete-selected-files-modal>
-	    </portal>
-	</div>
+	<portal to="modals">
+	    <move-file-modal></move-file-modal>
+	    <rename-file-modal :selection="singleSelection"></rename-file-modal>
+	    <delete-selected-files-modal></delete-selected-files-modal>
+	</portal>
+    </div>
 </template>
 
 <script>
