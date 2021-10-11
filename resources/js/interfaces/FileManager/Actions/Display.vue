@@ -1,5 +1,5 @@
 <template>
-	<ui-dropdown id="display-filters" right>
+    <ui-dropdown id="display-filters" right title="Display">
 		<fa-icon class="icon" :icon="options[display]"></fa-icon>
 		<span class="hidden md:inline">{{ display | capitalize  }}</span>
 

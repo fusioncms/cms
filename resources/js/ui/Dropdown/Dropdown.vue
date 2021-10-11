@@ -4,12 +4,12 @@
             slot-scope="props"
             :class="{'dropdown--open': props.isOpen, 'dropdown--right': right, 'dropdown--up': up}"
             v-click-outside="props.close">
-            <button :id="id" class="z-0" :class="[{ 'button': !borderless, 'button--icon': icon }, sizeClass]" @click="props.toggle" aria-haspopup="true" :aria-expanded="props.isOpen ? 'true' : 'false'">
+            <button :disabled="disabled" :id="id" class="z-0" :class="[{ 'button': !borderless, 'button--icon': icon }, sizeClass]" @click="props.toggle" aria-haspopup="true" :aria-expanded="props.isOpen ? 'true' : 'false'">
                 <slot></slot>
                 <fa-icon v-if="! noArrow" icon="angle-down" class="dropdown__arrow"></fa-icon>
             </button>
 
-            <div class="dropdown__menu" :aria-labelledby="id">
+            <div v-if="! disabled" class="dropdown__menu" :aria-labelledby="id">
                 <slot name="menu"></slot>
             </div>
         </div>
@@ -50,7 +50,12 @@
                 default: false,
                 required: false,
             },
-            size: String
+            size: String,
+            disabled: {
+                type: Boolean,
+                default: false,
+                required: false,
+            },
         },
 
         data() {

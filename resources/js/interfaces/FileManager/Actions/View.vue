@@ -1,11 +1,11 @@
 <template>
-	<div class="buttons">
+    <div class="buttons ml-1">
 		<div class="buttons__group">
-			<ui-button icon @click.prevent="toggleView('list')" :disabled="view == 'list'">
+			<ui-button icon @click.prevent="toggleView('list')" :disabled="view == 'list'" title="View by list">
 				<fa-icon class="icon" icon="bars"></fa-icon>
 			</ui-button>
 
-			<ui-button icon @click.prevent="toggleView('grid')" :disabled="view == 'grid'">
+			<ui-button icon @click.prevent="toggleView('grid')" :disabled="view == 'grid'"  title="View by grid">
 				<fa-icon class="icon" icon="th-large"></fa-icon>
 			</ui-button>
 		</div>
