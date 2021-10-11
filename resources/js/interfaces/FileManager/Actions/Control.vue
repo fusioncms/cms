@@ -1,18 +1,18 @@
 <template>
-    <div title="Control selected element">
+    <div title="Actions">
 	<ui-dropdown id="control-filter" right v-if="hasSelection">
 	    <fa-icon class="fa-fw" :icon="['fas', 'bolt']"></fa-icon>
             <span class="hidden md:inline">Selected</span>
 	    <template v-slot:menu>
-		<ui-dropdown-link @click.prevent="clearSelection"><fa-icon :icon="['fas', 'minus-square']"></fa-icon> Unselect All</ui-dropdown-link>
-		<ui-dropdown-link v-if="singleSelection" v-modal:rename-file><fa-icon :icon="['fas', 'tag']"></fa-icon> Rename File</ui-dropdown-link>
-		<ui-dropdown-link v-modal:move-file><fa-icon :icon="['fas', 'exchange-alt']"></fa-icon> Move Selected</ui-dropdown-link>
-		<ui-dropdown-link v-modal:delete><fa-icon :icon="['fas', 'trash']"></fa-icon> Delete Selected</ui-dropdown-link>
+		<ui-dropdown-link @click.prevent="clearSelection"><fa-icon class="icon" :icon="['fas', 'minus-square']"></fa-icon> Unselect All</ui-dropdown-link>
+		<ui-dropdown-link v-if="singleSelection" v-modal:rename-file><fa-icon class="icon" :icon="['fas', 'tag']"></fa-icon> Rename File</ui-dropdown-link>
+		<ui-dropdown-link v-modal:move-file><fa-icon class="icon" :icon="['fas', 'exchange-alt']"></fa-icon> Move Selected</ui-dropdown-link>
+		<ui-dropdown-link v-modal:delete><fa-icon class="icon" :icon="['fas', 'trash']"></fa-icon> Delete Selected</ui-dropdown-link>
 	    </template>
 	</ui-dropdown>
-	<ui-dropdown id="control-filter" right v-else disabled="true">
+	<ui-dropdown id="control-filter" right v-else :disabled="true">
 	    <fa-icon class="fa-fw" :icon="['fas', 'bolt']"></fa-icon>
-            <span class="hidden md:inline">Disabled</span>
+            <span class="hidden md:inline">Actions</span>
 	</ui-dropdown>
 
 	<portal to="modals">
