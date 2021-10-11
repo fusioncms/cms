@@ -303,6 +303,15 @@ const router = new Router({
             },
         },
         {
+            path: '/addons',
+            component: () => import('@/pages/Addons/Index'),
+            name: 'addons',
+            meta: {
+                requiresAuth: true,
+                layout: 'admin',
+            },
+        },
+        {
             path: '/users',
             component: () => import('@/pages/Users/Index'),
             name: 'users',
