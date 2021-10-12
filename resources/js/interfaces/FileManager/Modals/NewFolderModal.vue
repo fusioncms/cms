@@ -51,13 +51,13 @@
 
         methods: {
             ...mapActions({
-                fetchFilesAndDirectories: 'filemanager/fetchFilesAndDirectories',
+                fetchDirectories: 'filemanager/fetchDirectories',
             }),
 
             submit() {
                 this.form.post(`/api/directories/${this.disk.id}`).then((response) => {
                     this.form.name = ""
-                    this.fetchFilesAndDirectories()
+                    this.fetchDirectories()
                     this.$children[0].isActive = false
 
                     toast('A new directory was successfully created.', 'success')

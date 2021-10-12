@@ -1,24 +1,31 @@
 <template>
-	<div class="gallery-container selectables">
-		<div class="gallery pb-2">
-			<directory
-				v-for="directory in directories"
-				:key="directory.id"
-				:directory="directory"
-				:isDropzone="true"
-				@dblclick="navigate(directory)">
-			</directory>
-		</div>
+    <div>
+        <div v-show="show">
+	    <div class="gallery-container selectables">
+	        <div class="gallery pb-2">
+		    <directory
+		        v-for="directory in directories"
+			:key="directory.id"
+		        :directory="directory"
+		        :isDropzone="true"
+		        @dblclick="navigate(directory)">
+		    </directory>
+	        </div>
 
-		<div class="gallery">
-			<file
-				v-for="file in files"
-				:key="file.id"
-				:file="file"
-				@dblclick="preview(file)">
-			</file>
-		</div>
-	</div>
+	        <div class="gallery">
+		    <file
+		        v-for="file in files"
+			:key="file.id"
+		        :file="file"
+		        @dblclick="preview(file)">
+		    </file>
+	        </div>
+	    </div>
+        </div>
+        <div v-show="! show">
+            Loading...
+        </div>
+    </div>
 </template>
 
 <script>
@@ -40,6 +47,12 @@
 			'directory': Directory,
 			'file':      File,
 		},
+
+            computed: {
+                show() {
+                    return ! this.$store.state.filemanager.loading;
+                }
+            },
 
 		watch: {
 			loading: function(isLoading) {

@@ -359,6 +359,55 @@ export default {
             })
         }, 500),
 
+        fetchFiles: _.throttle(({ state, getters, commit, dispatch }) => {
+            commit('setLoading', true)
+
+            let getDirectory = null
+
+            if (state.currentDirectory > 0)
+                getDirectory = axios.get(`/api/directories/${state.disk.id}/${state.currentDirectory}`)
+
+            axios.all([
+                axios.get(`/api/files/${state.disk.id}`, { params: getters.getFileFilters }),
+                getDirectory
+            ]).then(
+                axios.spread((files, currentDirectory) => {
+                    commit('setFiles',       files.data.data)
+                    commit('setTotalPages',  files.data.meta.last_page)
+                    commit('setDirectory',   currentDirectory ? currentDirectory.data.data : null)
+                    commit('setLoading',     false)
+
+                    dispatch('setBreadcrumbs')
+                })
+            ).catch(errors => {
+                console.error(errors)
+            })
+        }, 500),
+
+        fetchDirectories: _.throttle(({ state, getters, commit, dispatch }) => {
+            commit('setLoading', true)
+
+            let getDirectory = null
+
+            if (state.currentDirectory > 0)
+                getDirectory = axios.get(`/api/directories/${state.disk.id}/${state.currentDirectory}`)
+
+            axios.all([
+                axios.get(`/api/directories/${state.disk.id}`, { params: getters.getDirectoryFilters }),
+                getDirectory
+            ]).then(
+                axios.spread((directories, currentDirectory) => {
+                    commit('setDirectories', directories.data.data)
+                    commit('setDirectory',   currentDirectory ? currentDirectory.data.data : null)
+                    commit('setLoading',     false)
+
+                    dispatch('setBreadcrumbs')
+                })
+            ).catch(errors => {
+                console.error(errors)
+            })
+        }, 500),
+
         moveFileToDirectory({ commit, state, dispatch }, payload) {
             axios.post(`/api/files/${state.disk.id}/move`, {
                 directory: payload.directory,

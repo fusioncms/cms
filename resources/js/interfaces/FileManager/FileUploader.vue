@@ -86,7 +86,7 @@
 
         methods: {
             ...mapActions({
-                fetchFilesAndDirectories: 'filemanager/fetchFilesAndDirectories',
+                fetchFiles: 'filemanager/fetchFiles',
                 setUploadsMinimized:      'filemanager/setUploadsMinimized',
                 setDropzoneVisible:       'filemanager/setDropzoneVisible',
                 setUploadProgress:        'filemanager/setUploadProgress',
@@ -111,7 +111,7 @@
             },
 
             dzComplete() {
-                this.fetchFilesAndDirectories()
+                this.fetchFiles()
                 this.setUploadProgress(100)
             },
 
