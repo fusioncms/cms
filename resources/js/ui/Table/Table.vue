@@ -82,6 +82,8 @@
             <slot name="toolbarAppend"></slot>
         </ui-toolbar>
 
+        <div v-show="loading" class="pb-2">Loading...</div>
+
         <div class="table-wrapper" v-if="records.length" :class="{'loading': loading}">
             <table :id="id" class="table" aria-live="polite">
                 <!-- Table Head -->
