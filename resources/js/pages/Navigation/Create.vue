@@ -1,10 +1,9 @@
 <template>
     <div class="navigation-page">
         <portal to="title">
-			<page-title icon="anchor">Create Navigation</page-title>
-		</portal>
-
-        <shared-form :form="form"></shared-form>
+	    <page-title icon="anchor">Create Navigation</page-title>
+	</portal>
+        <shared-form :loading="loading" :form="form"></shared-form>
     </div>
 </template>
 
@@ -34,7 +33,8 @@
                     handle: '',
                     description: '',
                     sections: []
-                }, true)
+                }, true),
+                loading: false
             }
         },
 
@@ -44,6 +44,7 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.post('/api/navigation')
                     .then((response) => {
                         axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
@@ -51,11 +52,14 @@
                                 toast('Navigation successfully saved', 'success')
 
                                 this.$router.push('/navigation')
+                                this.loading = false;
                             }).catch((response) => {
                                 toast(response.message, 'failed')
+                                this.loading = false;
                             })
                     }).catch((response) => {
                         toast(response.message, 'failed')
+                        this.loading = false;
                     })
             }
         }
