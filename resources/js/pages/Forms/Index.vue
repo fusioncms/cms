@@ -34,7 +34,7 @@
 
                             <ui-dropdown-link
                                 @click.prevent
-                                v-modal:delete-term="table.record"
+                                v-modal:delete-form="table.record"
                                 class="danger">
                                 Delete
                             </ui-dropdown-link>

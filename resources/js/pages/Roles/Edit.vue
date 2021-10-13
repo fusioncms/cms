@@ -4,7 +4,7 @@
             <page-title icon="user-shield">Edit Role</page-title>
         </portal>
 
-        <shared-form :form="form" :role="role" :submit="submit"></shared-form>
+        <shared-form :loading="loading" :form="form" :role="role" :submit="submit"></shared-form>
     </div>
 </template>
 
@@ -32,6 +32,7 @@
             return {
                 role: {},
                 form: new Form,
+                loading: false
             }
         },
 
@@ -41,22 +42,19 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.patch(`/api/roles/${this.role.id}`).then((response) => {
                     toast('Role successfully updated', 'success')
 
                     this.$router.push('/roles')
                 }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
+                    toast(response.message, 'failed')
+                    this.loading = false;
                 })
             },
 
             getAuthLevel() {
-                console.log(this.role.level)
-
                 if (this.role.level) return this.role.level
-
-                console.log('false')
-
                 return false
             },
         },

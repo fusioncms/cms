@@ -1,10 +1,16 @@
 <template>
     <div>
         <portal to="title">
-			<page-title icon="anchor">Create Link</page-title>
-		</portal>
+	    <page-title icon="anchor">Create Link</page-title>
+	</portal>
 
-        <shared-form :form="form" :submit="submit" :navigation="navigation" :links="links"></shared-form>
+        <shared-form
+            :loading="loading"
+            :form="form"
+            :submit="submit"
+            :navigation="navigation"
+            :links="links">
+        </shared-form>
     </div>
 </template>
 
@@ -34,18 +40,21 @@
                     parent_id: 0,
                     order: 0,
                     status: false,
-                }, true)
+                }, true),
+                loading: false
             }
         },
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.post('/api/navigation/' + this.navigation.id + '/links').then((response) => {
                     toast('Link saved successfully', 'success')
 
                     this.$router.push('/navigation/' + this.navigation.id + '/links')
                 }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
+                    toast(response.message, 'failed')
+                    this.loading = false;
                 })
             },
         },

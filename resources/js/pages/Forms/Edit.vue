@@ -1,11 +1,12 @@
 <template>
     <div>
         <portal to="title">
-			<page-title icon="paper-plane">Edit Form</page-title>
-		</portal>
+	    <page-title icon="paper-plane">Edit Form</page-title>
+	</portal>
 
         <shared-form
             v-if="form"
+            :loading="loading"
             :form="form"
             :resource="resource">
         </shared-form>
@@ -35,7 +36,8 @@
             return {
                 id: null,
                 resource: null,
-                form: null
+                form: null,
+                loading: false
             }
         },
 
@@ -45,14 +47,21 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.patch(`/api/forms/${this.id}`)
                     .then(() => {
                         axios.post(`/api/blueprints/${this.resource.blueprint.id}/sections`, { sections: this.form.sections })
                             .then(() => {
                                 toast('Form successfully saved', 'success')
+                                this.loading = false;
                             })
+                        .catch((response) => {
+                                toast(response.message, 'failed')
+                                this.loading = false;
+                        })
                     }).catch((response) => {
-                        toast(response.response.data.message, 'failed')
+                        toast(response.message, 'failed')
+                        this.loading = false;
                     })
             }
         },

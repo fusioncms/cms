@@ -4,7 +4,7 @@
             <page-title icon="user-shield">Create Role</page-title>
         </portal>
 
-        <shared-form :form="form" :submit="submit"></shared-form>
+        <shared-form :loading="loading" :form="form" :submit="submit"></shared-form>
     </div>
 </template>
 
@@ -34,7 +34,8 @@
                     description: '',
                     level: null,
                     permissions: []
-                }, true)
+                }, true),
+                loading: false
             }
         },
 
@@ -44,12 +45,14 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.post('/api/roles').then((response) => {
                     toast('Role successfully created', 'success')
 
                     this.$router.push('/roles')
                 }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
+                    toast(response.message, 'failed')
+                    this.loading = false;
                 })
             },
         }

@@ -6,6 +6,7 @@
 
         <shared-form
             v-if="form"
+            :loading="loading"
             :form="form"
             :roles="roles"
             :user="user"
@@ -38,7 +39,8 @@
             return {
                 user: {},
                 roles: [],
-                form: null
+                form: null,
+                loading: false
             }
         },
 
@@ -56,12 +58,14 @@
             },
 
             submit() {
+                this.loading = true;
                 this.form.patch(`/api/users/${this.user.id}`).then((response) => {
                     toast('User successfully updated', 'success')
 
                     this.$router.push('/users')
                 }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
+                    toast(response.message, 'failed')
+                    this.loading = false;
                 })
             },
         },

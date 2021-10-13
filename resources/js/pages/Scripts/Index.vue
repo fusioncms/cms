@@ -5,9 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <div class="buttons">
-                <ui-button :to="{ name: 'scripts.create' }">Create</ui-button>
-            </div>
+                <ui-button variant="primary" :to="{ name: 'scripts.create' }">Create</ui-button>
         </portal>
 
         <div class="row">

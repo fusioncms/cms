@@ -4,7 +4,7 @@
             <page-title icon="user-alt">Create User</page-title>
         </portal>
 
-        <shared-form :form="form" :roles="roles" :submit="submit"></shared-form>
+        <shared-form :loading="loading" :form="form" :roles="roles" :submit="submit"></shared-form>
     </div>
 </template>
 
@@ -39,7 +39,8 @@
                     email_verified_at: this.$moment().format('X'),
                     subscriptions: [],
                     status: 1,
-                }, true)
+                }, true),
+                loading: false
             }
         },
 
@@ -49,12 +50,14 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.post('/api/users').then((response) => {
                     toast('User successfully created', 'success')
 
                     this.$router.push('/users')
                 }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
+                    toast(response.message, 'failed')
+                    this.loading = false;
                 })
             },
         },
