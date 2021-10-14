@@ -5,7 +5,7 @@
         </portal>
 
         <portal to="actions">
-            <ui-button :to="{ name: 'forms' }">Manage Forms</ui-button>
+            <ui-button variant="primary" :to="{ name: 'forms' }">Manage Forms</ui-button>
         </portal>
 
         <div v-if="$mq == 'sm' && response.id" class="row mb-6">
