@@ -33,7 +33,7 @@
                 form: new Form({
                     name: '',
                     email: '',
-                    role: null,
+                    role: "user",
                     password: '',
                     password_confirmation: '',
                     email_verified_at: this.$moment().format('X'),
