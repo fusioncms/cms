@@ -36,7 +36,7 @@
                 form: new Form({
                     name: '',
                     url: '',
-                    new_window: false,
+                    new_window: '0',
                     parent_id: 0,
                     order: 0,
                     status: false,
@@ -100,7 +100,7 @@
             let fields = {
                 name: '',
                 url: '',
-                new_window: 0,
+                new_window: '0',
                 parent_id: 0,
                 order: null,
                 status: 1,
