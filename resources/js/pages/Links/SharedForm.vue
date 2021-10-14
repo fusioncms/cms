@@ -28,11 +28,11 @@
                             :options="[
                                 {
                                     'label': 'New Window',
-                                    'value': 1,
+                                    'value': '1',
                                 },
                                 {
                                     'label': 'Same Window',
-                                    'value': 0,
+                                    'value': '0',
                                 },
                             ]"
                             v-model="form.new_window">
