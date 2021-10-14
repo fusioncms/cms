@@ -105,7 +105,7 @@
             let fields = {
                 name: link.name,
                 url: link.url,
-                new_window: link.new_window,
+                new_window: Number(link.new_window).toString(),
                 parent_id: link.parent_id,
                 order: link.order,
                 status: link.status,
