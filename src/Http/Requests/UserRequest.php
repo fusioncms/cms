@@ -53,8 +53,8 @@ class UserRequest extends Request
         $id = $this->user->id ?? null;
 
         $rules = [
-            'name'          => [],
-            'email'         => ['email', 'unique:users,email,'.$id],
+            'name'          => ['required'],
+            'email'         => ['required', 'email', 'unique:users,email,'.$id],
             'role'          => ['sometimes', 'exists:roles,handle'],
             'status'        => ['sometimes', 'boolean'],
             'subscriptions' => 'sometimes',
