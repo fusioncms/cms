@@ -6,8 +6,8 @@
 
         <portal to="actions">
             <div class="buttons">
-                <router-link :to="{ name: 'inbox' }" class="button">View Inbox</router-link>
-                <router-link :to="{ name: 'forms.create' }" class="button">Create Form</router-link>
+                <ui-button key="to-inbox-btn" :to="{ name: 'inbox' }">View Inbox</ui-button>
+                <ui-button key="create-form-btn" :to="{ name: 'forms.create' }" variant="primary" v-if="$can('forms.create')">Create Form</ui-button>
             </div>
         </portal>
 
