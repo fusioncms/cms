@@ -4,7 +4,12 @@
             <page-title icon="layer-group">Edit Fieldset</page-title>
         </portal>
 
-        <shared-form v-if="form" :form="form" :submit="submit"></shared-form>
+        <shared-form
+            v-if="form"
+            :loading="loading"
+            :form="form"
+            :submit="submit">
+        </shared-form>
     </div>
 </template>
 
@@ -30,7 +35,8 @@
         data() {
             return {
                 fieldset: {},
-                form: null
+                form: null,
+                loading: false
             }
         },
 
@@ -40,14 +46,17 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.patch(`/api/fieldsets/${this.fieldset.id}`).then((response) => {
                     this.$store.dispatch('navigation/fetchAdminNavigation')
 
                     toast('Fieldset successfully updated', 'success')
 
                     this.$router.push('/fieldsets')
+                    this.loading = false;
                 }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
+                    toast(response.message, 'failed')
+                    this.loading = false;
                 })
             }
         },

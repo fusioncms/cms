@@ -1,11 +1,11 @@
 <template>
-	<form-container>
-		<portal to="actions">
-			<div class="buttons">
-				<ui-button v-if="$mq != 'sm'" :to="{ name: 'blueprints' }" variant="secondary">Go Back</ui-button>
-				<ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges">Save</ui-button>
-			</div>
-		</portal>
+    <form-container>
+	<portal to="actions">
+	    <div class="buttons">
+		<ui-button v-if="$mq != 'sm'" :to="{ name: 'blueprints' }" variant="secondary">Go Back</ui-button>
+		<ui-button type="submit" @click.prevent="$parent.submit" variant="primary" :disabled="!form.hasChanges || loading">Save</ui-button>
+	    </div>
+	</portal>
 
         <portal to="sidebar-right">
             <sidebar id="blueprint-sidebar">
@@ -13,9 +13,11 @@
             </sidebar>
         </portal>
 
-		<div class="card">
+        <section-card title="Loading..." v-show="loading"></section-card>
+        <div v-show="! loading">
+	<div class="card">
             <div class="card__body">
-				<ui-title-group
+		<ui-title-group
                     name="name"
                     readonly
                     :has-error="form.errors.has('name')"
@@ -48,9 +50,10 @@
                     </ui-modal>
 
                 </blueprint>
-			</div>
-		</div>
-	</form-container>
+	    </div>
+        </div>
+	</div>
+    </form-container>
 </template>
 
 <script>
@@ -74,7 +77,12 @@
             form: {
                 type: Object,
                 required: true,
-            }
+            },
+
+           loading: {
+               type: Boolean,
+               required: false,
+           }
         },
 
         methods: {

@@ -4,7 +4,7 @@
             <page-title icon="layer-group">Create Fieldset</page-title>
         </portal>
 
-        <shared-form :form="form" :submit="submit"></shared-form>
+        <shared-form :loading="loading" :form="form" :submit="submit"></shared-form>
     </div>
 </template>
 
@@ -34,7 +34,8 @@
                     handle: '',
                     status: '1',
                     fields: [],
-                }, true)
+                }, true),
+                loading: false
             }
         },
 
@@ -44,14 +45,17 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.post('/api/fieldsets').then((response) => {
                     this.$store.dispatch('navigation/fetchAdminNavigation')
 
                     toast('Fieldset successfully created', 'success')
 
                     this.$router.push('/fieldsets')
+                    this.loading = false;
                 }).catch((response) => {
                     toast(response.message, 'failed')
+                    this.loading = false;
                 })
             }
         }

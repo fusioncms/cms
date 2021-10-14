@@ -6,6 +6,7 @@
 
         <shared-form
             v-if="form"
+            :loading="loading"
             :form="form"
             :entry="entry"
             :collection="collection">
@@ -31,6 +32,7 @@
                 collection: {},
                 entry: {},
                 form: null,
+                loading: false
             }
         },
 
@@ -40,12 +42,14 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.patch('/api/collections/' + this.collection.slug + '/' + this.entry.id).then((response) => {
                     toast('Entry saved successfully', 'success')
 
                     this.$router.push('/collection/' + this.collection.slug)
                 }).catch((response) => {
                     toast(response.message, 'failed')
+                    this.loading = false;
                 })
             },
         },

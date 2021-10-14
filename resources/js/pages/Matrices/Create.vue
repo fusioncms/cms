@@ -5,6 +5,7 @@
         </portal>
 
         <shared-form
+            :loading="loading"
             :form="form"
             :submit="submit"
             :matrices="matrices">
@@ -52,7 +53,8 @@
                     order_by: 'name',
                     order_direction: true,
                     status: true,
-                }, true)
+                }, true),
+                loading: false
             }
         },
 
@@ -62,6 +64,7 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.post('/api/matrices').then((response) => {
                     axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
                         .then((response) => {
@@ -72,9 +75,11 @@
                             this.$router.push('/matrices')
                         }).catch((response) => {
                             toast(response.message, 'failed')
+                            this.loading = false;
                         })
                 }).catch((response) => {
                     toast(response.message, 'failed')
+                    this.loading = false;
                 })
             },
         },

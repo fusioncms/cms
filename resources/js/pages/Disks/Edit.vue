@@ -1,10 +1,10 @@
 <template>
     <div class="disk-page">
         <portal to="title">
-			<page-title icon="hdd">Edit Disk</page-title>
-		</portal>
+	    <page-title icon="hdd">Edit Disk</page-title>
+	</portal>
 
-        <shared-form v-if="form" :form="form"></shared-form>
+        <shared-form v-if="form" :loading="loading" :form="form"></shared-form>
     </div>
 </template>
 
@@ -30,7 +30,8 @@
         data() {
             return {
                 disk: null,
-                form: null
+                form: null,
+                loading: false
             }
         },
 
@@ -44,6 +45,7 @@
             },
 
             submit() {
+                this.loading = true;
                 this.form.patch(`/api/disks/${this.disk.id}`)
                     .then(() => {
                         toast('Disk successfully saved', 'success')
@@ -51,6 +53,7 @@
                         this.$router.push('/disks')
                     }).catch((response) => {
                         toast(response.message, 'failed')
+                        this.loading = false;
                     })
             }
         },

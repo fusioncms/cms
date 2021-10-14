@@ -6,6 +6,7 @@
 
         <shared-form
             v-if="form"
+            :loading="loading"
             :form="form"
             :resource="resource">
         </shared-form>
@@ -34,7 +35,8 @@
         data() {
             return {
                 resource: {},
-                form: null
+                form: null,
+                loading: false
             }
         },
 
@@ -44,12 +46,14 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.patch(`/api/scripts/${this.resource.id}`).then((response) => {
                     toast('Script successfully updated', 'success')
 
                     this.$router.push('/scripts')
                 }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
+                    toast(response.message, 'failed')
+                    this.loading = false;
                 })
             },
         },

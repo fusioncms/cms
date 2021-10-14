@@ -1,10 +1,10 @@
 <template>
     <div class="navigation-page">
         <portal to="title">
-			<page-title icon="anchor">Edit Navigation</page-title>
-		</portal>
+	    <page-title icon="anchor">Edit Navigation</page-title>
+	</portal>
 
-        <shared-form v-if="form" :form="form"></shared-form>
+        <shared-form v-if="form" :loading="loading" :form="form"></shared-form>
     </div>
 </template>
 
@@ -30,7 +30,8 @@
         data() {
             return {
                 navigation: null,
-                form: null
+                form: null,
+                loading: false
             }
         },
 
@@ -40,6 +41,7 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.patch(`/api/navigation/${this.navigation.id}`)
                     .then(() => {
                         axios.post(`/api/blueprints/${this.navigation.blueprint.id}/sections`, { sections: this.form.sections })
@@ -49,9 +51,11 @@
                                 this.$router.push('/navigation')
                             }).catch((response) => {
                                 toast(response.message, 'failed')
+                                this.loading = false;
                             })
                     }).catch((response) => {
                         toast(response.message, 'failed')
+                        this.loading = false;
                     })
             }
         },

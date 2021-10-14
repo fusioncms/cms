@@ -7,6 +7,7 @@
         <shared-form
             v-if="form"
             :id="id"
+            :loading="loading"
             :form="form"
             :matrix="matrix"
             :submit="submit"
@@ -39,7 +40,8 @@
                 id: null,
                 matrices: [],
                 matrix: {},
-                form: null
+                form: null,
+                loading: false
             }
         },
 
@@ -49,6 +51,7 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.patch(`/api/matrices/${this.id}`).then((response) => {
                     axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
                         .then((response) => {
@@ -59,9 +62,11 @@
                             this.$router.push('/matrices')
                         }).catch((response) => {
                             toast(response.message, 'failed')
+                            this.loading = false;
                         })
                 }).catch((response) => {
-                    toast(response.response.data.message, 'failed')
+                    toast(response.message, 'failed')
+                    this.loading = false;
                 })
             },
         },

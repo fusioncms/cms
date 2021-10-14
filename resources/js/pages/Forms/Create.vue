@@ -1,10 +1,10 @@
 <template>
     <div>
         <portal to="title">
-			<page-title icon="paper-plane">Create Form</page-title>
-		</portal>
+	    <page-title icon="paper-plane">Create Form</page-title>
+	</portal>
 
-        <shared-form :form="form"></shared-form>
+        <shared-form :loading="loading" :form="form"></shared-form>
     </div>
 </template>
 
@@ -53,7 +53,8 @@
                     thankyou_template: '',
 
                     status: true,
-                }, true)
+                }, true),
+                loading: false
             }
         },
 
@@ -63,6 +64,7 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.post('/api/forms')
                     .then((response) => {
                         axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
@@ -70,11 +72,14 @@
                                 toast('Form successfully saved', 'success')
 
                                 this.$router.push('/forms')
+                                this.loading = false;
                             }).catch((response) => {
                                 toast(response.message, 'failed')
+                                this.loading = false;
                             })
                     }).catch((response) => {
                         toast(response.message, 'failed')
+                        this.loading = false;
                     })
             }
         },

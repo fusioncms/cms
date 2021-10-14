@@ -1,10 +1,10 @@
 <template>
     <div class="script-page">
         <portal to="title">
-			<page-title icon="code">Create Script</page-title>
-		</portal>
+	    <page-title icon="code">Create Script</page-title>
+	</portal>
 
-        <shared-form :form="form"></shared-form>
+        <shared-form :loading="loading" :form="form"></shared-form>
     </div>
 </template>
 
@@ -39,7 +39,8 @@
                     type: 'user',
                     order: 0,
                     status: true,
-                }, true)
+                }, true),
+                loading: false
             }
         },
 
@@ -49,6 +50,7 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.post('/api/scripts')
                     .then((response) => {
                         toast('Script successfully saved', 'success')
@@ -56,6 +58,7 @@
                         this.$router.push('/scripts')
                     }).catch((response) => {
                         toast(response.message, 'failed')
+                        this.loading = false;
                     })
             }
         },
