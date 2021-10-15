@@ -3,7 +3,7 @@
         <portal to="actions">
             <div class="buttons">
                 <ui-button v-if="$mq != 'sm'" key="go-back-btn" :to="{ name: 'users' }" variant="secondary">Go Back</ui-button>
-                <ui-button key="save-btn" variant="primary" @click.prevent="submit" :disabled="!form.hasChanges">Save</ui-button>
+                <ui-button key="save-btn" variant="primary" @click.prevent="submit" :disabled="!form.hasChanges || loading">Save</ui-button>
             </div>
         </portal>
 
