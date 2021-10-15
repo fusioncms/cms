@@ -36,18 +36,6 @@
                                     <ui-dropdown-link @click.prevent :to="{ name: 'links.edit', params: {navigation: navigation.id, link: item.id} }">Edit</ui-dropdown-link>
                                     <ui-dropdown-link
                                         @click.prevent
-                                        v-modal:move-before="item">
-                                        Move before...
-                                    </ui-dropdown-link>
-
-                                    <ui-dropdown-link
-                                        @click.prevent
-                                        v-modal:move-after="item">
-                                        Move after...
-                                    </ui-dropdown-link>
-
-                                    <ui-dropdown-link
-                                        @click.prevent
                                         v-modal:delete-link="item"
                                         classes="link--danger">
                                         Delete
@@ -67,32 +55,6 @@
                 <template slot="footer" slot-scope="link">
                     <ui-button v-modal:delete-link @click="destroy(link.data.id)" variant="danger" class="ml-3">Delete</ui-button>
                     <ui-button v-modal:delete-link>Cancel</ui-button>
-                </template>
-            </ui-modal>
-
-            <ui-modal name="move-before" title="Move before..." key="move_before">
-                <template>
-                    <p>Which link would you like to move before?</p>
-
-                    <ui-select-group name="before" label="Link" hide-label :options="options" v-model="before"></ui-select-group>
-                </template>
-
-                <template slot="footer" slot-scope="link">
-                    <ui-button v-modal:move-before @click="moveBefore(link.data.id)" variant="danger" class="ml-3">Move</ui-button>
-                    <ui-button v-modal:move-before @click="before = null">Cancel</ui-button>
-                </template>
-            </ui-modal>
-
-            <ui-modal name="move-after" title="Move after..." key="move_after">
-                <template>
-                    <p>Which link would you like to move after?</p>
-
-                    <ui-select-group name="after" label="Link" hide-label :options="options" v-model="after"></ui-select-group>
-                </template>
-
-                <template slot="footer" slot-scope="link">
-                    <ui-button v-modal:move-after @click="moveAfter(link.data.id)" variant="danger" class="ml-3">Move</ui-button>
-                    <ui-button v-modal:move-after @click="after = null">Cancel</ui-button>
                 </template>
             </ui-modal>
         </portal>
@@ -130,8 +92,6 @@
                 links: [],
                 saving: false,
                 changed: false,
-                before: null,
-                after: null,
                 form: new Form({
                     name: '',
                     url: '',
@@ -142,12 +102,7 @@
 
         computed: {
             options() {
-                return _.map(this.links, function(link) {
-                    return {
-                        'label': link.name,
-                        'value': link.id
-                    }
-                })
+                return this.links.map(link => ({ 'label': link.name, 'value': link.id }));
             }
         },
 
@@ -183,34 +138,6 @@
                     })
                 })
             },
-
-            moveBefore(move) {
-                axios.post('/api/navigation/' + this.navigation.id + '/links/before', {
-                    move: move,
-                    before: parseInt(this.before),
-                }).then((response) => {
-                    this.after = null
-                    this.before = null
-
-                    this.fetchLinks().then(() => {
-                        toast('Link successfully moved.', 'success')
-                    })
-                })
-            },
-
-            moveAfter(move) {
-                axios.post('/api/navigation/' + this.navigation.id + '/links/after', {
-                    move: move,
-                    after: parseInt(this.after),
-                }).then((response) => {
-                    this.after = null
-                    this.before = null
-
-                    this.fetchLinks().then(() => {
-                        toast('Link successfully moved.', 'success')
-                    })
-                })
-            }
         },
 
         beforeRouteEnter(to, from, next) {

@@ -118,8 +118,6 @@ Route::apiResource('matrices', 'MatrixController');
 /**
  * API - Navigation Routes.
  */
-Route::post('navigation/{navigation}/links/before', 'LinkMoveBeforeController');
-Route::post('navigation/{navigation}/links/after', 'LinkMoveAfterController');
 Route::patch('navigation/{navigation}/links/refresh', 'LinkRefreshController');
 Route::post('navigation/{navigation}/links/reorder', 'LinkReorderController');
 Route::apiResource('navigation/{navigation}/links', 'LinkController');
