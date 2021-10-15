@@ -126,6 +126,14 @@
                         toast('Role successfully deleted.', 'success')
 
                         bus().$emit('refresh-datatable-roles')
+
+                        axios.get('/api/roles').then((response) => {
+                            this.roles = response.data.data;
+                        }).catch((response) => {
+                            toast(response.message, 'failed');
+                        });
+                    }).catch((response) => {
+                        toast(response.message, 'failed')
                     })
             },
 
