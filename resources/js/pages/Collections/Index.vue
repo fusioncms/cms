@@ -10,7 +10,7 @@
 
         <ui-card v-if="endpoint">
             <ui-card-body>
-                <ui-table :key="'entries-' + collection.id" class="entries-table" id="entries" :endpoint="endpoint" sort-by="name" :per-page="50">
+                <ui-table :key="'entries-' + collection.id" class="entries-table" id="entries" :endpoint="endpoint" sort-by="order" :per-page="50">
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">
                             <ui-status :value="table.record.status" class="mr-2"></ui-status>

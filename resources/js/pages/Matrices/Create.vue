@@ -50,7 +50,7 @@
                     name_format: '',
                     route: '',
                     template: '',
-                    order_by: 'name',
+                    order_by: 'order',
                     order_direction: true,
                     status: true,
                 }, true),

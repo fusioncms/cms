@@ -34,6 +34,7 @@ class MatrixObserver implements BuilderObserver
             $table->boolean('status')->default(true);
             $table->timestamp('publish_at')->useCurrent();
             $table->timestamp('expire_at')->nullable();
+            $table->float('order')->nullable()->index();
             $table->timestamps();
         });
     }

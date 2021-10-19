@@ -26,10 +26,10 @@ class Matrix extends Builder
     {
         switch ($this->source->type) {
             case 'single':
-                return ['matrix_id', 'name', 'slug', 'publish_at', 'expire_at', 'status'];
+                return ['matrix_id', 'name', 'slug', 'publish_at', 'expire_at', 'order', 'status'];
                 break;
             case 'collection':
-                return ['matrix_id', 'parent_id', 'name', 'slug', 'publish_at', 'expire_at', 'status'];
+                return ['matrix_id', 'parent_id', 'name', 'slug', 'publish_at', 'expire_at', 'order', 'status'];
                 break;
         }
 
@@ -44,6 +44,7 @@ class Matrix extends Builder
     protected function getCasts()
     {
         return [
+            'order' => 'integer',
             'status' => 'boolean',
         ];
     }
@@ -85,7 +86,7 @@ class Matrix extends Builder
     protected function getPlaceholders()
     {
         return [
-            '{order_by}'        => $this->source->order_by ?? 'name',
+            '{order_by}'        => $this->source->order_by ?? 'order',
             '{order_direction}' => $this->source->order_direction ? 'ASC' : 'DESC',
         ];
     }

@@ -34,6 +34,12 @@
  */
 
 /*!
+ * vue-nestable v2.6.0
+ * (c) Ralph Huwiler <ralph@huwiler.rocks>
+ * Released under the MIT License.
+ */
+
+/*!
  * vuex v3.6.2
  * (c) 2021 Evan You
  * @license MIT

@@ -114,6 +114,7 @@ Route::prefix('insights')->group(function () {
  */
 Route::get('matrices/slug/{slug}', 'MatrixController@slug');
 Route::apiResource('matrices', 'MatrixController');
+Route::post('matrices/{matrix}/collection/reorder', 'CollectionReorderController');
 
 /**
  * API - Navigation Routes.

@@ -45,6 +45,7 @@ class CollectionRequest extends Request
     {
         $this->merge([
             'matrix_id'  => $this->matrix->id,
+            'order'         => $this->order ?? $this->model->orderLast(),
             'status'     => $this->status ?? true,
             'publish_at' => (isset($this->publish_at) and !empty($this->publish_at)) ? $this->publish_at : now(),
             'expire_at'  => (isset($this->expire_at) and !empty($this->expire_at)) ? $this->expire_at : null,
@@ -61,6 +62,7 @@ class CollectionRequest extends Request
         $rules = [
             'matrix_id'  => 'required|integer',
             'slug'       => 'unique:'.$this->model->getTable().',slug,'.request()->id,
+            'order'         => 'sometimes',
             'publish_at' => 'nullable|date',
             'expire_at'  => 'nullable|date|after:publish_at',
             'status'     => 'required|boolean',
