@@ -19,7 +19,7 @@
 
             <!-- Page View -->
             <ui-toolbar-group>
-                <ui-dropdown noArrow id="per-page-options" right>
+                <ui-dropdown :disabled="order === 'Save' " noArrow id="per-page-options" right>
                     <fa-icon icon="list"></fa-icon>
                     <span class="sr-only-mobile">View</span>
 
@@ -78,13 +78,16 @@
                     </template>
                 </ui-dropdown>
             </ui-toolbar-group>
+            <!-- Order -->
+            <ui-button v-show="order === 'Order' " :disabled="loading" @click.prevent="toggleOrder"><fa-icon class="mr-1" icon="ellipsis-v"></fa-icon>{{order}}</ui-button>
+            <ui-button v-show="order === 'Save' " :disabled="loading" @click.prevent="toggleOrder" variant="primary"><fa-icon class="mr-1" icon="ellipsis-v"></fa-icon>{{order}}</ui-button>
 
             <slot name="toolbarAppend"></slot>
         </ui-toolbar>
 
         <div v-show="loading" class="pb-2">Loading...</div>
 
-        <div class="table-wrapper" v-if="records.length" :class="{'loading': loading}">
+        <div v-show="order === 'Order' " class="table-wrapper" v-if="records.length" :class="{'loading': loading}">
             <table :id="id" class="table" aria-live="polite">
                 <!-- Table Head -->
                 <thead>
@@ -172,6 +175,24 @@
             </table>
         </div>
 
+        <div v-show="order === 'Save' && ! loading" class="mb-4 xl:mb-6" >
+            <VueNestable v-model="records" :threshold="32">
+                <template slot-scope="{ item }">
+                    <div class="flex">
+                        <VueNestableHandle :item="item" class="flex items-center justify-center border-r w-8 text-gray-500 bg-gray-50 rounded-l">
+                            <fa-icon :icon="['fas', 'grip-vertical']"></fa-icon>
+                        </VueNestableHandle>
+                        <div class="flex flex-1 items-center justify-between">
+                            <div class="p-3 flex items-center" :class="{'font-bold': (item.url == '' || item.url == '#')}">
+                                <ui-status :value="item.status" class="mr-2"></ui-status>
+                                <router-link :to="{ name: 'collection.edit', params: {id: item.id} }">{{ item.name }}</router-link>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </VueNestable>
+        </div>
+
         <!-- Pagination -->
         <div class="pagination-group" v-if="this.pagination.totalPages > 1">
             <div v-if="showPageStatus" class="pagination-group__item">
@@ -225,10 +246,16 @@
 <script>
     import _ from 'lodash'
     import axios from 'axios'
-    import queryString from 'query-string'
+ import queryString from 'query-string'
+ import { VueNestable, VueNestableHandle } from 'vue-nestable'
 
     export default {
         name: 'ui-table',
+
+        components: {
+            VueNestable,
+            VueNestableHandle
+        },
 
         props: {
             id: {
@@ -329,6 +356,7 @@
                     order: this.sortIn,
                 },
                 selected: [],
+                order: 'Order',
             }
         },
 
@@ -396,6 +424,27 @@
         },
 
         methods: {
+            toggleOrder() {
+                if (this.order === 'Order') {
+                    this.order = 'Save';
+                    this.changePerPage(this.pagination.totalRecords + 1);
+                }
+                else {
+                    const matrix_id = this.endpoint.split('/').at(-1);
+                    this.loading = true
+                    axios.post('/api/matrices/' + matrix_id + '/collection/reorder', {collection: this.records}).then((response) => {
+                        toast('Entries successfully saved.', 'success')
+                        this.loading = false;
+                        this.changePerPage(10);
+                    }).catch((response) => {
+                        toast(response.message, 'failed')
+                        this.loading = false;
+                        this.changePerPage(10);
+                    });
+                    this.order = 'Order';
+                }
+            },
+
             cancelBulkAction() {
                 this.showBulkActionConfirmation = false
                 this.action = null

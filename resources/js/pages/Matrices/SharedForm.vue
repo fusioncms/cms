@@ -309,6 +309,7 @@
                     { label: 'ID',           value: 'id'         },
                     { label: 'Name',         value: 'name'       },
                     { label: 'Slug',         value: 'slug'       },
+                    { label: 'Manual',         value: 'order'       },
                     { label: 'Publish Date', value: 'publish_at' },
                     { label: 'Created',      value: 'created_at' },
                     { label: 'Last Update',  value: 'updated_at' },

@@ -39,6 +39,7 @@ class CollectionController extends DataTableController
         return [
             'name',
             'slug',
+            'order',
             'created_at',
             'updated_at',
         ];
@@ -49,6 +50,7 @@ class CollectionController extends DataTableController
         return [
             'name',
             'slug',
+            'order',
             'created_at',
             'updated_at',
         ];
@@ -59,6 +61,7 @@ class CollectionController extends DataTableController
         return [
             'name',
             'slug',
+            'order',
             'created_at',
             'updated_at',
         ];
@@ -69,6 +72,7 @@ class CollectionController extends DataTableController
         return [
             'name'       => 'Name',
             'slug'       => 'Slug',
+            'order'       => 'Manual',
             'created_at' => 'Created',
             'updated_at' => 'Updated',
         ];
