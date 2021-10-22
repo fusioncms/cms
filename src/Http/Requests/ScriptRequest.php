@@ -1,6 +1,7 @@
 <?php
 
 namespace Fusion\Http\Requests;
+use Fusion\Models\Script;
 
 class ScriptRequest extends Request
 {
@@ -22,6 +23,32 @@ class ScriptRequest extends Request
     public function authorizePatch()
     {
         return $this->user()->can('scripts.update');
+    }
+
+    /**
+     * Helper function to find the last order
+     *
+     * @return float
+     */
+    public function orderLast()
+    {
+        if (Script::count() === 0) return 0.0;
+
+        $last_order = Script::all()->max(function ($script) { return $script->order; });
+
+        return $last_order + 1.0;
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'order'         => $this->order ?? $this->orderLast(),
+        ]);
     }
 
     /**

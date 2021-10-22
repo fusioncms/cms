@@ -19,6 +19,7 @@ class CreateDisksTable extends Migration
             $table->string('handle')->unique();
             $table->string('driver');
             $table->text('configurations')->nullable();
+            $table->float('order')->nullable()->index();
             $table->timestamps();
         });
     }

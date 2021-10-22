@@ -4,6 +4,7 @@ namespace Fusion\Http\Requests;
 
 use Fusion\Rules\NotAReservedKeyword;
 use Illuminate\Support\Str;
+use Fusion\Models\Form;
 
 class FormRequest extends Request
 {
@@ -28,6 +29,20 @@ class FormRequest extends Request
     }
 
     /**
+     * Helper function to find the last order
+     *
+     * @return float
+     */
+    public function orderLast()
+    {
+        if (Form::count() === 0) return 0.0;
+
+        $last_order = Form::all()->max(function ($form) { return $form->order; });
+
+        return $last_order + 1.0;
+    }
+
+    /**
      * Prepare the data for validation.
      *
      * @return void
@@ -36,6 +51,7 @@ class FormRequest extends Request
     {
         $this->merge([
             'slug' => $this->slug ?? Str::slug($this->name),
+            'order'         => $this->order ?? $this->orderLast(),
         ]);
     }
 
@@ -57,6 +73,7 @@ class FormRequest extends Request
             'collect_ip_addresses'    => 'sometimes',
             'response_receipt'        => 'sometimes',
 
+            'order'                        => 'sometimes',
             'confirmation_message'    => 'sometimes',
             'redirect_on_submission'  => 'sometimes',
             'redirect_url'            => 'sometimes',

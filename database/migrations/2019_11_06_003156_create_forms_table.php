@@ -45,6 +45,7 @@ class CreateFormsTable extends Migration
             $table->string('thankyou_template')->nullable();
 
             $table->boolean('status')->default(true);
+            $table->float('order')->nullable()->index();
 
             $table->timestamps();
         });

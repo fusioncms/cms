@@ -17,16 +17,8 @@ class RoleController extends DataTableController
         return [
             'name',
             'level',
+            'order',
             'description',
-        ];
-    }
-
-    public function getCustomColumnNames()
-    {
-        return [
-            'name'        => 'Name',
-            'level'       => 'Level',
-            'description' => 'Description',
         ];
     }
 
@@ -35,6 +27,7 @@ class RoleController extends DataTableController
         return [
             'name',
             'level',
+            'order',
         ];
     }
 
@@ -43,6 +36,17 @@ class RoleController extends DataTableController
         return [
             'name',
             'level',
+            'order',
+        ];
+    }
+
+    public function getCustomColumnNames()
+    {
+        return [
+            'name'        => 'Name',
+            'level'       => 'Level',
+            'order'      => 'Manual',
+            'description' => 'Description',
         ];
     }
 }

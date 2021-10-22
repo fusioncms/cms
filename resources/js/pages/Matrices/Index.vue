@@ -10,7 +10,21 @@
 
         <ui-card>
             <ui-card-body>
-                <ui-table key="matrices" class="matrix-table" id="matrices" :endpoint="endpoint" sort-by="name" primary-key="handle" show-page-status show-page-numbers show-page-nav show-page-ends>
+                <ui-table slot-scope="table"
+                          key="matrices"
+                          class="matrix-table"
+                          id="matrices"
+                          sort-by="order"
+                          primary-key="handle"
+                          show-page-status show-page-numbers
+                          show-page-nav show-page-ends
+                          link_name="matrices.edit"
+                          link_param="matrix"
+                          reorder_route="/api/matrices/reorder"
+                          :show_status="true"
+                          :table="table"
+                          :endpoint="endpoint"
+                >
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">
                             <ui-status :value="table.record.status" class="mr-2"></ui-status>

@@ -10,7 +10,17 @@
 
         <ui-card>
             <ui-card-body>
-                <ui-table :endpoint="endpoint" id="disks" sort-by="name" primary-key="handle" key="disks_table">
+                <ui-table
+                    id="disks"
+                    sort-by="order"
+                    primary-key="handle"
+                    key="disks_table"
+                    link_name="disks.edit"
+                    link_param="disk"
+                    reorder_route="/api/disks/reorder"
+                    :show_status="false"
+                    :endpoint="endpoint"
+                >
                     <template slot="name" slot-scope="table">
                         <router-link v-if="!isLocked(table.record.handle)" :to="{ name: 'disks.edit', params: {disk: table.record.id} }">{{ table.record.name }}</router-link>
                         <span v-else>{{ table.record.name }}</span>

@@ -3,6 +3,7 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Rules\NotAReservedKeyword;
+use Fusion\Models\Fieldset;
 
 class FieldsetRequest extends Request
 {
@@ -27,6 +28,32 @@ class FieldsetRequest extends Request
     }
 
     /**
+     * Helper function to find the last order
+     *
+     * @return float
+     */
+    public function orderLast()
+    {
+        if (Fieldset::count() === 0) return 0.0;
+
+        $last_order = Fieldset::all()->max(function ($fieldset) { return $fieldset->order; });
+
+        return $last_order + 1.0;
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'order'         => $this->order ?? $this->orderLast(),
+        ]);
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -38,6 +65,7 @@ class FieldsetRequest extends Request
         return [
             'name'   => 'required|regex:/^[A-z]/i',
             'handle' => ['required', 'unique:fieldsets,handle,'.$id, new NotAReservedKeyword()],
+            'order'             => 'sometimes',
         ];
     }
 }

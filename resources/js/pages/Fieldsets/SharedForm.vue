@@ -8,8 +8,9 @@
         </portal>
 
         <section-card title="Loading..." v-show="loading"></section-card>
-        <div v-show="! loading">
-            <portal to="sidebar-right">
+
+        <portal to="sidebar-right">
+            <div v-show="! loading">
                 <sidebar id="fieldset-sidebar">
                     <sidebar-section id="fieldset_panel_status" tabindex="-1">
                         <ui-toggle
@@ -30,8 +31,10 @@
                         tabindex="-1">
                     </status-card>
                 </sidebar>
-            </portal>
+            </div>
+        </portal>
 
+        <div v-show="! loading">
             <section-card id="fieldset_panel_general" title="General Information" description="General information about your fieldset and what it manages." tabindex="-1">
                 <div class="row">
                     <div class="col w-full lg:w-1/2">

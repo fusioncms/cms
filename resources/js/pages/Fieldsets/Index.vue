@@ -20,13 +20,16 @@
                     key="fieldsets"
                     class="fieldset-table"
                     id="fieldsets"
-                    :endpoint="endpoint"
-                    sort-by="name"
+                    sort-by="order"
                     primary-key="handle"
-                    show-page-status
-                    show-page-numbers
-                    show-page-nav
-                    show-page-ends>
+                    show-page-status show-page-numbers
+                    show-page-nav show-page-ends
+                    link_name="fieldsets.edit"
+                    link_param="fieldset"
+                    reorder_route="/api/fieldsets/reorder"
+                    :show_status="true"
+                    :endpoint="endpoint"
+                >
 
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">

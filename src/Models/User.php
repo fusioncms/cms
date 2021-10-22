@@ -40,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'status',
+        'order',
         'logged_in_at',
         'invalidly_logged_in_at',
         'password_changed_at',

@@ -17,6 +17,7 @@ class FieldsetController extends DataTableController
         return [
             'name',
             'handle',
+            'order',
         ];
     }
 
@@ -25,6 +26,7 @@ class FieldsetController extends DataTableController
         return [
             'name',
             'handle',
+            'order',
         ];
     }
 
@@ -33,6 +35,7 @@ class FieldsetController extends DataTableController
         return [
             'name',
             'handle',
+            'order',
         ];
     }
 
@@ -41,6 +44,7 @@ class FieldsetController extends DataTableController
         return [
             'name'   => 'Name',
             'handle' => 'Handle',
+            'order'      => 'Manual',
         ];
     }
 }

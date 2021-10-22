@@ -16,6 +16,7 @@ class CreateDefaultDisks
             'name'           => 'Public',
             'handle'         => 'public',
             'driver'         => 'local',
+            'order'       => 0.0,
             'configurations' => [
                 'root' => 'app/public',
             ],
@@ -24,6 +25,7 @@ class CreateDefaultDisks
             'name'           => 'Local',
             'handle'         => 'local',
             'driver'         => 'local',
+            'order'       => 1.0,
             'configurations' => [
                 'root' => 'app',
             ],

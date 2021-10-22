@@ -13,7 +13,17 @@
 
         <ui-card>
             <ui-card-body>
-                <ui-table :endpoint="endpoint" id="forms" sort-by="name" primary-key="handle" key="forms_table">
+                <ui-table
+                    id="forms"
+                    sort-by="order"
+                    primary-key="handle"
+                    key="forms_table"
+                    link_name="forms.edit"
+                    link_param="form"
+                    reorder_route="/api/forms/reorder"
+                    :endpoint="endpoint"
+                    :show_status="true"
+                >
                     <template slot="name" slot-scope="table">
                         <ui-status :value="table.record.status" class="mr-2"></ui-status>
 

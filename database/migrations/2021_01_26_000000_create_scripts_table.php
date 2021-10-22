@@ -22,8 +22,8 @@ class CreateScriptsTable extends Migration
             $table->string('trigger_on')->default('all');
             $table->string('trigger_where')->nullable();
             $table->string('type')->default('user');
-            $table->integer('order')->default(0);
             $table->boolean('status')->default(true);
+            $table->float('order')->nullable()->index();
             $table->timestamps();
         });
     }

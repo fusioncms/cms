@@ -17,6 +17,7 @@ class MatrixController extends DataTableController
         return [
             'name',
             'handle',
+            'order',
             'description',
             'type',
         ];
@@ -27,6 +28,7 @@ class MatrixController extends DataTableController
         return [
             'name',
             'handle',
+            'order',
             'description',
             'type',
         ];
@@ -37,6 +39,7 @@ class MatrixController extends DataTableController
         return [
             'name',
             'handle',
+            'order',
             'description',
             'type',
         ];
@@ -47,6 +50,7 @@ class MatrixController extends DataTableController
         return [
             'name'        => 'Name',
             'handle'      => 'Handle',
+            'order'      => 'Manual',
             'description' => 'Description',
             'type'        => 'Type',
         ];

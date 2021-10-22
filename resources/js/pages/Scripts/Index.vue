@@ -12,14 +12,24 @@
             <div class="col w-full">
                 <ui-card>
                     <ui-card-body>
-                        <ui-table key="scripts" class="scripts-table" id="scripts" :endpoint="endpoint" sort-by="name" :per-page="50">
+                        <ui-table
+                            key="scripts"
+                            class="scripts-table"
+                            id="scripts"
+                            sort-by="order"
+                            link_name="scripts.edit"
+                            link_param="script"
+                            reorder_route="/api/scripts/reorder"
+                            :show_status="false"
+                            :endpoint="endpoint"
+                            :per-page="50"
+                        >
+                            <template slot="name" slot-scope="table">
+                                <router-link :to="{ name: 'scripts.edit', params: {script: table.record.id} }">{{ table.record.name }}</router-link>
+                            </template>
 
                             <template slot="actions" slot-scope="table">
                                 <ui-actions :id="'script_' + table.record.id + '_actions'" :key="'script_' + table.record.id + '_actions'">
-                                    <ui-dropdown-link :to="{ name: 'scripts.edit', params: {script: table.record.id} }" v-if="$can('scripts.update')">Edit</ui-dropdown-link>
-
-                                    <ui-dropdown-divider></ui-dropdown-divider>
-
                                     <ui-dropdown-link
                                         v-if="$can('scripts.delete')"
                                         @click.prevent

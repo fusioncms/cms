@@ -27,6 +27,7 @@ class CreateRolesTable extends Migration
             $table->string('guard_name');
             $table->text('description')->nullable();
             $table->integer('level')->nullable();
+            $table->float('order')->nullable()->index();
             $table->timestamps();
         });
 

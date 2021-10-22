@@ -73,8 +73,18 @@ class UserController extends DataTableController
             'name',
             'email',
             'role',
+            'order',
             'created_at',
             'email_verified_at',
+        ];
+    }
+
+    public function getFilterable()
+    {
+        return [
+            'name',
+            'email',
+            'order',
         ];
     }
 
@@ -83,6 +93,7 @@ class UserController extends DataTableController
         return [
             'name',
             'email',
+            'order',
             'created_at',
         ];
     }
@@ -93,16 +104,9 @@ class UserController extends DataTableController
             'name'              => 'Name',
             'email'             => 'E-mail',
             'role'              => 'Role',
+            'order'      => 'Manual',
             'created_at'        => 'Created',
             'email_verified_at' => 'Verified',
-        ];
-    }
-
-    public function getFilterable()
-    {
-        return [
-            'name',
-            'email',
         ];
     }
 

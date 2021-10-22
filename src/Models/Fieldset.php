@@ -17,7 +17,11 @@ class Fieldset extends Model implements Structure
      *
      * @var array
      */
-    protected $fillable = ['name', 'handle'];
+    protected $fillable = [
+        'name',
+        'handle',
+        'order',
+    ];
 
     /**
      * Get the fields for the given section.

@@ -23,6 +23,7 @@ Route::prefix('collections')->group(function () {
     Route::patch('{slug}/{id}', 'CollectionController@update');
     Route::get('{slug}/{id}/edit', 'CollectionController@edit');
     Route::delete('{slug}/{id}', 'CollectionController@destroy');
+    Route::post('{id}/collection/reorder', 'CollectionReorderController');
 });
 
 /**
@@ -36,6 +37,7 @@ Route::prefix('fields')->group(function () {
  * API - Fieldset Routes.
  */
 Route::apiResource('fieldsets', 'FieldsetController');
+Route::post('fieldsets/reorder', 'FieldsetReorderController');
 
 /**
  * API - Fieldtype Routes.
@@ -96,6 +98,7 @@ Route::prefix('directories/{disk}')->group(function () {
  */
 Route::apiResource('forms/{slug}/responses', 'Forms\ResponseController');
 Route::apiResource('forms', 'Forms\FormController');
+Route::post('forms/reorder', 'FormReorderController');
 
 /**
  * API - Insight Routes.
@@ -114,7 +117,7 @@ Route::prefix('insights')->group(function () {
  */
 Route::get('matrices/slug/{slug}', 'MatrixController@slug');
 Route::apiResource('matrices', 'MatrixController');
-Route::post('matrices/{matrix}/collection/reorder', 'CollectionReorderController');
+Route::post('matrices/reorder', 'MatrixReorderController');
 
 /**
  * API - Navigation Routes.
@@ -123,6 +126,7 @@ Route::patch('navigation/{navigation}/links/refresh', 'LinkRefreshController');
 Route::post('navigation/{navigation}/links/reorder', 'LinkReorderController');
 Route::apiResource('navigation/{navigation}/links', 'LinkController');
 Route::apiResource('navigation', 'NavigationController');
+Route::post('navigation/reorder', 'NavigationReorderController');
 
 /**
  * API - Addon Routes.
@@ -154,6 +158,7 @@ Route::apiResource('taxonomies', 'TaxonomyController');
  * API - Scripts.
  */
 Route::apiResource('scripts', 'ScriptController');
+Route::post('scripts/reorder', 'ScriptReorderController');
 
 /**
  * API - Theme Routes.
@@ -181,8 +186,10 @@ Route::prefix('users')->group(function () {
     Route::post('{user}/expire-password', 'Users\PasswordExpireController@store');
 });
 Route::apiResource('users', 'Users\UserController');
+Route::post('users/reorder', 'UserReorderController');
 Route::apiResource('roles', 'Users\RoleController');
 Route::apiResource('tokens', 'Users\TokenController')->except(['show', 'update']);
+Route::post('roles/reorder', 'RoleReorderController');
 
 /**
  * API - Notification Routes.
@@ -194,6 +201,7 @@ Route::get('notifications', 'Notifications\NotificationController@index');
  * API - Filesystem Disks.
  */
 Route::apiResource('disks', 'DiskController');
+Route::post('disks/reorder', 'DiskReorderController');
 
 /**
  * API - Updates Routes.

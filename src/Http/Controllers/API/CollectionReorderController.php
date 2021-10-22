@@ -20,14 +20,14 @@ class CollectionReorderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request, $matrix)
+    public function __invoke(Request $request, $id)
     {
         $this->authorize('matrices.update');
 
-        $matrix  = Matrix::find($matrix)->firstOrFail();
+        $matrix  = Matrix::find($id);
         $this->model = Builders\Matrix::resolve($matrix->handle);
 
-        $this->walkCollection($request->collection);
+        $this->walkCollection($request->records);
 
         activity()
             ->performedOn($matrix)

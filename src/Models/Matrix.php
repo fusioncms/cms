@@ -30,6 +30,7 @@ class Matrix extends Model implements Structure
         'name',
         'handle',
         'slug',
+        'order',
         'description',
         'type',
         'sidebar',

@@ -148,6 +148,7 @@
             </section-card>
         </div>
         <template v-slot:sidebar>
+            <div v-show="! loading">
             <ui-card>
                 <ui-card-body>
                     <ui-slug-group
@@ -186,6 +187,7 @@
                     {{ $moment(resource.updated_at).format('Y-MM-DD, hh:mm a') }}
                 </ui-definition>
             </ui-definition-list>
+            </div>
         </template>
     </form-container>
 </template>

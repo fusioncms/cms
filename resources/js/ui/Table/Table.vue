@@ -184,8 +184,8 @@
                         </VueNestableHandle>
                         <div class="flex flex-1 items-center justify-between">
                             <div class="p-3 flex items-center" :class="{'font-bold': (item.url == '' || item.url == '#')}">
-                                <ui-status :value="item.status" class="mr-2"></ui-status>
-                                <router-link :to="{ name: 'collection.edit', params: {id: item.id} }">{{ item.name }}</router-link>
+                                <ui-status v-show="show_status" :value="item.status" class="mr-2"></ui-status>
+                                <router-link :to="{ name: link_name, params: {[link_param]: item.id} }">{{ item.name }}</router-link>
                             </div>
                         </div>
                     </div>
@@ -322,7 +322,23 @@
             pageSelectLabel: {
                 type: String,
                 default: 'Page'
-            }
+            },
+            reorder_route: {
+                type: String,
+                default: ''
+            },
+            link_name: {
+                type: String,
+                default: ''
+            },
+            link_param: {
+                type: String,
+                default: ''
+            },
+            show_status: {
+                type: Boolean,
+                default: false
+            },
         },
 
         data() {
@@ -432,7 +448,7 @@
                 else {
                     const matrix_id = this.endpoint.split('/').at(-1);
                     this.loading = true
-                    axios.post('/api/matrices/' + matrix_id + '/collection/reorder', {collection: this.records}).then((response) => {
+                    axios.post(this.reorder_route, {records: this.records}).then((response) => {
                         toast('Entries successfully saved.', 'success')
                         this.loading = false;
                         this.changePerPage(10);
