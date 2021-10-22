@@ -19,6 +19,7 @@ class CreateNavigationTable extends Migration
             $table->string('name');
             $table->string('handle')->unique();
             $table->text('description')->nullable();
+            $table->float('order')->nullable()->index();
 
             $table->timestamps();
         });

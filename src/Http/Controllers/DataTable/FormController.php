@@ -17,6 +17,7 @@ class FormController extends DataTableController
         return [
             'name',
             'handle',
+            'order',
             'description',
         ];
     }
@@ -26,6 +27,7 @@ class FormController extends DataTableController
         return [
             'name',
             'handle',
+            'order',
             'description',
         ];
     }
@@ -35,6 +37,7 @@ class FormController extends DataTableController
         return [
             'name',
             'handle',
+            'order',
             'description',
         ];
     }
@@ -44,6 +47,7 @@ class FormController extends DataTableController
         return [
             'name'        => 'Name',
             'handle'      => 'Handle',
+            'order'      => 'Manual',
             'description' => 'Description',
         ];
     }

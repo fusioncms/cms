@@ -18,6 +18,7 @@ class CreateFieldsetsTable extends Migration
             $table->string('name');
             $table->string('handle')->unique();
             $table->boolean('status')->default(true);
+            $table->float('order')->nullable()->index();
             $table->timestamps();
         });
     }

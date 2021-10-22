@@ -28,6 +28,7 @@ class Form extends Model implements Structure
         'name',
         'slug',
         'handle',
+        'order',
         'description',
         'collect_email_addresses',
         'collect_ip_addresses',

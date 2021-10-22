@@ -29,6 +29,7 @@ class Navigation extends Model implements Structure
     protected $fillable = [
         'name',
         'handle',
+        'order',
         'description',
     ];
 

@@ -16,13 +16,7 @@ class ScriptController extends DataTableController
     {
         return [
             'name',
-        ];
-    }
-
-    public function getCustomColumnNames()
-    {
-        return [
-            'name'        => 'Name',
+            'order',
         ];
     }
 
@@ -30,6 +24,7 @@ class ScriptController extends DataTableController
     {
         return [
             'name',
+            'order',
         ];
     }
 
@@ -37,6 +32,15 @@ class ScriptController extends DataTableController
     {
         return [
             'name',
+            'order',
+        ];
+    }
+
+    public function getCustomColumnNames()
+    {
+        return [
+            'name'        => 'Name',
+            'order'      => 'Manual',
         ];
     }
 }

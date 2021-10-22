@@ -10,7 +10,19 @@
 
         <ui-card>
             <ui-card-body>
-                <ui-table key="roles" class="roles-table" id="roles" endpoint="/datatable/roles" sort-by="level" show-page-status show-page-numbers show-page-nav show-page-ends>
+                <ui-table
+                    key="roles"
+                    class="roles-table"
+                    id="roles"
+                    endpoint="/datatable/roles"
+                    sort-by="order"
+                    show-page-status show-page-numbers
+                    show-page-nav show-page-ends
+                    link_name="roles.edit"
+                    link_param="role"
+                    reorder_route="/api/roles/reorder"
+                    :show_status="false"
+                >
                     <template slot="name" slot-scope="table">
                         <router-link :to="{ name: 'roles.show', params: {role: table.record.id} }" v-if="$can('roles.view')">{{ table.record.name }}</router-link>
                         <span v-else>{{ table.record.name }}</span>

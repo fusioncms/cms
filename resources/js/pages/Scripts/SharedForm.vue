@@ -88,8 +88,10 @@
                     v-model="form.trigger_where">
                 </ui-input-group>
             </section-card>
+        </div>
 
-            <portal to="sidebar-right">
+        <portal to="sidebar-right">
+            <div v-show="! loading">
                 <sidebar id="script-sidebar">
                     <sidebar-section id="script_panel_status" tabindex="-1">
                         <ui-toggle
@@ -105,8 +107,8 @@
 
                     <status-card v-if="resource" :entry="resource" id="script_panel_status_card" tabindex="-1"></status-card>
                 </sidebar>
-            </portal>
-        </div>
+            </div>
+        </portal>
     </form-container>
 </template>
 

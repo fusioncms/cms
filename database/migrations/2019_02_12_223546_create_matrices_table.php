@@ -22,6 +22,7 @@ class CreateMatricesTable extends Migration
             $table->text('description')->nullable();
             $table->string('type');
 
+            $table->float('order')->nullable()->index();
             $table->boolean('sidebar')->default(true);
             $table->boolean('quicklink')->default(true);
             $table->string('icon')->nullable();

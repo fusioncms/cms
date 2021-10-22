@@ -10,7 +10,17 @@
 
         <ui-card>
             <ui-card-body>
-                <ui-table :endpoint="endpoint" id="navigation" sort-by="name" primary-key="handle" key="navigation_table">
+                <ui-table
+                    id="navigation"
+                    sort-by="order"
+                    primary-key="handle"
+                    key="navigation_table"
+                    link_name="navigation.edit"
+                    link_param="navigation"
+                    reorder_route="/api/navigation/reorder"
+                    :show_status="false"
+                    :endpoint="endpoint"
+                >
                     <template slot="name" slot-scope="table">
                         <router-link :to="{ name: 'links', params: {navigation: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>

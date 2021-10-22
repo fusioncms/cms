@@ -13,21 +13,25 @@ class CreateDefaultRoles
         'owner' => [
             'name'        => 'Owner',
             'level'       => 0,
+            'order'       => 0.0,
             'description' => 'The owner has full, unlimited control panel access and permissions. This role is not editable.',
         ],
         'guest' => [
             'name'        => 'Guest',
             'level'       => 99,
+            'order'       => 3.0,
             'description' => 'All non-logged, visiting users automatically assume this role.',
         ],
         'user' => [
             'name'        => 'User',
             'level'       => 5,
+            'order'       => 2.0,
             'description' => 'Default role assigned to new users after creating an account.',
         ],
         'admin' => [
             'name'        => 'Administrator',
             'level'       => 1,
+            'order'       => 1.0,
             'description' => 'Administrators have control panel access with a base set of assigned permissions.',
             'permissions' => [
                 'access.controlPanel',
@@ -68,6 +72,7 @@ class CreateDefaultRoles
                 'guard_name'  => '*',
                 'description' => $role['description'],
                 'level'       => $role['level'],
+                'order'       => $role['order'],
             ])->givePermissionTo($role['permissions'] ?? []);
         }
     }

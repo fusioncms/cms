@@ -10,7 +10,19 @@
 
         <ui-card>
             <ui-card-body>
-                <ui-table bulk key="users" class="user-table" id="users" :endpoint="endpoint" sort-by="name" show-page-status show-page-numbers show-page-nav show-page-ends>
+                <ui-table
+                    key="users"
+                    class="user-table"
+                    id="users"
+                    sort-by="order"
+                    show-page-status show-page-numbers
+                    bulk show-page-nav show-page-ends
+                    link_name="users.edit"
+                    link_param="user"
+                    reorder_route="/api/users/reorder"
+                    :show_status="true"
+                    :endpoint="endpoint"
+                >
                     <template v-slot:toolbarPrepend>
                         <ui-toolbar-group>
                             <ui-dropdown id="user-roles">

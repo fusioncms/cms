@@ -21,6 +21,7 @@ class Disk extends Model
         'name',
         'handle',
         'driver',
+        'order',
         'configurations',
     ];
 

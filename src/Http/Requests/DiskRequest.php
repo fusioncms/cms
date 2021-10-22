@@ -2,6 +2,8 @@
 
 namespace Fusion\Http\Requests;
 
+use Fusion\Models\Disk;
+
 class DiskRequest extends Request
 {
     /**
@@ -25,6 +27,32 @@ class DiskRequest extends Request
     }
 
     /**
+     * Helper function to find the last order
+     *
+     * @return float
+     */
+    public function orderLast()
+    {
+        if (Disk::count() === 0) return 0.0;
+
+        $last_order = Disk::all()->max(function ($disk) { return $disk->order; });
+
+        return $last_order + 1.0;
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'order'         => $this->order ?? $this->orderLast(),
+        ]);
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -37,6 +65,7 @@ class DiskRequest extends Request
             'name'           => 'required',
             'handle'         => "required|unique:disks,handle,{$id}",
             'driver'         => 'required',
+            'order'             => 'sometimes',
         ];
 
         switch ($this->driver) {

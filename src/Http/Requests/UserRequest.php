@@ -4,6 +4,7 @@ namespace Fusion\Http\Requests;
 
 use Fusion\Rules\SecurePassword;
 use Illuminate\Validation\Rule;
+use Fusion\Models\User;
 
 class UserRequest extends Request
 {
@@ -28,6 +29,20 @@ class UserRequest extends Request
     }
 
     /**
+     * Helper function to find the last order
+     *
+     * @return float
+     */
+    public function orderLast()
+    {
+        if (User::count() === 0) return 0.0;
+
+        $last_order = User::all()->max(function ($user) { return $user->order; });
+
+        return $last_order + 1.0;
+    }
+
+    /**
      * Prepare the data for validation.
      *
      * @return void
@@ -39,6 +54,7 @@ class UserRequest extends Request
                 'status' => $this->status ?? true,
                 'role'   => $this->role ? $this->role :
                     setting('users.default_user_role', 'user'),
+                'order'         => $this->order ?? $this->orderLast(),
             ]);
         }
     }
@@ -58,6 +74,7 @@ class UserRequest extends Request
             'role'          => ['sometimes', 'exists:roles,handle'],
             'status'        => ['sometimes', 'boolean'],
             'subscriptions' => 'sometimes',
+            'order'           => 'sometimes',
         ];
 
         if ($this->method() == 'POST') {

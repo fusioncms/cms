@@ -10,7 +10,18 @@
 
         <ui-card v-if="endpoint">
             <ui-card-body>
-                <ui-table :key="'entries-' + collection.id" class="entries-table" id="entries" :endpoint="endpoint" sort-by="order" :per-page="50">
+                <ui-table
+                    id="entries"
+                    class="entries-table"
+                    sort-by="order"
+                    link_name="collection.edit"
+                    link_param="id"
+                    :show_status="true"
+                    :reorder_route="'/api/collections/' + collection.id + '/collection/reorder'"
+                    :endpoint="endpoint"
+                    :per-page="50"
+                    :key="'entries-' + collection.id"
+                >
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">
                             <ui-status :value="table.record.status" class="mr-2"></ui-status>

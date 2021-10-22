@@ -8,8 +8,9 @@
         </portal>
 
         <section-card title="Loading..." v-show="loading"></section-card>
-        <div v-show="! loading">
-            <portal to="sidebar-right">
+
+        <portal to="sidebar-right">
+            <div v-show="! loading">
                 <sidebar id="users-sidebar">
                     <sidebar-section id="users_panel_status" tabindex="-1">
                         <ui-toggle
@@ -49,7 +50,10 @@
                         </div>
                     </sidebar-section>
                 </sidebar>
-            </portal>
+            </div>
+        </portal>
+
+            <div v-show="! loading">
 
             <section-card id="user_panel_general" title="General Information" description="General information about this user." tabindex="-1">
                 <ui-input-group

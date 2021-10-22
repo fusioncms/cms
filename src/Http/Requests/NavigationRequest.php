@@ -3,6 +3,7 @@
 namespace Fusion\Http\Requests;
 
 use Fusion\Rules\NotAReservedKeyword;
+use Fusion\Models\Navigation;
 
 class NavigationRequest extends Request
 {
@@ -27,6 +28,32 @@ class NavigationRequest extends Request
     }
 
     /**
+     * Helper function to find the last order
+     *
+     * @return float
+     */
+    public function orderLast()
+    {
+        if (Navigation::count() === 0) return 0.0;
+
+        $last_order = Navigation::all()->max(function ($navigation) { return $navigation->order; });
+
+        return $last_order + 1.0;
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'order'         => $this->order ?? $this->orderLast(),
+        ]);
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -39,6 +66,7 @@ class NavigationRequest extends Request
             'name'        => 'required|regex:/^[A-z]/i',
             'handle'      => ['required', 'unique:navigation,handle,'.$id, new NotAReservedKeyword()],
             'description' => 'sometimes',
+            'order'             => 'sometimes',
         ];
     }
 }

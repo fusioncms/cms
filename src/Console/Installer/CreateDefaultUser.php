@@ -32,10 +32,10 @@ class CreateDefaultUser
         activity()->withoutLogs(function () {
             User::firstOrCreate([
                 'email' => $this->container['user_email'],
-            ], [
                 'name'              => $this->container['user_name'],
                 'password'          => Hash::make($this->container['user_password']),
                 'status'            => true,
+                'order'               => 0.0,
                 'email_verified_at' => now(),
             ])->assignRole('owner');
         });

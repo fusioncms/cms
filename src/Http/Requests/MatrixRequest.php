@@ -4,6 +4,7 @@ namespace Fusion\Http\Requests;
 
 use Fusion\Rules\NotAReservedKeyword;
 use Illuminate\Support\Str;
+use Fusion\Models\Matrix;
 
 class MatrixRequest extends Request
 {
@@ -28,6 +29,20 @@ class MatrixRequest extends Request
     }
 
     /**
+     * Helper function to find the last order
+     *
+     * @return float
+     */
+    public function orderLast()
+    {
+        if (Matrix::count() === 0) return 0.0;
+
+        $last_order = Matrix::all()->max(function ($matrix) { return $matrix->order; });
+
+        return $last_order + 1.0;
+    }
+
+    /**
      * Prepare the data for validation.
      *
      * @return void
@@ -36,6 +51,7 @@ class MatrixRequest extends Request
     {
         $this->merge([
             'slug'   => $this->slug ?? Str::slug($this->name),
+            'order'         => $this->order ?? $this->orderLast(),
             'status' => $this->status ?? true,
         ]);
     }
@@ -54,6 +70,7 @@ class MatrixRequest extends Request
             'name'               => 'required|regex:/^[A-z]/i',
             'handle'             => ['required', 'unique:matrices,handle,'.$id, new NotAReservedKeyword()],
             'slug'               => 'required|unique:matrices,slug,'.$id,
+            'order'             => 'sometimes',
             'description'        => 'sometimes',
             'type'               => 'required',
             'status'             => 'required|boolean',
