@@ -44,7 +44,6 @@
 
                     <template slot="actions" slot-scope="table">
                         <ui-actions :id="'entry_' + table.record.id + '_actions'" :key="'entry_' + table.record.id + '_actions'">
-                            <ui-dropdown-link>View</ui-dropdown-link>
                             <ui-dropdown-link :to="{ name: 'collection.edit', params: {collection: collection.slug, id: table.record.id} }">Edit</ui-dropdown-link>
 
                             <ui-dropdown-divider></ui-dropdown-divider>

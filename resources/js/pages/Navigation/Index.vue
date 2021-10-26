@@ -22,7 +22,7 @@
                     :endpoint="endpoint"
                 >
                     <template slot="name" slot-scope="table">
-                        <router-link :to="{ name: 'links', params: {navigation: table.record.id} }">{{ table.record.name }}</router-link>
+                        <router-link :to="{ name: 'navigation.edit', params: {navigation: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
 
                     <template slot="handle" slot-scope="table">
@@ -38,10 +38,12 @@
                             <ui-dropdown-link :to="{ name: 'links', params: {navigation: table.record.id} }">Links</ui-dropdown-link>
                             <ui-dropdown-link :to="{ name: 'navigation.edit', params: {navigation: table.record.id} }">Edit</ui-dropdown-link>
 
+                            <ui-dropdown-divider></ui-dropdown-divider>
+
                             <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-navigation="table.record"
-                                classes="link--danger">
+                                class="danger">
                                 Delete
                             </ui-dropdown-link>
                         </ui-actions>
