@@ -8,8 +8,8 @@
         </portal>
 
         <section-card title="Loading..." v-show="loading"></section-card>
-        <div v-show="! loading">
-            <portal to="sidebar-right">
+        <portal to="sidebar-right">
+            <div v-show="! loading">
                 <sidebar v-if="collection" id="collection-sidebar">
                     <sidebar-section id="collection_panel_status" tabindex="-1">
                         <ui-toggle
@@ -64,8 +64,10 @@
 
                     <status-card v-if="entry" id="collection_panel_status_card" :entry="entry" tabindex="-1"></status-card>
                 </sidebar>
-            </portal>
+            </div>
+        </portal>
 
+        <div v-show="! loading">
             <ui-card v-if="collection.show_name_field" :id="'collection_panel_' + collection.handle" tabindex="-1">
                 <ui-card-body>
                     <ui-title-group
