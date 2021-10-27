@@ -79,8 +79,10 @@
                 </ui-dropdown>
             </ui-toolbar-group>
             <!-- Order -->
-            <ui-button v-show="order === 'Order' " :disabled="loading" @click.prevent="toggleOrder"><fa-icon class="mr-1" icon="ellipsis-v"></fa-icon>{{order}}</ui-button>
-            <ui-button v-show="order === 'Save' " :disabled="loading" @click.prevent="toggleOrder" variant="primary"><fa-icon class="mr-1" icon="ellipsis-v"></fa-icon>{{order}}</ui-button>
+            <div v-show="show_order">
+                <ui-button v-show="order === 'Order' " :disabled="loading" @click.prevent="toggleOrder"><fa-icon class="mr-1" icon="ellipsis-v"></fa-icon>{{order}}</ui-button>
+                <ui-button v-show="order === 'Save' " :disabled="loading" @click.prevent="toggleOrder" variant="primary"><fa-icon class="mr-1" icon="ellipsis-v"></fa-icon>{{order}}</ui-button>
+            </div>
 
             <slot name="toolbarAppend"></slot>
         </ui-toolbar>
@@ -338,6 +340,10 @@
             show_status: {
                 type: Boolean,
                 default: false
+            },
+            show_order: {
+                type: Boolean,
+                default: true
             },
         },
 

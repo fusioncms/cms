@@ -89,6 +89,8 @@
                                 Reset Password
                             </ui-dropdown-link>
 
+                            <ui-dropdown-divider></ui-dropdown-divider>
+
                             <ui-dropdown-link
                                 v-if="table.record.id != $user.id && $can('users.delete', table.record.role.level)"
                                 @click.prevent

@@ -15,8 +15,6 @@ class ScriptResource extends JsonResource
      */
     public function toArray($request)
     {
-        $resource = parent::toArray($request);
-
-        return $resource;
+        return parent::toArray($request);
     }
 }

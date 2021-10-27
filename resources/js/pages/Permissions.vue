@@ -6,7 +6,16 @@
 
         <ui-card>
             <ui-card-body>
-                <ui-table key="permissions" class="permissions-table" id="permissions" :endpoint="endpoint" sort-by="name" no-actions show-page-status show-page-numbers show-page-nav show-page-ends>
+                <ui-table
+                    key="permissions"
+                    class="permissions-table"
+                    id="permissions"
+                    sort-by="name"
+                    :show_order="false"
+                    :endpoint="endpoint"
+                    no-actions show-page-status show-page-numbers
+                    show-page-nav show-page-ends
+                >
                     <template slot="name" slot-scope="table">
                         <code>{{ table.record.name }}</code>
                     </template>
