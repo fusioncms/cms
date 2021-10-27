@@ -93,19 +93,11 @@
 
         computed: {
             endpoint() {
-                if (this.collection.id) {
-                    return '/datatable/collections/' + this.collection.id
-                }
-
-                return null
+                return this.collection.id ? '/datatable/collections/' + this.collection.id : null;
             },
 
             singular() {
-                if (this.collection.name) {
-                    return pluralize.singular(this.collection.name)
-                }
-
-                return ''
+                return this.collection.name ? pluralize.singular(this.collection.name) : '';
             },
         },
 
