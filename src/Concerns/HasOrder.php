@@ -22,7 +22,7 @@ trait HasOrder
             ->first();
 
         if (!$last) {
-            return 1;
+            return 0;
         }
 
         return $last->order + 1;
