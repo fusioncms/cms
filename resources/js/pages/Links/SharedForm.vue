@@ -8,8 +8,8 @@
 	</portal>
 
         <section-card title="Loading..." v-show="loading"></section-card>
-        <div v-show="! loading">
-            <portal to="sidebar-right">
+        <portal to="sidebar-right">
+            <div v-show="! loading">
                 <sidebar id="link-sidebar">
                     <sidebar-section id="link_panel_status" tabindex="-1">
                         <ui-toggle
@@ -39,8 +39,10 @@
                         </ui-select-group>
                     </sidebar-section>
                 </sidebar>
-            </portal>
+            </div>
+        </portal>
 
+        <div v-show="! loading">
             <ui-card id="link_panel" tabindex="-1">
                 <ui-card-body>
                     <ui-title-group

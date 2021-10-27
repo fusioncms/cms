@@ -8,50 +8,52 @@
 	</portal>
 
         <portal to="sidebar-right">
-            <sidebar id="blueprint-sidebar">
-                <status-card v-if="resource" :entry="resource" id="blueprint_panel_status_card" tabindex="-1"></status-card>
-            </sidebar>
+            <div v-show="! loading">
+                <sidebar id="blueprint-sidebar">
+                    <status-card v-if="resource" :entry="resource" id="blueprint_panel_status_card" tabindex="-1"></status-card>
+                </sidebar>
+            </div>
         </portal>
 
         <section-card title="Loading..." v-show="loading"></section-card>
         <div v-show="! loading">
-	<div class="card">
-            <div class="card__body">
-		<ui-title-group
-                    name="name"
-                    readonly
-                    :has-error="form.errors.has('name')"
-                    :error-message="form.errors.get('name')"
-                    v-model="form.name">
-                </ui-title-group>
+	    <div class="card">
+                <div class="card__body">
+		    <ui-title-group
+                        name="name"
+                        readonly
+                        :has-error="form.errors.has('name')"
+                        :error-message="form.errors.get('name')"
+                        v-model="form.name">
+                    </ui-title-group>
 
-                <blueprint>
-                    <blueprint-area
-                        v-model="form.sections"
-                        :placements="placements"
-                        area="body"
-                        title="Body">
-                    </blueprint-area>
+                    <blueprint>
+                        <blueprint-area
+                            v-model="form.sections"
+                            :placements="placements"
+                            area="body"
+                            title="Body">
+                        </blueprint-area>
 
-                    <blueprint-area
-                        v-model="form.sections"
-                        class="blueprint__col--sidebar"
-                        :placements="placements"
-                        area="sidebar"
-                        title="Sidebar">
-                    </blueprint-area>
+                        <blueprint-area
+                            v-model="form.sections"
+                            class="blueprint__col--sidebar"
+                            :placements="placements"
+                            area="sidebar"
+                            title="Sidebar">
+                        </blueprint-area>
 
-                    <ui-modal name="delete_section" title="Delete" >
-                        <p>Are you sure you want to permenantly delete this section and related fields?</p>
-                        <template slot="footer">
-                            <ui-button v-modal:delete_section @click="remove" variant="danger" class="ml-3">Delete</ui-button>
-                            <ui-button v-modal:delete_section variant="secondary">Cancel</ui-button>
-                        </template>
-                    </ui-modal>
+                        <ui-modal name="delete_section" title="Delete" >
+                            <p>Are you sure you want to permenantly delete this section and related fields?</p>
+                            <template slot="footer">
+                                <ui-button v-modal:delete_section @click="remove" variant="danger" class="ml-3">Delete</ui-button>
+                                <ui-button v-modal:delete_section variant="secondary">Cancel</ui-button>
+                            </template>
+                        </ui-modal>
 
-                </blueprint>
-	    </div>
-        </div>
+                    </blueprint>
+	        </div>
+            </div>
 	</div>
     </form-container>
 </template>
