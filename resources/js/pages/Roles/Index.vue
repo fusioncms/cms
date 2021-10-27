@@ -57,7 +57,7 @@
                                 v-if="isRemovable(table.record.handle) && $can('roles.delete', table.record.level)"
                                 @click.prevent
                                 v-modal:delete-role="table.record"
-                                classes="danger">
+                                class="danger">
                                 Delete
                             </ui-dropdown-link>
                         </ui-actions>

@@ -35,19 +35,17 @@
                     </template>
 
                     <template slot="actions" slot-scope="table">
-                        <ui-button v-if="isLocked(table.record.handle)" icon size="small" disabled>
-                            <fa-icon icon="ellipsis-h" class="fa-fw"></fa-icon>
-                        </ui-button>
-
-                        <ui-table-actions v-else :id="'disks_' + table.record.id + '_actions'" :key="'disks_' + table.record.id + '_actions'">
+                        <ui-table-actions :disabled="isLocked(table.record.handle)" :id="'disks_' + table.record.id + '_actions'" :key="'disks_' + table.record.id + '_actions'">
                             <ui-dropdown-link :to="{ name: 'disks.edit', params: {disk: table.record.id} }">
                                 Edit
                             </ui-dropdown-link>
 
+                            <ui-dropdown-divider></ui-dropdown-divider>
+
                             <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-disk="table.record"
-                                classes="link--danger">
+                                class="danger">
                                 Delete
                             </ui-dropdown-link>
                         </ui-table-actions>

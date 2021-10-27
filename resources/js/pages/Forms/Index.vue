@@ -42,6 +42,8 @@
                         <ui-actions :id="'form_' + table.record.id + '_actions'" :key="'form_' + table.record.id + '_actions'">
                             <ui-dropdown-link :to="{ name: 'forms.edit', params: {form: table.record.id} }">Edit</ui-dropdown-link>
 
+                            <ui-dropdown-divider></ui-dropdown-divider>
+
                             <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-form="table.record"

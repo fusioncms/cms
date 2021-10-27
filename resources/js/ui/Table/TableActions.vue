@@ -1,7 +1,9 @@
 <template>
-    <ui-dropdown noArrow :id="id" right>
-        <fa-icon icon="ellipsis-h" class="fa-fw"></fa-icon>
-        <span class="sr-only">Actions</span>
+    <ui-dropdown noArrow borderless :id="id" right>
+        <div v-if="! disabled" class="p-1 text-gray-600">
+            <fa-icon icon="ellipsis-h" class="fa-fw"></fa-icon>
+            <span class="sr-only">Actions</span>
+        </div>
 
         <template v-slot:menu>
             <slot></slot>
@@ -16,6 +18,10 @@
         props: {
             id: {
                 required: true
+            },
+            disabled: {
+                required: false,
+                default: false,
             }
         }
     }
