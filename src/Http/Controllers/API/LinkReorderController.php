@@ -24,10 +24,10 @@ class LinkReorderController extends Controller
     {
         $this->authorize('links.update');
 
-        $navigation  = Navigation::find($navigation)->firstOrFail();
+        $navigation  = Navigation::find($navigation);
         $this->model = Builders\Navigation::resolve($navigation->handle);
 
-        $this->walkLinks($request->links);
+        $this->walkLinks($request->records);
 
         activity()
             ->performedOn($navigation)
