@@ -18,35 +18,49 @@
             </div>
         </div>
 
-        <div v-else class="mb-4 xl:mb-6">
-            <VueNestable v-model="links" :threshold="32" @input="changing()">
-                <template slot-scope="{ item }">
-                    <div class="flex">
-                        <VueNestableHandle :item="item" class="flex items-center justify-center border-r w-8 text-gray-500 bg-gray-50 rounded-l">
-                            <fa-icon :icon="['fas', 'grip-vertical']"></fa-icon>
-                        </VueNestableHandle>
+        <ui-card v-else v-show="endpoint">
+            <ui-card-body>
+                <ui-table
+                    id="entries"
+                    class="entries-table"
+                    sort-by="order"
+                    link_name="links.edit"
+                    link_param="link"
+                    :show_status="true"
+                    :reorder_route="'/api/navigation/' + navigation.id + '/links/reorder'"
+                    :endpoint="endpoint"
+                    :per-page="50"
+                    :key="'entries-' + navigation.id"
+                >
+                    <template slot="name" slot-scope="table">
+                        <div class="flex items-center">
+                            <ui-status :value="table.record.status" class="mr-2"></ui-status>
 
-                        <div class="flex flex-1 items-center justify-between">
-                            <div class="p-3 flex items-center" :class="{'font-bold': (item.url == '' || item.url == '#')}">
-                                <ui-status :value="item.status" class="mr-2"></ui-status>
-                                <router-link :to="{ name: 'links.edit', params: {navigation: navigation.id, link: item.id} }">{{ item.name }}</router-link>
-                            </div>
-                            <div class="p-2">
-                                <ui-actions right :id="'link_' + item.id + '_actions'" :key="'link_' + item.id + '_actions'">
-                                    <ui-dropdown-link @click.prevent :to="{ name: 'links.edit', params: {navigation: navigation.id, link: item.id} }">Edit</ui-dropdown-link>
-                                    <ui-dropdown-link
-                                        @click.prevent
-                                        v-modal:delete-link="item"
-                                        classes="link--danger">
-                                        Delete
-                                    </ui-dropdown-link>
-                                </ui-actions>
-                            </div>
+                            <router-link :to="{ name: 'links.edit', params: {navigation: navigation.id, link: table.record.id} }">{{ table.record.name }}</router-link>
                         </div>
-                    </div>
-                </template>
-            </VueNestable>
-        </div>
+                    </template>
+
+                    <template slot="url" slot-scope="table">
+                        <code>{{ table.record.url }}</code>
+                    </template>
+
+                    <template slot="actions" slot-scope="table">
+                        <ui-actions :id="'entry_' + table.record.id + '_actions'" :key="'entry_' + table.record.id + '_actions'">
+                            <ui-dropdown-link :to="{ name: 'links.edit', params: {navigation: navigation.id, link: table.record.id} }">Edit</ui-dropdown-link>
+
+                            <ui-dropdown-divider></ui-dropdown-divider>
+
+                            <ui-dropdown-link
+                                @click.prevent
+                                v-modal:delete-link="table.record"
+                                class="danger">
+                                Delete
+                            </ui-dropdown-link>
+                        </ui-actions>
+                    </template>
+                </ui-table>
+            </ui-card-body>
+        </ui-card>
 
         <portal to="modals">
             <ui-modal name="delete-link" title="Delete Link" key="delete_link">
@@ -62,104 +76,93 @@
 </template>
 
 <script>
-    import { VueNestable, VueNestableHandle } from 'vue-nestable'
-    import Form from '../../services/Form'
-
-    export default {
-        auth() {
-            return {
-                permission: 'links.viewAny',
-            }
-        },
-
-        components: {
-            VueNestable,
-            VueNestableHandle
-        },
-
-        head: {
-            title() {
-                return {
-                    inner: this.navigation.name || 'Loading...'
-                }
-            }
-        },
-
-        data() {
-            return {
-                loaded: false,
-                navigation: {},
-                links: [],
-                saving: false,
-                changed: false,
-                form: new Form({
-                    name: '',
-                    url: '',
-                    new_window: 0,
-                }),
-            }
-        },
-
-        computed: {
-            options() {
-                return this.links.map(link => ({ 'label': link.name, 'value': link.id }));
-            }
-        },
-
-        methods: {
-            save() {
-                this.saving = true
-
-                axios.post('/api/navigation/' + this.navigation.id + '/links/reorder', {links: this.links}).then((response) => {
-                    this.saving = false
-                    this.changed = false
-                    toast('Links successfully saved.', 'success')
-                })
-            },
-
-            changing() {
-                if (!this.loaded) {
-                    this.loaded = true
-                } else {
-                    this.changed = true
-                }
-            },
-
-            fetchLinks() {
-                return axios.get('/api/navigation/' + this.navigation.id).then((response) => {
-                    this.links = response.data.data.links
-                })
-            },
-
-            destroy(id) {
-                axios.delete('/api/navigation/' + this.navigation.id + '/links/' + id).then((response) => {
-                    this.fetchLinks().then(() => {
-                        toast('Link successfully deleted.', 'success')
-                    })
-                })
-            },
-        },
-
-        beforeRouteEnter(to, from, next) {
-            axios.get('/api/navigation/' + to.params.navigation).then((response) => {
-                next(function(vm) {
-                    vm.navigation = response.data.data
-                    vm.links = response.data.data.links
-
-                    vm.$emit('updateHead')
-                })
-            })
-        },
-
-        beforeRouteUpdate(to, from, next) {
-            axios.get('/api/navigation/' + to.params.navigation).then((response) => {
-                this.navigation = response.data.data
-                this.links = response.data.data.links
-
-                this.$emit('updateHead')
-            })
-
-            next()
-        },
-    }
+ import { VueNestable, VueNestableHandle } from 'vue-nestable'
+ import Form from '../../services/Form'
+ export default {
+     auth() {
+         return {
+             permission: 'links.viewAny',
+         }
+     },
+     components: {
+         VueNestable,
+         VueNestableHandle
+     },
+     head: {
+         title() {
+             return {
+                 inner: this.navigation.name || 'Loading...'
+             }
+         }
+     },
+     data() {
+         return {
+             loaded: false,
+             navigation: {},
+             links: [],
+             saving: false,
+             changed: false,
+             form: new Form({
+                 name: '',
+                 url: '',
+                 new_window: 0,
+             }),
+         }
+     },
+     computed: {
+         options() {
+             return this.links.map(link => ({ 'label': link.name, 'value': link.id }));
+         },
+         endpoint() {
+             return this.navigation.id ? '/datatable/navigations/' + this.navigation.id : null;
+         },
+     },
+     methods: {
+         save() {
+             this.saving = true
+             axios.post('/api/navigation/' + this.navigation.id + '/links/reorder', {links: this.links}).then((response) => {
+                 this.saving = false
+                 this.changed = false
+                 toast('Links successfully saved.', 'success')
+             })
+         },
+         changing() {
+             if (!this.loaded) {
+                 this.loaded = true
+             } else {
+                 this.changed = true
+             }
+         },
+         fetchLinks() {
+             return axios.get('/api/navigation/' + this.navigation.id).then((response) => {
+                 this.links = response.data.data.links
+             })
+         },
+         destroy(id) {
+             axios.delete('/api/navigation/' + this.navigation.id + '/links/' + id).then((response) => {
+                 this.fetchLinks().then(() => {
+                     toast('Link successfully deleted.', 'success')
+                     bus().$emit('refresh-datatable-entries')
+                 })
+             })
+         },
+     },
+     beforeRouteEnter(to, from, next) {
+         axios.get('/api/navigation/' + to.params.navigation).then((response) => {
+             next(function(vm) {
+                 vm.navigation = response.data.data
+                 vm.links = response.data.data.links
+                 vm.$emit('updateHead')
+             })
+         })
+     },
+     beforeRouteUpdate(to, from, next) {
+         axios.get('/api/navigation/' + to.params.navigation).then((response) => {
+             this.navigation = response.data.data
+             this.links = response.data.data.links
+             this.$emit('updateHead')
+         })
+         next()
+     },
+ }
 </script>
