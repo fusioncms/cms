@@ -10,7 +10,17 @@
 
         <ui-card>
             <ui-card-body>
-                <ui-table :endpoint="endpoint" id="taxonomies" sort-by="name" primary-key="handle" key="taxonomies_table">
+                <ui-table
+                    id="taxonomies"
+                    sort-by="order"
+                    primary-key="handle"
+                    key="taxonomies_table"
+                    link_name="taxonomies.edit"
+                    link_param="taxonomy"
+                    reorder_route="/api/taxonomies/reorder"
+                    :show_status="false"
+                    :endpoint="endpoint"
+                >
                     <template slot="name" slot-scope="table">
                         <router-link :to="{ name: 'taxonomies.edit', params: {taxonomy: table.record.id} }">{{ table.record.name }}</router-link>
                     </template>
@@ -32,11 +42,12 @@
                         <ui-actions :id="'taxonomy_' + table.record.id + '_actions'" :key="'taxonomy_' + table.record.id + '_actions'">
                             <ui-dropdown-link @click.prevent :to="{ name: 'taxonomies.edit', params: {taxonomy: table.record.id} }">Edit</ui-dropdown-link>
 
+                            <ui-dropdown-divider></ui-dropdown-divider>
+
                             <ui-dropdown-link
                                 @click.prevent
                                 v-modal:delete-taxonomy="table.record"
-                                classes="link--danger"
-                            >
+                                class="danger">
                                 Delete
                             </ui-dropdown-link>
                         </ui-actions>

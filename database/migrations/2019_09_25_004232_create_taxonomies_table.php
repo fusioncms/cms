@@ -24,6 +24,7 @@ class CreateTaxonomiesTable extends Migration
 
             $table->string('route')->nullable();
             $table->string('template')->nullable();
+            $table->float('order')->nullable()->index();
 
             $table->timestamps();
         });

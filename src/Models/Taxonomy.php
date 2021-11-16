@@ -26,6 +26,7 @@ class Taxonomy extends Model implements Structure
     protected $fillable = [
         'name',
         'handle',
+        'order',
         'slug',
         'description',
         'sidebar',
@@ -72,7 +73,8 @@ class Taxonomy extends Model implements Structure
      */
     public function terms()
     {
-        return $this->hasMany($this->getBuilderModelNamespace())->orderBy('order', 'asc');
+        // order by name for now as terms haven't been built yet and ordering by order breaks taxonomy
+        return $this->hasMany($this->getBuilderModelNamespace())->orderBy('name', 'asc');
     }
 
     /**

@@ -23,7 +23,7 @@ class Taxonomy extends Builder
      */
     protected function getFillable()
     {
-        return ['taxonomy_id', 'parent_id', 'name', 'slug', 'status'];
+        return ['taxonomy_id', 'parent_id', 'name', 'slug', 'order', 'status'];
     }
 
     /**
@@ -34,6 +34,7 @@ class Taxonomy extends Builder
     protected function getCasts()
     {
         return [
+            'order'      => 'integer',
             'status' => 'boolean',
         ];
     }
