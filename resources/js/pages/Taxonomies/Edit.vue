@@ -7,6 +7,7 @@
         <shared-form
             v-if="form"
             :form="form"
+            :loading="loading"
             :taxonomy="taxonomy"
             :submit="submit">
         </shared-form>
@@ -35,7 +36,8 @@
         data() {
             return {
                 taxonomy: {},
-                form: null
+                form: null,
+                loading: false
             }
         },
 
@@ -45,6 +47,7 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.patch(`/api/taxonomies/${this.taxonomy.id}`).then((response) => {
                     axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
                         .then((response) => {
@@ -55,9 +58,11 @@
                             this.$router.push('/taxonomies')
                         }).catch((response) => {
                             toast(response.message, 'failed')
+                            this.loading = false;
                         })
                 }).catch((response) => {
                     toast(response.response.data.message, 'failed')
+                    this.loading = false;
                 })
             },
         },

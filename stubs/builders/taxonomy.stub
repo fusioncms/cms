@@ -4,6 +4,7 @@ namespace Fusion\Models\Taxonomies;
 
 use Fusion\Models\Field;
 use Fusion\Models\Taxonomy;
+use Fusion\Concerns\HasOrder;
 use Illuminate\Support\Str;
 use Fusion\Concerns\HasActivity;
 use Fusion\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Spatie\Activitylog\Models\Activity;
 
 class {class} extends Model
 {
-    use HasActivity;
+    use HasOrder, HasActivity;
 
 	/**
      * The table associated with the model.

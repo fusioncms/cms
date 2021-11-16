@@ -4,7 +4,11 @@
             <page-title icon="sitemap">Create Taxonomy</page-title>
         </portal>
 
-        <shared-form :form="form" :submit="submit"></shared-form>
+        <shared-form
+            :form="form"
+            :loading="loading"
+            :submit="submit">
+        </shared-form>
     </div>
 </template>
 
@@ -38,7 +42,8 @@
                     route: '',
                     template: '',
                     sections: [],
-                }, true)
+                }, true),
+                loading: false
             }
         },
 
@@ -48,6 +53,7 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.post('/api/taxonomies').then((response) => {
                     axios.post(`/api/blueprints/${response.data.blueprint.id}/sections`, { sections: this.form.sections })
                         .then((response) => {
@@ -58,9 +64,11 @@
                             this.$router.push('/taxonomies')
                         }).catch((response) => {
                             toast(response.message, 'failed')
+                            this.loading = false;
                         })
                 }).catch((response) => {
                     toast(response.message, 'failed')
+                    this.loading = false;
                 })
             },
         }

@@ -4,6 +4,7 @@ namespace Fusion\Http\Requests;
 
 use Fusion\Rules\NotAReservedKeyword;
 use Illuminate\Support\Str;
+use Fusion\Models\Taxonomy;
 
 class TaxonomyRequest extends Request
 {
@@ -28,6 +29,20 @@ class TaxonomyRequest extends Request
     }
 
     /**
+     * Helper function to find the last order
+     *
+     * @return float
+     */
+    public function orderLast()
+    {
+        if (Taxonomy::count() === 0) return 0.0;
+
+        $last_order = Taxonomy::all()->max(function ($taxonomy) { return $taxonomy->order; });
+
+        return $last_order + 1.0;
+    }
+
+    /**
      * Prepare the data for validation.
      *
      * @return void
@@ -36,6 +51,7 @@ class TaxonomyRequest extends Request
     {
         $this->merge([
             'slug' => $this->slug ?? Str::slug($this->name),
+            'order'         => $this->order ?? $this->orderLast(),
         ]);
     }
 
@@ -53,6 +69,7 @@ class TaxonomyRequest extends Request
             'handle'      => ['required', 'not_regex:/[^a-z0-9_]/i', 'unique:taxonomies,handle,'.$id, new NotAReservedKeyword()],
             'slug'        => 'required|unique:taxonomies,slug,'.$id,
             'description' => 'sometimes',
+            'order'             => 'sometimes',
 
             'sidebar'     => 'required',
             'icon'        => 'sometimes',
