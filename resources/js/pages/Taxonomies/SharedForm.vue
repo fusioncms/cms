@@ -140,7 +140,6 @@
              placements: [
                  { label: 'Body',    value: 'body'    },
                  { label: 'Sidebar', value: 'sidebar' },
-                 { label: 'Manual', value: 'order' }
              ]
          }
      },
