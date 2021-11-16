@@ -51,7 +51,7 @@ class FormRequest extends Request
     {
         $this->merge([
             'slug' => $this->slug ?? Str::slug($this->name),
-            'order'         => $this->order ?? $this->orderLast(),
+            'order'         => $this->form->order ?? $this->orderLast(),
         ]);
     }
 

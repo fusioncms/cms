@@ -48,7 +48,7 @@ class DiskRequest extends Request
     protected function prepareForValidation()
     {
         $this->merge([
-            'order'         => $this->order ?? $this->orderLast(),
+            'order'         => $this->disk->order ?? $this->orderLast(),
         ]);
     }
 

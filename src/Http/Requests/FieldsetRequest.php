@@ -49,7 +49,7 @@ class FieldsetRequest extends Request
     protected function prepareForValidation()
     {
         $this->merge([
-            'order'         => $this->order ?? $this->orderLast(),
+            'order'         => $this->fieldset->order ?? $this->orderLast(),
         ]);
     }
 
