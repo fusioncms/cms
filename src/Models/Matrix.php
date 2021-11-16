@@ -69,6 +69,16 @@ class Matrix extends Model implements Structure
         return Str::plural(ucfirst($this->type));
     }
 
+    /**
+     * Matrix has many Entries.
+     *
+     * @return HasManyRelationship
+     */
+    public function entries()
+    {
+        return $this->hasMany($this->getBuilderModelNamespace())->orderBy('order', 'asc');
+    }
+
     public function getAdminPathAttribute()
     {
         if ($this->type === 'single') {

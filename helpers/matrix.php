@@ -1,5 +1,7 @@
 <?php
 
+use Fusion\Models\Matrix;
+
 /**
  * retrieve an instance of the matrix model builder.
  *
@@ -7,19 +9,19 @@
  *
  * @return \Fusion\Services\Builders\Matrix
  */
-function matrix_page($matrix)
+function matrix_page($slug)
 {
     try {
-        return new \Fusion\Services\Builders\Single($matrix);
+        return Matrix::where('slug', $slug)->firstOrFail();
     } catch (\Exception $e) {
         return null;
     }
 }
 
-function matrix_entries($matrix)
+function matrix_entries($slug)
 {
     try {
-        return (new \Fusion\Services\Builders\Collection($matrix))->make();
+        return Matrix::where('slug', $slug)->firstOrFail()->entries;
     } catch (\Exception $e) {
         return null;
     }
