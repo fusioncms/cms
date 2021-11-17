@@ -153,6 +153,7 @@ Route::prefix('singles')->group(function () {
  */
 Route::apiResource('taxonomies/{taxonomy}/terms', 'TermController');
 Route::apiResource('taxonomies', 'TaxonomyController');
+Route::post('taxonomies/{taxonomy}/terms/reorder', 'TermReorderController');
 Route::post('taxonomies/reorder', 'TaxonomyReorderController');
 
 /**

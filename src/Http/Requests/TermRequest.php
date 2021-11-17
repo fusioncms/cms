@@ -37,6 +37,16 @@ class TermRequest extends Request
     }
 
     /**
+     * Helper function to find the last order
+     *
+     * @return float
+     */
+    public function orderLast()
+    {
+        return $this->model->count();
+    }
+
+    /**
      * Prepare the data for validation.
      *
      * @return void
@@ -45,6 +55,7 @@ class TermRequest extends Request
     {
         $this->merge([
             'taxonomy_id' => $this->taxonomy->id,
+            'order'         => $this->model->find($this->route('term'))->order ?? $this->orderLast(),
             'slug'        => $this->slug ? $this->slug : Str::slug($this->name),
         ]);
     }
@@ -60,6 +71,7 @@ class TermRequest extends Request
 
         $rules = [
             'taxonomy_id' => 'required|integer',
+            'order'         => 'sometimes',
             'parent_id'   => 'sometimes|integer',
             'name'        => 'required',
             'slug'        => 'required|unique:'.$this->model->getTable().',slug,'.$id,

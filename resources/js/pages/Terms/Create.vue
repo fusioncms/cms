@@ -9,7 +9,9 @@
         <shared-form
             v-if="form"
             :form="form"
-            :taxonomy="taxonomy">
+            :loading="loading"
+            :taxonomy="taxonomy"
+        >
         </shared-form>
     </div>
 </template>
@@ -38,6 +40,7 @@
             return {
                 taxonomy: {},
                 form: null,
+                loading: false
             }
         },
 
@@ -57,12 +60,14 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.post(`/api/taxonomies/${this.taxonomy.id}/terms`).then((response) => {
                     toast('Term saved successfully', 'success')
 
                     this.$router.push(`/taxonomies/${this.taxonomy.id}`)
                 }).catch((response) => {
                     toast(response.response.data.message, 'failed')
+                    this.loading = false;
                 })
             },
         },

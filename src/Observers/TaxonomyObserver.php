@@ -23,6 +23,7 @@ class TaxonomyObserver implements BuilderObserver
             $table->bigIncrements('id');
             $table->unsignedBigInteger('taxonomy_id');
             $table->unsignedBigInteger('parent_id')->nullable();
+            $table->float('order')->nullable()->index();
             $table->string('name');
             $table->string('slug')->unique()->nullable();
             $table->boolean('status')->default(true);

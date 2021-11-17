@@ -23,6 +23,7 @@ class TermController extends DataTableController
         return [
             'name',
             'slug',
+            'order',
         ];
     }
 
@@ -31,6 +32,7 @@ class TermController extends DataTableController
         return [
             'name',
             'slug',
+            'order',
         ];
     }
 
@@ -39,6 +41,7 @@ class TermController extends DataTableController
         return [
             'name',
             'slug',
+            'order',
         ];
     }
 
@@ -47,6 +50,7 @@ class TermController extends DataTableController
         return [
             'name' => 'Name',
             'slug' => 'Slug',
+            'order'       => 'Manual',
         ];
     }
 }
