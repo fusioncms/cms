@@ -47,7 +47,7 @@ class ScriptRequest extends Request
     protected function prepareForValidation()
     {
         $this->merge([
-            'order'         => $this->orderLast(),
+            'order'         => $this->script->order ?? $this->orderLast(),
         ]);
     }
 

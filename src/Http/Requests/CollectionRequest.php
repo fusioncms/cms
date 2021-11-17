@@ -37,6 +37,16 @@ class CollectionRequest extends Request
     }
 
     /**
+     * Helper function to find the last order
+     *
+     * @return float
+     */
+    public function orderLast()
+    {
+        return $this->model->count();
+    }
+
+    /**
      * Prepare the data for validation.
      *
      * @return void
@@ -45,7 +55,7 @@ class CollectionRequest extends Request
     {
         $this->merge([
             'matrix_id'  => $this->matrix->id,
-            'order'         => $this->order ?? $this->model->orderLast(),
+            'order'         => $this->model->find($this->id)->order ?? $this->orderLast(),
             'status'     => $this->status ?? true,
             'publish_at' => (isset($this->publish_at) and !empty($this->publish_at)) ? $this->publish_at : now(),
             'expire_at'  => (isset($this->expire_at) and !empty($this->expire_at)) ? $this->expire_at : null,

@@ -51,7 +51,7 @@ class MatrixRequest extends Request
     {
         $this->merge([
             'slug'   => $this->slug ?? Str::slug($this->name),
-            'order'         => $this->order ?? $this->orderLast(),
+            'order'         => $this->matrix->order ?? $this->orderLast(),
             'status' => $this->status ?? true,
         ]);
     }
