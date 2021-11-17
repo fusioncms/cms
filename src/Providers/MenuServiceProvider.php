@@ -73,14 +73,14 @@ class MenuServiceProvider extends ServiceProvider
                     $handle = str_handle($name);
                     $path   = $subitem->adminPath;
 
-                    return [$handle => ['title' => $name, 'to' => $path]];
+                    return ['matrix-' . $handle => ['title' => $name, 'to' => $path]];
                 });
 
                 $name   = $item->name;
                 $handle = str_handle($name);
                 $path   = $item->adminPath;
 
-                return [$item->handle => [
+                return ['matrix-' . $item->handle => [
                     'title'    => $item->name,
                     'icon'     => $item->icon ?: 'pencil-alt',
                     'children' => collect([
@@ -89,7 +89,7 @@ class MenuServiceProvider extends ServiceProvider
                 ]];
             }
 
-            return [$item->handle => [
+            return ['matrix-' . $item->handle => [
                 'title' => $item->name,
                 'to'    => $item->adminPath,
                 'icon'  => $item->icon ?: 'pencil-alt',
@@ -105,7 +105,7 @@ class MenuServiceProvider extends ServiceProvider
         $taxonomies = Taxonomy::where('sidebar', true)->orderBy('name')->get();
         if ($taxonomies->isNotEmpty()) {
             $taxonomies = $taxonomies->mapWithKeys(function ($item) {
-                return [$item->handle => [
+                return ['taxonomy-' . $item->handle => [
                     'title' => $item->name,
                     'to'    => $item->adminPath,
                     'icon'  => $item->icon ?: 'tag',
