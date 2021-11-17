@@ -10,6 +10,7 @@
             v-if="form"
             :form="form"
             :term="term"
+            :loading="loading"
             :taxonomy="taxonomy">
         </shared-form>
     </div>
@@ -40,6 +41,7 @@
                 taxonomy: {},
                 term: {},
                 form: new Form({}),
+                loading: false
             }
         },
 
@@ -59,12 +61,14 @@
 
         methods: {
             submit() {
+                this.loading = true;
                 this.form.patch(`/api/taxonomies/${this.taxonomy.id}/terms/${this.term.id}`).then((response) => {
                     toast('Term saved successfully', 'success')
 
                     this.$router.push(`/taxonomies/${this.taxonomy.id}`)
                 }).catch((response) => {
                     toast(response.response.data.message, 'failed')
+                    this.loading = false;
                 })
             },
         },

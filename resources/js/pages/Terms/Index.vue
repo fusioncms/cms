@@ -5,12 +5,22 @@
         </portal>
 
         <portal to="actions">
-            <router-link v-if="taxonomy.id" :to="{ name: 'terms.create', params: {taxonomy: taxonomy.id} }" class="button">Create {{ singular }}</router-link>
+            <ui-button v-if="taxonomy.id" variant="primary" :to="{ name: 'terms.create', params: {taxonomy: taxonomy.id} }">Create</ui-button>
         </portal>
 
         <ui-card>
             <ui-card-body>
-                <ui-table v-if="endpoint" id="entries" :endpoint="endpoint" sort-by="name" :key="taxonomy.handle + '_table'">
+                <ui-table
+                    v-if="endpoint"
+                    id="entries"
+                    sort-by="order"
+                    link_name="terms.edit"
+                    link_param="id"
+                    :reorder_route="'/api/taxonomies/' + taxonomy.id + '/terms/reorder'"
+                    :show_status="false"
+                    :endpoint="endpoint"
+                    :key="taxonomy.handle + '_table'"
+                >
                     <template slot="name" slot-scope="table">
                         <div class="flex items-center">
                             <ui-status :value="table.record.status" class="mr-2"></ui-status>
@@ -31,6 +41,8 @@
                     <template slot="actions" slot-scope="table">
                         <ui-actions :id="'term_' + table.record.id + '_actions'" :key="'term_' + table.record.id + '_actions'">
                             <ui-dropdown-link @click.prevent :to="{ name: 'terms.edit', params: {taxonomy: taxonomy.id, id: table.record.id} }">Edit</ui-dropdown-link>
+
+                            <ui-dropdown-divider></ui-dropdown-divider>
 
                             <ui-dropdown-link
                                 @click.prevent
