@@ -58,10 +58,6 @@ class SectionController extends Controller
      */
     protected function getDetachedSections(Blueprint $blueprint, Collection $sections)
     {
-        if ($sections->isEmpty()) {
-            return collect();
-        }
-
         $existing = $blueprint->sections->pluck('id');
         $saving   = $this->getUpdatedSections($sections)->pluck('id');
 
