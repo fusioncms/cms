@@ -56,22 +56,7 @@
             </section-card>
 
             <section-card title="Blueprint" description="Configure this navigation's blueprint.">
-                <blueprint>
-                    <blueprint-area
-                        v-model="form.sections"
-                        :placements="placements"
-                        area="body"
-                        title="Body">
-                    </blueprint-area>
-
-                    <blueprint-area
-                        v-model="form.sections"
-                        class="blueprint__col--sidebar"
-                        :placements="placements"
-                        area="sidebar"
-                        title="Sidebar">
-                    </blueprint-area>
-                </blueprint>
+                <blueprint :placements="placements" :form="form"></blueprint>
             </section-card>
         </div>
     </div>

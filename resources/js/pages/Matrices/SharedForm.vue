@@ -227,22 +227,7 @@
             </section-card>
 
             <section-card id="matrix_panel_blueprint" :grid="false" title="Blueprint" description="Create the content blueprint for this matrix by adding panel sections and fields to either the page body or page sidebar." tabindex="-1">
-                <blueprint>
-                    <blueprint-area
-                        v-model="form.sections"
-                        :placements="placements"
-                        area="body"
-                        title="Body">
-                    </blueprint-area>
-
-                    <blueprint-area
-                        v-model="form.sections"
-                        class="blueprint__col--sidebar"
-                        :placements="placements"
-                        area="sidebar"
-                        title="Sidebar">
-                    </blueprint-area>
-                </blueprint>
+                <blueprint :placements="placements" :form="form"></blueprint>
             </section-card>
         </div>
     </div>
