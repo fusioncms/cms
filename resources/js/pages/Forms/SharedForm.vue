@@ -1,5 +1,5 @@
 <template>
-    <form-container>
+    <div>
         <portal to="actions">
             <div class="buttons">
                 <ui-button :to="{ name: 'forms' }" variant="secondary">Go Back</ui-button>
@@ -8,6 +8,37 @@
         </portal>
 
         <section-card title="Loading..." v-show="loading"></section-card>
+
+        <portal to="sidebar-right">
+            <div v-show="! loading">
+                <ui-card>
+                    <ui-card-body>
+                        <ui-toggle
+                            name="status"
+                            label="Status"
+                            v-model="form.status"
+                            :true-value="true"
+                            :false-value="false">
+                        </ui-toggle>
+                    </ui-card-body>
+                </ui-card>
+
+                <ui-definition-list v-if="resource">
+                    <ui-definition name="Status">
+                        <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': resource.status, 'text-danger-500': ! resource.status}"></fa-icon> {{ resource.status ? 'Enabled' : 'Disabled' }}
+                    </ui-definition>
+
+                    <ui-definition name="Created At">
+                        {{ $moment(resource.created_at).format('Y-MM-DD, hh:mm a') }}
+                    </ui-definition>
+
+                    <ui-definition name="Updated At">
+                        {{ $moment(resource.updated_at).format('Y-MM-DD, hh:mm a') }}
+                    </ui-definition>
+                </ui-definition-list>
+            </div>
+        </portal>
+
         <div v-show="! loading">
             <section-card title="General Information" description="General information about this form and what it collects.">
                 <ui-input-group
@@ -21,6 +52,19 @@
                     :error-message="form.errors.get('name')"
                     v-model="form.name">
                 </ui-input-group>
+
+                <ui-slug-group
+                    name="form-handle"
+                    label="Handle"
+                    autocomplete="off"
+                    monospaced
+                    required
+                    delimiter="_"
+                    :watch="form.name"
+                    :has-error="form.errors.has('handle')"
+                    :error-message="form.errors.get('handle')"
+                    v-model="form.handle">
+                </ui-slug-group>
 
                 <ui-textarea-group
                     name="description"
@@ -132,49 +176,7 @@
                 <blueprint :placements="placements" :form="form"></blueprint>
             </section-card>
         </div>
-        <template v-slot:sidebar>
-            <div v-show="! loading">
-            <ui-card>
-                <ui-card-body>
-                    <ui-slug-group
-                        name="form-handle"
-                        label="Handle"
-                        autocomplete="off"
-                        monospaced
-                        required
-                        delimiter="_"
-                        :watch="form.name"
-                        :has-error="form.errors.has('handle')"
-                        :error-message="form.errors.get('handle')"
-                        v-model="form.handle">
-                    </ui-slug-group>
-
-                    <ui-toggle
-                        name="status"
-                        label="Status"
-                        v-model="form.status"
-                        :true-value="1"
-                        :false-value="0">
-                    </ui-toggle>
-                </ui-card-body>
-            </ui-card>
-
-            <ui-definition-list v-if="resource">
-                <ui-definition name="Status">
-                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': resource.status, 'text-danger-500': ! resource.status}"></fa-icon> {{ resource.status ? 'Enabled' : 'Disabled' }}
-                </ui-definition>
-
-                <ui-definition name="Created At">
-                    {{ $moment(resource.created_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-
-                <ui-definition name="Updated At">
-                    {{ $moment(resource.updated_at).format('Y-MM-DD, hh:mm a') }}
-                </ui-definition>
-            </ui-definition-list>
-            </div>
-        </template>
-    </form-container>
+    </div>
 </template>
 
 <script>

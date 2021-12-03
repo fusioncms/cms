@@ -20,7 +20,6 @@ Vue.component('blueprint-section', require('@/components/Blueprints/BlueprintSec
 Vue.component('confirm-modal', require('@/components/Modals/ConfirmModal').default)
 Vue.component('update-modal', require('@/components/Modals/UpdateModal').default)
 Vue.component('fieldtype-picker', require('@/components/FieldtypePicker').default)
-Vue.component('form-container', require('@/components/FormContainer').default)
 Vue.component('icon-picker', require('@/components/IconPicker').default)
 Vue.component('layout-header', require('@/components/Layout/Header').default)
 Vue.component('layout-footer', require('@/components/Layout/Footer').default)
