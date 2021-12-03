@@ -17,8 +17,8 @@
                             label="Status"
                             :help="form.status ? 'Toggle to disable this link.' : 'Toggle to enable this link.'"
                             v-model="form.status"
-                            :true-value="1"
-                            :false-value="0">
+                            :true-value="true"
+                            :false-value="false">
                         </ui-toggle>
 
                         <ui-select-group

@@ -29,39 +29,7 @@
             >
         </span>
     </ui-field-group>
-
-    <!-- <div class="form__group">
-        <label
-            class="form__label"
-            :for="name"
-            v-if="label"
-            v-html="label">
-        </label>
-
-        <span class="toggle__wrap"
-            :class="[isChecked ? 'toggle__wrap--checked' : 'toggle__wrap--unchecked']">
-            <input
-                type="checkbox"
-                class="toggle"
-                :id="name"
-                :name="name"
-                :value="value"
-                :checked="isChecked"
-                :readonly="readonly"
-                :disabled="disabled"
-                :required="required"
-                @click="toggle"
-            >
-        </span>
-
-        <p
-            class="form__help"
-            v-if="help"
-            v-html="help"
-        ></p>
-    </div> -->
 </template>
-
 <script>
     export default {
         name: 'ui-toggle',

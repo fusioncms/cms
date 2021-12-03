@@ -178,7 +178,54 @@
                 <blueprint :placements="placements" :form="form"></blueprint>
             </section-card>
         </div>
+<<<<<<< HEAD
+        <template v-slot:sidebar>
+            <div v-show="! loading">
+            <ui-card>
+                <ui-card-body>
+                    <ui-slug-group
+                        name="form-handle"
+                        label="Handle"
+                        autocomplete="off"
+                        monospaced
+                        required
+                        delimiter="_"
+                        :watch="form.name"
+                        :has-error="form.errors.has('handle')"
+                        :error-message="form.errors.get('handle')"
+                        v-model="form.handle">
+                    </ui-slug-group>
+
+                    <ui-toggle
+                        name="status"
+                        label="Status"
+                        :help="form.status ? 'Toggle to disable this form.' : 'Toggle to enable this form.'"
+                        v-model="form.status"
+                        :true-value="true"
+                        :false-value="false">
+                    </ui-toggle>
+                </ui-card-body>
+            </ui-card>
+
+            <ui-definition-list v-if="resource">
+                <ui-definition name="Status">
+                    <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': resource.status, 'text-danger-500': ! resource.status}"></fa-icon> {{ resource.status ? 'Enabled' : 'Disabled' }}
+                </ui-definition>
+
+                <ui-definition name="Created At">
+                    {{ $moment(resource.created_at).format('Y-MM-DD, hh:mm a') }}
+                </ui-definition>
+
+                <ui-definition name="Updated At">
+                    {{ $moment(resource.updated_at).format('Y-MM-DD, hh:mm a') }}
+                </ui-definition>
+            </ui-definition-list>
+            </div>
+        </template>
+    </form-container>
+=======
     </div>
+>>>>>>> 484a8a5e622df9b04db3f7989a0cf7e29df9b2b6
 </template>
 
 <script>

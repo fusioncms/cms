@@ -17,8 +17,8 @@
                             label="Status"
                             :help="form.status ? 'Toggle to disable this entry.' : 'Toggle to enable this entry.'"
                             v-model="form.status"
-                            :true-value="1"
-                            :false-value="0">
+                            :true-value="true"
+                            :false-value="false">
                         </ui-toggle>
 
                         <ui-flatpickr-group
