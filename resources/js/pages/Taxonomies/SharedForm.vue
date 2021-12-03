@@ -28,8 +28,8 @@
                             name="sidebar"
                             label="Show in Sidebar"
                             v-model="form.sidebar"
-                            :true-value="1"
-                            :false-value="0">
+                            :true-value="true"
+                            :false-value="false">
                         </ui-toggle>
                     </sidebar-section>
 

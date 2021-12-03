@@ -18,8 +18,8 @@
                             label="Status"
                             :help="form.status ? 'Toggle to disable this term.' : 'Toggle to enable this term.'"
                             v-model="form.status"
-                            :true-value="1"
-                            :false-value="0">
+                            :true-value="true"
+                            :false-value="false">
                         </ui-toggle>
                     </sidebar-section>
 
