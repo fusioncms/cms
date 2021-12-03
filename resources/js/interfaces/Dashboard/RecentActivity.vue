@@ -3,7 +3,16 @@
         <ui-card-header title="Recent Activity"></ui-card-header>
 
         <ui-card-body>
-            <ui-table key="recent-activities" class="recent-activities-table" id="recent-activities" :endpoint="endpoint" sort-by="created_at" sort-in="desc" :per-page="10">
+            <ui-table
+                key="recent-activities"
+                class="recent-activities-table"
+                id="recent-activities"
+                sort-by="created_at"
+                sort-in="desc"
+                :show_order="false"
+                :per-page="10"
+                :endpoint="endpoint"
+            >
                 <template slot="causer.name" slot-scope="table">
                     <router-link :to="{ name: 'users.edit', params: {user: table.record.causer.id} }">{{ table.record.causer.name }}</router-link>
                 </template>
