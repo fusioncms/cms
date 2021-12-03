@@ -11,8 +11,8 @@
 
         <portal to="sidebar-right">
             <div v-show="! loading">
-                <ui-card>
-                    <ui-card-body>
+                <sidebar v-if="form" id="collection-sidebar">
+                    <sidebar-section id="collection_panel_status" tabindex="-1">
                         <ui-toggle
                             name="status"
                             label="Status"
@@ -20,22 +20,24 @@
                             :true-value="true"
                             :false-value="false">
                         </ui-toggle>
-                    </ui-card-body>
-                </ui-card>
+                    </sidebar-section>
 
-                <ui-definition-list v-if="resource">
-                    <ui-definition name="Status">
-                        <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': resource.status, 'text-danger-500': ! resource.status}"></fa-icon> {{ resource.status ? 'Enabled' : 'Disabled' }}
-                    </ui-definition>
+                    <sidebar-section
+                        <ui-definition-list v-if="resource">
+                            <ui-definition name="Status">
+                                <fa-icon :icon="['fas', 'circle']" class="fa-fw text-xs" :class="{'text-success-500': form.status, 'text-danger-500': ! form.status}"></fa-icon> {{ form.status ? 'Enabled' : 'Disabled' }}
+                            </ui-definition>
 
-                    <ui-definition name="Created At">
-                        {{ $moment(resource.created_at).format('Y-MM-DD, hh:mm a') }}
-                    </ui-definition>
+                            <ui-definition name="Created At">
+                                {{ $moment(resource.created_at).format('Y-MM-DD, hh:mm a') }}
+                            </ui-definition>
 
-                    <ui-definition name="Updated At">
-                        {{ $moment(resource.updated_at).format('Y-MM-DD, hh:mm a') }}
-                    </ui-definition>
-                </ui-definition-list>
+                            <ui-definition name="Updated At">
+                                {{ $moment(resource.updated_at).format('Y-MM-DD, hh:mm a') }}
+                            </ui-definition>
+                        </ui-definition-list>
+                    </sidebar-section>
+                </sidebar>
             </div>
         </portal>
 
