@@ -76,3 +76,6 @@
         }
     }
 </script>
+<style>
+ @import '../../../../node_modules/flatpickr/dist/flatpickr.min.css';
+</style>
