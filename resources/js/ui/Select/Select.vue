@@ -35,13 +35,6 @@
             </div>
         </button>
 
-        <!-- <ui-input
-            :id="formattedId"
-            type="text"
-            :required="required"
-            :value="selectedOptions">
-        </ui-input> -->
-
         <!-- Select Dropdown -->
         <div
             v-show="isOpen"
@@ -249,6 +242,7 @@
                 } else if (_.isNumber(this.value)) {
                     this.selection = [ _.toString(this.value) ]
                 }
+                this.resetHighlighted();
             },
 
             selection(value) {
@@ -336,11 +330,11 @@
                 let option = this.filteredOptions[this.highlighted]
                 let value  = option.value || option
 
-                this.toggleSelection(value)
+                this.toggleSelection(option);
             },
 
             resetHighlighted() {
-                this.highlighted = 0
+                this.highlighted = this.filteredOptions.findIndex(option => option.value === this.value);
             },
 
             setHighlight(index) {
@@ -371,7 +365,7 @@
         },
 
         mounted() {
-            this.highlighted = this.filteredOptions.findIndex(option => option.value === this.value);
+            this.resetHighlighted();
         },
 
         beforeDestroy() {
