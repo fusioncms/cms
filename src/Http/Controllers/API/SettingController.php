@@ -7,6 +7,7 @@ use Fusion\Http\Requests\SettingRequest;
 use Fusion\Http\Resources\SettingResource;
 use Fusion\Models\Setting;
 use Illuminate\Http\Request;
+use Mail;
 
 class SettingController extends Controller
 {
@@ -64,5 +65,25 @@ class SettingController extends Controller
         foreach ($setting->blueprint->relationships() as $relationship) {
             $relationship->type()->persistRelationship($setting->settings, $relationship);
         }
+    }
+
+
+    /**
+     * Request specific resource from storage.
+     *
+     * @param Request $request
+     * @param Setting $setting
+     *
+     * @return SettingResource
+     */
+    public function sendTestEmail(Request $request, $test_email)
+    {
+        $data = array();
+        Mail::send('emails/test', $data, function($message) use ($test_email) {
+            $message->to($test_email, setting('mail.mail_name'))->subject('Test Email');
+            $message->from(setting('mail.mail_server'), setting('mail.mail_name'));
+        });
+
+        return response()->json([], 202);
     }
 }

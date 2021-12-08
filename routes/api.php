@@ -177,6 +177,7 @@ Route::prefix('settings')->group(function () {
     Route::get('', 'SettingController@index');
     Route::get('{group}', 'SettingController@show');
     Route::patch('{group}', 'SettingController@update');
+    Route::post('/send/{test_email}', 'SettingController@sendTestEmail');
 });
 
 /**
