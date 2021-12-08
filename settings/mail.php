@@ -41,6 +41,7 @@ return [
                 'description' => 'The host name of your SMTP server.',
                 'default'     => 'smtp.example.com',
                 'override'    => 'mail.mailers.smtp.host',
+                'required'    => true,
             ],
             [
                 'name'        => 'Port',
@@ -48,18 +49,23 @@ return [
                 'description' => 'The port number of your SMTP server.',
                 'default'     => '587',
                 'override'    => 'mail.mailers.smtp.port',
+                'required'    => true,
             ],
             [
                 'name'        => 'SMTP Username',
                 'handle'      => 'mail_smtp_username',
                 'description' => 'The username for your SMTP server.',
+                'default'     => 'username',
                 'override'    => 'mail.mailers.smtp.username',
+                'required'    => true,
             ],
             [
                 'name'        => 'SMTP Password',
                 'handle'      => 'mail_smtp_password',
                 'description' => 'The password for your SMTP server.',
+                'default'     => 'password',
                 'override'    => 'mail.mailers.smtp.password',
+                'required'    => true,
             ],
         ],
         'Sparkpost' => [
@@ -67,6 +73,8 @@ return [
                 'name'        => 'Secret',
                 'handle'      => 'mail_sparkpost_secret',
                 'description' => 'Secret key assigned after setting up your SparkPost account.',
+                'default'     => 'secret',
+                'required'    => true,
             ],
         ],
         'Mailgun' => [
@@ -74,11 +82,15 @@ return [
                 'name'        => 'Domain',
                 'handle'      => 'mail_mailgun_domain',
                 'description' => 'Domain of your Mailgun account.',
+                'default'     => 'domain',
+                'required'    => true,
             ],
             [
                 'name'        => 'Secret',
                 'handle'      => 'mail_mailgun_secret',
                 'description' => 'Secret key assigned after setting up your Mailgun account.',
+                'default'     => 'secret',
+                'required'    => true,
             ],
         ],
         'Mandrill' => [
@@ -86,6 +98,8 @@ return [
                 'name'        => 'Secret',
                 'handle'      => 'mail_mandrill_secret',
                 'description' => 'Secret key assigned after setting up your Mandrill account.',
+                'default'     => 'secret',
+                'required'    => true,
             ],
         ],
         'Subjects' => [
