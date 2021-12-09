@@ -34,6 +34,25 @@ class ConfigServiceProvider extends ServiceProvider
         $this->resetBackupConfigurations();
         $this->mergeFusionCMSConfigurations();
         $this->mergeFileSystemConfigurations();
+
+        $this->app['config']['services'] = [
+
+            // SparkPost service settings..
+            'sparkpost' => [
+                'secret' => setting('mail.mail_sparkpost_secret'),
+            ],
+
+            // Mailgun service settings..
+            'mailgun' => [
+                'domain' => setting('mail.mail_mailgun_domain'),
+                'secret' => setting('mail.mail_mailgun_secret'),
+            ],
+
+            // Mandrill service settings..
+            'mandrill' => [
+                'secret' => setting('mail.mail_mandrill_secret'),
+            ],
+        ];
     }
 
     /**
