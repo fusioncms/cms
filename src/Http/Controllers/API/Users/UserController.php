@@ -67,8 +67,6 @@ class UserController extends Controller
             $user->syncSubscriptions($attributes['subscriptions']);
         }
 
-        config(['services.sparkpost.secret' => setting('mail.mail_sparkpost_secret')]);
-
         rescue(function () use ($user) {
             /**
              * Forces new users to confirm themselves.
