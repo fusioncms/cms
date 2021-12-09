@@ -13,7 +13,6 @@ return [
                 'description' => 'The desired theme for the public frontend.',
                 'default'     => 'Hello',
                 'hidden'      => true,
-                'required'    => true,
             ],
             [
                 'name'        => 'Website Title',

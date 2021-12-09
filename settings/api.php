@@ -27,7 +27,7 @@ return [
                     'step' => 10,
                 ],
                 'default'     => '60',
-                'required'    => true,
+                'required'    => false,
             ],
         ],
     ],

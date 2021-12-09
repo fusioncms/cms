@@ -14,7 +14,6 @@ return [
                 'type'        => 'select',
                 'options'     => ['enabled'  => 'Enabled', 'disabled' => 'Disabled'],
                 'default'     => 'disabled',
-                'required'    => true,
             ],
         ],
         'Disks' => [
@@ -26,7 +25,6 @@ return [
                 'component'   => 'settings-backup-disks',
                 'default'     => ['local'],
                 'override'    => 'backup.backup.destination.disks',
-                'required'    => true,
             ],
         ],
         'Cleanup Strategy' => [
@@ -37,7 +35,6 @@ return [
                 'type'        => 'number',
                 'default'     => 7,
                 'override'    => 'backup.cleanup.default_strategy.keep_all_backups_for_days',
-                'required'    => true,
             ],
             [
                 'name'        => 'Keep Daily Backups For Days',
@@ -46,7 +43,6 @@ return [
                 'type'        => 'number',
                 'default'     => 16,
                 'override'    => 'backup.cleanup.default_strategy.keep_daily_backups_for_days',
-                'required'    => true,
             ],
             [
                 'name'        => 'Keep Weekly Backups For Weeks',
@@ -55,7 +51,6 @@ return [
                 'type'        => 'number',
                 'default'     => 8,
                 'override'    => 'backup.cleanup.default_strategy.keep_weekly_backups_for_weeks',
-                'required'    => true,
             ],
             [
                 'name'        => 'Keep Monthly Backups For Months',
@@ -64,7 +59,6 @@ return [
                 'type'        => 'number',
                 'default'     => 4,
                 'override'    => 'backup.cleanup.default_strategy.keep_monthly_backups_for_months',
-                'required'    => true,
             ],
             [
                 'name'        => 'Keep Yearly Backups For Years',
@@ -73,7 +67,6 @@ return [
                 'type'        => 'number',
                 'default'     => 2,
                 'override'    => 'backup.cleanup.default_strategy.keep_yearly_backups_for_years',
-                'required'    => true,
             ],
         ],
     ],
