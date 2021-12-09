@@ -62,6 +62,8 @@ trait MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
+        config(['services.sparkpost.secret' => setting('mail.mail_sparkpost_secret')]);
+
         if ($this->shouldVerifyEmail()) {
             rescue(function () {
                 $this->notify(new VerifyEmail());
