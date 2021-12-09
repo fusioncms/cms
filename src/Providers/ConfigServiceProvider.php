@@ -34,7 +34,16 @@ class ConfigServiceProvider extends ServiceProvider
         $this->resetBackupConfigurations();
         $this->mergeFusionCMSConfigurations();
         $this->mergeFileSystemConfigurations();
+        $this->registerMailServices();
+    }
 
+    /**
+     * Register mail services
+     *
+     * @return void
+     */
+    protected function registerMailServices()
+    {
         $this->app['config']['services'] = [
 
             // SparkPost service settings..
