@@ -22,7 +22,7 @@ return [
                 'options'     => [
                     'min'  => 0,
                     'max'  => 50,
-                    'step' => 'any',
+                    'step' => 1,
                 ],
                 'default'  => 15,
                 'required' => true,

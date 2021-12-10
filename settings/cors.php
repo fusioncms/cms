@@ -63,7 +63,7 @@ return [
                 'options'     => [
                     'min'  => 0,
                     'max'  => 120,
-                    'step' => 'any',
+                    'step' => 1,
                 ],
                 'default'  => 0,
                 'override' => 'cors.max_age',
