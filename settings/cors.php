@@ -14,6 +14,7 @@ return [
                 'type'        => 'list',
                 'default'     => ['api/*'],
                 'override'    => 'cors.paths',
+                'required' => true,
             ],
             [
                 'name'        => 'Allowed Methods',

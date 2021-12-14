@@ -105,6 +105,13 @@
             if (_.isEmpty(this.value)) {
                 this.model = []
             }
+
+            else {
+                this.value.forEach((value, index, theValue) => {
+                    if (typeof theValue[index] === 'string')
+                        theValue[index] = this.new(value);
+                });
+            }
         }
     }
 </script>

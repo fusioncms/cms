@@ -59,6 +59,15 @@ class FileUploader
     }
 
     /**
+     * Get the extension
+     *
+     * @return string
+     */
+    public function getExtension() {
+        return $this->info['extension'];
+    }
+
+    /**
      * Set Disk for File to Upload.
      *
      * @param \Fusion\Models\Disk|int $disk

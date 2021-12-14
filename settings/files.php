@@ -13,6 +13,7 @@ return [
                 'description' => 'List of accepted file types. Separate values by a comma.',
                 'type'        => 'list',
                 'default'     => ['jpg', 'jpeg', 'png', 'gif'],
+                'required' => true,
             ],
             [
                 'name'        => 'Max Filesize Upload Limit',

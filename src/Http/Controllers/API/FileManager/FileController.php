@@ -75,6 +75,20 @@ class FileController extends Controller
     {
         $attributes = $request->validated();
 
+        $extensions = setting('files.accepted_files');
+        $file = new FileUploader($request->file('file'));
+
+        $check = false;
+        foreach($extensions as $extension) {
+            if ($extension['value'] === $file->getExtension()) {
+                $check = true; break;
+            }
+        }
+
+        if ($check === false) {
+            abort(500, 'File extension not allowed. Allow in settings before resubmitting');
+        }
+
         $file = (new FileUploader($request->file('file')))
             ->setDisk($disk)
             ->setDirectory($attributes['directory_id'])
