@@ -58,6 +58,10 @@ class FileUploader
         $this->setDimensions();
     }
 
+    public function getExtension() {
+        return $this->info['extension'];
+    }
+
     /**
      * Set Disk for File to Upload.
      *
