@@ -58,6 +58,11 @@ class FileUploader
         $this->setDimensions();
     }
 
+    /**
+     * Get the extension
+     *
+     * @return string
+     */
     public function getExtension() {
         return $this->info['extension'];
     }
