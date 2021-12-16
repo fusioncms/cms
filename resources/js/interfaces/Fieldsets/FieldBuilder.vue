@@ -32,7 +32,7 @@
                                         <ui-dropdown-link @click.prevent="set('edit', index)">Edit</ui-dropdown-link>
                                         <ui-dropdown-link v-if="sections.length > 1" @click.prevent="set('move', index)">Move to...</ui-dropdown-link>
                                         <ui-dropdown-divider></ui-dropdown-divider>
-                                        <ui-dropdown-link @click.prevent="remove(index)">Delete</ui-dropdown-link>
+                                        <ui-dropdown-link @click.prevent="remove(index)" class="danger">Delete</ui-dropdown-link>
                                     </ui-table-actions>
                                 </td>
                             </tr>

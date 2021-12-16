@@ -1,5 +1,5 @@
 <template>
-    <form-container>
+    <div>
 	<portal to="actions">
 	    <div class="buttons">
 		<ui-button v-if="$mq != 'sm'" :to="{ name: 'blueprints' }" variant="secondary">Go Back</ui-button>
@@ -31,7 +31,7 @@
 	        </div>
             </div>
 	</div>
-    </form-container>
+    </div>
 </template>
 
 <script>

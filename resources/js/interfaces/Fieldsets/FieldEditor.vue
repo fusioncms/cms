@@ -1,6 +1,6 @@
 <template>
     <ui-modal name="edit-field" :title="title" noCloseButton noEscClose extra-large v-model="modalOpen">
-        <form-container v-if="form">
+        <div v-if="form">
             <div class="row mb-6">
                 <div class="col w-1/2">
                     <ui-input-group
@@ -47,7 +47,7 @@
                 </div>
 
                 <field-validation
-                    v-if="form.validation"
+                    v-if="form.validation[0] !== false"
                     v-model="form.validation">
                 </field-validation>
 
@@ -58,7 +58,7 @@
                     v-model="form">
                 </component>
             </template>
-        </form-container>
+        </div>
 
         <template slot="footer">
             <ui-button variant="primary" @click="submit">Save</ui-button>
