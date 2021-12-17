@@ -78,8 +78,6 @@ class SettingController extends Controller
      */
     public function sendTestEmail(Request $request, $test_email)
     {
-        config(['services.sparkpost.secret' => setting('mail.mail_sparkpost_secret')]);
-
         $data = array();
         Mail::send('emails/test', $data, function($message) use ($test_email) {
             $message->to($test_email, setting('mail.mail_name'))->subject('Test Email');
