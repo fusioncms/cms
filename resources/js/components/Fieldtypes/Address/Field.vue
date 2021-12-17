@@ -4,8 +4,7 @@
         :fieldId="`${field.handle}-field`"
         :label="field.name"
         :help="field.help">
-
-            <div class="row">
+            <div class="row" v-if="model">
                 <div class="col md:w-1/2">
                     <ui-input-group
                         :name="field.handle + '_address1'"

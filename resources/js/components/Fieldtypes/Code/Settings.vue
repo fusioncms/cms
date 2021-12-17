@@ -47,9 +47,7 @@
 
         computed: {
             options() {
-                return _.map(this.modes, (label) => {
-                    return { value: _.lowerCase(label), label }
-                })
+                return this.modes.map(mode => ({'value' : mode.toLowerCase(), 'label' : mode}));
             }
         },
 

@@ -63,6 +63,12 @@
                     this.settings.format = value
                 }
             }
+        },
+
+        watch: {
+            format: function (val) {
+                this.settings.format = val;
+            }
         }
     }
 </script>
