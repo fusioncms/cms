@@ -11,6 +11,8 @@ return [
                 'name'        => 'Tracking ID',
                 'handle'      => 'analytic_tracking_id',
                 'description' => 'Your Google Tracking ID. Should look like UA-xxxxxxxx-x.',
+                'default'     => 'id',
+                'required' => true,
             ],
         ],
         'Insights' => [
@@ -19,6 +21,8 @@ return [
                 'handle'      => 'analytic_view_id',
                 'description' => 'Your Google Analytics View ID.',
                 'override'    => 'analytics.view_id',
+                'default'     => 'id',
+                'required' => true,
             ],
             [
                 'name'        => 'Credentials',

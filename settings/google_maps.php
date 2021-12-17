@@ -11,6 +11,8 @@ return [
                 'name'        => 'API Key',
                 'handle'      => 'maps_api_key',
                 'description' => 'Your Google Maps API key.',
+                'default'     => 'key',
+                'required' => true,
             ],
         ],
     ],
