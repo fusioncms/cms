@@ -12,7 +12,7 @@ return [
                 'handle'      => 'mail_default',
                 'description' => 'Select the desired e-mail driver.',
                 'type'        => 'select',
-                'options'     => ['smtp' => 'SMTP', 'sparkpost' => 'SparkPost', 'mailgun' => 'Mailgun', 'mandrill' => 'Mandrill', 'log' => 'Log'],
+                'options'     => ['sendmail' => 'Sendmail', 'smtp' => 'SMTP', 'sparkpost' => 'SparkPost', 'mailgun' => 'Mailgun', 'mandrill' => 'Mandrill', 'log' => 'Log'],
                 'default'     => 'smtp',
                 'override'    => 'mail.default',
                 'required'    => true,
@@ -32,6 +32,15 @@ return [
                 'default'     => 'Wendell',
                 'override'    => 'mail.from.name',
                 'required'    => true,
+            ],
+        ],
+        'Sendmail' => [
+            [
+                'name'        => 'Host',
+                'handle'      => 'mail_sendmail_host',
+                'description' => 'The host name sendmail server.',
+                'default'     => 'localhost',
+                'override'    => 'mail.host',
             ],
         ],
         'SMTP' => [
