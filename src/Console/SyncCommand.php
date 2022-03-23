@@ -36,6 +36,7 @@ class SyncCommand extends Command
                 dispatch(new \Fusion\Console\Actions\SyncPermissions());
                 dispatch(new \Fusion\Console\Actions\SyncStructures());
                 dispatch(new \Fusion\Console\Actions\SyncNotifications());
+                dispatch(new \Fusion\Console\Actions\SyncModels());
             });
         } catch (Exception $exception) {
             Log::error($exception->getMessage(), (array) $exception->getTrace()[0]);
