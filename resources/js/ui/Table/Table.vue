@@ -165,7 +165,13 @@
                             <span class="column-label">{{ column_names[column] || column }}</span>
 
                             <slot :name="column" :record="record">
-                                {{ record[column] }}
+                                <component
+                                    v-if="column_types[column]" 
+                                    :is="column_types[column]"
+                                    :value="record[column]"
+                                    :record="record"
+                                />
+                                <span v-else >{{ record[column] }}</span>
                             </slot>
                         </td>
 
@@ -266,7 +272,7 @@
             },
             bulk: {
                 type: Boolean,
-                default: false
+                default: true
             },
             refresh: {
                 type: Number|Boolean,
@@ -356,6 +362,7 @@
                 working: false,
                 displayable: [],
                 column_names: [],
+                column_types: [],
                 bulk_actions: [],
                 bulk_actions_exempt: [],
                 sortable: [],
@@ -397,6 +404,7 @@
             },
 
             hasBulkActions() {
+                console.log(this.bulk, this.selectable.length, this.allowedBulkActions.length)
                 if (! this.bulk) return false
                 if (! this.selectable.length > 0) return false
                 if (! this.allowedBulkActions.length > 0) return false
@@ -512,6 +520,7 @@
                     this.displayable = response.data.displayable
                     this.sortable = response.data.sortable
                     this.column_names = response.data.column_names
+                    this.column_types = response.data.column_types
                     this.bulk_actions = response.data.bulk_actions
                     this.bulk_actions_exempt = response.data.bulk_actions_exempt
                     this.pagination.totalRecords = response.data.records.total
