@@ -116,8 +116,8 @@ class ConfigServiceProvider extends ServiceProvider
             $this->app['config']->set(
                 $name,
                 Arr::mergeDeep(
-                    $this->app['config']->get($name, []),
                     require $path,
+                    $this->app['config']->get($name, []),
                 )
             );
         }
