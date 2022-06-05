@@ -3,7 +3,7 @@
 namespace Fusion\Observers;
 
 use Fusion\Models\Field;
-use Fusion\Models\Fieldset;
+use Fusion\Models\Blueprint as FusionBlueprint;
 use Fusion\Models\Replicator;
 use Fusion\Models\Section;
 use Illuminate\Database\Schema\Blueprint;
@@ -73,14 +73,17 @@ class ReplicatorObserver
      */
     private function createFieldset(Replicator $replicator)
     {
-        $fieldset = $replicator->fieldsets()->create([
+        $blueprint = $replicator->blueprint()->create([
+            'structure' => 'Replicator',
             'name'   => ($name = "Replicator: {$replicator->name}"),
             'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
             'hidden' => true,
+            'blueprintable_type' => Replicator::class,
+            'blueprintable_id' => $replicator->id,
         ]);
 
         $this->createSections(
-            $fieldset,
+            $blueprint,
             collect($replicator->field->settings['sections'])
         );
     }
@@ -132,20 +135,18 @@ class ReplicatorObserver
      *
      * @return void
      */
-    private function createSections(Fieldset $fieldset, Collection $toCreate)
+    private function createSections(FusionBlueprint $blueprint, Collection $toCreate)
     {
-        $toCreate->each(function ($data, $index) use ($fieldset) {
-            $section = $fieldset->sections()->create([
-                'name'        => $data['name'],
-                'handle'      => $data['handle'],
-                'description' => $data['description'],
-                'placement'   => $data['placement'],
-                'order'       => ($index + 1),
-            ]);
+        $section = $blueprint->sections()->create([
+            'name'        => 'General',
+            'handle'      => 'general',
+            'description' => null,
+            'placement'   => 'body',
+            'order'       => 0,
+        ]);
 
-            $this->createReplicantTable($section);
-            $this->createFields($section, collect($data['fields']));
-        });
+        $this->createReplicantTable($section);
+        $this->createFields($section, $toCreate);
     }
 
     /**
@@ -213,7 +214,7 @@ class ReplicatorObserver
             $field = $section->fields()->create([
                 'name'     => $data['name'],
                 'handle'   => $data['handle'],
-                'help'     => $data['help'],
+                'help'     => $data['help'] ?? null,
                 'settings' => $data['settings'],
                 'type'     => is_string($data['type']) ? $data['type'] : $data['type']['handle'],
                 'order'    => ($index + 1),
