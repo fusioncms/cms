@@ -3,6 +3,8 @@
 namespace Fusion\Models;
 
 use Fusion\Concerns\HasBlueprint;
+use Fusion\Concerns\HasActivity;
+use Fusion\Concerns\HasBuilder;
 use Fusion\Contracts\Structure;
 use Fusion\Database\Eloquent\Model;
 use Fusion\Services\Builders;
@@ -10,6 +12,7 @@ use Fusion\Services\Builders;
 class Replicator extends Model implements Structure
 {
     use HasBlueprint;
+    use HasBuilder;
 
     /**
      * The attributes that are fillable via mass assignment.
