@@ -23,6 +23,8 @@ class Replicator extends Model implements Structure
 
     protected $structure = 'Replicators';
 
+    protected $blueprintHidden = true;
+
     /**
      * @param \Fusion\Models\Section $section
      *
@@ -51,5 +53,13 @@ class Replicator extends Model implements Structure
     public function field()
     {
         return $this->belongsTo(Field::class);
+    }
+
+    public function getBuilderTable($section)
+    {
+        $namespace = $this->getBuilderNamespace();
+        $prefix    = $namespace::prefix();
+
+        return "{$prefix}_{$this->handle}_{$section->handle}_{$this->uniqid}";
     }
 }
