@@ -50,8 +50,11 @@ class EmailFieldtype extends Fieldtype
      */
     public function rules(Field $field, $value = null)
     {
-        $validation = explode('|', $field->validation->get('value') ?: 'sometimes');
-        $validation = array_merge($validation, ['email']);
+        $validation = parent::rules($field, $value);
+        
+        if ($field->validation->get('value')) {
+            $validation = array_merge($validation, ['email']);
+        }
 
         return [
             $field->handle => $validation,

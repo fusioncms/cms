@@ -66,8 +66,11 @@ class DateTimeFieldtype extends Fieldtype
      */
     public function rules(Field $field, $value = null)
     {
-        $validation = explode('|', $field->validation->get('value') ?: 'nullable');
-        $validation = array_merge($validation, ['date_format:Y-m-d H:i:s']);
+        $validation = parent::rules($field, $value);
+        
+        if ($field->validation->get('value')) {
+            $validation = array_merge($validation, ['date_format:Y-m-d H:i:s']);
+        }
 
         return [
             $field->handle => $validation,
