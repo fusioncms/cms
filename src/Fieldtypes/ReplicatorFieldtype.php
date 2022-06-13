@@ -205,7 +205,9 @@ class ReplicatorFieldtype extends Fieldtype
                 $handle     = key($rule);
                 $validation = current($rule);
 
-                $rules[$prefix.$handle] = $validation;
+				if ($validation !== false) {
+					$rules[$prefix.$handle] = $validation;
+				}
             }
         }
 
