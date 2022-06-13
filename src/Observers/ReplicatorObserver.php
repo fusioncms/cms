@@ -73,17 +73,8 @@ class ReplicatorObserver
      */
     private function createFieldset(Replicator $replicator)
     {
-        $blueprint = $replicator->blueprint()->create([
-            'structure' => 'Replicator',
-            'name'   => ($name = "Replicator: {$replicator->name}"),
-            'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
-            'hidden' => true,
-            'blueprintable_type' => Replicator::class,
-            'blueprintable_id' => $replicator->id,
-        ]);
-
         $this->createSections(
-            $blueprint,
+            $replicator->blueprint,
             collect($replicator->field->settings['sections'])
         );
     }

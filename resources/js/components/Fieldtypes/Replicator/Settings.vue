@@ -15,7 +15,7 @@
                 if (this.settings.replicator) {
                     axios.get(`/api/replicators/${this.settings.replicator}`)
                         .then((response) => {
-                            this.$set(this.settings, 'sections', response.data.data.sections)
+                            this.$set(this.settings, 'sections', response.data.data.sections[0].fields)
                         })
                 } else {
                     this.settings.sections = []
