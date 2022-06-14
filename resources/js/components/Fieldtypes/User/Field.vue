@@ -42,7 +42,7 @@
 
 
         <ui-modal name="selection-modal" title="Browse users">
-            <ui-table :endpoint="endpoint" id="user-items" sort-by="name" sort-in="desc" :per-page="10">
+            <ui-table :bulk="false" :endpoint="endpoint" id="user-items" sort-by="name" sort-in="desc" :per-page="10">
                 <template slot="name" slot-scope="table">
                     <ui-checkbox
                         :id="`selection-${table.record.id}`"
@@ -54,8 +54,8 @@
                 </template>
 
                 <template slot="role" slot-scope="table">
-                    <router-link :to="{ name: 'roles.show', params: {role: table.record.role.id} }" v-if="$can('roles.view')">{{ table.record.role.name }}</router-link>
-                    <span v-else>{{ table.record.role.name }}</span>
+                    <router-link :to="{ name: 'roles.show', params: {role: table.record.role ? table.record.role.id : null} }" v-if="$can('roles.view')">{{ table.record.role ? table.record.role.name : '&lt;No role&gt;' }}</router-link>
+                    <span v-else>{{ table.record.role ? table.record.role.name : '&lt;No role&gt;' }}</span>
                 </template>
 
                 <template slot="created_at" slot-scope="table">
