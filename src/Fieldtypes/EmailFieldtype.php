@@ -52,7 +52,7 @@ class EmailFieldtype extends Fieldtype
     {
         $validation = parent::rules($field, $value);
         
-        if ($field->validation) {
+        if ($field->validation->get('value')) {
             $validation = array_merge($validation, ['email']);
         }
 
