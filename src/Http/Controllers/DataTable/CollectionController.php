@@ -2,8 +2,9 @@
 
 namespace Fusion\Http\Controllers\DataTable;
 
-use Fusion\Http\Controllers\DataTableController;
 use Fusion\Models\Matrix;
+use Fusion\Actions\BulkAction;
+use Fusion\Http\Controllers\DataTableController;
 
 class CollectionController extends DataTableController
 {
@@ -76,5 +77,25 @@ class CollectionController extends DataTableController
             'created_at' => 'Created',
             'updated_at' => 'Updated',
         ];
+    }
+
+    /**
+     * Get the available bulk actions.
+     *
+     * @return array
+     */
+    protected function getBulkActions()
+    {
+        return BulkAction::all()->filter(function($action) {
+            return true;
+        })->map(function($action) {
+            $action = new $action;
+            $action = $action->toArray();
+
+            if (isset($this->matrix->handle)) {
+                $action['route'] .= '?matrix='.$this->matrix->handle;
+            }
+            return $action;
+        })->values();
     }
 }
