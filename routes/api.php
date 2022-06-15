@@ -216,3 +216,9 @@ Route::prefix('updates')->group(function () {
     Route::post('composer', 'UpdateController@composer');
     Route::post('finalize', 'UpdateController@finalize');
 });
+
+/**
+ * API - Bulk Actions.
+ */
+
+Route::post('bulk-action/{slug}', 'BulkActionController@handle');
