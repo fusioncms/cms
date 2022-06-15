@@ -61,6 +61,7 @@ abstract class BulkAction
         if (!isset(static::$actions[$slug])) {
             static::$actions[$slug] = static::class;
         } else {
+			$className = [];
             $className[] = static::class;
             $className[] = static::$actions[$slug];
             throw new \Exception('There is more than 1 action named "'.$slug.'" ('.implode(', ', $classNames).'), please use another name. ');
