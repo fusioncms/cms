@@ -239,14 +239,7 @@
 			accept() {
                 this.model = [...this.selection]
 				this.close()
-			},
-
-            navigate(directory) {
-                this.reset()
-                this.setCurrentDirectory(directory.id)
-                this.setRootDirectory(this.field.settings.directory || 0)
-                this.fetchDisk(this.field.settings.disk)
-            }
+			}
 		},
 
 		created() {
