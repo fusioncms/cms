@@ -32,7 +32,7 @@ class FileController extends Controller
 
         return Storage::disk($file->disk->handle)->response(
             $file->location,
-            $file->name,
+            $file->name.'.'.$file->extension,
             [
                 'Content-Type' => $file->mimetype,
             ]
