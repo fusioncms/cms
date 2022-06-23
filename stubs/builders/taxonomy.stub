@@ -13,6 +13,8 @@ use Spatie\Activitylog\Models\Activity;
 class {class} extends Model
 {
     use HasOrder, HasActivity;
+	
+	{traits}
 
 	/**
      * The table associated with the model.
