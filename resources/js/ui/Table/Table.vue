@@ -290,6 +290,10 @@
                 type: String,
                 default: 'id'
             },
+            saveSortBy: {
+                type: Boolean,
+                default: true,
+            },
             perPage: {
                 type: Number,
                 default: 10
@@ -563,6 +567,26 @@
                 }
 
                 this.getRecords()
+
+                this.saveSortProperty()
+            },
+
+            saveSortProperty() {
+                if (this.saveSortBy) {
+                    window.localStorage.setItem('ui-table-sort-' + this.id, JSON.stringify(this.sort))
+                }
+            },
+
+            loadSortProperty() {
+                try {
+                    let sort = window.localStorage.getItem('ui-table-sort-' + this.id)
+                    if (sort) {
+                        sort = JSON.parse(sort)
+                        this.sort = sort
+                    }
+                } catch (error) {
+
+                }
             },
 
             changePage(page) {
@@ -593,6 +617,7 @@
         },
 
         created() {
+            this.loadSortProperty()
             this.getRecords()
             this.listenForEvents()
         },
