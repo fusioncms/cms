@@ -196,18 +196,20 @@ class ReplicatorFieldtype extends Fieldtype
     {
         $rules = [];
 
-        foreach ($value as $key => $input) {
-            $section = Section::find($input['section']['id']);
-            $prefix  = "{$field->handle}.{$key}.fields.";
+        if (isset($value)) {
+            foreach ($value as $key => $input) {
+                $section = Section::find($input['section']['id']);
+                $prefix  = "{$field->handle}.{$key}.fields.";
 
-            foreach ($section->fields as $sub) {
-                $rule       = $sub->type()->rules($sub, $value[$key]['fields'][$sub->handle]);
-                $handle     = key($rule);
-                $validation = current($rule);
+                foreach ($section->fields as $sub) {
+                    $rule       = $sub->type()->rules($sub, $value[$key]['fields'][$sub->handle]);
+                    $handle     = key($rule);
+                    $validation = current($rule);
 
-				if ($validation !== false) {
-					$rules[$prefix.$handle] = $validation;
-				}
+                    if ($validation !== false) {
+                        $rules[$prefix.$handle] = $validation;
+                    }
+                }
             }
         }
 
@@ -226,12 +228,14 @@ class ReplicatorFieldtype extends Fieldtype
     {
         $attributes = [];
 
-        foreach ($value as $key => $input) {
-            $section = Section::find($input['section']['id']);
-            $prefix  = "{$field->handle}.{$key}.fields.";
+        if (isset($value)) {
+            foreach ($value as $key => $input) {
+                $section = Section::find($input['section']['id']);
+                $prefix  = "{$field->handle}.{$key}.fields.";
 
-            foreach ($section->fields as $sub) {
-                $attributes[$prefix.$sub->handle] = $sub->name;
+                foreach ($section->fields as $sub) {
+                    $attributes[$prefix.$sub->handle] = $sub->name;
+                }
             }
         }
 
