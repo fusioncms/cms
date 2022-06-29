@@ -573,13 +573,13 @@
 
             saveSortProperty() {
                 if (this.saveSortBy) {
-                    window.localStorage.setItem('ui-table-sort-' + this.id, JSON.stringify(this.sort))
+                    window.localStorage.setItem('ui-table-sort-' + this.id + '-' + window.location.pathname, JSON.stringify(this.sort))
                 }
             },
 
             loadSortProperty() {
                 try {
-                    let sort = window.localStorage.getItem('ui-table-sort-' + this.id)
+                    let sort = window.localStorage.getItem('ui-table-sort-' + this.id + '-' + window.location.pathname)
                     if (sort) {
                         sort = JSON.parse(sort)
                         this.sort = sort
