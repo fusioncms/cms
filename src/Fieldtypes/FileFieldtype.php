@@ -90,7 +90,7 @@ class FileFieldtype extends Fieldtype
     {
         if (request()->hasFile($field->handle)) {
             $files     = request()->file($field->handle);
-            $oldValues = $model->{$field->handle}->pluck('id');
+			$oldValues = isset($model->{$field->handle}) ? $model->{$field->handle}->pluck('id') : [];
             $newValues = collect();
 
             foreach ($files as $key => $file) {
@@ -127,6 +127,6 @@ class FileFieldtype extends Fieldtype
      */
     public function getResource($model, Field $field)
     {
-        return FileResource::collection($this->getValue($model, $field));
+        return FileResource::collection($this->getValue($model, $field) ?? []);
     }
 }
