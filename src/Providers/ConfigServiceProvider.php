@@ -67,7 +67,6 @@ class ConfigServiceProvider extends ServiceProvider
 
                 if (is_array($value) && is_array($arr2[$key])) {
                     $output[$key] = Arr::mergeDeep($value, $arr2[$key]);
-                    $output[$key] = array_unique($output[$key], SORT_REGULAR);
                 }
             }
 
