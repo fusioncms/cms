@@ -125,13 +125,13 @@
                             </span>
                         </th>
 
-                        <th v-show="hasSelections" :colspan="displayable.length">
+                        <th v-show="hasSelections" :colspan="displayable.length > 2 ? displayable.length - 1 : displayable.length">
                             <span class="table__heading">
                                 {{ this.selected.length }} record{{ this.selected.length > 1 ? 's' : '' }} selected
                             </span>
                         </th>
 
-                        <th v-show="hasSelections" class="w-48">
+                        <th v-show="hasSelections" :colspan="displayable.length > 2 ? 2 : 1" class="w-48">
                             <div class="bulk-actions">
                                 <select name="bulk-actions" id="bulk-actions" class="field-select field-select--sm field-select--bordered" v-model="action" @change="showBulkActionConfirmation = true">
                                     <option selected disabled :value="null">Bulk Actions</option>
@@ -141,7 +141,7 @@
                             </div>
                         </th>
 
-                        <th v-show="hasActions && ! hasSelections" class="w-48">&nbsp;</th>
+                        <th v-show="hasActions && ! hasSelections" class="w-20">&nbsp;</th>
                     </tr>
                 </thead>
 
