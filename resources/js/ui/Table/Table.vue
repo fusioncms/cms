@@ -108,7 +108,7 @@
 
                         <th v-for="(column, index) in displayable"
                             v-show="! hasSelections"
-                            :class="{'sortable': isSortable(column), 'active': (sort.key === column), 'w-96': (column === 'url')}"
+                            :class="{'sortable': isSortable(column), 'active': (sort.key === column), 'w-96': (column === 'url'), ['th-' + column]: true}"
                             :key="column[primaryKey] || index">
                             <a href="#" v-if="isSortable(column)" class="table__heading table__heading--link" @click.prevent="isSortable(column) && sortRecordsBy(column)" :aria-label="'Sort by ' + column_names[column] || column">
                                 <span>{{ column_names[column] || column }}</span>
@@ -141,7 +141,7 @@
                             </div>
                         </th>
 
-                        <th v-show="hasActions && ! hasSelections" class="w-20">&nbsp;</th>
+                        <th v-show="hasActions && ! hasSelections" class="w-20 col-actions">&nbsp;</th>
                     </tr>
                 </thead>
 
@@ -160,7 +160,7 @@
                             </div>
                         </td>
 
-                        <td v-for="column in displayable"
+                        <td v-for="column in displayable" :class="'td-' + column"
                             :key="column">
                             <span class="column-label">{{ column_names[column] || column }}</span>
 
@@ -175,7 +175,7 @@
                             </slot>
                         </td>
 
-                        <td class="table__actions w-20" v-if="hasActions">
+                        <td class="'table__actions w-20 col-actions'" v-if="hasActions">
                             <slot name="actions" :record="record"></slot>
                         </td>
                     </tr>
