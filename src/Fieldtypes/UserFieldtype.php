@@ -3,7 +3,7 @@
 namespace Fusion\Fieldtypes;
 
 use File;
-use Fusion\Http\Resources\USerResource;
+use Fusion\Http\Resources\UserResource;
 use Fusion\Models\Field;
 use Illuminate\Support\Str;
 
