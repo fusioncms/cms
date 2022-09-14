@@ -20,7 +20,7 @@
                         <ui-tag
                             :value="option.label || option"
                             :label="'Unselect' + option.label || option"
-                            @click="removeSelection(index)">
+                            @click="removeSelection(option)">
                         </ui-tag>
                     </li>
                 </ul>
@@ -115,7 +115,7 @@
                 search: '',
                 highlighted: 0,
                 // assuming selection is a string or a number only
-                selection: _.isString(this.value) ? this.value.split(',') : [ _.toString(this.value) ],
+                selection: _.isString(this.value) ? this.value.split(',') : this.value,
             }
         },
 
@@ -237,16 +237,12 @@
 
         watch: {
             value(value) {
-                if (_.isString(this.value)) {
-                    this.selection = this.value.split(',')
-                } else if (_.isNumber(this.value)) {
-                    this.selection = [ _.toString(this.value) ]
-                }
+                this.selection = _.isString(value) ? value.split(',') : value
                 this.resetHighlighted();
             },
 
             selection(value) {
-                this.$emit('input', _.isArray(value) ? _.join(value, ',') : value)
+                this.$emit('input', value)
             },
 
             search(value) {
@@ -302,13 +298,17 @@
                 }
             },
 
-            removeSelection(index) {
+            removeSelection(option) {
+                let index = _.findIndex(this.selection, (item) => {
+                    return option.value == item
+                })
+                console.log('remove', index, this.selection, option)
                 this.selection.splice(index, 1)
             },
 
             toggleSelection(option) {
                 if (this.inSelection(option)) {
-                    this.removeSelection(_.indexOf(this.selection, option))
+                    this.removeSelection(option)
                 } else {
                     this.addSelection(option)
                 }
