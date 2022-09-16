@@ -242,7 +242,11 @@
             },
 
             selection(value) {
-                this.$emit('input', value)
+                if (!this.multiple) {
+                    this.$emit('input', value.length ? value[0] : null)
+                } else {
+                    this.$emit('input', value)
+                }
             },
 
             search(value) {
