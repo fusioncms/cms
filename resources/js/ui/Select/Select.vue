@@ -115,7 +115,7 @@
                 search: '',
                 highlighted: 0,
                 // assuming selection is a string or a number only
-                selection: _.isString(this.value) ? this.value.split(',') : (this.value ? this.value.toString() : null),
+                selection: _.isString(this.value) && this.multiple ? this.value.split(',') : this.value,
             }
         },
 
