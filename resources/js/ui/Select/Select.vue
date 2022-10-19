@@ -243,7 +243,7 @@
 
             selection(value) {
                 if (!this.multiple) {
-                    this.$emit('input', value.length ? value[0] : null)
+                    this.$emit('input', _.isArray(value) && value.length ? value[0] : value)
                 } else {
                     this.$emit('input', value)
                 }
@@ -319,7 +319,11 @@
             },
 
             inSelection(option) {
-                return _.includes(this.selection, option.value)
+                if (this.multiple) {
+                    return _.includes(this.selection, option.value)
+                } else {
+                    return this.selection == option.value
+                }
             },
 
             resetSearch() {
