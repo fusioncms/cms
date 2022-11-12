@@ -151,10 +151,10 @@ class ReplicatorFieldtype extends Fieldtype
      *
      * @return void
      */
-    public function persistRelationship($model, Field $field)
+    public function persistRelationship($model, Field $field, $value = null)
     {
         $replicator = Replicator::find($field->settings['replicator']);
-        $replicants = $this->persistReplicants($replicator, $field);
+        $replicants = $this->persistReplicants($replicator, $field, $value);
         $sections   = $replicator->sections;
 
         $sections->each(function ($section) use ($model, $replicator, $replicants) {
@@ -259,9 +259,9 @@ class ReplicatorFieldtype extends Fieldtype
      *
      * @return \Illuminate\Support\Collection
      */
-    private function persistReplicants(Replicator $replicator, Field $field)
+    private function persistReplicants(Replicator $replicator, Field $field, $value = null)
     {
-        return collect(request()->input($field->handle, []))
+        return collect($value ?? request()->input($field->handle, []))
             ->map(function ($input) use ($replicator) {
                 $section = Section::findOrFail($input['section']['id']);
                 $builder = $replicator->getBuilder($section);
