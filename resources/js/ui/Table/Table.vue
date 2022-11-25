@@ -108,7 +108,7 @@
 
                         <th v-for="(column, index) in displayable"
                             v-show="! hasSelections"
-                            :class="{'sortable': isSortable(column), 'active': (sort.key === column), 'w-96': (column === 'url')}"
+                            :class="{'sortable': isSortable(column), 'active': (sort.key === column), 'w-96': (column === 'url'), ['th-' + column]: true}"
                             :key="column[primaryKey] || index">
                             <a href="#" v-if="isSortable(column)" class="table__heading table__heading--link" @click.prevent="isSortable(column) && sortRecordsBy(column)" :aria-label="'Sort by ' + column_names[column] || column">
                                 <span>{{ column_names[column] || column }}</span>
@@ -125,13 +125,13 @@
                             </span>
                         </th>
 
-                        <th v-show="hasSelections" :colspan="displayable.length">
+                        <th v-show="hasSelections" :colspan="displayable.length > 2 ? displayable.length - 1 : displayable.length">
                             <span class="table__heading">
                                 {{ this.selected.length }} record{{ this.selected.length > 1 ? 's' : '' }} selected
                             </span>
                         </th>
 
-                        <th v-show="hasSelections" class="w-48">
+                        <th v-show="hasSelections" :colspan="displayable.length > 2 ? 2 : 1" class="w-48">
                             <div class="bulk-actions">
                                 <select name="bulk-actions" id="bulk-actions" class="field-select field-select--sm field-select--bordered" v-model="action" @change="showBulkActionConfirmation = true">
                                     <option selected disabled :value="null">Bulk Actions</option>
@@ -141,7 +141,7 @@
                             </div>
                         </th>
 
-                        <th v-show="hasActions && ! hasSelections" class="w-48">&nbsp;</th>
+                        <th v-show="hasActions && ! hasSelections" class="w-20 col-actions">&nbsp;</th>
                     </tr>
                 </thead>
 
@@ -160,16 +160,22 @@
                             </div>
                         </td>
 
-                        <td v-for="column in displayable"
+                        <td v-for="column in displayable" :class="'td-' + column"
                             :key="column">
                             <span class="column-label">{{ column_names[column] || column }}</span>
 
                             <slot :name="column" :record="record">
-                                {{ record[column] }}
+                                <component
+                                    v-if="column_types[column]" 
+                                    :is="column_types[column]"
+                                    :value="record[column]"
+                                    :record="record"
+                                />
+                                <span v-else >{{ record[column] }}</span>
                             </slot>
                         </td>
 
-                        <td class="table__actions w-20" v-if="hasActions">
+                        <td class="'table__actions w-20 col-actions'" v-if="hasActions">
                             <slot name="actions" :record="record"></slot>
                         </td>
                     </tr>
@@ -266,7 +272,7 @@
             },
             bulk: {
                 type: Boolean,
-                default: false
+                default: true
             },
             refresh: {
                 type: Number|Boolean,
@@ -283,6 +289,10 @@
             sortBy: {
                 type: String,
                 default: 'id'
+            },
+            saveSortBy: {
+                type: Boolean,
+                default: true,
             },
             perPage: {
                 type: Number,
@@ -356,6 +366,7 @@
                 working: false,
                 displayable: [],
                 column_names: [],
+                column_types: [],
                 bulk_actions: [],
                 bulk_actions_exempt: [],
                 sortable: [],
@@ -397,6 +408,7 @@
             },
 
             hasBulkActions() {
+                console.log(this.bulk, this.selectable.length, this.allowedBulkActions.length)
                 if (! this.bulk) return false
                 if (! this.selectable.length > 0) return false
                 if (! this.allowedBulkActions.length > 0) return false
@@ -512,6 +524,7 @@
                     this.displayable = response.data.displayable
                     this.sortable = response.data.sortable
                     this.column_names = response.data.column_names
+                    this.column_types = response.data.column_types
                     this.bulk_actions = response.data.bulk_actions
                     this.bulk_actions_exempt = response.data.bulk_actions_exempt
                     this.pagination.totalRecords = response.data.records.total
@@ -523,6 +536,8 @@
                     if (this.refresh && ! self._timer) {
                         this._timer = setTimeout(() => this.getRecords(), this.refresh)
                     }
+
+                    this.$emit('loaded', this.records)
                 })
             },
 
@@ -554,6 +569,26 @@
                 }
 
                 this.getRecords()
+
+                this.saveSortProperty()
+            },
+
+            saveSortProperty() {
+                if (this.saveSortBy) {
+                    window.localStorage.setItem('ui-table-sort-' + this.id + '-' + this.endpoint + '-' + window.location.pathname, JSON.stringify(this.sort))
+                }
+            },
+
+            loadSortProperty() {
+                try {
+                    let sort = window.localStorage.getItem('ui-table-sort-' + this.id + '-' + this.endpoint + '-' + window.location.pathname)
+                    if (sort) {
+                        sort = JSON.parse(sort)
+                        this.sort = sort
+                    }
+                } catch (error) {
+
+                }
             },
 
             changePage(page) {
@@ -584,6 +619,7 @@
         },
 
         created() {
+            this.loadSortProperty()
             this.getRecords()
             this.listenForEvents()
         },
