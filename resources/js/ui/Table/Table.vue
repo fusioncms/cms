@@ -536,6 +536,8 @@
                     if (this.refresh && ! self._timer) {
                         this._timer = setTimeout(() => this.getRecords(), this.refresh)
                     }
+
+                    this.$emit('loaded', this.records)
                 })
             },
 
