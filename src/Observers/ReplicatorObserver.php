@@ -3,7 +3,7 @@
 namespace Fusion\Observers;
 
 use Fusion\Models\Field;
-use Fusion\Models\Fieldset;
+use Fusion\Models\Blueprint as FusionBlueprint;
 use Fusion\Models\Replicator;
 use Fusion\Models\Section;
 use Illuminate\Database\Schema\Blueprint;
@@ -39,7 +39,7 @@ class ReplicatorObserver
         $this->suffix = $replicator->uniqid;
 
         $replicator->withoutEvents(function () use ($replicator) {
-            if ($replicator->fieldset == null) {
+            if ($replicator->sections == null || $replicator->sections->isEmpty()) {
                 $this->createFieldset($replicator);
             } else {
                 $this->updateFieldset($replicator);
@@ -73,14 +73,8 @@ class ReplicatorObserver
      */
     private function createFieldset(Replicator $replicator)
     {
-        $fieldset = $replicator->fieldsets()->create([
-            'name'   => ($name = "Replicator: {$replicator->name}"),
-            'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
-            'hidden' => true,
-        ]);
-
         $this->createSections(
-            $fieldset,
+            $replicator->blueprint,
             collect($replicator->field->settings['sections'])
         );
     }
@@ -94,18 +88,14 @@ class ReplicatorObserver
      */
     private function updateFieldset(Replicator $replicator)
     {
-        $fieldset = $replicator->fieldset;
-        $fieldset->update([
-            'name'   => ($name = "Replicator: {$replicator->name}"),
-            'handle' => str_handle("{$replicator->name}_{$replicator->uniqid}"),
-        ]);
+        $blueprint = $replicator->blueprint;
 
         $sections = collect($replicator->field->settings['sections']);
-        $existing = $fieldset->sections->pluck('id');
+        $existing = $blueprint->sections->pluck('id');
 
-        $this->deleteSections($fieldset, $this->getDetachedItems($existing, $sections));
-        $this->updateSections($fieldset, $this->getUpdatedItems($sections));
-        $this->createSections($fieldset, $this->getAttachedItems($sections));
+        $this->deleteSections($blueprint, $this->getDetachedItems($existing, $sections));
+        $this->updateSections($blueprint, $this->getUpdatedItems($sections));
+        $this->createSections($blueprint, $this->getAttachedItems($sections));
     }
 
     /**
@@ -132,20 +122,18 @@ class ReplicatorObserver
      *
      * @return void
      */
-    private function createSections(Fieldset $fieldset, Collection $toCreate)
+    private function createSections(FusionBlueprint $blueprint, Collection $toCreate)
     {
-        $toCreate->each(function ($data, $index) use ($fieldset) {
-            $section = $fieldset->sections()->create([
-                'name'        => $data['name'],
-                'handle'      => $data['handle'],
-                'description' => $data['description'],
-                'placement'   => $data['placement'],
-                'order'       => ($index + 1),
-            ]);
+        $section = $blueprint->sections()->create([
+            'name'        => 'General',
+            'handle'      => 'general',
+            'description' => null,
+            'placement'   => 'body',
+            'order'       => 0,
+        ]);
 
-            $this->createReplicantTable($section);
-            $this->createFields($section, collect($data['fields']));
-        });
+        $this->createReplicantTable($section);
+        $this->createFields($section, $toCreate);
     }
 
     /**
@@ -156,10 +144,10 @@ class ReplicatorObserver
      *
      * @return void
      */
-    private function updateSections(Fieldset $fieldset, Collection $toUpdate)
+    private function updateSections(FusionBlueprint $blueprint, Collection $toUpdate)
     {
-        $toUpdate->each(function ($data, $index) use ($fieldset) {
-            $newSection = $fieldset->sections()->find($data['id']);
+        $toUpdate->each(function ($data, $index) use ($blueprint, $toUpdate) {
+            $newSection = $blueprint->sections()->find($data['id']);
             $oldSection = $newSection->replicate();
             $newSection->update([
                 'name'        => $data['name'],
@@ -189,9 +177,9 @@ class ReplicatorObserver
      *
      * @return void
      */
-    private function deleteSections(Fieldset $fieldset, Collection $toDelete)
+    private function deleteSections(FusionBlueprint $blueprint, Collection $toDelete)
     {
-        $sections = $fieldset->sections()->whereIn('id', $toDelete);
+        $sections = $blueprint->sections()->whereIn('id', $toDelete);
         $sections->each(function ($section) {
             $this->deleteFields($section, $section->fields->pluck('id'));
             $this->deleteReplicantTable($section);
@@ -213,7 +201,7 @@ class ReplicatorObserver
             $field = $section->fields()->create([
                 'name'     => $data['name'],
                 'handle'   => $data['handle'],
-                'help'     => $data['help'],
+                'help'     => $data['help'] ?? null,
                 'settings' => $data['settings'],
                 'type'     => is_string($data['type']) ? $data['type'] : $data['type']['handle'],
                 'order'    => ($index + 1),

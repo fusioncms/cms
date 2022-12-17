@@ -68,6 +68,17 @@ class Replicator extends Builder
         ];
     }
 
+    protected function getBuildTable()
+    {
+        $prefix = static::prefix();
+
+        if (is_null($prefix)) {
+            $prefix = Str::lower($this->source->getClassName());
+        }
+
+        return "{$prefix}_{$this->handle}";
+    }
+
     /**
      * Builder table prefix.
      *
@@ -75,6 +86,6 @@ class Replicator extends Builder
      */
     public static function prefix()
     {
-        return 'replicator';
+        return 'rp';
     }
 }
