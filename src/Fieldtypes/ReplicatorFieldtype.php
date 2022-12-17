@@ -183,6 +183,16 @@ class ReplicatorFieldtype extends Fieldtype
             $model->{$handle}()->attach($attached);
         });
     }
+    
+    public function destroyRelationship($model, Field $field)
+    {
+        $replicator = Replicator::find($field->settings['replicator']);
+        $sections   = $replicator->sections;
+        $sections->each(function ($section) use ($model, $replicator, $field) {
+            $handle = "rp_{$section->handle}_{$replicator->uniqid}";
+            $model->{$handle}()->wherePivot('section_id', $section->id)->detach();
+        });
+    }
 
     /**
      * Get custom rules when saving field.
