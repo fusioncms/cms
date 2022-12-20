@@ -299,11 +299,11 @@ class ReplicatorFieldtype extends Fieldtype
                         /**
                          * Merge replicator field into Request object.
                          */
-                        request()->merge([
-                            $field->handle => $input['fields'][$field->handle],
-                        ]);
+                        // request()->merge([
+                        //     $field->handle => $input['fields'][$field->handle],
+                        // ]);
 
-                        $field->type()->persistRelationship($replicant, $field);
+                        $field->type()->persistRelationship($replicant, $field, $input['fields'][$field->handle] ?? null);
                     }
                 });
 
