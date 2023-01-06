@@ -221,7 +221,7 @@ abstract class DataTableController extends Controller
                 // - page    (defaults to `PAGE_NUM`)
                 ->paginate(
                     $request->query('perPage', self::PER_PAGE),
-                    self::getDisplayableColumns(),
+                    ['*'], // fix issue where displayable columns cannot be configured properly when there is column which is not exist in the table (eg, column generated using aggregate function)
                     get_class($this),
                     $request->query('page', self::PAGE_NUM)
                 );
