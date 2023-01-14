@@ -48,10 +48,18 @@ export default {
 			reset:                    'filemanager/reset',
 		}),
 
+		loadCurrentDirectoryFromLocalStorage(diskId) {
+			return window.localStorage.getItem('filemanager_current_directory_' + diskId);
+		},
+		saveCurrentDirectoryToLocalStorage(directoryId) {
+			window.localStorage.setItem('filemanager_current_directory_' + this.disk.id, directoryId);
+		},
+
 		navigate(directory) {
 			this.reset()
 
 			if (directory) {
+				this.saveCurrentDirectoryToLocalStorage(directory.id)
 				this.setCurrentDirectory(directory.id)
 				this.setParentDirectory(directory.parent_id)
 			}
