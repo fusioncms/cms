@@ -93,6 +93,8 @@ class FileFieldtype extends Fieldtype
             $oldValues = $model->{$field->handle}->pluck('id');
             $newValues = collect();
 
+            $files = is_array($files) ? $files : [$files];
+
             foreach ($files as $key => $file) {
                 foreach ((array) $field->settings['directory'] as $data) {
                     /**
