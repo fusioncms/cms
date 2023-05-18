@@ -95,6 +95,8 @@
             <p v-else class="field-dropdown__empty">
                 No results found for "{{ search }}"
             </p>
+
+            <slot name="footer"></slot>
         </div>
     </div>
 </template>

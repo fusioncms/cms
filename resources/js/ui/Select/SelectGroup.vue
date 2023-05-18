@@ -26,6 +26,8 @@
             :message="hasMessage"
             :value="value"
             @input="onInput($event)">
+
+            <template v-slot:footer><slot name="footer"></slot></template>
         </ui-select>
 	</ui-field-group>
 </template>
