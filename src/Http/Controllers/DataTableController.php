@@ -148,6 +148,14 @@ abstract class DataTableController extends Controller
     }
 
     /**
+     * Get the sortable columns for Spatie query builder (It's value is not same as getSortable() when it have object as value, eg. Spatie\QueryBuilder\Sorts\Sort)
+     */
+    protected function getAllowedSorts()
+    {
+        return $this->getSortable();
+    }
+
+    /**
      * Get the sortable columns.
      *
      * @return array
@@ -209,7 +217,7 @@ abstract class DataTableController extends Controller
                 ->allowedIncludes($this->getRelationships())
 
                 // Allowed sortable columns    (e.g. sort=name)
-                ->allowedSorts($this->getSortable())
+                ->allowedSorts($this->getAllowedSorts())
 
                 // Default sortable column
                 ->defaultSort($this->getDefaultSort())
