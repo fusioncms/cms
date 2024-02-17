@@ -166,6 +166,7 @@
                                 <component
                                     v-if="column_types[column] && isComponentExist(column_types[column])" 
                                     :is="column_types[column]"
+                                    v-bind="column_props[column]"
                                     :value="record[column]"
                                     :record="record"
                                 />
@@ -365,6 +366,7 @@
                 displayable: [],
                 column_names: [],
                 column_types: [],
+                column_props: [],
                 bulk_actions: [],
                 bulk_actions_exempt: [],
                 sortable: [],
@@ -523,6 +525,7 @@
                     this.sortable = response.data.sortable
                     this.column_names = response.data.column_names
                     this.column_types = response.data.column_types
+                    this.column_props = response.data.column_props
                     this.bulk_actions = response.data.bulk_actions
                     this.bulk_actions_exempt = response.data.bulk_actions_exempt
                     this.pagination.totalRecords = response.data.records.total

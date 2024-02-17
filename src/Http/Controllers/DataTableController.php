@@ -41,6 +41,7 @@ abstract class DataTableController extends Controller
             'sortable'            => array_values($this->getSortable()),
             'column_names'        => $this->getCustomColumnNames(),
             'column_types'        => $this->getCustomColumnTypes(),
+            'column_props'        => $this->getCustomColumnProps(),
             'records'             => $this->getRecords($request),
             'bulk_actions'        => $this->getBulkActions(),
             'bulk_actions_exempt' => $this->getExemptFromBulkActions(),
@@ -107,6 +108,16 @@ abstract class DataTableController extends Controller
      * @return array
      */
     protected function getCustomColumnTypes()
+    {
+        return [];
+    }
+
+    /**
+     * Get the mapped custom column props.
+     *
+     * @return array
+     */
+    protected function getCustomColumnProps()
     {
         return [];
     }
