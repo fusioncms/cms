@@ -61,7 +61,7 @@
         },
 
         mounted() {
-            this.inst = flatpickr(`#flatpickr_${this.field.handle}`, {
+            this.inst = flatpickr(this.$el.querySelector(`#flatpickr_${this.field.handle}`), {
                 altFormat: this.field.settings.format,
                 altInput: true,
                 dateFormat: 'Y-m-d H:i:S',
