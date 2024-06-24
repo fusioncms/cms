@@ -48,7 +48,9 @@ abstract class Builder
 
         foreach ($this->columns as $column) {
             $fillable[]             = $column->handle;
-            $casts[$column->handle] = $column->type()->cast;
+            if (isset($column->type()->cast)) {
+                $casts[$column->handle] = $column->type()->cast;
+            }
         }
 
         $fillable = array_merge($this->getFillable(), $fillable);

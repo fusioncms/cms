@@ -148,14 +148,14 @@ class FieldsetFieldtype extends Fieldtype
      *
      * @return void
      */
-    public function persistRelationship($model, Field $field)
+    public function persistRelationship($model, Field $field, $value = null)
     {
         $fieldset = Fieldset::findOrFail($field->settings['fieldset']);
 
         $model->{$field->handle}()->updateOrCreate([
             'field_id'    => $field->id,
             'fieldset_id' => $fieldset->id,
-        ], request()->input($field->handle, []));
+        ], $value ?? request()->input($field->handle, []));
     }
 
     /**

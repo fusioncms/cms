@@ -3,7 +3,7 @@
 namespace Fusion\Fieldtypes;
 
 use File;
-use Fusion\Http\Resources\USerResource;
+use Fusion\Http\Resources\UserResource;
 use Fusion\Models\Field;
 use Illuminate\Support\Str;
 
@@ -76,10 +76,10 @@ class UserFieldtype extends Fieldtype
      *
      * @return void
      */
-    public function persistRelationship($model, Field $field)
+    public function persistRelationship($model, Field $field, $value = null)
     {
         $oldValues = $model->{$field->handle}->pluck('id');
-        $newValues = collect(request()->input($field->handle))->mapWithKeys(function ($item, $key) use ($field) {
+        $newValues = collect($value ?? request()->input($field->handle))->mapWithKeys(function ($item, $key) use ($field) {
             return [
                 $item['id'] => [
                     'field_id' => $field->id,

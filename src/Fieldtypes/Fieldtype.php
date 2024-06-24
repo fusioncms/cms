@@ -27,7 +27,7 @@ abstract class Fieldtype
      *
      * @var string
      */
-    public $cast = '';
+    public $cast = null;
 
     /**
      * @var null
