@@ -20,6 +20,6 @@
   "dependencies": {
     "@proton-ui/proton": "https://github.com/proton-ui/proton",
     "@tailwindcss/custom-forms": "^0.1.4",
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.21"
   }
 }
