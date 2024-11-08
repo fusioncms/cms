@@ -90,7 +90,7 @@ class TaxonomyFieldtype extends Fieldtype
      */
     public function persistRelationship($model, Field $field)
     {
-        $oldValues = $model->{$field->handle}->pluck('id');
+        $oldValues = isset($model->{$field->handle}) ? $model->{$field->handle}->pluck('id') : [];
         $newValues = collect(request()->input($field->handle))
             ->mapWithKeys(function ($id) use ($field) {
                 return [
@@ -115,6 +115,6 @@ class TaxonomyFieldtype extends Fieldtype
      */
     public function getResource($model, Field $field)
     {
-        return TermResource::collection($this->getValue($model, $field));
+        return TermResource::collection($this->getValue($model, $field) ?? []);
     }
 }

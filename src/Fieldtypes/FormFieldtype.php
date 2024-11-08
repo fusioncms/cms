@@ -71,7 +71,7 @@ class FormFieldtype extends Fieldtype
      */
     public function persistRelationship($model, Field $field)
     {
-        $oldValues = $model->{$field->handle}->pluck('id');
+        $oldValues = isset($model->{$field->handle}) ? $model->{$field->handle}->pluck('id') : [];
         $newValues = collect(request()->input($field->handle))
             ->mapWithKeys(function ($id, $key) use ($field) {
                 return [
@@ -97,6 +97,6 @@ class FormFieldtype extends Fieldtype
      */
     public function getResource($model, Field $field)
     {
-        return FormResource::collection($this->getValue($model, $field));
+        return FormResource::collection($this->getValue($model, $field) ?? []);
     }
 }

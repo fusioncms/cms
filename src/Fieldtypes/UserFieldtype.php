@@ -78,7 +78,7 @@ class UserFieldtype extends Fieldtype
      */
     public function persistRelationship($model, Field $field)
     {
-        $oldValues = $model->{$field->handle}->pluck('id');
+        $oldValues = isset($model->{$field->handle}) ? $model->{$field->handle}->pluck('id') : [];
         $newValues = collect(request()->input($field->handle))->mapWithKeys(function ($item, $key) use ($field) {
             return [
                 $item['id'] => [
@@ -101,6 +101,6 @@ class UserFieldtype extends Fieldtype
      */
     public function getResource($model, Field $field)
     {
-        return UserResource::collection($this->getValue($model, $field));
+        return UserResource::collection($this->getValue($model, $field) ?? []);
     }
 }
