@@ -40,6 +40,8 @@ abstract class DataTableController extends Controller
             'displayable'         => array_values($this->getDisplayableColumns()),
             'sortable'            => array_values($this->getSortable()),
             'column_names'        => $this->getCustomColumnNames(),
+            'column_types'        => $this->getCustomColumnTypes(),
+            'column_props'        => $this->getCustomColumnProps(),
             'records'             => $this->getRecords($request),
             'bulk_actions'        => $this->getBulkActions(),
             'bulk_actions_exempt' => $this->getExemptFromBulkActions(),
@@ -101,6 +103,26 @@ abstract class DataTableController extends Controller
     }
 
     /**
+     * Get the mapped custom column types.
+     *
+     * @return array
+     */
+    protected function getCustomColumnTypes()
+    {
+        return [];
+    }
+
+    /**
+     * Get the mapped custom column props.
+     *
+     * @return array
+     */
+    protected function getCustomColumnProps()
+    {
+        return [];
+    }
+
+    /**
      * Get the filterable columns.
      *
      * @return array
@@ -134,6 +156,14 @@ abstract class DataTableController extends Controller
                 }
             });
         });
+    }
+
+    /**
+     * Get the sortable columns for Spatie query builder (It's value is not same as getSortable() when it have object as value, eg. Spatie\QueryBuilder\Sorts\Sort)
+     */
+    protected function getAllowedSorts()
+    {
+        return $this->getSortable();
     }
 
     /**
@@ -198,7 +228,7 @@ abstract class DataTableController extends Controller
                 ->allowedIncludes($this->getRelationships())
 
                 // Allowed sortable columns    (e.g. sort=name)
-                ->allowedSorts($this->getSortable())
+                ->allowedSorts($this->getAllowedSorts())
 
                 // Default sortable column
                 ->defaultSort($this->getDefaultSort())
@@ -210,7 +240,7 @@ abstract class DataTableController extends Controller
                 // - page    (defaults to `PAGE_NUM`)
                 ->paginate(
                     $request->query('perPage', self::PER_PAGE),
-                    self::getDisplayableColumns(),
+                    ['*'], // fix issue where displayable columns cannot be configured properly when there is column which is not exist in the table (eg, column generated using aggregate function)
                     get_class($this),
                     $request->query('page', self::PAGE_NUM)
                 );
