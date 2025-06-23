@@ -193,11 +193,10 @@ class SyncSettings
      */
     private function determineValidation($setting): array
     {
-        if (!isset($setting['required'])) {
-            return ['value' => null];
+        if (isset($setting['required']) && $setting['required'] === true) {
+            return ['value' => 'required'];
         }
-
-        return $setting['required'] === true ? ['value' => 'required'] : [];
+        return ['value' => null];
     }
 
     /**
