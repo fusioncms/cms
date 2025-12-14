@@ -39,7 +39,7 @@ class MenuServiceProvider extends ServiceProvider
         $disks = Disk::all();
 
         if ($disks->count() == 1) {
-            return ['title' => 'File Manager', 'to' => "/files/{$disk->first()->handle}", 'icon' => 'images'];
+            return ['title' => 'File Manager', 'to' => "/files/{$disks->first()->handle}", 'icon' => 'images'];
         }
 
         return [
