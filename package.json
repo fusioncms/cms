@@ -71,13 +71,13 @@
         "browser-sync-webpack-plugin": "^2.3",
         "glob-all": "^3.1.0",
         "laravel-mix": "^6.0",
-        "node-sass": "^7.0.0",
+        "node-sass": "^9.0.0",
         "postcss": "^8.5.3",
         "purgecss-webpack-plugin": "^4.0",
         "query-string": "^6.11.0",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.16.0",
-        "sass-loader": "^11.0",
+        "sass-loader": "^16.0",
         "vue-loader": "^17.4.2",
         "vue-template-compiler": "^2.5.22"
     }
