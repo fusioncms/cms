@@ -23,7 +23,7 @@
         "apexcharts": "^3.15.6",
         "autoprefixer": "^10.2.5",
         "autosize": "^4.0.2",
-        "axios": "^1.13.5",
+        "axios": "^1.15.0",
         "brace": "^0.11.1",
         "codemirror": "^5.49.2",
         "cronstrue": "^1.84.0",
