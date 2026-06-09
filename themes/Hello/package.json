@@ -15,7 +15,7 @@
     "laravel-mix": "^4.0.15",
     "resolve-url-loader": "2.3.1",
     "tailwindcss": "^1.0.0-beta.8",
-    "vue": "^2.6.10"
+    "vue": "^3.0.0"
   },
   "dependencies": {
     "@proton-ui/proton": "https://github.com/proton-ui/proton",
