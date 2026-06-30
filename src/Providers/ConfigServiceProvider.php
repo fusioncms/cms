@@ -44,10 +44,10 @@ class ConfigServiceProvider extends ServiceProvider
      */
     protected function registerMailServices()
     {
-		config(['sparkpost.secret' => setting('mail.mail_sparkpost_secret')]);
-		config(['mailgun.domain' => setting('mail.mail_mailgun_domain')]);
-		config(['mailgun.secret' => setting('mail.mail_mailgun_secret')]);
-		config(['mandrill.secret' => setting('mail.mail_mandrill_secret')]);
+		config(['services.sparkpost.secret' => setting('mail.mail_sparkpost_secret')]);
+		config(['services.mailgun.domain' => setting('mail.mail_mailgun_domain')]);
+		config(['services.mailgun.secret' => setting('mail.mail_mailgun_secret')]);
+		config(['services.mandrill.secret' => setting('mail.mail_mandrill_secret')]);
     }
 
     /**
