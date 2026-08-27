@@ -44,24 +44,10 @@ class ConfigServiceProvider extends ServiceProvider
      */
     protected function registerMailServices()
     {
-        $this->app['config']['services'] = [
-
-            // SparkPost service settings..
-            'sparkpost' => [
-                'secret' => setting('mail.mail_sparkpost_secret'),
-            ],
-
-            // Mailgun service settings..
-            'mailgun' => [
-                'domain' => setting('mail.mail_mailgun_domain'),
-                'secret' => setting('mail.mail_mailgun_secret'),
-            ],
-
-            // Mandrill service settings..
-            'mandrill' => [
-                'secret' => setting('mail.mail_mandrill_secret'),
-            ],
-        ];
+		config(['services.sparkpost.secret' => setting('mail.mail_sparkpost_secret')]);
+		config(['services.mailgun.domain' => setting('mail.mail_mailgun_domain')]);
+		config(['services.mailgun.secret' => setting('mail.mail_mailgun_secret')]);
+		config(['services.mandrill.secret' => setting('mail.mail_mandrill_secret')]);
     }
 
     /**
@@ -81,7 +67,6 @@ class ConfigServiceProvider extends ServiceProvider
 
                 if (is_array($value) && is_array($arr2[$key])) {
                     $output[$key] = Arr::mergeDeep($value, $arr2[$key]);
-                    $output[$key] = array_unique($output[$key], SORT_REGULAR);
                 }
             }
 
@@ -116,8 +101,8 @@ class ConfigServiceProvider extends ServiceProvider
             $this->app['config']->set(
                 $name,
                 Arr::mergeDeep(
-                    $this->app['config']->get($name, []),
                     require $path,
+                    $this->app['config']->get($name, []),
                 )
             );
         }
