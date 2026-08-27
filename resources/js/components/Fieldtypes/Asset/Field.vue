@@ -94,6 +94,8 @@
 								</file>
 							</div>
 						</div>
+							
+						<file-paginator></file-paginator>
 
             		</div>
             	</div>
@@ -115,6 +117,7 @@
 
 	import FileUploader  from '@/interfaces/FileManager/FileUploader.vue'
 	import FileSelection from '@/interfaces/FileManager/FileSelection.vue'
+ 	import FilePaginator from '@/interfaces/FileManager/FilePaginator.vue'
 
 	import BreadcrumbAction from '@/interfaces/FileManager/Actions/Breadcrumb.vue'
 	import DisplayAction    from '@/interfaces/FileManager/Actions/Display.vue'
@@ -133,6 +136,7 @@
         components: {
 			'file-uploader':  FileUploader,
 			'file-selection': FileSelection,
+			'file-paginator': FilePaginator,
 
 			'breadcrumb-action': BreadcrumbAction,
 			'display-action':    DisplayAction,
@@ -216,10 +220,13 @@
 			},
 
 			open() {
+				let directory = this.loadCurrentDirectoryFromLocalStorage(this.field.settings.disk)
+
                 this.reset()
-                this.setCurrentDirectory(this.field.settings.directory || 0)
                 this.setRootDirectory(this.field.settings.directory || 0)
                 this.fetchDisk(this.field.settings.disk)
+
+                this.setCurrentDirectory(directory || this.field.settings.directory || 0)
 
                 this.selection = [...this.model]
                 this.requestOpen = true
@@ -239,14 +246,7 @@
 			accept() {
                 this.model = [...this.selection]
 				this.close()
-			},
-
-            navigate(directory) {
-                this.reset()
-                this.setCurrentDirectory(directory.id)
-                this.setRootDirectory(this.field.settings.directory || 0)
-                this.fetchDisk(this.field.settings.disk)
-            }
+			}
 		},
 
 		created() {

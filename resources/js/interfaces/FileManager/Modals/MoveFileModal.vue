@@ -1,10 +1,13 @@
 <template>
     <ui-modal name="move-file" title="Move file(s) to directory">
-        <ui-treeview :nodes="directories" v-model="directory">
+        <div v-if="loading">Loading ...</div>
+
+        <ui-treeview v-else :nodes="directories" v-model="directory">
             <i class="fas fa-folder-open"></i>
-            <template slot="prepend" slot-scope="{ node, open }">
-                <fa-icon v-if="open" :icon="['fas', 'folder-open']" class="mr-2" :class="{'fill-current text-info-500': node.isCurrent}"></fa-icon>
-                <fa-icon v-else :icon="['fas', 'folder']" class="mr-2" :class="{'fill-current text-info-500': node.isCurrent}"></fa-icon>
+            
+            <template v-slot:prepend="{ node, open }">
+                <fa-icon v-if="open && node" :icon="['fas', 'folder-open']" class="mr-2" :class="{'fill-current text-info-500': node.isCurrent}"></fa-icon>
+                <fa-icon v-else-if="node" :icon="['fas', 'folder']" class="mr-2" :class="{'fill-current text-info-500': node.isCurrent}"></fa-icon>
             </template>
         </ui-treeview>
 
@@ -23,6 +26,7 @@
 
         data() {
             return {
+                loading: false,
                 isOpen: false,
                 directory: null,
                 directories: []
@@ -93,7 +97,9 @@
             },
 
             gatherOptions() {
+                this.loading = true
                 axios.get(`/api/directories/${this.disk.id}?recursive=true`).then(({data}) => {
+                    this.loading = false
                     this.directories = [{
                         id:        '0',
                         name:      'Root',
@@ -101,6 +107,8 @@
                         isCurrent: this.currentDirectory === 0,
                         children:  this.recursiveMap(data.data)
                     }]
+                }).catch((error) => {
+                    this.loading = false
                 })
             }
         },

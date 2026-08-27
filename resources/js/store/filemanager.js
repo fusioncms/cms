@@ -326,7 +326,6 @@ export default {
             axios.get(`/api/disks/${disk}`)
                 .then(({ data }) => {
                     commit('setDisk', data.data)
-                    dispatch('reset')
                     dispatch('fetchFilesAndDirectories')
                 })
                 .catch((errors) => console.log(errors))
