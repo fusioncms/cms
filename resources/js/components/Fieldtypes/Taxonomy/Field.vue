@@ -5,7 +5,7 @@
                 v-for="term in taxonomy.terms"
                 :key="term.id"
                 :name="field.handle"
-                :id="term.id"
+                :id="field.handle + '_' + term.id"
                 :native-value="term.id"
                 v-model="model">
                 <template>
