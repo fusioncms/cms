@@ -30,6 +30,13 @@ abstract class Builder
     protected $relationships = [];
 
     /**
+     * Traits.
+     *
+     * @var array
+     */
+    protected $traits = [];
+
+    /**
      * Generate & return fresh builder instance.
      *
      * @return \Fusion\Database\Eloquent\Model
@@ -70,6 +77,7 @@ abstract class Builder
                     '{fillable}'      => $this->toString($fillable),
                     '{casts}'         => $this->toString($casts),
                     '{relationships}' => $this->generateRelationships(),
+                    '{traits}'        => $this->generateUseTraitStatements(),
                 ], $this->getPlaceholders())
             )
         );
@@ -211,6 +219,19 @@ abstract class Builder
         return trim($generated);
     }
 
+    protected function generateUseTraitStatements()
+    {
+        $useStatements = [];
+
+        foreach ($this->traits as $traits) {
+            foreach ($traits as $trait) {
+                $prefix = Str::startsWith($trait, '\\') ? 'use ' : 'use \\';
+                $useStatements[] = $prefix.$trait.';';
+            }
+        }
+        return implode("\n", $useStatements);
+    }
+
     /**
      * Separates column/relationship-based fields.
      *
@@ -221,6 +242,10 @@ abstract class Builder
         if ($this->source instanceof Structure) {
             $this->source->fields->each(function ($field) {
                 $fieldtype = $field->type();
+
+                if ($fieldtype->hasTraits()) {
+                    $this->traits[$field->handle] = $fieldtype->getTraits();
+                }
 
                 if ($fieldtype->hasRelationship()) {
                     $this->relationships[$field->handle] = $field;
