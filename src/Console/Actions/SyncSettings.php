@@ -147,7 +147,7 @@ class SyncSettings
                     'help'       => $item['description'] ?? '',
                     'order'      => ++$order,
                     'validation' => $this->determineValidation($item),
-                    'settings'   => array_merge($fieldtype->getSettings(), [
+                    'settings'   => array_merge($fieldtype->getSettings(), ($item['settings'] ?? []), [
                         'default'   => $item['default'] ?? '',
                         'override'  => $item['override'] ?? false,
                         'options'   => $this->formatSettingOptions($item['options'] ?? []),
@@ -193,11 +193,10 @@ class SyncSettings
      */
     private function determineValidation($setting): array
     {
-        if (!isset($setting['required'])) {
-            return [];
+        if (isset($setting['required']) && $setting['required'] === true) {
+            return ['value' => 'required'];
         }
-
-        return $setting['required'] === true ? ['value' => 'required'] : [];
+        return ['value' => null];
     }
 
     /**

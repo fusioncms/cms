@@ -65,6 +65,9 @@ class SettingController extends Controller
         foreach ($setting->blueprint->relationships() as $relationship) {
             $relationship->type()->persistRelationship($setting->settings, $relationship);
         }
+
+        // Let new setting to take effect after the value of setting is updated
+        cache()->flush();
     }
 
 
