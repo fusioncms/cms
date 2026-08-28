@@ -6,7 +6,7 @@
     <input
     	type="file"
     	id="{{ $field->handle }}-field"
-    	name="{{ $field->handle }}[]"
+    	name="{{ $field->handle }}{{ $field->settings['multiple'] ? '[]' : ''}}"
     	accept="{{ $field->settings['accept'] ?? null }}"
     	{{ $field->settings['multiple'] ? 'multiple': null }}
     />

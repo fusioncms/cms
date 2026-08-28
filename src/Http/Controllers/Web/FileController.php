@@ -22,7 +22,7 @@ class FileController extends Controller
             return redirect()->to('/file/'.$uuid.'/'.$file->name.'?'.http_build_query($params));
         }
 
-        if (in_array($file->mimetype, ['image/jpeg', 'image/gif', 'image/png'])) {
+        if (in_array($file->mimetype, ['image/jpeg', 'image/gif', 'image/png', 'image/webp'])) {
             return $this->imageResponse($file, $params);
         }
 
@@ -32,7 +32,7 @@ class FileController extends Controller
 
         return Storage::disk($file->disk->handle)->response(
             $file->location,
-            $file->name,
+            $file->name.'.'.$file->extension,
             [
                 'Content-Type' => $file->mimetype,
             ]
