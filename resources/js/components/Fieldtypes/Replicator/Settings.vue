@@ -1,5 +1,5 @@
 <template>
-    <section-builder v-model="settings.sections"></section-builder>
+    <field-builder v-model="settings.sections"></field-builder>
 </template>
 
 <script>
@@ -15,7 +15,7 @@
                 if (this.settings.replicator) {
                     axios.get(`/api/replicators/${this.settings.replicator}`)
                         .then((response) => {
-                            this.$set(this.settings, 'sections', response.data.data.sections)
+                            this.$set(this.settings, 'sections', response.data.data.sections[0].fields)
                         })
                 } else {
                     this.settings.sections = []
