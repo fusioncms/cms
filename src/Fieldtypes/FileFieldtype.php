@@ -93,6 +93,8 @@ class FileFieldtype extends Fieldtype
 			$oldValues = isset($model->{$field->handle}) ? $model->{$field->handle}->pluck('id') : [];
             $newValues = collect();
 
+            $files = is_array($files) ? $files : [$files];
+
             foreach ($files as $key => $file) {
                 foreach ((array) $field->settings['directory'] as $data) {
                     /**
@@ -113,6 +115,18 @@ class FileFieldtype extends Fieldtype
 
             // --
             $model->{$field->handle}()->detach($oldValues);
+            $model->{$field->handle}()->attach($newValues);
+        } else if (request()->filled($field->handle)) {
+			$oldValues = isset($model->{$field->handle}) ? $model->{$field->handle}->pluck('id') : [];
+            $newValues = collect($value ?? request()->input($field->handle))
+            ->mapWithKeys(function ($value) use ($field) {
+                return [
+                    $value['id'] => [
+                        'field_id' => $field->id,
+                    ],
+                ];
+            });
+            $model->{$field->handle}()->wherePivot('field_id', $field->id)->detach($oldValues);
             $model->{$field->handle}()->attach($newValues);
         }
     }
