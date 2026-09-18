@@ -186,7 +186,7 @@ abstract class Builder
      *
      * @return string
      */
-    private function getBuildTable()
+    protected function getBuildTable()
     {
         $prefix = static::prefix();
 

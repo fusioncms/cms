@@ -64,6 +64,6 @@ class Section extends Model
      */
     public function getBuilderTable()
     {
-        return $this->blueprint->blueprintable->getBuilderTable();
+        return $this->blueprint->blueprintable->getBuilderTable($this);
     }
 }
