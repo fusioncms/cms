@@ -57,6 +57,10 @@ class SettingServiceProvider extends ServiceProvider
                             $value = $value->all();
                         }
 
+                        if ($fieldtype = $field->type()) {
+                            $value = $fieldtype->getConfigValue($value);
+                        }
+
                         // For file types we want to pass the path of the file
                         // through to override config values.
                         //
