@@ -248,6 +248,14 @@ abstract class Fieldtype
             ];
         }
 
+        // Fields stored in a column still need a rule, otherwise their
+        // value is left out of the validated data and never saved.
+        if ($this->hasColumn()) {
+            return [
+                $field->handle => 'sometimes',
+            ];
+        }
+
         return [];
     }
 
@@ -403,6 +411,19 @@ abstract class Fieldtype
     public function getResource($model, Field $field)
     {
         return $this->getValue($model, $field);
+    }
+
+    /**
+     * Returns value of field in the format expected by
+     * the config value a setting overrides.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getConfigValue($value)
+    {
+        return $value;
     }
 
     /**

@@ -112,7 +112,9 @@ class Setting
                 $group->blueprint->fields->each(function ($field) use ($group, $key, $value) {
                     if ($key == "{$group->handle}.{$field->handle}") {
                         if ($field->settings['override'] !== false) {
-                            config([$field->settings['override'] => $value]);
+                            $fieldtype = $field->type();
+
+                            config([$field->settings['override'] => $fieldtype ? $fieldtype->getConfigValue($value) : $value]);
                         }
                     }
                 });
